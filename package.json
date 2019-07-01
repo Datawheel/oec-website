@@ -1,0 +1,28 @@
+{
+  "name": "oec-website",
+  "version": "4.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "canon-build",
+    "dev": "canon-dev",
+    "locales": "canon-locales",
+    "release": "canon-release",
+    "setup": "canon-setup",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/observatory-economic-complexity/oec-website.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/observatory-economic-complexity/oec-website/issues"
+  },
+  "homepage": "https://github.com/observatory-economic-complexity/oec-website#readme",
+  "dependencies": {
+    "@datawheel/canon-core": "^0.17.30"
+  }
+}
