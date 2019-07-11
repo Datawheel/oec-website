@@ -1,0 +1,98 @@
+#Profile {
+  background: var(--dark);
+  color: var(--white);
+
+  & .hero {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    z-index: 1;
+    min-height: 250px;
+    display: flex;
+    &::before {
+      content: "";
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      position: absolute;
+      background: linear-gradient(rgb(33, 40, 49) 0%, rgba(33, 40, 49, 0) 100%);
+      z-index: -1;
+    }
+
+    & .d3plus-viz {
+      border: 1px solid #cccccc;
+    }
+
+    & .hero-content {
+      width: 100%;
+      & .hero-title {
+        font-size: 65px;
+        display: flex;
+        align-items: center;
+        margin: 0;
+        & .hero-icon {
+          width: 80px;
+          height: 80px;
+          margin-right: 20px;
+        }
+      }
+
+      & .hero-stats {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        & .stat {
+          min-width: 1px;
+          flex: 1;
+          align-items: center;
+        }
+      }
+    }
+
+  }
+
+  & .sections {
+    & .section {
+      & .section-title a {
+        color: var(--white);
+      }
+    }
+  }
+}
+
+.d3plus-geomap-tileGroup {
+  & image.tile {
+    opacity: 0.3 !important;
+  }
+}
+
+.d3plus-tooltip {
+  & td {
+    text-align: right;
+    padding: 5px 10px;
+    &:first-child {
+      text-align: left;
+      font-weight: 700;
+    }
+    &:last-child {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.d3plus-tooltip-title-wrapper {
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  & .icon {
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    & img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}

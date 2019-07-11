@@ -15,9 +15,8 @@
 #   import style from "style.yml";
 #
 
-dark: "rgb(61, 71, 55)"
-light: "rgb(101, 111, 95)"
-white: "#fafafa"
+dark: "#212931"
+light: "#FFFFFF"
 
 nav-height: 40px
 subnav-size: 200px
@@ -25,3 +24,43 @@ subnav-size: 200px
 nested:
   color1: "red"
   color2: "black"
+
+# grayscale
+white:   "#FFFFFF"
+light-1: "#F8F9FA"
+light-2: "#ECEFF1"
+light-3: "#CFDAE2"
+gray:    "#AEBDCC"
+dark-1:  "#8A97AE"
+dark-2:  "#2A2F3B"
+dark-3:  "#20242E"
+black:   "#181A21"
+
+# accent colors
+accent:       "#FFCD33"
+accent-light: "#FFD65B"
+accent-dark:  "#C4960B"
+accent-black: "#7F6516"
+
+# UI colors
+alert-dark:   "#75224D"
+alert:        "#992C64"
+alert-light:  "#DB64A6"
+
+type-number:      "#8EB6FF"
+type-number-dark: "#2D4A7F"
+
+type-string:      "#B9E28C"
+type-string-dark: "#62873B"
+
+type-boolean:      "#FFD65B"
+type-boolean-dark: "#7F6516"
+
+type-error:       "#DB64A6"
+type-error-dark:  "#75224D"
+
+# measurements
+nav-height: "50px"
+cms-nav-height: "3.125rem"
+sidebar-width: "17rem"
+toolbox-width: "22.5rem"
