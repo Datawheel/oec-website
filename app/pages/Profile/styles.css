@@ -85,7 +85,6 @@
 .d3plus-tooltip-title-wrapper {
   display: flex;
   align-items: center;
-  // justify-content: center;
   & .icon {
     margin-right: 10px;
     width: 40px;

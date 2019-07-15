@@ -92,6 +92,21 @@ export default {
     }
   },
   layoutPadding: 1,
+  legendTooltip: {
+    title: d => {
+      const title = d.Country;
+      const bgColor = findColor(d);
+
+      let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
+      const imgUrl = "Continent" in d ? `/images/icons/country/country_${d.Continent}.png`
+        : `/images/icons/hs/hs_${d["Chapter ID"]}.png`;
+
+      tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
+      tooltip += `<span>${d.Continent || d.Chapter}</span>`;
+      tooltip += "</div>";
+      return tooltip;
+    }
+  },
   tooltipConfig: {
     arrowStyle: {
       "background": "#66737e",
