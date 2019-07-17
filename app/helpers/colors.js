@@ -25,8 +25,8 @@ export default {
   },
 
   Flow: {
-    1: "blue",
-    2: "red"
+    1: "#4495bc",
+    2: "#942217"
   },
 
   Continent: {

@@ -14,8 +14,8 @@ export default function RouteCreate() {
     <Route path="/" component={App} history={browserHistory}>
       <IndexRoute component={Home} />
       <Route path="/admin" component={Builder} />
-      <Route exact path="/profile/:pslug/:pid" component={Profile} />
-      <Route exact path="/profile2/:slug/:id(/:slug2)(/:id2)" component={CMSProfile} />
+      <Route exact path="/profile2/:pslug/:pid" component={Profile} />
+      <Route exact path="/profile/:slug/:id(/:slug2)(/:id2)" component={CMSProfile} />
     </Route>
   );
 }
