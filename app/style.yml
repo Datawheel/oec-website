@@ -1,66 +1,180 @@
-# Any variables defined in this file will be available in css:
-#
-#   .class {
-#     color: var(--dark);
-#   }
-#
-# Variables may also be nested:
-#
-#   .class {
-#     background: map(nested, color1);
-#   }
-#
-# Finally, this file can be imported into any file as a JavaScript object:
-#
-#   import style from "style.yml";
-#
 
-dark: "#212931"
-light: "#FFFFFF"
 
-nav-height: 40px
-subnav-size: 200px
-
-nested:
-  color1: "red"
-  color2: "black"
-
+# InfoCard
+# UI colors
+# accent colors
+# admin panel
+# any rem units will scale up with the viewport
+# base (p, li, etc.)
+# buttons
+# display (.display class)
+# fields
 # grayscale
-white:   "#FFFFFF"
+# handle MultiColumn section with css multicolumn
+# handle grouped SingleColumn sections with flex-basis
+# headings (h1, h2, etc.; .heading class)
+# hero AKA header AKA splash
+# label (.label class)
+# measurements
+# measurements
+# percentage bar visualization
+# profile
+# sections
+# stats
+# typography
+# visualizations
+########################################
+########################################
+########################################
+########################################
+accent-black: "#7F6516"
+accent-dark: "#C4960B"
+accent-light: "#FFD65B"
+accent:    "#FFCD33"
+alert-dark:  "#75224D"
+alert-light: "#DB64A6"
+alert:    "#992C64"
+base-font-stack:      "'Lato', 'Trebuchet MS', sans-serif" # Remember to import custom fonts & only the necessary weights via Helmet.js
+base-font-weight:     "400"
+base-letter-spacing:    "0"
+black:  "#181A21"
+body-font-scale-md:    "112.5%" # 1rem = 18px (min-width: 992px)
+body-font-scale-sm:    "100%"  # 1rem = 16px (max-width: 991px)
+body-font-scale-xl:    "125%"  # 1rem = 20px (min-width: 1400px)
+bold-weight:        "800"
+button-bg-color:      "color(var(--white) a(0.5))"
+button-border-color:    "var(--light-3)"
+button-border-radius:   "2px"
+button-border-width:    "1px"
+button-color:       "var(--accent-black)"
+button-hover-bg-color:   "var(--accent-black)"
+button-hover-border-color: "var(--accent-black)"
+button-hover-color:    "var(--white)"
+button-padding:      "0.5em 1.25em"
+cms-nav-height: "3.125rem"
+container-width:      "80rem" # 1280px
+dark-1: "#8A97AE"
+dark-2: "#2A2F3B"
+dark-3: "#20242E"
+display-font-stack:    "var(--base-font-stack)"
+display-font-weight:    "600"
+display-letter-spacing:  "0.0125em" # generally, some kerning is helps legibility of all caps text only
+display-text-transform:  "uppercase"
+field-bg-color:      "var(--white)"
+field-border-color:    "var(--light-3)"
+field-border-radius:    "1px"
+field-border-width:    "1px"
+field-color:        "var(--dark-2)"
+field-focus-color:     "var(--accent-dark)"
+field-font-weight:     "400"
+field-icon-color:     "var(--dark-1)"
+field-icon-hover-color:  "var(--dark-3)"
+field-padding:       "0.5em 0.5em 0.575em 0.5em"
+field-placeholder-color:  "var(--gray)"
+font-lg:          "1.25rem" # 20px
+font-md:          "1rem"   # 16px
+font-sm:          "0.875rem" # 14px
+font-xl:          "1.5rem"  # 24px
+font-xs:          "0.75rem" # 12px
+font-xxl:         "2rem"   # 32px - use sparingly
+font-xxs:         "0.625rem" # 10px
+font-xxxs:         "0.5rem"  # 8px - use sparingly
+gray:  "#AEBDCC"
+gutter-lg:         "2.25rem"
+gutter-md:         "1.5rem"
+gutter-sm:         "0.75rem"
+gutter-xl:         "3rem"
+gutter-xs:         "0.5rem"
+heading-font-stack:    "var(--base-font-stack)"
+heading-font-weight:    "600"
+heading-letter-spacing:  "0"
+heading-text-transform:  "none"
+hero-bg-color:       "var(--dark-3)"
+hero-container-width:   "var(--container-width)"
+hero-heading-color:    "var(--white)"
+hero-heading-size:     "var(--font-xxl)"
+hero-paragraph-size:    "var(--font-xs)"
+hero-stat-column-count:  "4"
+hero-stat-column-width:  "10rem"
+hero-stat-value-color:   "var(--accent)"
+hero-subhead-color:    "var(--white)"
+hero-subhead-size:     "var(--font-md)"
+hero-text-color:      "var(--light-2)"
+hero-viz-width:      "20rem"
+infocard-border-color:   "var(--light-2)"
+infocard-border-radius:  "4px"
+infocard-border-width:   "1px"
+infocard-header-bg-color: "var(--light-1)"
+infocard-main-bg-color:  "var(--white)"
+infocard-viz-min-width:  "10rem"
+label-font-stack:     "var(--base-font-stack)"
+label-font-weight:     "400"
+label-letter-spacing:   "0.0125em" # generally, some kerning is helps legibility of all caps text only
+label-text-transform:   "uppercase"
 light-1: "#F8F9FA"
 light-2: "#ECEFF1"
 light-3: "#CFDAE2"
-gray:    "#AEBDCC"
-dark-1:  "#8A97AE"
-dark-2:  "#2A2F3B"
-dark-3:  "#20242E"
-black:   "#181A21"
-
-# accent colors
-accent:       "#FFCD33"
-accent-light: "#FFD65B"
-accent-dark:  "#C4960B"
-accent-black: "#7F6516"
-
-# UI colors
-alert-dark:   "#75224D"
-alert:        "#992C64"
-alert-light:  "#DB64A6"
-
-type-number:      "#8EB6FF"
-type-number-dark: "#2D4A7F"
-
-type-string:      "#B9E28C"
-type-string-dark: "#62873B"
-
-type-boolean:      "#FFD65B"
-type-boolean-dark: "#7F6516"
-
-type-error:       "#DB64A6"
-type-error-dark:  "#75224D"
-
-# measurements
-nav-height: "50px"
-cms-nav-height: "3.125rem"
+multicolumn-column-count: "3"
+multicolumn-column-gap:  "var(--gutter-xl)"
+multicolumn-column-width: "20rem"
+nav-height:        "50px"
+percentage-bar-bg-color:  "var(--light-2)"
+percentage-bar-color:   "var(--accent-dark)"
+percentage-bar-height:   "var(--gutter-xs)"
+percentage-bar-radius:   "0.5em"
+section-bg-even:      "var(--light-1)"
+section-bg-odd:      "var(--white)"
+section-heading-color:   "var(--dark-3)"
+section-text-color:    "var(--dark-2)"
+select-bg-color:      "var(--light-1)"
+select-border-radius:   "var(--button-border-radius)"
 sidebar-width: "17rem"
+singlecolumn-column-count: "3"
+singlecolumn-min-width:  "20rem"
+stat-label-color:     "inherit"
+stat-label-font-size:   "var(--font-sm)"
+stat-subtitle-color:    "var(--dark-1)"
+stat-subtitle-font-size:  "var(--font-xs)"
+stat-value-color:     "var(--accent-dark)"
+stat-value-font-size:   "var(--font-xl)"
+sticky-section-bg:     "var(--white)"
+sticky-section-height:   "var(--nav-height)"
+sticky-section-offset:   "50px" # px value required here unfortunately
+sticky-section-shadow:   "0 1px 0.375rem color(var(--black) a(0.125))"
+subnav-height:       "var(--nav-height)"
 toolbox-width: "22.5rem"
+type-boolean-dark: "#7F6516"
+type-boolean:   "#FFD65B"
+type-error-dark: "#75224D"
+type-error:    "#DB64A6"
+type-number-dark: "#2D4A7F"
+type-number:   "#8EB6FF"
+type-string-dark: "#62873B"
+type-string:   "#B9E28C"
+viz-aspect-ratio:     "50%" # set as padding-top on .cp-viz-container, then .cp-viz fills the height
+viz-min-height:      "40vh" # prevent visualizations from getting too squishy
+white: "#FFFFFF"
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
+​
