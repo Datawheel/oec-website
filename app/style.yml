@@ -154,27 +154,3 @@ type-string:   "#B9E28C"
 viz-aspect-ratio:     "50%" # set as padding-top on .cp-viz-container, then .cp-viz fills the height
 viz-min-height:      "40vh" # prevent visualizations from getting too squishy
 white: "#FFFFFF"
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​
-​

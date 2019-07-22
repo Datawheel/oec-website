@@ -57,7 +57,8 @@ const axisStyles = {
     stroke: "#FFFFFF"
   },
   gridConfig: {
-    stroke: "#FFFFFF"
+    stroke: "#FFFFFF",
+    strokeWidth: 1
   },
   labelConfig: {
     fontColor: () => "#FFFFFF",
@@ -87,6 +88,9 @@ export default {
   aggs: {
     "Chapter ID": mean,
     "Flow ID": mean
+  },
+  backgroundConfig: {
+    fill: "#383e44"
   },
   xConfig: axisStyles,
   yConfig: axisStyles,
@@ -165,9 +169,14 @@ export default {
   },
   total: "Trade Value",
   totalConfig: {
-    fontColor: () => "#FFFFFF",
-    fontSize: () => 14,
-    textTransform: "uppercase"
+    "fontColor": () => "#FFFFFF",
+    "fontSize": () => 14,
+    "text-transform": "uppercase"
+  },
+  titleConfig: {
+    "fontColor": () => "#FFFFFF",
+    "fontSize": () => 14,
+    "text-transform": "uppercase"
   },
   shapeConfig: {
     Area: {

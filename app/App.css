@@ -8,3 +8,47 @@ h1, h2, h3, h4, h5, h6 {
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 300;
 }
+
+.cp-main > *:nth-child(odd) {
+  background-color: #212831;
+}
+
+.cp-main > *:nth-child(even) {
+  background-color: #212831;
+}
+
+.cp-section-heading {
+  color: #FFFFFF;
+}
+
+.cp-section-paragraph {
+  color: #FFFFFF;
+}
+
+.cp-viz-container {
+  min-height: 60vh;
+}
+
+.d3plus-textBox text {
+  font-family: "Fira Sans Condensed", sans-serif !important;
+  font-weight: 600 !important;
+}
+
+.cp-select-label {
+  color: #FFFFFF;
+}
+
+.cp-button-group {
+  & .cp-button {
+    color: #FFFFFF;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    border-radius: 0px;
+    font-size: 11px;
+    &:hover {
+      background-color: #120f1b;
+    }
+  }
+}
