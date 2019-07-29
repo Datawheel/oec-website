@@ -1,5 +1,3 @@
-
-
 # InfoCard
 # UI colors
 # accent colors
@@ -142,6 +140,18 @@ sticky-section-height:   "var(--nav-height)"
 sticky-section-offset:   "50px" # px value required here unfortunately
 sticky-section-shadow:   "0 1px 0.375rem color(var(--black) a(0.125))"
 subnav-height:       "var(--nav-height)"
+table-cell-bg-color:        "var(--white)" # table cells
+table-cell-border-color:    "var(--light-2)"
+table-cell-text-color:      "var(--dark-3)"
+table-height:               "60vh" # height of table body
+table-hgroup-bg-color:      "var(--light-2)" # top heading in a group of nested headings
+table-hgroup-border-color:  "var(--light-3)"
+table-hgroup-text-color:    "var(--dark-3)"
+table-icon-color:           "var(--dark-2)" # dotted cell resize handle, pivot triangle
+table-nested-cell-bg-color: "var(--light-1)" # nested/pivoted cells
+table-thead-bg-color:       "var(--dark-1)" # primary table headings
+table-thead-border-color:   "color(var(--dark-2) a(0.25))"
+table-thead-text-color:     "var(--light-1)"
 toolbox-width: "22.5rem"
 type-boolean-dark: "#7F6516"
 type-boolean:   "#FFD65B"

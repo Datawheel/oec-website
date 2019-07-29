@@ -2,6 +2,11 @@
   text-align: center;
   background: #272f38 url(/images/background_home.png) repeat;
   height: 100vh;
+  -webkit-font-smoothing: antialiased;
+
+  p {
+    letter-spacing: 0.01em;
+  }
 
   & .ring {
     border-radius: 50%;
@@ -12,6 +17,16 @@
     position: relative;
     width: 100%;
 
+    & .launch-video {
+      transition: opacity 0.5s;
+      cursor: pointer;
+      position: absolute;
+      bottom: 17%;
+      opacity: 0.6;
+      right: 22%;
+      color: white;
+    }
+
     & .big-logo {
       left: 13%;
       position: absolute;
@@ -20,11 +35,58 @@
       z-index: 99;
     }
 
+    & .info {
+      color: white;
+      display: block;
+      font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      font-size: 17.14286px;
+      font-weight: 300;
+      line-height: 1.4;
+      position: absolute;
+      -webkit-text-shadow: -2px 0 5px #212831;
+      -moz-text-shadow: -2px 0 5px #212831;
+      text-shadow: -2px 0 5px #212831;
+      text-align: center;
+      bottom: 18%;
+      right: 14%;
+      width: 36%;
+    }
+
+    & .search-home {
+      border-radius: 2px;
+      bottom: 10%;
+      border-bottom: 1px solid #63737f;
+      color: #fff;
+      cursor: pointer;
+      display: block;
+      font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      font-size: 18.75px;
+      font-weight: 300;
+      left: 33%;
+      opacity: 0.8;
+      padding-bottom: 3px;
+      position: absolute;
+      width: 37%;
+    }
+
+    & .more-info {
+      transition: color 1s, opacity 0.5s;
+      border-bottom: 1px solid transparent;
+      color: #99BCD1;
+      display: inline-block;
+      font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+      font-weight: 400;
+      font-size: 75%;
+      margin: 2% 2% 2% 2%;
+      opacity: 0.8;
+      text-transform: uppercase;
+    }
+
     & .observatory {
       left: 8%;
-    position: absolute;
-    top: 14%;
-    width: 100%;
+      position: absolute;
+      top: 14%;
+      width: 100%;
     }
 
     & .star-rotate {
@@ -56,6 +118,49 @@
     }
     & .echo-ring {
       animation: pulse 8s ease-in 4s infinite;
+    }
+  }
+}
+
+.font-xxs {
+  font-size: 10px;
+}
+
+.footer {
+  color: #d1d2d4;
+  margin: 65px auto 5px auto;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  -webkit-font-smoothing: antialiased;
+  & .container {
+    max-width: 770px;
+    z-index: 99;
+  }
+  & a {
+    color: #99BCD1;
+  }
+
+  & .license {
+
+  }
+}
+
+.locale-options {
+  list-style: none;
+  display: flex;
+  margin-left: -40px;
+  align-items: center;
+  justify-content: center;
+  & li {
+    color: white;
+    transition: opacity 1.5s;
+    opacity: 0.8;
+    font-size: 10px;
+    margin: 5px 10px;
+    & a {
+      color: #99BCD1;
     }
   }
 }

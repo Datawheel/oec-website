@@ -4,5 +4,8 @@
   "eslint.autoFixOnSave": true,
   "editor.trimAutoWhitespace": true,
   "files.trimTrailingWhitespace": true,
+  "files.associations": {
+    "*.css": "scss"
+  },
   "files.insertFinalNewline": true
 }
