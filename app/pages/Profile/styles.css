@@ -2,6 +2,39 @@
   background: var(--dark);
   color: var(--white);
 
+  & .cp-hero-inner {
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    padding-bottom: 0px;
+    justify-content: flex-end;
+
+    & .cp-viz-container {
+      height: 250px;
+      width: 250px;
+    }
+
+    & .cp-hero-figure {
+      padding-top: 0px;
+      max-width: 300px;
+      min-width: 300px;
+
+      & .cp-viz {
+        height: 250px;
+        width: 250px;
+      }
+
+      & .cp-viz-container {
+        min-height: 30vh;
+      }
+    }
+  }
+
+  & .navbar {
+    background-color: var(--dark);
+    position: fixed;
+    z-index: 21;
+  }
+
   & .hero {
     background-size: cover;
     background-position: center;

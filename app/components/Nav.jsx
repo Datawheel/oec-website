@@ -5,7 +5,9 @@ import "./Nav.css";
 class Nav extends React.Component {
   render() {
     return <nav className="navbar">
-      <div>x</div>
+      <div>
+        <img src="/images/logo-sm.png" alt=""/>
+      </div>
       <ul className="menu-options">
         <li className="option">Countries</li>
         <li className="option">Products</li>

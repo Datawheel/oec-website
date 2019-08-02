@@ -51,6 +51,7 @@ button-hover-color:    "var(--white)"
 button-padding:      "0.5em 1.25em"
 cms-nav-height: "3.125rem"
 container-width:      "80rem" # 1280px
+dark:  "#20252e"
 dark-1: "#8A97AE"
 dark-2: "#2A2F3B"
 dark-3: "#20242E"
