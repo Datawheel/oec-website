@@ -2,6 +2,30 @@
   background: var(--dark);
   color: var(--white);
 
+  & .cp-hero {
+    background: url(/images/headers/country/usa.jpg);
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 1;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      content: "";
+      z-index: -1;
+      background: linear-gradient(to bottom, #212831 0%, rgba(33, 40, 49, 0) 100%);
+    }
+  }
+
+  & .cp-grouping-section-heading {
+    text-transform: uppercase;
+    font-size: 32px;
+  }
+
   & .cp-hero-inner {
     flex-direction: row-reverse;
     align-items: flex-start;
@@ -95,11 +119,6 @@
   }
 }
 
-.d3plus-geomap-tileGroup {
-  & image.tile {
-    opacity: 0.3 !important;
-  }
-}
 
 .d3plus-tooltip {
   & td {

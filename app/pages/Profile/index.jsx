@@ -10,6 +10,7 @@ import {Profile as CMSProfile} from "@datawheel/canon-cms";
 import Nav from "components/Nav";
 
 import "./styles.css";
+import Footer from "../../components/Footer";
 
 class Profile extends React.Component {
   state = {
@@ -63,6 +64,8 @@ class Profile extends React.Component {
         title={scrolled ? variables.name : ""}
       />
       <CMSProfile {...this.props} />
+
+      <Footer />
     </div>;
   }
 }

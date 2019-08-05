@@ -1,0 +1,20 @@
+.footer {
+  color: #d1d2d4;
+  margin: 65px auto 5px auto;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  -webkit-font-smoothing: antialiased;
+  & .container {
+    max-width: 770px;
+    z-index: 99;
+  }
+  & a {
+    color: #99BCD1;
+  }
+
+  & .license {
+
+  }
+}
