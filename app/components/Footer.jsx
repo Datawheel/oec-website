@@ -20,7 +20,7 @@ class Footer extends React.Component {
         <ul className="locale-options">
           {languages.map(d => <li><a href={d.locale}>{d.name}</a></li>)}
         </ul>
-        <p className="font-xxs">
+        <p className="u-font-xxs">
       The Observatory of Economic Complexity by <a href="http://alexandersimoes.com/">Alexander Simoes</a> is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. Permissions beyond the scope of this license may be available <a href="/permissions/">here</a>.
           <a className="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
             <img alt="Creative Commons License" src="//i.creativecommons.org/l/by-sa/3.0/80x15.png" />

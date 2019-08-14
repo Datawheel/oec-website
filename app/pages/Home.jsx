@@ -9,8 +9,9 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div id="Home">
+      <div className="home">
         <Nav />
+
         <div className="bg-frame">
           <div className="ring-pulse" />
           <div className="ring-pulse echo-ring" />
