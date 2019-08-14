@@ -32,7 +32,6 @@
     & .info {
       color: white;
       display: block;
-      font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
       font-size: 17.14286px;
       font-weight: 300;
       line-height: 1.4;
@@ -51,7 +50,6 @@
       color: #fff;
       cursor: pointer;
       display: block;
-      font-family: "Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
       font-size: 18.75px;
       font-weight: 300;
       left: 33%;
@@ -66,7 +64,6 @@
       border-bottom: 1px solid transparent;
       color: #99BCD1;
       display: inline-block;
-      font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
       font-weight: 400;
       font-size: 75%;
       margin: 2% 2% 2% 2%;

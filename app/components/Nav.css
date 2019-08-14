@@ -9,7 +9,6 @@
     margin: 0;
     display: flex;
     list-style: none;
-    font-family: "Montserrat", sans-serif;
     font-size: 12px;
     & .option {
       color: var(--white);

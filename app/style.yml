@@ -103,7 +103,7 @@ font-xl:                    "1.5rem"   # 24px
 font-xxl:                   "2rem"     # 32px - use sparingly
 
 # base (p, li, etc.)
-base-font-stack:            "'Lato', 'Trebuchet MS', sans-serif" # Remember to import custom fonts & only the necessary weights via Helmet.js
+base-font-stack:            "'Source Sans Pro', 'Droid Sans', 'Avenir', Helvetica, Arial, sans-serif" # Remember to import custom fonts & only the necessary weights via Helmet.js
 base-font-weight:           "400"
 base-letter-spacing:        "0"
 bold-weight:                "800"
