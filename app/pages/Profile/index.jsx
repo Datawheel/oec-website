@@ -58,7 +58,7 @@ class Profile extends React.Component {
     const {profile, t} = this.props;
     const {variables} = profile;
     const {scrolled} = this.state;
-    return <div id="Profile" onScroll={this.handleScroll}>
+    return <div className="profile" onScroll={this.handleScroll}>
       <Nav
         className={scrolled ? "background" : ""}
         title={scrolled ? variables.name : ""}
@@ -91,4 +91,3 @@ export default withNamespaces()(
     profile: state.data.profile
   }))(Profile)
 );
-
