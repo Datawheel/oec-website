@@ -1,5 +1,5 @@
-#Profile {
-  background: var(--dark);
+[id="Profile"] {
+  background: var(--dark-3);
   color: var(--white);
 
   & .cp-hero {
@@ -54,7 +54,7 @@
   }
 
   & .navbar {
-    background-color: var(--dark);
+    background-color: var(--dark-3);
     position: fixed;
     z-index: 21;
   }

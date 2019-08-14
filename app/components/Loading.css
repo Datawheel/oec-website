@@ -1,21 +1,25 @@
-.loading {
-  background-color: var(--dark);
+@import "../../node_modules/@datawheel/canon-cms/src/css/mixins.css";
+
+[id="Canon"] > .loading {
+  /* take up the whole screen */
+  @mixin absolute-expand;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* theming */
+  background-color: var(--dark-3);
   color: var(--white);
-  height: 100vh;
-  left: 0;
-  max-width: none;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 100;
-  & .pt-non-ideal-state-visual {
+
+  & [class*="non-ideal-state-visual"] {
     max-width: 200px;
     width: 100%;
-    & .pt-progress-meter {
-      background-color: var(--light);
+    & [class*="progress-meter"] {
+      background-color: var(--light-1);
     }
   }
-  & .pt-non-ideal-state-title {
-    color: var(--white);
+
+  & [class*="non-ideal-state-title"] {
+    margin-bottom: var(--gutter-xs);
   }
 }
