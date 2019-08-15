@@ -1,6 +1,7 @@
 .home {
   text-align: center;
   background: #272f38 url(/images/background_home.png) repeat;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 
   & .ring {
@@ -27,6 +28,7 @@
       position: absolute;
       top: 23%;
       width: 38%;
+      z-index: 1;
     }
 
     & .info {
@@ -108,6 +110,10 @@
     & .echo-ring {
       animation: pulse 8s ease-in 4s infinite;
     }
+  }
+
+  & .footer {
+    margin-bottom: 0;
   }
 }
 
