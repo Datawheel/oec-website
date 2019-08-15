@@ -1,17 +1,20 @@
 .footer {
-  color: #d1d2d4;
-  margin: 65px auto 5px auto;
+  color: var(--light-2);
+  margin: 0;
+  padding-top: var(--gutter-lg);
+  padding-bottom: var(--gutter-lg);
   text-align: center;
   align-items: center;
   justify-content: center;
   display: flex;
   -webkit-font-smoothing: antialiased;
+  
   & .container {
     max-width: 770px;
     z-index: 99;
   }
   & a {
-    color: #99BCD1;
+    color: var(--gray);
   }
 
   & .license {

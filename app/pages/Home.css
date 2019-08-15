@@ -1,13 +1,13 @@
 .home {
   text-align: center;
-  background: #272f38 url(/images/background_home.png) repeat;
+  background: var(--dark-2) url(/images/background_home.png) repeat;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 
   & .ring {
     border-radius: 50%;
-    background-color: #212831;
-    border: 1px solid #99BCD1;
+    background-color: var(--dark-3);
+    border: 1px solid var(--gray);
     height: 100%;
     overflow: hidden;
     position: relative;
@@ -20,7 +20,7 @@
       bottom: 17%;
       opacity: 0.6;
       right: 22%;
-      color: white;
+      color: var(--white);
     }
 
     & .big-logo {
@@ -32,13 +32,13 @@
     }
 
     & .info {
-      color: white;
+      color: var(--white);
       display: block;
       font-size: 17.14286px;
       font-weight: 300;
       line-height: 1.4;
       position: absolute;
-      text-shadow: -2px 0 5px #212831;
+      text-shadow: -2px 0 5px var(--dark-3);
       text-align: center;
       bottom: 18%;
       right: 14%;
@@ -48,8 +48,8 @@
     & .search-home {
       border-radius: 2px;
       bottom: 10%;
-      border-bottom: 1px solid #63737f;
-      color: #fff;
+      border-bottom: 1px solid var(--dark-1);
+      color: var(--white);
       cursor: pointer;
       display: block;
       font-size: 18.75px;
@@ -64,7 +64,7 @@
     & .more-info {
       transition: color 1s, opacity 0.5s;
       border-bottom: 1px solid transparent;
-      color: #99BCD1;
+      color: var(--gray);
       display: inline-block;
       font-weight: 400;
       font-size: 75%;
@@ -111,10 +111,6 @@
       animation: pulse 8s ease-in 4s infinite;
     }
   }
-
-  & .footer {
-    margin-bottom: 0;
-  }
 }
 
 
@@ -126,14 +122,14 @@
   justify-content: center;
 
   & li {
-    color: white;
+    color: var(--white);
     transition: opacity 1.5s;
     opacity: 0.8;
     font-size: 10px;
     margin: 5px 10px;
 
     & a {
-      color: #99BCD1;
+      color: var(--gray);
     }
   }
 }

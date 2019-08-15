@@ -1,19 +1,19 @@
 .cp {
-  background-color: #212831;
+  background-color: var(--dark-3);
 
   & .cp-hero {
     min-height: calc(100vh - 350px - 50px);
   }
 
   & .cp-multi-column-section {
-    background: #ffffff !important;
+    background: var(--white);
     & p {
-      color: #120f1b;
+      color: var(--black);
     }
   }
 
   & p {
-    color: white;
+    color: var(--white);
     font-size: 14px;
     font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
@@ -25,7 +25,7 @@
   }
 
   & .cp-section-heading {
-    color: #ffffff;
+    color: var(--white);
     font-size: 30px;
     text-align: left;
   }
@@ -35,19 +35,19 @@
   }
 
   & .cp-main > *:nth-child(even), & .cp-main > *:only-child > *:nth-child(even) {
-    background-color: #212831;
+    background-color: var(--dark-3);
   }
   & .cp-main > *:nth-child(odd), & .cp-main > *:only-child > *:nth-child(odd) {
-    background-color: #28313d;
+    background-color: var(--dark-2);
   }
 }
 
 .d3plus-Message {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .cp-section-paragraph {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .cp-viz-container {
@@ -68,12 +68,12 @@
 } */
 
 .cp-select-label {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .cp-button-group {
   & .cp-button {
-    color: #ffffff;
+    color: var(--white);
     background-color: transparent;
     cursor: pointer;
     border: none;
@@ -81,7 +81,7 @@
     border-radius: 0px;
     font-size: 11px;
     &:hover {
-      background-color: #120f1b;
+      background-color: var(--black);
     }
   }
 }

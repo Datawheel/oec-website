@@ -17,7 +17,10 @@
       left: 0;
       content: "";
       z-index: -1;
-      background: linear-gradient(to bottom, #212831 0%, rgba(33, 40, 49, 0) 100%);
+      background: linear-gradient(
+        var(--dark-3) 0%,
+        color( var(--dark-3) a(0) ) 100%
+      );
     }
   }
 
@@ -74,12 +77,15 @@
       bottom: 0;
       top: 0;
       position: absolute;
-      background: linear-gradient(rgb(33, 40, 49) 0%, rgba(33, 40, 49, 0) 100%);
+      background: linear-gradient(
+        var(--dark-3) 0%,
+        color( var(--dark-3) a(0) ) 100%
+      );
       z-index: -1;
     }
 
     & .d3plus-viz {
-      border: 1px solid #cccccc;
+      border: 1px solid var(--light-3);
     }
 
     & .hero-content {
