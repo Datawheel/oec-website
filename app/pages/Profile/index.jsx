@@ -9,8 +9,8 @@ import libs from "@datawheel/canon-cms/src/utils/libs";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
 import Nav from "components/Nav";
 
-import "./styles.css";
 import Footer from "../../components/Footer";
+import "./Profile.css";
 
 class Profile extends React.Component {
   state = {

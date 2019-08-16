@@ -1,22 +1,41 @@
 .navbar {
-  padding: 10px;
+  /* sizing */
   width: 100%;
+  max-width: 100%;
+  min-height: var(--nav-height);
+  padding: 10px;
+  /* layout */
   display: flex;
+  flex-wrap: wrap; /* prevent from breaking on small screens */
   justify-content: space-between;
   align-items: center;
+  background-color: var(--dark-3);
+  z-index: 21;
+
+  /* prevent from breaking on small screens, for now */
+  @media (min-width: 900px) {
+    position: fixed;
+
+    /* offset nav height */
+    & + .cp {
+      padding-top: var(--nav-height);
+    }
+  }
 
   & .menu-options {
     margin: 0;
+    padding-left: 0; /* reset default list style */
     display: flex;
+    flex-wrap: wrap; /* prevent from breaking on small screens */
     list-style: none;
-    font-size: 12px;
+    font-size: var(--font-xs);
+
     & .option {
       color: var(--white);
       text-transform: uppercase;
       opacity: 0.7;
       letter-spacing: 1px;
       padding: 15px 20px;
-      font-size: 12px;
     }
   }
 

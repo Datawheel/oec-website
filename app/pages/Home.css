@@ -2,7 +2,10 @@
   text-align: center;
   background: var(--dark-2) url(/images/background_home.png) repeat;
   min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* prevent the ring from expanding the viewport */
+  /* center the world */
+  display: flex;
+  flex-direction: column;
 
   & .ring {
     border-radius: 50%;
@@ -31,53 +34,64 @@
       z-index: 1;
     }
 
-    & .info {
+    & .info,
+    & .search-home {
       color: var(--white);
-      display: block;
-      font-size: 17.14286px;
+      font-size: var(--font-md);
       font-weight: 300;
-      line-height: 1.4;
+    }
+
+    & .info {
+      /* sizing */
+      display: block;
+      width: 36%;
+      /* positioning */
       position: absolute;
-      text-shadow: -2px 0 5px var(--dark-3);
-      text-align: center;
       bottom: 18%;
       right: 14%;
-      width: 36%;
+      /* typography */
+      line-height: 1.4;
+      text-align: center;
+      text-shadow: -2px 0 5px var(--dark-3);
     }
 
     & .search-home {
-      border-radius: 2px;
-      bottom: 10%;
-      border-bottom: 1px solid var(--dark-1);
-      color: var(--white);
-      cursor: pointer;
+      /* sizing */
       display: block;
-      font-size: 18.75px;
-      font-weight: 300;
-      left: 33%;
-      opacity: 0.8;
-      padding-bottom: 3px;
-      position: absolute;
       width: 37%;
+      /* positioning */
+      position: absolute;
+      bottom: 10%;
+      left: 33%;
+      padding-bottom: 3px;
+      /* theming */
+      border-bottom: 1px solid var(--dark-1);
+      border-radius: 2px;
+      opacity: 0.8;
+      /* cursor: pointer; */ /* it's not a link */
     }
 
     & .more-info {
-      transition: color 1s, opacity 0.5s;
+      /* positioning */
+      display: inline-block;
+      margin: 2%;
+      /* typography */
+      font-size: var(--font-xs);
+      font-weight: 400;
+      text-transform: uppercase;
+      /* theming */
       border-bottom: 1px solid transparent;
       color: var(--gray);
-      display: inline-block;
-      font-weight: 400;
-      font-size: 75%;
-      margin: 2% 2% 2% 2%;
       opacity: 0.8;
-      text-transform: uppercase;
+      /* transitions */
+      transition: color 1s, opacity 0.5s;
     }
 
     & .observatory {
-      left: 8%;
-      position: absolute;
-      top: 14%;
       width: 100%;
+      position: absolute;
+      left: 8%;
+      top: 14%;
     }
 
     & .star-rotate {
@@ -88,7 +102,6 @@
       opacity: 0.4;
       position: absolute;
       top: 64%;
-      width: 150%;
     }
   }
 
@@ -97,6 +110,8 @@
     position: relative;
     margin: auto;
     width: 600px;
+    max-width: 90vw;
+    max-height: 90vw;
     pointer-events: none;
 
     & .ring-pulse {
@@ -109,27 +124,6 @@
     }
     & .echo-ring {
       animation: pulse 8s ease-in 4s infinite;
-    }
-  }
-}
-
-
-.locale-options {
-  list-style: none;
-  display: flex;
-  margin-left: -40px;
-  align-items: center;
-  justify-content: center;
-
-  & li {
-    color: var(--white);
-    transition: opacity 1.5s;
-    opacity: 0.8;
-    font-size: 10px;
-    margin: 5px 10px;
-
-    & a {
-      color: var(--gray);
     }
   }
 }

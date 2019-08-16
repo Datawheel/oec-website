@@ -43,7 +43,11 @@ accent-light: "#99BCD1" # social media buttons
 accent-dark:  "#3C71A6"
 accent-black: "#164B7F"
 
+# additional colors
 label-color:  "#91A9BA"
+comparison-stat-color: "#FAB613"
+macro-market-color: "#DBB607"
+connect-americas-color: "#1AC4D8"
 
 
 ########################################
@@ -106,7 +110,7 @@ font-xxl:                   "2rem"     # 32px - use sparingly
 
 # base (p, li, etc.)
 base-font-stack:            "'Source Sans Pro', 'Droid Sans', 'Avenir', Helvetica, Arial, sans-serif" # Remember to import custom fonts & only the necessary weights via Helmet.js
-base-font-weight:           "400"
+base-font-weight:           "300"
 base-letter-spacing:        "0"
 bold-weight:                "800"
 
@@ -136,16 +140,16 @@ hero-heading-color:         "var(--white)"
 hero-heading-size:          "var(--font-xxl)"
 hero-subhead-color:         "var(--white)"
 hero-subhead-size:          "var(--font-md)"
-hero-stat-value-color:      "var(--accent)"
+hero-stat-value-color:      "var(--white)"
 hero-stat-column-count:     "4"
 hero-stat-column-width:     "10rem"
 hero-viz-width:             "20rem"
 
 # sections
-section-bg-odd:             "var(--white)"
-section-bg-even:            "var(--light-1)"
-section-text-color:         "var(--dark-2)"
-section-heading-color:      "var(--dark-3)"
+section-bg-odd:             "var(--dark-2)"
+section-bg-even:            "var(--dark-3)"
+section-text-color:         "var(--white)"
+section-heading-color:      "var(--white)"
 # sticky sections
 sticky-section-offset:      "50px" # px value required here unfortunately
 sticky-section-height:      "var(--nav-height)"
@@ -166,44 +170,44 @@ infocard-border-color:      "var(--light-2)"
 infocard-header-bg-color:   "var(--light-1)"
 infocard-main-bg-color:     "var(--white)"
 # Grouping (intro) section
-grouping-bg-color:          "var(--accent-light)"
-grouping-text-color:        "var(--black)"
+grouping-bg-color:          "var(--black)"
+grouping-text-color:        "var(--white)"
 grouping-paragraph-size:    "var(--font-md)"
-grouping-subhead-color:     "var(--accent-black)"
-grouping-subhead-font-size: "var(--font-xl)"
+grouping-subhead-color:     "var(--light-3)"
+grouping-subhead-font-size: "var(--font-md)"
 grouping-heading-color:     "var(--white)"
 grouping-heading-font-size: "var(--font-xxl)"
 grouping-stat-value-color:  "var(--white)"
 
 # buttons
-button-border-radius:       "2px"
+button-border-radius:       "0"
 button-border-width:        "1px"
-button-bg-color:            "color(var(--white) a(0.5))"
-button-border-color:        "var(--light-3)"
-button-color:               "var(--accent-black)"
+button-bg-color:            "transparent"
+button-border-color:        "var(--white)"
+button-color:               "var(--label-color)"
 button-padding:             "0.5em 1.25em"
 button-hover-bg-color:      "var(--accent-black)"
-button-hover-border-color:  "var(--accent-black)"
+button-hover-border-color:  "var(--white)"
 button-hover-color:         "var(--white)"
 
 # fields
 field-border-radius:        "1px"
 field-border-width:         "1px"
 field-padding:              "0.5em 0.5em 0.575em 0.5em"
-field-font-weight:          "400"
-field-bg-color:             "var(--white)"
-field-border-color:         "var(--light-3)"
-field-color:                "var(--dark-2)"
+field-font-weight:          "600"
+field-bg-color:             "transparent"
+field-border-color:         "var(--white)"
+field-color:                "var(--light-3)"
 field-placeholder-color:    "var(--gray)"
 field-focus-color:          "var(--accent-dark)"
-field-icon-color:           "var(--dark-1)"
-field-icon-hover-color:     "var(--dark-3)"
+field-icon-color:           "var(--gray)"
+field-icon-hover-color:     "var(--white)"
 select-border-radius:       "var(--button-border-radius)"
-select-bg-color:            "var(--light-1)"
+select-bg-color:            "transparent"
 
 # visualizations
 viz-aspect-ratio:           "50%"  # set as padding-top on .cp-viz-container, then .cp-viz fills the height
-viz-min-height:             "40vh" # prevent visualizations from getting too squishy
+viz-min-height:             "60vh" # prevent visualizations from getting too squishy
 # percentage bar visualization
 percentage-bar-height:      "var(--gutter-xs)"
 percentage-bar-bg-color:    "var(--light-2)"

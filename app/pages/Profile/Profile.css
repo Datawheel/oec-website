@@ -1,0 +1,143 @@
+@import "../../../node_modules/@datawheel/canon-cms/src/css/mixins.css";
+
+/* general section overrides */
+.cp-section-heading {
+  font-size: var(--font-xxl);
+}
+.cp-section-paragraph {
+  line-height: 1.5;
+
+  &:not(:last-child) {
+    margin-bottom: 0.75em;
+  }
+}
+.cp-stat-value-text {
+  font-weight: 300;
+}
+.cp-default-section-inner {
+  padding-bottom: var(--gutter-lg); /* prevent overflow bug */
+}
+
+
+/* hero */
+.cp-hero {
+  min-height: calc(40vh - var(--nav-height));
+  position: relative;
+  z-index: 1;
+
+  & .cp-hero-inner {
+    flex-direction: row-reverse; /* reversed layout */
+    padding: 0; /* allow smaller vertical height */
+  }
+  & .cp-viz-figure {
+    min-height: calc(25vh);
+    flex-basis: 300px;
+  }
+
+  /* temporary background image */
+  /* TODO: remove/refactor once hero images are in canon */
+  &:before {
+    @mixin absolute-expand;
+    content: "";
+    display: block;
+    background:
+      linear-gradient(
+        color( var(--dark-3) a(0.875)) 0%,
+        color( var(--dark-3) a(0.666) ) 100%
+      ),
+      url(/images/headers/country/usa.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+  }
+}
+
+
+
+& .cp-hero {
+
+
+  &::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    content: "";
+    z-index: -1;
+    background: linear-gradient(
+      var(--dark-3) 0%,
+      color( var(--dark-3) a(0) ) 100%
+    );
+  }
+}
+
+
+/* about section */
+.cp-grouping > .cp-multi-column-section:first-child {
+  background-color: var(--white);
+  color: var(--black);
+
+  & .cp-multi-column-section-heading {
+    color: var(--dark-1);
+  }
+
+  /* override heading default */
+  & .cp-multi-column-section-paragraph {
+    font-weight: 400; /* override --base-font-size (300), which works better against dark backgrounds */
+  }
+}
+
+
+/* groupings */
+.cp-grouping-section-heading {
+  text-transform: uppercase;
+}
+
+
+/* viz height overrides */
+.cp-single-column-section-grouping .cp-viz-container {
+  min-height: 30vh;
+}
+
+
+/* --------------------------
+// d3plus
+-------------------------- */
+
+/* .d3plus-textBox text {
+  font-family: "Fira Sans Condensed", sans-serif !important;
+  font-weight: 600 !important;
+} */
+
+.d3plus-Message {
+  color: var(--white);
+}
+
+.d3plus-tooltip {
+  & td {
+    text-align: right;
+    padding: 5px 10px;
+    &:first-child {
+      text-align: left;
+      font-weight: 700;
+    }
+    &:last-child {
+      text-transform: uppercase;
+    }
+  }
+}
+
+.d3plus-tooltip-title-wrapper {
+  display: flex;
+  align-items: center;
+  & .icon {
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    & img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}

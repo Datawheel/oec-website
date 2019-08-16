@@ -8,8 +8,6 @@ import {Profile as CMSProfile} from "@datawheel/canon-cms";
 import App from "./App";
 import Home from "./pages/Home";
 
-import "./Profile.css";
-
 /** */
 export default function RouteCreate() {
   return (
