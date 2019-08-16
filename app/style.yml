@@ -186,7 +186,7 @@ button-bg-color:            "transparent"
 button-border-color:        "var(--white)"
 button-color:               "var(--label-color)"
 button-padding:             "0.5em 1.25em"
-button-hover-bg-color:      "var(--accent-black)"
+button-hover-bg-color:      "var(--dark-1)"
 button-hover-border-color:  "var(--white)"
 button-hover-color:         "var(--white)"
 
@@ -199,7 +199,7 @@ field-bg-color:             "transparent"
 field-border-color:         "var(--white)"
 field-color:                "var(--light-3)"
 field-placeholder-color:    "var(--gray)"
-field-focus-color:          "var(--accent-dark)"
+field-focus-color:          "var(--accent)"
 field-icon-color:           "var(--gray)"
 field-icon-hover-color:     "var(--white)"
 select-border-radius:       "var(--button-border-radius)"
@@ -207,7 +207,7 @@ select-bg-color:            "transparent"
 
 # visualizations
 viz-aspect-ratio:           "50%"  # set as padding-top on .cp-viz-container, then .cp-viz fills the height
-viz-min-height:             "60vh" # prevent visualizations from getting too squishy
+viz-min-height:             "50vh" # prevent visualizations from getting too squishy
 # percentage bar visualization
 percentage-bar-height:      "var(--gutter-xs)"
 percentage-bar-bg-color:    "var(--light-2)"

@@ -14,9 +14,6 @@
 .cp-stat-value-text {
   font-weight: 300;
 }
-.cp-default-section-inner {
-  padding-bottom: var(--gutter-lg); /* prevent overflow bug */
-}
 
 
 /* hero */
@@ -74,11 +71,60 @@
 }
 
 
+/* default (sidebar) layout */
+.cp-default-section-inner {
+  padding-bottom: var(--gutter-lg); /* prevent overflow bug */
+
+  & .cp-section-paragraph {
+    @mixin font-xs;
+  }
+}
+/* fudge visualizations below section title */
+.cp-default-section-figure {
+  @mixin min-sm {
+    margin-top: 3.325rem;
+  }
+}
+
+
 /* viz height overrides */
 .cp-single-column-section-grouping .cp-viz-container {
   min-height: 30vh;
 }
 
+
+/* form field overrides */
+.cp-button-group > .cp-button {
+  /* remove border from adjacent buttons */
+  &:not(:first-child) {
+    border-left: none;
+  }
+  /* active state */
+  &.is-active {
+    color: var(--accent);
+    background-color: var(--button-hover-bg-color); /* TODO: remove once this is fixed in canon */
+  }
+  /* interactions */
+  &:hover, &:focus {
+    border-color: inherit;
+  }
+}
+
+/* adjust viz options style */
+.cp-viz-container .cp-button-group > .cp-button {
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+  border: none;
+  background-color: var(--button-hover-bg-color);
+
+  /* as if `icon-hidden` prop were set */
+  & > .cp-button-icon { margin: 0; }
+  & > .cp-button-text { @mixin visually-hidden; }
+}
+
+/* TODO: delete when these lines are added to canon */
+.cp-button-group > .cp-button:hover, .cp-button-group > .cp-button:focus { border-color: var(--button-hover-border-color); }
+.cp-button > .cp-button-icon { vertical-align: middle; position: relative; }
 
 /* --------------------------
 // d3plus
