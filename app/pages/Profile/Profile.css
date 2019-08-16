@@ -31,7 +31,6 @@
   }
   & .cp-viz-figure {
     min-height: calc(25vh);
-    flex-basis: 300px;
   }
 
   /* temporary background image */
@@ -49,26 +48,6 @@
     background-size: cover;
     background-repeat: no-repeat;
     z-index: -1;
-  }
-}
-
-
-
-& .cp-hero {
-
-
-  &::before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    content: "";
-    z-index: -1;
-    background: linear-gradient(
-      var(--dark-3) 0%,
-      color( var(--dark-3) a(0) ) 100%
-    );
   }
 }
 

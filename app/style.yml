@@ -143,7 +143,7 @@ hero-subhead-size:          "var(--font-md)"
 hero-stat-value-color:      "var(--white)"
 hero-stat-column-count:     "4"
 hero-stat-column-width:     "10rem"
-hero-viz-width:             "20rem"
+hero-viz-width:             "var(--sidebar-width)"
 
 # sections
 section-bg-odd:             "var(--dark-2)"
