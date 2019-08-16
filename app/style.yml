@@ -147,7 +147,7 @@ hero-viz-width:             "var(--sidebar-width)"
 
 # sections
 section-bg-odd:             "var(--dark-2)"
-section-bg-even:            "var(--dark-3)"
+section-bg-even:            "var(--dark-2)"
 section-text-color:         "var(--white)"
 section-heading-color:      "var(--white)"
 # sticky sections
@@ -170,7 +170,7 @@ infocard-border-color:      "var(--light-2)"
 infocard-header-bg-color:   "var(--light-1)"
 infocard-main-bg-color:     "var(--white)"
 # Grouping (intro) section
-grouping-bg-color:          "var(--black)"
+grouping-bg-color:          "var(--dark-3)"
 grouping-text-color:        "var(--white)"
 grouping-paragraph-size:    "var(--font-md)"
 grouping-subhead-color:     "var(--light-3)"
