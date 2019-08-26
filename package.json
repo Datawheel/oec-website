@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/observatory-economic-complexity/oec-website#readme",
   "dependencies": {
-    "@datawheel/canon-cms": "^0.7.0",
-    "@datawheel/canon-core": "^0.17.35",
+    "@datawheel/canon-cms": "^0.7.20",
+    "@datawheel/canon-core": "^0.17.46",
     "d3plus-react": "^0.5.6",
     "mondrian-rest-client": "^1.1.3"
   }
