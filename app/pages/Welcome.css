@@ -1,0 +1,3 @@
+.welcome-bg {
+  animation: spin-right 120s linear infinite; /* from Home.css */
+}

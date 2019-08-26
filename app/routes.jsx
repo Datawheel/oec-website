@@ -7,6 +7,7 @@ import {Profile as CMSProfile} from "@datawheel/canon-cms";
 
 import App from "./App";
 import Home from "./pages/Home";
+import Welcome from "./pages/Welcome";
 
 /** */
 export default function RouteCreate() {
@@ -14,6 +15,7 @@ export default function RouteCreate() {
     <Route path="/" component={App} history={browserHistory}>
       <IndexRoute component={Home} />
       <Route exact path="(/:lang)" component={Home} />
+      <Route path="/welcome" component={Welcome} />
       <Route path="/admin" component={Builder} />
       <Route exact path="/:lang/profile/:slug/:id(/:slug2)(/:id2)" component={Profile} />
     </Route>
