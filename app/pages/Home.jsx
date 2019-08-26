@@ -1,11 +1,11 @@
 import React, {Component} from "react";
+import {hot} from "react-hot-loader/root";
 import "./Home.css";
 
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
-export default class Home extends Component {
-
+class Home extends Component {
   render() {
     return (
       <div className="home">
@@ -31,5 +31,6 @@ export default class Home extends Component {
       </div>
     );
   }
-
 }
+
+export default hot(Home);

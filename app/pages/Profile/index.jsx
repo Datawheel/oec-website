@@ -1,4 +1,5 @@
 import React from "react";
+import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
 
 import {fetchData} from "@datawheel/canon-core";
@@ -84,10 +85,10 @@ Profile.childContextTypes = {
 };
 
 
-export default withNamespaces()(
+export default hot(withNamespaces()(
   connect(state => ({
     formatters: state.data.formatters,
     locale: state.i18n.locale,
     profile: state.data.profile
   }))(Profile)
-);
+));

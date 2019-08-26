@@ -1,7 +1,8 @@
 import React, {Component} from "react";
+import {hot} from "react-hot-loader/root";
 import "./Welcome.css";
 
-export default class Home extends Component {
+class Welcome extends Component {
   render() {
     return (
       <div className="welcome">
@@ -10,3 +11,5 @@ export default class Home extends Component {
     );
   }
 }
+
+export default hot(Welcome);
