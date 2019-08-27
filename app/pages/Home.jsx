@@ -15,11 +15,11 @@ class Home extends Component {
           <div className="ring-pulse" />
           <div className="ring-pulse echo-ring" />
           <div className="ring">
-            <img className="big-logo" src="/images/big_logo.png" />
-            <img className="star-rotate" src="/images/stars.png" />
-            <img className="observatory" src="/images/observatory.png" />
+            <img className="big-logo" src="/images/big_logo.png" alt="" />
+            <img className="star-rotate" src="/images/stars.png" alt="" />
+            <img className="observatory" src="/images/observatory.png" alt="" />
             <p className="info">
-              We are the world's leading visualization engine for international trade data.
+              We are the world’s leading visualization engine for international trade data.
               <a href="" className="more-info">Learn More</a>
             </p>
             <div className="launch-video">Watch a video</div>
