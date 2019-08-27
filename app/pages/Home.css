@@ -1,8 +1,8 @@
 @import "../helpers/mixins.css";
 
 .home {
+  @mixin striped-bg;
   text-align: center;
-  background: var(--dark-2) url(/images/background_home.png) repeat;
   min-height: 100vh;
   overflow: hidden; /* prevent the ring from expanding the viewport */
   /* center the world */

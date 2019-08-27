@@ -5,7 +5,7 @@
   width: 100%;
   max-width: 100%;
   min-height: var(--nav-height);
-  padding: 10px;
+  padding: 0 var(--gutter-xs);
   /* layout */
   display: flex;
   flex-wrap: wrap; /* prevent from breaking on small screens */
@@ -15,8 +15,9 @@
   z-index: 21;
 
   /* prevent from breaking on small screens, for now */
-  @media (min-width: 900px) {
+  @mixin min-md {
     position: fixed;
+    top: 0;
 
     /* offset nav height */
     & + .cp {

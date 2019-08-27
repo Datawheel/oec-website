@@ -13,3 +13,17 @@
   Note: many of these are also available as utility classes:
   https://github.com/Datawheel/canon/blob/master/packages/cms/src/css/utilities.css
 */
+
+@define-mixin striped-bg
+  $stripe-color: var(--dark-2),
+  $bg-color: var(--dark-3)
+{
+  background-color: $bg-color;
+  background-image: linear-gradient(-45deg,
+    $bg-color 16.67%,
+    $stripe-color 16.67%, $stripe-color 50%,
+    $bg-color 50.00%,     $bg-color 66.67%,
+    $stripe-color 66.67%, $stripe-color 100%
+  );
+  background-size: 5px 5px;
+}
