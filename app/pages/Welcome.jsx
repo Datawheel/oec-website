@@ -69,9 +69,11 @@ class Welcome extends Component {
 
         {/* welcome text */}
         <div className="welcome-intro">
-          <h1 className="welcome-intro-heading u-margin-top-off" aria-label="Welcome to the Observatory of Economic Complexity, the world's leading data visualization tool for international trade data">
+          <h1 className="welcome-intro-heading u-font-lg u-margin-top-off" aria-label="Welcome to the Observatory of Economic Complexity, the world's leading data visualization tool for international trade data">
             <span className="welcome-intro-heading-text">Welcome to</span>
-            <img className="welcome-intro-heading-logo" src="/images/big_logo.png" alt="" draggable="false" />
+            <div className="welcome-intro-heading-logo">
+              <img className="welcome-intro-heading-logo-img" src="/images/big_logo.png" alt="" draggable="false" />
+            </div>
             <span className="welcome-intro-heading-text">The world’s leading data visualization tool for international trade data.</span>
           </h1>
 

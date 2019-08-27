@@ -11,7 +11,7 @@
 .welcome-bg {
   @mixin absolute-expand;
   z-index: -1;
-  opacity: 0.5;
+  opacity: 0.4;
   overflow: hidden;
 }
 .welcome-bg-img {
@@ -30,7 +30,72 @@
     margin-top: -40%;
   }
   @mixin min-lg {
-    width: 60%;
-    margin-top: -30%;
+    width: 70%;
+    margin-top: -35%;
   }
+}
+
+/* introduction */
+.welcome-intro {
+  /* sizing */
+  padding-top: 10vh;
+  padding-bottom: 10vh;
+  /* positioning */
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  /* theming */
+  color: var(--light-3);
+}
+.welcome-intro-heading {
+  /* sizing */
+  padding-left: var(--gutter-md);
+  padding-right: var(--gutter-md);
+  /* typography */
+  @mixin font-smoothing;
+  font-weight: var(--label-font-weight);
+
+  & > * {
+    display: block;
+  }
+}
+.welcome-intro-heading-logo {
+  /* positioning */
+  margin: var(--gutter-sm) auto;
+  /* sizing */
+  &, & > * {
+    width: 13rem;
+    max-width: 100%;
+  }
+  /* hide the the */
+  overflow: hidden;
+  & > * {
+    margin-top: -10%;
+  }
+}
+
+/* logos */
+.welcome-intro-logo-list {
+  @mixin list-reset;
+}
+.welcome-intro-logo-item {
+  width: auto;
+  display: inline-block;
+}
+.welcome-intro-logo-link {
+  display: block;
+  padding: 1rem;
+  /* transitions */
+  opacity: 0.75;
+  transition:
+    opacity 0.1s ease-out,
+    transform 0.1s ease-out;
+
+  &:hover, &:focus {
+    opacity: 1;
+    transform: scale(1.075);
+  }
+}
+.welcome-intro-logo-img {
+  max-height: 1.875rem;
 }
