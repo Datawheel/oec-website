@@ -1,3 +1,5 @@
+@import "../helpers/mixins.css";
+
 .home {
   text-align: center;
   background: var(--dark-2) url(/images/background_home.png) repeat;
@@ -126,17 +128,4 @@
       animation: pulse 8s ease-in 4s infinite;
     }
   }
-}
-
-@keyframes pulse {
-  0%   { transform: scale(1); opacity: 0.1; }
-  100% { transform: scale(2); opacity: 0; }
-}
-
-@keyframes spin-right {
-  0%   { opacity: 0.2; }
-  20%  { opacity: 0.6; }
-  50%  { opacity: 0.3; }
-  90%  { opacity: 0.5; }
-  100% { opacity: 0.2; transform: rotate(360deg); }
 }

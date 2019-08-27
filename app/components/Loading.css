@@ -1,4 +1,4 @@
-@import "../../node_modules/@datawheel/canon-cms/src/css/mixins.css";
+@import "../helpers/mixins.css";
 
 [id="Canon"] > .loading {
   /* take up the whole screen */

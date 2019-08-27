@@ -1,0 +1,15 @@
+@import "../../node_modules/@datawheel/canon-cms/src/css/mixins.css";
+/*
+  From canon cms, some nice mixins to help you write less css, including:
+    - media queries (both mobile & max-width first)
+    - typography (font sizes using style.yml, also available as utility classes)
+    - accessibly hiding text; useful to add context for screen readers
+    - layout (set a parent `position` to `relative`, then give the child a mixin like `absolute-expand` or `absolute-center`
+    - resets (list-reset, button-reset)
+
+  Direct link to canon mixins file:
+  https://github.com/Datawheel/canon/blob/master/packages/cms/src/css/mixins.css
+
+  Note: many of these are also available as utility classes:
+  https://github.com/Datawheel/canon/blob/master/packages/cms/src/css/utilities.css
+*/

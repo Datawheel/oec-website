@@ -1,3 +1,5 @@
+@import "../helpers/mixins.css";
+
 .welcome-bg {
-  animation: spin-right 120s linear infinite; /* from Home.css */
+  animation: spin-right 120s linear infinite;
 }

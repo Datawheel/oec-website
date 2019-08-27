@@ -1,4 +1,4 @@
-@import "../../../node_modules/@datawheel/canon-cms/src/css/mixins.css";
+@import "../../helpers/mixins.css";
 
 /* general section overrides */
 .cp-section-heading {
