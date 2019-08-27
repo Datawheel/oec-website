@@ -1,5 +1,34 @@
 @import "../helpers/mixins.css";
 
+.welcome {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--dark-2);
+}
+
+/* big spinning background */
 .welcome-bg {
+  @mixin absolute-expand;
+  opacity: 0.5;
+  overflow: hidden;
+}
+.welcome-bg-img {
+  /* sizing */
+  display: block;
+  width: 100%;
+  /* positioning */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -50%;
+  /* animations */
   animation: spin-right 120s linear infinite;
+
+  @mixin min-sm {
+    width: 80%;
+    margin-top: -40%;
+  }
+  @mixin min-lg {
+    width: 60%;
+    margin-top: -30%;
+  }
 }

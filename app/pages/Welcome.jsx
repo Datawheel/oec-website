@@ -6,7 +6,9 @@ class Welcome extends Component {
   render() {
     return (
       <div className="welcome">
-        <img className="welcome-bg" src="/images/stars.png" />
+        <div className="welcome-bg">
+          <img className="welcome-bg-img" src="/images/stars.png" />
+        </div>
       </div>
     );
   }
