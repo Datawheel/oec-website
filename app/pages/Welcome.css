@@ -5,6 +5,10 @@
   z-index: 1;
   min-height: 100vh;
   background-color: var(--dark-2);
+  /* push form to bottom */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 /* big spinning background */
@@ -38,8 +42,8 @@
 /* introduction */
 .welcome-intro {
   /* sizing */
-  padding-top: 10vh;
-  padding-bottom: 10vh;
+  padding-top: 12vh;
+  padding-bottom: 12vh;
   /* positioning */
   margin-left: auto;
   margin-right: auto;
@@ -98,4 +102,28 @@
 }
 .welcome-intro-logo-img {
   max-height: 1.875rem;
+}
+
+/* form */
+.welcome-form-outer {
+  background-color: var(--dark-3);
+  padding: 0 var(--gutter-md) var(--gutter-lg) var(--gutter-md);
+  position: relative;
+
+  &:before {
+    content: "";
+    /* sizing */
+    display: block;
+    width: 100%;
+    height: 10vh;
+    /* positioning */
+    position: absolute;
+    top: -10vh;
+    left: 0;
+    right: 0;
+    /* theming */
+    background-color: var(--dark-3);
+    border-top-left-radius: 50% 100%;
+    border-top-right-radius: 50% 100%;
+  }
 }
