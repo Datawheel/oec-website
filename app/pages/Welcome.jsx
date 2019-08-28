@@ -42,7 +42,7 @@ class Welcome extends Component {
   }
 
   render() {
-    const {selection1, selection2Entity} = this.state;
+    const {selection1, selection2, selection2Entity} = this.state;
 
     // dummy data
     const countries = [
@@ -60,11 +60,16 @@ class Welcome extends Component {
       {name: "Wheels", id: "wheels"}
     ];
 
+    const countryIconPath = "/images/icons/country";
+    const productIconPath = "/images/icons/hs";
+    const countryDefaultIcon = `${countryIconPath}/country.svg`;
+    const productDefaultIcon = `${productIconPath}/product.svg`;
+
     return (
       <div className="welcome">
         {/* spinning orb thing */}
         <div className="welcome-bg">
-          <img className="welcome-bg-img" src="/images/stars.png" />
+          <img className="welcome-bg-img" src="/images/stars.png" alt="" draggable="false" />
         </div>
 
         {/* welcome text */}
@@ -109,13 +114,21 @@ class Welcome extends Component {
         <div className="welcome-form-outer">
           <div className="welcome-form-inner">
             <h2 className="u-visually-hidden">
-              Please select either a country and product, or two countries.
+              Please select a country. You may also select a product, or an additional country.
             </h2>
 
             {/* the form */}
             <form onSubmit={e => this.handleSubmit(e)} className="welcome-form">
               {/* entity 1 */}
               <div className="welcome-form-select-wrapper">
+                <img
+                  src={selection1 === "unspecified"
+                    ? countryDefaultIcon
+                    : `${countryIconPath}/country_${selection1}.png`
+                  }
+                  className="welcome-form-select-icon"
+                  alt=""
+                />
                 <Select
                   label="country"
                   className="welcome-form-select"
@@ -146,6 +159,16 @@ class Welcome extends Component {
                       onClick: () => this.toggleEntity("country")
                     }
                   ]}
+                />
+                <img
+                  src={selection2Entity === "product"
+                    ? selection2 === "unspecified"
+                      ? productDefaultIcon : `${productIconPath}/hs_${selection2}.png`
+                    : selection2 === "unspecified"
+                      ? countryDefaultIcon : `${countryIconPath}/country_${selection2}.png`
+                  }
+                  className="welcome-form-select-icon"
+                  alt=""
                 />
                 <Select
                   label={selection2Entity}
