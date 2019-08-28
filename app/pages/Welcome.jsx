@@ -79,7 +79,7 @@ class Welcome extends Component {
             <div className="welcome-intro-heading-logo">
               <img className="welcome-intro-heading-logo-img" src="/images/big_logo.png" alt="" draggable="false" />
             </div>
-            <span className="welcome-intro-heading-text">The world’s leading data visualization tool for international trade data.</span>
+            <span className="welcome-intro-heading-text">The world’s leading data visualization tool for international trade data.</span>
           </h1>
 
           {/* logos */}
@@ -194,10 +194,12 @@ class Welcome extends Component {
               </div>
 
               {/* submit button submits the form */}
-              <button className="welcome-form-button" disabled={selection1 === "unspecified"}>
-                <span className="welcome-form-button-text">Go to profile</span>
-                <Icon icon="arrow-right" className="welcome-form-button-icon" />
-              </button>
+              <div className="welcome-form-button-wrapper">
+                <button className="welcome-form-button" disabled={selection1 === "unspecified"}>
+                  <span className="welcome-form-button-text">Go to profile</span>
+                  <Icon icon="arrow-right" className="welcome-form-button-icon" />
+                </button>
+              </div>
 
             </form>
           </div>

@@ -237,3 +237,41 @@
     margin-bottom: 1px; /* baseline fudge */
   }
 }
+
+/* submit button */
+.welcome-form-button-wrapper {
+  /* alignment */
+  @mixin max-sm {
+    & > .welcome-form-button {
+      display: block;
+      width: 100%;
+    }
+  }
+  @mixin min-sm {
+    text-align: center;
+    margin-top: var(--gutter-md);
+    margin-bottom: var(--gutter-md);
+  }
+}
+.welcome-form-button {
+  /* theming */
+  color: var(--white);
+  background-color: var(--gray);
+  border: none;
+  border-radius: 4px;
+  padding: 1em 1.5em;
+  cursor: pointer; /* it a button, but it acts like a link */
+  /* typography */
+  @mixin font-uppercase;
+  font-size: var(--font-sm);
+  font-weight: var(--bold-weight);
+
+  & > .welcome-form-button-text {
+    margin-right: 0.5em;
+  }
+  & > .welcome-form-button-icon {
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+}
