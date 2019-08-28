@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
-import {Icon} from "@blueprintjs/core";
 
 import Select from "@datawheel/canon-cms/src/components/fields/Select.jsx";
 import ButtonGroup from "@datawheel/canon-cms/src/components/fields/ButtonGroup.jsx";
+
+import FancyButton from "../components/FancyButton";
 import "./Welcome.css";
 
 class Welcome extends Component {
@@ -195,10 +196,9 @@ class Welcome extends Component {
 
               {/* submit button submits the form */}
               <div className="welcome-form-button-wrapper">
-                <button className="welcome-form-button" disabled={selection1 === "unspecified"}>
-                  <span className="welcome-form-button-text">Go to profile</span>
-                  <Icon icon="arrow-right" className="welcome-form-button-icon" />
-                </button>
+                <FancyButton icon="arrow-right" disabled={selection1 === "unspecified"}>
+                  Go to profile
+                </FancyButton>
               </div>
 
             </form>
