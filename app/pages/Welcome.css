@@ -42,8 +42,8 @@
 /* introduction */
 .welcome-intro {
   /* sizing */
-  padding-top: 12vh;
-  padding-bottom: 12vh;
+  padding-top: 14vh;
+  padding-bottom: 14vh;
   /* positioning */
   margin-left: auto;
   margin-right: auto;
@@ -125,5 +125,115 @@
     background-color: var(--dark-3);
     border-top-left-radius: 50% 100%;
     border-top-right-radius: 50% 100%;
+  }
+}
+
+/* layout */
+.welcome-form-inner {
+  width: 50rem;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+
+  & .welcome-form > *:not(:last-child) {
+    margin-bottom: var(--gutter-md);
+  }
+
+  @mixin min-sm {
+    & .welcome-form-select-wrapper {
+      display: inline-block;
+      width: calc(50% - 2rem);
+
+      /* + */
+      &:first-child:after {
+        /* sizing */
+        content: "+";
+        display: block;
+        font-size: var(--font-xxl);
+        color: var(--gray);
+        /* positioning */
+        @mixin absolute-vertical-center;
+        right: -1.25em;
+        padding-top: 0.75em;
+      }
+
+      &:nth-child(2) {
+        left: 4rem;
+      }
+    }
+  }
+}
+
+/* dropdown label & button group styled as label */
+.welcome-form-select-wrapper > .cp-select-label > .cp-select-text,
+.welcome-form-select-wrapper > .cp-button-group > .cp-button {
+  /* typography */
+  @mixin font-uppercase;
+  font-size: var(--font-sm);
+  font-weight: var(--bold-weight);
+  color: var(--light-3);
+  /* sizing */
+  padding: 0.25em 0.5em;
+
+  &:first-child {
+    margin-left: -0.5em; /* offset padding */
+  }
+}
+
+/* button group style overrides */
+.welcome-form-select-wrapper > .cp-button-group {
+  display: block; /* override flex */
+
+  & > .cp-button {
+    background: none;
+    border: none;
+    transition: color 0.1s ease-out;
+
+    &:first-child {
+      border-right: 1px solid var(--gray);
+    }
+
+    &.is-inactive {
+      color: var(--gray);
+
+      &:hover, &:focus {
+        color: var(--accent);
+      }
+    }
+  }
+}
+
+/* select menu overrides */
+.welcome-form-select-wrapper > .cp-select-label > .cp-select {
+  /* typography */
+  font-weight: var(--base-font-weight);
+  /* theming */
+  background: none;
+  border-width: 0 0 2px 0;
+  border-bottom-color: var(--gray);
+  /* sizing */
+  padding-top: 0.25em; /* bring in labels closer */
+  padding-left: 1.5em; /* make room for icon */
+
+  &:hover {
+    border-bottom-color: var(--light-3);
+  }
+  &:focus {
+    border-bottom-color: var(--accent);
+  }
+}
+
+/* position icons */
+.welcome-form-select-wrapper {
+  position: relative;
+
+  & > .welcome-form-select-icon {
+    /* sizing */
+    width: var(--font-lg);
+    height: auto;
+    /* positioning */
+    position: absolute;
+    bottom: var(--gutter-sm);
+    margin-bottom: 1px; /* baseline fudge */
   }
 }

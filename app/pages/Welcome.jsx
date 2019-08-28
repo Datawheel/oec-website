@@ -132,6 +132,7 @@ class Welcome extends Component {
                 <Select
                   label="country"
                   className="welcome-form-select"
+                  fontSize="lg"
                   onChange={e => this.setState({selection1: e.target.value})}
                 >
                   {countries.map(country =>
@@ -174,6 +175,7 @@ class Welcome extends Component {
                   label={selection2Entity}
                   labelHidden
                   className="welcome-form-select"
+                  fontSize="lg"
                   onChange={e => this.setState({selection2: e.target.value})}
                 >
                   {selection2Entity === "product"
