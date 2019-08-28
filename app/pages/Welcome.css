@@ -107,7 +107,7 @@
 /* form */
 .welcome-form-outer {
   background-color: var(--dark-3);
-  padding: 0 var(--gutter-md) var(--gutter-lg) var(--gutter-md);
+  padding: 0 var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
   position: relative;
 
   &:before {
@@ -242,6 +242,8 @@
 .welcome-form-button-wrapper {
   /* alignment */
   @mixin max-sm {
+    margin-top: var(--gutter-lg);
+
     & > .welcome-form-button {
       display: block;
       width: 100%;
@@ -265,13 +267,43 @@
   @mixin font-uppercase;
   font-size: var(--font-sm);
   font-weight: var(--bold-weight);
+  /* transitions */
+  transition:
+    opacity 0.3s ease-out,
+    background 0.3s ease-out,
+    box-shadow 0.1s ease-out;
 
   & > .welcome-form-button-text {
     margin-right: 0.5em;
   }
   & > .welcome-form-button-icon {
+    width: 1.125em;
     vertical-align: middle;
     position: relative;
-    top: -1px;
+    top: -0.075em;
+    transition: transform 0.15s ease-out;
+
+    & > svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  /* disabled state */
+  &[disabled] {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* interactions */
+  &:not([disabled]):hover,
+  &:not([disabled]):focus {
+    background-color: var(--accent-dark);
+    box-shadow: 0 0.125em 1em color(var(--black) a(0.5));
+
+    & > .welcome-form-button-icon {
+      transform: scale(1.125) translateX(0.075em);
+    }
   }
 }
