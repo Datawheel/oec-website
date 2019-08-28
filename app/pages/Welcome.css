@@ -226,6 +226,7 @@
 /* position icons */
 .welcome-form-select-wrapper {
   position: relative;
+  transition: opacity 0.3s ease-out;
 
   & > .welcome-form-select-icon {
     /* sizing */
@@ -235,6 +236,12 @@
     position: absolute;
     bottom: var(--gutter-sm);
     margin-bottom: 1px; /* baseline fudge */
+  }
+
+  /* disabled state */
+  &[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 

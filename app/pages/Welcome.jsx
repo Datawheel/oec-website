@@ -61,7 +61,7 @@ class Welcome extends Component {
     ];
 
     const countryIconPath = "/images/icons/country";
-    const productIconPath = "/images/icons/hs";
+    const productIconPath = "/images/icons/product";
     const countryDefaultIcon = `${countryIconPath}/country.svg`;
     const productDefaultIcon = `${productIconPath}/product.svg`;
 
@@ -144,7 +144,7 @@ class Welcome extends Component {
               </div>
 
               {/* entity 2 */}
-              <div className="welcome-form-select-wrapper">
+              <div className="welcome-form-select-wrapper" disabled={selection1 === "unspecified"}>
                 <ButtonGroup className="welcome-form-toggle"
                   buttons={[
                     {
