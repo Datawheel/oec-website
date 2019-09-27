@@ -4,13 +4,27 @@
 .cp-section-heading {
   font-size: var(--font-xxl);
 }
+
+/* paragraphs */
 .cp-section-paragraph {
   line-height: 1.5;
 
   &:not(:last-child) {
     margin-bottom: 0.75em;
   }
+
+  /* story links */
+  & a {
+    @mixin link-theme;
+  }
+
+  /* underlined text (why?) */
+  & u {
+    text-decoration-color: var(--dark-1); /* not widely supported, but degrades gracefully */
+  }
 }
+
+
 .cp-stat-value-text {
   font-weight: 300;
 }
@@ -38,8 +52,8 @@
     display: block;
     background:
       linear-gradient(
-        color( var(--dark-3) a(0.875)) 0%,
-        color( var(--dark-3) a(0.666) ) 100%
+        color( var(--dark-4) a(0.875)) 0%,
+        color( var(--dark-4) a(0.666) ) 100%
       ),
       url(/images/headers/country/usa.jpg);
     background-size: cover;
@@ -55,7 +69,7 @@
   color: var(--black);
 
   & .cp-multi-column-section-heading {
-    color: var(--dark-1);
+    color: var(--dark-2);
   }
 
   /* override heading default */
@@ -115,7 +129,7 @@
   padding-left: 0.75em;
   padding-right: 0.75em;
   border: none;
-  background-color: var(--button-hover-bg-color);
+  background-color: var(--dark-4);
 
   /* as if `icon-hidden` prop were set */
   & > .cp-button-icon { margin: 0; }

@@ -11,7 +11,7 @@
   flex-wrap: wrap; /* prevent from breaking on small screens */
   justify-content: space-between;
   align-items: center;
-  background-color: var(--dark-3);
+  background-color: var(--dark-4);
   z-index: 21;
 
   /* prevent from breaking on small screens, for now */

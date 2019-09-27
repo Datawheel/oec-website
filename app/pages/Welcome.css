@@ -4,7 +4,7 @@
   position: relative;
   z-index: 1;
   min-height: 100vh;
-  background-color: var(--dark-2);
+  background-color: var(--dark-3);
   /* push form to bottom */
   display: flex;
   flex-direction: column;
@@ -106,7 +106,7 @@
 
 /* form */
 .welcome-form-outer {
-  background-color: var(--dark-3);
+  background-color: var(--dark-4);
   padding: 0 var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
   position: relative;
 
@@ -122,7 +122,7 @@
     left: 0;
     right: 0;
     /* theming */
-    background-color: var(--dark-3);
+    background-color: var(--dark-4);
     border-top-left-radius: 50% 100%;
     border-top-right-radius: 50% 100%;
   }
@@ -150,7 +150,7 @@
         content: "+";
         display: block;
         font-size: var(--font-xxl);
-        color: var(--gray);
+        color: var(--dark-1);
         /* positioning */
         @mixin absolute-vertical-center;
         right: -1.25em;
@@ -190,11 +190,11 @@
     transition: color 0.1s ease-out;
 
     &:first-child {
-      border-right: 1px solid var(--gray);
+      border-right: 1px solid var(--dark-1);
     }
 
     &.is-inactive {
-      color: var(--gray);
+      color: var(--dark-1);
 
       &:hover, &:focus {
         color: var(--accent);
@@ -210,7 +210,7 @@
   /* theming */
   background: none;
   border-width: 0 0 2px 0;
-  border-bottom-color: var(--gray);
+  border-bottom-color: var(--dark-1);
   /* sizing */
   padding-top: 0.25em; /* bring in labels closer */
   padding-left: 1.5em; /* make room for icon */

@@ -11,8 +11,8 @@
 
   & .ring {
     border-radius: 50%;
-    background-color: var(--dark-3);
-    border: 1px solid var(--gray);
+    background-color: var(--dark-4);
+    border: 1px solid var(--dark-1);
     height: 100%;
     overflow: hidden;
     position: relative;
@@ -54,7 +54,7 @@
       /* typography */
       line-height: 1.4;
       text-align: center;
-      text-shadow: -2px 0 5px var(--dark-3);
+      text-shadow: -2px 0 5px var(--dark-4);
     }
 
     & .search-home {
@@ -67,7 +67,7 @@
       left: 33%;
       padding-bottom: 3px;
       /* theming */
-      border-bottom: 1px solid var(--dark-1);
+      border-bottom: 1px solid var(--dark-2);
       border-radius: 2px;
       opacity: 0.8;
       /* cursor: pointer; */ /* it's not a link */
@@ -83,7 +83,7 @@
       text-transform: uppercase;
       /* theming */
       border-bottom: 1px solid transparent;
-      color: var(--gray);
+      color: var(--dark-1);
       opacity: 0.8;
       /* transitions */
       transition: color 1s, opacity 0.5s;

@@ -1,4 +1,4 @@
-@import "../../node_modules/@datawheel/canon-cms/src/css/mixins.css";
+@import "@datawheel/canon-cms/src/css/mixins.css";
 /*
   From canon cms, some nice mixins to help you write less css, including:
     - media queries (both mobile & max-width first)
@@ -15,8 +15,8 @@
 */
 
 @define-mixin striped-bg
-  $stripe-color: var(--dark-2),
-  $bg-color: var(--dark-3)
+  $stripe-color: var(--dark-3),
+  $bg-color: var(--dark-4)
 {
   background-color: $bg-color;
   background-image: linear-gradient(-45deg,
@@ -26,4 +26,14 @@
     $stripe-color 66.67%, $stripe-color 100%
   );
   background-size: 5px 5px;
+}
+
+@define-mixin link-theme {
+  font-weight: var(--heading-font-weight);
+  color: var(--accent);
+  text-decoration: underline;
+
+  &:hover, &:focus {
+    color: var(--accent-light);
+  }
 }
