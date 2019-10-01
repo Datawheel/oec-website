@@ -24,7 +24,7 @@ function findColor(d) {
   if (detectedColors.length !== 1) {
     for (const key in colors) {
       if (`${key} ID` in d || key === "Continent") {
-        return colors[key][d[`${key} ID`]] || colors[key][d[key]] || "transparent" || colors.colorGrey;
+        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || "transparent" || colors.colorGrey;
       }
     }
   }
@@ -37,8 +37,8 @@ function findColor(d) {
  */
 function backgroundImage(d) {
 
-  if ("Chapter ID" in d) {
-    return `/images/icons/hs/hs_${d["Chapter ID"]}.png`;
+  if ("Section ID" in d) {
+    return `/images/icons/hs/hs_${d["Section ID"]}.png`;
   }
   else if ("Continent" in d) {
     return `/images/icons/country/country_${d["Continent ID"]}.png`;
@@ -63,6 +63,7 @@ const axisStyles = {
   labelConfig: {
     fontColor: () => "#FFFFFF",
     // fontFamily: () => "Source Sans Pro",
+    fontFamily: () => "'Source Sans Pro', sans-serif",
     fontSize: () => 12,
     fontWeight: () => 400
   },
@@ -70,6 +71,7 @@ const axisStyles = {
     labelConfig: {
       fontColor: () => "#FFFFFF",
       // fontFamily: () => "Source Sans Pro",
+      fontFamily: () => "'Source Sans Pro', sans-serif",
       fontSize: () => 12,
       fontWeight: () => 400
     },
@@ -78,7 +80,7 @@ const axisStyles = {
   tickSize: 5,
   titleConfig: {
     fontColor: () => "#FFFFFF",
-    // fontFamily: () => "Palanquin",
+    fontFamily: () => "'Palanquin', sans-serif",
     fontSize: () => 12,
     fontWeight: () => 400
   }
@@ -86,7 +88,7 @@ const axisStyles = {
 
 export default {
   aggs: {
-    "Chapter ID": mean,
+    "Section ID": mean,
     "Flow ID": mean
   },
   backgroundConfig: {
@@ -113,7 +115,7 @@ export default {
       const imgUrl = backgroundImage(d);
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-      tooltip += `<span>${d.Continent || d.Chapter || d.Flow}</span>`;
+      tooltip += `<span>${d.Continent || d.Section || d.Flow}</span>`;
       tooltip += "</div>";
       return tooltip;
     }
@@ -124,13 +126,13 @@ export default {
       "z-index": 18
     },
     title: d => {
-      const dd = ["HS6", "HS4", "HS2", "Chapter", "Country", "Flow"].find(h => h in d);
+      const dd = ["HS6", "HS4", "HS2", "Section", "Country", "Flow"].find(h => h in d);
       const bgColor = "Country" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
       const imgUrl = "Country" in d ? `/images/icons/country/country_${d["ISO 3"]}.png`
-        : "Chapter" in d ? `/images/icons/hs/hs_${d["Chapter ID"]}.png`
+        : "Section" in d ? `/images/icons/hs/hs_${d["Section ID"]}.png`
           : `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;

@@ -1,5 +1,5 @@
 export default {
-  Chapter: {
+  Section: {
     1: "#e5d597",
     2: "#e0b546",
     3: "#c38842",
