@@ -13,11 +13,6 @@
     margin-bottom: 0.75em;
   }
 
-  /* story links */
-  & a {
-    @mixin link-theme;
-  }
-
   /* underlined text (why?) */
   & u {
     text-decoration-color: var(--dark-1); /* not widely supported, but degrades gracefully */
