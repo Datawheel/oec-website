@@ -8,7 +8,7 @@ import {withNamespaces} from "react-i18next";
 
 import libs from "@datawheel/canon-cms/src/utils/libs";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
-import Nav from "components/Nav";
+import Navbar from "components/Navbar";
 
 import Footer from "../../components/Footer";
 import "./Profile.css";
@@ -60,7 +60,7 @@ class Profile extends React.Component {
     const {variables} = profile;
     const {scrolled} = this.state;
     return <div className="profile" onScroll={this.handleScroll}>
-      <Nav
+      <Navbar
         className={scrolled ? "background" : ""}
         title={scrolled ? variables.name : ""}
       />

@@ -2,14 +2,14 @@ import React, {Component} from "react";
 import {hot} from "react-hot-loader/root";
 import "./Home.css";
 
-import Nav from "../components/Nav";
+import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 class Home extends Component {
   render() {
     return (
       <div className="home">
-        <Nav />
+        <Navbar />
 
         <div className="bg-frame">
           <div className="ring-pulse" />
