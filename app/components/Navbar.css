@@ -7,6 +7,7 @@
   min-height: var(--nav-height);
   padding: 0 var(--gutter-md);
   /* positioning */
+  position: relative; /* honor z-index */
   z-index: 21;
   /* layout */
   text-align: left; /* override home.css for now */
