@@ -9,7 +9,16 @@ import NavGroup from "./NavGroup";
 import "./Navbar.css";
 
 class Navbar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      navVisible: false
+    };
+  }
+
   render() {
+    const {navVisible} = this.state;
+
     return (
       <div className="navbar">
         <Link className="navbar-logo-link" to="/">
@@ -22,7 +31,13 @@ class Navbar extends Component {
           />
         </Link>
 
-        <nav className="navbar-nav">
+        <button
+          className="navbar-nav-toggle-button display u-font-md u-hide-above-md"
+          onClick={() => this.setState({navVisible: !navVisible})}
+        >
+          Menu <Icon icon={navVisible ? "cross" : "menu"} className="navbar-nav-toggle-button-icon" />
+        </button>
+        <nav className={`navbar-nav ${navVisible ? "is-visible" : "is-hidden"}`}>
           <ul className="navbar-nav-list">
             {NAV.map(group =>
               <NavGroup title={group.title} items={group.items} key={group.title} />
