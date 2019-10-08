@@ -32,7 +32,7 @@ class Navbar extends Component {
 
         <button className="navbar-search-button">
           <span className="u-visually-hidden">Search profiles...</span>
-          <Icon icon="search" className="navbar-search-button-icon" />
+          <Icon icon="search" iconSize={20} className="navbar-search-button-icon" />
         </button>
       </div>
     );

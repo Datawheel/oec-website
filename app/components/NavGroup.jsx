@@ -37,9 +37,12 @@ class NavGroup extends Component {
     const {isOpen} = this.state;
 
     return (
-      <li className={`nav-group ${isOpen ? "is-open" : "is-closed"}`} onBlur={e => this.onBlur(e)}>
+      <li className="nav-group" onBlur={e => this.onBlur(e)}>
         {/* click the title to toggle the menu */}
-        <button className="nav-group-button display" onClick={() => this.setState({isOpen: !isOpen})}>
+        <button
+          className={`nav-group-button display ${isOpen ? "is-active" : "is-inactive"}`}
+          onClick={() => this.setState({isOpen: !isOpen})}
+        >
           <span className="u-visually-hidden">{isOpen ? "hide" : "show"} </span>
           <span className="nav-group-button-text">{title} </span>
           <Icon icon="caret-down" className="nav-group-button-icon" />
@@ -47,7 +50,7 @@ class NavGroup extends Component {
 
         {/* loop through nav links */}
         {items && items.length &&
-          <ul className="nav-group-list">
+          <ul className={`nav-group-list ${isOpen ? "is-open" : "is-closed"}`}>
             {items.map(item =>
               <li className="nav-group-item" key={item.title}>
                 {item.items && item.items.length

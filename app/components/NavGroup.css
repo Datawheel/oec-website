@@ -1,5 +1,6 @@
 @import "../helpers/mixins.css";
 
+/* reset links */
 .nav-group-link,
 .nav-group-button,
 .nav-group-subtitle {
@@ -7,60 +8,142 @@
   padding: 0 1rem;
 }
 
+/* tweak display font for dropdown titles & subtitles */
 .nav-group-button,
 .nav-group-subtitle {
   @mixin font-md;
+  font-weight: var(--label-font-weight);
 }
 
-.nav-group-subtitle {
-  margin-bottom: 0.25rem;
-}
-
+/* the main title is a button */
 .nav-group-button {
   @mixin button-reset;
   width: 100%;
   text-align: left;
   line-height: var(--nav-height);
-}
-.nav-group-button {
+  /* theming */
   color: inherit;
 
-  /* layout */
+  /* interactions */
+  &:hover path,
+  &.is-active path {
+    fill: var(--white);
+  }
+
+  /* align text and icon */
   & > * {
     display: inline-block;
     vertical-align: middle;
   }
 }
+/* interactions */
+.nav-group:hover > .nav-group-button,
+.nav-group-button.is-active {
+  background-color: var(--dark-3);
+}
 
+/* 🔻 */
 .nav-group-button-icon {
   /* sizing */
   width: 0.75em;
   /* positioning */
   position: relative;
-  top: -1px;
   margin-left: 0.25em;
+  margin-right: -0.125em;
+  /* never not fudging the baseline */
+  top: 1px;
+  @mixin min-md { top: -1px; }
+  @mixin min-lg { top: -0.0875em; }
 
   /* theming */
   & path {
     fill: var(--accent-light);
+    transition: fill 0.2s ease-out;
   }
 }
 
+/* dropdown list */
+.nav-group {
+  position: relative;
+}
 .nav-group-list {
   @mixin list-reset;
+
+  /* absolutely position & size dropdowns */
+  &:not(.nav-group-nested-list) {
+    /* positioning */
+    position: absolute;
+    top: var(--nav-height);
+    /* sizing */
+    width: max-content;
+    min-width: 100%;
+    padding-top: var(--gutter-xs);
+    padding-bottom: var(--gutter-xs);
+
+    /* hidden state */
+    &.is-closed {
+      /* make it invisible */
+      opacity: 0;
+      transform: translateY(-20px);
+      z-index: -1;
+      /* prevent clicks */
+      clip: rect(1px, 1px, 1px, 1px);
+      overflow: hidden;
+      pointer-events: none;
+    }
+  }
 }
+/* open/hover state */
+.nav-group-list.is-open,
+.nav-group:hover > .nav-group-list {
+  background-color: var(--dark-3);
+  box-shadow:
+    0 0.25em 0.5em color(var(--black) a(0.125)),
+    0 0.5em 1em color(var(--black) a(0.125));
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
+}
+/* override closed styles on hover */
+.nav-group:hover > .nav-group-list.is-closed {
+  opacity: 1;
+  transform: none;
+  clip: auto;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+/* space out subtitles (override blueprint) */
+.nav-group-subtitle {
+  margin-bottom: 0.25rem;
+}
+/* space out adjacent nested lists */
 .nav-group-item:not(:last-child) > .nav-group-nested-list {
   margin-bottom: var(--gutter-sm);
 }
 
+/* link theming */
 .nav-group-link {
   @mixin font-sm;
-  font-weight: var(--label-font-weight);
   color: var(--light-3);
   padding-top: 0.25em;
   padding-bottom: 0.25em;
-}
-.nav-group-link-icon {
-  width: 0.75em;
-  margin-right: 0.5em;
+
+  /* icon */
+  & .nav-group-link-icon {
+    width: 0.75em;
+    margin-right: 0.5em;
+    transition: 0.1s ease-out;
+  }
+
+  /* interactions */
+  &:hover, &:focus {
+    color: var(--white);
+    background-color: var(--dark-4);
+    text-decoration: none;
+
+    & .nav-group-link-icon {
+      transform: scale(1.25);
+    }
+  }
 }

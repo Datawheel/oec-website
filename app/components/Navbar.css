@@ -28,26 +28,43 @@
       padding-top: var(--nav-height);
     }
   }
+
+  /* style focus outline */
+  & *:focus {
+    outline: thin solid var(--accent);
+    outline-offset: 0;
+  }
 }
 
 /* logo */
 .navbar-logo-link {
-  display: block;
+  margin-left: calc(0px - var(--gutter-sm));
+  margin-right: calc(0px - var(--gutter-sm));
   padding: var(--gutter-sm);
-  margin-left: calc(0px - var(--gutter-sm)); /* offset padding */
 }
 .navbar-logo-img {
-  width: 6.75rem;
+  width: 100px;
 }
 
-/* nav list */
+/* main nav list */
+.navbar-nav {
+  position: relative;
+  top: -2px;
+}
 .navbar-nav-list {
   @mixin list-reset;
   display: flex;
+  flex-wrap: wrap;
 }
 
 /* search */
 .navbar-search-button {
   @mixin button-reset;
   color: var(--white);
+
+  /* center nav on big screens */
+  @mixin min-md {
+    width: 100px;
+    text-align: right;
+  }
 }
