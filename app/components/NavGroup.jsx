@@ -25,7 +25,7 @@ export default class NavGroup extends Component {
   renderLink(item) {
     return <a href={item.url} className="nav-group-link" onFocus={() => this.setState({isOpen: true})}>
       {item.icon &&
-        <img className="nav-group-link-icon" src={item.icon} alt="" />
+        <img className="nav-group-link-icon" src={`/images/icons/${item.icon}.png`} alt="" />
       }
       {item.title}
     </a>;

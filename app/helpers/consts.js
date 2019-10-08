@@ -21,13 +21,13 @@ module.exports = {
     ]},
     // visualizations
     {title: "Visualizations", items: [
-      {title: "Tree map",     url: `/${locale}/visualizations/tree-map`,  icon: "tree-map"},
-      {title: "Stacked area", url: `/${locale}/visualizations/stacked`,   icon: "stacked"},
-      {title: "Line chart",   url: `/${locale}/visualizations/line`,      icon: "line"},
-      {title: "Network",      url: `/${locale}/visualizations/network`,   icon: "network"},
-      {title: "Ring",         url: `/${locale}/visualizations/ring`,      icon: "ring"},
-      {title: "Scatter plot", url: `/${locale}/visualizations/scatter`,   icon: "scatter"},
-      {title: "Geo map",      url: `/${locale}/visualizations/geo-map`,   icon: "geo-map"}
+      {title: "Tree map",     url: `/${locale}/visualizations/tree-map`,  icon: "visualizations/tree-map"},
+      {title: "Stacked area", url: `/${locale}/visualizations/stacked`,   icon: "visualizations/stacked"},
+      {title: "Line chart",   url: `/${locale}/visualizations/line`,      icon: "visualizations/line"},
+      {title: "Network",      url: `/${locale}/visualizations/network`,   icon: "visualizations/network"},
+      {title: "Ring",         url: `/${locale}/visualizations/ring`,      icon: "visualizations/ring"},
+      {title: "Scatter plot", url: `/${locale}/visualizations/scatter`,   icon: "visualizations/scatter"},
+      {title: "Geo map",      url: `/${locale}/visualizations/geo-map`,   icon: "visualizations/geo-map"}
     ]},
     // about
     {title: "About", items: [
