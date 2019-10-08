@@ -5,14 +5,18 @@
   width: 100%;
   max-width: 100%;
   min-height: var(--nav-height);
-  padding: 0 var(--gutter-xs);
+  padding: 0 var(--gutter-md);
+  /* positioning */
+  z-index: 21;
   /* layout */
+  text-align: left; /* override home.css for now */
   display: flex;
   flex-wrap: wrap; /* prevent from breaking on small screens */
   justify-content: space-between;
   align-items: center;
+  /* theming */
   background-color: var(--dark-4);
-  z-index: 21;
+  color: var(--white);
 
   /* prevent from breaking on small screens, for now */
   @mixin min-md {
@@ -24,36 +28,26 @@
       padding-top: var(--nav-height);
     }
   }
+}
 
-  & .menu-options {
-    margin: 0;
-    padding-left: 0; /* reset default list style */
-    display: flex;
-    flex-wrap: wrap; /* prevent from breaking on small screens */
-    list-style: none;
-    font-size: var(--font-xs);
+/* logo */
+.navbar-logo-link {
+  display: block;
+  padding: var(--gutter-sm);
+  margin-left: calc(0px - var(--gutter-sm)); /* offset padding */
+}
+.navbar-logo-img {
+  width: 6.75rem;
+}
 
-    & .option,
-    & .option a {
-      color: var(--white);
-      text-transform: uppercase;
-      opacity: 0.7;
-      letter-spacing: 1px;
-      padding: 15px 20px;
-    }
-  }
+/* nav list */
+.navbar-nav-list {
+  @mixin list-reset;
+  display: flex;
+}
 
-  & .search-button {
-
-    opacity: 0.7;
-    & img {
-      height: 22px;
-      transition: opacity 0.1s, transform 0.5s;
-      width: 22px;
-    }
-    &:hover {
-      cursor: pointer;
-      opacity: 1;
-    }
-  }
+/* search */
+.navbar-search-button {
+  @mixin button-reset;
+  color: var(--white);
 }

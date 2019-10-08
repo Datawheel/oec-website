@@ -1,8 +1,9 @@
 import React, {Component, Fragment} from "react";
+import {hot} from "react-hot-loader/root";
 import {Icon} from "@blueprintjs/core";
 import "./NavGroup.css";
 
-export default class NavGroup extends Component {
+class NavGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +39,7 @@ export default class NavGroup extends Component {
     return (
       <li className={`nav-group ${isOpen ? "is-open" : "is-closed"}`} onBlur={e => this.onBlur(e)}>
         {/* click the title to toggle the menu */}
-        <button className="nav-group-button" onClick={() => this.setState({isOpen: !isOpen})}>
+        <button className="nav-group-button display" onClick={() => this.setState({isOpen: !isOpen})}>
           <span className="u-visually-hidden">{isOpen ? "hide" : "show"} </span>
           <span className="nav-group-button-text">{title} </span>
           <Icon icon="caret-down" className="nav-group-button-icon" />
@@ -52,7 +53,7 @@ export default class NavGroup extends Component {
                 {item.items && item.items.length
                   // nested items array; render them in a nested list
                   ? <Fragment>
-                    <p className="nav-group-subtitle heading">{item.title}</p>
+                    <p className="nav-group-subtitle display">{item.title}</p>
                     <ul className="nav-group-list nav-group-nested-list">
                       {item.items.map(nestedItem =>
                         <li className="nav-group-item nav-group-nested-item" key={nestedItem.title}>
@@ -73,3 +74,5 @@ export default class NavGroup extends Component {
     );
   }
 }
+
+export default hot(NavGroup);

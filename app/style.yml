@@ -125,7 +125,7 @@ heading-letter-spacing:     "0"
 display-font-stack:         "var(--base-font-stack)"
 display-font-weight:        "600"
 display-text-transform:     "uppercase"
-display-letter-spacing:     "0.0125em" # generally, some kerning is helps legibility of all caps text only
+display-letter-spacing:     "0.05em" # generally, some kerning is helps legibility of all caps text only
 
 # label (.label class)
 label-font-stack:           "var(--base-font-stack)"

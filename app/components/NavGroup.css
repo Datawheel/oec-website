@@ -1,1 +1,66 @@
 @import "../helpers/mixins.css";
+
+.nav-group-link,
+.nav-group-button,
+.nav-group-subtitle {
+  display: block;
+  padding: 0 1rem;
+}
+
+.nav-group-button,
+.nav-group-subtitle {
+  @mixin font-md;
+}
+
+.nav-group-subtitle {
+  margin-bottom: 0.25rem;
+}
+
+.nav-group-button {
+  @mixin button-reset;
+  width: 100%;
+  text-align: left;
+  line-height: var(--nav-height);
+}
+.nav-group-button {
+  color: inherit;
+
+  /* layout */
+  & > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.nav-group-button-icon {
+  /* sizing */
+  width: 0.75em;
+  /* positioning */
+  position: relative;
+  top: -1px;
+  margin-left: 0.25em;
+
+  /* theming */
+  & path {
+    fill: var(--accent-light);
+  }
+}
+
+.nav-group-list {
+  @mixin list-reset;
+}
+.nav-group-item:not(:last-child) > .nav-group-nested-list {
+  margin-bottom: var(--gutter-sm);
+}
+
+.nav-group-link {
+  @mixin font-sm;
+  font-weight: var(--label-font-weight);
+  color: var(--light-3);
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+}
+.nav-group-link-icon {
+  width: 0.75em;
+  margin-right: 0.5em;
+}

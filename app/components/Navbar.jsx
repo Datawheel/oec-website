@@ -1,16 +1,17 @@
 import React, {Component} from "react";
 import {hot} from "react-hot-loader/root";
 import {Link} from "react-router";
-import {NAV} from "helpers/consts";
+import {Icon} from "@blueprintjs/core";
 
+import {NAV} from "helpers/consts";
 import NavGroup from "./NavGroup";
 
 import "./Navbar.css";
 
 class Navbar extends Component {
   render() {
-    return <nav className="navbar">
-      <div className="navbar-logo">
+    return (
+      <div className="navbar">
         <Link className="navbar-logo-link" to="/">
           <img
             className="navbar-logo-img"
@@ -20,19 +21,21 @@ class Navbar extends Component {
             draggable="false"
           />
         </Link>
+
+        <nav className="navbar-nav">
+          <ul className="navbar-nav-list">
+            {NAV.map(group =>
+              <NavGroup title={group.title} items={group.items} key={group.title} />
+            )}
+          </ul>
+        </nav>
+
+        <button className="navbar-search-button">
+          <span className="u-visually-hidden">Search profiles...</span>
+          <Icon icon="search" className="navbar-search-button-icon" />
+        </button>
       </div>
-
-      <ul className="menu-options">
-        {NAV.map(group =>
-          <NavGroup title={group.title} items={group.items} key={group.title} />
-        )}
-      </ul>
-
-      <button className="search-button">
-        <div className="u-visually-hidden">Search profiles...</div>
-        <img src="/images/icons/nav/search.png" />
-      </button>
-    </nav>;
+    );
   }
 }
 
