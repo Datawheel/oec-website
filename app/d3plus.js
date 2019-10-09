@@ -23,7 +23,7 @@ function findColor(d) {
   }
   if (detectedColors.length !== 1) {
     for (const key in colors) {
-      if (`${key} ID` in d || key === "Continent") {
+      if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
         return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || "transparent" || colors.colorGrey;
       }
     }
@@ -42,6 +42,9 @@ function backgroundImage(d) {
   }
   else if ("Continent" in d) {
     return `/images/icons/country/country_${d["Continent ID"]}.png`;
+  }
+  else if ("Parent Service ID" in d) {
+    return `/images/icons/service/service_${[d["Parent Service ID"]]}.png`;
   }
   else if ("Flow" in d) {
     const options = {1: "export", 2: "import"};
@@ -115,7 +118,7 @@ export default {
       const imgUrl = backgroundImage(d);
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-      tooltip += `<span>${d.Continent || d.Section || d.Flow}</span>`;
+      tooltip += `<span>${d.Continent || d.Section || d["Parent Service"] || d.Flow}</span>`;
       tooltip += "</div>";
       return tooltip;
     }
@@ -126,14 +129,21 @@ export default {
       "z-index": 18
     },
     title: d => {
-      const dd = ["HS6", "HS4", "HS2", "Section", "Country", "Flow"].find(h => h in d);
+      const dd = ["HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
       const bgColor = "Country" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-      const imgUrl = "Country" in d ? `/images/icons/country/country_${d["ISO 3"]}.png`
-        : "Section" in d ? `/images/icons/hs/hs_${d["Section ID"]}.png`
-          : `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
+      let imgUrl = "/images/icons/product/product.svg";
+      if ("Country" in d) {
+        imgUrl = `/images/icons/country/country_${d["ISO 3"]}.png`;
+      }
+      if ("Section" in d) {
+        imgUrl = `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      }
+      if ("Flow" in d) {
+        imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
+      }
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
       tooltip += `<span>${d[dd]}</span>`;
@@ -191,10 +201,13 @@ export default {
       labelConfig: {
         fontSize: () => 13
       },
-      strokeWidth: d => {
-        const c = findColor(d);
-        return [good, bad].includes(c) ? 1 : 0;
-      }
+      // strokeWidth: d => {
+      //   const c = findColor(d);
+      //   return [good, bad].includes(c) ? 1 : 0;
+      // },
+      strokeWidth: d => 2,
+      strokeFill: d => "#212831",
+      fill: findColor
     },
     fill: findColor,
     labelConfig: {
@@ -213,7 +226,7 @@ export default {
     Rect: {
       labelConfig: {
         fontResize: true,
-        fontFamily: () => "Fira Sans Condensed",
+        fontFamily: () => "'Source Sans Pro', sans-serif",
         padding: 10
       }
     }

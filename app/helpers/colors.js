@@ -1,5 +1,5 @@
 export default {
-  Section: {
+  "Section": {
     1: "#e5d597",
     2: "#e0b546",
     3: "#c38842",
@@ -24,12 +24,12 @@ export default {
     22: "red"
   },
 
-  Flow: {
+  "Flow": {
     1: "#4495bc",
     2: "#942217"
   },
 
-  Continent: {
+  "Continent": {
     eu: "#642a6c", // Europe
     as: "#a92c20", // Asia
     sa: "#3d8446", // South America,
@@ -39,6 +39,21 @@ export default {
     ac: "#1e040a" // Antarctic
   },
 
-  colorGrey: "#ccc"
+  "Parent Service": {
+    1: "#82065c", // Transportation
+    2: "#e2ad60", // Travel
+    3: "#842f26", // Communications services
+    4: "#8c8341", // Construction services
+    5: "#3a5a77", // Insurance services
+    6: "#59457f", // Financial services
+    7: "#51753a", // Computer and information services
+    8: "#4badaf", // Royalties and license fees
+    9: "#b74f77", // Other business services
+    10: "#916a3c", // Personal, cultural, and recreational services
+    11: "#267175", // Government services, n.i.e.
+    12: "#939e9e" // other
+  },
+
+  "colorGrey": "#ccc"
 };
 
