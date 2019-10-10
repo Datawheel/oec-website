@@ -4,7 +4,7 @@
   /* sizing */
   width: 100%;
   max-width: 100%;
-  min-height: var(--nav-height);
+  height: var(--nav-height);
   padding: 0 var(--gutter-md);
   /* positioning */
   position: relative; /* honor z-index */
@@ -41,7 +41,7 @@
 .navbar-logo-link {
   margin-left: calc(0px - var(--gutter-sm));
   margin-right: calc(0px - var(--gutter-sm));
-  padding: var(--gutter-sm);
+  padding: 0 var(--gutter-sm);
 }
 .navbar-logo-img {
   width: 100px;
@@ -52,9 +52,55 @@
   position: relative;
   top: -2px;
 
+  /* position below main navbar on small screens */
   @mixin max-md {
+    position: absolute;
+    width: 100%;
+    min-height: var(--nav-height);
+    left: 0;
+    right: 0;
+    top: var(--nav-height);
+    padding: 0 var(--gutter-xs);
+    /* theming */
+    background-color: var(--dark-3);
+    /* transition */
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.2s ease-out;
+
+    & .navbar-nav-list {
+      justify-content: space-between;
+    }
+
+    & .nav-group-button-text,
+    & .nav-group-button-icon {
+      margin-top: -6px; /* fudge baseline */
+    }
+    & .nav-group-button-icon {
+      top: -2px;
+    }
+
     &.is-hidden {
       @mixin visually-hidden;
+      transform: translateY(10px);
+    }
+  }
+
+  /* vertical groups on small screens */
+  @mixin max-sm {
+    & .navbar-nav-list {
+      display: block;
+
+      & .nav-group-list.is-closed {
+        display: none;
+      }
+
+      & .nav-group-list.is-open {
+        position: relative;
+        /* override */
+        top: 0;
+        box-shadow: none;
+      }
     }
   }
 }
@@ -67,8 +113,11 @@
 .navbar-nav-toggle-button {
   @mixin button-reset;
   color: var(--white);
-  margin-left: auto;
   margin-right: var(--gutter-xs);
+
+  &.is-active {
+    background-color: var(--dark-2);
+  }
 
   & > .navbar-nav-toggle-button-icon {
     width: 1em;
