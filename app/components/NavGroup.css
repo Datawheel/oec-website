@@ -100,17 +100,22 @@
   box-shadow:
     0 0.25em 0.5em color(var(--black) a(0.125)),
     0 0.5em 1em color(var(--black) a(0.125));
-  transition:
-    opacity 0.2s ease-out,
-    transform 0.2s ease-out;
+
+  @mixin min-sm {
+    transition:
+      opacity 0.2s ease-out,
+      transform 0.2s ease-out;
+  }
 }
 /* override closed styles on hover */
-.nav-group:hover > .nav-group-list.is-closed {
-  opacity: 1;
-  transform: none;
-  clip: auto;
-  pointer-events: auto;
-  z-index: 1;
+@mixin min-sm {
+  .nav-group:hover > .nav-group-list.is-closed {
+    opacity: 1;
+    transform: none;
+    clip: auto;
+    pointer-events: auto;
+    z-index: 1;
+  }
 }
 
 /* space out subtitles (override blueprint) */

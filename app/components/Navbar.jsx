@@ -21,15 +21,6 @@ class Navbar extends Component {
 
     return (
       <div className="navbar">
-
-        <button
-          className={`navbar-nav-toggle-button display u-font-md u-hide-above-md ${navVisible ? "is-active" : "is-inactive"}`}
-          onClick={() => this.setState({navVisible: !navVisible})}
-        >
-          <span className="u-visually-hidden">Menu</span>
-          <Icon icon={navVisible ? "cross" : "menu"} className="navbar-nav-toggle-button-icon" />
-        </button>
-
         <Link className="navbar-logo-link" to="/">
           <img
             className="navbar-logo-img"
@@ -39,6 +30,14 @@ class Navbar extends Component {
             draggable="false"
           />
         </Link>
+
+        <button
+          className={`navbar-nav-toggle-button display u-font-md u-hide-above-md ${navVisible ? "is-active" : "is-inactive"}`}
+          onClick={() => this.setState({navVisible: !navVisible})}
+        >
+          <span className="u-visually-hidden">Menu</span>
+          <Icon icon={navVisible ? "cross" : "menu"} className="navbar-nav-toggle-button-icon" />
+        </button>
 
         <nav className={`navbar-nav ${navVisible ? "is-visible" : "is-hidden"}`}>
           <ul className="navbar-nav-list">
