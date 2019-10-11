@@ -1,0 +1,89 @@
+@import "../helpers/mixins.css";
+
+.search-label {
+  position: relative;
+}
+
+/* the main input */
+.search-input {
+  /* sizing */
+  padding: 0.5em 2em;
+  height: var(--nav-height);
+  width: 100%;
+  /* resets */
+  border: none;
+  border-radius: 0;
+  /* theming */
+  background-color: var(--dark-3);
+  color: var(--white);
+
+  &::placeholder {
+    color: var(--light-2);
+  }
+
+  /* IE fix */
+  &::-ms-clear {
+    opacity: 0;
+  }
+
+  /* interactions */
+  &:hover + .search-icon path,
+  &:focus + .search-icon path {
+    fill: var(--white);
+  }
+}
+
+/* search icon */
+.search-icon {
+  /* sizing & positioning */
+  @mixin absolute-vertical-center;
+  width: 1em;
+  left: 0.5em;
+  /* prevent from obscuring click */
+  pointer-events: none;
+
+  & path {
+    fill: var(--light-2);
+    transition: fill 0.15s ease-out;
+  }
+}
+
+/* close button */
+.search-close-button {
+  @mixin absolute-vertical-center;
+  @mixin button-reset;
+  right: 0;
+  opacity: 0.5;
+  transition: opacity 0.15s ease-out;
+
+  & .search-close-icon {
+    /* sizing */
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    /* theming */
+    border-radius: 50%;
+  }
+
+  /* interactions */
+  &:hover, &:focus {
+    opacity: 1;
+  }
+
+  /* visible state */
+  &.is-visible .search-close-icon {
+    transition:
+      opacity 0.15s ease-out,
+      transform 0.15s ease-out;
+  }
+
+  /* hidden state */
+  &.is-hidden  {
+    z-index: -1;
+
+    & .search-close-icon {
+      opacity: 0;
+      transform: scale(0.75);
+    }
+  }
+}

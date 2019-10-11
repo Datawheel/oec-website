@@ -94,11 +94,20 @@
   }
 }
 
-/* toggle button */
-.navbar-nav-toggle-button {
+/* toggle button base style */
+.navbar-toggle-button {
   @mixin button-reset;
   color: var(--white);
 
+  /* icon sizing & positioning */
+  & > .navbar-toggle-button-icon {
+    width: 1em;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+}
+.navbar-nav-toggle-button {
   /* move menu toggle button to the left on small screens */
   @mixin max-md {
     order: -1;
@@ -108,29 +117,37 @@
   &.is-active {
     background-color: var(--dark-2);
   }
-
   /* interactions */
   &:hover, &:focus {
     background-color: var(--accent-dark);
   }
-
-  /* icon sizing & positioning */
-  & > .navbar-nav-toggle-button-icon {
-    width: 1em;
-    vertical-align: middle;
-    position: relative;
-    top: -1px;
-  }
 }
-
-/* search */
-.navbar-search-button {
-  @mixin button-reset;
-  color: var(--white);
-
-  /* center nav on big screens */
+/* keep search toggle button the same size as the logo on big screens to keep nav centered */
+.navbar-search-toggle-button-wrapper {
   @mixin min-md {
     width: 100px;
     text-align: right;
+  }
+}
+.navbar-search-toggle-button {
+  position: relative;
+  z-index: 1; /* in front of open search */
+}
+
+/* position search over the entire screen */
+.navbar-search {
+  @mixin absolute-expand;
+  position: fixed;
+  background-color: var(--dark-3);
+
+  &.is-hidden {
+    /* transitions */
+    transform: translate(10% 10%);
+    opacity: 0;
+    /* prevent clicks */
+    clip: rect(1px, 1px, 1px, 1px);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -999;
   }
 }

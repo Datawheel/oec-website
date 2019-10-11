@@ -1,0 +1,6 @@
+@import "../helpers/mixins.css";
+
+.search-column-list,
+.search-column-result-list {
+  @mixin list-reset;
+}
