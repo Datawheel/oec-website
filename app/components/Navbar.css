@@ -138,12 +138,15 @@
 .navbar-search {
   @mixin absolute-expand;
   position: fixed;
-  background-color: var(--dark-3);
+  background-color: var(--dark-4);
+  transition:
+    opacity 0.2s ease-out,
+    transform 0.2s ease-out;
 
   &.is-hidden {
     /* transitions */
-    transform: translate(10% 10%);
     opacity: 0;
+    transform: scale(1.025);
     /* prevent clicks */
     clip: rect(1px, 1px, 1px, 1px);
     overflow: hidden;
