@@ -70,89 +70,51 @@
       opacity 0.2s ease-out,
       transform 0.2s ease-out;
 
-    & .navbar-nav-list {
-      justify-content: space-between;
-    }
-
-    & .nav-group-link,
-    & .nav-group-button,
-    & .nav-group-subtitle {
-      padding-left: var(--gutter-md);
-      padding-right: var(--gutter-md);
-    }
-
-    & .nav-group-link {
-      font-size: var(--font-md);
-      padding-top: var(--gutter-xs);
-      padding-bottom: var(--gutter-xs);
-    }
-
-    & .nav-group-button-text,
-    & .nav-group-button-icon {
-      margin-top: -6px; /* fudge baseline */
-    }
-    & .nav-group-button-icon {
-      top: -2px;
-    }
-
+    /* pull menu up when revealed */
     &.is-hidden {
       @mixin visually-hidden;
       transform: translateY(10px);
     }
   }
-
-  /* vertical groups on small screens */
-  @mixin max-sm {
-    & .nav-group-button {
-      border-bottom: 1px solid var(--dark-4);
-
-      &:hover, &:focus {
-        background-color: var(--black);
-      }
-    }
-    & .navbar-nav-list {
-      display: block;
-    }
-
-    & .nav-group-list.is-open {
-      position: relative;
-      background-color: var(--dark-4);
-      /* override */
-      top: 0;
-      box-shadow: none;
-    }
-    & .nav-group-link {
-      padding-top: 0.625em;
-      padding-bottom: 0.625em;
-
-      &:hover, &:focus {
-        background-color: var(--black);
-      }
-    }
-  }
 }
 
-/* move menu toggle button to the left */
-@mixin max-md {
-  .navbar-nav-toggle-button {
-    order: -1;
-  }
-}
-
+/* list of nav groups */
 .navbar-nav-list {
   @mixin list-reset;
-  display: flex;
-  flex-wrap: wrap;
+
+  /* horizontal list on non-small screens */
+  @mixin min-sm {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* space out evenly on medium screens */
+  @mixin max-md {
+    justify-content: space-between;
+  }
 }
+
 /* toggle button */
 .navbar-nav-toggle-button {
   @mixin button-reset;
   color: var(--white);
 
+  /* move menu toggle button to the left on small screens */
+  @mixin max-md {
+    order: -1;
+  }
+
+  /* active state */
   &.is-active {
     background-color: var(--dark-2);
   }
 
+  /* interactions */
+  &:hover, &:focus {
+    background-color: var(--accent-dark);
+  }
+
+  /* icon sizing & positioning */
   & > .navbar-nav-toggle-button-icon {
     width: 1em;
     vertical-align: middle;

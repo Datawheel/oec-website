@@ -5,7 +5,12 @@
 .nav-group-button,
 .nav-group-subtitle {
   display: block;
-  padding: 0 1rem;
+  padding-left: var(--gutter-md);
+  padding-right: var(--gutter-md);
+
+  @mixin min-md {
+    padding: 0 1rem;
+  }
 }
 
 /* tweak display font for dropdown titles & subtitles */
@@ -24,6 +29,11 @@
   /* theming */
   color: inherit;
 
+  /* adjust theming for small screens */
+  @mixin max-sm {
+    border-bottom: 1px solid var(--dark-4);
+  }
+
   /* interactions */
   &:hover path,
   &.is-active path {
@@ -34,12 +44,20 @@
   & > * {
     display: inline-block;
     vertical-align: middle;
+
+    @mixin max-md {
+      margin-top: -6px; /* fudge baseline */
+    }
   }
 }
 /* interactions */
 .nav-group:hover > .nav-group-button,
 .nav-group-button.is-active {
-  background-color: var(--dark-3);
+  background-color: var(--black);
+
+  @mixin min-sm {
+    background-color: vaR(--dark-3);
+  }
 }
 
 /* 🔻 */
@@ -51,7 +69,7 @@
   margin-left: 0.25em;
   margin-right: -0.125em;
   /* never not fudging the baseline */
-  top: 1px;
+  top: -2px;
   @mixin min-md { top: -1px; }
   @mixin min-lg { top: -0.0875em; }
 
@@ -65,20 +83,32 @@
 /* dropdown list */
 .nav-group {
   position: relative;
+
+  /* prevent the rightmost menu item from getting cropped off the page */
+  @mixin max-md {
+    &:last-of-type:hover > .nav-group-list,
+    &:last-of-type > .nav-group-list.is-open {
+      right: 0;
+    }
+  }
 }
 .nav-group-list {
   @mixin list-reset;
 
   /* absolutely position & size dropdowns */
   &:not(.nav-group-nested-list) {
-    /* positioning */
-    position: absolute;
-    top: var(--nav-height);
     /* sizing */
     width: max-content;
     min-width: 100%;
     padding-top: var(--gutter-xs);
     padding-bottom: var(--gutter-xs);
+
+    /* position below nav bar on non-small screens */
+    @mixin min-sm {
+      /* positioning */
+      position: absolute;
+      top: var(--nav-height);
+    }
 
     /* hidden state */
     &.is-closed {
@@ -96,15 +126,22 @@
 /* open/hover state */
 .nav-group-list.is-open,
 .nav-group:hover > .nav-group-list {
-  background-color: var(--dark-3);
-  box-shadow:
-    0 0.25em 0.5em color(var(--black) a(0.125)),
-    0 0.5em 1em color(var(--black) a(0.125));
+  background-color: var(--dark-4);
 
   @mixin min-sm {
+    background-color: var(--dark-3);
+    box-shadow:
+      0 0.25em 0.5em color(var(--black) a(0.125)),
+      0 0.5em 1em color(var(--black) a(0.125));
     transition:
       opacity 0.2s ease-out,
       transform 0.2s ease-out;
+  }
+}
+/* adjust open state theming & positioning */
+@mixin max-sm {
+  .nav-group-list.is-closed {
+    position: absolute;
   }
 }
 /* override closed styles on hover */
@@ -129,12 +166,23 @@
 
 /* link theming */
 .nav-group-link {
-  @mixin font-sm;
+  @mixin font-md;
   color: var(--light-3);
-  padding-top: 0.25em;
-  padding-bottom: 0.25em;
+  padding-top: 0.625em;
+  padding-bottom: 0.625em;
 
-  /* icon */
+  /* adjust padding & font size on bigger screens */
+  @mixin min-sm {
+    padding-top: var(--gutter-xs);
+    padding-bottom: var(--gutter-xs);
+  }
+  @mixin min-md {
+    @mixin font-sm;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+  }
+
+  /* icon sizing & positioning */
   & .nav-group-link-icon {
     width: 0.75em;
     margin-right: 0.5em;
@@ -144,8 +192,12 @@
   /* interactions */
   &:hover, &:focus {
     color: var(--white);
-    background-color: var(--dark-4);
+    background-color: var(--black);
     text-decoration: none;
+
+    @mixin min-sm {
+      background-color: var(--dark-4);
+    }
 
     & .nav-group-link-icon {
       transform: scale(1.25);
