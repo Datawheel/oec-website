@@ -9,6 +9,7 @@ class NavGroup extends Component {
     this.state = {
       isOpen: false
     };
+    this.toggleButton = React.createRef();
   }
 
   /** when tabbing out of the nav group, collapse it */
@@ -19,6 +20,13 @@ class NavGroup extends Component {
       if (!currentTarget.contains(document.activeElement)) {
         this.setState({isOpen: false});
       }
+    }, 85); // register the click before closing
+  }
+
+  /** when clicking a subtitle, refocus the button to prevent the nav from losing focus and collapsing */
+  onFocusButton() {
+    setTimeout(() => {
+      this.toggleButton.current.focus();
     }, 0);
   }
 
@@ -37,11 +45,12 @@ class NavGroup extends Component {
     const {isOpen} = this.state;
 
     return (
-      <li className="nav-group" onBlur={e => this.onBlur(e)}>
+      <li className="nav-group" onBlur={e => this.onBlur(e)} onClick={() => this.onFocusButton()} key={title}>
         {/* click the title to toggle the menu */}
         <button
           className={`nav-group-button display ${isOpen ? "is-active" : "is-inactive"}`}
           onClick={() => this.setState({isOpen: !isOpen})}
+          ref={this.toggleButton}
         >
           <span className="u-visually-hidden">{isOpen ? "hide" : "show"} </span>
           <span className="nav-group-button-text">{title} </span>
