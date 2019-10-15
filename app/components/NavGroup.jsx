@@ -45,7 +45,7 @@ class NavGroup extends Component {
     const {isOpen} = this.state;
 
     return (
-      <li className="nav-group" onBlur={e => this.onBlur(e)} onClick={() => this.onFocusButton()} key={title}>
+      <li className="nav-group" onBlur={e => this.onBlur(e)} onClick={() => this.onFocusButton()} key={`${title}-nav-group`}>
         {/* click the title to toggle the menu */}
         <button
           className={`nav-group-button display ${isOpen ? "is-active" : "is-inactive"}`}
@@ -59,16 +59,16 @@ class NavGroup extends Component {
 
         {/* loop through nav links */}
         {items && items.length &&
-          <ul className={`nav-group-list ${isOpen ? "is-open" : "is-closed"}`}>
+          <ul className={`nav-group-list ${isOpen ? "is-open" : "is-closed"}`} key={`${title}-nav-group-list`}>
             {items.map(item =>
-              <li className="nav-group-item" key={item.title}>
+              <li className="nav-group-item" key={`${item.title}-nav-group-item`}>
                 {item.items && item.items.length
                   // nested items array; render them in a nested list
                   ? <Fragment>
                     <p className="nav-group-subtitle display">{item.title}</p>
                     <ul className="nav-group-list nav-group-nested-list">
                       {item.items.map(nestedItem =>
-                        <li className="nav-group-item nav-group-nested-item" key={nestedItem.title}>
+                        <li className="nav-group-item nav-group-nested-item" key={`${item.title}-${nestedItem.title}-nav-group-nested-item`}>
                           {this.renderLink(nestedItem)}
                         </li>
                       )}

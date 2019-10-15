@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from "react";
+import React, {Component} from "react";
 import {hot} from "react-hot-loader/root";
 import axios from "axios";
 import {event, select} from "d3-selection";
@@ -14,7 +14,8 @@ class Search extends Component {
     super(props);
     this.state = {
       searchActive: false,
-      filters: [],
+      activeFilter: null,
+      entities: ["location", "product", "technology", "firm"],
       results: [],
       timeout: 0,
       query: ""
@@ -23,7 +24,7 @@ class Search extends Component {
 
   // get value from input
   onChange(e) {
-    const {id, filters, timeout} = this.state;
+    const {id, activeFilter, timeout} = this.state;
     const {limit, minQueryLength} = this.props;
     const query = e ? e.target.value : this.state.query;
 
@@ -52,15 +53,15 @@ class Search extends Component {
           // base query
           let URL = `${this.props.api}/search/?q=${encodeChars(query)}&limit=${limit}`;
 
-          // location filters (by level & location_id)
-          const countryFilters = filters.filter(d => d.entity === "location" && d.level === "country");
-          if (countryFilters.length) {
-            URL += `&project_country_id=${countryFilters.map(l => l.id)}`;
-          }
-          const subnationalFilters = filters.filter(d => d.entity === "location" && d.level === "subnational");
-          if (subnationalFilters.length) {
-            URL += `&project_geo_id=${subnationalFilters.map(l => l.id)}`;
-          }
+          // location activeFilter (by level & location_id)
+          // const countryFilter = activeFilter.activeFilter(d => d.entity === "location" && d.level === "country");
+          // if (countryFilter.length) {
+          //   URL += `&project_country_id=${countryFilter.map(l => l.id)}`;
+          // }
+          // const subnationalFilter = activeFilter.activeFilter(d => d.entity === "location" && d.level === "subnational");
+          // if (subnationalFilter.length) {
+          //   URL += `&project_geo_id=${subnationalFilter.map(l => l.id)}`;
+          // }
 
           axios.get(URL)
             .then(res => res.data)
@@ -79,26 +80,22 @@ class Search extends Component {
   resetSearch() {
     this.setState({
       query: "",
-      filters: [],
+      activeFilter: null,
       searchActive: false
     });
     setTimeout(() => this.textInput.focus(), 0);
   }
 
-  // remove a filter
-  removeFilter(filter) {
-    const {filters} = this.state;
+  setFilter(e) {
+    this.setState({activeFilter: e.target.value});
+  }
 
-    // filter out the unwanted filter
-    const newFilters = filters.filter(item => item !== filter);
-    this.setState({filters: newFilters}); // update state
-
-    // update search results
-    this.onChange();
+  resetFilter() {
+    this.setState({activeFilter: null});
   }
 
   render() {
-    const {filters, query} = this.state;
+    const {activeFilter, entities, query} = this.state;
     const {minQueryLength} = this.props;
 
     const columnProps = {minQueryLength};
@@ -106,7 +103,15 @@ class Search extends Component {
     return (
       <div className="search" role="search">
         {/* accessibility text */}
-        <h2 className="u-visually-hidden">search</h2>
+        <h2 className="u-visually-hidden">Search</h2>
+
+        {/* filters */}
+        <div className="search-filter-container">
+          <button onClick={() => this.resetFilter()}>none</button>
+          {entities.map(filter =>
+            <button key={`${filter}-filter-button`} onClick={e => this.setFilter(e)}>{filter}</button>
+          )}
+        </div>
 
         {/* main input */}
         <label className="search-label">
@@ -138,28 +143,12 @@ class Search extends Component {
           </button>
         </label>
 
-        {/* container for filters & results */}
+        {/* container for results */}
         <div className="search-inner">
-
-          <div className="search-filter-container">
-            <h2 className="u-visually-hidden">Project filters: </h2>
-            <ul className={`search-filter-list ${filters.length ? "is-visible" : "is-hidden"}`}>
-              {filters.length
-                ? filters.map(filter =>
-                  <li className="search-filter-item" key={`${filter.id}-filter-tag`}>
-                    {/* WARNING: .search-filter-button class used for focus management */}
-                    <button className={`search-filter-button ${filter.entity}-entity`} onClick={this.removeFilter.bind(this, filter)}>{filter.name}</button>
-                  </li>
-                )
-                : ""}
-            </ul>
-          </div>
-
           <ul className="search-column-list">
-            <SearchColumn {...this.state} {...columnProps} entity="location" />
-            <SearchColumn {...this.state} {...columnProps} entity="product" />
-            <SearchColumn {...this.state} {...columnProps} entity="technology" />
-            <SearchColumn {...this.state} {...columnProps} entity="firm" />
+            {entities.map(entity =>
+              <SearchColumn {...this.state} {...columnProps} entity={entity} key={entity} />
+            )}
           </ul>
         </div>
       </div>
