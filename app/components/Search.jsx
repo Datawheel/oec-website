@@ -82,6 +82,7 @@ class Search extends Component {
       filters: [],
       searchActive: false
     });
+    setTimeout(() => this.textInput.focus(), 0);
   }
 
   // remove a filter
@@ -111,12 +112,12 @@ class Search extends Component {
         <label className="search-label">
           {/* accessibility text */}
           <span className="u-visually-hidden">
-            Search projects, programming languages, locations, and domains
+            Search locations, products, technologies, and firms
           </span>
 
           {/* the input; NOTE: className must stay as .search-input for focus management */}
           <input
-            className="search-input"
+            className="search-input u-font-xxl"
             placeholder="Search profiles..."
             value={query}
             onChange={this.onChange.bind(this) }
@@ -124,7 +125,7 @@ class Search extends Component {
           />
 
           {/* search icon (keep after input so it can be easily styled input hover/focus) */}
-          <Icon className="search-icon" icon="search" />
+          <Icon className="search-icon u-font-xxl" icon="search" />
 
           {/* close button */}
           <button
@@ -132,7 +133,7 @@ class Search extends Component {
             tabIndex={query ? 0 : -1}
             onClick={this.resetSearch.bind(this)}
           >
-            <Icon className="search-close-icon" src="cross" />
+            <Icon className="search-close-icon" icon="cross" />
             <span className="u-visually-hidden">reset search</span>
           </button>
         </label>

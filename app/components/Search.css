@@ -1,24 +1,34 @@
 @import "../helpers/mixins.css";
 
+.search {
+  padding: var(--gutter-lg);
+}
+
 .search-label {
   position: relative;
+  display: block;
+
 }
 
 /* the main input */
 .search-input {
   /* sizing */
-  padding: 0.5em 2em;
-  height: var(--nav-height);
+  padding: 0.25em 1em 0.25em 0;
   width: 100%;
   /* resets */
   border: none;
   border-radius: 0;
   /* theming */
-  background-color: var(--dark-3);
+  font-weight: var(--base-font-weight);
+  background-color: transparent;
+  border-bottom: 2px solid var(--dark-1);
   color: var(--white);
+  transition:
+    border 0.2s ease-out,
+    color 0.2s ease-out;
 
   &::placeholder {
-    color: var(--light-2);
+    color: var(--gray);
   }
 
   /* IE fix */
@@ -27,9 +37,20 @@
   }
 
   /* interactions */
-  &:hover + .search-icon path,
-  &:focus + .search-icon path {
-    fill: var(--white);
+  &:hover {
+    border-color: var(--white);
+
+    & + .search-icon path {
+      fill: var(--white);
+    }
+  }
+  &[class]:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+
+    & + .search-icon path {
+      fill: var(--accent);
+    }
   }
 }
 
@@ -37,13 +58,19 @@
 .search-icon {
   /* sizing & positioning */
   @mixin absolute-vertical-center;
-  width: 1em;
-  left: 0.5em;
+  width: 0.625em;
+  left: -0.875em;
   /* prevent from obscuring click */
   pointer-events: none;
+  transition: color 0.2s ease-out;
+
+  & svg {
+    width: 100%;
+    height: auto;
+  }
 
   & path {
-    fill: var(--light-2);
+    fill: var(--dark-1);
     transition: fill 0.15s ease-out;
   }
 }
@@ -52,17 +79,24 @@
 .search-close-button {
   @mixin absolute-vertical-center;
   @mixin button-reset;
+  padding: 0;
   right: 0;
-  opacity: 0.5;
-  transition: opacity 0.15s ease-out;
+
 
   & .search-close-icon {
     /* sizing */
     width: 2rem;
     height: 2rem;
-    padding: 0.25rem;
+    padding: 0.5em;
     /* theming */
     border-radius: 50%;
+    background-color: var(--black);
+    color: var(--white);
+
+    & svg {
+      width: 100%;
+      height: auto;
+    }
   }
 
   /* interactions */
