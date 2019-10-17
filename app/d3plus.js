@@ -21,6 +21,9 @@ function findColor(d) {
   if (this && this._filteredData) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
+  // if (d["Parent Service"]) {
+  //   console.log("findColor!!!!", d, detectedColors);
+  // }
   if (detectedColors.length !== 1) {
     for (const key in colors) {
       if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
@@ -28,7 +31,8 @@ function findColor(d) {
       }
     }
   }
-  return Object.keys(d).some(v => badMeasures.includes(v)) ? bad : good;
+  return detectedColors[0];
+  // return Object.keys(d).some(v => badMeasures.includes(v)) ? bad : good;
 }
 
 /**

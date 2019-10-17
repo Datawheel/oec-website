@@ -1,4 +1,4 @@
-let locale = "en";
+const locale = "en";
 
 module.exports = {
   NAV: [
@@ -7,7 +7,7 @@ module.exports = {
       {title: "Location", items: [
         {title: "Country",            url: `/${locale}/profile/country/pry`},
         {title: "Subnational",        url: `/${locale}/profile/subnational/`, pro: true},
-        {title: "Country to country", url: `/${locale}/profile/country/pry/partner/ury`},
+        {title: "Country to country", url: `/${locale}/profile/partner/pry/country/ury`},
         {title: "Product in country", url: `/${locale}/profile/country/pry/hs92/2120100`}
       ]},
       {title: "Product", items: [

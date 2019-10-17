@@ -42,6 +42,12 @@
     min-height: calc(25vh);
   }
 
+  /* make flag/icon smaller */
+  & .cp-hero-heading img {
+    width: 50px;
+    vertical-align: middle;
+  }
+
   /* temporary background image */
   /* TODO: remove/refactor once hero images are in canon */
   &:before {
