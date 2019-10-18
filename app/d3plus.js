@@ -31,7 +31,7 @@ function findColor(d) {
       }
     }
   }
-  return detectedColors[0];
+  return detectedColors[0] || "transparent";
   // return Object.keys(d).some(v => badMeasures.includes(v)) ? bad : good;
 }
 
