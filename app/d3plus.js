@@ -1,4 +1,5 @@
 import colors from "./helpers/colors";
+import {formatAbbreviate} from "d3plus-format";
 import {mean} from "d3-array";
 
 const bad = "#cf5555";
@@ -133,6 +134,7 @@ export default {
       "z-index": 18
     },
     title: d => {
+      // console.log("my tooltip data:", d);
       const dd = ["HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
       const bgColor = "Country" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
@@ -153,6 +155,35 @@ export default {
       tooltip += `<span>${d[dd]}</span>`;
       tooltip += "</div>";
       return tooltip;
+    },
+    tbody: d => {
+      const tbodyData = [];
+      // Look for IDs...
+      let idVal = [];
+      ["Section", "HS2", "HS4", "HS6"].forEach(id => {
+        if (d[`${id} ID`]) {
+          idVal = [`${id} ID`, `${d[`${id} ID`]}`];
+        }
+      });
+      if (idVal.length) {
+        tbodyData.push(idVal);
+      }
+      // time...
+      if (d.Month) {
+        const formatter = new Intl.DateTimeFormat("en", {month: "short"});
+        const thisMonthAsDate = new Date(d.Month.substr(0, 4), d.Month.substr(4, 6), "01");
+        const month = formatter.format(thisMonthAsDate);
+        const year = thisMonthAsDate.getFullYear();
+        tbodyData.push(["Month", `${month}, ${year}`]);
+      }
+      // Look for measures...
+      if (d["Trade Value RCA"]) {
+        tbodyData.push(["Trade Value RCA", `${formatAbbreviate(d["Trade Value RCA"])}`]);
+      }
+      if (d["Trade Value"]) {
+        tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
+      }
+      return tbodyData;
     },
     background: "#282f37",
     border: "1px solid #66737e",
