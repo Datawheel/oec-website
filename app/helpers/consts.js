@@ -5,9 +5,9 @@ module.exports = {
     // profiles
     {title: "Profiles", items: [
       {title: "Location", items: [
-        {title: "Country",            url: `/${locale}/profile/country/pry`},
+        {title: "Country",            url: `/${locale}/profile/country/`},
         {title: "Subnational",        url: `/${locale}/profile/subnational/`, pro: true},
-        {title: "Country to country", url: `/${locale}/profile/partner/pry/country/ury`},
+        {title: "Country to country", url: `/${locale}/profile/partner/`},
         {title: "Product in country", url: `/${locale}/profile/country/pry/hs92/2120100`}
       ]},
       {title: "Product", items: [
