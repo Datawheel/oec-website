@@ -66,6 +66,13 @@
   }
 }
 
+/* moves reset button to top right */
+.cp-default-section {
+  position: relative;
+}
+.cp-var-reset-button {
+  position: absolute; top: 20px; right: 20px;
+}
 
 /* about section */
 .cp-grouping > .cp-multi-column-section:first-child {
