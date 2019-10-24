@@ -180,7 +180,12 @@ export default {
       if (d["Trade Value RCA"]) {
         tbodyData.push(["Trade Value RCA", `${formatAbbreviate(d["Trade Value RCA"])}`]);
       }
-      if (d["Trade Value"]) {
+      if (d.shareDelta) {
+        tbodyData.push(["Market Share ∆", `${formatAbbreviate(d.shareDelta * 100)}%`]);
+        tbodyData.push([`Market Share ${d.Year + 1}`, `${formatAbbreviate(d.currYearShare * 100)}%`]);
+        tbodyData.push([`Market Share ${d.Year}`, `${formatAbbreviate(d.prevYearShare * 100)}%`]);
+      }
+      else if (d["Trade Value"]) {
         tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
       }
       return tbodyData;

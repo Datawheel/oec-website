@@ -5,6 +5,8 @@ import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
 
+import {Login, SignUp} from "@datawheel/canon-core";
+
 import App from "./App";
 import Home from "./pages/Home";
 import Welcome from "./pages/Welcome";
@@ -16,8 +18,10 @@ export default function RouteCreate() {
       <IndexRoute component={Home} />
       <Route exact path="(/:lang)" component={Home} />
       <Route path="/welcome" component={Welcome} />
-      <Route path="/admin" component={Builder} />
       <Route exact path="/:lang/profile/:slug/:id(/:slug2)(/:id2)" component={Profile} />
+      <Route exact path="/admin" component={Builder} />
+      <Route exact path="/:lang/login" component={Login} />
+      <Route exact path="/:lang/signup" component={SignUp} />
     </Route>
   );
 }
