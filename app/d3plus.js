@@ -253,6 +253,9 @@ export default {
     labelConfig: {
       fontSize: () => 13
     },
+    Circle: {
+      fill: d => d["Trade Value RCA"] && d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6"
+    },
     Line: {
       curve: "monotoneX",
       stroke: d => findColor(d),

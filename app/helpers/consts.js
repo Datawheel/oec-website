@@ -11,7 +11,7 @@ module.exports = {
         {title: "Product in country", url: `/${locale}/profile/country/pry/hs92/2120100`}
       ]},
       {title: "Product", items: [
-        {title: "Product",            url: `/${locale}/profile/hs92/2090121`},
+        {title: "Product",            url: `/${locale}/profile/hs92/`},
         {title: "Product in country", url: `/${locale}/profile/country/pry/hs92/2120100`}
       ]},
       {title: "Research", items: [
