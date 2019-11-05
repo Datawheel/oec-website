@@ -1,5 +1,13 @@
 @import "../../helpers/mixins.css";
 
+@media print {
+  [class*="cp-"] {
+    background: #fff !important;
+    color: #000 !important;
+    text-shadow: none !important;
+  }
+}
+
 /* general section overrides */
 .cp-section-heading {
   font-size: var(--font-xxl);
@@ -191,4 +199,12 @@
       height: 40px;
     }
   }
+}
+
+
+.cp-viz-container > .cp-viz-header > .cp-viz-title:not(:last-child) {
+  text-align: center;
+  display: block;
+  flex: 1;
+  font-size: 24px;
 }

@@ -89,8 +89,38 @@ const axisStyles = {
   titleConfig: {
     fontColor: () => "#FFFFFF",
     fontFamily: () => "'Palanquin', sans-serif",
-    fontSize: () => 12,
+    fontSize: () => 18,
     fontWeight: () => 400
+  }
+};
+
+const colorScaleConfig = {
+  axisConfig: {
+    labelOffset: true,
+    labelRotation: false,
+    shapeConfig: {
+      labelConfig: {
+        fontColor: () => "#211f1a",
+        fontSize: () => 12,
+        fontWeight: () => 400
+      }
+    },
+    titleConfig: {
+      fontColor: () => "#211f1a",
+      fontSize: () => 12,
+      fontWeight: () => 400
+    },
+    tickFormat: d => formatAbbreviate(d)
+  },
+  legendConfig: {
+    shapeConfig: {
+      labelConfig: {
+        fontSize: () => 16
+      },
+      height: () => 15,
+      stroke: "#383e44",
+      width: () => 15
+    }
   }
 };
 
@@ -102,6 +132,7 @@ export default {
   backgroundConfig: {
     fill: "#383e44"
   },
+  colorScaleConfig,
   xConfig: axisStyles,
   yConfig: axisStyles,
   barPadding: 0,
@@ -180,6 +211,9 @@ export default {
       if (d["Trade Value RCA"]) {
         tbodyData.push(["Trade Value RCA", `${formatAbbreviate(d["Trade Value RCA"])}`]);
       }
+      if (d["Trade Value Density"]) {
+        tbodyData.push(["Trade Value Density", `${formatAbbreviate(d["Trade Value Density"])}`]);
+      }
       if (d.shareDelta) {
         tbodyData.push(["Market Share ∆", `${formatAbbreviate(d.shareDelta * 100)}%`]);
         tbodyData.push([`Market Share ${d.Year + 1}`, `${formatAbbreviate(d.currYearShare * 100)}%`]);
@@ -227,7 +261,7 @@ export default {
   },
   titleConfig: {
     "fontColor": () => "#FFFFFF",
-    "fontSize": () => 14,
+    "fontSize": () => 20,
     "text-transform": "uppercase"
   },
   shapeConfig: {

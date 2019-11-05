@@ -150,8 +150,16 @@ hero-img-overlay-opacity:   "0.75"
 # sections
 section-bg-odd:             "var(--dark-2)"
 section-bg-even:            "var(--dark-2)"
+
+# section-bg-odd:             "var(--white)"
+# section-bg-even:            "var(--white)"
+
 section-text-color:         "var(--white)"
 section-heading-color:      "var(--white)"
+
+# section-text-color:         "var(--dark-2)"
+# section-heading-color:      "var(--dark-2)"
+
 # sticky sections
 sticky-section-offset:      "50px" # px value required here unfortunately
 sticky-section-height:      "var(--nav-height)"
