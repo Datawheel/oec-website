@@ -6,6 +6,19 @@
     color: #000 !important;
     text-shadow: none !important;
   }
+  .cp-hero-inner, .cp-hero-inner * {
+    background: transparent !important;
+  }
+  .navbar, .cp-hero-credits, .Options, .footer {
+    display: none !important;
+  }
+  .cp {
+    padding-top: 0 !important;
+  }
+  .cp-viz-title {
+    text-overflow: auto !important;
+    white-space: initial !important;
+  }
 }
 
 /* general section overrides */
