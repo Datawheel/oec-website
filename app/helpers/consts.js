@@ -8,11 +8,11 @@ module.exports = {
         {title: "Country",            url: `/${locale}/profile/country/`},
         {title: "Subnational",        url: `/${locale}/profile/subnational/`, pro: true},
         {title: "Country to country", url: `/${locale}/profile/partner/`},
-        {title: "Product in country", url: `/${locale}/profile/country/pry/hs92/2120100`}
+        {title: "Product in country", url: `/${locale}/profile/hs92/52709/country/chn`}
       ]},
       {title: "Product", items: [
         {title: "Product",            url: `/${locale}/profile/hs92/`},
-        {title: "Product in country", url: `/${locale}/profile/country/pry/hs92/2120100`}
+        {title: "Product in country", url: `/${locale}/profile/hs92/52709/country/chn`}
       ]},
       {title: "Research", items: [
         {title: "Technology",         url: `/${locale}/profile/technology`},
