@@ -7,12 +7,12 @@ module.exports = {
       {title: "Location", items: [
         {title: "Country",            url: `/${locale}/profile/country/`},
         {title: "Subnational",        url: `/${locale}/profile/subnational/`, pro: true},
-        {title: "Country to country", url: `/${locale}/profile/partner/`},
-        {title: "Product in country", url: `/${locale}/profile/hs92/52709/country/chn`}
+        {title: "Country to country", url: `/${locale}/profile/bilateral-country/`, pro: true},
+        {title: "Product in country", url: `/${locale}/profile/bilateral-product/`, pro: true}
       ]},
       {title: "Product", items: [
         {title: "Product",            url: `/${locale}/profile/hs92/`},
-        {title: "Product in country", url: `/${locale}/profile/hs92/52709/country/chn`}
+        {title: "Product in country", url: `/${locale}/profile/bilateral-product/`, pro: true}
       ]},
       {title: "Research", items: [
         {title: "Technology",         url: `/${locale}/profile/technology`},
