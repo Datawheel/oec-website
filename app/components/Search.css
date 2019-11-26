@@ -1,7 +1,7 @@
 @import "../helpers/mixins.css";
 
 .search {
-  padding: var(--gutter-lg);
+  padding: var(--gutter-lg) var(--gutter-lg) 0 var(--gutter-lg);
   /* layout */
   display: flex;
   height: 100%;
@@ -174,10 +174,12 @@
 .search-column-list {
   display: flex;
   flex-wrap: wrap;
-  width: calc(100% + var(--gutter));
+  width: calc(100% + var(--gutter-lg)); /* offset column margin */
 
   & .search-column {
-    flex: 1 0 calc(33.333% - var(--gutter));
-    margin-right: var(--gutter);
+    flex: 1 0 calc(33.333% - var(--gutter-lg));
+    min-width: 14rem;
+    max-width: 100%;
+    margin-right: var(--gutter-lg);
   }
 }

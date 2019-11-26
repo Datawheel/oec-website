@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import {hot} from "react-hot-loader/root";
-import {Link} from "react-router";
-// import {Icon} from "@blueprintjs/core";
-
+import Tile from "./Tile";
 import "./SearchColumn.css";
 
 class SearchColumn extends Component {
@@ -50,11 +48,12 @@ class SearchColumn extends Component {
         {count
           ? <ul className="search-column-result-list">
             {limitedResults.map(result =>
-              <li className="search-column-result-item" key={result.name}>
-                <Link to={`${locale}/profile/${result.profile}/${result.id}`} className="search-column-result-link">
-                  {result.name}
-                </Link>
-              </li>
+              <Tile
+                title={result.name}
+                link={`${locale}/profile/${result.profile}/${result.slug}`}
+                image={result.image ? `api/image?slug=${result.profile}&id=${result.id}&size=thumb` : null}
+                key={result.id}
+              />
             )}
           </ul> : ""
         }
@@ -64,8 +63,8 @@ class SearchColumn extends Component {
 }
 
 SearchColumn.defaultProps = {
-  limit: 50, // limit for each column
-  locale: "en"
+  locale: "en",
+  limit: 50 // limit for each column
 };
 
 export default hot(SearchColumn);

@@ -1,12 +1,15 @@
 @import "../helpers/mixins.css";
 
+/* reset lists */
 .search-column-list,
 .search-column-result-list {
   @mixin list-reset;
 }
 
+/* column full of results */
 .search-column {
   position: relative;
+  padding-bottom: var(--gutter-lg);
   transition:
     opacity 1s ease-out 1s;
 
@@ -21,12 +24,16 @@
   }
 }
 
+/* list entity title */
 .search-column-title {
+  /* positioning */
   position: sticky;
   top: 0;
-  width: calc(100% - var(--gutter));
+  z-index: 2; /* above tile & tile title */
   margin: 0;
-  padding: 1rem 0;
+  /* sizing */
   height: var(--nav-height);
+  padding: 1rem 0;
+  /* hide tiles as they pass through */
   background-color: var(--dark-4);
 }
