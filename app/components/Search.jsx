@@ -16,7 +16,7 @@ class Search extends Component {
       searchActive: false,
       activeFilter: null,
       entities: ["commodity", "exporter", "department"],
-      results: {},
+      results: null,
       timeout: 0,
       query: ""
     };
@@ -29,7 +29,7 @@ class Search extends Component {
     const query = e ? e.target.value : this.state.query;
 
     if (query.length < minQueryLength) {
-      this.setState({searchActive: false, results: [], query});
+      this.setState({searchActive: false, results: null, query});
       clearTimeout(timeout);
     }
     else {
@@ -57,7 +57,7 @@ class Search extends Component {
             .then(searchResultsData => {
               this.setState({
                 searchActive: true,
-                results: searchResultsData
+                results: searchResultsData.results
               });
             });
         }, 300)
@@ -86,13 +86,6 @@ class Search extends Component {
   render() {
     const {activeFilter, entities, query, results, searchActive} = this.state;
     const {minQueryLength} = this.props;
-
-    const columnProps = {minQueryLength};
-
-    if (results.results) {
-      console.log(results);
-      console.log([...new Set(results.results.map(r => r.dimension))]);
-    }
 
     return (
       <div className="search" role="search">
@@ -158,7 +151,7 @@ class Search extends Component {
         {/* container for results */}
         <ul className="search-column-list">
           {entities.map(entity =>
-            <SearchColumn {...this.state} {...columnProps} entity={entity} key={entity} />
+            <SearchColumn {...this.state} minQueryLength={minQueryLength} entity={entity} key={entity} />
           )}
         </ul>
       </div>
@@ -167,7 +160,9 @@ class Search extends Component {
 }
 
 Search.defaultProps = {
-  limit: 99999, // not setting a limit means it defaults to 10, in which the first 10 of only one entity will be returned
+  // not setting a limit means it defaults to 10, in which the first 10 of only one entity will be returned;
+  // return them all and limit each SearchColumn instead
+  limit: 99999,
   minQueryLength: 1
 };
 

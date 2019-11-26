@@ -15,16 +15,28 @@ class SearchColumn extends Component {
   }
 
   render() {
-    const {minQueryLength, results, entity, query} = this.props;
-    const resultsList = results[[`${entity}s`]];
-    const count = resultsList ? resultsList.length : 0;
+    const {limit, locale, minQueryLength, results, entity, query} = this.props;
+
+    let fullResults, limitedResults;
+    let count, fullCount = 0;
+
+    if (results && entity) {
+      fullResults = results.filter(r => r.dimension.toLowerCase() === entity);
+      fullCount = fullResults.length;
+
+      limitedResults = fullResults.slice(0, limit);
+      count = limitedResults.length;
+    }
 
     return (
       <li className={`search-column-item ${entity}-entity ${count >= 1 ? "is-active" : "is-empty"}`}>
         {/* label & count */}
         <h3 className={`search-column-title ${query.length >= minQueryLength && count === 0 ? "is-empty" : ""}`}>
           <span className="search-column-title-count">
-            {query.length >= minQueryLength ? count : ""}
+            {query.length >= minQueryLength
+              ? fullCount > limit ? `${limit}+` : count
+              : ""
+            }
           </span>
           <span className="search-column-title-label display">
             { " " }{count !== 1 && query.length >= minQueryLength
@@ -37,10 +49,10 @@ class SearchColumn extends Component {
         {/* search results */}
         {count
           ? <ul className="search-column-result-list">
-            {query && resultsList.map(result =>
-              <li className="search-column-result-item" key={`${result}-result`}>
-                <Link to={`/${entity}/${result}`} className="search-column-result-link">
-                  {result}
+            {limitedResults.map(result =>
+              <li className="search-column-result-item" key={result.name}>
+                <Link to={`${locale}/profile/${result.profile}/${result.id}`} className="search-column-result-link">
+                  {result.name}
                 </Link>
               </li>
             )}
@@ -50,5 +62,10 @@ class SearchColumn extends Component {
     );
   }
 }
+
+SearchColumn.defaultProps = {
+  limit: 50, // limit for each column
+  locale: "en"
+};
 
 export default hot(SearchColumn);
