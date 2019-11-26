@@ -15,8 +15,8 @@ class Search extends Component {
     this.state = {
       searchActive: false,
       activeFilter: null,
-      entities: ["location", "product", "technology", "firm"],
-      results: [],
+      entities: ["commodity", "exporter", "department"],
+      results: {},
       timeout: 0,
       query: ""
     };
@@ -50,18 +50,7 @@ class Search extends Component {
         query,
         // make the request on a timeout
         timeout: setTimeout(() => {
-          // base query
-          let URL = `${this.props.api}/search/?q=${encodeChars(query)}&limit=${limit}`;
-
-          // location activeFilter (by level & location_id)
-          // const countryFilter = activeFilter.activeFilter(d => d.entity === "location" && d.level === "country");
-          // if (countryFilter.length) {
-          //   URL += `&project_country_id=${countryFilter.map(l => l.id)}`;
-          // }
-          // const subnationalFilter = activeFilter.activeFilter(d => d.entity === "location" && d.level === "subnational");
-          // if (subnationalFilter.length) {
-          //   URL += `&project_geo_id=${subnationalFilter.map(l => l.id)}`;
-          // }
+          const URL = `/api/search?q=${ query }${ activeFilter ? `&dimension=${activeFilter}` : "" }&limit=${limit}`;
 
           axios.get(URL)
             .then(res => res.data)
@@ -95,10 +84,15 @@ class Search extends Component {
   }
 
   render() {
-    const {activeFilter, entities, query, searchActive} = this.state;
+    const {activeFilter, entities, query, results, searchActive} = this.state;
     const {minQueryLength} = this.props;
 
     const columnProps = {minQueryLength};
+
+    if (results.results) {
+      console.log(results);
+      console.log([...new Set(results.results.map(r => r.dimension))]);
+    }
 
     return (
       <div className="search" role="search">
@@ -106,7 +100,7 @@ class Search extends Component {
         <h2 className="u-visually-hidden">Search</h2>
 
         {/* filters */}
-        <div className={`search-filter-container ${searchActive ? "is-visible" : "is-hidden"}`}>
+        <div className={`search-filter-container ${query ? "is-visible" : "is-hidden"}`}>
           <h3 className="search-filter-heading u-font-xs">Filter by: </h3>
           <div className="search-filter-button-list">
             <button
@@ -173,7 +167,7 @@ class Search extends Component {
 }
 
 Search.defaultProps = {
-  limit: 100,
+  limit: 99999, // not setting a limit means it defaults to 10, in which the first 10 of only one entity will be returned
   minQueryLength: 1
 };
 

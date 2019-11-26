@@ -7,6 +7,13 @@ import "./SearchColumn.css";
 
 class SearchColumn extends Component {
 
+  formatPlural(str) {
+    if (str.slice(str.length - 1) === "y") {
+      return `${str.slice(0, -1)}ies`;
+    }
+    else return `${str}s`;
+  }
+
   render() {
     const {minQueryLength, results, entity, query} = this.props;
     const resultsList = results[[`${entity}s`]];
@@ -20,7 +27,10 @@ class SearchColumn extends Component {
             {query.length >= minQueryLength ? count : ""}
           </span>
           <span className="search-column-title-label display">
-            { " " }{ entity }{ count !== 1 && query.length >= minQueryLength ? "s" : "" }
+            { " " }{count !== 1 && query.length >= minQueryLength
+              ? this.formatPlural(entity)
+              : entity
+            }
           </span>
         </h3>
 
