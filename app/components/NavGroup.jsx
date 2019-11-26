@@ -51,6 +51,7 @@ class NavGroup extends Component {
           className={`nav-group-button display ${isOpen ? "is-active" : "is-inactive"}`}
           onClick={() => this.setState({isOpen: !isOpen})}
           ref={this.toggleButton}
+          key="b"
         >
           <span className="u-visually-hidden">{isOpen ? "hide" : "show"} </span>
           <span className="nav-group-button-text">{title} </span>
