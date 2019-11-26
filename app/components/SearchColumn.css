@@ -4,3 +4,17 @@
 .search-column-result-list {
   @mixin list-reset;
 }
+
+.search-column {
+  position: relative;
+}
+
+.search-column-title {
+  position: sticky;
+  top: 0;
+  width: calc(100% - var(--gutter));
+  margin: 0;
+  padding: 1rem 0;
+  height: var(--nav-height);
+  background-color: var(--dark-4);
+}

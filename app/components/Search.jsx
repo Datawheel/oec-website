@@ -70,7 +70,8 @@ class Search extends Component {
     this.setState({
       query: "",
       activeFilter: null,
-      searchActive: false
+      searchActive: false,
+      results: []
     });
     setTimeout(() => this.textInput.focus(), 0);
   }
@@ -84,7 +85,7 @@ class Search extends Component {
   }
 
   render() {
-    const {activeFilter, entities, query, results, searchActive} = this.state;
+    const {activeFilter, entities, query} = this.state;
     const {minQueryLength} = this.props;
 
     return (
@@ -99,6 +100,7 @@ class Search extends Component {
             <button
               className="search-filter-button u-font-xs"
               onClick={() => this.resetFilter()}
+              tabIndex={query ? null : -1}
               aria-pressed={!activeFilter}
             >
               none
@@ -107,6 +109,7 @@ class Search extends Component {
               <button
                 className="search-filter-button u-font-xs"
                 onClick={() => this.setFilter(filter)}
+                tabIndex={query ? null : -1}
                 aria-pressed={activeFilter === filter}
                 key={`${filter}-filter-button`}
               >
@@ -138,13 +141,13 @@ class Search extends Component {
 
           {/* close button */}
           <button
-            className={`search-close-button ${query ? "is-visible" : "is-hidden"}`}
+            className={`search-reset-button ${query ? "is-visible" : "is-hidden"}`}
             tabIndex={query ? 0 : -1}
             onClick={this.resetSearch.bind(this)}
             key="slb"
           >
-            <Icon className="search-close-button-icon" icon="cross" />
-            <span className="search-close-button-text">reset</span>
+            <Icon className="search-reset-button-icon" icon="cross" />
+            <span className="search-reset-button-text">reset</span>
           </button>
         </label>
 

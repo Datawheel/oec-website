@@ -84,8 +84,8 @@
   }
 }
 
-/* close button */
-.search-close-button {
+/* reset search button */
+.search-reset-button {
   @mixin absolute-vertical-center;
   @mixin button-reset;
   padding: 0.5em 1em 0.625em 1em;
@@ -95,6 +95,7 @@
   background-color: var(--black);
   color: var(--white);
   transition:
+    background-color 0.15s ease-out,
     opacity 0.15s ease-out,
     transform 0.15s ease-out;
 
@@ -103,7 +104,7 @@
     vertical-align: middle;
   }
 
-  & .search-close-button-icon {
+  & .search-reset-button-icon {
     position: relative;
     width: 1em;
     left: -0.25em;
@@ -117,6 +118,11 @@
   /* interactions */
   &:hover, &:focus {
     opacity: 1;
+    background-color: var(--accent-black);
+
+    & .search-reset-button-icon {
+      transform: scale(1.25);
+    }
   }
 
   /* hidden state */
@@ -170,7 +176,7 @@
   flex-wrap: wrap;
   width: calc(100% + var(--gutter));
 
-  & .search-column-item {
+  & .search-column {
     flex: 1 0 calc(33.333% - var(--gutter));
     margin-right: var(--gutter);
   }
