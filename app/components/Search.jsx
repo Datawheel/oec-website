@@ -86,8 +86,8 @@ class Search extends Component {
     setTimeout(() => this.textInput.focus(), 0);
   }
 
-  setFilter(e) {
-    this.setState({activeFilter: e.target.value});
+  setFilter(filter) {
+    this.setState({activeFilter: filter});
   }
 
   resetFilter() {
@@ -107,39 +107,57 @@ class Search extends Component {
 
         {/* filters */}
         <div className="search-filter-container">
-          <button onClick={() => this.resetFilter()}>none</button>
-          {entities.map(filter =>
-            <button key={`${filter}-filter-button`} onClick={e => this.setFilter(e)}>{filter}</button>
-          )}
+          <h3 className="search-filter-heading u-font-xs">Filter by: </h3>
+          <div className="search-filter-button-list">
+            <button
+              className="search-filter-button u-font-xs"
+              onClick={() => this.resetFilter()}
+              aria-pressed={!activeFilter}
+            >
+              none
+            </button>
+            {entities.map(filter =>
+              <button
+                className="search-filter-button u-font-xs"
+                onClick={() => this.setFilter(filter)}
+                aria-pressed={activeFilter === filter}
+                key={`${filter}-filter-button`}
+              >
+                {filter}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* main input */}
         <label className="search-label">
           {/* accessibility text */}
-          <span className="u-visually-hidden">
+          <span className="u-visually-hidden" key="slt">
             Search locations, products, technologies, and firms
           </span>
 
-          {/* the input; NOTE: className must stay as .search-input for focus management */}
+          {/* the input */}
           <input
             className="search-input u-font-xxl"
             placeholder="Search profiles..."
             value={query}
             onChange={this.onChange.bind(this) }
             ref={input => this.textInput = input}
+            key="sli"
           />
 
           {/* search icon (keep after input so it can be easily styled input hover/focus) */}
-          <Icon className="search-icon u-font-xxl" icon="search" />
+          <Icon className="search-icon u-font-xxl" icon="search" key="slii" />
 
           {/* close button */}
           <button
             className={`search-close-button ${query ? "is-visible" : "is-hidden"}`}
             tabIndex={query ? 0 : -1}
             onClick={this.resetSearch.bind(this)}
+            key="slb"
           >
-            <Icon className="search-close-icon" icon="cross" />
-            <span className="u-visually-hidden">reset search</span>
+            <Icon className="search-close-button-icon" icon="cross" />
+            <span className="search-close-button-text">reset</span>
           </button>
         </label>
 

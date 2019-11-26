@@ -7,7 +7,7 @@
 .search-label {
   position: relative;
   display: block;
-
+  margin: 1em 0;
 }
 
 /* the main input */
@@ -79,19 +79,21 @@
 .search-close-button {
   @mixin absolute-vertical-center;
   @mixin button-reset;
-  padding: 0;
+  padding: 0.5em 1em 0.625em 1em;
   right: 0;
+  /* theming */
+  border-radius: 2em;
+  background-color: var(--black);
+  color: var(--white);
 
+  & > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
 
-  & .search-close-icon {
-    /* sizing */
-    width: 2rem;
-    height: 2rem;
-    padding: 0.5em;
-    /* theming */
-    border-radius: 50%;
-    background-color: var(--black);
-    color: var(--white);
+  & .search-close-button-icon {
+    position: relative;
+    left: -0.25em;
 
     & svg {
       width: 100%;
@@ -105,7 +107,7 @@
   }
 
   /* visible state */
-  &.is-visible .search-close-icon {
+  &.is-visible {
     transition:
       opacity 0.15s ease-out,
       transform 0.15s ease-out;
@@ -114,10 +116,35 @@
   /* hidden state */
   &.is-hidden  {
     z-index: -1;
+    opacity: 0;
+    transform: scale(0.75) translateY(-50%);
+  }
+}
 
-    & .search-close-icon {
-      opacity: 0;
-      transform: scale(0.75);
-    }
+/* filters */
+.search-filter-container {
+  margin-top: -1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  padding-right: 1rem; /* make room for search close button */
+}
+.search-filter-heading {
+  margin: 0 0.5em 0 0;
+}
+.search-filter-button {
+  @mixin button-reset;
+  padding: 0.5em;
+  color: var(--light-3);
+  border-bottom: 1px solid var(--dark-1);
+  transform: border-color 0.2s ease-out;
+
+  &:hover, &:focus {
+    color: var(--white);
+  }
+
+  &[aria-pressed="true"] {
+    border-color: var(--white);
+    color: var(--white);
   }
 }
