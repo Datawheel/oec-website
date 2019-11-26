@@ -29,7 +29,7 @@ class Search extends Component {
     const query = e ? e.target.value : this.state.query;
 
     if (query.length < minQueryLength) {
-      this.setState({searchActive: true, results: [], query});
+      this.setState({searchActive: false, results: [], query});
       clearTimeout(timeout);
     }
     else {
@@ -95,7 +95,7 @@ class Search extends Component {
   }
 
   render() {
-    const {activeFilter, entities, query} = this.state;
+    const {activeFilter, entities, query, searchActive} = this.state;
     const {minQueryLength} = this.props;
 
     const columnProps = {minQueryLength};
@@ -106,7 +106,7 @@ class Search extends Component {
         <h2 className="u-visually-hidden">Search</h2>
 
         {/* filters */}
-        <div className="search-filter-container">
+        <div className={`search-filter-container ${searchActive ? "is-visible" : "is-hidden"}`}>
           <h3 className="search-filter-heading u-font-xs">Filter by: </h3>
           <div className="search-filter-button-list">
             <button
@@ -162,13 +162,11 @@ class Search extends Component {
         </label>
 
         {/* container for results */}
-        <div className="search-inner">
-          <ul className="search-column-list">
-            {entities.map(entity =>
-              <SearchColumn {...this.state} {...columnProps} entity={entity} key={entity} />
-            )}
-          </ul>
-        </div>
+        <ul className="search-column-list">
+          {entities.map(entity =>
+            <SearchColumn {...this.state} {...columnProps} entity={entity} key={entity} />
+          )}
+        </ul>
       </div>
     );
   }
