@@ -154,7 +154,13 @@ class Search extends Component {
         {/* container for results */}
         <ul className="search-column-list">
           {entities.map(entity =>
-            <SearchColumn {...this.state} minQueryLength={minQueryLength} entity={entity} key={entity} />
+            <SearchColumn
+              entity={entity}
+              minQueryLength={minQueryLength}
+              visible={!activeFilter || activeFilter === entity}
+              key={entity}
+              {...this.state}
+            />
           )}
         </ul>
       </div>

@@ -15,7 +15,7 @@ class SearchColumn extends Component {
   }
 
   render() {
-    const {limit, locale, minQueryLength, results, entity, query} = this.props;
+    const {entity, limit, locale, minQueryLength, results, visible, query} = this.props;
 
     let fullResults, limitedResults;
     let count, fullCount = 0;
@@ -29,7 +29,7 @@ class SearchColumn extends Component {
     }
 
     return (
-      <li className={`search-column ${entity}-entity ${count >= 1 ? "is-active" : "is-empty"}`}>
+      <li className={`search-column ${entity}-entity ${!query || count >= 1 ? "is-active" : "is-empty"} ${visible ? "is-visible" : "is-hidden"}`}>
         {/* label & count */}
         <h3 className={`search-column-title ${query.length >= minQueryLength && count === 0 ? "is-empty" : ""}`}>
           <span className="search-column-title-count">

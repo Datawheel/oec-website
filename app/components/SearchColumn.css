@@ -7,6 +7,18 @@
 
 .search-column {
   position: relative;
+  transition:
+    opacity 1s ease-out 1s;
+
+  /* query, but no results */
+  &.is-empty {
+    opacity: 0.5;
+  }
+
+  /* a filter is selected, and it isn't this one */
+  &.is-hidden {
+    @mixin visually-hidden;
+  }
 }
 
 .search-column-title {
