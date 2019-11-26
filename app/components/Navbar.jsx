@@ -66,6 +66,7 @@ class Navbar extends Component {
         <div className="navbar-search-toggle-button-wrapper">
           <button
             className="navbar-toggle-button navbar-search-toggle-button display u-font-md"
+            aria-pressed={searchVisible}
             onClick={() => this.toggleSearch()}
           >
             <span className="u-visually-hidden">Search profiles...</span>

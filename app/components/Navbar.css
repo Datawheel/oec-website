@@ -132,6 +132,15 @@
 .navbar-search-toggle-button {
   position: relative;
   z-index: 1; /* in front of open search */
+  transition: transform 0.1s ease-out;
+
+  &:hover, &:focus {
+    transform: scale(1.375);
+  }
+
+  &[aria-pressed="true"] {
+    transform: scale(1.75);
+  }
 }
 
 /* position search over the entire screen */
