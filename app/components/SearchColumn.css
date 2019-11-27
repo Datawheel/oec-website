@@ -22,6 +22,15 @@
   &.is-hidden {
     @mixin visually-hidden;
   }
+
+  /* show them in a grid where there's space */
+  &.is-visible .search-column-result-list {
+    column-width: 14rem;
+    column-gap: var(--gutter);
+
+    /* prevent awkward jaggy wrapping */
+    & .tile { break-inside: avoid; }
+  }
 }
 
 /* list entity title */
