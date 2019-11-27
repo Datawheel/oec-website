@@ -19,7 +19,7 @@ class SearchColumn extends Component {
     let count, fullCount = 0;
 
     if (results && entity) {
-      fullResults = results.filter(r => r.dimension.toLowerCase() === entity);
+      fullResults = results.filter(r => r.dimension === entity);
       fullCount = fullResults.length;
 
       limitedResults = fullResults.slice(0, limit);
@@ -45,7 +45,7 @@ class SearchColumn extends Component {
         </h3>
 
         {/* search results */}
-        {count
+        {count && query.length
           ? <ul className="search-column-result-list">
             {limitedResults.map(result =>
               <Tile

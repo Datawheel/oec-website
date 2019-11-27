@@ -3,7 +3,6 @@ import {hot} from "react-hot-loader/root";
 import axios from "axios";
 import {event, select} from "d3-selection";
 import {Icon} from "@blueprintjs/core";
-import {encodeChars} from "@datawheel/canon-core";
 
 import SearchColumn from "./SearchColumn";
 import "./Search.css";
@@ -15,11 +14,22 @@ class Search extends Component {
     this.state = {
       searchActive: false,
       activeFilter: null,
-      entities: ["commodity", "exporter", "department"],
+      entities: [],
       results: null,
       timeout: 0,
-      query: ""
+      query: "",
+      profileMeta: null
     };
+  }
+
+  componentDidMount() {
+    axios.get("/api/cms/meta")
+      .then(res => res.data)
+      .then(profileMeta =>
+        this.setState({
+          entities: [...new Set(profileMeta.map(p => p.dimension))] // get all unique dimensions
+        })
+      );
   }
 
   // get value from input
@@ -60,7 +70,7 @@ class Search extends Component {
                 results: searchResultsData.results
               });
             });
-        }, 300)
+        }, 200)
       });
     }
   }
@@ -113,7 +123,7 @@ class Search extends Component {
                 aria-pressed={activeFilter === filter}
                 key={`${filter}-filter-button`}
               >
-                {filter}
+                {filter.toLowerCase()}
               </button>
             )}
           </div>

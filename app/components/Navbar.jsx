@@ -74,7 +74,11 @@ class Navbar extends Component {
           </button>
         </div>
 
-        <div className={`navbar-search ${searchVisible ? "is-visible" : "is-hidden"}`}>
+        <div
+          className={`navbar-search ${searchVisible ? "is-visible" : "is-hidden"}`}
+          aria-hidden={!searchVisible}
+          tabIndex={searchVisible ? null : -1}
+        >
           <Search />
         </div>
       </div>
