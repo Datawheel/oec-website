@@ -27,7 +27,7 @@ class SearchColumn extends Component {
     }
 
     return (
-      <li className={`search-column ${entity}-entity ${!query || count >= 1 ? "is-active" : "is-empty"} ${visible ? "is-visible" : "is-hidden"}`}>
+      <li className={`search-column ${entity.toLowerCase()}-entity ${!query || count >= 1 ? "is-active" : "is-empty"} ${visible ? "is-visible" : "is-hidden"}`}>
         {/* label & count */}
         <h3 className={`search-column-title ${query.length >= minQueryLength && count === 0 ? "is-empty" : ""}`}>
           <span className="search-column-title-count">
