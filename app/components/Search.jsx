@@ -39,7 +39,7 @@ class Search extends Component {
     const query = e ? e.target.value : this.state.query;
 
     if (query.length < minQueryLength) {
-      this.setState({searchActive: false, results: null, query});
+      this.setState({searchActive: false, results: null, activeFilter: null, query});
       clearTimeout(timeout);
     }
     else {
