@@ -16,21 +16,19 @@
 .search-label {
   position: relative;
   display: block;
-  margin: 1em 0;
+  margin: 1.5em -1.5em 0.5em -1.5em;
 }
 
 /* the main input */
 .search-input {
   /* sizing */
-  padding: 0.25em 1em 0.25em 0;
+  padding: 0.25em 3em 0.375em 1.5em;
   width: 100%;
-  /* resets */
-  border: none;
-  border-radius: 0;
   /* theming */
   font-weight: var(--base-font-weight);
   background-color: transparent;
-  border-bottom: 2px solid var(--dark-1);
+  border: 2px solid var(--dark-2);
+  border-radius: 1em; /* fully rounded */
   color: var(--white);
   transition:
     border 0.2s ease-out,
@@ -47,15 +45,15 @@
 
   /* interactions */
   &:hover {
-    border-color: var(--white);
+    border-color: var(--dark-1);
 
     & + .search-icon path {
-      fill: var(--white);
+      fill: var(--gray);
     }
   }
   &[class]:focus {
     outline: none;
-    border-bottom-color: var(--accent);
+    border-color: var(--accent);
 
     & + .search-icon path {
       fill: var(--accent);
@@ -68,7 +66,7 @@
   /* sizing & positioning */
   @mixin absolute-vertical-center;
   width: 0.625em;
-  left: -0.875em;
+  left: 0.5em;
   /* prevent from obscuring click */
   pointer-events: none;
   transition: color 0.2s ease-out;
@@ -89,7 +87,7 @@
   @mixin absolute-vertical-center;
   @mixin button-reset;
   padding: 0.5em 1em 0.625em 1em;
-  right: 0;
+  right: 1em;
   /* theming */
   border-radius: 2em;
   background-color: var(--black);
@@ -159,14 +157,16 @@
   padding: 0.5em;
   color: var(--light-3);
   border-bottom: 1px solid var(--dark-1);
-  transform: border-color 0.2s ease-out;
+  transition:
+    border-color 0.1s ease-out,
+    color 0.1s ease-out;
 
   &:hover, &:focus {
     color: var(--white);
   }
 
   &[aria-pressed="true"] {
-    border-color: var(--white);
+    border-color: var(--light-3);
     color: var(--white);
   }
 }
