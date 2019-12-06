@@ -165,8 +165,7 @@ export default {
       "z-index": 18
     },
     title: d => {
-      // console.log("my tooltip data:", d);
-      const dd = ["HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
       const bgColor = "Country" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
