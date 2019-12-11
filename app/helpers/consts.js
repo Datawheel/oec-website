@@ -6,7 +6,7 @@ module.exports = {
     {title: "Profiles", items: [
       {title: "Location", items: [
         {title: "Country",            url: `/${locale}/profile/country/`},
-        {title: "Subnational",        url: `/${locale}/profile/subnational/`, pro: true},
+        {title: "Subnational",        url: `/${locale}/profile/subnational_bra/alagoas`, pro: true},
         {title: "Country to country", url: `/${locale}/profile/bilateral-country/`, pro: true},
         {title: "Product in country", url: `/${locale}/profile/bilateral-product/`, pro: true}
       ]},
