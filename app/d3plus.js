@@ -25,6 +25,13 @@ function findColor(d) {
   // if (d["Parent Service"]) {
   //   console.log("findColor!!!!", d, detectedColors);
   // }
+
+  if ("Section" in d) {
+    return "Subgroup Count" in d
+      ? colors["CPC Section"][`${d["Section ID"]}`]
+      : colors.Section[`${d["Section ID"]}`];
+  }
+
   if (detectedColors.length !== 1) {
     for (const key in colors) {
       if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
@@ -42,7 +49,10 @@ function findColor(d) {
  */
 function backgroundImage(d) {
 
-  if ("Section ID" in d) {
+  if ("Section ID" in d && "Subgroup Count" in d) {
+    return `/images/icons/cpc/${d["Section ID"]}.png`;
+  }
+  else if ("Section ID" in d) {
     return `/images/icons/hs/hs_${d["Section ID"]}.png`;
   }
   else if ("Continent" in d) {
@@ -173,6 +183,9 @@ export default {
       let imgUrl = "/images/icons/product/product.svg";
       if ("Country" in d) {
         imgUrl = `/images/icons/country/country_${d["ISO 3"]}.png`;
+      }
+      if ("Section ID" in d && "Subgroup Count" in d) {
+        imgUrl = `/images/icons/cpc/${d["Section ID"]}.png`;
       }
       if ("Section" in d) {
         imgUrl = `/images/icons/hs/hs_${d["Section ID"]}.png`;

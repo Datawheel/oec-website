@@ -54,6 +54,18 @@ export default {
     12: "#939e9e" // other
   },
 
+  "CPC Section": {
+    A: "#9A3260",
+    B: "#ED6560",
+    C: "#F19462",
+    D: "#F9D79B",
+    E: "#DE9489",
+    F: "#4B343B",
+    G: "#6F7B93",
+    H: "#4F7993",
+    Y: "#8F4F5A"
+  },
+
   "colorGrey": "#ccc"
 };
 
