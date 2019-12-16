@@ -96,7 +96,7 @@
 }
 
 /* about section */
-.cp-grouping > .cp-multi-column-section:first-child {
+.cp-grouping > .cp-section.cp-multi-column-section:first-child {
   background-color: var(--white);
   color: var(--black);
 
