@@ -3,6 +3,7 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 
 import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
+import Subnational from "./pages/Subnational";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
 
 import {Login, SignUp} from "@datawheel/canon-core";
@@ -69,6 +70,7 @@ export default function RouteCreate() {
       <Route exact path="/admin" component={Builder} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
+      <Route exact path="/:lang/subnational" component={Subnational} />
     </Route>
   );
 }
