@@ -278,7 +278,7 @@ export default {
   },
   titleConfig: {
     "fontColor": () => "#FFFFFF",
-    "fontSize": () => 20,
+    "fontSize": () => 16,
     "text-transform": "uppercase"
   },
   shapeConfig: {
@@ -324,5 +324,6 @@ export default {
         padding: 10
       }
     }
-  }
+  },
+  timelineConfig: axisStyles
 };

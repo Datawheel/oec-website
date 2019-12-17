@@ -116,6 +116,9 @@
   text-transform: uppercase;
 }
 
+.cp-section-paragraph {
+  text-align: justify;
+}
 
 /* default (sidebar) layout */
 .cp-default-section-inner {
@@ -219,5 +222,13 @@
   text-align: center;
   display: block;
   flex: 1;
-  font-size: 24px;
+  font-size: 18px;
+}
+
+.cp-section {
+  padding: var(--gutter-sm);
+}
+
+.cp-section-content {
+  /*width: 18rem;*/
 }

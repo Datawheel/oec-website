@@ -171,7 +171,7 @@ singlecolumn-min-width:     "20rem"
 # handle MultiColumn section with css multicolumn
 multicolumn-column-count:   "3"
 multicolumn-column-width:   "20rem"
-multicolumn-column-gap:     "var(--gutter-xl)"
+multicolumn-column-gap:     "var(--gutter-sm)"
 # InfoCard
 infocard-viz-min-width:     "10rem"
 infocard-border-radius:     "4px"
