@@ -231,6 +231,11 @@ export default {
         tbodyData.push([`Market Share ${d.Year + 1}`, `${formatAbbreviate(d.currYearShare * 100)}%`]);
         tbodyData.push([`Market Share ${d.Year}`, `${formatAbbreviate(d.prevYearShare * 100)}%`]);
       }
+      else if (d.growthDelta) {
+        tbodyData.push(["Delta", `${formatAbbreviate(d.growthDelta * 100)}%`]);
+        tbodyData.push(["Total 2017", `${formatAbbreviate(d.currYear)}`]);
+        tbodyData.push(["Total 2016", `${formatAbbreviate(d.prevYear)}`]);
+      }
       else if (d["Trade Value"]) {
         tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
       }
