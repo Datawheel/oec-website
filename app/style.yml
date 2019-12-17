@@ -101,13 +101,13 @@ gutter-xl:                  "3rem"
 
 # typography
 font-xxxs:                  "0.5rem"   # 8px  - use sparingly
-font-xxs:                   "0.625rem" # 10px
-font-xs:                    "0.75rem"  # 12px
-font-sm:                    "0.875rem" # 14px
-font-md:                    "1rem"     # 16px
-font-lg:                    "1.25rem"  # 20px
-font-xl:                    "1.5rem"   # 24px
-font-xxl:                   "2rem"     # 32px - use sparingly
+font-xxs:                   "0.6rem" # 10px
+font-xs:                    "0.7rem"  # 12px
+font-sm:                    "0.8rem" # 14px
+font-md:                    "0.9rem"     # 16px
+font-lg:                    "1.1rem"  # 20px
+font-xl:                    "1.4rem"   # 24px
+font-xxl:                   "1.8rem"     # 32px - use sparingly
 
 # base (p, li, etc.)
 base-font-stack:            "'Source Sans Pro', 'Droid Sans', 'Avenir', Helvetica, Arial, sans-serif" # Remember to import custom fonts & only the necessary weights via Helmet.js
