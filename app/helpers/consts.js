@@ -74,7 +74,7 @@ module.exports = {
         {title: "Kyusyu", url: `/${locale}/profile/subnational_jpn/kyusyu`, pro: true},
         {title: "Chugoku", url: `/${locale}/profile/subnational_jpn/chugoku`, pro: true}
       ]},
-      {title: "Municipalities", items: [
+      {title: "Prefecture", items: [
         {title: "Chiba, Kanto", url: `/${locale}/profile/subnational_jpn/chiba`, pro: true},
         {title: "Aichi, Chubu", url: `/${locale}/profile/subnational_jpn/aichi`, pro: true},
         {title: "Osaka, Kinki", url: `/${locale}/profile/subnational_jpn/osaka`, pro: true},

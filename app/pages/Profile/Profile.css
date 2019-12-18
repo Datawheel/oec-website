@@ -49,9 +49,18 @@
 }
 
 
+.cp-hero-figure {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.cp-hero-credits {
+  margin-bottom: 0.5rem;
+}
+
 /* hero */
 .cp-hero {
-  min-height: calc(40vh - var(--nav-height));
+  min-height: calc(20vh - var(--nav-height));
   position: relative;
   z-index: 1;
 

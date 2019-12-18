@@ -61,9 +61,9 @@ function backgroundImage(d) {
   else if ("Parent Service ID" in d) {
     return `/images/icons/service/service_${[d["Parent Service ID"]]}.png`;
   }
-  else if ("Flow" in d) {
+  else if ("Trade Flow" in d) {
     const options = {1: "export", 2: "import"};
-    return `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
+    return `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
   }
   else {
     return undefined;
@@ -184,7 +184,7 @@ export default {
     },
     title: d => {
       const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
-      const bgColor = "Country" in d ? "red" : findColor(d);
+      const bgColor = "Country" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
