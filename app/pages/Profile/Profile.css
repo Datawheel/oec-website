@@ -232,3 +232,9 @@
 .cp-section-content {
   /*width: 18rem;*/
 }
+
+@mixin min-sm {
+  .cp-default-section-figure {
+    width: calc(100% - var(--sidebar-width) - var(--gutter-sm));
+  }
+}

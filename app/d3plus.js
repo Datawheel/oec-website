@@ -35,11 +35,11 @@ function findColor(d) {
   if (detectedColors.length !== 1) {
     for (const key in colors) {
       if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || "transparent" || colors.colorGrey;
+        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || "red" || colors.colorGrey;
       }
     }
   }
-  return detectedColors[0] || "transparent";
+  return detectedColors[0] || "red";
   // return Object.keys(d).some(v => badMeasures.includes(v)) ? bad : good;
 }
 
@@ -110,23 +110,31 @@ const colorScaleConfig = {
     labelRotation: false,
     shapeConfig: {
       labelConfig: {
-        fontColor: () => "#211f1a",
+        // fontColor: () => "#211f1a",
+        fontColor: () => "#ffffff",
         fontSize: () => 12,
         fontWeight: () => 400
-      }
+      },
+      stroke: "#979797"
     },
     titleConfig: {
-      fontColor: () => "#211f1a",
+      // fontColor: () => "#211f1a",
+      fontColor: () => "#ffffff",
       fontSize: () => 12,
       fontWeight: () => 400
+    },
+    barConfig: {
+      stroke: "white"
     },
     tickFormat: d => formatAbbreviate(d)
   },
   legendConfig: {
     shapeConfig: {
       labelConfig: {
-        fontSize: () => 16
+        fontSize: () => 16,
+        fontColor: () => "#ffffff"
       },
+      fontColor: () => "#ffffff",
       height: () => 15,
       stroke: "#383e44",
       width: () => 15
@@ -176,7 +184,7 @@ export default {
     },
     title: d => {
       const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
-      const bgColor = "Country" in d ? "transparent" : findColor(d);
+      const bgColor = "Country" in d ? "red" : findColor(d);
       const options = {1: "export", 2: "import"};
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";

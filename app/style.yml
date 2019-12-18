@@ -145,7 +145,7 @@ hero-stat-value-color:      "var(--white)"
 hero-stat-column-count:     "4"
 hero-stat-column-width:     "10rem"
 hero-viz-width:             "var(--sidebar-width)"
-hero-img-overlay-opacity:   "0.75"
+hero-img-overlay-opacity:   "0.5"
 
 # sections
 section-bg-odd:             "var(--dark-2)"
