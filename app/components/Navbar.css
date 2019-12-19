@@ -5,7 +5,7 @@
   width: 100%;
   max-width: 100%;
   height: var(--nav-height);
-  padding: 0 var(--gutter-md);
+  padding: 0 var(--gutter-sm);
   /* positioning */
   position: relative; /* honor z-index */
   z-index: 21;
@@ -20,7 +20,7 @@
   color: var(--white);
 
   /* prevent from breaking on small screens, for now */
-  @mixin min-md {
+  @mixin min-sm {
     position: fixed;
     top: 0;
 
