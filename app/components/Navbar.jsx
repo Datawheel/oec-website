@@ -3,6 +3,8 @@ import {hot} from "react-hot-loader/root";
 import {Link} from "react-router";
 import {Icon} from "@blueprintjs/core";
 
+import {AnchorLink} from "@datawheel/canon-core";
+
 import {NAV} from "helpers/consts";
 import NavGroup from "./NavGroup";
 import Search from "./Search";
@@ -30,6 +32,7 @@ class Navbar extends Component {
   }
 
   render() {
+    const {title, scrolled} = this.props;
     const {navVisible, searchVisible} = this.state;
 
     return (
@@ -44,6 +47,14 @@ class Navbar extends Component {
             draggable="false"
           />
         </Link>
+
+        {title &&
+          <div className={`navbar-top-link-wrapper ${scrolled ? "is-visible" : "is-hidden"}`}>
+            <AnchorLink className="navbar-top-link heading u-font-lg" to="top">
+              {title}
+            </AnchorLink>
+          </div>
+        }
 
         {/* nav */}
         <button
