@@ -183,7 +183,7 @@ export default {
       "z-index": 18
     },
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Trade Flow", "Service"].find(h => h in d);
       const bgColor = "Country" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
@@ -200,6 +200,10 @@ export default {
       }
       if ("Flow" in d) {
         imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
+      }
+      if ("Trade Flow" in d) {
+        const options = {1: "export", 2: "import"};
+        imgUrl = `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
       }
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
@@ -243,6 +247,9 @@ export default {
         tbodyData.push(["Delta", `${formatAbbreviate(d.growthDelta * 100)}%`]);
         tbodyData.push(["Total 2017", `${formatAbbreviate(d.currYear)}`]);
         tbodyData.push(["Total 2016", `${formatAbbreviate(d.prevYear)}`]);
+      }
+      else if (d["Trade Value"]) {
+        tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
       }
       else if (d["Trade Value"]) {
         tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
