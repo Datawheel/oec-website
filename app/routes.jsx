@@ -10,6 +10,7 @@ import {Login, SignUp} from "@datawheel/canon-core";
 import App from "./App";
 import Home from "./pages/Home";
 import Welcome from "./pages/Welcome";
+import Vizbuilder from "./pages/Vizbuilder";
 
 /** */
 export default function RouteCreate() {
@@ -67,6 +68,7 @@ export default function RouteCreate() {
       <Route path="/welcome" component={Welcome} />
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route exact path="/admin" component={Builder} />
+      <Route exact path="/:lang/visualize" component={Vizbuilder} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
     </Route>
