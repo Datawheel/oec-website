@@ -89,7 +89,7 @@ body-font-scale-xl:         "125%"   # 1rem = 20px (min-width: 1400px)
 
 # measurements
 nav-height:                 "3.5rem"
-subnav-height:              "var(--nav-height)"
+subnav-height:              "2rem"
 container-width:            "80rem" # 1280px
 hero-container-width:       "var(--container-width)"
 
@@ -101,13 +101,13 @@ gutter-xl:                  "3rem"
 
 # typography
 font-xxxs:                  "0.5rem"   # 8px  - use sparingly
-font-xxs:                   "0.625rem" # 10px
-font-xs:                    "0.75rem"  # 12px
-font-sm:                    "0.875rem" # 14px
-font-md:                    "1rem"     # 16px
-font-lg:                    "1.25rem"  # 20px
-font-xl:                    "1.5rem"   # 24px
-font-xxl:                   "2rem"     # 32px - use sparingly
+font-xxs:                   "0.6rem" # 10px
+font-xs:                    "0.7rem"  # 12px
+font-sm:                    "0.8rem" # 14px
+font-md:                    "0.9rem"     # 16px
+font-lg:                    "1.1rem"  # 20px
+font-xl:                    "1.4rem"   # 24px
+font-xxl:                   "1.8rem"     # 32px - use sparingly
 
 # base (p, li, etc.)
 base-font-stack:            "'Source Sans Pro', 'Droid Sans', 'Avenir', Helvetica, Arial, sans-serif" # Remember to import custom fonts & only the necessary weights via Helmet.js
@@ -145,7 +145,7 @@ hero-stat-value-color:      "var(--white)"
 hero-stat-column-count:     "4"
 hero-stat-column-width:     "10rem"
 hero-viz-width:             "var(--sidebar-width)"
-hero-img-overlay-opacity:   "0.75"
+hero-img-overlay-opacity:   "0.5"
 
 # sections
 section-bg-odd:             "var(--dark-2)"
@@ -171,7 +171,7 @@ singlecolumn-min-width:     "20rem"
 # handle MultiColumn section with css multicolumn
 multicolumn-column-count:   "3"
 multicolumn-column-width:   "20rem"
-multicolumn-column-gap:     "var(--gutter-xl)"
+multicolumn-column-gap:     "var(--gutter-sm)"
 # InfoCard
 infocard-viz-min-width:     "10rem"
 infocard-border-radius:     "4px"

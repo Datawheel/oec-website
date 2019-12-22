@@ -29,6 +29,11 @@ export default {
     2: "#942217"
   },
 
+  "Trade Flow": {
+    1: "#4495bc",
+    2: "#942217"
+  },
+
   "Continent": {
     eu: "#642a6c", // Europe
     as: "#a92c20", // Asia

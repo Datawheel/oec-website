@@ -3,6 +3,8 @@ import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
 
 import {fetchData} from "@datawheel/canon-core";
+import throttle from "@datawheel/canon-cms/src/utils/throttle";
+import stripHTML from "@datawheel/canon-cms/src/utils/formatters/stripHTML";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
@@ -44,30 +46,36 @@ class Profile extends React.Component {
   }
 
   handleScroll = () => {
-    if (window.scrollY > 5) {
-      this.setState({scrolled: true});
-    }
-    else {
-      this.setState({scrolled: false});
-    }
-
+    throttle(() => {
+      if (window.scrollY > 220) {
+        this.setState({scrolled: true});
+      }
+      else {
+        this.setState({scrolled: false});
+      }
+    }, 30);
   };
-
 
 
   render() {
     const {profile, t} = this.props;
-    const {variables} = profile;
     const {scrolled} = this.state;
-    return <div className="profile" onScroll={this.handleScroll}>
-      <Navbar
-        className={scrolled ? "background" : ""}
-        title={scrolled ? variables.name : ""}
-      />
-      <CMSProfile {...this.props} />
 
-      <Footer />
-    </div>;
+    let title = null;
+    if (profile.sections.length) title = stripHTML(profile.sections[0].title);
+
+    return (
+      <div className="profile" id="top">
+        <Navbar
+          className={scrolled ? "background" : ""}
+          title={title}
+          scrolled={scrolled}
+        />
+        <CMSProfile {...this.props} />
+
+        <Footer />
+      </div>
+    );
   }
 }
 

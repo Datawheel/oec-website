@@ -35,11 +35,11 @@ function findColor(d) {
   if (detectedColors.length !== 1) {
     for (const key in colors) {
       if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || "transparent" || colors.colorGrey;
+        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || "red" || colors.colorGrey;
       }
     }
   }
-  return detectedColors[0] || "transparent";
+  return detectedColors[0] || "red";
   // return Object.keys(d).some(v => badMeasures.includes(v)) ? bad : good;
 }
 
@@ -61,9 +61,9 @@ function backgroundImage(d) {
   else if ("Parent Service ID" in d) {
     return `/images/icons/service/service_${[d["Parent Service ID"]]}.png`;
   }
-  else if ("Flow" in d) {
+  else if ("Trade Flow" in d) {
     const options = {1: "export", 2: "import"};
-    return `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
+    return `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
   }
   else {
     return undefined;
@@ -110,23 +110,31 @@ const colorScaleConfig = {
     labelRotation: false,
     shapeConfig: {
       labelConfig: {
-        fontColor: () => "#211f1a",
+        // fontColor: () => "#211f1a",
+        fontColor: () => "#ffffff",
         fontSize: () => 12,
         fontWeight: () => 400
-      }
+      },
+      stroke: "#979797"
     },
     titleConfig: {
-      fontColor: () => "#211f1a",
+      // fontColor: () => "#211f1a",
+      fontColor: () => "#ffffff",
       fontSize: () => 12,
       fontWeight: () => 400
+    },
+    barConfig: {
+      stroke: "white"
     },
     tickFormat: d => formatAbbreviate(d)
   },
   legendConfig: {
     shapeConfig: {
       labelConfig: {
-        fontSize: () => 16
+        fontSize: () => 16,
+        fontColor: () => "#ffffff"
       },
+      fontColor: () => "#ffffff",
       height: () => 15,
       stroke: "#383e44",
       width: () => 15
@@ -175,7 +183,7 @@ export default {
       "z-index": 18
     },
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Service"].find(h => h in d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Trade Flow", "Service"].find(h => h in d);
       const bgColor = "Country" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
@@ -192,6 +200,10 @@ export default {
       }
       if ("Flow" in d) {
         imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
+      }
+      if ("Trade Flow" in d) {
+        const options = {1: "export", 2: "import"};
+        imgUrl = `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
       }
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
@@ -230,6 +242,14 @@ export default {
         tbodyData.push(["Market Share ∆", `${formatAbbreviate(d.shareDelta * 100)}%`]);
         tbodyData.push([`Market Share ${d.Year + 1}`, `${formatAbbreviate(d.currYearShare * 100)}%`]);
         tbodyData.push([`Market Share ${d.Year}`, `${formatAbbreviate(d.prevYearShare * 100)}%`]);
+      }
+      else if (d.growthDelta) {
+        tbodyData.push(["Delta", `${formatAbbreviate(d.growthDelta * 100)}%`]);
+        tbodyData.push(["Total 2017", `${formatAbbreviate(d.currYear)}`]);
+        tbodyData.push(["Total 2016", `${formatAbbreviate(d.prevYear)}`]);
+      }
+      else if (d["Trade Value"]) {
+        tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
       }
       else if (d["Trade Value"]) {
         tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
@@ -273,7 +293,7 @@ export default {
   },
   titleConfig: {
     "fontColor": () => "#FFFFFF",
-    "fontSize": () => 20,
+    "fontSize": () => 16,
     "text-transform": "uppercase"
   },
   shapeConfig: {
@@ -319,5 +339,6 @@ export default {
         padding: 10
       }
     }
-  }
+  },
+  timelineConfig: axisStyles
 };
