@@ -8,4 +8,4 @@ class Vizbuilder extends React.Component {
   }
 }
 
-export default withNamespaces()(connect())(Vizbuilder);
+export default withNamespaces()(connect()(Vizbuilder));
