@@ -1,0 +1,38 @@
+.panel {
+  color: var(--white);
+  opacity: 1;
+  margin-bottom: 0px!important;
+  & .text {
+    font-size: var(--font-sm);
+    text-transform: uppercase;
+  }
+  & .panel-option {
+    font-size: var(--font-sm);
+    line-height: 20px;
+    display: block;
+    color: var(--white);
+  }
+
+  & .options {
+    margin-left: -40px;
+    & .panel-option:hover {
+      cursor: pointer;
+      opacity: 0.9;
+      list-style-image: url(/images/icons/app/arrow-fill.png);
+      text-decoration: none;
+    }
+  }
+  & .panel-option, & .text {
+    opacity: 0.7;
+  }
+  & .is-selected {
+    font-weight: bold;
+    opacity: 1;
+    list-style-image: url(/images/icons/app/arrow-fill.png);
+    color: var(--white);
+  }
+}
+
+.is-margin-bottom {
+  margin-bottom: 10px !important;
+}
