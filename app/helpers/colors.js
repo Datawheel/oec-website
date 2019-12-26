@@ -25,13 +25,13 @@ export default {
   },
 
   "Flow": {
-    1: "#4495bc",
-    2: "#942217"
+    1: "#4495bc", // Blue (exports)
+    2: "#942217" // Red (imports)
   },
 
   "Trade Flow": {
-    1: "#4495bc",
-    2: "#942217"
+    1: "#4495bc", // Blue (exports)
+    2: "#942217" // Red (imports)
   },
 
   "Continent": {
