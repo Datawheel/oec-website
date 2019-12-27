@@ -3,7 +3,7 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 
 import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
-import Subnational from "./pages/Subnational";
+import Subnational from "./pages/Subnational/Subnational";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
 
 import {Login, SignUp} from "@datawheel/canon-core";

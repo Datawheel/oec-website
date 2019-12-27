@@ -37,7 +37,6 @@ class Subnational extends React.Component {
   };
 
   render() {
-    const {t} = this.props;
     const {scrolled} = this.state;
     return <div className="subnational" onScroll={this.handleScroll}>
       <Navbar
