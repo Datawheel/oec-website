@@ -85,10 +85,10 @@ class PredictClass(object):
     if DEBUG:
       print("\nRaw DataFrame (head):\n________________\n")
       print(self.raw_df.head())
-    model = Prophet()
+    model = Prophet(seasonality_mode='multiplicative')
     with suppress_stdout_stderr():
       model.fit(self.raw_df)
-    future = model.make_future_dataframe(periods=10, freq = 'A-JAN')
+    future = model.make_future_dataframe(periods=10, freq = 'A-JAN', include_history=False)
     if DEBUG:
       print("\nFuture DataFrame (unpopulated tail):\n________________\n")
       print(future.tail())
