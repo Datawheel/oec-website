@@ -47,7 +47,10 @@ default_params = {
   "cube": "trade_i_baci_a_92",
   "Exporter Country": "sapry",
   "drilldowns": "Year",
-  "measures": "Trade Value"
+  "measures": "Trade Value",
+  "seasonality_mode": "multiplicative",
+  "changepoint_prior_scale": 0.05,
+  "changepoint_range": 0.80
 }
 params = json.loads(sys.argv[1]) if len(sys.argv) > 1 else default_params
 
@@ -78,6 +81,17 @@ class PredictClass(object):
     self.raw_df = pd.DataFrame(req.json()["data"])
 
   def predict(self):
+    seasonality_mode = params.get("seasonality_mode", "multiplicative")
+    changepoint_prior_scale = params.get("changepoint_prior_scale", "0.05")
+    try:
+      changepoint_prior_scale = float(changepoint_prior_scale)
+    except ValueError:
+      changepoint_prior_scale = 0.05
+    changepoint_range = params.get("changepoint_range", "0.80")
+    try:
+      changepoint_range = float(changepoint_range)
+    except ValueError:
+      changepoint_range = 0.80
     date_index = pd.to_datetime([f'{y}-01-31' for y in self.raw_df["Year"]])
     self.raw_df["ds"] = date_index
     self.raw_df["y_orig"] = self.raw_df[self.params["measures"]]
@@ -85,10 +99,10 @@ class PredictClass(object):
     if DEBUG:
       print("\nRaw DataFrame (head):\n________________\n")
       print(self.raw_df.head())
-    model = Prophet(seasonality_mode='multiplicative')
+    model = Prophet(seasonality_mode=seasonality_mode, changepoint_prior_scale=changepoint_prior_scale, changepoint_range=changepoint_range)
     with suppress_stdout_stderr():
       model.fit(self.raw_df)
-    future = model.make_future_dataframe(periods=10, freq = 'A-JAN', include_history=False)
+    future = model.make_future_dataframe(periods=10, freq = 'A-JAN', include_history=True)
     if DEBUG:
       print("\nFuture DataFrame (unpopulated tail):\n________________\n")
       print(future.tail())
@@ -112,7 +126,8 @@ class PredictClass(object):
     self.merged_df["Year"] = self.merged_df["Year"].astype("int32")
     self.merged_df["ds"] = self.merged_df["ds"].dt.strftime("%Y-%m-%d")
     print(json.dumps({
-      "data": json.loads(self.merged_df.to_json(orient="records"))
+      "data": json.loads(self.merged_df.to_json(orient="records")),
+      "params": params
     }))
 
 

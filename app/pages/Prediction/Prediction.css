@@ -1,0 +1,33 @@
+.prediction-container-outer {
+  background-color: var(--dark-4);
+  color: var(--light-3);
+  margin: calc(var(--gutter-lg)*2) var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
+  padding: var(--gutter-sm);
+  position: relative;
+
+  & h1 {
+    margin-top: 0;
+  }
+
+  & .prediction-controls {
+    border: solid 1px var(--black);
+    display: flex;
+
+    & .prediction-control {
+      flex: 1;
+      padding: 5px 10px;
+      &.slider-control {
+        padding: 5px 15px;
+      }
+    }
+  }
+
+  & .prediction-viz-container {
+    border: solid 1px var(--black);
+    min-height: 400px;
+  }
+}
+
+.d3plus-tooltip {
+  z-index: 9 !important;
+}
