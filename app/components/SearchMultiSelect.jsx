@@ -1,7 +1,9 @@
 import React from "react";
 
-import {Button, MenuItem} from "@blueprintjs/core";
+import {Alignment, Button, Classes, Label, MenuItem, Switch} from "@blueprintjs/core";
 import {MultiSelect} from "@blueprintjs/select";
+
+import "@blueprintjs/select/lib/css/blueprint-select.css";
 
 class SearchMultiSelect extends React.Component {
   constructor(props) {
@@ -25,8 +27,8 @@ class SearchMultiSelect extends React.Component {
       <MenuItem
         active={modifiers.active}
         icon={this.isItemSelected(item) ? "tick" : "blank"}
-        key={item.name}
-        label={undefined}
+        key={`${item.id}-${item.name}`}
+        label={item.displayId ? `${item.displayId}`.toUpperCase() : `${item.id}`}
         onClick={handleClick}
         text={item.name}
         shouldDismissPopover={false}
@@ -92,8 +94,9 @@ class SearchMultiSelect extends React.Component {
   };
 
   render() {
+    const {isDrilldown, items, itemType, toggleDrilldown} = this.props;
     return <div className="prediction-control">
-      <h3>Select a {this.props.itemType}...</h3>
+      <h3>Select a {itemType}...</h3>
       <MultiSelect
         fill={true}
         initialContent={undefined}
@@ -104,13 +107,29 @@ class SearchMultiSelect extends React.Component {
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={this.handleItemSelect}
         popoverProps={{minimal: true}}
-        tagRenderer={this.renderTag}
+        resetOnSelect={true}
         tagInputProps={{
           onRemove: this.handleTagRemove,
-          rightElement: this.state.selectedItems.length ? <Button icon="cross" minimal={true} onClick={this.handleClear} /> : null
+          rightElement: this.state.selectedItems.length ? <Button icon="cross" minimal={true} onClick={this.handleClear} /> : null,
+          tagProps: d => {
+            const thisItem = items.find(dd => dd.name === d);
+            return {
+              style: {backgroundColor: thisItem.color}
+            };
+          }
         }}
+        tagRenderer={this.renderTag}
         selectedItems={this.state.selectedItems}
       />
+      <Label className={Classes.INLINE}>
+        Aggregate&nbsp;
+        <Switch
+          alignIndicator={Alignment.LEFT}
+          checked={isDrilldown}
+          labelElement={"Drilldown"}
+          inline={true}
+          onChange={toggleDrilldown} />
+      </Label>
     </div>;
   }
 }

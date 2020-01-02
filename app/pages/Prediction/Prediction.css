@@ -25,7 +25,27 @@
   & .prediction-viz-container {
     border: solid 1px var(--black);
     min-height: 400px;
+
+    & .prediction-viz {
+      position: relative;
+
+      & .prediction-loading {
+        background-color: var(--dark-4);
+        color: var(--light-3);
+        font-size: 20px;
+        height: 100%;
+        left: 0;
+        opacity: 0.8;
+        padding: 100px 0 0 0;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+      }
+    }
   }
+
 }
 
 .d3plus-tooltip {

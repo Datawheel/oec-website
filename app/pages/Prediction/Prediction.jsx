@@ -11,6 +11,8 @@ import libs from "@datawheel/canon-cms/src/utils/libs";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
 import PredictionViz from "pages/Prediction/PredictionViz";
+import {toHS} from "helpers/funcs.js";
+import colors from "helpers/colors";
 import "./Prediction.css";
 
 import {Button, ButtonGroup, Collapse, Slider} from "@blueprintjs/core";
@@ -20,14 +22,16 @@ import SearchMultiSelect from "components/SearchMultiSelect";
 class Prediction extends React.Component {
   state = {
     advControlIsOpen: false,
-    scrolled: false,
-    origins: [],
-    destinations: [],
-    products: [],
-    predictionData: [],
-    seasonalityMode: "multiplicative",
     changepointPriorScale: 0.05,
     changepointRange: 0.80,
+    currentDrilldown: null,
+    destinations: [],
+    loading: false,
+    origins: [],
+    predictionData: [],
+    products: [],
+    scrolled: false,
+    seasonalityMode: "multiplicative",
     updateKey: null
   };
 
@@ -57,18 +61,48 @@ class Prediction extends React.Component {
   grabIds = item => item.id;
 
   buildPrediction = () => {
-    const {origins, destinations, products, seasonalityMode, changepointPriorScale, changepointRange} = this.state;
+    this.setState({loading: true});
+    const {currentDrilldown, origins, destinations, products, seasonalityMode, changepointPriorScale, changepointRange} = this.state;
+    let apiUrls = [];
+    let drilldowns = [];
     const originFilter = origins.length ? `&Exporter+Country=${origins.map(this.grabIds)}` : "";
     const destinationFilter = destinations.length ? `&Importer+Country=${destinations.map(this.grabIds)}` : "";
     const productFilter = products.length ? `&HS4=${products.map(this.grabIds)}` : "";
     const advControls = `&seasonality_mode=${seasonalityMode}&changepoint_prior_scale=${changepointPriorScale}&changepoint_range=${changepointRange}`;
-    const apiUrl = `/api/predict?cube=trade_i_baci_a_92${originFilter}${destinationFilter}${productFilter}&drilldowns=Year&measures=Trade+Value${advControls}`;
-    axios.get(apiUrl)
-      .then(res => {
-        console.log("DONE!", res.data);
-        const updateKey = `sm-${seasonalityMode}-cps-${changepointPriorScale}-cr-${changepointRange}`;
-        this.setState({updateKey, predictionData: res.data.data || []});
+    if (!currentDrilldown) {
+      drilldowns = [{name: "All", color: "red", id: "xx"}];
+      apiUrls = [`/api/predict?cube=trade_i_baci_a_92${originFilter}${destinationFilter}${productFilter}&drilldowns=Year&measures=Trade+Value${advControls}`];
+    }
+    else if (currentDrilldown === "origins") {
+      drilldowns = origins.slice();
+      apiUrls = origins.map(origin => {
+        const originCut = `&Exporter+Country=${origin.id}`;
+        return `/api/predict?cube=trade_i_baci_a_92${originCut}${destinationFilter}${productFilter}&drilldowns=Year&measures=Trade+Value${advControls}`;
       });
+    }
+    else if (currentDrilldown === "products") {
+      drilldowns = products.slice();
+      apiUrls = products.map(product => {
+        const productCut = `&HS4=${product.id}`;
+        return `/api/predict?cube=trade_i_baci_a_92${originFilter}${destinationFilter}${productCut}&drilldowns=Year&measures=Trade+Value${advControls}`;
+      });
+    }
+    else if (currentDrilldown === "destinations") {
+      drilldowns = destinations.slice();
+      apiUrls = destinations.map(destination => {
+        const destinationCut = `&Importer+Country=${destination.id}`;
+        return `/api/predict?cube=trade_i_baci_a_92${originFilter}${destinationCut}${productFilter}&drilldowns=Year&measures=Trade+Value${advControls}`;
+      });
+    }
+    axios.all(apiUrls.map(url => axios.get(url)))
+      .then(axios.spread((...responses) => {
+        let allResults = [];
+        responses.forEach((resp, i) => {
+          allResults = allResults.concat(resp.data.data.map(d => ({...d, Drilldown: drilldowns[i]})));
+        });
+        const updateKey = `sm-${seasonalityMode}-cps-${changepointPriorScale}-cr-${changepointRange}`;
+        this.setState({loading: false, updateKey, predictionData: allResults || []});
+      }));
   }
 
   toggleAdvControls = () => this.setState({advControlIsOpen: !this.state.advControlIsOpen});
@@ -79,8 +113,21 @@ class Prediction extends React.Component {
 
   changeChangepointRange = newChangepointRange => this.setState({changepointRange: newChangepointRange});
 
+  toggleDrilldown = selectorType => e => {
+    this.setState({currentDrilldown: e.target.checked ? selectorType : null});
+    console.log("xxx", selectorType, e.target.value, e.target.checked);
+  }
+
   render() {
-    const {scrolled} = this.state;
+    const {countries, productsHs4} = this.props;
+    const {currentDrilldown, loading, predictionData, scrolled, updateKey} = this.state;
+    const countriesForDropdown = countries.data
+      .map(d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const productsForDropdown = productsHs4.data
+      .map(d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}))
+      .sort((a, b) => a.name.localeCompare(b.name));
+
     return <div className="prediction" onScroll={this.handleScroll}>
       <Navbar
         className={scrolled ? "background" : ""}
@@ -99,16 +146,22 @@ class Prediction extends React.Component {
           <div className="prediction-controls">
             <SearchMultiSelect
               updateSelection={this.updateSelection("origins")}
+              isDrilldown={currentDrilldown === "origins" ? true : false}
               itemType="Origin Country"
-              items={[{name: "Angola", id: "afago"}, {name: "China", id: "aschn"}, {name: "Finland", id: "eufin"}, {name: "United States", id: "nausa"}]} />
+              items={countriesForDropdown}
+              toggleDrilldown={this.toggleDrilldown("origins")} />
             <SearchMultiSelect
               updateSelection={this.updateSelection("products")}
+              isDrilldown={currentDrilldown === "products" ? true : false}
               itemType="Product"
-              items={[{name: "Computers", id: 168471}, {name: "Yeast", id: 42102}]} />
+              items={productsForDropdown}
+              toggleDrilldown={this.toggleDrilldown("products")} />
             <SearchMultiSelect
               updateSelection={this.updateSelection("destinations")}
+              isDrilldown={currentDrilldown === "destinations" ? true : false}
               itemType="Destination Country"
-              items={[{name: "Angola", id: "afago"}, {name: "China", id: "aschn"}, {name: "Finland", id: "eufin"}, {name: "United States", id: "nausa"}]} />
+              items={countriesForDropdown}
+              toggleDrilldown={this.toggleDrilldown("destinations")} />
             <Button rightIcon="arrow-right" intent="success" text="Go" minimal={true} onClick={this.buildPrediction} />
           </div>
           <div className="prediction-controls-advanced">
@@ -161,10 +214,11 @@ class Prediction extends React.Component {
 
           {/* prediction viz line chart */}
           <div className="prediction-viz-container">
-            {this.state.predictionData.length
+            {predictionData.length
               ? <PredictionViz
-                updateKey={this.state.updateKey}
-                data={this.state.predictionData}
+                data={predictionData}
+                loading={loading}
+                updateKey={updateKey}
               />
               : null}
           </div>
@@ -179,6 +233,8 @@ class Prediction extends React.Component {
 
 
 Prediction.need = [
+  fetchData("countries", "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3"),
+  fetchData("productsHs4", "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false")
 ];
 
 Prediction.childContextTypes = {
@@ -191,6 +247,8 @@ Prediction.childContextTypes = {
 export default hot(withNamespaces()(
   connect(state => ({
     formatters: state.data.formatters,
-    locale: state.i18n.locale
+    locale: state.i18n.locale,
+    countries: state.data.countries,
+    productsHs4: state.data.productsHs4
   }))(Prediction)
 ));
