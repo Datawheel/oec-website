@@ -12,13 +12,14 @@ class PredictionViz extends React.Component {
   }
 
   render() {
-    const {data, loading, updateKey} = this.props;
+    const {data, error, loading, updateKey} = this.props;
     const actualPoints = data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `Actual Points (${d.Drilldown.name})`, color: d.Drilldown.color, shape: "Circle"}));
     // const actualLine = data.map(d => ({...d, Title: "Actual Line", shape: "Line"}));
     const predictionLine = data.map(d => ({...d, "Title": `Prediction Line (${d.Drilldown.name})`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat}));
     const combinedData = actualPoints.concat(predictionLine);
     return <div className="prediction-viz">
-      {loading ? <div className="prediction-loading">Loading...</div> : null}
+      {loading ? <div className="prediction-overlay prediction-loading">Loading...</div> : null}
+      {error ? <div className="prediction-overlay prediction-error">Error... Please try another selection.</div> : null}
       <Plot config={{
         data: combinedData,
         dataKey: updateKey,
