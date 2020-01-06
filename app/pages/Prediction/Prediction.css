@@ -5,8 +5,17 @@
   padding: var(--gutter-sm);
   position: relative;
 
-  & h1 {
-    margin-top: 0;
+  & .bp3-navbar {
+    background: var(--dark-4);
+    & h1 {
+      margin: 0;
+    }
+    & a, & a.bp3-active, & a:hover {
+      color: var(--light-3);
+    }
+    & .bp3-navbar-divider {
+      border-color: var(--dark-1);
+    }
   }
 
   & .prediction-controls {
@@ -47,6 +56,10 @@
         z-index: 99;
       }
     }
+  }
+
+  & .prediction-controls-container {
+    margin: 10px 0 0 0;
   }
 
 }

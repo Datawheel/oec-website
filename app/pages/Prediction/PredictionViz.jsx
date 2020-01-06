@@ -21,10 +21,20 @@ class PredictionViz extends React.Component {
       {loading ? <div className="prediction-overlay prediction-loading">Loading...</div> : null}
       {error ? <div className="prediction-overlay prediction-error">Error... Please try another selection.</div> : null}
       <Plot config={{
+        confidence: [
+          d => d.yhat_lower || d["Trade Value"],
+          d => d.yhat_upper || d["Trade Value"]
+        ],
+        confidenceConfig: {
+          fill: d => d.color,
+          fillOpacity: d => d.shape === "Line" ? 0.25 : 1,
+          strokeWidth: 0
+        },
         data: combinedData,
         dataKey: updateKey,
         discrete: "x",
         groupBy: "Title",
+        legend: false,
         shape: d => d.shape,
         shapeConfig: {
           Circle: {
@@ -34,15 +44,6 @@ class PredictionViz extends React.Component {
           Line: {
             stroke: d => d.color
           }
-        },
-        confidence: [
-          d => d.yhat_lower || d["Trade Value"],
-          d => d.yhat_upper || d["Trade Value"]
-        ],
-        confidenceConfig: {
-          fill: d => d.color,
-          fillOpacity: d => d.shape === "Line" ? 0.25 : 1,
-          strokeWidth: 0
         },
         tooltipConfig: {
           title: d => d.Title,

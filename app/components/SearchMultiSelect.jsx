@@ -107,7 +107,8 @@ class SearchMultiSelect extends React.Component {
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={this.handleItemSelect}
         popoverProps={{minimal: true}}
-        resetOnSelect={true}
+        resetOnSelect={false}
+        resetOnQuery={false}
         tagInputProps={{
           onRemove: this.handleTagRemove,
           rightElement: this.state.selectedItems.length ? <Button icon="cross" minimal={true} onClick={this.handleClear} /> : null,
