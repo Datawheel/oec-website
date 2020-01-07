@@ -111,7 +111,7 @@ class PredictClass(object):
     if time_drilldown == "Year":
       future = model.make_future_dataframe(periods=10, freq='A-JAN', include_history=True)
     else:
-      future = model.make_future_dataframe(periods=10, freq='m', include_history=True)
+      future = model.make_future_dataframe(periods=10*5, freq='m', include_history=True)
     if DEBUG:
       print("\nFuture DataFrame (unpopulated tail):\n________________\n")
       print(future.tail())
@@ -119,7 +119,7 @@ class PredictClass(object):
     # now merge forcast with original dataframes
     self.raw_df = self.raw_df.set_index('ds')
     self.forecast_df = self.forecast_df.set_index('ds')
-    self.merged_df = self.raw_df.join(self.forecast_df[['yhat', 'yhat_lower','yhat_upper']], how = 'outer')
+    self.merged_df = self.raw_df.join(self.forecast_df[['yhat', 'yhat_lower','yhat_upper', 'trend', 'trend_lower','trend_upper']], how = 'outer')
     del self.merged_df['y']
     if DEBUG:
       print("\nFuture DataFrame (unpopulated tail):\n________________\n")

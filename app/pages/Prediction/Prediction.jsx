@@ -10,11 +10,12 @@ import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
+import PredictionTable from "pages/Prediction/PredictionTable";
 import {toHS} from "helpers/funcs.js";
 import colors from "helpers/colors";
 import "./Prediction.css";
 
-import {Alignment, AnchorButton, Button, Navbar, Tabs, Tab} from "@blueprintjs/core";
+import {Alignment, AnchorButton, Button, Collapse, Navbar, Tabs, Tab} from "@blueprintjs/core";
 
 import SearchMultiSelect from "components/SearchMultiSelect";
 
@@ -112,6 +113,7 @@ class Prediction extends React.Component {
       ? DATASETS.find(d => d.slug === getQueryParam(this.props.router.location, "dataset"))
       : DATASETS[0],
     datasetSelections: [],
+    datatableOpen: false,
     destinations: [],
     drilldowns: [],
     error: false,
@@ -216,11 +218,18 @@ class Prediction extends React.Component {
       });
     }
     else {
+      let selectionCount = 0;
+      let singlePotentialDrilldown = null;
       dataset.selections.forEach(selection => {
         if (selection.selected.length) {
+          selectionCount += selection.selected.length;
+          singlePotentialDrilldown = selection.selected[0];
           apiUrls[0] = `${apiUrls[0]}&${selection.dimName}=${selection.selected.map(this.grabIds)}`;
         }
       });
+      if (selectionCount === 1) {
+        drilldowns = [singlePotentialDrilldown];
+      }
       apiUrls[0] = `${apiUrls[0]}${advParamStrings[0]}`;
     }
     // console.log("apiUrls!", apiUrls);
@@ -269,6 +278,8 @@ class Prediction extends React.Component {
 
   handleControlTabChange = newTabId => this.setState({activeTabId: newTabId})
 
+  toggleDatatable = () => this.setState({datatableOpen: !this.state.datatableOpen})
+
   updateAdvParams = index => newParams => {
     const {advParams} = this.state;
     advParams[index] = newParams;
@@ -276,8 +287,8 @@ class Prediction extends React.Component {
   }
 
   render() {
-    const {activeTabId, currentDrilldown, dataset, drilldowns,
-      error, loading, predictionData, scrolled, updateKey} = this.state;
+    const {activeTabId, currentDrilldown, dataset, datatableOpen,
+      drilldowns, error, loading, predictionData, scrolled, updateKey} = this.state;
 
     return <div className="prediction" onScroll={this.handleScroll}>
       <OECNavbar
@@ -345,6 +356,20 @@ class Prediction extends React.Component {
                 {drilldowns.map((drill, index) => <Tab key={drill.id} id={drill.id} title={drill.name} panel={<AdvParamPanel updateAdvParams={this.updateAdvParams(index)} />} />)}
               </Tabs>
               : null}
+          </div>
+
+          {/* prediction data table */}
+          <div className="prediction-datatable-container">
+            <Button onClick={this.toggleDatatable} minimal={false} icon={"th"}>
+              {datatableOpen ? "Hide" : "Show"} Data Table
+            </Button>
+            <Collapse isOpen={datatableOpen}>
+              <PredictionTable
+                data={predictionData}
+                error={error}
+                loading={loading}
+              />
+            </Collapse>
           </div>
 
         </div>

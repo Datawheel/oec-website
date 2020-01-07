@@ -2,22 +2,32 @@ import React from "react";
 import {Plot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {timeFormat, timeParse} from "d3-time-format";
+import {Button} from "@blueprintjs/core";
 
 class PredictionViz extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       items: props.items,
-      selectedItems: []
+      selectedItems: [],
+      showObserved: true,
+      showPrediction: true,
+      showTrend: false
     };
   }
 
+  toggleVizShowOptions = stateKey => () => this.setState({[stateKey]: !this.state[stateKey]})
+
   render() {
     const {data, error, loading, updateKey} = this.props;
-    const actualPoints = data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `Observed Points (${d.Drilldown.name})`, color: d.Drilldown.color, shape: "Circle"}));
+    const {showObserved, showPrediction, showTrend} = this.state;
+    const actualPoints = showObserved ? data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `${d.Drilldown.name} (Observed)`, color: d.Drilldown.color, shape: "Circle"})) : [];
+    const trendLine = showTrend ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Trend)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.trend, "yhat_upper": d.trend, "yhat_lower": d.trend})) : [];
     // const actualLine = data.map(d => ({...d, Title: "Actual Line", shape: "Line"}));
-    const predictionLine = data.map(d => ({...d, "Title": `Prediction Line (${d.Drilldown.name})`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat}));
-    const combinedData = actualPoints.concat(predictionLine);
+    const predictionLine = showPrediction ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Prediction)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat})) : [];
+
+    const combinedData = actualPoints.concat(predictionLine).concat(trendLine);
+    // console.log("combinedData!", combinedData);
 
     return <div className="prediction-viz">
       {loading ? <div className="prediction-overlay prediction-loading">Loading...</div> : null}
@@ -79,6 +89,26 @@ class PredictionViz extends React.Component {
           }
         }
       }} />
+      <div className="prediction-viz-key">
+        <Button
+          active={showObserved}
+          className="bp3-minimal"
+          icon="scatter-plot"
+          onClick={this.toggleVizShowOptions("showObserved")}
+          text="Observed Data" />
+        <Button
+          active={showPrediction}
+          className="bp3-minimal"
+          icon="timeline-line-chart"
+          onClick={this.toggleVizShowOptions("showPrediction")}
+          text="Prediction" />
+        <Button
+          active={showTrend}
+          className="bp3-minimal"
+          icon="regression-chart"
+          onClick={this.toggleVizShowOptions("showTrend")}
+          text="Trend" />
+      </div>
     </div>;
   }
 }

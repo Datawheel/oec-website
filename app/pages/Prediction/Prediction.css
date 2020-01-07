@@ -169,3 +169,31 @@ tabs
 }
 
 button:focus {outline:0;}
+
+
+/* ---------------------------
+Under viz options (key)
+--------------------------- */
+.prediction-viz-key {
+  margin: 0 0 10px 0;
+  text-align: center;
+  & button {
+    margin: 0 10px;
+    & .bp3-button-text {
+      color: var(--dark-1);
+    }
+    &.bp3-active {
+      & .bp3-button-text {
+        color: var(--light-3);
+      }
+    }
+  }
+}
+
+
+/* ---------------------------
+Datatable styles
+--------------------------- */
+.number {
+  text-align: right;
+}
