@@ -8,9 +8,9 @@
     width: 100%;
     & .vb-column {
       flex: 1;
-      padding: var(--gutter-sm) var(--gutter-md);
+      padding: var(--gutter-sm);
       &.aside {
-        max-width: 400px;
+        max-width: 300px;
       }
     }
   }
@@ -55,20 +55,39 @@
           color: var(--white) !important;
           font-weight: 700 !important;
         }
-        border: 1px solid var(--white);
-        border-bottom: 1px solid var(--dark-4);
+        border: 1px solid var(--dark-1);
+        border-bottom: 1px solid var(--dark-4) !important;
       }
     }
 
     & .bp3-tab-panel {
       margin-top: 0px;
       padding: 5px;
-      border: 1px solid var(--white);
+      border: 1px solid var(--dark-1);
     }
   }
 
   & .is-tabs {
     margin-bottom: 0px;
+  }
+
+  & .build {
+    background-color: var(--dark-1);
+    border-radius: 2px;
+    border: 0;
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 200;
+    height: auto;
+    margin-bottom: 5px;
+    outline: none;
+    padding: 9px 10px 9px 10px;
+    position: relative;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+    text-transform: uppercase;
+    width: 100%;
   }
 
 }

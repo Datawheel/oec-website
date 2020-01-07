@@ -2,8 +2,9 @@
   margin-bottom: 10px;
   & .title {
     font-family: "Montserrat", sans-serif;
-    font-size: 12px;
+    font-size: var(--font-xs);
     margin-bottom: 5px;
+    margin-top: 10px;
     text-transform: uppercase;
   }
 
@@ -16,7 +17,7 @@
         justify-content: space-between;
         background: transparent;
         color: var(--white);
-        border: 1px solid var(--white);
+        border: 1px solid var(--dark-1);
         border-radius: 0px;
         box-shadow: none;
       }
@@ -85,9 +86,7 @@
     border-radius: 0px !important;
   }
 
-  & .is-selected {
-    background: var(--white);
-  }
+
 }
 
 .bp3-input {
@@ -110,7 +109,8 @@
   height: 50px;
   position: absolute;
   padding: 5px 10px;
-  background: #b0a7ac !important;
+  background: var(--dark-4) !important;
+  color: var(--white);
   -webkit-box-align: left;
   -ms-flex-align: left;
   -webkit-box-pack: center;
@@ -121,6 +121,11 @@
   align-items: center;
   cursor: pointer;
   justify-content: space-between;
+
+  &.is-selected {
+    background: var(--white);
+    color: var(--dark-4) !important;
+  }
 
   & .item {
     width: 100%;
@@ -139,7 +144,7 @@
   }
 
   &:hover {
-    background-color: #c7c2c5 !important;
+    background-color: var(--dark-2) !important;
   }
 
   & .text {
@@ -164,7 +169,7 @@
 .bp3-popover {
   & li {
     list-style: none;
-    background: #b0a7ac !important;
+    background: var(--dark-4) !important;
   }
 }
 .button-virtual-selector {

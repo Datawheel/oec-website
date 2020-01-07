@@ -63,10 +63,10 @@ class VirtualSelector extends React.Component {
         onClick={() => this.handleSelector(d)}
       >
         <div className="item">
-          <div className="box" style={{backgroundColor: "gray"}}>
+          {this.props.icon && <div className="box" style={{backgroundColor: "gray"}}>
             <img src={`/images/icons/hs/hs_${d}.png`} />
-          </div>
-          <span className="text">Hello <span className="product-id"></span></span>
+          </div>}
+          <span className="text">{d.title} <span className="product-id"></span></span>
         </div>
         {s && <Icon icon="small-tick" />}
       </div>
@@ -84,11 +84,11 @@ class VirtualSelector extends React.Component {
     const len = filteredItems.length;
     const itemHeight = 50;
 
-    const selected = selectedItem ? selectedItem : items[0];
+    const selected = selectedItem || items[0];
     const selectedIndex = search ? 0 : items.findIndex(d => d.value === selected.value);
 
     return <div className="selector">
-      <h6 className="title is-6">{t(title)}</h6>
+      <h6 className="title is-6">{title}</h6>
       <Popover
         className="popover-virtual-selector filter-selector"
         content={
@@ -118,9 +118,9 @@ class VirtualSelector extends React.Component {
       >
         <Button text={<div className="option">
           <div className="product">
-            <div className="box" style={{backgroundColor: "gray"}}>
-              <img src={`/images/icons/hs/hs_${selected}.png`} /></div>
-            <span className="text">Hello</span></div></div>} rightIcon="chevron-down" />
+            {this.props.icon && <div className="box" style={{backgroundColor: "gray"}}>
+              <img src={`/images/icons/hs/hs_${selected}.png`} /></div>}
+            <span className="text">{selected && selected.title}</span></div></div>} rightIcon="chevron-down" />
       </Popover>
     </div>;
 
@@ -128,6 +128,7 @@ class VirtualSelector extends React.Component {
 }
 
 VirtualSelector.defaultProps = {
+  icon: undefined,
   items: [],
   selectedItem: undefined,
   title: "Title"

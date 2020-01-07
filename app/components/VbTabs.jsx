@@ -56,7 +56,7 @@ class VbTabs extends React.Component {
       <div className="columns is-tabs">
         <div className="column-1 tab">
           <Tabs
-            key="tabs_line_geo_map"
+            key="tabs_network_rings_map"
             onChange={this.handleTabChange}
             selectedTabId={activeTab}
           >
@@ -109,7 +109,7 @@ class VbTabs extends React.Component {
       <div className="columns is-tabs">
         <div className="column-1 tab">
           <Tabs
-            key="tabs_line_geo_map"
+            key="tabs_scatter_map"
             onChange={this.handleTabChange}
             selectedTabId={activeTab}
           >
