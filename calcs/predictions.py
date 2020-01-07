@@ -81,6 +81,7 @@ class PredictClass(object):
     self.raw_df = pd.DataFrame(req.json()["data"])
 
   def predict(self):
+    time_drilldown = params.get("drilldowns", "Year")
     seasonality_mode = params.get("seasonality_mode", "multiplicative")
     changepoint_prior_scale = params.get("changepoint_prior_scale", "0.05")
     try:
@@ -92,17 +93,25 @@ class PredictClass(object):
       changepoint_range = float(changepoint_range)
     except ValueError:
       changepoint_range = 0.80
-    date_index = pd.to_datetime([f'{y}-01-31' for y in self.raw_df["Year"]])
+    if time_drilldown == "Year":
+      date_index = pd.to_datetime([f'{year}-01-31' for year in self.raw_df[time_drilldown]])
+    elif time_drilldown == "Time":
+      date_index = pd.to_datetime([f'{str(date)[:4]}-{str(date)[4:]}-01' for date in self.raw_df[time_drilldown]])
+    else:
+      date_index = pd.to_datetime([t for t in self.raw_df[time_drilldown]])
     self.raw_df["ds"] = date_index
-    self.raw_df["y_orig"] = self.raw_df[self.params["measures"]]
-    self.raw_df["y"] = self.raw_df[self.params["measures"]].round(2)
+    self.raw_df["y_orig"] = self.raw_df[self.params["measures"]].astype(float)
+    self.raw_df["y"] = self.raw_df["y_orig"].round(2)
     if DEBUG:
       print("\nRaw DataFrame (head):\n________________\n")
       print(self.raw_df.head())
     model = Prophet(seasonality_mode=seasonality_mode, changepoint_prior_scale=changepoint_prior_scale, changepoint_range=changepoint_range)
     with suppress_stdout_stderr():
       model.fit(self.raw_df)
-    future = model.make_future_dataframe(periods=10, freq = 'A-JAN', include_history=True)
+    if time_drilldown == "Year":
+      future = model.make_future_dataframe(periods=10, freq='A-JAN', include_history=True)
+    else:
+      future = model.make_future_dataframe(periods=10, freq='m', include_history=True)
     if DEBUG:
       print("\nFuture DataFrame (unpopulated tail):\n________________\n")
       print(future.tail())

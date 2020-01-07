@@ -24,6 +24,7 @@ const DATASETS = [
     slug: "trade-annual",
     cube: "trade_i_baci_a_92",
     selectionsLoaded: false,
+    dateDrilldown: "Year",
     selections: [
       {
         dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
@@ -53,8 +54,43 @@ const DATASETS = [
         selected: []
       }
     ]
+  },
+  {
+    name: "Trade (monthly)",
+    slug: "trade-monthly",
+    cube: "trade_i_comtrade_m_hs",
+    selectionsLoaded: false,
+    dateDrilldown: "Time",
+    selections: [
+      {
+        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=Reporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
+        data: [],
+        dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+        dimName: "Reporter Country",
+        id: "origins",
+        name: "Origin Country",
+        selected: []
+      },
+      {
+        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+        data: [],
+        dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+        dimName: "HS4",
+        id: "products",
+        name: "Product",
+        selected: []
+      },
+      {
+        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=Partner+Country&measures=Trade+Value&parents=true&sparse=false&properties=Partner+Country+ISO+3",
+        data: [],
+        dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+        dimName: "Partner Country",
+        id: "destinations",
+        name: "Destination Country",
+        selected: []
+      }
+    ]
   }
-  // {name: "Trade (monthly)", slug: "trade-monthly", cube: "trade_i_comtrade_m_hs"}
 ];
 
 const getQueryParam = (location, param) => {
@@ -148,7 +184,7 @@ class Prediction extends React.Component {
     this.setState({error: false, loading: true});
     const {currentDrilldown, dataset} = this.state;
     let myAdvParamStrings = [];
-    const advParams = advParams && advParams.length
+    const advParams = this.state.advParams && this.state.advParams.length
       ? this.state.advParams
       : [{
         changepointPriorScale: 0.05,
@@ -158,7 +194,7 @@ class Prediction extends React.Component {
     const advParamStrings = advParams.map(advParam => `&seasonality_mode=${advParam.seasonalityMode}&changepoint_prior_scale=${advParam.changepointPriorScale}&changepoint_range=${advParam.changepointRange}`);
     const updateKey = advParams.map(advParam => `sm-${advParam.seasonalityMode}-cps-${advParam.changepointPriorScale}-cr-${advParam.changepointRange}`);
     // step 1: build api URLs
-    const apiUrlRoot = `/api/predict?cube=${dataset.cube}&drilldowns=Year&measures=Trade+Value`;
+    const apiUrlRoot = `/api/predict?cube=${dataset.cube}&drilldowns=${dataset.dateDrilldown}&measures=Trade+Value`;
     let apiUrls = [apiUrlRoot];
     let drilldowns = [{name: "Aggregate", color: "red", id: "xx"}];
     // Are there any drilldowns?
