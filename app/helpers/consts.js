@@ -49,6 +49,52 @@ module.exports = {
       {title: "Product rankings", url: `/${locale}/rankings/product/sitc`}
     ]}
   ],
+  SUBNATIONAL_COUNTRIES: [
+    {
+      name: "Brazil",
+      code: "bra",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "States", level: "Region"},
+        {name: "Municipalities", level: "Subnat Geography"}
+      ]
+    },
+    {
+      name: "Japan",
+      code: "jpn",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Regions", level: "Area"},
+        {name: "Prefectures", level: "Subnat Geography"}
+      ]
+    },
+    {
+      name: "Russia",
+      code: "rus",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Districts", level: "District"},
+        {name: "Regions", level: "Subnat Geography"}
+      ]
+    },
+    {
+      name: "Canadá",
+      code: "can",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Provinces", level: "Subnat Geography"}
+      ]
+    },
+    {
+      name: "Uruguay",
+      code: "ury",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Corridor", level: "Corridor"},
+        {name: "Departments", level: "Subnat Geography"}
+      ]
+    }
+  ],
   SUBNATIONAL: [
     {title: "Brazil", items: [
       {title: "States", items: [

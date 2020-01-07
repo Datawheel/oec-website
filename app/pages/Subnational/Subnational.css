@@ -1,6 +1,8 @@
-.subnat-list-outer {
-  /* background-color: var(--dark-4); */
-  color: var(--light-3);
-  padding: var(--gutter-lg) var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
-  position: relative;
+.subnational {
+  & .subnational-content {
+    background-color: var(--dark-4);
+    color: var(--light-3);
+    padding: var(--gutter-lg) var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
+    position: relative;
+  }
 }
