@@ -9,6 +9,7 @@ import "./Vizbuilder.css";
 import VbTabs from "../../components/VbTabs";
 import VbChart from "../../components/VbChart";
 import VirtualSelector from "../../components/VirtualSelector";
+import {Client} from "@datawheel/olap-client";
 
 class Vizbuilder extends React.Component {
   constructor(props) {
@@ -22,6 +23,21 @@ class Vizbuilder extends React.Component {
 
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
+
+    Client.fromURL("https://api.oec.world/tesseract")
+      .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
+        const query = cube.query;
+
+        query
+          .addMeasure("Trade Value");
+
+
+        return client.getMembers({level: "HS2"});
+      }))
+      .then(data => {
+        console.log(data);
+        this.setState({data});
+      });
   }
 
   componentWillUnmount() {
