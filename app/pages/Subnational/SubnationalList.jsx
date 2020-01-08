@@ -21,10 +21,13 @@ class SubnationalList extends React.Component {
 
   render() {
     const {options} = this.props;
-    console.log(options);
+
     return <div className="subnational-list">
       {options &&
         <ul>
+          {options.length === 0 &&
+            <li>No results.<br/> Try another search.</li>
+          }
           {options.sort((a, b) => a.name > b.name ? 1 : -1).map(profile =>
             <li key={profile.slug}><a>{profile.name}</a></li>
           )}

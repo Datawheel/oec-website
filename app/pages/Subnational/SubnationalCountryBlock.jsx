@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
 import SubnationalList from "./SubnationalList";
+import SubnationalMap from "./SubnationalMap";
 
 import "./SubnationalCountryBlock.css";
 
@@ -14,9 +15,11 @@ class SubnationalCountryBlock extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navbarTabId: false
+      items: {...props.options},
+      navbarTabId: "tab-0"
     };
     this.handleNavbarTabChange = this.handleNavbarTabChange.bind(this);
+    this.filterList = this.filterList.bind(this);
   }
 
   componentDidMount() {
@@ -27,38 +30,56 @@ class SubnationalCountryBlock extends React.Component {
 
   }
 
+  filterList(event) {
+    const {options} = this.props;
+    const filtered = {};
+    Object.keys(options).map(level => {
+      filtered[level] = options[level].filter(item => item.name.toLowerCase().search(
+        event.target.value.toLowerCase()) !== -1);
+    });
+
+    this.setState({items: filtered, searchText: event.target.value});
+  }
+
   handleNavbarTabChange(navbarTabId) {
-    this.setState({navbarTabId});
+    this.setState({navbarTabId, items: this.props.options, searchText: ""});
   }
 
   render() {
-    const {metadata, options} = this.props;
-    let {navbarTabId} = this.state;
-    navbarTabId = navbarTabId ? navbarTabId : "tab-0";
+    const {metadata} = this.props;
+    const {items} = this.state;
+
+    // Navbar
+    const {navbarTabId, searchText} = this.state;
+
     const navbarTabIx = parseInt(navbarTabId.split("-")[1], 0);
 
     return <div className="subnational-country-block">
-      <div className="subnational-sidebar">
+      <div className="subnational-header">
         <h2>{metadata.name}</h2>
-        <InputGroup type="text" placeholder="Search..." />
       </div>
-      <div className="subnational-tabs">
-        <Tabs
-          animate={true}
-          id="GeoLevels"
-          key={"horizontal"}
-          renderActiveTabPanelOnly={false}
-          vertical={false}
-          onChange={this.handleNavbarTabChange}
-          selectedTabId={navbarTabId}
-        >
-          {metadata.geoLevels.map((gl, ix) =>
-            <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList options={options && options[gl.level] ? options[gl.level] : []} />} />
-          )}
-        </Tabs>
-      </div>
-      <div className="subnational-map">
-        MAP: {metadata.code} - {metadata.geoLevels[navbarTabIx].slug}
+      <div className="subnational-block-content">
+        <div className="subnational-tabs">
+          <Tabs
+            animate={true}
+            id="GeoLevels"
+            key={"horizontal"}
+            className="subnational-tabs-component"
+            renderActiveTabPanelOnly={false}
+            vertical={false}
+            onChange={this.handleNavbarTabChange}
+            selectedTabId={navbarTabId}
+          >
+            {metadata.geoLevels.map((gl, ix) =>
+              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList options={items && items[gl.level] ? items[gl.level] : []} />} />
+            )}
+            <Tabs.Expander />
+            <InputGroup type="text" placeholder={`Search ${metadata.geoLevels[navbarTabIx].name}`} onChange={this.filterList} value={searchText} />
+          </Tabs>
+        </div>
+        <div className="subnational-map-container">
+          <SubnationalMap country={metadata.code} level={metadata.geoLevels[navbarTabIx].slug}  />
+        </div>
       </div>
     </div>;
   }
