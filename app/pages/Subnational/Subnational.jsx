@@ -43,6 +43,7 @@ class Subnational extends React.Component {
 
   render() {
     const {scrolled} = this.state;
+    const {subnationalLandingData} = this.props;
 
     return <div className="subnational" onScroll={this.handleScroll}>
       <Navbar
@@ -59,8 +60,8 @@ class Subnational extends React.Component {
 
         <h1>Subnational Countries</h1>
 
-        {SUBNATIONAL_COUNTRIES.map((country, ix) =>
-          <SubnationalMap key={`subnational-country-${ix}`} country={country} />
+        {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map((country, ix) =>
+          <SubnationalMap key={`subnational-country-${ix}`} metadata={country} options={subnationalLandingData ? subnationalLandingData[country.code] : false} />
         )}
 
       </div>
@@ -116,6 +117,7 @@ Subnational.need = [(params, store) => {
 
 export default hot(withNamespaces()(
   connect(state => ({
-    locale: state.i18n.locale
+    locale: state.i18n.locale,
+    subnationalLandingData: state.data.subnationalLandingData
   }))(Subnational)
 ));
