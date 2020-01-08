@@ -1,16 +1,14 @@
-import React, {Fragment} from "react";
+import React from "react";
 import {hot} from "react-hot-loader/root";
-import PropTypes from "prop-types";
+
 import axios from "axios";
 
-import {fetchData} from "@datawheel/canon-core";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
-import libs from "@datawheel/canon-cms/src/utils/libs";
 import Navbar from "components/Navbar";
 import Footer from "components/Footer";
-import SubnationalMap from "./SubnationalMap";
+import SubnationalCountryBlock from "./SubnationalCountryBlock";
 
 import {nest as d3Nest} from "d3-collection";
 
@@ -61,7 +59,7 @@ class Subnational extends React.Component {
         <h1>Subnational Countries</h1>
 
         {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map((country, ix) =>
-          <SubnationalMap key={`subnational-country-${ix}`} metadata={country} options={subnationalLandingData ? subnationalLandingData[country.code] : false} />
+          <SubnationalCountryBlock key={`subnational-country-${ix}`} metadata={country} options={subnationalLandingData ? subnationalLandingData[country.code] : false} />
         )}
 
       </div>
@@ -88,8 +86,10 @@ Subnational.need = [(params, store) => {
     const finalResponse = {};
     let reponseMetadata;
     let records;
+    let responseURL;
     responses.map(res => {
-      reponseMetadata = countriesData[res.request.responseURL];
+      responseURL = res.request.responseURL ? res.request.responseURL : res.request.res.responseUrl;
+      reponseMetadata = countriesData[responseURL];
       if (reponseMetadata) {
         records = res.data.results.filter(datum =>
           datum.profile === `subnational_${reponseMetadata.code}` &&
@@ -99,8 +99,8 @@ Subnational.need = [(params, store) => {
         finalResponse[reponseMetadata.code] = d3Nest().key(d => d.hierarchy).object(records);
       }
       else {
-        console.warn("responseURL", res.request);
-        console.warn("not in", Object.keys(countriesData));
+        console.warn("responseURL", res.request.res.responseUrl);
+        // console.warn("not in", Object.keys(countriesData));
       }
     });
     return {

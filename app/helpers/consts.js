@@ -55,8 +55,8 @@ module.exports = {
       code: "bra",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "States", level: "Region"},
-        {name: "Municipalities", level: "Subnat Geography"}
+        {name: "States", level: "Region", slug: "states"},
+        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
       ]
     },
     {
@@ -64,8 +64,8 @@ module.exports = {
       code: "jpn",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Regions", level: "Area"},
-        {name: "Prefectures", level: "Subnat Geography"}
+        {name: "Regions", level: "Area", slug: "regions"},
+        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures"}
       ]
     },
     {
@@ -73,8 +73,8 @@ module.exports = {
       code: "rus",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Districts", level: "District"},
-        {name: "Regions", level: "Subnat Geography"}
+        {name: "Districts", level: "District", slug: "districts"},
+        {name: "Regions", level: "Subnat Geography", slug: "regions"}
       ]
     },
     {
@@ -82,7 +82,7 @@ module.exports = {
       code: "can",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Provinces", level: "Subnat Geography"}
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
       ]
     },
     {
@@ -90,8 +90,8 @@ module.exports = {
       code: "ury",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Corridor", level: "Corridor"},
-        {name: "Departments", level: "Subnat Geography"}
+        {name: "Corridor", level: "Corridor", slug: "corridors"},
+        {name: "Departments", level: "Subnat Geography", slug: "departments"}
       ]
     }
   ],
