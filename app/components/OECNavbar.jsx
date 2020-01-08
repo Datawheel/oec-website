@@ -9,9 +9,9 @@ import {NAV} from "helpers/consts";
 import NavGroup from "./NavGroup";
 import Search from "./Search";
 
-import "./Navbar.css";
+import "./OECNavbar.css";
 
-class Navbar extends Component {
+class OECNavbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -97,4 +97,4 @@ class Navbar extends Component {
   }
 }
 
-export default hot(Navbar);
+export default hot(OECNavbar);

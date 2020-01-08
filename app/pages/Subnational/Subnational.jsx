@@ -6,7 +6,8 @@ import axios from "axios";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
-import Navbar from "components/Navbar";
+import libs from "@datawheel/canon-cms/src/utils/libs";
+import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import SubnationalCountryBlock from "./SubnationalCountryBlock";
 
@@ -44,7 +45,7 @@ class Subnational extends React.Component {
     const {subnationalLandingData} = this.props;
 
     return <div className="subnational" onScroll={this.handleScroll}>
-      <Navbar
+      <OECNavbar
         className={scrolled ? "background" : ""}
         title={scrolled ? "Subnational" : ""}
       />
