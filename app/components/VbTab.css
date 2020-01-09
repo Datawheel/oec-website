@@ -3,17 +3,18 @@
   opacity: 1;
   margin-bottom: 0px!important;
   & .text {
-    font-size: var(--font-sm);
+    font-size: var(--font-xs);
     text-transform: uppercase;
   }
   & .panel-option {
-    font-size: var(--font-sm);
+    font-size: var(--font-xs);
     line-height: 20px;
     display: block;
     color: var(--white);
   }
 
   & .options {
+    margin: 0;
     margin-left: -40px;
     & .panel-option:hover {
       cursor: pointer;

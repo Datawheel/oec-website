@@ -1,4 +1,11 @@
 /** */
+export const range = (start, end, step = 1) => {
+  end = end * 1, start = start * 1;
+  const len = Math.floor((end - start) / step) + 1
+  return Array(len).fill().map((_, idx) => start + (idx * step))
+}
+
+/** */
 export const zfill = (num, len) => {
   // if (num.toString().length < 3) return num;
   const zero = len - num.toString().length + 1;

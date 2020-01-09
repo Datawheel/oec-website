@@ -30,8 +30,10 @@ const years = [...Array(56).keys()].map(d => ({value: 2017 - d, title: 2017 - d}
 class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
+    const {t} = this.props;
     this.state = {
       activeTab: "tree_map",
+      activeOption: `tree_map_${t("Country")}_${t("Exports")}`,
       country: [],
       product: [],
       _product: undefined,
@@ -150,8 +152,8 @@ class Vizbuilder extends React.Component {
   }
 
   render() {
-    const {activeTab, scrolled} = this.state;
-    const {t} = this.props;
+    const {activeOption, activeTab, scrolled} = this.state;
+    const {routeParams, t} = this.props;
 
     return <div id="vizbuilder">
       <Navbar
@@ -164,6 +166,7 @@ class Vizbuilder extends React.Component {
         <div className="vb-columns">
           <div className="vb-column aside">
             <VbTabs
+              activeOption={activeOption}
               activeTab={activeTab}
               callback={d => this.setState(d)}
             />
@@ -248,7 +251,9 @@ class Vizbuilder extends React.Component {
             </div>
           </div>
           <div className="vb-column">
-            <VbChart />
+            <VbChart
+              routeParams={routeParams}
+            />
           </div>
         </div>
       </div>
