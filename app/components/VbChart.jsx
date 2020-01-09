@@ -9,11 +9,9 @@ import "./VbChart.css";
 class VbChart extends React.Component {
   constructor(props) {
     super(props);
-    const permalink = "stacked/hs02/import/chl/all/show/2013.2017".split("/");
     this.state = {
       countryData: [],
-      data: [],
-      permalink
+      data: []
     };
   }
 
@@ -44,7 +42,7 @@ class VbChart extends React.Component {
       ? countryData.find(d => d.value.includes(partner))
       : undefined;
 
-    const type = flow === "export"
+    const countryType = flow === "export"
       ? "Exporter Country"
       : "Importer Country";
 
@@ -54,7 +52,7 @@ class VbChart extends React.Component {
 
     const dd = {
       show: "HS4",
-      all: type
+      all: flow === "export" ? "Importer Country" : "Exporter Country"
     };
 
     const interval = time.split(".");
@@ -68,13 +66,14 @@ class VbChart extends React.Component {
       Year: range(interval[0], interval[1]).join()
     };
 
-    if (countryId) params[type] = countryId.value;
+    if (countryId) params[countryType] = countryId.value;
     if (partnerId) params[partnerType] = partnerId.value;
 
     axios.get("https://api.oec.world/tesseract/data", {
       params
     }).then(resp => {
       const data = resp.data.data;
+      console.log(data);
       this.setState({data});
     });
 
