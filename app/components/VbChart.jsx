@@ -39,11 +39,18 @@ class VbChart extends React.Component {
     const {countryData} = this.state;
     const {cube, flow, country, partner, viztype, time} = routeParams;
 
-    const idCountry = countryData.find(d => d.value.includes(country));
+    const countryId = countryData.find(d => d.value.includes(country));
+    const partnerId = !["show", "all"].includes(partner)
+      ? countryData.find(d => d.value.includes(partner))
+      : undefined;
 
     const type = flow === "export"
       ? "Exporter Country"
       : "Importer Country";
+
+    const partnerType = flow === "export"
+      ? "Importer Country"
+      : "Exporter Country";
 
     const dd = {
       show: "HS4",
@@ -61,8 +68,8 @@ class VbChart extends React.Component {
       Year: range(interval[0], interval[1]).join()
     };
 
-
-    if (idCountry) params[type] = idCountry.value;
+    if (countryId) params[type] = countryId.value;
+    if (partnerId) params[partnerType] = partnerId.value;
 
     axios.get("https://api.oec.world/tesseract/data", {
       params
