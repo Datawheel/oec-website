@@ -42,7 +42,7 @@ class SubnationalMap extends React.Component {
           }
         }
       },
-      projectionPadding: "0 0 30 0",
+      projectionPadding: "0 0 0 0",
       shapeConfig: {
         Path: {
           fill: d => "#ff9900",
