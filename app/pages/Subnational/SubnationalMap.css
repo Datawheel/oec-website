@@ -1,8 +1,5 @@
 .subnational-map {
-  height: 500px;
-  display: block;
-  background: #ccc;
-  & h2 {
+  & h4 {
     color: steelblue;
     margin: 0 0 10px 0;
   }

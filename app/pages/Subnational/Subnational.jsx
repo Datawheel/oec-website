@@ -6,7 +6,6 @@ import axios from "axios";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
-import libs from "@datawheel/canon-cms/src/utils/libs";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import SubnationalCountryBlock from "./SubnationalCountryBlock";
@@ -18,37 +17,12 @@ import "./Subnational.css";
 import {SUBNATIONAL_COUNTRIES} from "helpers/consts";
 
 class Subnational extends React.Component {
-  state = {
-    scrolled: false
-  };
-
-  componentDidMount() {
-    window.addEventListener("scroll", this.handleScroll);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
-
-  handleScroll = () => {
-    if (window.scrollY > 5) {
-      this.setState({scrolled: true});
-    }
-    else {
-      this.setState({scrolled: false});
-    }
-
-  };
 
   render() {
-    const {scrolled} = this.state;
     const {subnationalLandingData} = this.props;
 
-    return <div className="subnational" onScroll={this.handleScroll}>
-      <OECNavbar
-        className={scrolled ? "background" : ""}
-        title={scrolled ? "Subnational" : ""}
-      />
+    return <div className="subnational">
+      <OECNavbar />
 
       {/* spinning orb thing */}
       <div className="welcome-bg">
