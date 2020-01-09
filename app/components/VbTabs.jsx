@@ -1,6 +1,6 @@
 import React from "react";
 import {withNamespaces} from "react-i18next";
-import {Tab, Tabs, Icon} from "@blueprintjs/core";
+import {Tab, Tabs} from "@blueprintjs/core";
 
 import VbTab from "./VbTab";
 
