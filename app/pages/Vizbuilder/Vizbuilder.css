@@ -55,6 +55,7 @@
           color: var(--white) !important;
           font-weight: 700 !important;
         }
+        background-color: var(--dark-4) !important;
         border: 1px solid var(--dark-1);
         border-bottom: 1px solid var(--dark-4) !important;
       }

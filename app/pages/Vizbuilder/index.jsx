@@ -2,7 +2,7 @@ import React from "react";
 import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
-import Navbar from "components/Navbar";
+import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import {parseURL, permalink} from "helpers/utils";
 
@@ -17,7 +17,8 @@ const datasets = [
   {value: "96", title: "HS96"},
   {value: "02", title: "HS02"},
   {value: "07", title: "HS07"},
-  {value: "sitc", title: "SITC"}
+  {value: "sitc", title: "SITC"},
+  {value: "cpc", title: "Technology"}
 ];
 
 const flow = [
@@ -156,7 +157,7 @@ class Vizbuilder extends React.Component {
     const {routeParams, t} = this.props;
 
     return <div id="vizbuilder">
-      <Navbar
+      <OECNavbar
         className={scrolled ? "background" : ""}
         title={"Hello"}
         scrolled={scrolled}

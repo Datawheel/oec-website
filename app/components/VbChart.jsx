@@ -115,7 +115,6 @@ class VbChart extends React.Component {
       console.log(baseConfig);
       return <div className="vb-chart">
         <Treemap
-          forceUpdate={true}
           config={{
             ...baseConfig,
             sum: measure
