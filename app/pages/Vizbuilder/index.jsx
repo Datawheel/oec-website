@@ -88,6 +88,12 @@ class Vizbuilder extends React.Component {
     }, 30);
   };
 
+  handleTabOption = d => {
+    const {router} = this.props;
+    this.setState(d);
+    router.push(d.permalink);
+  }
+
   buildViz = () => {
     const {
       chart,
@@ -139,19 +145,6 @@ class Vizbuilder extends React.Component {
 
   };
 
-  updateFilter = (key, value) => {
-    if (key === "timeDimension") {
-      const v = value.value;
-      return this.setState({
-        [key]: v,
-        timeTemp: this.props.timeDimensions[v][0].value,
-        startTimeTemp: this.props.timeDimensions[v][1].value,
-        endTimeTemp: this.props.timeDimensions[v][0].value
-      });
-    }
-    return this.setState({[key]: value === "all" ? null : value});
-  }
-
   render() {
     const {activeOption, activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
@@ -169,7 +162,7 @@ class Vizbuilder extends React.Component {
             <VbTabs
               activeOption={activeOption}
               activeTab={activeTab}
-              callback={d => this.setState(d)}
+              callback={d => this.handleTabOption(d)}
             />
             <div className="columns">
               <div className="column-1">
@@ -254,6 +247,7 @@ class Vizbuilder extends React.Component {
           <div className="vb-column">
             <VbChart
               countryData={this.state.country}
+              permalink={this.state.permalink}
               routeParams={routeParams}
             />
           </div>

@@ -13,6 +13,7 @@ class VbTab extends React.Component {
     return (
       <div>
         {items.map((d, i, {length}) => <div
+          key={`${chart}_${i}_panel`}
           className={classnames("columns", "panel", {"is-margin-bottom": i !== length - 1})}
         >
           <div className="column-1-2">
@@ -24,12 +25,16 @@ class VbTab extends React.Component {
           </div>
           <div className="column-1-2">
             <ul className="options">
-              {d.nest.map(h => <li
+              {d.nest.map((h, k) => <li
+                key={`${chart}_${i}_${k}_panel`}
                 className={classnames(
                   "panel-option",
                   {"is-selected": activeOption === `${chart}_${d.name}_${h.name}`}
                 )}
-                onClick={() => this.props.callback(`${chart}_${d.name}_${h.name}`)}
+                onClick={() => this.props.callback({
+                  activeOption: `${chart}_${d.name}_${h.name}`,
+                  permalink: `/en/visualize/${chart}/${h.permalink || "hs92/export/chl/all/show/2017/"}`
+                })}
               >
                 {h.name}
               </li>)}
@@ -45,6 +50,6 @@ class VbTab extends React.Component {
 
 VbTab.defaultProps = {
   items: []
-}
+};
 
 export default withNamespaces()(VbTab);

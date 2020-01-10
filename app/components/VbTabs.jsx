@@ -43,28 +43,35 @@ class VbTabs extends React.Component {
                 <VbTab
                   activeOption={activeOption}
                   chart="tree_map"
-                  callback={activeOption => this.props.callback({activeOption})}
+                  callback={d => this.props.callback(d)}
                   items={[
                     {
                       name: t("Country"), nest: [
-                        {name: t("Exports")},
-                        {name: t("Imports")},
-                        {name: t("Export Destinations")},
-                        {name: t("Import Origins")}
+                        {name: t("Exports"), permalink: "hs92/export/chl/all/show/2017/"},
+                        {name: t("Imports"), permalink: "hs92/import/chl/all/show/2017/"},
+                        {name: t("Export Destinations"), permalink: "hs92/export/chl/show/all/2017/"},
+                        {name: t("Import Origins"), permalink: "hs92/import/chl/show/all/2017/"},
+                        {name: t("Patent Granted"), permalink: "cpc/export/chl/all/show/2019/"}
                       ]
                     },
                     {
                       name: t("Product"), nest: [
+                        {name: t("Exporters"), permalink: "hs92/export/show/all/10101/2017/"},
+                        {name: t("Importers"), permalink: "hs92/import/show/all/10101/2017/"}
+                      ]
+                    },
+                    {
+                      name: t("Technology"), nest: [
                         {name: t("Exporters")},
                         {name: t("Importers")}
                       ]
                     },
                     {
                       name: t("Bilateral"), nest: [
-                        {name: t("Exports to Destination")},
-                        {name: t("Imports from Origin")},
-                        {name: t("Exports by Product")},
-                        {name: t("Imports by Product")}
+                        {name: t("Exports to Destination"), permalink: "hs92/export/chl/arg/show/2017/"},
+                        {name: t("Imports from Origin"), permalink: "hs92/import/chl/arg/show/2017/"},
+                        {name: t("Exports by Product"), permalink: "hs92/export/chl/all/10101/2017/"},
+                        {name: t("Imports by Product"), permalink: "hs92/import/chl/all/10101/2017/"}
                       ]
                     }
                   ]}
@@ -79,7 +86,7 @@ class VbTabs extends React.Component {
                 <VbTab
                   chart="stacked"
                   activeOption={activeOption}
-                  callback={activeOption => this.props.callback({activeOption})}
+                  callback={d => this.props.callback(d)}
                   items={[
                     {
                       name: t("Country"), nest: [
@@ -126,7 +133,7 @@ class VbTabs extends React.Component {
                 <VbTab
                   chart="network"
                   activeOption={activeOption}
-                  callback={activeOption => this.props.callback({activeOption})}
+                  callback={d => this.props.callback(d)}
                   items={[
                     {
                       name: t("Country"), nest: [
@@ -147,7 +154,7 @@ class VbTabs extends React.Component {
                 <VbTab
                   chart="rings"
                   activeOption={activeOption}
-                  callback={activeOption => this.props.callback({activeOption})}
+                  callback={d => this.props.callback(d)}
                   items={[
                     {
                       name: t("Country"), nest: [
@@ -177,7 +184,7 @@ class VbTabs extends React.Component {
                 <VbTab
                   chart="geomap"
                   activeOption={activeOption}
-                  callback={activeOption => this.props.callback({activeOption})}
+                  callback={d => this.props.callback(d)}
                   items={[
                     {
                       name: t("Product"), nest: [
@@ -197,7 +204,7 @@ class VbTabs extends React.Component {
                 <VbTab
                   activeOption={activeOption}
                   chart="line"
-                  callback={activeOption => this.props.callback({activeOption})}
+                  callback={d => this.props.callback(d)}
                   items={[
                     {
                       name: t("Country"), nest: [
@@ -250,7 +257,7 @@ class VbTabs extends React.Component {
                 <VbTab
                   activeOption={activeOption}
                   chart="scatter"
-                  callback={activeOption => this.props.callback({activeOption})}
+                  callback={d => this.props.callback(d)}
                   items={[
                     {
                       name: t("Economic Complexity"), nest: [

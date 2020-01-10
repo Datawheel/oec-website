@@ -11,7 +11,9 @@ class VbChart extends React.Component {
     super(props);
     this.state = {
       countryData: [],
-      data: []
+      data: [],
+      loading: true,
+      routeParams: {}
     };
   }
 
@@ -25,17 +27,35 @@ class VbChart extends React.Component {
       }))
       .then(data => {
         this.setState(
-          {countryData: data.map(d => ({value: d.key, title: d.name}))},
+          {
+            countryData: data.map(d => ({value: d.key, title: d.name})),
+            routeParams: this.props.routeParams
+          },
           () => this.fetchData()
         );
       });
+  }
 
+  shouldComponentUpdate = (prevProps, prevState) => {
+    console.log(prevProps, prevState);
+
+    return prevProps.permalink !== this.props.permalink ||
+    prevState.loading !== this.state.loading;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.permalink !== this.props.permalink) {
+      console.log("ASDF");
+      this.fetchData();
+    }
   }
 
   fetchData = () => {
     const {routeParams} = this.props;
     const {countryData} = this.state;
     const {cube, flow, country, partner, viztype, time} = routeParams;
+
+    this.setState({data: [], loading: true});
 
     const countryId = countryData.find(d => d.value.includes(country));
     const partnerId = !["show", "all"].includes(partner)
@@ -83,16 +103,23 @@ class VbChart extends React.Component {
       params
     }).then(resp => {
       const data = resp.data.data;
-      console.log(resp);
-      this.setState({data});
+      this.setState({data, loading: false, routeParams: this.props.routeParams});
     });
 
   };
 
+  /**
+  shouldComponentUpdate = () => {
+    this.fetchData();
+  }
+  */
+
   render() {
-    const {routeParams} = this.props;
-    const {data} = this.state;
+    const {routeParams} = this.state;
+    const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype} = routeParams;
+
+    if (loading) return <div>Loading...</div>;
 
     const isTechnology = cube.includes("cpc");
 
@@ -112,7 +139,6 @@ class VbChart extends React.Component {
     const measure = isTechnology ? "Patent Share" : "Trade Value";
 
     if (chart === "tree_map" && data && data.length > 0) {
-      console.log(baseConfig);
       return <div className="vb-chart">
         <Treemap
           config={{
