@@ -27,7 +27,7 @@ function findColor(d) {
   // }
 
   if ("Section" in d) {
-    return "Subgroup Count" in d
+    return "Patent Share" in d
       ? colors["CPC Section"][`${d["Section ID"]}`]
       : colors.Section[`${d["Section ID"]}`];
   }
@@ -48,8 +48,7 @@ function findColor(d) {
  * @param {Object} d
  */
 function backgroundImage(d) {
-
-  if ("Section ID" in d && "Subgroup Count" in d) {
+  if ("Section ID" in d && "Patent Share" in d) {
     return `/images/icons/cpc/${d["Section ID"]}.png`;
   }
   else if ("Section ID" in d) {
@@ -195,11 +194,11 @@ export default {
       if ("Country" in d) {
         imgUrl = `/images/icons/country/country_${d["ISO 3"]}.png`;
       }
-      if ("Section ID" in d && "Subgroup Count" in d) {
-        imgUrl = `/images/icons/cpc/${d["Section ID"]}.png`;
-      }
       if ("Section" in d) {
         imgUrl = `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      }
+      if ("Section ID" in d && "Patent Share" in d) {
+        imgUrl = `/images/icons/cpc/${d["Section ID"]}.png`;
       }
       if ("Flow" in d) {
         imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
