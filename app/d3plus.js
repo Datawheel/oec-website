@@ -28,7 +28,7 @@ function findColor(d) {
 
   if ("Section" in d) {
     return "Subgroup Count" in d
-      ? colors["CPC Section"][`${d["Section ID"]}`]
+      ? colors["CPC Section"][`${d["Section ID"]}`] || "gray"
       : colors.Section[`${d["Section ID"]}`];
   }
 
