@@ -1,0 +1,199 @@
+.prediction-container-outer {
+  background-color: var(--dark-4);
+  color: var(--light-3);
+  margin: calc(var(--gutter-lg)*2) var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
+  padding: var(--gutter-sm);
+  position: relative;
+
+  & .bp3-navbar {
+    background: var(--dark-4);
+    & h1 {
+      margin: 0;
+    }
+    & a, & a.bp3-active, & a:hover {
+      color: var(--light-3);
+    }
+    & .bp3-navbar-divider {
+      border-color: var(--dark-1);
+    }
+  }
+
+  & .prediction-controls {
+    display: flex;
+
+    &.advanced-params {
+      border: solid 1px var(--light-1);
+    }
+
+    & .prediction-control {
+      flex: 1;
+      padding: 5px 10px;
+      &.slider-control {
+        padding: 5px 15px;
+      }
+    }
+  }
+
+  & .prediction-viz-container {
+    border: solid 1px var(--black);
+    min-height: 400px;
+
+    & .prediction-viz {
+      position: relative;
+
+      & .prediction-overlay {
+        background-color: var(--dark-4);
+        color: var(--light-3);
+        font-size: 20px;
+        height: 100%;
+        left: 0;
+        opacity: 0.8;
+        padding: 100px 0 0 0;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+      }
+    }
+  }
+
+  & .prediction-controls-container {
+    margin: 10px 0 0 0;
+  }
+
+}
+
+.d3plus-tooltip {
+  z-index: 9 !important;
+}
+
+
+/* ---------------------------
+tabs
+--------------------------- */
+.bp3-tab-list {
+  margin-bottom: -1px;
+
+  & .bp3-tab-indicator-wrapper {
+    & .bp3-tab-indicator {
+      background-color: transparent;
+    }
+  }
+
+  /* individual tab */
+  & .bp3-tab {
+    margin-right: 0;
+    /* typography
+    @add-mixin heading-font;
+    @add-mixin font-xxs; */
+    /* theming */
+    box-shadow: none;
+    border-radius: 5px 5px 0 0;
+    border: 1px solid transparent;
+    color: var(--gray);
+    /* override blueprint */
+    cursor: default;
+    /* remove ugly blue halo */
+    outline: 0;
+    padding: 2px 5px;
+
+    /* button */
+    & .bp3-button {
+      /* blueprint overrides */
+      background: inherit !important;
+      color: inherit !important;
+      font: inherit;
+      text-transform: inherit;
+      cursor: default;
+      /* sizing */
+      padding-left: 1em;
+      padding-right: 1em;
+      /* remove icon */
+      &:before {
+        display: none;
+      }
+    }
+
+    /* icon */
+    & .bp3-button:before {
+      color: inherit !important;
+      font-size: 1em;
+      margin-left: -0.25em;
+      margin-right: 0.5em;
+    }
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--dark-1) !important;
+    }
+
+    /* active tab */
+    &[aria-selected=true] {
+      background-color: var(--light-1) !important;
+      color: var(--dark-1);
+      border-color: var(--light-2);
+      border-bottom-color: var(--light-1);
+      z-index: 1;
+
+      & button {
+        outline: none;
+      }
+
+      /* hide .control-group top left border radius */
+      &:first-child {
+        overflow: visible; /* override blueprint */
+
+        &:after {
+          content: '';
+          /* sizing */
+          display: block;
+          width: 5px;
+          height: 5px;
+          /* positioning */
+          position: absolute;
+          left: -1px;
+          bottom: -5px;
+          z-index: 1;
+          /* theming */
+          /* background-color: var(--light-1); */
+          border-left: 1px solid var(--light-2);
+        }
+      }
+    }
+  }
+  /* remove margin from following panels */
+  & ~ .bp3-tab-panel {
+    margin-top: 0; /* override blueprint */
+  }
+}
+
+button:focus {outline:0;}
+
+
+/* ---------------------------
+Under viz options (key)
+--------------------------- */
+.prediction-viz-key {
+  margin: 0 0 10px 0;
+  text-align: center;
+  & button {
+    margin: 0 10px;
+    & .bp3-button-text {
+      color: var(--dark-1);
+    }
+    &.bp3-active {
+      & .bp3-button-text {
+        color: var(--light-3);
+      }
+    }
+  }
+}
+
+
+/* ---------------------------
+Datatable styles
+--------------------------- */
+.number {
+  text-align: right;
+}

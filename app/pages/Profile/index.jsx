@@ -10,7 +10,7 @@ import {withNamespaces} from "react-i18next";
 
 import libs from "@datawheel/canon-cms/src/utils/libs";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
-import Navbar from "components/Navbar";
+import OECNavbar from "components/OECNavbar";
 
 import Footer from "components/Footer";
 import "./Profile.css";
@@ -66,7 +66,7 @@ class Profile extends React.Component {
 
     return (
       <div className="profile" id="top">
-        <Navbar
+        <OECNavbar
           className={scrolled ? "background" : ""}
           title={title}
           scrolled={scrolled}

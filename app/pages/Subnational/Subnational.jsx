@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
 import libs from "@datawheel/canon-cms/src/utils/libs";
-import Navbar from "components/Navbar";
+import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import "./Subnational.css";
 
@@ -37,10 +37,9 @@ class Subnational extends React.Component {
   };
 
   render() {
-    const {t} = this.props;
     const {scrolled} = this.state;
     return <div className="subnational" onScroll={this.handleScroll}>
-      <Navbar
+      <OECNavbar
         className={scrolled ? "background" : ""}
         title={scrolled ? "Subnational" : ""}
       />

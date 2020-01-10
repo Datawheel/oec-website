@@ -27,8 +27,8 @@ function findColor(d) {
   // }
 
   if ("Section" in d) {
-    return "Subgroup Count" in d
-      ? colors["CPC Section"][`${d["Section ID"]}`] || "gray"
+    return "Patent Share" in d
+      ? colors["CPC Section"][`${d["Section ID"]}`]
       : colors.Section[`${d["Section ID"]}`];
   }
 
@@ -48,8 +48,7 @@ function findColor(d) {
  * @param {Object} d
  */
 function backgroundImage(d) {
-
-  if ("Section ID" in d && "Subgroup Count" in d) {
+  if ("Section ID" in d && "Patent Share" in d) {
     return `/images/icons/cpc/${d["Section ID"]}.png`;
   }
   else if ("Section ID" in d) {
@@ -183,20 +182,23 @@ export default {
       "z-index": 18
     },
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Trade Flow", "Service"].find(h => h in d);
-      const bgColor = "Country" in d ? "transparent" : findColor(d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
+      const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
       let imgUrl = "/images/icons/product/product.svg";
+      if ("Organization" in d) {
+        imgUrl = "/images/icons/patent.png";
+      }
       if ("Country" in d) {
         imgUrl = `/images/icons/country/country_${d["ISO 3"]}.png`;
       }
-      if ("Section ID" in d && "Subgroup Count" in d) {
-        imgUrl = `/images/icons/cpc/${d["Section ID"]}.png`;
-      }
       if ("Section" in d) {
         imgUrl = `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      }
+      if ("Section ID" in d && "Patent Share" in d) {
+        imgUrl = `/images/icons/cpc/${d["Section ID"]}.png`;
       }
       if ("Flow" in d) {
         imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
@@ -224,7 +226,7 @@ export default {
         tbodyData.push(idVal);
       }
       // time...
-      if (d.Month) {
+      if (d.Month && !isNaN(d.Month)) {
         const formatter = new Intl.DateTimeFormat("en", {month: "short"});
         const thisMonthAsDate = new Date(d.Month.substr(0, 4), d.Month.substr(4, 6), "01");
         const month = formatter.format(thisMonthAsDate);
