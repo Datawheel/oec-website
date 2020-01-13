@@ -39,9 +39,12 @@ class Vizbuilder extends React.Component {
       product: [],
       _product: undefined,
       _country: undefined,
+      _countryId: "all",
       _flow: undefined,
       _partner: undefined,
+      _partnerId: "all",
       _year: undefined,
+      _yearId: "2017",
       scrolled: false
     };
   }
@@ -95,54 +98,19 @@ class Vizbuilder extends React.Component {
   }
 
   buildViz = () => {
-    const {
-      chart,
-      endTimeTemp,
-      scale,
-      startTimeTemp,
-      timeTemp,
-      flowTemp,
-      productTemp,
-      partnerTemp,
-      timeDimension
-    } = this.state;
-    const {lng, timeDimensions} = this.props;
-
-    const allTime = timeDimensions[timeDimension];
-
-    const latestMonth = timeDimensions.Month[0].value.split("-");
-    const _year = latestMonth[0] * 1;
-    const _month = latestMonth[1] * 1;
-    const timeLabels = allTime.map(d => d.value).sort((a, b) => a > b ? 1 : -1);
-
-    const _latestYear = _month === 12 ? _year : _year - 1;
-    const _latestQuarter = _month % 3 === 0 ? timeDimensions.Quarter[0].value : timeDimensions.Quarter[1].value;
-
-    const compare = timeDimension === "Year"
-      ? _latestYear
-      : timeDimension === "Quarter"
-        ? _latestQuarter : timeDimensions.Month[0].value;
-
-    const idx = timeLabels.findIndex(d => d.toString() === compare.toString());
-
     const {router} = this.props;
+    const {activeTab, _countryId, _yearId} = this.state;
+    const permalink = `/en/visualize/${activeTab}/hs92/export/${_countryId.slice(2, 5)}/all/show/${_yearId}/`;
+    this.setState({permalink});
+    router.push(permalink);
+  };
 
-    const t = ["line", "stacked"].includes(chart);
-
-    const sameTime = startTimeTemp === endTimeTemp;
-
-    const vbKey = {
-      chart,
-      flow: flowTemp ? flowTemp.flow : undefined,
-      partner: partnerTemp ? partnerTemp.value : undefined,
-      product: productTemp ? productTemp.value : undefined,
-      scale,
-      time: t ? sameTime ? `${timeLabels[idx - 5]}.${timeLabels[idx]}` : `${startTimeTemp}.${endTimeTemp}` : timeTemp,
-      lng
-    };
-
-    router.push(permalink(vbKey));
-
+  updateFilter = (key, value) => {
+    console.log([`${key}Id`], value);
+    this.setState({
+      [key]: value,
+      [`${key}Id`]: value.value
+    });
   };
 
   render() {

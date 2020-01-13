@@ -17,7 +17,7 @@ class VbChart extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     Client.fromURL("https://api.oec.world/tesseract")
       .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
         const query = cube.query;
@@ -36,14 +36,10 @@ class VbChart extends React.Component {
       });
   }
 
-  shouldComponentUpdate = (prevProps, prevState) => {
-    console.log(prevProps, prevState);
+  shouldComponentUpdate = (prevProps, prevState) => prevProps.permalink !== this.props.permalink ||
+    prevState.loading !== this.state.loading
 
-    return prevProps.permalink !== this.props.permalink ||
-    prevState.loading !== this.state.loading;
-  }
-
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
       console.log("ASDF");
       this.fetchData();
@@ -64,6 +60,7 @@ class VbChart extends React.Component {
 
     const isTechnology = cube.includes("cpc");
     const isProduct = isFinite(viztype);
+    const isFilter = !["show", "all"].includes(viztype);
 
     const countryType = isTechnology ? "Organization Country" : flow === "export"
       ? "Exporter Country"
@@ -82,6 +79,8 @@ class VbChart extends React.Component {
       all: countryTypeBalance
     };
 
+    const ddTech = ["Section", "Superclass", "Class", "Subclass"];
+
     const interval = time.split(".");
     if (interval.length === 1) interval.push(interval[0]);
 
@@ -98,6 +97,7 @@ class VbChart extends React.Component {
     if (countryId) params[countryType] = countryId.value;
     if (partnerId) params[partnerType] = partnerId.value;
     if (isProduct) params.HS4 = viztype;
+    if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
     axios.get("https://api.oec.world/tesseract/data", {
       params
@@ -122,10 +122,11 @@ class VbChart extends React.Component {
     if (loading) return <div>Loading...</div>;
 
     const isTechnology = cube.includes("cpc");
+    const isFilter = !["show", "all"].includes(viztype);
 
     const baseConfig = {
       data: data || [],
-      groupBy: viztype === "all" || isFinite(viztype)
+      groupBy: viztype === "all" || isFinite(viztype) || isFilter
         ? ["Continent", "Country"]
         : isTechnology ? ["Section", "Subclass"] : ["Section", "HS4"]
     };
