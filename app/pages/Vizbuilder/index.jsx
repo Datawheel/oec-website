@@ -4,13 +4,13 @@ import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
-import {parseURL, permalink} from "helpers/utils";
 
 import "./Vizbuilder.css";
 import VbTabs from "../../components/VbTabs";
 import VbChart from "../../components/VbChart";
 import VirtualSelector from "../../components/VirtualSelector";
 import {Client} from "@datawheel/olap-client";
+import OECMultiSelect from "../../components/OECMultiSelect";
 
 const datasets = [
   {value: "92", title: "HS92"},
@@ -45,7 +45,11 @@ class Vizbuilder extends React.Component {
       _partnerId: "all",
       _year: undefined,
       _yearId: "2017",
-      scrolled: false
+      scrolled: false,
+
+      _selectedItemsProduct: [],
+      _selectedItemsCountry: [],
+      _selectedItemsPartner: []
     };
   }
 
@@ -99,19 +103,29 @@ class Vizbuilder extends React.Component {
 
   buildViz = () => {
     const {router} = this.props;
-    const {activeTab, _countryId, _yearId} = this.state;
-    const permalink = `/en/visualize/${activeTab}/hs92/export/${_countryId.slice(2, 5)}/all/show/${_yearId}/`;
+    const {activeTab, _countryId, _yearId, _selectedItemsCountry, _selectedItemsPartner} = this.state;
+
+    const countryIds = _selectedItemsCountry.map(d => d.value.slice(2, 5)).join(".");
+    const partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
+      ? _selectedItemsPartner.map(d => d.value.slice(2, 5)).join(".")
+      : "all";
+
+
+    const permalink = `/en/visualize/${activeTab}/hs92/export/${countryIds}/${partnerIds}/show/${_yearId}/`;
     this.setState({permalink});
     router.push(permalink);
   };
 
   updateFilter = (key, value) => {
-    console.log([`${key}Id`], value);
     this.setState({
       [key]: value,
       [`${key}Id`]: value.value
     });
   };
+
+  handleItemMultiSelect = (key, d) => {
+    this.setState({[key]: [d].concat(this.state[key])});
+  }
 
   render() {
     const {activeOption, activeTab, scrolled} = this.state;
@@ -132,7 +146,19 @@ class Vizbuilder extends React.Component {
               activeTab={activeTab}
               callback={d => this.handleTabOption(d)}
             />
+
             <div className="columns">
+              <div className="column-1">
+                <OECMultiSelect
+                  items={this.state.product}
+                  selectedItems={this.state._selectedItemsProduct}
+                  title={"Product"}
+                  callback={d => this.handleItemMultiSelect("_selectedItemsProduct", d)}
+                />
+              </div>
+            </div>
+
+            {/* <div className="columns">
               <div className="column-1">
                 <VirtualSelector
                   items={this.state.product}
@@ -142,26 +168,26 @@ class Vizbuilder extends React.Component {
                   run={this.updateFilter}
                 />
               </div>
-            </div>
+            </div>*/}
+
             <div className="columns">
               <div className="column-1">
-                <VirtualSelector
+                <OECMultiSelect
                   items={this.state.country}
+                  selectedItems={this.state._selectedItemsCountry}
                   title={"Country"}
-                  state="_country"
-                  selectedItem={this.state._country}
-                  run={this.updateFilter}
+                  callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
                 />
               </div>
             </div>
+
             <div className="columns">
               <div className="column-1">
-                <VirtualSelector
+                <OECMultiSelect
                   items={this.state.country}
+                  selectedItems={this.state._selectedItemsPartner}
                   title={"Partner"}
-                  state="_partner"
-                  selectedItem={this.state._partner}
-                  run={this.updateFilter}
+                  callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
             </div>

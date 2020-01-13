@@ -15,6 +15,7 @@ p > a,
 
 .column-1 {
   flex: 1;
+  width: 100%;
 }
 
 .column-1-2 {
@@ -43,4 +44,16 @@ p > a,
 
 .is-fullwidth {
   width: 100%;
+}
+
+.bp3-popover-target {
+  width: 100%;
+}
+
+.bp3-popover-target.bp3-popover-open {
+  width: 100%;
+}
+
+.bp3-tag-input .bp3-tag {
+  background-color: var(--dark-4);
 }

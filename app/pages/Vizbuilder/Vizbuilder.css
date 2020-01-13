@@ -92,3 +92,13 @@
   }
 
 }
+
+.multi-select-wrapper {
+  & .title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    text-transform: uppercase;
+  }
+}
