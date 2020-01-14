@@ -1,3 +1,5 @@
+const title = "The Observatory of Economic Complexity (OEC)";
+
 export default {
   link: [
     {rel: "icon", href: "/images/favicon.ico"},
@@ -12,7 +14,7 @@ export default {
     {name: "mobile-web-app-capable", content: "yes"},
     {name: "apple-mobile-web-app-capable", content: "yes"},
     {name: "apple-mobile-web-app-status-bar-style", content: "black"},
-    {name: "apple-mobile-web-app-title", content: "oec-website"}
+    {name: "apple-mobile-web-app-title", content: title}
   ],
-  title: "oec-website"
+  title
 };
