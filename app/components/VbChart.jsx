@@ -88,7 +88,7 @@ class VbChart extends React.Component {
       cube: !isTechnology
         ? `trade_i_baci_a_${cube.replace("hs", "")}`
         : "patents_i_uspto_w_cpc",
-      drilldowns: `${dd[viztype] || countryTypeBalance},Year`,
+      drilldowns: `${isTechnology && !dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance},Year`,
       measures: isTechnology ? "Patent Share" : "Trade Value",
       parents: true,
       Year: ["tree_map", "geomap"].includes(chart)
@@ -128,7 +128,7 @@ class VbChart extends React.Component {
 
     const baseConfig = {
       data: data || [],
-      groupBy: viztype === "all" || isFinite(viztype) || isFilter
+      groupBy: isTechnology && isFilter ? ["Section", "Subclass"] : viztype === "all" || isFinite(viztype) || isFilter
         ? ["Continent", "Country"]
         : isTechnology ? ["Section", "Subclass"] : ["Section", "HS4"]
     };

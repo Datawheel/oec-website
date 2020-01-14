@@ -22,8 +22,8 @@ const datasets = [
 ];
 
 const flow = [
-  {value: "1", title: "Exports"},
-  {value: "2", title: "Imports"}
+  {value: "export", title: "Exports"},
+  {value: "import", title: "Imports"}
 ];
 
 const years = [...Array(56).keys()].map(d => ({value: 2017 - d, title: 2017 - d}));
@@ -43,7 +43,7 @@ class Vizbuilder extends React.Component {
       _country: undefined,
       _countryId: "all",
       _dataset: datasets[0],
-      _flow: undefined,
+      _flow: flow[0],
       _partner: undefined,
       _partnerId: "all",
       _year: undefined,
@@ -138,11 +138,14 @@ class Vizbuilder extends React.Component {
     const {
       activeTab,
       _countryId,
+      _flow,
       _yearId,
       _dataset,
       _selectedItemsCountry,
       _selectedItemsPartner,
-      _selectedItemsYear
+      _selectedItemsYear,
+      _selectedItemsProduct,
+      _selectedItemsTechnology
     } = this.state;
 
     const countryIds = _selectedItemsCountry.map(d => d.value.slice(2, 5)).join(".");
@@ -150,8 +153,16 @@ class Vizbuilder extends React.Component {
       ? _selectedItemsPartner.map(d => d.value.slice(2, 5)).join(".")
       : "all";
 
+    const productId = _dataset.value === "cpc"
+      ? _selectedItemsTechnology.length > 0
+        ? _selectedItemsTechnology.map(d => d.value).join(".")
+        : "show"
+      : _selectedItemsProduct.length > 0
+        ? _selectedItemsProduct.map(d => d.value).join(".")
+        : "show";
 
-    const permalink = `/en/visualize/${activeTab}/${_dataset.value}/export/${countryIds}/${partnerIds}/show/${_selectedItemsYear.map(d => d.value).join(".")}/`;
+
+    const permalink = `/en/visualize/${activeTab}/${_dataset.value}/${_flow.value}/${countryIds}/${partnerIds}/${productId}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
     this.setState({permalink});
     router.push(permalink);
   };
