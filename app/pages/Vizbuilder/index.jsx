@@ -162,7 +162,7 @@ class Vizbuilder extends React.Component {
         : "show";
 
 
-    const permalink = `/en/visualize/${activeTab}/${_dataset.value}/${_flow.value}/${countryIds}/${partnerIds}/${productId}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
+    const permalink = `/en/visualize/tree_map/${_dataset.value}/${_flow.value}/${countryIds}/${partnerIds}/${productId}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
     this.setState({permalink});
     router.push(permalink);
   };
