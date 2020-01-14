@@ -14,7 +14,7 @@ import libs from "@datawheel/canon-cms/src/utils/libs";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
 import OECNavbar from "components/OECNavbar";
 
-import Footer from "../../components/Footer";
+import Footer from "components/Footer";
 import "./Profile.css";
 
 class Profile extends React.Component {

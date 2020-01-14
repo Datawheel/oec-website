@@ -192,7 +192,8 @@ export default {
         imgUrl = "/images/icons/patent.png";
       }
       if ("Country" in d) {
-        imgUrl = `/images/icons/country/country_${d["ISO 3"]}.png`;
+        console.log(d);
+        imgUrl = `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
       }
       if ("Section" in d) {
         imgUrl = `/images/icons/hs/hs_${d["Section ID"]}.png`;
