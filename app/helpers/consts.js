@@ -21,13 +21,13 @@ module.exports = {
     ]},
     // visualizations
     {title: "Visualizations", items: [
-      {title: "Tree map",     url: `/${locale}/visualizations/tree-map`,  icon: "visualizations/tree-map"},
-      {title: "Stacked area", url: `/${locale}/visualizations/stacked`,   icon: "visualizations/stacked"},
-      {title: "Line chart",   url: `/${locale}/visualizations/line`,      icon: "visualizations/line"},
-      {title: "Network",      url: `/${locale}/visualizations/network`,   icon: "visualizations/network"},
-      {title: "Ring",         url: `/${locale}/visualizations/ring`,      icon: "visualizations/ring"},
-      {title: "Scatter plot", url: `/${locale}/visualizations/scatter`,   icon: "visualizations/scatter"},
-      {title: "Geo map",      url: `/${locale}/visualizations/geo-map`,   icon: "visualizations/geo-map"}
+      {title: "Tree map",     url: `/${locale}/visualize/tree_map/hs92/export/deu/all/show/2017/`, icon: "visualizations/tree-map"},
+      {title: "Stacked area", url: `/${locale}/visualize/stacked/hs92/export/pry/all/show/1995.2017/`, icon: "visualizations/stacked"},
+      {title: "Line chart",   url: `/${locale}/visualize/line/hs92/export/pry/all/show/1995.2017/`, icon: "visualizations/line"},
+      {title: "Network",      url: `/${locale}/visualize/network/hs92/export/deu/all/show/2017/`, icon: "visualizations/network"},
+      {title: "Ring",         url: `/${locale}/visualize/rings/hs92/export/deu/all/show/2017/`, icon: "visualizations/ring"},
+      {title: "Scatter plot", url: `/${locale}/visualize/scatter`, icon: "visualizations/scatter"},
+      {title: "Geo map",      url: `/${locale}/visualize/geo-map`, icon: "visualizations/geo-map"}
     ]},
     // about
     {title: "About", items: [
