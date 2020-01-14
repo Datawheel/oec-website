@@ -13,10 +13,10 @@ import {Client} from "@datawheel/olap-client";
 import OECMultiSelect from "../../components/OECMultiSelect";
 
 const datasets = [
-  {value: "92", title: "HS92"},
-  {value: "96", title: "HS96"},
-  {value: "02", title: "HS02"},
-  {value: "07", title: "HS07"},
+  {value: "hs92", title: "HS92"},
+  {value: "hs96", title: "HS96"},
+  {value: "hs02", title: "HS02"},
+  {value: "hs07", title: "HS07"},
   {value: "sitc", title: "SITC"},
   {value: "cpc", title: "Technology"}
 ];
@@ -37,9 +37,12 @@ class Vizbuilder extends React.Component {
       activeOption: `tree_map_${t("Country")}_${t("Exports")}`,
       country: [],
       product: [],
+      technology: [],
+
       _product: undefined,
       _country: undefined,
       _countryId: "all",
+      _dataset: datasets[0],
       _flow: undefined,
       _partner: undefined,
       _partnerId: "all",
@@ -49,12 +52,16 @@ class Vizbuilder extends React.Component {
 
       _selectedItemsProduct: [],
       _selectedItemsCountry: [],
-      _selectedItemsPartner: []
+      _selectedItemsPartner: [],
+      _selectedItemsTechnology: [],
+      _selectedItemsYear: []
     };
   }
 
 
   componentDidMount() {
+    const {routeParams} = this.props;
+    const {country, partner, time} = routeParams;
     window.addEventListener("scroll", this.handleScroll);
 
     Client.fromURL("https://api.oec.world/tesseract")
@@ -69,6 +76,17 @@ class Vizbuilder extends React.Component {
       });
 
     Client.fromURL("https://api.oec.world/tesseract")
+      .then(client => client.getCube("patents_i_uspto_w_cpc").then(cube => {
+        const query = cube.query;
+        query.addMeasure("Patent Share");
+        return client.getMembers({level: "Subclass"});
+
+      }))
+      .then(data => {
+        this.setState({technology: data.map(d => ({value: d.key, title: d.name}))});
+      });
+
+    Client.fromURL("https://api.oec.world/tesseract")
       .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
         const query = cube.query;
         query.addMeasure("Trade Value");
@@ -76,8 +94,22 @@ class Vizbuilder extends React.Component {
 
       }))
       .then(data => {
-        this.setState({country: data.map(d => ({value: d.key, title: d.name}))});
+        const countryData = data.map(d => ({value: d.key, title: d.name}));
+        const _selectedItemsCountry = countryData
+          .filter(d => country.split(".").includes(d.value.slice(2, 5)));
+        const _selectedItemsPartner = countryData
+          .filter(d => partner.split(".").includes(d.value.slice(2, 5)));
+        const _selectedItemsYear = years
+          .filter(d => time.split(".").includes(d.value.toString()));
+
+        this.setState({
+          country: countryData,
+          _selectedItemsCountry,
+          _selectedItemsPartner,
+          _selectedItemsYear
+        });
       });
+
   }
 
   componentWillUnmount() {
@@ -103,7 +135,15 @@ class Vizbuilder extends React.Component {
 
   buildViz = () => {
     const {router} = this.props;
-    const {activeTab, _countryId, _yearId, _selectedItemsCountry, _selectedItemsPartner} = this.state;
+    const {
+      activeTab,
+      _countryId,
+      _yearId,
+      _dataset,
+      _selectedItemsCountry,
+      _selectedItemsPartner,
+      _selectedItemsYear
+    } = this.state;
 
     const countryIds = _selectedItemsCountry.map(d => d.value.slice(2, 5)).join(".");
     const partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
@@ -111,7 +151,7 @@ class Vizbuilder extends React.Component {
       : "all";
 
 
-    const permalink = `/en/visualize/${activeTab}/hs92/export/${countryIds}/${partnerIds}/show/${_yearId}/`;
+    const permalink = `/en/visualize/${activeTab}/${_dataset.value}/export/${countryIds}/${partnerIds}/show/${_selectedItemsYear.map(d => d.value).join(".")}/`;
     this.setState({permalink});
     router.push(permalink);
   };
@@ -124,7 +164,7 @@ class Vizbuilder extends React.Component {
   };
 
   handleItemMultiSelect = (key, d) => {
-    this.setState({[key]: [d].concat(this.state[key])});
+    this.setState({[key]: d});
   }
 
   render() {
@@ -158,17 +198,16 @@ class Vizbuilder extends React.Component {
               </div>
             </div>
 
-            {/* <div className="columns">
+            <div className="columns">
               <div className="column-1">
-                <VirtualSelector
-                  items={this.state.product}
-                  title={"Product"}
-                  selectedItem={this.state._product}
-                  state="_product"
-                  run={this.updateFilter}
+                <OECMultiSelect
+                  items={this.state.technology}
+                  selectedItems={this.state._selectedItemsTechnology}
+                  title={"Technology"}
+                  callback={d => this.handleItemMultiSelect("_selectedItemsTechnology", d)}
                 />
               </div>
-            </div>*/}
+            </div>
 
             <div className="columns">
               <div className="column-1">
@@ -217,12 +256,11 @@ class Vizbuilder extends React.Component {
 
             <div className="columns">
               <div className="column-1">
-                <VirtualSelector
+                <OECMultiSelect
                   items={years}
+                  selectedItems={this.state._selectedItemsYear}
                   title={"Year"}
-                  state="_year"
-                  selectedItem={this.state._year}
-                  run={this.updateFilter}
+                  callback={d => this.handleItemMultiSelect("_selectedItemsYear", d)}
                 />
               </div>
             </div>

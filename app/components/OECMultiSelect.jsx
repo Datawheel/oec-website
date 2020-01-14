@@ -1,8 +1,20 @@
 import React from "react";
 import {MultiSelect} from "@blueprintjs/select";
-import {MenuItem} from "@blueprintjs/core";
+import {Button, MenuItem, Tag} from "@blueprintjs/core";
 
 class OECMultiSelect extends React.Component {
+  handleTagRemove = (tag, index) => {
+    const {selectedItems} = this.props;
+    selectedItems.splice(index, 1);
+    this.props.callback(selectedItems);
+  }
+
+  handleTagInsert = d => {
+    const {selectedItems} = this.props;
+    selectedItems.push(d);
+    this.props.callback(selectedItems);
+  }
+
   render() {
     const {items, selectedItems, title} = this.props;
 
@@ -20,7 +32,8 @@ class OECMultiSelect extends React.Component {
           shouldDismissPopover={false}
         />}
         selectedItems={selectedItems}
-        onItemSelect={d => this.props.callback(d)}
+        onItemSelect={d => this.handleTagInsert(d)}
+        tagInputProps={{onRemove: this.handleTagRemove}}
         tagRenderer={d => d.title}
       />
     </div>;

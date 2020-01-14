@@ -94,11 +94,12 @@
 }
 
 .multi-select-wrapper {
+  margin-bottom: 12px;
   & .title {
     font-family: "Montserrat", sans-serif;
     font-size: 0.7rem;
     margin-bottom: 5px;
-    margin-top: 10px;
+    margin-top: 5px;
     text-transform: uppercase;
   }
 }

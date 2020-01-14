@@ -49,13 +49,13 @@ class VbChart extends React.Component {
   fetchData = () => {
     const {routeParams} = this.props;
     const {countryData} = this.state;
-    const {cube, flow, country, partner, viztype, time} = routeParams;
+    const {cube, chart, flow, country, partner, viztype, time} = routeParams;
 
     this.setState({data: [], loading: true});
 
-    const countryId = countryData.find(d => d.value.includes(country));
+    const countryId = countryData.filter(d => country.split(".").includes(d.value.slice(2, 5)));
     const partnerId = !["show", "all"].includes(partner)
-      ? countryData.find(d => d.value.includes(partner))
+      ? countryData.filter(d => partner.split(".").includes(d.value.slice(2, 5)))
       : undefined;
 
     const isTechnology = cube.includes("cpc");
@@ -91,11 +91,13 @@ class VbChart extends React.Component {
       drilldowns: `${dd[viztype] || countryTypeBalance},Year`,
       measures: isTechnology ? "Patent Share" : "Trade Value",
       parents: true,
-      Year: range(interval[0], interval[1]).join()
+      Year: ["tree_map", "geomap"].includes(chart)
+        ? time.replace(".", ",")
+        : range(interval[0], interval[1])
     };
 
-    if (countryId) params[countryType] = countryId.value;
-    if (partnerId) params[partnerType] = partnerId.value;
+    if (countryId) params[countryType] = countryId.map(d => d.value).join();
+    if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
     if (isProduct) params.HS4 = viztype;
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
