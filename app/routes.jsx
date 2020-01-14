@@ -70,7 +70,7 @@ export default function RouteCreate() {
       <Route path="/welcome" component={Welcome} />
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route exact path="/admin" component={Builder} />
-      <Route exact path="/:lang/visualize" component={Vizbuilder} />
+      <Route exact path="/:lang/visualize/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={Vizbuilder} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
       <Route exact path="/:lang/subnational" component={Subnational} />
