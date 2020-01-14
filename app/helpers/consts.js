@@ -47,6 +47,11 @@ module.exports = {
     {title: "Rankings", items: [
       {title: "Country rankings", url: `/${locale}/rankings/country/eci`},
       {title: "Product rankings", url: `/${locale}/rankings/product/sitc`}
+    ]},
+    // predictions
+    {title: "Predictions", items: [
+      {title: "World Trade Predictions (annual)", url: `/${locale}/prediction?dataset=trade-annual`},
+      {title: "World Trade Predictions (monthly)", url: `/${locale}/prediction?dataset=trade-monthly`}
     ]}
   ],
   SUBNATIONAL: [

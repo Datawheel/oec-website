@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 import {fetchData} from "@datawheel/canon-core";
 import throttle from "@datawheel/canon-cms/src/utils/throttle";
-import stripHTML from "@datawheel/canon-cms/src/utils/formatters/stripHTML";
+import stripP from "@datawheel/canon-cms/src/utils/formatters/stripP";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
@@ -62,7 +62,9 @@ class Profile extends React.Component {
     const {scrolled} = this.state;
 
     let title = null;
-    if (profile.sections.length) title = stripHTML(profile.sections[0].title);
+    if (profile.sections.length) title = stripP(profile.sections[0].title)
+      .replace(/\<br\>/g, "")
+      .replace(/\&nbsp\;/, "");
 
     return (
       <div className="profile" id="top">

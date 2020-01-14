@@ -50,9 +50,7 @@ class OECNavbar extends Component {
 
         {title &&
           <div className={`navbar-top-link-wrapper ${scrolled ? "is-visible" : "is-hidden"}`}>
-            <AnchorLink className="navbar-top-link heading u-font-lg" to="top">
-              {title}
-            </AnchorLink>
+            <AnchorLink className="navbar-top-link heading u-font-lg" to="top" dangerouslySetInnerHTML={{__html: title}} />
           </div>
         }
 
