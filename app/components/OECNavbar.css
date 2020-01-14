@@ -190,6 +190,15 @@
     padding-left: var(--gutter-sm);
     padding-right: var(--gutter-sm);
     line-height: var(--nav-height);
+    & img {
+      /* prevent button size from increasing */
+      max-height: 1.5em;
+      /* positioning */
+      display: inline-block;
+      margin-right: 0.5em;
+      margin-top: -0.1em;
+      vertical-align: middle;
+    }
   }
 
   /* theming */
