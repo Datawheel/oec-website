@@ -2,12 +2,13 @@ import React, {Component} from "react";
 import {hot} from "react-hot-loader/root";
 import {Link} from "react-router";
 import {Icon} from "@blueprintjs/core";
+import {select} from "d3-selection";
 
 import {AnchorLink} from "@datawheel/canon-core";
+import {ProfileSearch} from "@datawheel/canon-cms";
 
 import {NAV} from "helpers/consts";
 import NavGroup from "./NavGroup";
-import Search from "./Search";
 
 import "./OECNavbar.css";
 
@@ -20,6 +21,29 @@ class OECNavbar extends Component {
     };
   }
 
+  componentDidMount() {
+
+    select(document).on("keydown.oecnavbar", () => {
+
+      const activeKeyCode = "S".charCodeAt(0);
+      const ESC = 27;
+      const key = event.keyCode;
+      const tagName = event.target.tagName.toLowerCase();
+      const {searchVisible} = this.state;
+
+      if (!searchVisible && key === activeKeyCode && !["input", "textarea"].includes(tagName)) {
+        event.preventDefault();
+        this.toggleSearch.bind(this)();
+      }
+      else if (searchVisible && key === ESC) {
+        event.preventDefault();
+        this.toggleSearch.bind(this)();
+      }
+
+    }, false);
+
+  }
+
   // open/close search
   toggleSearch() {
     const {searchVisible} = this.state;
@@ -27,7 +51,7 @@ class OECNavbar extends Component {
 
     // focus the search input
     if (!searchVisible) {
-      document.querySelector(".search-input").focus();
+      document.querySelector(".navbar-search .cp-input").focus();
     }
   }
 
@@ -88,7 +112,9 @@ class OECNavbar extends Component {
           aria-hidden={!searchVisible}
           tabIndex={searchVisible ? null : -1}
         >
-          <Search />
+          <ProfileSearch
+            display="columns"
+            showExamples={false} />
         </div>
       </div>
     );
