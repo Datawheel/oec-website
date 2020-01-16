@@ -60,7 +60,7 @@
             background-color: var(--dark-3);
             color: var(--white);
             text-align: left;
-            &:hover {
+            &:hover, &:focus {
               background-color: var(--dark-2);
             }
           }
@@ -103,6 +103,10 @@
         margin-bottom: -5px;
         width: 100%;
       }
+
+      @mixin max-md {
+        display: none;
+      }
     }
 
     & .home-hero-skybox {
@@ -136,6 +140,74 @@
       }
     }
 
+  }
+
+  & .home-grid {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: var(--gutter-md) var(--gutter-md);
+    grid-auto-flow: row dense;
+    padding: var(--gutter-sm) var(--gutter-md);
+    width: 100%;
+
+    @mixin min-xs {
+      grid-template-columns: 50% 50%;
+      width: calc(100% - var(--gutter-md));
+    }
+
+    @mixin min-sm {
+      grid-template-columns: 33.3% 33.3% 33.3%;
+      width: calc(100% - calc(var(--gutter-md) * 2));
+    }
+
+    @mixin min-md {
+      grid-template-columns: 25% 25% 25% 25%;
+      width: calc(100% - calc(var(--gutter-md) * 3));
+    }
+
+    @mixin min-lg {
+      grid-template-columns: 20% 20% 20% 20% 20%;
+      width: calc(100% - calc(var(--gutter-md) * 4));
+    }
+
+    @mixin min-xl {
+      grid-template-columns: 16.6% 16.6% 16.6% 16.6% 16.6% 16.6%;
+      width: calc(100% - calc(var(--gutter-md) * 5));
+    }
+
+    @mixin min-xl {
+      grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
+      width: calc(100% - calc(var(--gutter-md) * 6));
+    }
+
+    & .home-grid-tile {
+      margin: 0;
+      & .cms-profilesearch-tile-link {
+        background-color: rgba(21, 25, 31, 0.45);
+        &:hover {
+          background-color: rgba(21, 25, 31, 0.25);
+        }
+      }
+      &.home-grid-tile-large {
+        @mixin min-sm {
+          grid-column: auto / span 2;
+          grid-row: auto / span 2;
+        }
+      }
+      &.home-grid-tile-new:after {
+        @mixin font-xs;
+        background-color: var(--accent-dark);
+        color: var(--white);
+        content: "New";
+        font-weight: 800;
+        left: 0;
+        padding: 0.2em 0.5em;
+        position: absolute;
+        text-transform: uppercase;
+        top: 0;
+      }
+    }
   }
 
 }

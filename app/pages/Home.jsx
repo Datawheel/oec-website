@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import {connect} from "react-redux";
+import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
 import "./Home.css";
 
@@ -6,9 +8,25 @@ import OECNavbar from "../components/OECNavbar";
 import Footer from "../components/Footer";
 
 import {ProfileSearch} from "@datawheel/canon-cms";
+import {fetchData} from "@datawheel/canon-core";
+
+import {max} from "d3-array";
+
+/** Determines font-size based on title */
+function titleSize(title, large = false) {
+  const length = title.length;
+  const longestWord = max(length ? title.match(/\w+/g).map(t => t.length) : 0);
+  if (length > 30 || longestWord > 25) return large ? "lg" : "sm";
+  if (length > 20 || longestWord > 15) return large ? "xl" : "md";
+  return large ? "xxl" : "xl";
+}
 
 class Home extends Component {
   render() {
+
+    const {tiles} = this.props;
+    const notMobile = window ? window.innerWidth > 768 : true;
+
     return (
       <div className="home">
         <OECNavbar />
@@ -32,21 +50,21 @@ class Home extends Component {
             {/* logos */}
             <ul className="home-hero-sponsor-list">
               <li className="home-hero-sponsor-item">
-                <a href="https://www.iadb.org" className="home-hero-sponsor-link">
-                  <img
-                    className="home-hero-sponsor-img"
-                    src="/images/logos/idb-logo.svg"
-                    alt="Inter-American Development Bank"
-                    draggable="false"
-                  />
-                </a>
-              </li>
-              <li className="home-hero-sponsor-item">
                 <a href="https://www.datawheel.us/" className="home-hero-sponsor-link">
                   <img
                     className="home-hero-sponsor-img"
                     src="/images/logos/datawheel-logo.svg"
                     alt="Datawheel"
+                    draggable="false"
+                  />
+                </a>
+              </li>
+              <li className="home-hero-sponsor-item">
+                <a href="https://www.iadb.org" className="home-hero-sponsor-link">
+                  <img
+                    className="home-hero-sponsor-img"
+                    src="/images/logos/idb-logo.svg"
+                    alt="Inter-American Development Bank"
                     draggable="false"
                   />
                 </a>
@@ -67,10 +85,48 @@ class Home extends Component {
           <div className="launch-video">Watch a video</div> */}
         </div>
 
+        <ul className="home-grid">
+          {tiles.map((tile, i) =>
+            <li className={`home-grid-tile cms-profilesearch-tile${tile.large ? " home-grid-tile-large" : ""}${tile.new ? " home-grid-tile-new" : ""}`} key={i}>
+              <Link to={tile.link} className="cms-profilesearch-tile-link">
+                { tile.title
+                  ? <div className="cms-profilesearch-tile-link-text">
+                    <div className={`cms-profilesearch-tile-link-title heading u-font-${titleSize(tile.title, notMobile ? tile.large : false)}`}>{tile.title}</div>
+                    <div className={`cms-profilesearch-tile-link-sub u-margin-top-xs u-font-${tile.large ? "md" : "xs"}`}>{tile.category}</div>
+                  </div>
+                  : tile.entities.map((r, i) =>
+                    <React.Fragment key={`tile-entity-${i}`}>
+                      { i > 0 && <span className={`cms-profilesearch-tile-link-joiner display u-font-${tile.large ? "xl" : "md"}`}>&amp;</span> }
+                      <div className="cms-profilesearch-tile-link-text">
+                        <div className={`cms-profilesearch-tile-link-title heading u-font-${titleSize(r.title, notMobile ? tile.large : false)}`}>{r.title}</div>
+                        <div className="cms-profilesearch-tile-link-sub u-margin-top-xs u-font-xs">{r.hierarchy}</div>
+                      </div>
+                    </React.Fragment>
+                  ) }
+              </Link>
+              <div className="cms-profilesearch-tile-image-container">
+                { tile.image
+                  ? <div key={`tile-image-${i}`}
+                    className="cms-profilesearch-tile-image"
+                    style={{backgroundImage: `url(${tile.image})`}} />
+                  : tile.entities.map((r, i) =>
+                    <div key={`tile-image-${i}`}
+                      className="cms-profilesearch-tile-image"
+                      style={{backgroundImage: `url(api/image?slug=${r.slug}&id=${r.id}&size=thumb)`}} />
+                  ) }
+              </div>
+            </li>
+          )}
+        </ul>
+
         <Footer />
       </div>
     );
   }
 }
 
-export default hot(Home);
+Home.need = [
+  fetchData("homeTiles", "/api/home")
+];
+
+export default connect(state => ({tiles: state.data.homeTiles}))(hot(Home));
