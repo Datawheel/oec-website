@@ -163,15 +163,27 @@
 
 
 /* form field overrides */
+.cp-select-label {
+  font-size: 14px;
+  font-weight: 800;
+}
+.cp-button-group {
+  font-weight: 800;
+  margin-bottom: var(--gutter-sm);
+}
+.cp-button-group > .cp-label {
+  font-size: 14px;
+}
 .cp-button-group > .cp-button {
+  font-size: 14px;
   /* remove border from adjacent buttons */
-  &:not(:first-child) {
+  &:not(:first-of-type) {
     border-left: none;
   }
   /* active state */
   &.is-active {
-    color: var(--accent);
-    background-color: var(--button-hover-bg-color); /* TODO: remove once this is fixed in canon */
+    color: var(--dark);
+    background-color: var(--white);
   }
   /* interactions */
   &:hover, &:focus {
