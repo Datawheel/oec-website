@@ -6,9 +6,10 @@
 }
 
 @keyframes spin-right {
-  0%   { opacity: 0.2; }
-  20%  { opacity: 0.6; }
-  50%  { opacity: 0.3; }
-  90%  { opacity: 0.5; }
-  100% { opacity: 0.2; transform: rotate(360deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes twinkle {
+  from {background-position: 0 0;}
+  to {background-position: -10000px 5000px;}
 }
