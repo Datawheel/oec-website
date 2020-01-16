@@ -5,14 +5,14 @@ const sequelize = require("sequelize");
 
 const tiles = [
   {
-    link: "/profile/country/aschn/bilateral-country/nausa",
+    link: "/profile/country/chn/bilateral-country/usa",
     large: true
   },
-  "/profile/country/sachl",
-  "/profile/country/nausa",
-  "/profile/country/eufra",
-  "/profile/country/aschn",
-  "/profile/country/asirn",
+  "/profile/country/chl",
+  "/profile/country/usa",
+  "/profile/country/fra",
+  "/profile/country/chn",
+  "/profile/country/irn",
   {
     link: "/profile/firm/disney-enterprises-inc-fa8492d090",
     image: "https://i.ytimg.com/vi/_iIxfFZW-NE/maxresdefault.jpg"
@@ -31,14 +31,14 @@ const tiles = [
     link: "/profile/hs92/semiconductor-devices",
     large: true
   },
-  "/profile/country/aschn/bilateral-product/cars",
-  "/profile/country/eufra/bilateral-product/planes-helicopters-andor-spacecraft",
+  "/profile/country/chn/bilateral-product/cars",
+  "/profile/country/fra/bilateral-product/planes-helicopters-andor-spacecraft",
   {
-    link: "/profile/country/asirn/bilateral-product/crude-petroleum",
+    link: "/profile/country/irn/bilateral-product/crude-petroleum",
     large: true
   },
-  "/profile/country/sachl/bilateral-product/lithium-carbonates",
-  "/profile/country/askor/bilateral-country/asjpn"
+  "/profile/country/chl/bilateral-product/lithium-carbonates",
+  "/profile/country/kor/bilateral-country/jpn"
 ];
 
 // To add once sub-nat profile IDs are resolved:
