@@ -25,7 +25,10 @@ class Home extends Component {
   render() {
 
     const {tiles} = this.props;
-    const notMobile = window ? window.innerWidth > 768 : true;
+    let notMobile = true;
+    if (typeof window !== "undefined") {
+      notMobile = window.innerWidth > 768;
+    }
 
     return (
       <div className="home">
