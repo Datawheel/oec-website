@@ -134,6 +134,14 @@
   }
 }
 
+/* about section */
+.cp-grouping > .cp-section:not(:first-child) a {
+  color: var(--accent-light);
+  &:hover, &:focus {
+    color: var(--accent);
+  }
+}
+
 
 /* groupings */
 .cp-grouping-section-heading {
