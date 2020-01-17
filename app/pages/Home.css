@@ -185,8 +185,13 @@
       margin: 0;
       & .cms-profilesearch-tile-link {
         background-color: rgba(21, 25, 31, 0.45);
+        text-shadow: 0 1px 2px var(--black);
         &:hover {
           background-color: rgba(21, 25, 31, 0.25);
+        }
+        & .cms-profilesearch-tile-link-sub {
+          font-weight: 400;
+          margin-top: 0.25rem !important;
         }
       }
       &.home-grid-tile-large {

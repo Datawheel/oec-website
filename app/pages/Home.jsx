@@ -10,15 +10,34 @@ import Footer from "../components/Footer";
 import {ProfileSearch} from "@datawheel/canon-cms";
 import {fetchData} from "@datawheel/canon-core";
 
+import {titleCase} from "d3plus-text";
 import {max} from "d3-array";
 
 /** Determines font-size based on title */
 function titleSize(title, large = false) {
   const length = title.length;
   const longestWord = max(length ? title.match(/\w+/g).map(t => t.length) : 0);
-  if (length > 30 || longestWord > 25) return large ? "lg" : "sm";
-  if (length > 20 || longestWord > 15) return large ? "xl" : "md";
-  return large ? "xxl" : "xl";
+  if (length > 25 || longestWord > 25) return large ? "lg" : "xs";
+  if (length > 15 || longestWord > 15) return large ? "xl" : "sm";
+  return large ? "xxl" : "lg";
+}
+
+/** Determines tile subtitles */
+function subtitle(entity) {
+  const {dimension} = entity;
+  let {slug} = entity;
+  if (["country", "technology"].includes(slug)) return titleCase(slug);
+  else if (slug === "hs92") return "Product";
+  else if (slug === "firm") return "Company";
+  else if (dimension.toLowerCase() !== slug.toLowerCase()) {
+    if (slug && slug.match(/[A-z]{1,}/g).join("").length < 4) {
+      slug = slug.toUpperCase();
+    }
+    else slug = titleCase(slug);
+    return `${dimension} (${slug})`;
+  }
+  return dimension;
+
 }
 
 class Home extends Component {
@@ -95,14 +114,14 @@ class Home extends Component {
                 { tile.title
                   ? <div className="cms-profilesearch-tile-link-text">
                     <div className={`cms-profilesearch-tile-link-title heading u-font-${titleSize(tile.title, notMobile ? tile.large : false)}`}>{tile.title}</div>
-                    <div className={`cms-profilesearch-tile-link-sub u-margin-top-xs u-font-${tile.large ? "md" : "xs"}`}>{tile.category}</div>
+                    { tile.category && <div className={`cms-profilesearch-tile-link-sub u-margin-top-xs u-font-${tile.large ? "md" : "xs"}`}>{tile.category}</div>}
                   </div>
                   : tile.entities.map((r, i) =>
                     <React.Fragment key={`tile-entity-${i}`}>
                       { i > 0 && <span className={`cms-profilesearch-tile-link-joiner display u-font-${tile.large ? "xl" : "md"}`}>&amp;</span> }
                       <div className="cms-profilesearch-tile-link-text">
                         <div className={`cms-profilesearch-tile-link-title heading u-font-${titleSize(r.title, notMobile ? tile.large : false)}`}>{r.title}</div>
-                        <div className="cms-profilesearch-tile-link-sub u-margin-top-xs u-font-xs">{r.hierarchy}</div>
+                        <div className="cms-profilesearch-tile-link-sub u-margin-top-xs u-font-xs">{subtitle(r)}</div>
                       </div>
                     </React.Fragment>
                   ) }
