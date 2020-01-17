@@ -1,11 +1,9 @@
-// const axios = require("axios");
-// const {mean} = require("d3-array");
 const {merge} = require("d3-array");
 const sequelize = require("sequelize");
 
 const tiles = [
   {
-    link: "/profile/country/chn/bilateral-country/usa",
+    link: "/profile/bilateral-country/usa/country/chn",
     large: true
   },
   "/profile/country/chl",
@@ -31,20 +29,21 @@ const tiles = [
     link: "/profile/hs92/semiconductor-devices",
     large: true
   },
-  "/profile/country/chn/bilateral-product/cars",
-  "/profile/country/fra/bilateral-product/planes-helicopters-andor-spacecraft",
+  "/profile/bilateral-product/cars/country/chn",
+  "/profile/bilateral-product/planes-helicopters-andor-spacecraft/country/fra",
   {
-    link: "/profile/country/irn/bilateral-product/crude-petroleum",
+    link: "/profile/bilateral-product/crude-petroleum/country/irn",
     large: true
   },
-  "/profile/country/chl/bilateral-product/lithium-carbonates",
-  "/profile/country/kor/bilateral-country/jpn"
+  "/profile/bilateral-product/lithium-carbonates/country/chl",
+  "/profile/bilateral-country/jpn/country/kor"
 ];
 
 // To add once sub-nat profile IDs are resolved:
 // moscow
 // berlin
 // shanghai
+// tokyo
 
 module.exports = function(app) {
 
@@ -58,6 +57,12 @@ module.exports = function(app) {
       .map(d => typeof d === "string" ? {link: d} : d);
 
     tileData.forEach(tile => {
+
+      const match = tile.link.match(/\/([a-z]{2})\//);
+      if (match && match.index === 0) {
+        tile.link = tile.link.replace(`${match[1]}/`, "");
+      }
+
       if (tile.link.includes("profile")) {
         tile.entities = [];
         tile.link
@@ -121,31 +126,11 @@ module.exports = function(app) {
           tile.new = true;
         }
       }
+      tile.link = `/${language}${tile.link}`;
     });
 
     return res.json(tileData);
 
-    // const origin = `http${ req.connection.encrypted ? "s" : "" }://${ req.headers.host }`;
-    // const data = await axios.get(`${origin}/api/profilesearch?limit=5`)
-    //   .then(resp => resp.data);
-    // const types = ["country", "country/bilateral-country", "country/bilateral-product", "hs92"];
-    // const profiles = Object.keys(data.profiles)
-    //   .reduce((arr, key) => {
-    //     if (types.includes(key)) {
-    //       arr = arr.concat(data.profiles[key].slice(0, 5));
-    //     }
-    //     return arr;
-    //   }, [])
-    //   .sort((a, b) => mean(b, d => d.ranking) - mean(a, d => d.ranking))
-    //   .map(profile => ({
-    //     images: profile.map(d => `api/image?slug=${d.slug}&id=${d.id}&size=thumb`),
-    //     link: `/${language}/profile/${profile.map(d => `${d.slug}/${d.id}`).join("/")}/`,
-    //     title: profile.map(d => d.name).join(" & "),
-    //     category: profile.map(d => d.memberDimension).join("/"),
-    //     large: profile.length > 1
-    //   }));
-
-    // return res.json(profiles);
   });
 
 };
