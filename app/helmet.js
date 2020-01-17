@@ -1,4 +1,4 @@
-const title = "The Observatory of Economic Complexity (OEC)";
+const title = "OEC - The Observatory of Economic Complexity";
 
 export default {
   link: [
