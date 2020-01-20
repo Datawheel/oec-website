@@ -9,14 +9,14 @@
   padding-right: var(--gutter-md);
 
   @mixin min-md {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
   }
 }
 
 /* tweak display font for dropdown titles & subtitles */
 .nav-group-button,
 .nav-group-subtitle {
-  @mixin font-md;
+  @mixin font-sm;
   font-weight: var(--label-font-weight);
 }
 

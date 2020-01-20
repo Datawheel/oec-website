@@ -5,14 +5,14 @@ import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
 import Subnational from "./pages/Subnational/Subnational";
 import Prediction from "./pages/Prediction/Prediction";
-import {Profile as CMSProfile} from "@datawheel/canon-cms";
-
-import {Login, SignUp} from "@datawheel/canon-core";
 
 import App from "./App";
 import Home from "./pages/Home";
 import Welcome from "./pages/Welcome";
 import Vizbuilder from "./pages/Vizbuilder";
+import Login from "./pages/User/Login";
+import SignUp from "./pages/User/SignUp";
+import Account from "./pages/User/Account";
 
 /** */
 export default function RouteCreate() {
@@ -70,9 +70,10 @@ export default function RouteCreate() {
       <Route path="/welcome" component={Welcome} />
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route exact path="/admin" component={Builder} />
-      <Route exact path="/:lang/visualize" component={Vizbuilder} />
+      <Route exact path="/:lang/visualize/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={Vizbuilder} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
+      <Route exact path="/:lang/account" component={Account} />
       <Route exact path="/:lang/subnational" component={Subnational} />
       <Route exact path="/:lang/prediction" component={Prediction} />
     </Route>

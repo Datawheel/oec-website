@@ -26,23 +26,3 @@
     font-weight: 400;
   }
 }
-
-.locale-options {
-  /* reset list defaults */
-  padding-left: 0;
-  list-style: none;
-  /* layout */
-  display: flex;
-  flex-wrap: wrap; /* prevent from breaking on small screens */
-  align-items: center;
-  justify-content: center;
-
-  & li {
-    transition: opacity 1.5s;
-    opacity: 0.8;
-
-    &:not(:last-child) {
-      margin-right: 0.5em;
-    }
-  }
-}

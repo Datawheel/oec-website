@@ -34,9 +34,9 @@
 
 /* logo */
 .navbar-logo-link {
-  margin-left: calc(0px - var(--gutter-sm));
-  margin-right: calc(0px - var(--gutter-sm));
-  padding: 0 var(--gutter-sm);
+  flex: 1 1 0;
+  margin: 0;
+  padding: 0;
 }
 .navbar-logo-img {
   width: 100px;
@@ -44,11 +44,12 @@
 
 /* main nav list */
 .navbar-nav {
+  flex: none;
   position: relative;
   top: -2px;
 
   /* position below main navbar on small screens */
-  @mixin max-md {
+  @mixin max-lg {
     position: absolute;
     width: 100%;
     min-height: var(--nav-height);
@@ -76,6 +77,7 @@
 /* list of nav groups */
 .navbar-nav-list {
   @mixin list-reset;
+  justify-content: center;
 
   /* horizontal list on non-small screens */
   @mixin min-sm {
@@ -84,7 +86,7 @@
   }
 
   /* space out evenly on medium screens */
-  @mixin max-md {
+  @mixin max-lg {
     justify-content: space-between;
   }
 }
@@ -104,7 +106,7 @@
 }
 .navbar-nav-toggle-button {
   /* move menu toggle button to the left on small screens */
-  @mixin max-md {
+  @mixin max-lg {
     order: -1;
   }
 
@@ -117,24 +119,43 @@
     background-color: var(--accent-dark);
   }
 }
+
 /* keep search toggle button the same size as the logo on big screens to keep nav centered */
 .navbar-search-toggle-button-wrapper {
-  @mixin min-md {
-    width: 100px;
-    text-align: right;
+  flex: 1 1 0;
+  text-align: right;
+  & .cp-button {
+    border: 0;
+    border-radius: 1rem;
+    margin-right: 0.5rem;
+    text-transform: uppercase;
+    &.navbar-user-login {
+      & a {
+        color: var(--white);
+      }
+    }
+    &.navbar-user-signup {
+      background-color: var(--accent-dark);
+      & a {
+        color: var(--white);
+      }
+      &:hover, &:focus {
+        background-color: var(--accent);
+      }
+    }
   }
-}
-.navbar-search-toggle-button {
-  position: relative;
-  z-index: 1; /* in front of open search */
-  transition: transform 0.1s ease-out;
+  & .navbar-search-toggle-button {
+    position: relative;
+    z-index: 1; /* in front of open search */
+    transition: transform 0.1s ease-out;
 
-  &:hover, &:focus {
-    transform: scale(1.375);
-  }
+    &:hover, &:focus {
+      transform: scale(1.375);
+    }
 
-  &[aria-pressed="true"] {
-    transform: scale(1.75);
+    &[aria-pressed="true"] {
+      transform: scale(1.75);
+    }
   }
 }
 
@@ -157,6 +178,20 @@
     pointer-events: none;
     z-index: -999;
   }
+
+  & .cms-profilesearch {
+    height: 100vh;
+    padding: var(--gutter-xl) var(--gutter-lg) 0;
+    & .cms-profilecolumn-title {
+      background: var(--dark-4);
+      margin-top: var(--gutter-sm);
+    }
+    & .bp3-non-ideal-state {
+      & .bp3-heading {
+        color: var(--light-3);
+      }
+    }
+  }
 }
 
 /* profile title / top link */
@@ -176,7 +211,7 @@
   transition: 0.333s opacity ease-out;
 
   /* make room for logo on left */
-  @mixin min-md {
+  @mixin min-sm {
     left: 8rem;
     right: 8rem;
     width: calc(100% - 16rem);
@@ -190,6 +225,15 @@
     padding-left: var(--gutter-sm);
     padding-right: var(--gutter-sm);
     line-height: var(--nav-height);
+    & img {
+      /* prevent button size from increasing */
+      max-height: 1.5em;
+      /* positioning */
+      display: inline-block;
+      margin-right: 0.5em;
+      margin-top: -0.1em;
+      vertical-align: middle;
+    }
   }
 
   /* theming */
