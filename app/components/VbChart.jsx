@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {Treemap, StackedArea, LinePlot} from "d3plus-react";
+import {Treemap, StackedArea, LinePlot, Geomap} from "d3plus-react";
 import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
 
@@ -79,10 +79,14 @@ class VbChart extends React.Component {
       all: countryTypeBalance
     };
 
+    if (chart === "line") dd.show = "Section";
+
     const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
     const interval = time.split(".");
     if (interval.length === 1) interval.push(interval[0]);
+
+    console.log(interval, range(interval[0], interval[1]));
 
     const params = {
       cube: !isTechnology
@@ -93,13 +97,15 @@ class VbChart extends React.Component {
       parents: true,
       Year: ["tree_map", "geomap"].includes(chart)
         ? time.replace(".", ",")
-        : range(interval[0], interval[1])
+        : range(interval[0], interval[interval.length - 1]).join()
     };
 
     if (countryId) params[countryType] = countryId.map(d => d.value).join();
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
     if (isProduct) params.HS4 = viztype;
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
+
+    if (params.drilldowns.includes("Country")) params.properties = `${countryTypeBalance} ISO 3`;
 
     axios.get("https://api.oec.world/tesseract/data", {
       params
@@ -176,6 +182,29 @@ class VbChart extends React.Component {
             y: measure,
             x: "Year"
           // time: "Year"
+          }}
+        />
+      </div>;
+    }
+    else if (chart === "geomap" && data && data.length > 0) {
+      return <div className="vb-chart">
+        <Geomap
+          config={{
+            ...baseConfig,
+            colorScale: measure,
+            colorScaleConfig: {
+              scale: "jenks"
+            },
+            groupBy: "ISO 3",
+            legend: false,
+            projection: "geoBoggs",
+            topojsonId: "id",
+            topojsonKey: "id",
+            tiles: false,
+            topojson: "/topojson/world-50m.json",
+            topojsonFilter: d => d.id !== "ata",
+            ocean: false,
+            total: false
           }}
         />
       </div>;

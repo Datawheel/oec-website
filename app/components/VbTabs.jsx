@@ -51,7 +51,7 @@ class VbTabs extends React.Component {
                         {name: t("Imports"), permalink: "hs92/import/chl/all/show/2017/"},
                         {name: t("Export Destinations"), permalink: "hs92/export/chl/show/all/2017/"},
                         {name: t("Import Origins"), permalink: "hs92/import/chl/show/all/2017/"},
-                        {name: t("Patent Granted"), permalink: "cpc/export/chl/all/show/2019/"}
+                        {name: t("Technology"), permalink: "cpc/export/chl/all/show/2019/"}
                       ]
                     },
                     {
