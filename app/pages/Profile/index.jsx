@@ -1,10 +1,12 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
+import {Helmet} from "react-helmet";
 
 import {fetchData} from "@datawheel/canon-core";
 import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import stripHTML from "@datawheel/canon-cms/src/utils/formatters/stripHTML";
+import stripP from "@datawheel/canon-cms/src/utils/formatters/stripP";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
@@ -12,7 +14,7 @@ import libs from "@datawheel/canon-cms/src/utils/libs";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
 import OECNavbar from "components/OECNavbar";
 
-import Footer from "../../components/Footer";
+import Footer from "components/Footer";
 import "./Profile.css";
 
 class Profile extends React.Component {
@@ -62,10 +64,15 @@ class Profile extends React.Component {
     const {scrolled} = this.state;
 
     let title = null;
-    if (profile.sections.length) title = stripHTML(profile.sections[0].title);
+    if (profile.sections.length) {
+      title = stripP(profile.sections[0].title)
+        .replace(/\<br\>/g, "")
+        .replace(/\&nbsp\;/, "");
+    }
 
     return (
       <div className="profile" id="top">
+        <Helmet title={stripHTML(title)} />
         <OECNavbar
           className={scrolled ? "background" : ""}
           title={title}

@@ -29,11 +29,12 @@
 }
 
 @define-mixin link-theme {
-  font-weight: var(--heading-font-weight);
-  color: var(--accent);
-  text-decoration: underline;
+  font-weight: normal;
+  color: var(--accent-dark);
+  text-decoration: none;
 
   &:hover, &:focus {
-    color: var(--accent-light);
+    color: var(--accent);
+    text-decoration: underline;
   }
 }

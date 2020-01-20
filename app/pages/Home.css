@@ -1,7 +1,7 @@
 @import "../helpers/mixins.css";
 
 .home {
-  @mixin striped-bg;
+  background: var(--dark-4);
   text-align: center;
   min-height: 100vh;
   overflow: hidden; /* prevent the ring from expanding the viewport */
@@ -9,123 +9,210 @@
   display: flex;
   flex-direction: column;
 
-  & .ring {
-    border-radius: 50%;
-    background-color: var(--dark-4);
-    border: 1px solid var(--dark-1);
-    height: 100%;
-    overflow: hidden;
+  & .home-hero {
+    align-items: center;
+    border-bottom: 1px solid rgb(109, 111, 118);
+    display: flex;
+    height: 500px;
+    padding: var(--nav-height) var(--gutter-lg) 0;
     position: relative;
+    margin: 0 auto;
     width: 100%;
 
-    & .launch-video {
-      transition: opacity 0.5s;
-      cursor: pointer;
-      position: absolute;
-      bottom: 17%;
-      opacity: 0.6;
-      right: 22%;
-      color: var(--white);
+    & .home-hero-content {
+      flex: 1 1 auto;
+      padding: 0;
+      z-index: 2;
+
+      & .home-hero-logo {
+        margin: 0 auto;
+      }
+
+      /* introduction */
+      & .home-hero-tagline {
+        /* typography */
+        @mixin font-smoothing;
+        font-weight: var(--label-font-weight);
+        /* sizing */
+        margin: var(--gutter-sm) auto var(--gutter-md);
+        /* positioning */
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        /* theming */
+        color: var(--light-3);
+      }
+
+      & .cms-profilesearch {
+        margin: 0 auto var(--gutter-sm);
+        max-width: 500px;
+        & .cms-profilesearch-container {
+          margin: -2px var(--gutter-md) 0;
+          & .bp3-non-ideal-state {
+            background-color: var(--dark-3);
+            & .bp3-heading {
+              color: var(--light-3);
+            }
+          }
+          & .cms-profilesearch-list-item-link {
+            @mixin font-md;
+            background-color: var(--dark-3);
+            color: var(--white);
+            text-align: left;
+            &:hover, &:focus {
+              background-color: var(--dark-2);
+            }
+          }
+        }
+      }
+
+      /* logos */
+      & .home-hero-sponsor-list {
+        @mixin list-reset;
+        & .home-hero-sponsor-item {
+          width: auto;
+          display: inline-block;
+          & .home-hero-sponsor-link {
+            display: block;
+            padding: 1rem;
+            /* transitions */
+            opacity: 0.75;
+            transition:
+              opacity 0.1s ease-out,
+              transform 0.1s ease-out;
+
+            &:hover, &:focus {
+              opacity: 1;
+              transform: scale(1.075);
+            }
+            & .home-hero-sponsor-img {
+              max-height: 1.875rem;
+            }
+          }
+        }
+      }
     }
 
-    & .big-logo {
-      left: 13%;
-      position: absolute;
-      top: 23%;
-      width: 38%;
-      z-index: 1;
+    & .home-hero-observatory {
+      align-self: flex-end;
+      width: 400px;
+      z-index: 2;
+      & img {
+        border: 0;
+        margin-bottom: -5px;
+        width: 100%;
+      }
+
+      @mixin max-md {
+        display: none;
+      }
     }
 
-    & .info,
-    & .search-home {
-      color: var(--white);
-      font-size: var(--font-md);
-      font-weight: 300;
+    & .home-hero-skybox {
+      @mixin absolute-expand;
+      overflow: hidden;
+
+      & .home-hero-sky {
+        animation: spin-right 400s linear infinite;
+        background: var(--black);
+        height: 200vw;
+        left: -50%;
+        position: absolute;
+        width: 200vw;
+        top: -50vw;
+        z-index: 1;
+
+        & .home-hero-stars {
+          @mixin absolute-expand;
+          background: var(--black) url(/images/home/stars.png) repeat top center;
+          display: block;
+          z-index: 0;
+        }
+        & .home-hero-twinkling {
+          @mixin absolute-expand;
+          animation: twinkle 200s linear infinite;
+          background: transparent url(/images/home/twinkling-black.png) repeat top center;
+          display: block;
+          z-index: 1;
+        }
+
+      }
     }
 
-    & .info {
-      /* sizing */
-      display: block;
-      width: 36%;
-      /* positioning */
-      position: absolute;
-      bottom: 18%;
-      right: 14%;
-      /* typography */
-      line-height: 1.4;
-      text-align: center;
-      text-shadow: -2px 0 5px var(--dark-4);
+  }
+
+  & .home-grid {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: var(--gutter-md) var(--gutter-md);
+    grid-auto-flow: row dense;
+    padding: var(--gutter-sm) var(--gutter-md);
+    width: 100%;
+
+    @mixin min-xs {
+      grid-template-columns: 50% 50%;
+      width: calc(100% - var(--gutter-md));
     }
 
-    & .search-home {
-      /* sizing */
-      display: block;
-      width: 37%;
-      /* positioning */
-      position: absolute;
-      bottom: 10%;
-      left: 33%;
-      padding-bottom: 3px;
-      /* theming */
-      border-bottom: 1px solid var(--dark-2);
-      border-radius: 2px;
-      opacity: 0.8;
-      /* cursor: pointer; */ /* it's not a link */
+    @mixin min-sm {
+      grid-template-columns: 33.3% 33.3% 33.3%;
+      width: calc(100% - calc(var(--gutter-md) * 2));
     }
 
-    & .more-info {
-      /* positioning */
-      display: inline-block;
-      margin: 2%;
-      /* typography */
-      font-size: var(--font-xs);
-      font-weight: 400;
-      text-transform: uppercase;
-      /* theming */
-      border-bottom: 1px solid transparent;
-      color: var(--dark-1);
-      opacity: 0.8;
-      /* transitions */
-      transition: color 1s, opacity 0.5s;
+    @mixin min-md {
+      grid-template-columns: 25% 25% 25% 25%;
+      width: calc(100% - calc(var(--gutter-md) * 3));
     }
 
-    & .observatory {
-      width: 100%;
-      position: absolute;
-      left: 8%;
-      top: 14%;
+    @mixin min-lg {
+      grid-template-columns: 20% 20% 20% 20% 20%;
+      width: calc(100% - calc(var(--gutter-md) * 4));
     }
 
-    & .star-rotate {
-      animation: spin-right 120s linear infinite;
-      left: 68%;
-      margin-left: -75%;
-      margin-top: -75%;
-      opacity: 0.4;
-      position: absolute;
-      top: 64%;
+    @mixin min-xl {
+      grid-template-columns: 16.6% 16.6% 16.6% 16.6% 16.6% 16.6%;
+      width: calc(100% - calc(var(--gutter-md) * 5));
+    }
+
+    @mixin min-xl {
+      grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
+      width: calc(100% - calc(var(--gutter-md) * 6));
+    }
+
+    & .home-grid-tile {
+      margin: 0;
+      & .cms-profilesearch-tile-link {
+        background-color: rgba(21, 25, 31, 0.45);
+        text-shadow: 0 1px 2px var(--black);
+        &:hover {
+          background-color: rgba(21, 25, 31, 0.25);
+        }
+        & .cms-profilesearch-tile-link-sub {
+          font-weight: 400;
+          margin-top: 0.25rem !important;
+        }
+      }
+      &.home-grid-tile-large {
+        @mixin min-sm {
+          grid-column: auto / span 2;
+          grid-row: auto / span 2;
+        }
+      }
+      &.home-grid-tile-new:after {
+        @mixin font-xs;
+        background-color: var(--accent-dark);
+        color: var(--white);
+        content: "New";
+        font-weight: 800;
+        left: 0;
+        padding: 0.2em 0.5em;
+        position: absolute;
+        text-transform: uppercase;
+        top: 0;
+      }
     }
   }
 
-  & .bg-frame {
-    height: 600px;
-    position: relative;
-    margin: auto;
-    width: 600px;
-    max-width: 90vw;
-    max-height: 90vw;
-    pointer-events: none;
-
-    & .ring-pulse {
-      animation: pulse 8s ease-in infinite;
-      border-radius: 50%;
-      border: 1px solid var(--white);
-      height: 100%;
-      position: absolute;
-      width: 100%;
-    }
-    & .echo-ring {
-      animation: pulse 8s ease-in 4s infinite;
-    }
-  }
 }
