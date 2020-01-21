@@ -98,6 +98,23 @@ module.exports = {
         {name: "Corridor", level: "Corridor", slug: "corridors"},
         {name: "Departments", level: "Subnat Geography", slug: "departments"}
       ]
+    },
+    {
+      name: "Germany",
+      code: "deu",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Regions", level: "Subnat Geography", slug: "regions"}
+      ]
+    },
+    {
+      name: "USA",
+      code: "usa",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "States", level: "State", slug: "states"},
+        {name: "Districts", level: "Subnat Geography", slug: "districts"}
+      ]
     }
   ],
   SUBNATIONAL: [

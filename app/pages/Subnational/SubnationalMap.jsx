@@ -35,6 +35,7 @@ class SubnationalMap extends React.Component {
       legend: false,
       ocean: "transparent",
       total: false,
+      transitions: 0,
       on: {
         "click.shape": d => {
           if (d) {
