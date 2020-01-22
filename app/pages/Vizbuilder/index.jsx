@@ -11,6 +11,7 @@ import VbChart from "../../components/VbChart";
 import VirtualSelector from "../../components/VirtualSelector";
 import {Client} from "@datawheel/olap-client";
 import OECMultiSelect from "../../components/OECMultiSelect";
+import VbTitle from "../../components/VbTitle";
 
 const datasets = [
   {value: "hs92", title: "HS92"},
@@ -193,7 +194,7 @@ class Vizbuilder extends React.Component {
         <div className="vb-columns">
           <div className="vb-column aside">
             <VbTabs
-              activeOption={activeOption}
+              activeOption={this.props.location.pathname}
               activeTab={activeTab}
               callback={d => this.handleTabOption(d)}
             />
@@ -288,6 +289,9 @@ class Vizbuilder extends React.Component {
             </div>
           </div>
           <div className="vb-column">
+            <VbTitle
+              routeParams={routeParams}
+            />
             <VbChart
               countryData={this.state.country}
               permalink={this.state.permalink}

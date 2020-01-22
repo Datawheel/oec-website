@@ -74,25 +74,27 @@ class VbChart extends React.Component {
       ? "Importer Country"
       : "Exporter Country";
 
+    const ddTech = ["Section", "Superclass", "Class", "Subclass"];
+
     const dd = {
-      show: isTechnology ? "Subclass" : "HS4",
+      show: isTechnology ? isFilter ? ddTech[viztype.length - 1] : "Subclass" : "HS4",
       all: countryTypeBalance
     };
 
     if (chart === "line") dd.show = "Section";
 
-    const ddTech = ["Section", "Superclass", "Class", "Subclass"];
-
     const interval = time.split(".");
     if (interval.length === 1) interval.push(interval[0]);
 
-    console.log(interval, range(interval[0], interval[1]));
+    const drilldowns = ["Year"];
+    drilldowns.push(isTechnology && !dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
+    if (isTechnology && chart === "geomap") drilldowns.push(countryTypeBalance);
 
     const params = {
       cube: !isTechnology
         ? `trade_i_baci_a_${cube.replace("hs", "")}`
         : "patents_i_uspto_w_cpc",
-      drilldowns: `${isTechnology && !dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance},Year`,
+      drilldowns: drilldowns.join(),
       measures: isTechnology ? "Patent Share" : "Trade Value",
       parents: true,
       Year: ["tree_map", "geomap"].includes(chart)
@@ -111,7 +113,11 @@ class VbChart extends React.Component {
       params
     }).then(resp => {
       const data = resp.data.data;
-      this.setState({data, loading: false, routeParams: this.props.routeParams});
+      this.setState({
+        data,
+        loading: false,
+        routeParams
+      });
     });
 
   };
