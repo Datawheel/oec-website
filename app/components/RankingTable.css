@@ -1,0 +1,58 @@
+.rankingtable-component {
+  & .rt-table {
+    color: white;
+
+    & .rt-thead {
+      & .rt-tr {
+        & .rt-th {
+          color: white;
+          background: none;
+          border: none
+        }
+      }
+    }
+    & .rt-tbody {
+      & .rt-tr-group {
+        & .rt-tr {
+          & .rt-td {
+            color: var(--light-3);
+            background: none;
+            border: none
+          }
+        }
+      }
+    }
+  }
+
+  & .country {
+    display: flex;
+    align-items: center;
+
+    & .flag {
+      height: 1.6rem;
+    }
+
+    & .link {
+      display: flex;
+      align-items: center;
+      color: var(--white);
+
+      & .name {
+        font-weight: var(--bold-weight);
+        font-size: var(--font-sm);
+        margin-left: var(--gutter-sm);
+      }
+      & .bp3-icon {
+        display: none;
+      }
+    }
+
+    & .link:hover {
+      text-decoration: none;
+
+      & .bp3-icon {
+        display: flex;
+      }
+    }
+  }
+}
