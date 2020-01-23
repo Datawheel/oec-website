@@ -192,7 +192,6 @@ export default {
         imgUrl = "/images/icons/patent.png";
       }
       if ("Country" in d) {
-        console.log(d);
         imgUrl = `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
       }
       if ("Section" in d) {
@@ -254,8 +253,8 @@ export default {
       else if (d["Trade Value"]) {
         tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
       }
-      else if (d["Trade Value"]) {
-        tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
+      if (d["Trade Value Growth"]) {
+        tbodyData.push(["Trade Value Growth", `${formatAbbreviate(d["Trade Value Growth"] * 100)}%`]);
       }
       return tbodyData;
     },
