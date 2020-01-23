@@ -24,11 +24,17 @@ class RankingTable extends React.Component {
     columns = [
       {
         id: "countryId",
-        Header: ""
+        Header: "",
+        className: "col-id",
+        accessor: d => d.table_id,
+        width: 50,
+        sortable: false
       },
       {
         id: "countryName",
         Header: "Country",
+        className: "col-country",
+        width: 300,
         Cell: props =>
           <div className="country">
             <img
@@ -45,34 +51,52 @@ class RankingTable extends React.Component {
               className="link"
             >
               <span className="name">{props.original.Country}</span>
-              <Icon icon={"chevron-right"} />
+              <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
+
       },
       {
         id: "firstYear",
         Header: `${first_year}`,
-        accessor: d => d[`${first_year}`]
+        accessor: d => d[`${first_year}`],
+        width: 160,
+        className: "firstYear"
       },
       {
         id: "secondYear",
         Header: `${first_year + 1}`,
-        accessor: d => d[`${first_year + 1}`]
+        accessor: d => d[`${first_year + 1}`],
+        width: 160,
+        className: "secondYear"
       },
       {
         id: "thirdYear",
         Header: `${first_year + 2}`,
-        accessor: d => d[`${first_year + 2}`]
+        accessor: d => d[`${first_year + 2}`],
+        width: 160,
+        className: "thirdYear"
       },
       {
         id: "fourthYear",
         Header: `${first_year + 3}`,
-        accessor: d => d[`${first_year + 3}`]
+        accessor: d => d[`${first_year + 3}`],
+        width: 160,
+        className: "fourthYear"
       },
       {
         id: "fifthYear",
         Header: `${first_year + 4}`,
-        accessor: d => d[`${first_year + 4}`]
+        accessor: d => d[`${first_year + 4}`],
+        width: 160,
+        className: "fifthYear"
+      },
+      {
+        id: "sparkline",
+        Header: "",
+        accessor: d => d.sparkline,
+        className: "sparkline",
+        sortable: false
       }
     ];
 
@@ -81,7 +105,12 @@ class RankingTable extends React.Component {
     /* here the data is loaded */
     axios
       .get(`/json/oec_eci_${filter}.json`)
-      .then(resp => this.setState({data: resp.data, length: resp.data.length}));
+      .then(
+        resp => (
+          resp.data.map((d, k) => d.table_id = k + 1),
+          this.setState({data: resp.data, length: resp.data.length})
+        )
+      );
   }
 
   render() {
@@ -95,6 +124,9 @@ class RankingTable extends React.Component {
             columns={columns}
             showPagination={false}
             defaultPageSize={length}
+            minRows={length}
+            resizable={false}
+            defaultSorted={["fifthYear"]}
           />
         }
       </div>

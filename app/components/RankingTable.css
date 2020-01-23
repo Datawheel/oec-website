@@ -1,23 +1,48 @@
 .rankingtable-component {
-  & .rt-table {
-    color: white;
+  margin-top: 3rem;
 
+  & .rt-table {
+    border: 1px solid var(--dark-1);
     & .rt-thead {
+      box-shadow: none;
       & .rt-tr {
         & .rt-th {
-          color: white;
-          background: none;
-          border: none
+          display: flex;
+          align-items: center;
+          background: var(--dark-3);
+          color: #ccc;
+          border: none;
+          font-weight: var(--bold-weight);
+          font-size: var(--font-sm);
+
+          & div {
+            display: flex;
+            align-items: center;
+          }
         }
       }
     }
     & .rt-tbody {
+      max-height: fit-content;
+
       & .rt-tr-group {
         & .rt-tr {
+          border-bottom: 1px solid var(--dark-1);
+
           & .rt-td {
-            color: var(--light-3);
-            background: none;
-            border: none
+            display: flex;
+            align-items: center;
+            background: var(--dark-3);
+            color: #ccc;
+            border: none;
+            font-size: var(--font-sm);
+            letter-spacing: 0.03em;
+          }
+
+          & .col-id {
+            justify-content: center;
+            font-weight: var(--bold-weight);
+            font-size: var(--font-sm);
           }
         }
       }
@@ -29,7 +54,7 @@
     align-items: center;
 
     & .flag {
-      height: 1.6rem;
+      height: 1.3rem;
     }
 
     & .link {
@@ -52,6 +77,7 @@
 
       & .bp3-icon {
         display: flex;
+        padding-top: 0.1rem;
       }
     }
   }
