@@ -1,7 +1,9 @@
 import React from "react";
 import axios from "axios";
+import Numeral from "numeral";
 import ReactTable from "react-table";
 import {Icon} from "@blueprintjs/core";
+import {Sparklines, SparklinesLine} from "react-sparklines";
 
 import "react-table/react-table.css";
 import "./RankingTable.css";
@@ -60,6 +62,7 @@ class RankingTable extends React.Component {
         id: "firstYear",
         Header: `${first_year}`,
         accessor: d => d[`${first_year}`],
+        Cell: props => Numeral(props.original[`${first_year}`]).format("0.00000"),
         width: 160,
         className: "firstYear"
       },
@@ -67,6 +70,7 @@ class RankingTable extends React.Component {
         id: "secondYear",
         Header: `${first_year + 1}`,
         accessor: d => d[`${first_year + 1}`],
+        Cell: props => Numeral(props.original[`${first_year + 1}`]).format("0.00000"),
         width: 160,
         className: "secondYear"
       },
@@ -74,6 +78,7 @@ class RankingTable extends React.Component {
         id: "thirdYear",
         Header: `${first_year + 2}`,
         accessor: d => d[`${first_year + 2}`],
+        Cell: props => Numeral(props.original[`${first_year + 2}`]).format("0.00000"),
         width: 160,
         className: "thirdYear"
       },
@@ -81,20 +86,30 @@ class RankingTable extends React.Component {
         id: "fourthYear",
         Header: `${first_year + 3}`,
         accessor: d => d[`${first_year + 3}`],
+        Cell: props => Numeral(props.original[`${first_year + 3}`]).format("0.00000"),
         width: 160,
-        className: "fourthYear"
+        className: "fourthYear",
+        sortable: true
       },
       {
         id: "fifthYear",
         Header: `${first_year + 4}`,
         accessor: d => d[`${first_year + 4}`],
+        Cell: props => Numeral(props.original[`${first_year + 4}`]).format("0.00000"),
         width: 160,
-        className: "fifthYear"
+        className: "fifthYear",
+        sortable: true
       },
       {
         id: "sparkline",
         Header: "",
-        accessor: d => d.sparkline,
+        accessor: "sparkline",
+        Cell: props =>
+          <div>
+            <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
+              <SparklinesLine color="white" style={{fill: "none"}} />
+            </Sparklines>
+          </div>,
         className: "sparkline",
         sortable: false
       }
@@ -115,7 +130,6 @@ class RankingTable extends React.Component {
 
   render() {
     const {data, length, columns} = this.state;
-    data.map(d => console.log(d.Country));
     return (
       <div className="rankingtable-component">
         {data.length > 0 &&
@@ -126,7 +140,7 @@ class RankingTable extends React.Component {
             defaultPageSize={length}
             minRows={length}
             resizable={false}
-            defaultSorted={["fifthYear"]}
+            // defaultSorted={["fifthYear"]}
           />
         }
       </div>

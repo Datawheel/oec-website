@@ -52,7 +52,6 @@ class Rankings extends React.Component {
   render() {
     const {category, title, text, filter} = this.state;
     const {t} = this.props;
-    console.log("props", this.props);
 
     return (
       <div className="rankings-page">
