@@ -6,34 +6,20 @@ import {range} from "helpers/utils";
 
 import "./VbChart.css";
 
+import countryMembers from "../../static/members/country.json";
+
 class VbChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countryData: [],
       data: [],
       loading: true,
-      routeParams: {}
+      routeParams: this.props.routeParams
     };
   }
 
   componentDidMount = () => {
-    Client.fromURL("https://api.oec.world/tesseract")
-      .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
-        const query = cube.query;
-        query.addMeasure("Trade Value");
-        return client.getMembers({level: "Exporter Country"});
-
-      }))
-      .then(data => {
-        this.setState(
-          {
-            countryData: data.map(d => ({value: d.key, title: d.name})),
-            routeParams: this.props.routeParams
-          },
-          () => this.fetchData()
-        );
-      });
+    this.fetchData();
   }
 
   shouldComponentUpdate = (prevProps, prevState) => prevProps.permalink !== this.props.permalink ||
@@ -48,14 +34,13 @@ class VbChart extends React.Component {
 
   fetchData = () => {
     const {routeParams} = this.props;
-    const {countryData} = this.state;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
 
     this.setState({data: [], loading: true});
 
-    const countryId = countryData.filter(d => country.split(".").includes(d.value.slice(2, 5)));
+    const countryId = countryMembers.filter(d => country.split(".").includes(d.value.slice(2, 5)));
     const partnerId = !["show", "all"].includes(partner)
-      ? countryData.filter(d => partner.split(".").includes(d.value.slice(2, 5)))
+      ? countryMembers.filter(d => partner.split(".").includes(d.value.slice(2, 5)))
       : undefined;
 
     const isTechnology = cube.includes("cpc");

@@ -2,12 +2,15 @@ import React from "react";
 import classnames from "classnames";
 import {withNamespaces} from "react-i18next";
 
+import countryData from "../../static/members/country.json";
+
 import "./VbTitle.css";
 
 class VbTitle extends React.Component {
 
   render() {
-    const {countryData, routeParams, t} = this.props;
+    console.log(countryData);
+    const {routeParams, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
     const countryId = countryData.filter(d => country.split(".").includes(d.value.slice(2, 5)));
