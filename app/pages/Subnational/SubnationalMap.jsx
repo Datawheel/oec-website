@@ -27,15 +27,17 @@ class SubnationalMap extends React.Component {
   }
 
   getGeoConfig() {
-    const {items, country, level} = this.props;
+    const {items, country, selectedGeoLevel} = this.props;
+
+    const ignoreIds = selectedGeoLevel.ignoreIds ? selectedGeoLevel.ignoreIds : [];
+
     return {
       data: items,
       groupBy: "id",
       height: 500,
       legend: false,
-      ocean: "transparent",
+      ocean: "steelblue",
       total: false,
-      transitions: 0,
       on: {
         "click.shape": d => {
           if (d) {
@@ -43,7 +45,7 @@ class SubnationalMap extends React.Component {
           }
         }
       },
-      projectionPadding: "0 0 0 0",
+      projectionPadding: "10 10 10 10",
       shapeConfig: {
         Path: {
           fill: d => "#ff9900",
@@ -52,20 +54,22 @@ class SubnationalMap extends React.Component {
       },
       tiles: false,
       fit: true,
-      topojson: `/shapes/subnational_${country}_${level}.topojson`,
+      topojson: `/shapes/subnational_${country}_${selectedGeoLevel.slug}.topojson`,
       topojsonId: d => d.properties.id,
+
+      /* topojsonFilter: d => ignoreIds.indexOf(d.properties.id) === -1,*/
       topojsonKey: "objects",
       zoom: false
     };
   }
 
   render() {
-    const {country, level} = this.props;
+    const {country, selectedGeoLevel} = this.props;
 
     const geoConfig = this.getGeoConfig();
 
     return <div className="subnational-map">
-      <h4>Map here: {country} - {level}</h4>
+      <h4>Map here: {country} - {selectedGeoLevel.slug}</h4>
       <Geomap
         className="splash-geomap"
         config={geoConfig}

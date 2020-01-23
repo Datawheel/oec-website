@@ -54,7 +54,9 @@ class SubnationalCountryBlock extends React.Component {
 
     const navbarTabIx = parseInt(navbarTabId.split("-")[1], 0);
 
-    const selectedLevel = metadata.geoLevels[navbarTabIx].name;
+    const selectedGeoLevel = metadata.geoLevels[navbarTabIx];
+
+    const selectedLevel = selectedGeoLevel.name;
 
     return <div className="subnational-country-block">
       <div className="subnational-header">
@@ -76,11 +78,15 @@ class SubnationalCountryBlock extends React.Component {
               <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList options={items && items[gl.level] ? items[gl.level] : []} />} />
             )}
             <Tabs.Expander />
-            <InputGroup type="text" placeholder={`Search ${metadata.geoLevels[navbarTabIx].name}`} onChange={this.filterList} value={searchText} />
+            <InputGroup type="text" placeholder={`Search ${selectedLevel}`} onChange={this.filterList} value={searchText} />
           </Tabs>
         </div>
         <div className="subnational-map-container">
-          <SubnationalMap country={metadata.code} level={metadata.geoLevels[navbarTabIx].slug} items={items && items[selectedLevel] ? items[selectedLevel] : []} />
+          <SubnationalMap
+            country={metadata.code}
+            selectedGeoLevel={selectedGeoLevel}
+            items={items && items[selectedLevel] ? items[selectedLevel] : []}
+          />
         </div>
       </div>
     </div>;

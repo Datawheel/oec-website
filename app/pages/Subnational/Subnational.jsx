@@ -24,11 +24,6 @@ class Subnational extends React.Component {
     return <div className="subnational">
       <OECNavbar />
 
-      {/* spinning orb thing */}
-      <div className="welcome-bg">
-        <img className="welcome-bg-img" src="/images/stars.png" alt="" draggable="false" />
-      </div>
-
       <div className="subnational-content">
 
         <h1>Subnational Countries</h1>

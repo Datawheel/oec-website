@@ -112,10 +112,13 @@ module.exports = {
       code: "usa",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "States", level: "State", slug: "states"},
-        {name: "Districts", level: "Subnat Geography", slug: "districts"}
+        {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02"]},
+        {name: "Counties", level: "Subnat Geography", slug: "counties", ignoreIds: []}
       ]
     }
+    // TODO: chile +  ecuador.
+    // ZAF -> ports, take a look.
+    // SWE -> no units, ignore it.
   ],
   SUBNATIONAL: [
     {title: "Brazil", items: [
