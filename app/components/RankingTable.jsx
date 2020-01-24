@@ -18,7 +18,8 @@ class RankingTable extends React.Component {
   componentDidMount() {
     const {category, filter} = this.props;
     // eslint-disable-next-line camelcase
-    const first_year = filter.split("_")[0] * 1;
+    const first_year = filter.split("-")[0] * 1;
+    const lastYear = filter.split("-")[1] * 1;
     console.log("categoria", category);
 
     let columns = [];
@@ -122,6 +123,7 @@ class RankingTable extends React.Component {
       .get(`/json/oec_eci_${filter}.json`)
       .then(
         resp => (
+          resp.data.sort((a, b) => b[`${lastYear}`] - a[`${lastYear}`]),
           resp.data.map((d, k) => d.table_id = k + 1),
           this.setState({data: resp.data, length: resp.data.length})
         )
@@ -140,7 +142,12 @@ class RankingTable extends React.Component {
             defaultPageSize={length}
             minRows={length}
             resizable={false}
-            // defaultSorted={["fifthYear"]}
+            defaultSorted={[
+              {
+                id: "fifthYear",
+                desc: true
+              }
+            ]}
           />
         }
       </div>

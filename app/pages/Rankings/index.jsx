@@ -1,6 +1,7 @@
 import React from "react";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
+import {Button, ButtonGroup} from "@blueprintjs/core";
 
 import "./Rankings.css";
 
@@ -8,56 +9,39 @@ import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import RankingTable from "../../components/RankingTable";
 
+import {PAGE, FILTER_CATEGORY, FILTER_YEARS} from "helpers/rankings.js";
+
 class Rankings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      category: null,
       title: null,
       text: [],
-      filter: "1968_1972"
+      category: this.props.params.category || "country",
+      filter: "2013-2017"
     };
   }
 
   componentDidMount() {
-    const category = this.props.params.category;
-
-    const dict = {
-      country: {
-        title: "Economic Complexity Rankings (ECI)",
-        text: [
-          "The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product. ECI measures the knowledge intensity of an economy by considering the knowledge intensity of the products it exports. PCI measures the knowledge intensity of a product by considering the knowledge intensity of its exporters. This circular argument is mathematically tractable and can be used to construct relative measures of the knowledge intensity of economies and products (see <a href=/en/resources/methodology/ class=link>methodology section</a> for more details).",
-          "ECI has been validated as a relevant economic measure by showing its ability to predict future economic growth (see <a href= class=link>Hidalgo and Hausmann 2009</a>), and explain international variations in income inequality (see <a href= class=link>Hartmann et al. 2017</a>).",
-          "This page includes rankings using the Economic Complexity Index (ECI)."
-        ]
-      },
-      product: {
-        title: "Product Complexity Rankings (PCI)",
-        text: [
-          "The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product. ECI measures the knowledge intensity of an economy by considering the knowledge intensity of the products it exports. PCI measures the knowledge intensity of a product by considering the knowledge intensity of its exporters. This circular argument is mathematically tractable and can be used to construct relative measures of the knowledge intensity of economies and products (see <a href=/en/resources/methodology/ class=link>methodology section</a> for more details).",
-          "ECI has been validated as a relevant economic measure by showing its ability to predict future economic growth (see <a href= class=link>Hidalgo and Hausmann 2009</a>), and explain international variations in income inequality (see <a href= class=link>Hartmann et al. 2017</a>).",
-          "This page includes rankings using the Economic Complexity Index (ECI)."
-        ]
-      }
-    };
+    const {category} = this.state;
 
     this.setState({
-      category,
-      title: dict[category].title,
-      text: dict[category].text
+      title: PAGE[0][category].title,
+      text: PAGE[0][category].text
     });
   }
 
   render() {
-    const {category, title, text, filter} = this.state;
+    const {title, text, category, filter} = this.state;
     const {t} = this.props;
+
+    console.log(FILTER_YEARS);
 
     return (
       <div className="rankings-page">
         <OECNavbar />
 
-        <div className="rankings-content content">
+        <div className="rankings-content">
           <h1 className="title">{t(title)}</h1>
           <div className="about">
             {text.map((d, k) =>
@@ -70,12 +54,25 @@ class Rankings extends React.Component {
           </div>
           <div className="download">Here it goes the download buttons</div>
           <div className="settings">
-            Here it goes the settings for the "Ranking Table"
+            <div className="setup">
+              <div className="title">{t("Showing")}</div>
+              <div className="buttons">
+                <ButtonGroup style={{minWidth: 200}}>
+                  {FILTER_CATEGORY.map((d, k) => <Button key={k}>{`${d[0]}`}</Button>)}
+                </ButtonGroup>
+              </div>
+            </div>
+            <div className="setup">
+              <div className="title">{t("Year Range")}</div>
+              <div className="buttons">
+                <ButtonGroup style={{minWidth: 200}}>
+                  {FILTER_YEARS.map((d, k) => <Button key={k}>{`${d}`}</Button>)}
+                </ButtonGroup>
+              </div>
+            </div>
           </div>
           <div className="ranking">
-            {category &&
-              <RankingTable filter={filter} category={category} />
-            }
+            {category && <RankingTable filter={filter} category={category} />}
           </div>
         </div>
 

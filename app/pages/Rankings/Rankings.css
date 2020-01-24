@@ -24,5 +24,17 @@
         margin-right: 0.01rem;
       }
     }
+
+    & .settings {
+      display: flex;
+      background: var(--dark-2);
+
+      & .setup {
+        & .title {
+        }
+        & .buttons {
+        }
+      }
+    }
   }
 }
