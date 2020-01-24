@@ -182,7 +182,7 @@ export default {
       "z-index": 18
     },
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
       const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
@@ -204,8 +204,11 @@ export default {
         imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
       }
       if ("Trade Flow" in d) {
-        const options = {1: "export", 2: "import"};
+        const options = {1: "import", 2: "export"};
         imgUrl = `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
+      }
+      if ("Parent Service" in d) {
+        imgUrl = `/images/icons/service/service_${d["Parent Service ID"]}.png`;
       }
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;

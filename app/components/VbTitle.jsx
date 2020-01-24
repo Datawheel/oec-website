@@ -9,7 +9,6 @@ import "./VbTitle.css";
 class VbTitle extends React.Component {
 
   render() {
-    console.log(countryData);
     const {routeParams, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
