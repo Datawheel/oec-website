@@ -51,7 +51,41 @@
 /* scale down fonts for long stats */
 .cp-stat-value-text.length-lg           { font-size: var(--font-lg); }
 .cp-stat-value-text[class*="length-x"]  { font-size: var(--font-md); }
-.cp-stat-subtitle[class*="length-x"]    { font-size: var(--font-xxs); }
+.cp-stat-subtitle {
+  color: var(--gray);
+  font-size: var(--font-md);
+}
+
+.cp-stat-group-wrapper {
+  margin-bottom: var(--gutter-sm);
+}
+
+.cp-stat-group-title, .cp-stat-label-text {
+  color: var(--gray);
+  display: block;
+  margin-bottom: 0.25rem !important;
+}
+
+.cp-stat-group-wrapper .cp-stat-group-list {
+  counter-reset: item;
+  list-style-type: none;
+  padding-left: 14px;
+  & .cp-stat {
+    min-width: 100%;
+    position: relative;
+    &:before {
+      content: counter(item) ". ";
+      counter-increment: item;
+      color: var(--dark-1);
+      font-weight: bold;
+      position: absolute;
+      left: -18px;
+      text-align: right;
+      top: 8px;
+      width: 14px;
+    }
+  }
+}
 
 .cp-hero-figure {
   padding-bottom: 0;
