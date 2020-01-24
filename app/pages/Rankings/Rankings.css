@@ -28,12 +28,33 @@
     & .settings {
       display: flex;
       background: var(--dark-2);
+      margin-top: var(--gutter-md);
 
       & .setup {
+        margin: var(--gutter-sm);
+
         & .title {
+          margin-bottom: var(--gutter-sm);
         }
+
         & .buttons {
+          & .bp3-button {
+            background: none;
+            color: var(--white);
+          }
+
+          & .isactive {
+            background: #212831;
+          }
         }
+      }
+
+      & .showing {
+        flex: 1;
+      }
+
+      & .year {
+        flex: 3;
       }
     }
   }

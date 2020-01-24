@@ -1,5 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
+import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {Button, ButtonGroup} from "@blueprintjs/core";
 
@@ -18,7 +19,8 @@ class Rankings extends React.Component {
       title: null,
       text: [],
       category: this.props.params.category || "country",
-      filter: "2013-2017"
+      measure: this.props.params.measure || "eci",
+      filter: this.props.location.search.split("=")[1] || "2013-2017"
     };
   }
 
@@ -31,11 +33,17 @@ class Rankings extends React.Component {
     });
   }
 
-  render() {
-    const {title, text, category, filter} = this.state;
-    const {t} = this.props;
+  redirectPage(category, measure, filter) {
+    const {lng} = this.props;
+    const path = `/${lng}/rankings/${category}/${measure}/?year_range=${filter}`;
+    browserHistory.push(path);
+    this.setState({category, measure, filter});
+  }
 
-    console.log(FILTER_YEARS);
+  render() {
+    const {title, text, category, measure, filter} = this.state;
+    const {t} = this.props;
+    console.log(category, measure, filter);
 
     return (
       <div className="rankings-page">
@@ -54,19 +62,31 @@ class Rankings extends React.Component {
           </div>
           <div className="download">Here it goes the download buttons</div>
           <div className="settings">
-            <div className="setup">
+            <div className="setup showing">
               <div className="title">{t("Showing")}</div>
               <div className="buttons">
                 <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_CATEGORY.map((d, k) => <Button key={k}>{`${d[0]}`}</Button>)}
+                  {FILTER_CATEGORY.map((d, k) =>
+                    <Button
+                      key={k}
+                      onClick={() => this.redirectPage(d[1], d[2], filter)}
+                      className={`${d[1] === category ? "isactive" : ""}`}
+                    >{`${d[0]}`}</Button>
+                  )}
                 </ButtonGroup>
               </div>
             </div>
-            <div className="setup">
+            <div className="setup year">
               <div className="title">{t("Year Range")}</div>
               <div className="buttons">
                 <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_YEARS.map((d, k) => <Button key={k}>{`${d}`}</Button>)}
+                  {FILTER_YEARS.map((d, k) =>
+                    <Button
+                      key={k}
+                      onClick={() => this.redirectPage(category, measure, d)}
+                      className={`${d === filter ? "isactive" : ""}`}
+                    >{`${d}`}</Button>
+                  )}
                 </ButtonGroup>
               </div>
             </div>

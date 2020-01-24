@@ -17,10 +17,12 @@ class RankingTable extends React.Component {
 
   componentDidMount() {
     const {category, filter} = this.props;
-    // eslint-disable-next-line camelcase
-    const first_year = filter.split("-")[0] * 1;
+  }
+
+  componentDidUpdate() {
+    const {filter} = this.props;
+    const firstYear = filter.split("-")[0] * 1;
     const lastYear = filter.split("-")[1] * 1;
-    console.log("categoria", category);
 
     let columns = [];
 
@@ -38,7 +40,7 @@ class RankingTable extends React.Component {
         Header: "Country",
         className: "col-country",
         width: 300,
-        Cell: props =>
+        Cell: props => 
           <div className="country">
             <img
               src={`/images/icons/country/country_${props.original["Country ID"].slice(
@@ -57,46 +59,46 @@ class RankingTable extends React.Component {
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
-
+        
       },
       {
         id: "firstYear",
-        Header: `${first_year}`,
-        accessor: d => d[`${first_year}`],
-        Cell: props => Numeral(props.original[`${first_year}`]).format("0.00000"),
+        Header: `${firstYear}`,
+        accessor: d => d[`${firstYear}`],
+        Cell: props => Numeral(props.original[`${firstYear}`]).format("0.00000"),
         width: 160,
         className: "firstYear"
       },
       {
         id: "secondYear",
-        Header: `${first_year + 1}`,
-        accessor: d => d[`${first_year + 1}`],
-        Cell: props => Numeral(props.original[`${first_year + 1}`]).format("0.00000"),
+        Header: `${firstYear + 1}`,
+        accessor: d => d[`${firstYear + 1}`],
+        Cell: props => Numeral(props.original[`${firstYear + 1}`]).format("0.00000"),
         width: 160,
         className: "secondYear"
       },
       {
         id: "thirdYear",
-        Header: `${first_year + 2}`,
-        accessor: d => d[`${first_year + 2}`],
-        Cell: props => Numeral(props.original[`${first_year + 2}`]).format("0.00000"),
+        Header: `${firstYear + 2}`,
+        accessor: d => d[`${firstYear + 2}`],
+        Cell: props => Numeral(props.original[`${firstYear + 2}`]).format("0.00000"),
         width: 160,
         className: "thirdYear"
       },
       {
         id: "fourthYear",
-        Header: `${first_year + 3}`,
-        accessor: d => d[`${first_year + 3}`],
-        Cell: props => Numeral(props.original[`${first_year + 3}`]).format("0.00000"),
+        Header: `${firstYear + 3}`,
+        accessor: d => d[`${firstYear + 3}`],
+        Cell: props => Numeral(props.original[`${firstYear + 3}`]).format("0.00000"),
         width: 160,
         className: "fourthYear",
         sortable: true
       },
       {
         id: "fifthYear",
-        Header: `${first_year + 4}`,
-        accessor: d => d[`${first_year + 4}`],
-        Cell: props => Numeral(props.original[`${first_year + 4}`]).format("0.00000"),
+        Header: `${firstYear + 4}`,
+        accessor: d => d[`${firstYear + 4}`],
+        Cell: props => Numeral(props.original[`${firstYear + 4}`]).format("0.00000"),
         width: 160,
         className: "fifthYear",
         sortable: true
@@ -105,36 +107,34 @@ class RankingTable extends React.Component {
         id: "sparkline",
         Header: "",
         accessor: "sparkline",
-        Cell: props =>
+        Cell: props => 
           <div>
             <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
               <SparklinesLine color="white" style={{fill: "none"}} />
             </Sparklines>
-          </div>,
+          </div>,        
         className: "sparkline",
         sortable: false
       }
     ];
 
-    this.setState({columns});
-
-    /* here the data is loaded */
     axios
       .get(`/json/oec_eci_${filter}.json`)
       .then(
         resp => (
           resp.data.sort((a, b) => b[`${lastYear}`] - a[`${lastYear}`]),
           resp.data.map((d, k) => d.table_id = k + 1),
-          this.setState({data: resp.data, length: resp.data.length})
+          this.setState({data: resp.data, length: resp.data.length, columns})
         )
       );
   }
 
   render() {
     const {data, length, columns} = this.state;
+    console.log(data);
     return (
       <div className="rankingtable-component">
-        {data.length > 0 &&
+        {data.length > 0 && 
           <ReactTable
             data={data}
             columns={columns}

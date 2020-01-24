@@ -20,8 +20,8 @@ module.exports = {
     }
   ],
   FILTER_CATEGORY: [
-    ["Country", "country"],
-    ["Product", "product"]
+    ["Country", "country", "eci"],
+    ["Product", "product", "pci"]
   ],
   FILTER_YEARS: [
     "1968-1972",
