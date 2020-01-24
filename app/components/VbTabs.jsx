@@ -109,12 +109,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports by Product"),
                           permalink: "hs92/export/chl/all/10101/2017/",
-                          regexp: new RegExp(/tree_map\/\w+\/export\/\w+\/all\/((?!.*all).*)\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/export\/\w{3}\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports by Product"),
                           permalink: "hs92/import/chl/all/10101/2017/",
-                          regexp: new RegExp(/tree_map\/\w+\/import\/\w+\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/import\/\w{3}\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         },
                         {
                           name: t("Patents by Category"),
@@ -205,12 +205,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports by Product"),
                           permalink: "hs92/export/chl/all/10101/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/stacked\/\w+\/export\/\w+\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/\w+\/visualize\/stacked\/\w{3}\/export\/\w+\/all\/\w+\/\w+\//)
                         },
                         {
                           name: t("Imports by Product"),
                           permalink: "hs92/import/chl/all/10101/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/stacked\/\w+\/import\/\w+\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/\w+\/visualize\/stacked\/\w{3}\/import\/\w+\/all\/\w+\/\w+\//)
                         },
                         {name: t("Patents by Category"), permalink: "cpc/import/show/all/A01B/2019/"}
                       ]

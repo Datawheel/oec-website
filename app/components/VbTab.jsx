@@ -12,40 +12,44 @@ class VbTab extends React.Component {
 
     return (
       <div>
-        {items.map((d, i, {length}) => <div
-          key={`${chart}_${i}_panel`}
-          className={classnames("columns", "panel", {"is-margin-bottom": i !== length - 1})}
-        >
-          <div className="column-1-2">
-            <span
-              className={classnames("text", {"is-selected": activeOption.includes(`${chart}_${d.name}`)})}
-            >
-              {d.name}
-            </span>
-          </div>
-          <div className="column-1-2">
-            <ul className="options">
-              {d.nest.map((h, k) => {
-                const isSelected = h.regexp ? h.regexp.test(activeOption) : false;
+        {items.map((d, i, {length}) => {
+          const isSelectedParent = d.nest.some(h => h.regexp ? h.regexp.test(activeOption) : false);
+          return <div
+            key={`${chart}_${i}_panel`}
+            className={classnames("columns", "panel", {"is-margin-bottom": i !== length - 1})}
+          >
+            <div className="column-1-2">
+              <span
+                className={classnames("text", {"is-selected": isSelectedParent})}
+              >
+                {d.name}
+              </span>
+            </div>
+            <div className="column-1-2">
+              <ul className="options">
+                {d.nest.map((h, k) => {
+                  const isSelected = h.regexp ? h.regexp.test(activeOption) : false;
 
-                return <li
-                  key={`${chart}_${i}_${k}_panel`}
-                  className={classnames(
-                    "panel-option",
-                    {"is-selected": isSelected}
-                  )}
-                  onClick={() => this.props.callback({
-                    activeOption: `${chart}_${d.name}_${h.name}`,
-                    permalink: `/en/visualize/${chart}/${h.permalink || "hs92/export/chl/all/show/2017/"}`
-                  })}
-                >
-                  {h.name}
-                </li>
-                ;
-              })}
-            </ul>
+                  return <li
+                    key={`${chart}_${i}_${k}_panel`}
+                    className={classnames(
+                      "panel-option",
+                      {"is-selected": isSelected}
+                    )}
+                    onClick={() => this.props.callback({
+                      activeOption: `${chart}_${d.name}_${h.name}`,
+                      permalink: `/en/visualize/${chart}/${h.permalink || "hs92/export/chl/all/show/2017/"}`
+                    })}
+                  >
+                    {h.name}
+                  </li>
+                  ;
+                })}
+              </ul>
+            </div>
           </div>
-        </div>)}
+          ;
+        })}
 
 
       </div>
