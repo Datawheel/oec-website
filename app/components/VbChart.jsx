@@ -27,7 +27,6 @@ class VbChart extends React.Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
-      console.log("ASDF");
       this.fetchData();
     }
   }

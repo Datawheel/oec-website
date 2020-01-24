@@ -27,6 +27,8 @@ class VbTabs extends React.Component {
   render() {
     const {activeOption, activeTab, t} = this.props;
 
+    console.log(activeTab, "activeTab");
+
     return <div>
       <div className="columns is-tabs">
         <div className="column-1 tab">
@@ -300,12 +302,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exporters"),
                           permalink: "hs92/export/show/all/10101/2017/",
-                          format: "{cube}/export/show/all/{viztype}/{year}/"
+                          regexp: new RegExp(/\w+\/visualize\/geomap\/\w+\/export\/show\/all\/\w+\/\w+\//)
                         },
                         {
                           name: t("Importers"),
                           permalink: "hs92/import/show/all/10101/2017/",
-                          format: "{cube}/import/show/all/{viztype}/{year}/"
+                          regexp: new RegExp(/\w+\/visualize\/geomap\/\w+\/import\/show\/all\/\w+\/\w+\//)
                         }
                       ]
                     },
@@ -330,24 +332,60 @@ class VbTabs extends React.Component {
                   items={[
                     {
                       name: t("Country"), nest: [
-                        {name: t("Exports")},
-                        {name: t("Imports")},
-                        {name: t("Export Destinations")},
-                        {name: t("Import Origins")}
+                        {
+                          name: t("Exports"),
+                          permalink: "hs92/export/arg/all/show/2014.2017/"
+                        },
+                        {
+                          name: t("Imports"),
+                          permalink: "hs92/import/arg/all/show/2014.2017/"
+                        },
+                        {
+                          name: t("Export Destinations"),
+                          permalink: "hs92/export/arg/show/all/2014.2017/"
+                        },
+                        {
+                          name: t("Import Origins"),
+                          permalink: "hs92/import/arg/show/all/2014.2017/"
+                        }
                       ]
                     },
                     {
                       name: t("Product"), nest: [
-                        {name: t("Exporters")},
-                        {name: t("Importers")}
+                        {
+                          name: t("Exporters"),
+                          permalink: "hs92/export/show/all/10101/2014.2017/",
+                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/export\/show\/all\/\w+\/\w+\//)
+                        },
+                        {
+                          name: t("Importers"),
+                          permalink: "hs92/import/show/all/10101/2014.2017/",
+                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/import\/show\/all\/\w+\/\w+\//)
+                        }
                       ]
                     },
                     {
                       name: t("Bilateral"), nest: [
-                        {name: t("Exports to Destination")},
-                        {name: t("Imports from Origin")},
-                        {name: t("Exports by Product")},
-                        {name: t("Imports by Product")},
+                        {
+                          name: t("Exports to Destination"),
+                          permalink: "hs92/export/chl/arg/show/2014.2017/",
+                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/export\/\w+\/\w+\/show\/\w+\//)
+                        },
+                        {
+                          name: t("Imports from Origin"),
+                          permalink: "hs92/import/chl/arg/show/2014.2017/",
+                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/import\/\w+\/\w+\/show\/\w+\//)
+                        },
+                        {
+                          name: t("Exports by Product"),
+                          permalink: "hs92/export/chl/all/10101/2014.2017/",
+                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/export\/\w+\/all\/\w+\/\w+\//)
+                        },
+                        {
+                          name: t("Imports by Product"),
+                          permalink: "hs92/import/chl/all/10101/2014.2017/",
+                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/import\/\w+\/all\/\w+\/\w+\//)
+                        },
                         {name: t("Trade Balance")}
                       ]
                     },

@@ -33,9 +33,10 @@ const years = [...Array(56).keys()].map(d => ({value: 2017 - d, title: 2017 - d}
 class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
-    const {t} = this.props;
+    const {params, t} = this.props;
+
     this.state = {
-      activeTab: "tree_map",
+      activeTab: params ? params.chart : "tree_map",
       activeOption: `tree_map_${t("Country")}_${t("Exports")}`,
       country: [],
       product: [],
