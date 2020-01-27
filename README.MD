@@ -18,6 +18,7 @@
 - Open for edit the topojson file using [geojson.io](http://geojson.io/) table view (or any other tool).
 - Make sure to create/update an `id` and  `name` columns based on tesseract ui query to match the ids with shapes. Pay attention on that.
 - Remove any other useless property. We just need `id` and `name`.
+- Sometimes we use `type` column for clarify geo level that are mixed in the same file.
 - Export it with the same name than before. (Make a copy if you are not sure of the results).
 - Go to [consts.js](app/helpers/consts.js) file and add a new item inside `SUBNATIONAL_COUNTRIES` array.
 - Replace the object values with your own data.
