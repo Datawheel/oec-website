@@ -1,5 +1,9 @@
+pystan
 numpy
 pandas
 networkx
 requests
+statsmodels
+scikit-learn
 fbprophet
+

@@ -11,6 +11,8 @@ import VbChart from "../../components/VbChart";
 import VirtualSelector from "../../components/VirtualSelector";
 import {Client} from "@datawheel/olap-client";
 import OECMultiSelect from "../../components/OECMultiSelect";
+import VbTitle from "../../components/VbTitle";
+
 
 const datasets = [
   {value: "hs92", title: "HS92"},
@@ -31,9 +33,10 @@ const years = [...Array(56).keys()].map(d => ({value: 2017 - d, title: 2017 - d}
 class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
-    const {t} = this.props;
+    const {params, t} = this.props;
+
     this.state = {
-      activeTab: "tree_map",
+      activeTab: params ? params.chart : "tree_map",
       activeOption: `tree_map_${t("Country")}_${t("Exports")}`,
       country: [],
       product: [],
@@ -193,7 +196,7 @@ class Vizbuilder extends React.Component {
         <div className="vb-columns">
           <div className="vb-column aside">
             <VbTabs
-              activeOption={activeOption}
+              activeOption={this.props.location.pathname}
               activeTab={activeTab}
               callback={d => this.handleTabOption(d)}
             />
@@ -288,6 +291,10 @@ class Vizbuilder extends React.Component {
             </div>
           </div>
           <div className="vb-column">
+            <VbTitle
+              countryData={this.state.country}
+              routeParams={routeParams}
+            />
             <VbChart
               countryData={this.state.country}
               permalink={this.state.permalink}

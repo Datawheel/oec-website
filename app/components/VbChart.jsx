@@ -6,34 +6,20 @@ import {range} from "helpers/utils";
 
 import "./VbChart.css";
 
+import countryMembers from "../../static/members/country.json";
+
 class VbChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countryData: [],
       data: [],
       loading: true,
-      routeParams: {}
+      routeParams: this.props.routeParams
     };
   }
 
   componentDidMount = () => {
-    Client.fromURL("https://api.oec.world/tesseract")
-      .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
-        const query = cube.query;
-        query.addMeasure("Trade Value");
-        return client.getMembers({level: "Exporter Country"});
-
-      }))
-      .then(data => {
-        this.setState(
-          {
-            countryData: data.map(d => ({value: d.key, title: d.name})),
-            routeParams: this.props.routeParams
-          },
-          () => this.fetchData()
-        );
-      });
+    this.fetchData();
   }
 
   shouldComponentUpdate = (prevProps, prevState) => prevProps.permalink !== this.props.permalink ||
@@ -41,21 +27,19 @@ class VbChart extends React.Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
-      console.log("ASDF");
       this.fetchData();
     }
   }
 
   fetchData = () => {
     const {routeParams} = this.props;
-    const {countryData} = this.state;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
 
     this.setState({data: [], loading: true});
 
-    const countryId = countryData.filter(d => country.split(".").includes(d.value.slice(2, 5)));
+    const countryId = countryMembers.filter(d => country.split(".").includes(d.value.slice(2, 5)));
     const partnerId = !["show", "all"].includes(partner)
-      ? countryData.filter(d => partner.split(".").includes(d.value.slice(2, 5)))
+      ? countryMembers.filter(d => partner.split(".").includes(d.value.slice(2, 5)))
       : undefined;
 
     const isTechnology = cube.includes("cpc");
@@ -74,25 +58,27 @@ class VbChart extends React.Component {
       ? "Importer Country"
       : "Exporter Country";
 
+    const ddTech = ["Section", "Superclass", "Class", "Subclass"];
+
     const dd = {
-      show: isTechnology ? "Subclass" : "HS4",
+      show: isTechnology ? isFilter ? ddTech[viztype.length - 1] : "Subclass" : "HS4",
       all: countryTypeBalance
     };
 
     if (chart === "line") dd.show = "Section";
 
-    const ddTech = ["Section", "Superclass", "Class", "Subclass"];
-
     const interval = time.split(".");
     if (interval.length === 1) interval.push(interval[0]);
 
-    console.log(interval, range(interval[0], interval[1]));
+    const drilldowns = ["Year"];
+    drilldowns.push(isTechnology && !dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
+    if (isTechnology && chart === "geomap") drilldowns.push(countryTypeBalance);
 
     const params = {
       cube: !isTechnology
         ? `trade_i_baci_a_${cube.replace("hs", "")}`
         : "patents_i_uspto_w_cpc",
-      drilldowns: `${isTechnology && !dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance},Year`,
+      drilldowns: drilldowns.join(),
       measures: isTechnology ? "Patent Share" : "Trade Value",
       parents: true,
       Year: ["tree_map", "geomap"].includes(chart)
@@ -111,7 +97,11 @@ class VbChart extends React.Component {
       params
     }).then(resp => {
       const data = resp.data.data;
-      this.setState({data, loading: false, routeParams: this.props.routeParams});
+      this.setState({
+        data,
+        loading: false,
+        routeParams
+      });
     });
 
   };

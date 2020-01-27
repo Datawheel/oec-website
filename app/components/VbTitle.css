@@ -1,0 +1,7 @@
+.vb-title {
+  & .title {
+    font-size: var(--font-xxl);
+    text-align: center
+    ;
+  }
+}

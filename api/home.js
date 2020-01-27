@@ -24,7 +24,7 @@ const tiles = [
     large: true
   },
   "/profile/firm/samsung-electronics-co-ltd-b8c1acc425",
-  "/profile/firm/apple-inc-87de88d17b",
+  "/profile/firm/apple-inc",
   {
     link: "/profile/hs92/semiconductor-devices",
     large: true
@@ -53,7 +53,7 @@ module.exports = function(app) {
 
     const {language} = req.i18n;
 
-    const tileData = tiles
+    let tileData = tiles
       .map(d => typeof d === "string" ? {link: d} : d);
 
     tileData.forEach(tile => {
@@ -107,27 +107,37 @@ module.exports = function(app) {
         include: [{association: "content"}]
       });
 
-    tileData.forEach(tile => {
+    tileData = tileData.reduce((tileArray, tile) => {
       if (tile.link.includes("profile")) {
         tile.entities = tile.entities
-          .map(entity => {
+          .reduce((arr, entity) => {
             const dim = slugToDimension[entity.slug];
             const e = entityRows.find(row => row.dimension === dim && [row.id, row.slug].includes(entity.id));
-            const content = e.content.find(c => c.locale === language) || e.content.find(c => c.locale === "en");
-            return {
-              dimension: e.dimension,
-              hierarchy: e.hierarchy,
-              id: e.id,
-              slug: dimensionToSlug[e.dimension],
-              title: content.name
-            };
-          });
-        if (tile.entities.length > 1 || !["hs92", "country"].includes(tile.entities[0].slug)) {
+            if (e) {
+              const content = e.content.find(c => c.locale === language) || e.content.find(c => c.locale === "en");
+              arr.push({
+                dimension: e.dimension,
+                hierarchy: e.hierarchy,
+                id: e.id,
+                slug: dimensionToSlug[e.dimension],
+                title: content.name
+              });
+            }
+            return arr;
+          }, []);
+        if (tile.entities.length && (tile.entities.length > 1 || !["hs92", "country"].includes(tile.entities[0].slug))) {
           tile.new = true;
         }
+        if (tile.entities.length) {
+          tileArray.push(tile);
+        }
+      }
+      else {
+        tileArray.push(tile);
       }
       tile.link = `/${language}${tile.link}`;
-    });
+      return tileArray;
+    }, []);
 
     return res.json(tileData);
 

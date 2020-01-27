@@ -1,0 +1,100 @@
+{
+  "Admin": "Admin",
+  "All Countries": "All Countries",
+  "Bilateral": "Bilateral",
+  "Bilateral Technology": "Bilateral Technology",
+  "Build Visualization": "Build Visualization",
+  "Contributor": "Contributor",
+  "Countries by Technology": "Countries by Technology",
+  "Country": "Country",
+  "ECI Rankings": "ECI Rankings",
+  "Economic Complexity": "Economic Complexity",
+  "Export Destinations": "Export Destinations",
+  "Exporters": "Exporters",
+  "Exports": "Exports",
+  "Exports by Product": "Exports by Product",
+  "Exports to Destination": "Exports to Destination",
+  "Filter": "Filter",
+  "Import Origins": "Import Origins",
+  "Importers": "Importers",
+  "Imports": "Imports",
+  "Imports by Product": "Imports by Product",
+  "Imports from Origin": "Imports from Origin",
+  "Loading": {
+    "description": "Loading {{progress}} of {{total}} datasets",
+    "title": "Please Wait"
+  },
+  "Login": {
+    "E-mail": "E-mail",
+    "Facebook": "Facebook",
+    "Github": "",
+    "Google": "",
+    "Instagram": "Instagram",
+    "LinkedIn": "",
+    "Login": "Login",
+    "Password": "Password",
+    "Twitter": "Twitter",
+    "error": "Wrong Username or Password",
+    "success": "Successfully Logged In"
+  },
+  "No results": {
+    "": "No results."
+  },
+  "PGI Product Space": "PGI Product Space",
+  "Patenters": "Patenters",
+  "Patents by Category": "Patents by Category",
+  "Product": "Product",
+  "Product Connections": "Product Connections",
+  "Product Space": "Product Space",
+  "Reset": {
+    "Confirm Password": "Confirm New Password",
+    "E-mail": "E-mail",
+    "Password": "New Password",
+    "actions": {
+      "RESET_SEND_FAILURE": "No account associated with {{email}}.",
+      "RESET_SEND_SUCCESS": "{{email}} has been sent a password reset. Please check your inbox.",
+      "RESET_TOKEN_FAILURE": "Password reset token is invalid or has expired."
+    },
+    "button": "Reset Password",
+    "mailgun": {
+      "body": "Someone has requested that your {{site}} account password be reset. If this wasn't you, you can safely ignore this email and your password will remain the same.",
+      "button": "Reset My Password",
+      "footer": "Or just visit {{resetLink}} in your browser",
+      "title": "Password Reset"
+    }
+  },
+  "Role": "Role",
+  "SignUp": {
+    "Confirm Password": "Confirm Password",
+    "E-mail": "E-mail",
+    "Password": "Password",
+    "PrivacyTermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a> and <a href='{{privacy}}'>Privacy Policy</a>",
+    "PrivacyText": "By checking this box, you agree to our <a href='{{privacy}}'>Privacy Policy</a>",
+    "Sign Up": "Sign Up",
+    "TermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a>",
+    "Username": "Username",
+    "error": {
+      "Exists": "E-mail or Username already in use",
+      "IncompleteFields": "Please set all fields",
+      "PasswordMatch": "Passwords don't match",
+      "TermsAgree": "Must agree to terms to continue"
+    },
+    "success": "Successfully Signed Up"
+  },
+  "Specific Country": "Specific Country",
+  "Technologies by Country": "Technologies by Country",
+  "Technology": "Technology",
+  "Trade Balance": "Trade Balance",
+  "User": "User",
+  "Username": "Username",
+  "vb_title_what_country_flow": "What does {{country}} {{flow}}? ({{time}})",
+  "vb_title_what_country_flow_partner": "What does {{country}} {{flow}} to {{partner}}? ({{time}})",
+  "vb_title_where_country_flow": "Where does {{country}} {{flow}} {{prep}}? ({{time}})",
+  "vb_title_where_country_flow_product": "Where does {{country}} {{flow}} {{product}} {{prep}}? (2017)",
+  "vb_title_which_countries_flow_product": "Which countries {{flow}} {{product}}? ({{time}})",
+  "vs GDP": "vs GDP",
+  "vs GDPpc (constant '05 US$)": "vs GDPpc (constant '05 US$)",
+  "vs GDPpc (current US$)": "vs GDPpc (current US$)",
+  "vs GDPpc PPP (constant '11)": "vs GDPpc PPP (constant '11)",
+  "vs GDPpc PPP (current)": "vs GDPpc PPP (current)"
+}

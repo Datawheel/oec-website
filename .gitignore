@@ -12,6 +12,7 @@ node_modules
 packages/*/static/reports
 /index.js
 /packages/*/index.js
+/venv
 
 # environment variable files for autoenv and direnv
 .env

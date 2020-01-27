@@ -177,12 +177,8 @@ export default {
     }
   },
   tooltipConfig: {
-    arrowStyle: {
-      "background": "#66737e",
-      "z-index": 18
-    },
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
       const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 
@@ -192,7 +188,6 @@ export default {
         imgUrl = "/images/icons/patent.png";
       }
       if ("Country" in d) {
-        console.log(d);
         imgUrl = `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
       }
       if ("Section" in d) {
@@ -205,8 +200,11 @@ export default {
         imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
       }
       if ("Trade Flow" in d) {
-        const options = {1: "export", 2: "import"};
+        const options = {1: "import", 2: "export"};
         imgUrl = `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
+      }
+      if ("Parent Service" in d) {
+        imgUrl = `/images/icons/service/service_${d["Parent Service ID"]}.png`;
       }
 
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
@@ -254,8 +252,8 @@ export default {
       else if (d["Trade Value"]) {
         tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
       }
-      else if (d["Trade Value"]) {
-        tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
+      if (d["Trade Value Growth"]) {
+        tbodyData.push(["Trade Value Growth", `${formatAbbreviate(d["Trade Value Growth"] * 100)}%`]);
       }
       return tbodyData;
     },

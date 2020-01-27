@@ -1,0 +1,1278 @@
+[
+  {
+    "value": "afago",
+    "title": "Angola"
+  },
+  {
+    "value": "afbdi",
+    "title": "Burundi"
+  },
+  {
+    "value": "afben",
+    "title": "Benin"
+  },
+  {
+    "value": "afbfa",
+    "title": "Burkina Faso"
+  },
+  {
+    "value": "afbwa",
+    "title": "Botswana"
+  },
+  {
+    "value": "afcaf",
+    "title": "Central African Republic"
+  },
+  {
+    "value": "afciv",
+    "title": "Cote d'Ivoire"
+  },
+  {
+    "value": "afcmr",
+    "title": "Cameroon"
+  },
+  {
+    "value": "afcod",
+    "title": "Democratic Republic of the Congo"
+  },
+  {
+    "value": "afcog",
+    "title": "Republic of the Congo"
+  },
+  {
+    "value": "afcom",
+    "title": "Comoros"
+  },
+  {
+    "value": "afcpv",
+    "title": "Cape Verde"
+  },
+  {
+    "value": "afdji",
+    "title": "Djibouti"
+  },
+  {
+    "value": "afdza",
+    "title": "Algeria"
+  },
+  {
+    "value": "afegy",
+    "title": "Egypt"
+  },
+  {
+    "value": "aferi",
+    "title": "Eritrea"
+  },
+  {
+    "value": "afesh",
+    "title": "Western Sahara"
+  },
+  {
+    "value": "afeth",
+    "title": "Ethiopia"
+  },
+  {
+    "value": "afgab",
+    "title": "Gabon"
+  },
+  {
+    "value": "afgha",
+    "title": "Ghana"
+  },
+  {
+    "value": "afgin",
+    "title": "Guinea"
+  },
+  {
+    "value": "afgmb",
+    "title": "Gambia"
+  },
+  {
+    "value": "afgnb",
+    "title": "Guinea-Bissau"
+  },
+  {
+    "value": "afgnq",
+    "title": "Equatorial Guinea"
+  },
+  {
+    "value": "afken",
+    "title": "Kenya"
+  },
+  {
+    "value": "aflbr",
+    "title": "Liberia"
+  },
+  {
+    "value": "aflby",
+    "title": "Libya"
+  },
+  {
+    "value": "aflso",
+    "title": "Lesotho"
+  },
+  {
+    "value": "afmar",
+    "title": "Morocco"
+  },
+  {
+    "value": "afmdg",
+    "title": "Madagascar"
+  },
+  {
+    "value": "afmli",
+    "title": "Mali"
+  },
+  {
+    "value": "afmoz",
+    "title": "Mozambique"
+  },
+  {
+    "value": "afmrt",
+    "title": "Mauritania"
+  },
+  {
+    "value": "afmus",
+    "title": "Mauritius"
+  },
+  {
+    "value": "afmwi",
+    "title": "Malawi"
+  },
+  {
+    "value": "afmyt",
+    "title": "Mayotte"
+  },
+  {
+    "value": "afnam",
+    "title": "Namibia"
+  },
+  {
+    "value": "afner",
+    "title": "Niger"
+  },
+  {
+    "value": "afnga",
+    "title": "Nigeria"
+  },
+  {
+    "value": "afreu",
+    "title": "Reunion"
+  },
+  {
+    "value": "afrwa",
+    "title": "Rwanda"
+  },
+  {
+    "value": "afsdn",
+    "title": "Sudan"
+  },
+  {
+    "value": "afsen",
+    "title": "Senegal"
+  },
+  {
+    "value": "afshn",
+    "title": "Saint Helena"
+  },
+  {
+    "value": "afsle",
+    "title": "Sierra Leone"
+  },
+  {
+    "value": "afsom",
+    "title": "Somalia"
+  },
+  {
+    "value": "afssd",
+    "title": "South Sudan"
+  },
+  {
+    "value": "afstp",
+    "title": "Sao Tome and Principe"
+  },
+  {
+    "value": "afswz",
+    "title": "Swaziland"
+  },
+  {
+    "value": "afsyc",
+    "title": "Seychelles"
+  },
+  {
+    "value": "aftcd",
+    "title": "Chad"
+  },
+  {
+    "value": "aftgo",
+    "title": "Togo"
+  },
+  {
+    "value": "aftun",
+    "title": "Tunisia"
+  },
+  {
+    "value": "aftza",
+    "title": "Tanzania"
+  },
+  {
+    "value": "afuga",
+    "title": "Uganda"
+  },
+  {
+    "value": "afxxa",
+    "title": "Other Africa"
+  },
+  {
+    "value": "afxxb",
+    "title": "Northern Africa"
+  },
+  {
+    "value": "afxxc",
+    "title": "Other Africa Not Elsewhere Specified"
+  },
+  {
+    "value": "afzaf",
+    "title": "South Africa"
+  },
+  {
+    "value": "afzmb",
+    "title": "Zambia"
+  },
+  {
+    "value": "afzwe",
+    "title": "Zimbabwe"
+  },
+  {
+    "value": "anata",
+    "title": "Antarctica"
+  },
+  {
+    "value": "anatf",
+    "title": "French South Antarctic Territory"
+  },
+  {
+    "value": "anbvt",
+    "title": "Bouvet Island"
+  },
+  {
+    "value": "anhmd",
+    "title": "Heard Island and McDonald Islands"
+  },
+  {
+    "value": "ansgs",
+    "title": "South Georgia South Sandwich Islands"
+  },
+  {
+    "value": "anxxa",
+    "title": "British Antarctic Territory"
+  },
+  {
+    "value": "asafg",
+    "title": "Afghanistan"
+  },
+  {
+    "value": "asare",
+    "title": "United Arab Emirates"
+  },
+  {
+    "value": "asarm",
+    "title": "Armenia"
+  },
+  {
+    "value": "asaze",
+    "title": "Azerbaijan"
+  },
+  {
+    "value": "asbgd",
+    "title": "Bangladesh"
+  },
+  {
+    "value": "asbhr",
+    "title": "Bahrain"
+  },
+  {
+    "value": "asbrn",
+    "title": "Brunei"
+  },
+  {
+    "value": "asbtn",
+    "title": "Bhutan"
+  },
+  {
+    "value": "ascck",
+    "title": "Cocos (Keeling) Islands"
+  },
+  {
+    "value": "aschn",
+    "title": "China"
+  },
+  {
+    "value": "ascxr",
+    "title": "Christmas Island"
+  },
+  {
+    "value": "ascyp",
+    "title": "Cyprus"
+  },
+  {
+    "value": "asfio",
+    "title": "Fr Ind O"
+  },
+  {
+    "value": "asgeo",
+    "title": "Georgia"
+  },
+  {
+    "value": "ashkg",
+    "title": "Hong Kong"
+  },
+  {
+    "value": "asidn",
+    "title": "Indonesia"
+  },
+  {
+    "value": "asind",
+    "title": "India"
+  },
+  {
+    "value": "asiot",
+    "title": "British Indian Ocean Territory"
+  },
+  {
+    "value": "asirn",
+    "title": "Iran"
+  },
+  {
+    "value": "asirq",
+    "title": "Iraq"
+  },
+  {
+    "value": "asisr",
+    "title": "Israel"
+  },
+  {
+    "value": "asjor",
+    "title": "Jordan"
+  },
+  {
+    "value": "asjpn",
+    "title": "Japan"
+  },
+  {
+    "value": "askaz",
+    "title": "Kazakhstan"
+  },
+  {
+    "value": "askgz",
+    "title": "Kyrgyzstan"
+  },
+  {
+    "value": "askhm",
+    "title": "Cambodia"
+  },
+  {
+    "value": "askor",
+    "title": "South Korea"
+  },
+  {
+    "value": "askwt",
+    "title": "Kuwait"
+  },
+  {
+    "value": "aslao",
+    "title": "Laos"
+  },
+  {
+    "value": "aslbn",
+    "title": "Lebanon"
+  },
+  {
+    "value": "aslka",
+    "title": "Sri Lanka"
+  },
+  {
+    "value": "asmac",
+    "title": "Macau"
+  },
+  {
+    "value": "asmdv",
+    "title": "Maldives"
+  },
+  {
+    "value": "asmid",
+    "title": "Midway"
+  },
+  {
+    "value": "asmmr",
+    "title": "Burma"
+  },
+  {
+    "value": "asmng",
+    "title": "Mongolia"
+  },
+  {
+    "value": "asmys",
+    "title": "Malaysia"
+  },
+  {
+    "value": "asnpl",
+    "title": "Nepal"
+  },
+  {
+    "value": "asomn",
+    "title": "Oman"
+  },
+  {
+    "value": "aspak",
+    "title": "Pakistan"
+  },
+  {
+    "value": "asphl",
+    "title": "Philippines"
+  },
+  {
+    "value": "asprk",
+    "title": "North Korea"
+  },
+  {
+    "value": "aspse",
+    "title": "Palestine"
+  },
+  {
+    "value": "asqat",
+    "title": "Qatar"
+  },
+  {
+    "value": "assau",
+    "title": "Saudi Arabia"
+  },
+  {
+    "value": "assgp",
+    "title": "Singapore"
+  },
+  {
+    "value": "assyr",
+    "title": "Syria"
+  },
+  {
+    "value": "astha",
+    "title": "Thailand"
+  },
+  {
+    "value": "astjk",
+    "title": "Tajikistan"
+  },
+  {
+    "value": "astkm",
+    "title": "Turkmenistan"
+  },
+  {
+    "value": "astls",
+    "title": "Timor-Leste"
+  },
+  {
+    "value": "astur",
+    "title": "Turkey"
+  },
+  {
+    "value": "astwn",
+    "title": "Taiwan"
+  },
+  {
+    "value": "asuzb",
+    "title": "Uzbekistan"
+  },
+  {
+    "value": "asvnm",
+    "title": "Vietnam"
+  },
+  {
+    "value": "aswak",
+    "title": "Wake Island"
+  },
+  {
+    "value": "asxxa",
+    "title": "Western Asia"
+  },
+  {
+    "value": "asxxb",
+    "title": "Other Asia"
+  },
+  {
+    "value": "asxxc",
+    "title": "China Free Trade Zone (FTZ)"
+  },
+  {
+    "value": "asxxd",
+    "title": "Abkhazia"
+  },
+  {
+    "value": "asxxe",
+    "title": "South Ossetia"
+  },
+  {
+    "value": "asyar",
+    "title": "Yemen Arab Republic"
+  },
+  {
+    "value": "asyem",
+    "title": "Yemen"
+  },
+  {
+    "value": "asymd",
+    "title": "Democratic Yemen"
+  },
+  {
+    "value": "euala",
+    "title": "Åland Islands"
+  },
+  {
+    "value": "eualb",
+    "title": "Albania"
+  },
+  {
+    "value": "euand",
+    "title": "Andorra"
+  },
+  {
+    "value": "euaut",
+    "title": "Austria"
+  },
+  {
+    "value": "eubel",
+    "title": "Belgium"
+  },
+  {
+    "value": "eubgr",
+    "title": "Bulgaria"
+  },
+  {
+    "value": "eubih",
+    "title": "Bosnia and Herzegovina"
+  },
+  {
+    "value": "eublr",
+    "title": "Belarus"
+  },
+  {
+    "value": "eublx",
+    "title": "Belgium-Luxembourg"
+  },
+  {
+    "value": "eubxx",
+    "title": "Benelux"
+  },
+  {
+    "value": "euche",
+    "title": "Switzerland"
+  },
+  {
+    "value": "euchi",
+    "title": "Channel Islands"
+  },
+  {
+    "value": "eucsk",
+    "title": "Czechoslovakia"
+  },
+  {
+    "value": "eucze",
+    "title": "Czech Republic"
+  },
+  {
+    "value": "euddr",
+    "title": "Democratic Republic of Germany"
+  },
+  {
+    "value": "eudeu",
+    "title": "Germany"
+  },
+  {
+    "value": "eudnk",
+    "title": "Denmark"
+  },
+  {
+    "value": "euesp",
+    "title": "Spain"
+  },
+  {
+    "value": "euest",
+    "title": "Estonia"
+  },
+  {
+    "value": "eueue",
+    "title": "European Union"
+  },
+  {
+    "value": "eufdr",
+    "title": "Federal Republic of Germany"
+  },
+  {
+    "value": "eufin",
+    "title": "Finland"
+  },
+  {
+    "value": "eufra",
+    "title": "France"
+  },
+  {
+    "value": "eufro",
+    "title": "Faroe Islands"
+  },
+  {
+    "value": "eugbr",
+    "title": "United Kingdom"
+  },
+  {
+    "value": "euggy",
+    "title": "Guernsey"
+  },
+  {
+    "value": "eugib",
+    "title": "Gibraltar"
+  },
+  {
+    "value": "eugrc",
+    "title": "Greece"
+  },
+  {
+    "value": "euhrv",
+    "title": "Croatia"
+  },
+  {
+    "value": "euhun",
+    "title": "Hungary"
+  },
+  {
+    "value": "euimn",
+    "title": "Isle of Man"
+  },
+  {
+    "value": "euirl",
+    "title": "Ireland"
+  },
+  {
+    "value": "euisl",
+    "title": "Iceland"
+  },
+  {
+    "value": "euita",
+    "title": "Italy"
+  },
+  {
+    "value": "eujey",
+    "title": "Jersey"
+  },
+  {
+    "value": "euksv",
+    "title": "Kosovo"
+  },
+  {
+    "value": "eulie",
+    "title": "Liechtenstein"
+  },
+  {
+    "value": "eultu",
+    "title": "Lithuania"
+  },
+  {
+    "value": "eulux",
+    "title": "Luxembourg"
+  },
+  {
+    "value": "eulva",
+    "title": "Latvia"
+  },
+  {
+    "value": "eumad",
+    "title": "Madeira"
+  },
+  {
+    "value": "eumco",
+    "title": "Monaco"
+  },
+  {
+    "value": "eumda",
+    "title": "Moldova"
+  },
+  {
+    "value": "eumkd",
+    "title": "Macedonia"
+  },
+  {
+    "value": "eumlt",
+    "title": "Malta"
+  },
+  {
+    "value": "eumne",
+    "title": "Montenegro"
+  },
+  {
+    "value": "eunld",
+    "title": "Netherlands"
+  },
+  {
+    "value": "eunor",
+    "title": "Norway"
+  },
+  {
+    "value": "eupol",
+    "title": "Poland"
+  },
+  {
+    "value": "euprt",
+    "title": "Portugal"
+  },
+  {
+    "value": "eurou",
+    "title": "Romania"
+  },
+  {
+    "value": "eurus",
+    "title": "Russia"
+  },
+  {
+    "value": "euscg",
+    "title": "Serbia and Montenegro"
+  },
+  {
+    "value": "eusjm",
+    "title": "Svalbard"
+  },
+  {
+    "value": "eusmr",
+    "title": "San Marino"
+  },
+  {
+    "value": "eusrb",
+    "title": "Serbia"
+  },
+  {
+    "value": "eusun",
+    "title": "USSR"
+  },
+  {
+    "value": "eusvk",
+    "title": "Slovakia"
+  },
+  {
+    "value": "eusvn",
+    "title": "Slovenia"
+  },
+  {
+    "value": "euswe",
+    "title": "Sweden"
+  },
+  {
+    "value": "euukr",
+    "title": "Ukraine"
+  },
+  {
+    "value": "euvat",
+    "title": "Holy See (Vatican City)"
+  },
+  {
+    "value": "euxxa",
+    "title": "Eastern Europe"
+  },
+  {
+    "value": "euxxb",
+    "title": "Europe EU"
+  },
+  {
+    "value": "euxxc",
+    "title": "Other Europe"
+  },
+  {
+    "value": "euxxd",
+    "title": "Europe EFTA"
+  },
+  {
+    "value": "euxxe",
+    "title": "European Union Not Elsewhere Specified"
+  },
+  {
+    "value": "euxxf",
+    "title": "Europe Other Not Elsewhere Specified"
+  },
+  {
+    "value": "euxxg",
+    "title": "Channel Islands"
+  },
+  {
+    "value": "euxxh",
+    "title": "EU"
+  },
+  {
+    "value": "euxxi",
+    "title": "EU27"
+  },
+  {
+    "value": "euxxj",
+    "title": "Europe"
+  },
+  {
+    "value": "euxxk",
+    "title": "EU15"
+  },
+  {
+    "value": "euyug",
+    "title": "Yugoslavia"
+  },
+  {
+    "value": "naabw",
+    "title": "Aruba"
+  },
+  {
+    "value": "naaia",
+    "title": "Anguilla"
+  },
+  {
+    "value": "naant",
+    "title": "Netherlands Antilles"
+  },
+  {
+    "value": "naatg",
+    "title": "Antigua and Barbuda"
+  },
+  {
+    "value": "nabes",
+    "title": "Bonaire"
+  },
+  {
+    "value": "nabhs",
+    "title": "Bahamas"
+  },
+  {
+    "value": "nablm",
+    "title": "Saint Barthélemy"
+  },
+  {
+    "value": "nablz",
+    "title": "Belize"
+  },
+  {
+    "value": "nabmu",
+    "title": "Bermuda"
+  },
+  {
+    "value": "nabrb",
+    "title": "Barbados"
+  },
+  {
+    "value": "nacan",
+    "title": "Canada"
+  },
+  {
+    "value": "nacri",
+    "title": "Costa Rica"
+  },
+  {
+    "value": "nacub",
+    "title": "Cuba"
+  },
+  {
+    "value": "nacuw",
+    "title": "Curaçao"
+  },
+  {
+    "value": "nacym",
+    "title": "Cayman Islands"
+  },
+  {
+    "value": "nadma",
+    "title": "Dominica"
+  },
+  {
+    "value": "nadom",
+    "title": "Dominican Republic"
+  },
+  {
+    "value": "nagrd",
+    "title": "Grenada"
+  },
+  {
+    "value": "nagrl",
+    "title": "Greenland"
+  },
+  {
+    "value": "nagtm",
+    "title": "Guatemala"
+  },
+  {
+    "value": "nahnd",
+    "title": "Honduras"
+  },
+  {
+    "value": "nahti",
+    "title": "Haiti"
+  },
+  {
+    "value": "najam",
+    "title": "Jamaica"
+  },
+  {
+    "value": "nakna",
+    "title": "Saint Kitts and Nevis"
+  },
+  {
+    "value": "nalca",
+    "title": "Saint Lucia"
+  },
+  {
+    "value": "namaf",
+    "title": "Saint Maarten"
+  },
+  {
+    "value": "namex",
+    "title": "Mexico"
+  },
+  {
+    "value": "namsr",
+    "title": "Montserrat"
+  },
+  {
+    "value": "namtq",
+    "title": "Martinique"
+  },
+  {
+    "value": "nanaa",
+    "title": "Netherland Antilles and Aruba"
+  },
+  {
+    "value": "nanic",
+    "title": "Nicaragua"
+  },
+  {
+    "value": "napan",
+    "title": "Panama"
+  },
+  {
+    "value": "napci",
+    "title": "Pacific Island (US)"
+  },
+  {
+    "value": "napcz",
+    "title": "Panama Canal Zone"
+  },
+  {
+    "value": "napri",
+    "title": "Puerto Rico"
+  },
+  {
+    "value": "naslv",
+    "title": "El Salvador"
+  },
+  {
+    "value": "naspm",
+    "title": "Saint Pierre and Miquelon"
+  },
+  {
+    "value": "natca",
+    "title": "Turks and Caicos Islands"
+  },
+  {
+    "value": "natto",
+    "title": "Trinidad and Tobago"
+  },
+  {
+    "value": "naumi",
+    "title": "United States Minor Outlying Islands"
+  },
+  {
+    "value": "nausa",
+    "title": "United States"
+  },
+  {
+    "value": "navct",
+    "title": "Saint Vincent and the Grenadines"
+  },
+  {
+    "value": "navgb",
+    "title": "British Virgin Islands"
+  },
+  {
+    "value": "navir",
+    "title": "Virgin Islands"
+  },
+  {
+    "value": "naxxa",
+    "title": "Caribbean"
+  },
+  {
+    "value": "naxxb",
+    "title": "CACM"
+  },
+  {
+    "value": "naxxc",
+    "title": "Rest of America"
+  },
+  {
+    "value": "naxxd",
+    "title": "North America and Central America"
+  },
+  {
+    "value": "naxxe",
+    "title": "United States Unspecified"
+  },
+  {
+    "value": "naxxf",
+    "title": "Saint Kitts, Nevis and Anguilla"
+  },
+  {
+    "value": "ocasm",
+    "title": "American Samoa"
+  },
+  {
+    "value": "ocaus",
+    "title": "Australia"
+  },
+  {
+    "value": "occok",
+    "title": "Cook Islands"
+  },
+  {
+    "value": "ocfji",
+    "title": "Fiji"
+  },
+  {
+    "value": "ocfsm",
+    "title": "Micronesia"
+  },
+  {
+    "value": "ocglp",
+    "title": "Guadeloupe"
+  },
+  {
+    "value": "ocgum",
+    "title": "Guam"
+  },
+  {
+    "value": "ocjtn",
+    "title": "Johnston Atoll"
+  },
+  {
+    "value": "ockir",
+    "title": "Kiribati"
+  },
+  {
+    "value": "ocmhl",
+    "title": "Marshall Islands"
+  },
+  {
+    "value": "ocmnp",
+    "title": "Northern Mariana Islands"
+  },
+  {
+    "value": "ocncl",
+    "title": "New Caledonia"
+  },
+  {
+    "value": "ocnfk",
+    "title": "Norfolk Island"
+  },
+  {
+    "value": "ocniu",
+    "title": "Niue"
+  },
+  {
+    "value": "ocnru",
+    "title": "Nauru"
+  },
+  {
+    "value": "ocnzl",
+    "title": "New Zealand"
+  },
+  {
+    "value": "ocpcn",
+    "title": "Pitcairn Islands"
+  },
+  {
+    "value": "ocplw",
+    "title": "Palau"
+  },
+  {
+    "value": "ocpng",
+    "title": "Papua New Guinea"
+  },
+  {
+    "value": "ocpyf",
+    "title": "French Polynesia"
+  },
+  {
+    "value": "ocslb",
+    "title": "Solomon Islands"
+  },
+  {
+    "value": "octkl",
+    "title": "Tokelau"
+  },
+  {
+    "value": "octon",
+    "title": "Tonga"
+  },
+  {
+    "value": "octuv",
+    "title": "Tuvalu"
+  },
+  {
+    "value": "ocvut",
+    "title": "Vanuatu"
+  },
+  {
+    "value": "ocwlf",
+    "title": "Wallis and Futuna"
+  },
+  {
+    "value": "ocwsm",
+    "title": "Samoa"
+  },
+  {
+    "value": "ocxxa",
+    "title": "Oceania"
+  },
+  {
+    "value": "ocxxb",
+    "title": "United States Miscellaneous Pacific Islands"
+  },
+  {
+    "value": "saarg",
+    "title": "Argentina"
+  },
+  {
+    "value": "sabol",
+    "title": "Bolivia"
+  },
+  {
+    "value": "sabra",
+    "title": "Brazil"
+  },
+  {
+    "value": "sachl",
+    "title": "Chile"
+  },
+  {
+    "value": "sacol",
+    "title": "Colombia"
+  },
+  {
+    "value": "saecu",
+    "title": "Ecuador"
+  },
+  {
+    "value": "saflk",
+    "title": "Falkland Islands"
+  },
+  {
+    "value": "saguf",
+    "title": "French Guiana"
+  },
+  {
+    "value": "saguy",
+    "title": "Guyana"
+  },
+  {
+    "value": "saper",
+    "title": "Peru"
+  },
+  {
+    "value": "sapry",
+    "title": "Paraguay"
+  },
+  {
+    "value": "sasur",
+    "title": "Suriname"
+  },
+  {
+    "value": "saury",
+    "title": "Uruguay"
+  },
+  {
+    "value": "saven",
+    "title": "Venezuela"
+  },
+  {
+    "value": "saxxa",
+    "title": "LAIA"
+  },
+  {
+    "value": "xxatf",
+    "title": "French Southern Territories"
+  },
+  {
+    "value": "xxemx",
+    "title": "European Patent Organization"
+  },
+  {
+    "value": "xxepx",
+    "title": "European Trademark Office"
+  },
+  {
+    "value": "xxwld",
+    "title": "World"
+  },
+  {
+    "value": "xxwox",
+    "title": "World Intellectual Property Organization (WIPO)"
+  },
+  {
+    "value": "xxxxa",
+    "title": "Provision of Ships and Aircraft"
+  },
+  {
+    "value": "xxxxb",
+    "title": "Central Banks"
+  },
+  {
+    "value": "xxxxc",
+    "title": "Unclassified"
+  },
+  {
+    "value": "xxxxd",
+    "title": "Unknown"
+  },
+  {
+    "value": "xxxxe",
+    "title": "Neutral Zone"
+  },
+  {
+    "value": "xxxxf",
+    "title": "Free Zones"
+  },
+  {
+    "value": "xxxxg",
+    "title": "Bunkers"
+  },
+  {
+    "value": "xxxxh",
+    "title": "Areas"
+  },
+  {
+    "value": "xxxxi",
+    "title": "Special Categories"
+  },
+  {
+    "value": "xxxxj",
+    "title": "Other"
+  },
+  {
+    "value": "xxxxk",
+    "title": "French West Indies"
+  },
+  {
+    "value": "xxxxm",
+    "title": null
+  },
+  {
+    "value": "xxxxn",
+    "title": "High Seas|International Waters"
+  },
+  {
+    "value": "xxxxo",
+    "title": "Union of Soviet Socialist Republics"
+  },
+  {
+    "value": "xxxxp",
+    "title": "Pacific Islands"
+  }
+]
