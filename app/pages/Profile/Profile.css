@@ -44,9 +44,6 @@
 .cp-stat-value-text {
   font-weight: var(--base-font-weight);
 }
-.cp-section:not(.cp-hero-section) .cp-stat a {
-  @mixin link-theme;
-}
 
 /* scale down fonts for long stats */
 .cp-stat-value-text.length-lg           { font-size: var(--font-lg); }
@@ -169,11 +166,15 @@
 }
 
 /* about section */
-.cp-grouping > .cp-section:not(:first-child) a {
-  color: var(--accent-light);
-  &:hover, &:focus {
-    color: var(--accent);
-  }
+.cp-section a {
+  @mixin link-theme;
+}
+.cp-grouping:first-child > .cp-section:first-child a {
+  @mixin link-theme;
+  color: var(--accent-dark);
+}
+.cp-section.cp-hero a {
+  color: var(--white);
 }
 
 
@@ -185,10 +186,6 @@
 /* default (sidebar) layout */
 .cp-default-section-inner {
   padding-bottom: var(--gutter-lg); /* prevent overflow bug */
-
-  & .cp-section-paragraph {
-    @mixin font-xs;
-  }
 }
 /* fudge visualizations below section title */
 .cp-default-section-figure {

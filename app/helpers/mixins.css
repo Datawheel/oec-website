@@ -30,7 +30,7 @@
 
 @define-mixin link-theme {
   font-weight: normal;
-  color: var(--accent-dark);
+  color: var(--accent-light);
   text-decoration: none;
 
   &:hover, &:focus {
