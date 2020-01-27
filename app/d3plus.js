@@ -177,10 +177,6 @@ export default {
     }
   },
   tooltipConfig: {
-    arrowStyle: {
-      "background": "#66737e",
-      "z-index": 18
-    },
     title: d => {
       const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
       const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
