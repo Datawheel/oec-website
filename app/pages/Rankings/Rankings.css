@@ -3,6 +3,7 @@
 .rankings-page {
   background-color: var(--dark-4);
   color: var(--white);
+  min-height: 100vh;
 
   & .rankings-content {
     margin-left: 2rem;

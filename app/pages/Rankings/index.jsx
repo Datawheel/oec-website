@@ -4,6 +4,11 @@ import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {Button, ButtonGroup} from "@blueprintjs/core";
 
+import axios from "axios";
+import Numeral from "numeral";
+import {Icon} from "@blueprintjs/core";
+import {Sparklines, SparklinesLine} from "react-sparklines";
+
 import "./Rankings.css";
 
 import OECNavbar from "components/OECNavbar";
@@ -20,7 +25,10 @@ class Rankings extends React.Component {
       text: [],
       category: this.props.params.category || "country",
       measure: this.props.params.measure || "eci",
-      filter: this.props.location.search.split("=")[1] || "2013-2017"
+      filter: this.props.location.search.split("=")[1] || "2013-2017",
+      data: [],
+      length: null,
+      columns: []
     };
   }
 
@@ -33,6 +41,131 @@ class Rankings extends React.Component {
     });
   }
 
+  componentDidUpdate() {
+    const {filter} = this.state;
+    const firstYear = filter.split("-")[0] * 1;
+    const lastYear = filter.split("-")[1] * 1;
+
+    let columns = [];
+
+    columns = [
+      {
+        id: "countryId",
+        Header: "",
+        className: "col-id",
+        accessor: d => d.table_id,
+        width: 50,
+        sortable: false
+      },
+      {
+        id: "countryName",
+        Header: "Country",
+        className: "col-country",
+        width: 300,
+        Cell: props =>
+          <div className="country">
+            <img
+              src={`/images/icons/country/country_${props.original["Country ID"].slice(
+                props.original["Country ID"].length - 3
+              )}.png`}
+              alt="flag"
+              className="flag"
+            />
+            <a
+              href={`/en/profile/country/${props.original["Country ID"].slice(
+                props.original["Country ID"].length - 3
+              )}`}
+              className="link"
+            >
+              <span className="name">{props.original.Country}</span>
+              <Icon icon={"chevron-right"} iconSize={14} />
+            </a>
+          </div>
+
+      },
+      {
+        id: "firstYear",
+        Header: `${firstYear}`,
+        accessor: d => d[`${firstYear}`],
+        Cell: props =>
+          Numeral(props.original[`${firstYear}`]).format("0.00000") * 1 !== 0
+            ? Numeral(props.original[`${firstYear}`]).format("0.00000")
+            : "",
+        width: 160,
+        className: "firstYear"
+      },
+      {
+        id: "secondYear",
+        Header: `${firstYear + 1}`,
+        accessor: d => d[`${firstYear + 1}`],
+        Cell: props =>
+          Numeral(props.original[`${firstYear + 1}`]).format("0.00000") * 1 !== 0
+            ? Numeral(props.original[`${firstYear + 1}`]).format("0.00000")
+            : "",
+        width: 160,
+        className: "secondYear"
+      },
+      {
+        id: "thirdYear",
+        Header: `${firstYear + 2}`,
+        accessor: d => d[`${firstYear + 2}`],
+        Cell: props =>
+          Numeral(props.original[`${firstYear + 2}`]).format("0.00000") * 1 !== 0
+            ? Numeral(props.original[`${firstYear + 2}`]).format("0.00000")
+            : "",
+        width: 160,
+        className: "thirdYear"
+      },
+      {
+        id: "fourthYear",
+        Header: `${firstYear + 3}`,
+        accessor: d => d[`${firstYear + 3}`],
+        Cell: props =>
+          Numeral(props.original[`${firstYear + 3}`]).format("0.00000") * 1 !== 0
+            ? Numeral(props.original[`${firstYear + 3}`]).format("0.00000")
+            : "",
+        width: 160,
+        className: "fourthYear",
+        sortable: true
+      },
+      {
+        id: "fifthYear",
+        Header: `${firstYear + 4}`,
+        accessor: d => d[`${firstYear + 4}`],
+        Cell: props =>
+          Numeral(props.original[`${firstYear + 4}`]).format("0.00000") * 1 !== 0
+            ? Numeral(props.original[`${firstYear + 4}`]).format("0.00000")
+            : "",
+        width: 160,
+        className: "fifthYear",
+        sortable: true
+      },
+      {
+        id: "sparkline",
+        Header: "",
+        accessor: "sparkline",
+        Cell: props =>
+          <div>
+            <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
+              <SparklinesLine color="white" style={{fill: "none"}} />
+            </Sparklines>
+          </div>,
+        className: "sparkline",
+        sortable: false
+      }
+    ];
+
+    axios
+      .get(`/json/rankings/oec_eci_${filter}.json`)
+      .then(
+        resp => (
+          resp.data.sort((a, b) => b[`${lastYear}`] - a[`${lastYear}`]),
+          resp.data.map((d, k) => d.table_id = k + 1),
+          this.setState({data: resp.data, length: resp.data.length, columns})
+        )
+      );
+  }
+
   redirectPage(category, measure, filter) {
     const {lng} = this.props;
     const path = `/${lng}/rankings/${category}/${measure}/?year_range=${filter}`;
@@ -41,9 +174,8 @@ class Rankings extends React.Component {
   }
 
   render() {
-    const {title, text, category, measure, filter} = this.state;
+    const {title, text, category, measure, filter, data, length, columns} = this.state;
     const {t} = this.props;
-    console.log(category, measure, filter);
 
     return (
       <div className="rankings-page">
@@ -92,7 +224,8 @@ class Rankings extends React.Component {
             </div>
           </div>
           <div className="ranking">
-            {category && <RankingTable filter={filter} category={category} />}
+            {/* data && <RankingTable filter={filter} /> */}
+            {data && <RankingTable data={data} columns={columns} length={length} />}
           </div>
         </div>
 
