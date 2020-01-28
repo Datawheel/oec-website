@@ -13,6 +13,7 @@ class Account extends Component {
     return (
       <div className="account">
         <OECNavbar />
+        <a href="/auth/logout">Click here to log out.</a>
         <Footer />
       </div>
     );

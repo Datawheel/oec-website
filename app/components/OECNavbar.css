@@ -144,6 +144,9 @@
       }
     }
   }
+  & .navbar-user-menu-button .bp3-popover-target {
+    width: auto;
+  }
   & .navbar-search-toggle-button {
     position: relative;
     z-index: 1; /* in front of open search */
