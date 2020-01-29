@@ -31,9 +31,11 @@ class SubnationalMap extends React.Component {
 
     const ignoreIds = selectedGeoLevel.ignoreIds ? selectedGeoLevel.ignoreIds : [];
 
+    console.log(`config: ${country}`, items,);
+
     return {
       data: items,
-      groupBy: "id",
+      // groupBy: "id",
       height: 500,
       legend: false,
       ocean: "steelblue",
@@ -53,11 +55,11 @@ class SubnationalMap extends React.Component {
         }
       },
       tiles: false,
+      tooltip: d => d.name,
       fit: true,
       topojson: `/shapes/subnational_${country}_${selectedGeoLevel.slug}.topojson`,
       topojsonId: d => d.properties.id,
-
-      /* topojsonFilter: d => ignoreIds.indexOf(d.properties.id) === -1,*/
+      topojsonFilter: d => ignoreIds.indexOf(d.properties.id) === -1,
       topojsonKey: "objects",
       zoom: false
     };

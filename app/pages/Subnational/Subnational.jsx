@@ -46,7 +46,7 @@ Subnational.need = [(params, store) => {
   const promisesList = [];
   const countriesData = {};
   SUBNATIONAL_COUNTRIES.map((country, ix) => {
-    const url = `${store.env.CANON_API}/api/search?dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=100`;
+    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=1000`;
     countriesData[encodeURI(url)] = country;
     promisesList.push(url);
   });
@@ -61,8 +61,9 @@ Subnational.need = [(params, store) => {
       responseURL = res.request.responseURL ? res.request.responseURL : res.request.res.responseUrl;
       reponseMetadata = countriesData[responseURL];
       if (reponseMetadata) {
+
         records = res.data.results.filter(datum =>
-          datum.profile === `subnational_${reponseMetadata.code}` &&
+          // datum.profile === `subnational_${reponseMetadata.code}` &&
           datum.dimension === reponseMetadata.dimension &&
           reponseMetadata.geoLevels.map(gl => gl.level).indexOf(datum.hierarchy) > -1
         );

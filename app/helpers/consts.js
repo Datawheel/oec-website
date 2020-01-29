@@ -58,15 +58,18 @@ module.exports = {
     {
       name: "Brazil",
       code: "bra",
+      cube: "trade_s_bra_mun_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "States", level: "Region", slug: "states"},
+        {name: "Region", level: "Region", slug: "regions"},
+        {name: "States", level: "State", slug: "states"},
         {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
       ]
     },
     {
       name: "Japan",
       code: "jpn",
+      cube: "trade_s_jpn_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
         {name: "Regions", level: "Area", slug: "regions"},
@@ -76,6 +79,7 @@ module.exports = {
     {
       name: "Russia",
       code: "rus",
+      cube: "trade_s_rus_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
         {name: "Districts", level: "District", slug: "districts"},
@@ -85,6 +89,7 @@ module.exports = {
     {
       name: "Canadá",
       code: "can",
+      cube: "trade_s_can_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
         {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
@@ -93,6 +98,7 @@ module.exports = {
     {
       name: "Uruguay",
       code: "ury",
+      cube: "trade_s_ury_a_hs",
       dimension: "Subnat Geography",
       geoLevels: [
         {name: "Corridor", level: "Corridor", slug: "corridors"},
@@ -102,6 +108,7 @@ module.exports = {
     {
       name: "Germany",
       code: "deu",
+      cube: "trade_s_deu_m_egw",
       dimension: "Subnat Geography",
       geoLevels: [
         {name: "Regions", level: "Subnat Geography", slug: "regions"}
@@ -110,10 +117,11 @@ module.exports = {
     {
       name: "USA",
       code: "usa",
+      cube: "trade_s_usa_district_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
         {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02"]},
-        {name: "Counties", level: "Subnat Geography", slug: "counties", ignoreIds: []}
+        {name: "District", level: "Subnat Geography", slug: "districts", ignoreIds: []}
       ]
     }
     // TODO: chile +  ecuador.
