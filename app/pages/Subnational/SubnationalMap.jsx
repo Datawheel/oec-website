@@ -35,7 +35,6 @@ class SubnationalMap extends React.Component {
 
     return {
       data: items,
-      // groupBy: "id",
       height: 500,
       legend: false,
       ocean: "steelblue",

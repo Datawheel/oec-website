@@ -65,7 +65,7 @@ module.exports = {
         {name: "States", level: "State", slug: "states"},
         {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
       ]
-    },
+    }/* ,
     {
       name: "Japan",
       code: "jpn",
@@ -123,7 +123,7 @@ module.exports = {
         {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02"]},
         {name: "District", level: "Subnat Geography", slug: "districts", ignoreIds: []}
       ]
-    }
+    }*/
     // TODO: chile +  ecuador.
     // ZAF -> ports, take a look.
     // SWE -> no units, ignore it.
