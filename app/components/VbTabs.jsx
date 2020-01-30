@@ -313,7 +313,7 @@ class VbTabs extends React.Component {
                     },
                     {
                       name: t("Technology"), nest: [
-                        {name: t("Patenters"), permalink: "cpc/export/show/all/A21/2019/"}
+                        {name: t("Patenters"), permalink: "cpc/uspto/show/all/A21/2019/"}
                       ]
                     }
                   ]}
