@@ -13,6 +13,7 @@ import Vizbuilder from "./pages/Vizbuilder";
 import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import Account from "./pages/User/Account";
+import Subscription from "./pages/User/Subscription";
 import Rankings from "./pages/Rankings";
 
 /** */
@@ -75,6 +76,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
       <Route exact path="/:lang/account" component={Account} />
+      <Route exact path="/:lang/subscription" component={Subscription} />
       <Route exact path="/:lang/subnational" component={Subnational} />
       <Route exact path="/:lang/prediction" component={Prediction} />
       <Route exact path="/:lang/rankings/:category/:measure/" component={Rankings} />

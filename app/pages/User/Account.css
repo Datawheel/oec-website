@@ -1,9 +1,53 @@
 .account {
   align-items: center;
-  background: var(--dark-4);
+  background: var(--dark-3);
+  color: var(--white);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
   padding-top: calc(var(--nav-height) * 2);
+  & .bp3-non-ideal-state {
+    margin-top: 15vh;
+  }
+  & .account-content {
+    align-items: flex-start;
+    display: flex;
+    padding: 0 var(--gutter-xl);
+    width: 100%;
+    & .account-meta {
+      background: var(--dark-4);
+      border-radius: 1em;
+      box-sizing: border-box;
+      min-width: 300px;
+      padding: var(--gutter-md);
+      & .account-meta-table {
+        border-collapse: collapse;
+        margin-bottom: var(--gutter-md);
+        width: 100%;
+        & tr {
+          &:not(:first-child) td {
+            border-top: 1px solid var(--dark-2);
+          }
+          & td {
+            padding: 0.25rem 0;
+            &:last-child {
+              text-align: right;
+            }
+          }
+        }
+      }
+    }
+    & .account-panel {
+      flex: 1 1 auto;
+      margin: 0 0 var(--gutter-xl) var(--gutter-lg);
+      & .account-invoices {
+        min-height: 200px;
+        width: 100%;
+        & table {
+          width: 100%;
+        }
+      }
+    }
+  }
 }

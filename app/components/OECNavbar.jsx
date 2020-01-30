@@ -101,11 +101,11 @@ class OECNavbar extends Component {
         <div className="navbar-search-toggle-button-wrapper">
           { auth.user
             ? <Button
-              className="navbar-user-login"
+              className={`navbar-user-login role-${auth.user.role}`}
               icon="user"
               iconPosition="left"
             >
-              <Link to={`${locale}/account`}>{auth.user.username}</Link>
+              <Link to={`${locale}/account`}>{auth.user.role === 10 ? "Contributor" : `${auth.user.role === 1 ? "Pro " : ""}Account`}</Link>
             </Button>
             : <React.Fragment>
               <Button className="navbar-user-login" rebuilding={auth.loading} disable={auth.loading}>
