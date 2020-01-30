@@ -143,7 +143,7 @@ const colorScaleConfig = {
 
 export default {
   aggs: {
-    // "Section ID": mean,
+    "Section ID": mean,
     "Flow ID": mean
   },
   backgroundConfig: {
