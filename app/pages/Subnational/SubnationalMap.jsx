@@ -44,9 +44,7 @@ class SubnationalMap extends React.Component {
       on: {
         "click.shape": d => {
           if (d) {
-            //console.log("click.shape", d);
             const url = `/${locale}/profile/subnational_${country}/${d.slug}`;
-            //console.log(url);
             router.push(url);
           }
         }
@@ -60,7 +58,7 @@ class SubnationalMap extends React.Component {
       },
       tiles: false,
       tooltipConfig: {
-        title: (d, a) => {
+        title: d => {
           let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
           const imgUrl = `/images/icons/country/country_${country}.png`;
           tooltip += `<div class="icon"><img src="${imgUrl}" /></div>`;
@@ -107,14 +105,11 @@ class SubnationalMap extends React.Component {
       topojson: `/shapes/subnational_${country}_${selectedGeoLevel.slug}.topojson`,
       topojsonId: d => d.properties.id,
       topojsonFilter: d => {
-        if(ignoreIds.length > 0){
-          console.log(ignoreIds,d.properties.id);
-          var ignore = ignoreIds.indexOf(d.properties.id) > -1;
-          if (ignore){
-            console.log(d);
-          }
+        let pass = true;
+        if (ignoreIds.length > 0) {
+          pass = ignoreIds.indexOf(d.properties.id) > -1;
         }
-        return !ignore
+        return pass;
       },
       topojsonKey: "objects",
       zoom: false

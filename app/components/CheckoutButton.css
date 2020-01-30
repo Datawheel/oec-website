@@ -1,0 +1,24 @@
+.checkout-button {
+  background: var(--accent-dark);
+  color: var(--white);
+  font-weight: bold;
+  padding: 0.5em 0.5em 0.65em;
+  &:hover, &:focus {
+    background: var(--accent);
+  }
+  &.enterprise {
+    background: transparent;
+    border: 1px solid var(--accent-dark);
+    & a {
+      color: var(--accent-dark);
+    }
+    &:hover, &:focus {
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      & a {
+        color: var(--white);
+        text-decoration: none;;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, Fragment} from "react";
 import {connect} from "react-redux";
 import {isAuthenticated} from "@datawheel/canon-core";
 import "./App.css";
@@ -8,7 +8,10 @@ class App extends Component {
     this.props.isAuthenticated();
   }
   render() {
-    return this.props.children;
+    return <Fragment>
+      <script key="stripe" src="https://js.stripe.com/v3/"></script>
+      <Fragment key="children">{this.props.children}</Fragment>
+    </Fragment>;
   }
 }
 
