@@ -71,10 +71,10 @@ function backgroundImage(d) {
 
 const axisStyles = {
   barConfig: {
-    stroke: "#FFFFFF"
+    stroke: "#15191F"
   },
   gridConfig: {
-    stroke: "#FFFFFF",
+    stroke: "#15191F",
     strokeWidth: 1
   },
   labelConfig: {
@@ -92,7 +92,7 @@ const axisStyles = {
       fontSize: () => 12,
       fontWeight: () => 400
     },
-    stroke: "#FFFFFF"
+    stroke: "#15191F"
   },
   tickSize: 5,
   titleConfig: {

@@ -88,7 +88,7 @@ module.exports = {
       ]
     },
     {
-      name: "Canadá",
+      name: "Canada",
       code: "can",
       cube: "trade_s_can_m_hs",
       dimension: "Subnat Geography",
@@ -121,7 +121,7 @@ module.exports = {
       cube: "trade_s_usa_district_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02","04000US15","04000US60","04000US69","04000US66"]},
+        {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02", "04000US15", "04000US60", "04000US69", "04000US66"]},
         {name: "District", level: "Subnat Geography", slug: "districts", ignoreIds: []}
       ]
     }
