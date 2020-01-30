@@ -31,30 +31,73 @@ class SubnationalMap extends React.Component {
 
     const ignoreIds = selectedGeoLevel.ignoreIds ? selectedGeoLevel.ignoreIds : [];
 
-    console.log(`config: ${country}`, items,);
-
     return {
+      id: `geomap-${country}`,
+      className: "geomap-subnational-viz",
       data: items,
       height: 500,
       legend: false,
-      ocean: "steelblue",
+      ocean: "transparent",
       total: false,
       on: {
         "click.shape": d => {
           if (d) {
-            console.log("click.shape", d.properties);
+            console.log("click.shape", d);
           }
         }
       },
       projectionPadding: "10 10 10 10",
       shapeConfig: {
         Path: {
-          fill: d => "#ff9900",
-          stroke: "rgba(255, 255, 255, 1)"
+          fill: d => d.type === "Feature" ? "none" : "#fff",
+          stroke: "#ccc"
         }
       },
       tiles: false,
-      tooltip: d => d.name,
+      tooltipConfig: {
+        title: (d, a) => {
+          let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
+          const imgUrl = `/images/icons/country/country_${country}.png`;
+          tooltip += `<div class="icon"><img src="${imgUrl}" /></div>`;
+          tooltip += `<span>${d.name}</span>`;
+          tooltip += "</div>";
+          return tooltip;
+        },
+        tbody: d => {
+          const tbodyData = [];
+          tbodyData.push(["Level", `${selectedGeoLevel.name}`]);
+          tbodyData.push(["ID", `${d.id}`]);
+          return tbodyData;
+        },
+        background: "#282f37",
+        border: "1px solid #66737e",
+        footerStyle: {
+          "color": "#666",
+          "fontFamily": () => "'Source Sans Pro', sans-serif",
+          "font-size": "12px",
+          "font-weight": "300",
+          "padding-top": "5px",
+          "text-align": "center"
+        },
+        padding: "0px",
+        titleStyle: {
+          "color": "#FFFFFF",
+          "padding": "5px",
+          "fontFamily": () => "'Source Sans Pro', sans-serif",
+          "font-size": "16px",
+          "font-weight": "600",
+          "max-height": "100px",
+          "overflow": "hidden",
+          "text-overflow": "ellipsis",
+          "display": "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "3"
+        },
+        tbodyStyle: {
+          color: "#FFFFFF"
+        },
+        width: "200px"
+      },
       fit: true,
       topojson: `/shapes/subnational_${country}_${selectedGeoLevel.slug}.topojson`,
       topojsonId: d => d.properties.id,
@@ -65,12 +108,12 @@ class SubnationalMap extends React.Component {
   }
 
   render() {
-    const {country, selectedGeoLevel} = this.props;
+    const {selectedGeoLevel} = this.props;
 
     const geoConfig = this.getGeoConfig();
 
     return <div className="subnational-map">
-      <h4>Map here: {country} - {selectedGeoLevel.slug}</h4>
+      <h2 className="subnational-map-label">{selectedGeoLevel.name}</h2>
       <Geomap
         className="splash-geomap"
         config={geoConfig}

@@ -55,25 +55,26 @@ module.exports = {
     ]}
   ],
   SUBNATIONAL_COUNTRIES: [
+
     {
       name: "Brazil",
       code: "bra",
       cube: "trade_s_bra_mun_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Region", level: "Region", slug: "regions"},
-        {name: "States", level: "State", slug: "states"},
-        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
+        {name: "Region", level: "Region", slug: "regions", ignoreIds: []},
+        {name: "States", level: "State", slug: "states", ignoreIds: []},
+        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities", ignoreIds: []}
       ]
-    }/* ,
+    },
     {
       name: "Japan",
       code: "jpn",
       cube: "trade_s_jpn_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Regions", level: "Area", slug: "regions"},
-        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures"}
+        {name: "Regions", level: "Area", slug: "regions", ignoreIds: []},
+        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures", ignoreIds: []}
       ]
     },
     {
@@ -123,7 +124,7 @@ module.exports = {
         {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02"]},
         {name: "District", level: "Subnat Geography", slug: "districts", ignoreIds: []}
       ]
-    }*/
+    }
     // TODO: chile +  ecuador.
     // ZAF -> ports, take a look.
     // SWE -> no units, ignore it.

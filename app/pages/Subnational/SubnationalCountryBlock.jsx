@@ -49,8 +49,6 @@ class SubnationalCountryBlock extends React.Component {
     const {metadata} = this.props;
     const {items} = this.state;
 
-    console.log(items);
-
     // Navbar
     const {navbarTabId, searchText} = this.state;
 
@@ -63,7 +61,7 @@ class SubnationalCountryBlock extends React.Component {
 
     return <div className="subnational-country-block">
       <div className="subnational-header">
-        <h2>{metadata.name}</h2>
+        <h3 className="">{metadata.name}</h3>
       </div>
       <div className="subnational-block-content">
         <div className="subnational-tabs">
