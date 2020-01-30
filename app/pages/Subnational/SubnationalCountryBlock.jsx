@@ -47,6 +47,7 @@ class SubnationalCountryBlock extends React.Component {
 
   render() {
     const {metadata} = this.props;
+
     const {items} = this.state;
 
     // Navbar
@@ -76,7 +77,7 @@ class SubnationalCountryBlock extends React.Component {
             selectedTabId={navbarTabId}
           >
             {metadata.geoLevels.map((gl, ix) =>
-              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList options={items && items[gl.level] ? items[gl.level] : []} />} />
+              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList country={metadata.code} options={items && items[gl.level] ? items[gl.level] : []} />} />
             )}
             <Tabs.Expander />
             <InputGroup type="text"
@@ -99,11 +100,8 @@ class SubnationalCountryBlock extends React.Component {
   }
 }
 
-
 SubnationalCountryBlock.need = [];
 
 export default hot(withNamespaces()(
-  connect(state => ({
-    locale: state.i18n.locale
-  }))(SubnationalCountryBlock)
+  connect()(SubnationalCountryBlock)
 ));

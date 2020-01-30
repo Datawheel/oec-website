@@ -20,7 +20,7 @@ class SubnationalList extends React.Component {
   }
 
   render() {
-    const {options} = this.props;
+    const {options,locale, country} = this.props;
 
     return <div className="subnational-list">
       {options &&
@@ -29,7 +29,11 @@ class SubnationalList extends React.Component {
             <li>No results.<br/> Try another search.</li>
           }
           {options.sort((a, b) => a.name > b.name ? 1 : -1).map(profile =>
-            <li key={profile.slug}><a>{profile.name}</a></li>
+            <li key={profile.slug}>
+              <a href={`/${locale}/profile/subnational_${country}/${profile.slug}`}>
+                {profile.name}
+              </a>
+            </li>
           )}
         </ul>
       }

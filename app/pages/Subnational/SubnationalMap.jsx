@@ -1,5 +1,6 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
+import PropTypes from "prop-types";
 
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
@@ -27,13 +28,14 @@ class SubnationalMap extends React.Component {
   }
 
   getGeoConfig() {
-    const {items, country, selectedGeoLevel} = this.props;
+    const {items, country, selectedGeoLevel, locale} = this.props;
 
     const ignoreIds = selectedGeoLevel.ignoreIds ? selectedGeoLevel.ignoreIds : [];
 
+    const {router} = this.context;
+
     return {
       id: `geomap-${country}`,
-      className: "geomap-subnational-viz",
       data: items,
       height: 500,
       legend: false,
@@ -42,7 +44,10 @@ class SubnationalMap extends React.Component {
       on: {
         "click.shape": d => {
           if (d) {
-            console.log("click.shape", d);
+            //console.log("click.shape", d);
+            const url = `/${locale}/profile/subnational_${country}/${d.slug}`;
+            //console.log(url);
+            router.push(url);
           }
         }
       },
@@ -115,7 +120,7 @@ class SubnationalMap extends React.Component {
     return <div className="subnational-map">
       <h2 className="subnational-map-label">{selectedGeoLevel.name}</h2>
       <Geomap
-        className="splash-geomap"
+        className="geomap-subnational-viz"
         config={geoConfig}
         dataFormat={this.dataFormat}
       />
@@ -123,6 +128,9 @@ class SubnationalMap extends React.Component {
   }
 }
 
+SubnationalMap.contextTypes = {
+  router: PropTypes.object
+};
 
 SubnationalMap.need = [];
 

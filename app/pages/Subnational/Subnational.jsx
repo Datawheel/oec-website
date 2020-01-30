@@ -1,5 +1,6 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
+import PropTypes from "prop-types";
 
 import axios from "axios";
 
@@ -17,6 +18,14 @@ import "./Subnational.css";
 import {SUBNATIONAL_COUNTRIES} from "helpers/consts";
 
 class Subnational extends React.Component {
+
+  getChildContext() {
+    const {locale, router} = this.props;
+    return {
+      router,
+      locale
+    };
+  }
 
   render() {
     const {subnationalLandingData} = this.props;
@@ -38,6 +47,11 @@ class Subnational extends React.Component {
     </div>;
   }
 }
+
+Subnational.childContextTypes = {
+  locale: PropTypes.string,
+  router: PropTypes.object
+};
 
 
 Subnational.need = [(params, store) => {
