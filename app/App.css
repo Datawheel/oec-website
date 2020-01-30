@@ -54,6 +54,27 @@ p > a,
   width: 100%;
 }
 
+.bp3-tooltip {
+  max-width: 300px;
+}
+
 .bp3-tag-input .bp3-tag {
   background-color: var(--dark-4);
+}
+
+.bp3-non-ideal-state {
+  & .bp3-heading {
+    @mixin font-md;
+    color: var(--gray);
+  }
+}
+
+.cp-button {
+  & a {
+    color: var(--label-color);
+  }
+  &:hover a, &:focus a {
+    color: var(--white);
+    text-decoration: none;
+  }
 }
