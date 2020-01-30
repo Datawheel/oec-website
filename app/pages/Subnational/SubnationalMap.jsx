@@ -106,7 +106,16 @@ class SubnationalMap extends React.Component {
       fit: true,
       topojson: `/shapes/subnational_${country}_${selectedGeoLevel.slug}.topojson`,
       topojsonId: d => d.properties.id,
-      topojsonFilter: d => ignoreIds.indexOf(d.properties.id) === -1,
+      topojsonFilter: d => {
+        if(ignoreIds.length > 0){
+          console.log(ignoreIds,d.properties.id);
+          var ignore = ignoreIds.indexOf(d.properties.id) > -1;
+          if (ignore){
+            console.log(d);
+          }
+        }
+        return !ignore
+      },
       topojsonKey: "objects",
       zoom: false
     };

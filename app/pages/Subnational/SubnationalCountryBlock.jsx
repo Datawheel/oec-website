@@ -60,9 +60,11 @@ class SubnationalCountryBlock extends React.Component {
     const selectedName = selectedGeoLevel.name;
     const selectedLevel = selectedGeoLevel.level;
 
+    const imgUrl = `/images/icons/country/country_${metadata.code}.png`;
+
     return <div className="subnational-country-block">
       <div className="subnational-header">
-        <h3 className="">{metadata.name}</h3>
+        <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
       </div>
       <div className="subnational-block-content">
         <div className="subnational-tabs">
