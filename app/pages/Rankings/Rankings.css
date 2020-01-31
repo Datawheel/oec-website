@@ -26,6 +26,31 @@
       }
     }
 
+    & .download {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--gutter-md);
+
+      & .bp3-button {
+        background: var(--dark-2);
+        color: var(--white);
+        border: 0px;
+        border-radius: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-right: var(--gutter-sm);
+
+        & .bp3-button-text {
+          padding: var(--button-padding);
+          font-size: var(--font-sm);
+        }
+      }
+
+      & .last {
+        margin-right: 0px;
+      }
+    }
+
     & .settings {
       display: flex;
       background: var(--dark-2);
@@ -52,6 +77,10 @@
 
       & .showing {
         flex: 1;
+      }
+
+      & .product {
+        flex: 2;
       }
 
       & .year {

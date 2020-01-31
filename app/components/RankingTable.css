@@ -1,5 +1,5 @@
 .rankingtable-component {
-  margin-top: 3rem;
+  margin-top: var(--gutter-sm);
 
   & .rt-table {
     border: 1px solid var(--dark-1);
@@ -46,6 +46,7 @@
           }
 
           & .sparkline {
+            justify-content: center;
             & svg {
               height: fit-content;
               max-height: 30px;
@@ -56,11 +57,11 @@
     }
   }
 
-  & .country {
+  & .category {
     display: flex;
     align-items: center;
 
-    & .flag {
+    & .icon {
       height: 1.3rem;
     }
 
@@ -72,7 +73,7 @@
       & .name {
         font-weight: var(--bold-weight);
         font-size: var(--font-sm);
-        margin-left: var(--gutter-sm);
+        padding-left: var(--gutter-sm);
       }
       & .bp3-icon {
         display: none;

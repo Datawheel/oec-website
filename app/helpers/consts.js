@@ -45,8 +45,8 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Country rankings", url: `/${locale}/rankings/country/eci`},
-      {title: "Product rankings", url: `/${locale}/rankings/product/sitc`}
+      {title: "Country rankings", url: `/${locale}/rankings/country/eci/`},
+      {title: "Product rankings", url: `/${locale}/rankings/product/hs92/`}
     ]},
     // predictions
     {title: "Predictions", items: [
