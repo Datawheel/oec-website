@@ -54,54 +54,78 @@ module.exports = {
       {title: "World Trade Predictions (monthly)", url: `/${locale}/prediction?dataset=trade-monthly`}
     ]}
   ],
-  SUBNATIONAL: [
-    {title: "Brazil", items: [
-      {title: "States", items: [
-        {title: "São Paulo", url: `/${locale}/profile/subnational_bra/sao-paulo`, pro: true},
-        {title: "Rio de Janeiro", url: `/${locale}/profile/subnational_bra/rio-de-janeiro`, pro: true},
-        {title: "Minas Gerais", url: `/${locale}/profile/subnational_bra/minas-gerais`, pro: true},
-        {title: "Rio Grande do Sul", url: `/${locale}/profile/subnational_bra/rio-grande-do-sul`, pro: true},
-        {title: "Paraná", url: `/${locale}/profile/subnational_bra/parana`, pro: true}
-      ]},
-      {title: "Municipalities", items: [
-        {title: "Rio de Janeiro, Rio de Janeiro", url: `/${locale}/profile/subnational_bra/rio-de-janeiro-3304557`, pro: true},
-        {title: "São Paulo, São Paulo", url: `/${locale}/profile/subnational_bra/sao-paulo-3450308`, pro: true},
-        {title: "Parauapebas, Pará", url: `/${locale}/profile/subnational_bra/parauapebas`, pro: true},
-        {title: "Angra dos Reis, Rio de Janeiro", url: `/${locale}/profile/subnational_bra/angra-dos-reis`, pro: true},
-        {title: "Duque de Caxias, Rio de Janeiro", url: `/${locale}/profile/subnational_bra/duque-de-caxias`, pro: true}
-      ]}
-    ]},
-    {title: "Japan", items: [
-      {title: "Region", items: [
-        {title: "Kanto", url: `/${locale}/profile/subnational_jpn/kanto`, pro: true},
-        {title: "Kinki", url: `/${locale}/profile/subnational_jpn/kinki`, pro: true},
-        {title: "Chubu", url: `/${locale}/profile/subnational_jpn/chubu`, pro: true},
-        {title: "Kyusyu", url: `/${locale}/profile/subnational_jpn/kyusyu`, pro: true},
-        {title: "Chugoku", url: `/${locale}/profile/subnational_jpn/chugoku`, pro: true}
-      ]},
-      {title: "Prefecture", items: [
-        {title: "Chiba, Kanto", url: `/${locale}/profile/subnational_jpn/chiba`, pro: true},
-        {title: "Aichi, Chubu", url: `/${locale}/profile/subnational_jpn/aichi`, pro: true},
-        {title: "Osaka, Kinki", url: `/${locale}/profile/subnational_jpn/osaka`, pro: true},
-        {title: "Tokyo, Kanto", url: `/${locale}/profile/subnational_jpn/tokyo`, pro: true},
-        {title: "Kanagawa, Kanto", url: `/${locale}/profile/subnational_jpn/kanagawa`, pro: true}
-      ]}
-    ]},
-    {title: "Russia", items: [
-      {title: "Districts", items: [
-        {title: "Central", url: `/${locale}/profile/subnational_rus/central-federal-district`, pro: true},
-        {title: "North West", url: `/${locale}/profile/subnational_rus/north-west-federal-district`, pro: true},
-        {title: "Southern", url: `/${locale}/profile/subnational_rus/southern-federal-district`, pro: true},
-        {title: "Volga", url: `/${locale}/profile/subnational_rus/volga-federal-district`, pro: true},
-        {title: "Urals", url: `/${locale}/profile/subnational_rus/urals-federal-district`, pro: true}
-      ]},
-      {title: "Regions", items: [
-        {title: "Moscow (Capital)", url: `/${locale}/profile/subnational_rus/moscow-the-capital-of-russian-federation`, pro: true},
-        {title: "St Petersburg", url: `/${locale}/profile/subnational_rus/st-petersburg`, pro: true},
-        {title: "Moscow Region", url: `/${locale}/profile/subnational_rus/moscow-region`, pro: true},
-        {title: "Republic of Tatarstan", url: `/${locale}/profile/subnational_rus/republic-of-tatarstan`, pro: true},
-        {title: "Khanty-Mansi Autonomous Area", url: `/${locale}/profile/subnational_rus/khanty-mansiysk-autonomous-area`, pro: true}
-      ]}
-    ]}
+  SUBNATIONAL_COUNTRIES: [
+
+    {
+      name: "Brazil",
+      code: "bra",
+      cube: "trade_s_bra_mun_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Region", level: "Region", slug: "regions", ignoreIds: []},
+        {name: "States", level: "State", slug: "states", ignoreIds: []},
+        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities", ignoreIds: []}
+      ]
+    },
+    {
+      name: "Japan",
+      code: "jpn",
+      cube: "trade_s_jpn_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Regions", level: "Area", slug: "regions", ignoreIds: []},
+        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures", ignoreIds: []}
+      ]
+    },
+    {
+      name: "Russia",
+      code: "rus",
+      cube: "trade_s_rus_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Districts", level: "District", slug: "districts"},
+        {name: "Regions", level: "Subnat Geography", slug: "regions"}
+      ]
+    },
+    {
+      name: "Canada",
+      code: "can",
+      cube: "trade_s_can_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+      ]
+    },
+    {
+      name: "Uruguay",
+      code: "ury",
+      cube: "trade_s_ury_a_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Corridor", level: "Corridor", slug: "corridors"},
+        {name: "Departments", level: "Subnat Geography", slug: "departments"}
+      ]
+    },
+    {
+      name: "Germany",
+      code: "deu",
+      cube: "trade_s_deu_m_egw",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Regions", level: "Subnat Geography", slug: "regions"}
+      ]
+    },
+    {
+      name: "USA",
+      code: "usa",
+      cube: "trade_s_usa_district_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02", "04000US15", "04000US60", "04000US69", "04000US66"]},
+        {name: "District", level: "Subnat Geography", slug: "districts", ignoreIds: []}
+      ]
+    }
+    // TODO: CHL, ECU, FRA, TUR
+    // TBD: ZAF -> ports, take a look , SWE -> no units, ignore it.
   ]
 };

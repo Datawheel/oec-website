@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {Treemap, StackedArea, LinePlot, Geomap} from "d3plus-react";
+import {Treemap, StackedArea, LinePlot, Geomap, Network} from "d3plus-react";
 import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
 
@@ -71,8 +71,9 @@ class VbChart extends React.Component {
     if (interval.length === 1) interval.push(interval[0]);
 
     const drilldowns = ["Year"];
-    drilldowns.push(isTechnology && !dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
-    if (isTechnology && chart === "geomap") drilldowns.push(countryTypeBalance);
+    if (!isTechnology) drilldowns.push(!dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
+    if (isTechnology) drilldowns.push(countryTypeBalance);
+    console.log(drilldowns);
 
     const params = {
       cube: !isTechnology
@@ -124,9 +125,11 @@ class VbChart extends React.Component {
 
     const baseConfig = {
       data: data || [],
-      groupBy: isTechnology && isFilter ? ["Section", "Subclass"] : viztype === "all" || isFinite(viztype) || isFilter
-        ? ["Continent", "Country"]
-        : isTechnology ? ["Section", "Subclass"] : ["Section", "HS4"]
+      groupBy: isTechnology && isFilter
+        ? country === "show" ? ["Continent", "Country"] : ["Section", "Subclass"]
+        : viztype === "all" || isFinite(viztype) || isFilter
+          ? ["Continent", "Country"]
+          : isTechnology ? ["Section", "Subclass"] : ["Section", "HS4"]
     };
 
     if (isTechnology) {
@@ -142,7 +145,8 @@ class VbChart extends React.Component {
         <Treemap
           config={{
             ...baseConfig,
-            sum: measure
+            sum: measure,
+            total: measure
           }}
         />
       </div>;
@@ -199,6 +203,41 @@ class VbChart extends React.Component {
         />
       </div>;
     }
+    else if (chart === "network") {
+      return <div className="vb-chart">
+        <Network
+          config={{
+            ...baseConfig,
+            nodes: "/network/network_hs4.json",
+            links: "/network/network_hs4.json",
+            groupBy: ["id"],
+
+            size: d => 1,
+            sizeMin: 2,
+            sizeMax: 9,
+            shapeConfig: {
+            // strokeWidth: d => 1,
+              stroke: d => "#444444",
+              Path: {
+                stroke: d => "#ccd0d6"
+              }
+            },
+            total: undefined
+          }}
+          nodesFormat={resp => resp.nodes}
+          linksFormat={resp => resp.edges}
+          dataFormat={
+            d => {
+              const newData = d
+                .map(dd => Object.assign(dd, {"id": `${dd["HS4 ID"]}`, "HS4 ID": `${dd["HS4 ID"]}`}));
+              // .filter(dd => dd["HS4 ID"] === "10101");
+              console.log(newData);
+              return newData;
+            }
+          }
+        /></div>;
+    }
+
     return <div />;
   }
 }

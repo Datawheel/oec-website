@@ -1,6 +1,6 @@
 @import "../helpers/mixins.css";
 
-[id="Canon"] > .loading {
+[id="Canon"] > .app-loading {
   /* take up the whole screen */
   @mixin absolute-expand;
   position: fixed;
@@ -9,17 +9,4 @@
   justify-content: center;
   /* theming */
   background-color: var(--dark-4);
-  color: var(--white);
-
-  & [class*="non-ideal-state-visual"] {
-    max-width: 200px;
-    width: 100%;
-    & [class*="progress-meter"] {
-      background-color: var(--light-1);
-    }
-  }
-
-  & [class*="non-ideal-state-title"] {
-    margin-bottom: var(--gutter-xs);
-  }
 }

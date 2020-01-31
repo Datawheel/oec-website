@@ -26,7 +26,9 @@ class NavGroup extends Component {
   /** when clicking a subtitle, refocus the button to prevent the nav from losing focus and collapsing */
   onFocusButton() {
     setTimeout(() => {
-      this.toggleButton.current.focus();
+      if (this.toggleButton.current) {
+        this.toggleButton.current.focus();
+      }
     }, 0);
   }
 

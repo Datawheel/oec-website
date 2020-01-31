@@ -133,6 +133,12 @@
       & a {
         color: var(--white);
       }
+      &.role-1 .bp3-icon {
+        color: var(--accent-dark);
+      }
+      &.role-10 .bp3-icon {
+        color: var(--alert-light);
+      }
     }
     &.navbar-user-signup {
       background-color: var(--accent-dark);
@@ -143,6 +149,9 @@
         background-color: var(--accent);
       }
     }
+  }
+  & .navbar-user-menu-button .bp3-popover-target {
+    width: auto;
   }
   & .navbar-search-toggle-button {
     position: relative;

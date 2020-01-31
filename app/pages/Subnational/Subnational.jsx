@@ -1,78 +1,45 @@
-import React, {Fragment} from "react";
+import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
 
-import {fetchData} from "@datawheel/canon-core";
+import axios from "axios";
+
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
-import libs from "@datawheel/canon-cms/src/utils/libs";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
+import SubnationalCountryBlock from "./SubnationalCountryBlock";
+
+import {nest as d3Nest} from "d3-collection";
+
 import "./Subnational.css";
 
-import {SUBNATIONAL} from "helpers/consts";
+import {SUBNATIONAL_COUNTRIES} from "helpers/consts";
 
 class Subnational extends React.Component {
-  state = {
-    scrolled: false
-  };
 
-  componentDidMount() {
-    window.addEventListener("scroll", this.handleScroll);
+  getChildContext() {
+    const {locale, router} = this.props;
+    return {
+      router,
+      locale
+    };
   }
-
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
-
-  handleScroll = () => {
-    if (window.scrollY > 5) {
-      this.setState({scrolled: true});
-    }
-    else {
-      this.setState({scrolled: false});
-    }
-
-  };
 
   render() {
-    const {scrolled} = this.state;
-    return <div className="subnational" onScroll={this.handleScroll}>
-      <OECNavbar
-        className={scrolled ? "background" : ""}
-        title={scrolled ? "Subnational" : ""}
-      />
+    const {subnationalLandingData} = this.props;
 
-      <div className="welcome">
-        {/* spinning orb thing */}
-        <div className="welcome-bg">
-          <img className="welcome-bg-img" src="/images/stars.png" alt="" draggable="false" />
-        </div>
+    return <div className="subnational">
+      <OECNavbar />
 
-        {/* entity selection form */}
-        <div className="subnat-list-outer">
-          <h1>Countries with Subnational Trade Data</h1>
-          {SUBNATIONAL.map(country =>
-            <div key={country.title}>
-              <h2>{country.title}</h2>
-              {country.items.map(subnationalGroup =>
-                <Fragment key={subnationalGroup.title}>
-                  <h3 className="nav-group-subtitle display">{subnationalGroup.title}</h3>
-                  <ul className="nav-group-list nav-group-nested-list">
-                    {subnationalGroup.items.map(subnation =>
-                      <li className="nav-group-item nav-group-nested-item" key={`${country.title}-${subnationalGroup.title}-${subnation.title}`}>
-                        <a href={subnation.url} className="nav-group-link" onFocus={() => this.setState({isOpen: true})}>
-                          {subnation.title}
-                        </a>
-                      </li>
-                    )}
-                  </ul>
-                </Fragment>
-              )}
-            </div>
-          )}
-        </div>
+      <div className="subnational-content">
+
+        <h1>Subnational Countries</h1>
+
+        {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map((country, ix) =>
+          <SubnationalCountryBlock key={`subnational-country-${ix}`} metadata={country} options={subnationalLandingData ? subnationalLandingData[country.code] : false} />
+        )}
 
       </div>
 
@@ -81,20 +48,61 @@ class Subnational extends React.Component {
   }
 }
 
-
-Subnational.need = [
-];
-
 Subnational.childContextTypes = {
-  formatters: PropTypes.object,
   locale: PropTypes.string,
   router: PropTypes.object
 };
 
 
+Subnational.need = [(params, store) => {
+
+  // Setup promises
+  const promisesList = [];
+  const countriesData = {};
+  SUBNATIONAL_COUNTRIES.map((country, ix) => {
+    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=1000`;
+    countriesData[encodeURI(url)] = country;
+    promisesList.push(url);
+  });
+
+  // All promises finish
+  const allPromise = Promise.all(promisesList.map(url => axios.get(url))).then(responses => {
+    const finalResponse = {};
+    let reponseMetadata;
+    let records;
+    let responseURL;
+    responses.map(res => {
+      responseURL = res.request.responseURL ? res.request.responseURL : res.request.res.responseUrl;
+      reponseMetadata = countriesData[responseURL];
+      if (reponseMetadata) {
+
+        records = res.data.results.filter(datum =>
+          // datum.profile === `subnational_${reponseMetadata.code}` &&
+          datum.dimension === reponseMetadata.dimension &&
+          reponseMetadata.geoLevels.map(gl => gl.level).indexOf(datum.hierarchy) > -1
+        );
+        finalResponse[reponseMetadata.code] = d3Nest().key(d => d.hierarchy).object(records);
+      }
+      else {
+        console.warn("responseURL", res.request.res.responseUrl);
+        // console.warn("not in", Object.keys(countriesData));
+      }
+    });
+    return {
+      key: "subnationalLandingData",
+      data: finalResponse
+    };
+  });
+
+  return {
+    type: "GET_DATA",
+    promise: allPromise
+  };
+}];
+
 export default hot(withNamespaces()(
   connect(state => ({
-    formatters: state.data.formatters,
-    locale: state.i18n.locale
+    locale: state.i18n.locale,
+    subnationalLandingData: state.data.subnationalLandingData
   }))(Subnational)
 ));

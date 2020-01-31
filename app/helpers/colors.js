@@ -60,15 +60,15 @@ export default {
   },
 
   "CPC Section": {
-    A: "#9A3260",
-    B: "#ED6560",
-    C: "#F19462",
-    D: "#F9D79B",
-    E: "#DE9489",
-    F: "#4B343B",
-    G: "#6F7B93",
-    H: "#4F7993",
-    Y: "#8F4F5A"
+    A: "#9A3260", // Human Necessities
+    B: "#ED6560", // Performing Operations; Transporting
+    C: "#F19462", // Chemistry; Metallurgy
+    D: "#F9D79B", // Textiles; Paper
+    E: "#DE9489", // Fixed Constructions
+    F: "#5e8566", // Mechanical Engineering; Lighting; Heating; Weapons; Blasting
+    G: "#6F7B93", // Physics
+    H: "#4F7993", // Electricity
+    Y: "#8F4F5A"  // General Tagging Of New Technological Developments...
   },
 
   "colorGrey": "#ccc"
