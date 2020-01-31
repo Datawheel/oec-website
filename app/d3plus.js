@@ -71,10 +71,10 @@ function backgroundImage(d) {
 
 const axisStyles = {
   barConfig: {
-    stroke: "#FFFFFF"
+    stroke: "#15191F"
   },
   gridConfig: {
-    stroke: "#FFFFFF",
+    stroke: "#15191F",
     strokeWidth: 1
   },
   labelConfig: {
@@ -92,7 +92,7 @@ const axisStyles = {
       fontSize: () => 12,
       fontWeight: () => 400
     },
-    stroke: "#FFFFFF"
+    stroke: "#15191F"
   },
   tickSize: 5,
   titleConfig: {
@@ -178,7 +178,7 @@ export default {
   },
   tooltipConfig: {
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Subclass", "Class", "Superclass", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
       const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
       const options = {1: "export", 2: "import"};
 

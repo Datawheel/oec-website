@@ -9,9 +9,4 @@
   justify-content: center;
   /* theming */
   background-color: var(--dark-4);
-  color: var(--white);
-
-  & .bp3-heading {
-    color: var(--white);
-  }
 }

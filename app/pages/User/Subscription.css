@@ -1,0 +1,18 @@
+.subscription {
+  align-items: center;
+  background: var(--dark-4);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding-top: var(--nav-height);
+  & .bp3-non-ideal-state {
+    margin-top: 15vh;
+  }
+  & .subscription-content {
+    align-items: flex-start;
+    padding: var(--gutter-sm) var(--gutter-xl);
+    width: 100%;
+  }
+}
