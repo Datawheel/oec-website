@@ -15,11 +15,11 @@ class RankingTable extends React.Component {
           <ReactTable
             data={data}
             columns={columns}
-            showPagination={false}
+            showPagination={true}
             // defaultPageSize={length}
             // minRows={length}
-            defaultPageSize={10}
-            minRows={10}
+            defaultPageSize={100}
+            minRows={100}
             resizable={false}
             defaultSorted={[{id: "lastyear", desc: true}]}
           />
