@@ -102,7 +102,7 @@ class VbChart extends React.Component {
     if (isProduct) params.HS4 = viztype;
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
-    // if (params.drilldowns.includes("Country")) params.properties = `${countryTypeBalance} ISO 3`;
+    if (params.drilldowns.includes(countryTypeBalance)) params.properties = `${countryTypeBalance} ISO 3`;
 
     if (chart === "network") {
       // eslint-disable-next-line guard-for-in
