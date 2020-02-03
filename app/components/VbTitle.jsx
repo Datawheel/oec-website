@@ -45,31 +45,45 @@ class VbTitle extends React.Component {
 
       title = networkTitleOptions[flow] || networkTitleOptions.export;
     }
+    else if (isTrade) {
+      // Titles for Trade charts
+      if (!isCountry && isProduct) {
+        title = t(
+          "vb_title_which_countries_flow_product",
+          {flow, product: viztype, time}
+        );
+      }
+      else if (isGeoGrouping) {
+        title = t(
+          "vb_title_where_country_flow",
+          {country: _countryNames, flow, time, prep: preps[flow]}
+        );
+      }
+      else if (isCountry && isPartner) {
+        title = t(
+          "vb_title_what_country_flow_partner",
+          {country: _countryNames, partner: _partnerNames, flow, time}
+        );
+      }
+      else if (isCountry && isProduct) {
+        console.log("hello");
+        title = t(
+          "vb_title_where_country_flow_product",
+          {country: _countryNames, flow, time, product: viztype, prep: preps[flow]}
+        );
+      }
+    }
+    else {
+      // Titles for Technology charts
+      if (isCountry) {
+        title = t(
+          "vb_title_what_country_patent",
+          {country: _countryNames, time}
+        );
+      }
+    }
 
-    else if (!isCountry && isProduct) {
-      title = t(
-        "vb_title_which_countries_flow_product",
-        {flow, product: viztype, time}
-      );
-    }
-    else if (isGeoGrouping) {
-      title = t(
-        "vb_title_where_country_flow",
-        {country: _countryNames, flow, time, prep: preps[flow]}
-      );
-    }
-    else if (isCountry && isPartner) {
-      title = t(
-        "vb_title_what_country_flow_partner",
-        {country: _countryNames, partner: _partnerNames, flow, time}
-      );
-    }
-    else if (isCountry && isProduct) {
-      title = t(
-        "vb_title_where_country_flow_product",
-        {country: _countryNames, flow, time, prep: preps[flow]}
-      );
-    }
+
 
     return (
       <div className="vb-title">

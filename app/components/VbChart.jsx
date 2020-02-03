@@ -63,9 +63,14 @@ class VbChart extends React.Component {
     const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
     const dd = {
-      show: isTechnology ? isFilter ? ddTech[viztype.length - 1] : "Subclass" : "HS4",
+      show: isTechnology
+        ? isFilter
+          ? ddTech[viztype.length - 1]
+          : "Subclass"
+        : countryId.length === 0 || isProduct ? countryTypeBalance : "HS4",
       all: countryTypeBalance
     };
+    console.log(dd);
 
     if (chart === "line") dd.show = "Section";
 
@@ -74,7 +79,8 @@ class VbChart extends React.Component {
 
     const drilldowns = ["Year"];
     if (!isTechnology) drilldowns.push(!dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
-    if (isTechnology) drilldowns.push(countryTypeBalance);
+    if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
+    if (isTechnology && partner === "all") drilldowns.push("Subclass");
 
     const cubeName = !isTechnology
       ? `trade_i_baci_a_${cube.replace("hs", "")}`
@@ -96,7 +102,7 @@ class VbChart extends React.Component {
     if (isProduct) params.HS4 = viztype;
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
-    if (params.drilldowns.includes("Country")) params.properties = `${countryTypeBalance} ISO 3`;
+    // if (params.drilldowns.includes("Country")) params.properties = `${countryTypeBalance} ISO 3`;
 
     if (chart === "network") {
       // eslint-disable-next-line guard-for-in
@@ -128,6 +134,7 @@ class VbChart extends React.Component {
       });
     }
 
+    console.log(params);
     return axios.get("https://api.oec.world/tesseract/data", {
       params
     }).then(resp => {
@@ -151,6 +158,8 @@ class VbChart extends React.Component {
     const {routeParams} = this.state;
     const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype} = routeParams;
+
+    console.log(data);
 
     if (loading) return <div>Loading...</div>;
 

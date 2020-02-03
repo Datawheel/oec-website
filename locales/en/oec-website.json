@@ -92,6 +92,7 @@
   "vb_title_network_relatedness": "What are the export opportunities of {{country}}? ({{time}})",
   "vb_title_what_country_flow": "What does {{country}} {{flow}}? ({{time}})",
   "vb_title_what_country_flow_partner": "What does {{country}} {{flow}} to {{partner}}? ({{time}})",
+  "vb_title_what_country_patent": "What does {{country}} patent? ({{time}})",
   "vb_title_where_country_flow": "Where does {{country}} {{flow}} {{prep}}? ({{time}})",
   "vb_title_where_country_flow_product": "Where does {{country}} {{flow}} {{product}} {{prep}}? (2017)",
   "vb_title_which_countries_flow_product": "Which countries {{flow}} {{product}}? ({{time}})",
