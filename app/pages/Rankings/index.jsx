@@ -4,6 +4,8 @@ import {Helmet} from "react-helmet";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {AnchorButton, Button, ButtonGroup} from "@blueprintjs/core";
+import {Redirect} from "react-router";
+import {Link, Route, Switch} from "react-router";
 
 import axios from "axios";
 import Numeral from "numeral";
@@ -130,6 +132,11 @@ class Rankings extends React.Component {
     this.setState({category, measure, range});
   }
 
+  redirectPage(category, measure) {
+    const {lng} = this.props;
+    return <Link to="/somewhere"/>;
+  }
+
   /**
     * Mount
     */
@@ -168,7 +175,7 @@ class Rankings extends React.Component {
 
   render() {
     const {title, text, data, category, measure, range} = this.state;
-    const {t} = this.props;
+    const {lng, t} = this.props;
 
     return (
       <div className="rankings-page">
@@ -200,11 +207,13 @@ class Rankings extends React.Component {
               <div className="buttons">
                 <ButtonGroup style={{minWidth: 200}}>
                   {FILTER_CATEGORY.map((d, k) =>
-                    <Button
+                    <AnchorButton
                       key={k}
-                      onClick={() => this.redirectPage(d[1], d[2])}
                       className={`${d[1] === category ? "isactive" : ""}`}
-                    >{`${d[0]}`}</Button>
+                      href={`/${lng}/rankings/${d[1]}/${d[2]}/`}
+                    >
+                      {`${d[0]}`}
+                    </AnchorButton>
                   )}
                 </ButtonGroup>
               </div>
@@ -215,11 +224,13 @@ class Rankings extends React.Component {
                 <div className="buttons">
                   <ButtonGroup style={{minWidth: 200}}>
                     {FILTER_PRODUCT.map((d, k) =>
-                      <Button
+                      <AnchorButton
                         key={k}
-                        onClick={() => this.changeRange("product", d[1])}
+                        onClick={() => this.redirectPage("product", d[1])}
                         className={`${d[1] === measure ? "isactive" : ""}`}
-                      >{`${d[0]}`}</Button>
+                      >
+                        {`${d[0]}`}
+                      </AnchorButton>
                     )}
                   </ButtonGroup>
                 </div>

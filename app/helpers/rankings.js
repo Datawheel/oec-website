@@ -21,7 +21,7 @@ module.exports = {
   ],
   FILTER_CATEGORY: [
     ["Country", "country", "eci"],
-    ["Product", "product", "pci"]
+    ["Product", "product", "hs92"]
   ],
   FILTER_PRODUCT: [
     ["HS 92", "hs92"],
