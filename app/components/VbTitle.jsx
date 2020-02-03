@@ -33,7 +33,20 @@ class VbTitle extends React.Component {
     };
 
     let title = t("vb_title_what_country_flow", {country: _countryNames, flow, time});
-    if (!isCountry && isProduct) {
+
+    if (chart === "network") {
+      // Titles for Network section
+      const networkTitleParams = {country: _countryNames, time};
+      const networkTitleOptions = {
+        export: t("vb_title_network_rca", networkTitleParams),
+        pgi: t("vb_title_network_pgi", networkTitleParams),
+        relatedness: t("vb_title_network_relatedness", networkTitleParams)
+      };
+
+      title = networkTitleOptions[flow] || networkTitleOptions.export;
+    }
+
+    else if (!isCountry && isProduct) {
       title = t(
         "vb_title_which_countries_flow_product",
         {flow, product: viztype, time}

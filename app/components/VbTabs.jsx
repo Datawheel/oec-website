@@ -210,7 +210,7 @@ class VbTabs extends React.Component {
                         {
                           name: t("Imports by Product"),
                           permalink: "hs92/import/chl/all/10101/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/stacked\/\w{3}\/import\/\w+\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/\w+\/visualize\/stacked\/\w{3}\/import\/\w+\/all\/\w+\/[0-9.-]+\//)
                         },
                         {name: t("Patents by Category"), permalink: "cpc/import/show/all/A01B/2019/"}
                       ]
@@ -248,8 +248,21 @@ class VbTabs extends React.Component {
                   items={[
                     {
                       name: t("Country"), nest: [
-                        {name: t("Product Space")},
-                        {name: t("PGI Product Space")}
+                        {
+                          name: t("Product Space"),
+                          permalink: "hs92/export/deu/all/show/2017/",
+                          regexp: new RegExp(/\w{2}\/visualize\/network\/\w+\/export\/\w+\/all\/show\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("PGI Product Space"),
+                          permalink: "hs92/pgi/deu/all/show/2017/",
+                          regexp: new RegExp(/\w{2}\/visualize\/network\/\w+\/pgi\/\w+\/all\/show\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("Relatedness Space"),
+                          permalink: "hs92/relatedness/deu/all/show/2017/",
+                          regexp: new RegExp(/\w{2}\/visualize\/network\/\w+\/relatedness\/\w+\/all\/show\/[0-9.-]+\//)
+                        }
                       ]
                     }
                   ]}

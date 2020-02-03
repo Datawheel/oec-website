@@ -4,6 +4,8 @@ import {Treemap, StackedArea, LinePlot, Geomap, Network} from "d3plus-react";
 import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
 
+import colors from "helpers/colors";
+
 import "./VbChart.css";
 
 import countryMembers from "../../static/members/country.json";
@@ -73,14 +75,16 @@ class VbChart extends React.Component {
     const drilldowns = ["Year"];
     if (!isTechnology) drilldowns.push(!dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
     if (isTechnology) drilldowns.push(countryTypeBalance);
-    console.log(drilldowns);
+
+    const cubeName = !isTechnology
+      ? `trade_i_baci_a_${cube.replace("hs", "")}`
+      : "patents_i_uspto_w_cpc";
+    const measureName = isTechnology ? "Patent Share" : "Trade Value";
 
     const params = {
-      cube: !isTechnology
-        ? `trade_i_baci_a_${cube.replace("hs", "")}`
-        : "patents_i_uspto_w_cpc",
+      cube: cubeName,
       drilldowns: drilldowns.join(),
-      measures: isTechnology ? "Patent Share" : "Trade Value",
+      measures: measureName,
       parents: true,
       Year: ["tree_map", "geomap"].includes(chart)
         ? time.replace(".", ",")
@@ -94,7 +98,37 @@ class VbChart extends React.Component {
 
     if (params.drilldowns.includes("Country")) params.properties = `${countryTypeBalance} ISO 3`;
 
-    axios.get("https://api.oec.world/tesseract/data", {
+    if (chart === "network") {
+      // eslint-disable-next-line guard-for-in
+      for (const member in params) {
+        delete params[member];
+      }
+      const apiStatsParams = {
+        cube: cubeName,
+        alias: "HS4,Country",
+        rca: `HS4,Exporter Country,${measureName}`,
+        measures: measureName,
+        parents: true,
+        filter_Country: countryId.map(d => d.value)[0],
+        Year: 2017
+      };
+
+      const endpoint = flow === "pgi"
+        ? "opportunity_gain" : "relatedness";
+
+      return axios.get(`/api/stats/${endpoint}`, {
+        params: apiStatsParams
+      }).then(resp => {
+        const data = resp.data.data;
+        this.setState({
+          data,
+          loading: false,
+          routeParams
+        });
+      });
+    }
+
+    return axios.get("https://api.oec.world/tesseract/data", {
       params
     }).then(resp => {
       const data = resp.data.data;
@@ -203,25 +237,45 @@ class VbChart extends React.Component {
         />
       </div>;
     }
-    else if (chart === "network") {
+    else if (chart === "network" && data && data.length > 0) {
+      const measureNetworkName = flow === "pgi"
+        ? "Trade Value Opportunity Gain"
+        : flow === "export" ? "Trade Value RCA" : "Trade Value Relatedness";
+      const networkConfig = {
+        shapeConfig: {
+          Circle: {
+            fill: d => d["Trade Value RCA"] > 1
+              ? (console.log(d),  colors.Section[d["Section ID"]] || "gray")
+              : "gray"
+          }
+        },
+        colorScaleConfig: {
+          scale: "jenks"
+        }
+      };
+      if (flow !== "export") {
+        networkConfig.colorScale = measureNetworkName;
+        networkConfig.shapeConfig = {
+          fill: "D3PLUS-COMMON-RESET",
+          Circle: {
+            fill: "D3PLUS-COMMON-RESET"
+          }
+        };
+      }
+
       return <div className="vb-chart">
         <Network
+          // forceUpdate={true}
           config={{
             ...baseConfig,
+            ...networkConfig,
             nodes: "/network/network_hs4.json",
             links: "/network/network_hs4.json",
-            groupBy: ["id"],
-
-            size: d => 1,
-            sizeMin: 2,
-            sizeMax: 9,
-            shapeConfig: {
-            // strokeWidth: d => 1,
-              stroke: d => "#444444",
-              Path: {
-                stroke: d => "#ccd0d6"
-              }
-            },
+            groupBy: ["Section ID", "HS4 ID"],
+            size: d => d["Trade Value"] * 1 || 1,
+            sizeMin: 5,
+            sizeMax: 15,
+            legend: false,
             total: undefined
           }}
           nodesFormat={resp => resp.nodes}
@@ -230,8 +284,7 @@ class VbChart extends React.Component {
             d => {
               const newData = d
                 .map(dd => Object.assign(dd, {"id": `${dd["HS4 ID"]}`, "HS4 ID": `${dd["HS4 ID"]}`}));
-              // .filter(dd => dd["HS4 ID"] === "10101");
-              console.log(newData);
+
               return newData;
             }
           }
