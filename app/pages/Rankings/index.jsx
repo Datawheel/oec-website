@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {Helmet} from "react-helmet";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
-import {AnchorButton, Button, ButtonGroup} from "@blueprintjs/core";
+import {AnchorButton, Button, ButtonGroup, Classes} from "@blueprintjs/core";
 import {Redirect} from "react-router";
 import {Link, Route, Switch} from "react-router";
 
@@ -60,30 +60,32 @@ class Rankings extends React.Component {
         id: "category",
         Header: `${categoryHeader}`,
         style: {whiteSpace: "unset"},
-        Cell: props =>
+        Cell: props => (
           <div className="category">
             <img
               src={
-                category === "country"
-                  ? `/images/icons/country/country_${props.original["Country ID"].slice(
+                category === "country" ? (
+                  `/images/icons/country/country_${props.original["Country ID"].slice(
                     props.original["Country ID"].length - 3
                   )}.png`
-                  :                   `/images/icons/hs/hs_${props.original["HS6 ID"].toString().length === 7
+                ) : (
+                  `/images/icons/hs/hs_${props.original["HS6 ID"].toString().length === 7
                     ? props.original["HS6 ID"].toString().slice(0, 1)
                     : props.original["HS6 ID"].toString().slice(0, 2)}.png`
-
+                )
               }
               alt="icon"
               className="icon"
             />
             <a
               href={
-                category === "country"
-                  ? `/en/profile/country/${props.original["Country ID"].slice(
+                category === "country" ? (
+                  `/en/profile/country/${props.original["Country ID"].slice(
                     props.original["Country ID"].length - 3
                   )}`
-                  :                   `/en/profile/${measure}/${props.original["HS6 ID"]}`
-
+                ) : (
+                  `/en/profile/${measure}/${props.original["HS6 ID"]}`
+                )
               }
               className="link"
             >
@@ -93,7 +95,7 @@ class Rankings extends React.Component {
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
-
+        )
       },
       ...RANGE_YEARS[range].map((year, index) => ({
         id: RANGE_YEARS[range].length - index > 1 ? `${year}` : "lastyear",
@@ -108,19 +110,20 @@ class Rankings extends React.Component {
       })),
       category === "country"
         ? {
-          id: "sparkline",
-          Header: "",
-          accessor: "sparkline",
-          Cell: props =>
-            <div>
-              <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
-                <SparklinesLine color="white" style={{fill: "none"}} />
-              </Sparklines>
-            </div>,
-          className: "sparkline",
-          width: 220,
-          sortable: false
-        }
+            id: "sparkline",
+            Header: "",
+            accessor: "sparkline",
+            Cell: props => (
+              <div>
+                <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
+                  <SparklinesLine color="white" style={{fill: "none"}} />
+                </Sparklines>
+              </div>
+            ),
+            className: "sparkline",
+            width: 220,
+            sortable: false
+          }
         : null
     ];
 
@@ -190,24 +193,24 @@ class Rankings extends React.Component {
           <h1 className="title">{t(title)}</h1>
 
           <div className="about">
-            {text.map((d, k) =>
+            {text.map((d, k) => (
               <p
                 className={"text"}
                 key={`${k}`}
                 dangerouslySetInnerHTML={{__html: t(d)}}
               />
-            )}
+            ))}
           </div>
 
           <div className="download">
-            {DOWNLOAD_BUTTONS.map((d, k) =>
+            {DOWNLOAD_BUTTONS.map((d, k) => (
               <AnchorButton
                 text={d[0]}
                 href={d[1]}
                 key={k}
                 className={DOWNLOAD_BUTTONS.length - k > 1 ? "" : "last"}
               />
-            )}
+            ))}
           </div>
 
           <div className="settings">
@@ -215,64 +218,67 @@ class Rankings extends React.Component {
               <div className="title">{t("Showing")}</div>
               <div className="buttons">
                 <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_CATEGORY.map((d, k) =>
-                    <AnchorButton
-                      key={k}
-                      className={`${d[1] === category ? "isactive" : ""}`}
+                  {FILTER_CATEGORY.map((d, k) => (
+                    <a
+                      role="button"
                       href={`/${lng}/rankings/${d[1]}/${d[2]}/`}
-                      dataRefresh="true"
-                      classes.button
-                    >
-                      {`${d[0]}`}
-                    </AnchorButton>
-                  )}
+                      className={`${Classes.BUTTON} ${d[1] === category
+                        ? "isactive"
+                        : ""}`}
+                      key={k}
+                      tabIndex="0"
+                      data-refresh="true"
+                    >{`${d[0]}`}</a>
+                  ))}
                 </ButtonGroup>
               </div>
             </div>
-            {category === "product" &&
+            {category === "product" && (
               <div className="setup product">
                 <div className="title">{t("Product Classification")}</div>
                 <div className="buttons">
                   <ButtonGroup style={{minWidth: 200}}>
-                    {FILTER_PRODUCT.map((d, k) =>
-                      <AnchorButton
-                        key={k}
-                        className={`${d[1] === measure ? "isactive" : ""}`}
+                    {FILTER_PRODUCT.map((d, k) => (
+                      <a
+                        role="button"
                         href={`/${lng}/rankings/product/${d[1]}/`}
-                        dataRefresh="true"
-                      >
-                        {`${d[0]}`}
-                      </AnchorButton>
-                    )}
+                        className={`${Classes.BUTTON} ${d[1] === measure
+                          ? "isactive"
+                          : ""}`}
+                        key={k}
+                        tabIndex="0"
+                        data-refresh="true"
+                      >{`${d[0]}`}</a>
+                    ))}
                   </ButtonGroup>
                 </div>
               </div>
-            }
+            )}
             <div className="setup year">
               <div className="title">{t("Year Range")}</div>
               <div className="buttons">
                 <ButtonGroup style={{minWidth: 200}}>
                   {FILTER_YEARS[measure] &&
-                    FILTER_YEARS[measure].map((d, k) =>
+                    FILTER_YEARS[measure].map((d, k) => (
                       <Button
                         key={k}
                         onClick={() => this.changeRange(category, measure, d)}
                         className={`${d === range ? "isactive" : ""}`}
                       >{`${d}`}</Button>
-                    )}
+                    ))}
                 </ButtonGroup>
               </div>
             </div>
           </div>
 
           <div className="ranking">
-            {data &&
+            {data && (
               <RankingTable
                 data={data[range].data}
                 columns={data[range].cols}
                 length={data[range].data.length}
               />
-            }
+            )}
           </div>
         </div>
         <Footer />
