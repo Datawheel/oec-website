@@ -183,6 +183,7 @@ class Vizbuilder extends React.Component {
   render() {
     const {activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
+    const {chart} = routeParams;
 
     return <div id="vizbuilder">
       <OECNavbar
@@ -200,7 +201,7 @@ class Vizbuilder extends React.Component {
               callback={d => this.handleTabOption(d)}
             />
 
-            <div className="columns">
+            {!["network"].includes(chart) && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.product}
@@ -209,9 +210,9 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsProduct", d)}
                 />
               </div>
-            </div>
+            </div>}
 
-            <div className="columns">
+            {!["network"].includes(chart) && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.technology}
@@ -220,7 +221,7 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsTechnology", d)}
                 />
               </div>
-            </div>
+            </div>}
 
             <div className="columns">
               <div className="column-1">

@@ -33,30 +33,57 @@ class VbTitle extends React.Component {
     };
 
     let title = t("vb_title_what_country_flow", {country: _countryNames, flow, time});
-    if (!isCountry && isProduct) {
-      title = t(
-        "vb_title_which_countries_flow_product",
-        {flow, product: viztype, time}
-      );
+
+    if (chart === "network") {
+      // Titles for Network section
+      const networkTitleParams = {country: _countryNames, time};
+      const networkTitleOptions = {
+        export: t("vb_title_network_rca", networkTitleParams),
+        pgi: t("vb_title_network_pgi", networkTitleParams),
+        relatedness: t("vb_title_network_relatedness", networkTitleParams)
+      };
+
+      title = networkTitleOptions[flow] || networkTitleOptions.export;
     }
-    else if (isGeoGrouping) {
-      title = t(
-        "vb_title_where_country_flow",
-        {country: _countryNames, flow, time, prep: preps[flow]}
-      );
+    else if (isTrade) {
+      // Titles for Trade charts
+      if (!isCountry && isProduct) {
+        title = t(
+          "vb_title_which_countries_flow_product",
+          {flow, product: viztype, time}
+        );
+      }
+      else if (isGeoGrouping) {
+        title = t(
+          "vb_title_where_country_flow",
+          {country: _countryNames, flow, time, prep: preps[flow]}
+        );
+      }
+      else if (isCountry && isPartner) {
+        title = t(
+          "vb_title_what_country_flow_partner",
+          {country: _countryNames, partner: _partnerNames, flow, time}
+        );
+      }
+      else if (isCountry && isProduct) {
+        console.log("hello");
+        title = t(
+          "vb_title_where_country_flow_product",
+          {country: _countryNames, flow, time, product: viztype, prep: preps[flow]}
+        );
+      }
     }
-    else if (isCountry && isPartner) {
-      title = t(
-        "vb_title_what_country_flow_partner",
-        {country: _countryNames, partner: _partnerNames, flow, time}
-      );
+    else {
+      // Titles for Technology charts
+      if (isCountry) {
+        title = t(
+          "vb_title_what_country_patent",
+          {country: _countryNames, time}
+        );
+      }
     }
-    else if (isCountry && isProduct) {
-      title = t(
-        "vb_title_where_country_flow_product",
-        {country: _countryNames, flow, time, prep: preps[flow]}
-      );
-    }
+
+
 
     return (
       <div className="vb-title">
