@@ -65,8 +65,13 @@ class Rankings extends React.Component {
             <img
               src={
                 category === "country"
-                  ? `/images/icons/country/country_${props.original["Country ID"].slice(props.original["Country ID"].length - 3)}.png`
-                  : `/images/icons/hs/hs_${props.original["HS6 ID"].toString().length === 7 ? props.original["HS6 ID"].toString().slice(0, 1) : props.original["HS6 ID"].toString().slice(0, 2)}.png`
+                  ? `/images/icons/country/country_${props.original["Country ID"].slice(
+                    props.original["Country ID"].length - 3
+                  )}.png`
+                  :                   `/images/icons/hs/hs_${props.original["HS6 ID"].toString().length === 7
+                    ? props.original["HS6 ID"].toString().slice(0, 1)
+                    : props.original["HS6 ID"].toString().slice(0, 2)}.png`
+
               }
               alt="icon"
               className="icon"
@@ -74,16 +79,16 @@ class Rankings extends React.Component {
             <a
               href={
                 category === "country"
-                  ? `/en/profile/country/${props.original["Country ID"].slice(props.original["Country ID"].length - 3)}`
-                  : `/en/profile/${measure}/${props.original["HS6 ID"]}`
+                  ? `/en/profile/country/${props.original["Country ID"].slice(
+                    props.original["Country ID"].length - 3
+                  )}`
+                  :                   `/en/profile/${measure}/${props.original["HS6 ID"]}`
+
               }
               className="link"
             >
               <div className="name">
-                {category === "country"
-                  ? props.original.Country
-                  : props.original.HS6
-                }
+                {category === "country" ? props.original.Country : props.original.HS6}
               </div>
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
@@ -132,11 +137,6 @@ class Rankings extends React.Component {
     this.setState({category, measure, range});
   }
 
-  redirectPage(category, measure) {
-    const {lng} = this.props;
-    return <Link to="/somewhere"/>;
-  }
-
   /**
     * Mount
     */
@@ -144,7 +144,9 @@ class Rankings extends React.Component {
   componentDidMount() {
     const {category, measure} = this.state;
 
-    const range = FILTER_YEARS[measure].find(d => d === this.props.location.search.split("=")[1]);
+    const range = FILTER_YEARS[measure].find(
+      d => d === this.props.location.search.split("=")[1]
+    );
 
     const futureData = FILTER_YEARS[measure].map(d => {
       const columns = this.createColumns(category, d, measure);
@@ -198,7 +200,14 @@ class Rankings extends React.Component {
           </div>
 
           <div className="download">
-            {DOWNLOAD_BUTTONS.map((d, k) => <AnchorButton text={d[0]} href={d[1]} key={k} className={DOWNLOAD_BUTTONS.length - k > 1 ? "" : "last"} />)}
+            {DOWNLOAD_BUTTONS.map((d, k) =>
+              <AnchorButton
+                text={d[0]}
+                href={d[1]}
+                key={k}
+                className={DOWNLOAD_BUTTONS.length - k > 1 ? "" : "last"}
+              />
+            )}
           </div>
 
           <div className="settings">
@@ -211,6 +220,8 @@ class Rankings extends React.Component {
                       key={k}
                       className={`${d[1] === category ? "isactive" : ""}`}
                       href={`/${lng}/rankings/${d[1]}/${d[2]}/`}
+                      dataRefresh="true"
+                      classes.button
                     >
                       {`${d[0]}`}
                     </AnchorButton>
@@ -226,8 +237,9 @@ class Rankings extends React.Component {
                     {FILTER_PRODUCT.map((d, k) =>
                       <AnchorButton
                         key={k}
-                        onClick={() => this.redirectPage("product", d[1])}
                         className={`${d[1] === measure ? "isactive" : ""}`}
+                        href={`/${lng}/rankings/product/${d[1]}/`}
+                        dataRefresh="true"
                       >
                         {`${d[0]}`}
                       </AnchorButton>
