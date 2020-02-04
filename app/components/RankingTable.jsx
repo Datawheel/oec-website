@@ -9,6 +9,7 @@ class RankingTable extends React.Component {
 
   render() {
     const {data, columns, length} = this.props;
+    console.log("length", length);
     return (
       <div className="rankingtable-component">
         {data &&
@@ -18,8 +19,8 @@ class RankingTable extends React.Component {
             showPagination={true}
             // defaultPageSize={length}
             // minRows={length}
-            defaultPageSize={100}
-            minRows={100}
+            defaultPageSize={50}
+            minRows={50}
             resizable={false}
             defaultSorted={[{id: "lastyear", desc: true}]}
           />
