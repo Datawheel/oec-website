@@ -5,7 +5,6 @@ const {
 } = process.env;
 
 const stripe = require("stripe")(CANON_STRIPE_SECRET);
-const bodyParser = require("body-parser");
 
 const isRole = role => (req, res, next) => {
   if (req.isAuthenticated()) {

@@ -282,7 +282,10 @@ class VbTabs extends React.Component {
                   items={[
                     {
                       name: t("Country"), nest: [
-                        {name: t("Product Connections")}
+                        {
+                          name: t("Product Connections"),
+                          permalink: "hs92/export/chl/all/10101/2017/"
+                        }
                       ]
                     }
                   ]}

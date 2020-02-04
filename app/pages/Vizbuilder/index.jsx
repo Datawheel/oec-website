@@ -13,6 +13,8 @@ import {Client} from "@datawheel/olap-client";
 import OECMultiSelect from "../../components/OECMultiSelect";
 import VbTitle from "../../components/VbTitle";
 
+import colors from "../../helpers/colors";
+
 
 const datasets = [
   {value: "hs92", title: "HS92"},
@@ -74,7 +76,7 @@ class Vizbuilder extends React.Component {
 
       }))
       .then(data => {
-        this.setState({product: data.map(d => ({value: d.key, title: d.name}))});
+        this.setState({product: data.map(d => ({value: d.key, title: d.name, color: colors.Section[d.key.toString().slice(0, -2)]}))});
       });
 
     Client.fromURL("https://api.oec.world/tesseract")
@@ -85,7 +87,7 @@ class Vizbuilder extends React.Component {
 
       }))
       .then(data => {
-        this.setState({technology: data.map(d => ({value: d.key, title: d.name}))});
+        this.setState({technology: data.map(d => ({value: d.key, title: d.name, color: colors["CPC Section"][d.key[0]]}))});
       });
 
     Client.fromURL("https://api.oec.world/tesseract")
@@ -96,7 +98,11 @@ class Vizbuilder extends React.Component {
 
       }))
       .then(data => {
-        const countryData = data.map(d => ({value: d.key, title: d.name}));
+        const countryData = data.map(d => ({
+          value: d.key,
+          title: d.name,
+          color: colors.Continent[d.key.slice(0, 2)]
+        }));
         const _selectedItemsCountry = countryData
           .filter(d => country.split(".").includes(d.value.slice(2, 5)));
         const _selectedItemsPartner = countryData
@@ -234,7 +240,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>
 
-            <div className="columns">
+            {!["network", "rings"].includes(chart) && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
@@ -243,7 +249,7 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
-            </div>
+            </div>}
 
             <div className="columns">
               <div className="column-1-2">
