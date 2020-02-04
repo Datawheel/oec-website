@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {Treemap, StackedArea, LinePlot, Geomap, Network} from "d3plus-react";
+import {Treemap, StackedArea, LinePlot, Geomap, Network, Rings} from "d3plus-react";
 import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
 
@@ -70,7 +70,6 @@ class VbChart extends React.Component {
         : countryId.length === 0 || isProduct ? countryTypeBalance : "HS4",
       all: countryTypeBalance
     };
-    console.log(dd);
 
     if (chart === "line") dd.show = "Section";
 
@@ -133,8 +132,21 @@ class VbChart extends React.Component {
         });
       });
     }
+    else if (chart === "rings") {
+      const ringsParams = {
+        Country: countryId.map(d => d.value)[0],
+        Year: 2017
+      };
+      return axios.get("/api/connections/hs4", {params: ringsParams}).then(resp => {
+        const data = resp.data;
+        this.setState({
+          data,
+          loading: false,
+          routeParams
+        });
+      });
+    }
 
-    console.log(params);
     return axios.get("https://api.oec.world/tesseract/data", {
       params
     }).then(resp => {
@@ -298,6 +310,26 @@ class VbChart extends React.Component {
             }
           }
         /></div>;
+    }
+
+    else if (chart === "rings" && data && data.length > 0) {
+      return <div className="vb-chart">
+        <Rings
+          config={{
+            links: data,
+            center: viztype,
+            // nodeGroupBy: ["Section ID"],
+            // size: "Trade Value",
+            label: "",
+            shapeConfig: {
+              Circle: {
+                fill: d => colors.Section[d.id.slice(0, -4)] || "gray"
+              }
+            },
+            total: "Trade Value"
+          }}
+        />;
+      </div>;
     }
 
     return <div />;

@@ -45,6 +45,9 @@ class VbTitle extends React.Component {
 
       title = networkTitleOptions[flow] || networkTitleOptions.export;
     }
+    else if (chart === "rings") {
+      title = t("vb_title_rings", {country: _countryNames, product: viztype, time});
+    }
     else if (isTrade) {
       // Titles for Trade charts
       if (!isCountry && isProduct) {
