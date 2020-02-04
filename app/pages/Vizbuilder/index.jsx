@@ -234,7 +234,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>
 
-            {!["network"].includes(chart) && <div className="columns">
+            {!["network", "rings"].includes(chart) && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}

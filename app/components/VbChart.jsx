@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {Treemap, StackedArea, LinePlot, Geomap, Network, Rings} from "d3plus-react";
+import {Treemap, StackedArea, LinePlot, Geomap, Network, Rings, Plot} from "d3plus-react";
 import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
 
@@ -329,6 +329,25 @@ class VbChart extends React.Component {
             total: "Trade Value"
           }}
         />;
+      </div>;
+    }
+
+    else if (chart === "scatter" && data && data.length > 0) {
+      return <div className="vb-chart">
+        <Plot
+          config={{
+            data: "/api/gdp/eci",
+            groupBy: ["Country ID"],
+            x: "Trade Value ECI",
+            y: "Measure",
+            xConfig: {
+              // scale: "log"
+            },
+            yConfig: {
+              scale: "log"
+            }
+          }}
+        />
       </div>;
     }
 
