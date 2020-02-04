@@ -27,7 +27,8 @@ module.exports = function(app) {
           ...a2.find(item => item["Country ID"] === itm["Country ID"] && item),
           ...itm
         }));
-      const data = mergeById(eciData, gdpData);
+      const data = mergeById(eciData, gdpData).filter(d => d.Measure && d["Trade Value ECI"]);
+
       res.json(data);
     }));
   });
