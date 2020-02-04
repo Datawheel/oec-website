@@ -5,6 +5,7 @@ import {MultiSelect} from "@blueprintjs/select";
 import {colorContrast} from "d3plus-color";
 
 import "@blueprintjs/select/lib/css/blueprint-select.css";
+import "./OECMultiSelect.css";
 
 class OECMultiSelect extends React.Component {
   constructor(props) {
@@ -24,13 +25,22 @@ class OECMultiSelect extends React.Component {
     if (!modifiers.matchesPredicate) {
       return null;
     }
+
+    let itemIcon = "";
+    switch (this.props.itemType) {
+      case "country":
+        itemIcon = <span><img src={`/images/icons/country/country_${item.value.slice(2, 5)}.png`} /></span>;
+        break;
+      default:
+        break;
+    }
     return <MenuItem
       active={modifiers.active}
       icon={this.isItemSelected(item) ? "tick" : "blank"}
       key={`${item.value}-${item.title}`}
       label={item.displayId ? `${item.displayId}`.toUpperCase() : `${item.value}`}
       onClick={handleClick}
-      text={item.title}
+      text={<div className="menu-item-text">{itemIcon}{item.title}</div>}
       shouldDismissPopover={false}
     />;
 
@@ -128,5 +138,9 @@ class OECMultiSelect extends React.Component {
     </div>;
   }
 }
+
+OECMultiSelect.defaultProps = {
+  itemType: undefined
+};
 
 export default OECMultiSelect;

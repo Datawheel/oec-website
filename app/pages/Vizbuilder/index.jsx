@@ -65,18 +65,18 @@ class Vizbuilder extends React.Component {
 
   componentDidMount() {
     const {routeParams} = this.props;
-    const {country, partner, time} = routeParams;
+    const {country, partner, time, viztype} = routeParams;
     window.addEventListener("scroll", this.handleScroll);
 
     Client.fromURL("https://api.oec.world/tesseract")
       .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
         const query = cube.query;
         query.addMeasure("Trade Value");
-        return client.getMembers({level: "HS2"});
+        return client.getMembers({level: "HS4"});
 
       }))
       .then(data => {
-        this.setState({product: data.map(d => ({value: d.key, title: d.name, color: colors.Section[d.key.toString().slice(0, -2)]}))});
+        this.setState({product: data.map(d => ({value: d.key, title: d.name, color: colors.Section[d.key.toString().slice(0, -4)]}))});
       });
 
     Client.fromURL("https://api.oec.world/tesseract")
@@ -109,11 +109,13 @@ class Vizbuilder extends React.Component {
           .filter(d => partner.split(".").includes(d.value.slice(2, 5)));
         const _selectedItemsYear = years
           .filter(d => time.split(".").includes(d.value.toString()));
-
+        const _selectedItemsProduct = this.state.product
+          .filter(d => viztype.split(".").includes(d.value.toString()));
         this.setState({
           country: countryData,
           _selectedItemsCountry,
           _selectedItemsPartner,
+          _selectedItemsProduct,
           _selectedItemsYear
         });
       });
@@ -189,7 +191,10 @@ class Vizbuilder extends React.Component {
   render() {
     const {activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
-    const {chart} = routeParams;
+    const {chart, cube} = routeParams;
+
+    const isTrade = cube.includes("hs");
+    const isTechnology = !isTrade;
 
     return <div id="vizbuilder">
       <OECNavbar
@@ -207,7 +212,7 @@ class Vizbuilder extends React.Component {
               callback={d => this.handleTabOption(d)}
             />
 
-            {!["network"].includes(chart) && <div className="columns">
+            {!["network"].includes(chart) && isTrade && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.product}
@@ -218,7 +223,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
 
-            {!["network"].includes(chart) && <div className="columns">
+            {!["network"].includes(chart) && isTechnology && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.technology}
@@ -233,6 +238,7 @@ class Vizbuilder extends React.Component {
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
+                  itemType={"country"}
                   selectedItems={this.state._selectedItemsCountry}
                   title={"Country"}
                   callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
@@ -244,6 +250,7 @@ class Vizbuilder extends React.Component {
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
+                  itemType="country"
                   selectedItems={this.state._selectedItemsPartner}
                   title={"Partner"}
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}

@@ -1,0 +1,7 @@
+.menu-item-text {
+  display: flex;
+  & img {
+    width: 20px;
+    margin-right: 5px;
+  }
+}
