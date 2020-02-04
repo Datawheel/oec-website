@@ -2,6 +2,7 @@ import React from "react";
 
 import {Button, MenuItem, Switch} from "@blueprintjs/core";
 import {MultiSelect} from "@blueprintjs/select";
+import {colorContrast} from "d3plus-color";
 
 import "@blueprintjs/select/lib/css/blueprint-select.css";
 
@@ -114,7 +115,10 @@ class OECMultiSelect extends React.Component {
           tagProps: d => {
             const thisItem = items.find(dd => dd.title === d);
             return {
-              style: {backgroundColor: thisItem.color}
+              style: {
+                backgroundColor: thisItem.color,
+                color: colorContrast(thisItem.color) || "white"
+              }
             };
           }
         }}
