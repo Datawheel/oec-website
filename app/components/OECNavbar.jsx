@@ -10,6 +10,7 @@ import {ProfileSearch} from "@datawheel/canon-cms";
 import Button from "@datawheel/canon-cms/src/components/fields/Button.jsx";
 
 import {NAV} from "helpers/consts";
+import {profileSearchConfig} from "helpers/search";
 import NavGroup from "./NavGroup";
 
 import "./OECNavbar.css";
@@ -132,8 +133,9 @@ class OECNavbar extends Component {
           tabIndex={searchVisible ? null : -1}
         >
           <ProfileSearch
+            {...profileSearchConfig}
             display="columns"
-            showExamples={false} />
+            showExamples={true} />
         </div>
       </div>
     );

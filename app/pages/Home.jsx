@@ -67,7 +67,7 @@ class Home extends Component {
             <img className="home-hero-logo" src="/images/big_logo.png" alt="" />
             <span className="home-hero-tagline u-font-md">The world’s leading data visualization tool for international trade data.</span>
 
-            <ProfileSearch position="absolute" inputFontSize="xl" />
+            <ProfileSearch position="absolute" inputFontSize="xl" showExamples={true} />
 
             {/* logos */}
             <ul className="home-hero-sponsor-list">
