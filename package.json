@@ -37,6 +37,6 @@
     "react-transition-group": "^4.3.0",
     "react-virtualized": "^9.21.2",
     "sort-by": "^1.2.0",
-    "stripe": "^8.8.0"
+    "stripe": "^8.14.0"
   }
 }
