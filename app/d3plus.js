@@ -289,11 +289,13 @@ export default {
   total: "Trade Value",
   totalConfig: {
     "fontColor": () => "#FFFFFF",
+    "fontFamily": () => "'Source Sans Pro', sans-serif",
     "fontSize": () => 14,
     "text-transform": "uppercase"
   },
   titleConfig: {
     "fontColor": () => "#FFFFFF",
+    "fontFamily": () => "'Palanquin', sans-serif",
     "fontSize": () => 16,
     "text-transform": "uppercase"
   },
