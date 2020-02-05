@@ -80,7 +80,7 @@
             background: rgba(33, 40, 49, 0.4);
           }
 
-          & .isactive {
+          & .is-active {
             background: rgba(33, 40, 49, 1) !important;
             font-weight: var(--field-font-weight);
             opacity: 1;

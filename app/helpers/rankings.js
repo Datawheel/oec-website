@@ -1,3 +1,5 @@
+const locale = "en";
+
 module.exports = {
   PAGE: [
     {
@@ -19,15 +21,39 @@ module.exports = {
       }
     }
   ],
-  FILTER_CATEGORY: [
-    ["Country", "country", "eci"],
-    ["Product", "product", "hs92"]
+  CATEGORY_BUTTONS: [
+    {
+      display: "Country",
+      value: "country",
+      href: `/${locale}/rankings/country/eci/`
+    },
+    {
+      display: "Product",
+      value: "product",
+      href: `/${locale}/rankings/product/hs92/`
+    }
   ],
-  FILTER_PRODUCT: [
-    ["HS 92", "hs92"],
-    ["HS 96", "hs96"],
-    ["HS 02", "hs02"],
-    ["HS 07", "hs07"]
+  PRODUCT_BUTTONS: [
+    {
+      display: "HS 92",
+      value: "hs92",
+      href: `/${locale}/rankings/product/hs92/`
+    },
+    {
+      display: "HS 96",
+      value: "hs96",
+      href: `/${locale}/rankings/product/hs96/`
+    },
+    {
+      display: "HS 02",
+      value: "hs02",
+      href: `/${locale}/rankings/product/hs02/`
+    },
+    {
+      display: "HS 07",
+      value: "hs07",
+      href: `/${locale}/rankings/product/hs07/`
+    }
   ],
   FILTER_YEARS: {
     eci: ["1968-1972", "1973-1977", "1978-1982", "1983-1987", "1988-1992", "1993-1997", "1998-2002", "2003-2007", "2008-2012", "2013-2017"],
@@ -35,22 +61,6 @@ module.exports = {
     hs96: ["1998-2002", "2003-2007", "2008-2012", "2013-2017"],
     hs02: ["2003-2007", "2008-2012", "2013-2017"],
     hs07: ["2008-2012", "2013-2017"]
-  },
-  RANGE_YEARS: {
-    "1968-1972": [1968, 1969, 1970, 1971, 1972],
-    "1973-1977": [1973, 1974, 1975, 1976, 1977],
-    "1978-1982": [1978, 1979, 1980, 1981, 1982],
-    "1983-1987": [1983, 1984, 1985, 1986, 1987],
-    "1988-1992": [1988, 1989, 1990, 1991, 1992],
-    "1993-1997": [1993, 1994, 1995, 1996, 1997],
-    "1998-2002": [1998, 1999, 2000, 2001, 2002],
-    "2003-2007": [2003, 2004, 2005, 2006, 2007],
-    "2008-2012": [2008, 2009, 2010, 2011, 2012],
-    "2013-2017": [2013, 2014, 2015, 2016, 2017],
-    "1995-1999": [1995, 1996, 1997, 1998, 1999],
-    "2000-2005": [2000, 2001, 2002, 2003, 2004, 2005],
-    "2006-2011": [2006, 2007, 2008, 2009, 2010, 2011],
-    "2012-2017": [2012, 2013, 2014, 2015, 2016, 2017]
   },
   DOWNLOAD_BUTTONS: [
     ["Download", {country: "https://oec.world/en/rankings/country/eci/?download=true", product: "https://oec.world/en/rankings/product/sitc/?download=true"}],
