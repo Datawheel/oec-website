@@ -2,6 +2,9 @@ npm-debug.log*
 .DS_Store
 .gitconfig
 
+scripts/*.ipynb
+scripts/.ipynb_checkpoints
+
 # node modules should never be synced with git
 node_modules
 
