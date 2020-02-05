@@ -52,9 +52,43 @@ def country():
     df.to_json("../static/members/country.json", orient="records")
 
 
+def technology():
+    r = requests.get("https://api.oec.world/tesseract/data.jsonrecords?cube=patents_i_uspto_w_cpc&drilldowns=Subclass&measures=Patent Share&parents=true&sparse=false")
+    df = pd.DataFrame(r.json()["data"])
+    df_concat = []
+
+    # Generates list of sections
+    df_temp = df[["Section ID", "Section"]].drop_duplicates().reset_index(drop=True)
+
+    for item in ["label", "value"]:
+        df_temp[item] = df_temp["Section ID"]
+
+    df_temp = df_temp.rename(columns={
+        "Section ID": "parent_id",
+        "Section": "title"
+    })
+    df_temp["level"] = "Section"
+    df_concat.append(df_temp)
+
+    for level in ["Superclass", "Class", "Subclass"]:
+        level_id = "{} ID".format(level)
+        df_temp = df[["Section ID", level, level_id]].drop_duplicates().reset_index(drop=True)
+        df_temp = df_temp.rename(columns={
+            "Section ID": "parent_id",
+            level: "title",
+            level_id: "label",
+            "level": level
+        })
+        df_temp["value"] = df_temp["label"]
+        df_temp["level"] = level
+        df_concat.append(df_temp)
+    df_concat = pd.concat(df_concat)
+    df_concat.to_json("../static/members/technology.json".format(cube), orient="records")
+
 products()
 products("hs96")
 products("hs02")
 products("hs07")
 products("hs12")
 country()
+technology()
