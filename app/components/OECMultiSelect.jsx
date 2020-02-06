@@ -1,6 +1,6 @@
 import React from "react";
 
-import {Button, MenuItem, Switch} from "@blueprintjs/core";
+import {Button, MenuItem} from "@blueprintjs/core";
 import {MultiSelect} from "@blueprintjs/select";
 import {colorContrast} from "d3plus-color";
 
@@ -29,7 +29,7 @@ class OECMultiSelect extends React.Component {
     let itemIcon = "";
     switch (this.props.itemType) {
       case "country":
-        itemIcon = <span><img src={`/images/icons/country/country_${item.value.slice(2, 5)}.png`} /></span>;
+        itemIcon = <span><img src={`/images/icons/country/country_${item.label}.png`} /></span>;
         break;
       default:
         break;
@@ -38,7 +38,7 @@ class OECMultiSelect extends React.Component {
       active={modifiers.active}
       icon={this.isItemSelected(item) ? "tick" : "blank"}
       key={`${item.value}-${item.title}`}
-      label={item.displayId ? `${item.displayId}`.toUpperCase() : `${item.value}`}
+      label={item.label || ""}
       onClick={handleClick}
       text={<div className="menu-item-text">{itemIcon}{item.title}</div>}
       shouldDismissPopover={false}
@@ -119,6 +119,7 @@ class OECMultiSelect extends React.Component {
         popoverProps={{minimal: true}}
         resetOnSelect={false}
         resetOnQuery={false}
+        selectedItems={this.props.selectedItems}
         tagInputProps={{
           onRemove: this.handleTagRemove,
           rightElement: this.props.selectedItems.length ? <Button icon="cross" minimal={true} onClick={this.handleClear} /> : null,
@@ -133,7 +134,6 @@ class OECMultiSelect extends React.Component {
           }
         }}
         tagRenderer={this.renderTag}
-        selectedItems={this.props.selectedItems}
       />
     </div>;
   }

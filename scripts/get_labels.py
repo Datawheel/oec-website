@@ -28,13 +28,13 @@ def products(cube="hs92"):
         df_temp = df_temp.rename(columns={
             "Section ID": "parent_id",
             level: "title",
-            level_id: "label",
+            level_id: "value",
             "level": level
         })
-        df_temp["value"] = df_temp["label"].astype(str).str[-level_number:]
+        df_temp["label"] = df_temp["value"].astype(str).str[-level_number:]
         df_temp["level"] = level
         df_concat.append(df_temp)
-    df_concat = pd.concat(df_concat)
+    df_concat = pd.concat(df_concat, sort=False)
     df_concat.to_json("../static/members/products_{}.json".format(cube), orient="records")
 
 
@@ -83,7 +83,7 @@ def technology():
         df_temp["level"] = level
         df_concat.append(df_temp)
     df_concat = pd.concat(df_concat)
-    df_concat.to_json("../static/members/technology.json".format(cube), orient="records")
+    df_concat.to_json("../static/members/technology.json", orient="records")
 
 products()
 products("hs96")

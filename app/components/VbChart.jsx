@@ -103,6 +103,8 @@ class VbChart extends React.Component {
 
     if (params.drilldowns.includes(countryTypeBalance)) params.properties = `${countryTypeBalance} ISO 3`;
 
+    console.log(params);
+
     if (chart === "network") {
       // eslint-disable-next-line guard-for-in
       for (const member in params) {

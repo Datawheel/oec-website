@@ -5,3 +5,7 @@
     margin-right: 5px;
   }
 }
+
+.bp3-menu-item-label {
+  text-transform: uppercase;
+}
