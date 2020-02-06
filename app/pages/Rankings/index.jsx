@@ -7,13 +7,14 @@ import {Helmet} from "react-helmet";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {Sparklines, SparklinesLine} from "react-sparklines";
-import {AnchorButton, Button, ButtonGroup, Classes, Icon} from "@blueprintjs/core";
+import {AnchorButton, Icon} from "@blueprintjs/core";
 
 import "./Rankings.css";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import RankingTable from "components/RankingTable";
+import RankingTableButtons from "components/RankingTableButtons";
 
 import {
   PAGE,
@@ -36,6 +37,7 @@ class Rankings extends React.Component {
       measure: this.props.params.measure || "eci",
       filter: null
     };
+    this.changeRange = this.changeRange.bind(this);
   }
 
   createColumns(category, measure, filter) {
@@ -177,19 +179,18 @@ class Rankings extends React.Component {
 
   render() {
     const {title, text, data, category, measure, filter} = this.state;
-    const {lng, t} = this.props;
-    console.log("data", data);
+    const {t} = this.props;
 
     return (
       <div className="rankings-page">
         <Helmet>
           <title>{t(title)}</title>
         </Helmet>
+
         <OECNavbar />
 
         <div className="rankings-content">
           <h1 className="title">{t(title)}</h1>
-
           <div className="about">
             {text.map((d, k) =>
               <p
@@ -212,59 +213,39 @@ class Rankings extends React.Component {
           </div>
 
           <div className="settings">
-            <div className="setup showing">
-              <div className="title">{t("Showing")}</div>
-              <div className="buttons">
-                <ButtonGroup style={{minWidth: 200}}>
-                  {CATEGORY_BUTTONS.map((d, k) =>
-                    <a
-                      role="button"
-                      className={classnames(`${Classes.BUTTON}`, {"is-active": d.value === category})}
-                      key={k}
-                      href={d.href}
-                      tabIndex="0"
-                      data-refresh="true"
-                    >{d.display}</a>
-                  )}
-                </ButtonGroup>
-              </div>
-            </div>
+            <RankingTableButtons
+              t={t}
+              anchor={true}
+              type={"showing"}
+              title={"Showing"}
+              array={CATEGORY_BUTTONS}
+              active={category}
+            />
             {category === "product" &&
-              <div className="setup product">
-                <div className="title">{t("Product Classification")}</div>
-                <div className="buttons">
-                  <ButtonGroup style={{minWidth: 200}}>
-                    {PRODUCT_BUTTONS.map((d, k) =>
-                      <a
-                        role="button"
-                        className={classnames(`${Classes.BUTTON}`, {"is-active": d.value === measure})}
-                        key={k}
-                        href={d.href}
-                        tabIndex="0"
-                        data-refresh="true"
-                      >{d.display}</a>
-                    )}
-                  </ButtonGroup>
-                </div>
-              </div>
+              <RankingTableButtons
+                t={t}
+                anchor={true}
+                type={"product"}
+                title={"Product Classification"}
+                array={PRODUCT_BUTTONS}
+                active={measure}
+              />
             }
-            <div className="setup year">
-              <div className="title">{t("Year Range")}</div>
-              <div className="buttons">
-                <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_YEARS[measure] &&
-                    FILTER_YEARS[measure].map((d, k) =>
-                      <Button
-                        key={k}
-                        onClick={() => this.changeRange(category, measure, d)}
-                        className={`${d === filter ? "is-active" : ""}`}
-                      >
-                        {d}
-                      </Button>
-                    )}
-                </ButtonGroup>
-              </div>
-            </div>
+            <RankingTableButtons
+              t={t}
+              anchor={false}
+              type={"year"}
+              title={"Year Range"}
+              array={FILTER_YEARS[measure]}
+              onclick={
+                {
+                  function: this.changeRange,
+                  category,
+                  measure
+                }
+              }
+              active={filter}
+            />
           </div>
 
           <div className="ranking">
@@ -276,6 +257,7 @@ class Rankings extends React.Component {
               />
             }
           </div>
+
         </div>
         <Footer />
       </div>
