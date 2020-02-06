@@ -312,6 +312,10 @@ class Vizbuilder extends React.Component {
           <div className="vb-column">
             <VbTitle
               countryData={this.state.country}
+              selectedItemsCountry={this.state._selectedItemsCountry}
+              selectedItemsProduct={this.state._selectedItemsProduct}
+              selectedItemsPartner={this.state._selectedItemsCountry}
+              selectedItemsTechnology={this.state._selectedItemsTechnology}
               routeParams={routeParams}
             />
             <VbChart
