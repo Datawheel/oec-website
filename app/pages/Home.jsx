@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
 import "./Home.css";
+import {profileSearchConfig} from "helpers/search";
 
 import OECNavbar from "../components/OECNavbar";
 import Footer from "../components/Footer";
@@ -67,7 +68,11 @@ class Home extends Component {
             <img className="home-hero-logo" src="/images/big_logo.png" alt="" />
             <span className="home-hero-tagline u-font-md">The world’s leading data visualization tool for international trade data.</span>
 
-            <ProfileSearch position="absolute" inputFontSize="xl" showExamples={true} />
+            <ProfileSearch
+              {...profileSearchConfig}
+              inputFontSize="xl"
+              position="absolute"
+              showExamples={true} />
 
             {/* logos */}
             <ul className="home-hero-sponsor-list">

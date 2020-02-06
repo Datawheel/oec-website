@@ -1,5 +1,5 @@
 export const profileSearchConfig = {
-  columnTitles: {
+  profileTitles: {
     "bilateral-country/country": "Bilateral Country",
     "bilateral-product/country": "Product in Coutnry",
     "country": "Country",
