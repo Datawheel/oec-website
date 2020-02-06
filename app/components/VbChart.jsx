@@ -98,12 +98,15 @@ class VbChart extends React.Component {
 
     if (countryId) params[countryType] = countryId.map(d => d.value).join();
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
-    if (isProduct) params.HS4 = viztype;
+    if (isProduct) {
+      const productTemp = viztype.split(".")[0];
+      const productLevels = ["Section", "HS2", "HS4", "HS6"];
+      const n = (productTemp.length - (productTemp.length / 2 >> 0)) / 2;
+      params[productLevels[n]] = viztype.replace(".", ",");
+    }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
     if (params.drilldowns.includes(countryTypeBalance)) params.properties = `${countryTypeBalance} ISO 3`;
-
-    console.log(params);
 
     if (chart === "network") {
       // eslint-disable-next-line guard-for-in
