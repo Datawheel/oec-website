@@ -132,10 +132,10 @@ class OECNavbar extends Component {
           aria-hidden={!searchVisible}
           tabIndex={searchVisible ? null : -1}
         >
-          <ProfileSearch
+          {searchVisible && <ProfileSearch
             {...profileSearchConfig}
             display="columns"
-            showExamples={true} />
+            showExamples={true} />}
         </div>
       </div>
     );
