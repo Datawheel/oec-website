@@ -39,7 +39,6 @@
         padding-left: 0px;
         padding-right: 0px;
         margin-right: var(--gutter-sm);
-        opacity: 0.7;
 
         & .bp3-button-text {
           padding: var(--button-padding);
@@ -48,7 +47,7 @@
       }
 
       & .bp3-button:hover {
-        opacity: 1;
+        background: var(--dark-3);
       }
 
       & .last {
