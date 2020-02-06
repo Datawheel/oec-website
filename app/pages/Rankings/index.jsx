@@ -73,7 +73,7 @@ class Rankings extends React.Component {
               src={
                 category === "country"
                   ? `/images/icons/country/country_${props.original["Icon ID"]}.png`
-                  :                   `/images/icons/hs/hs_${props.original["Icon ID"]}.png`
+                  : `/images/icons/hs/hs_${props.original["Icon ID"]}.png`
 
               }
               alt="icon"
@@ -83,7 +83,7 @@ class Rankings extends React.Component {
               href={
                 category === "country"
                   ? `/${lng}/profile/country/${props.original["Icon ID"]}`
-                  :                   `/${lng}/profile/${measure}/${props.original["HS6 ID"]}`
+                  : `/${lng}/profile/${measure}/${props.original["HS6 ID"]}`
 
               }
               className="link"
