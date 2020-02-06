@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   "Section": {
     1: "#e5d597",
     2: "#e0b546",
@@ -73,4 +73,3 @@ export default {
 
   "colorGrey": "#ccc"
 };
-
