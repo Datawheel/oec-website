@@ -1,30 +1,30 @@
 import React from "react";
+import axios from "axios";
+import numeral from "numeral";
+import classnames from "classnames";
 import {connect} from "react-redux";
 import {Helmet} from "react-helmet";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
-import {AnchorButton, Button, ButtonGroup, Classes} from "@blueprintjs/core";
-
-import axios from "axios";
-import Numeral from "numeral";
-import {Icon} from "@blueprintjs/core";
 import {Sparklines, SparklinesLine} from "react-sparklines";
+import {AnchorButton, Icon} from "@blueprintjs/core";
 
 import "./Rankings.css";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
-import RankingTable from "../../components/RankingTable";
+import RankingTable from "components/RankingTable";
+import RankingTableButtons from "components/RankingTableButtons";
 
 import {
   PAGE,
-  FILTER_CATEGORY,
-  FILTER_PRODUCT,
+  CATEGORY_BUTTONS,
+  PRODUCT_BUTTONS,
   FILTER_YEARS,
-  RANGE_YEARS,
   DOWNLOAD_BUTTONS
-} from "helpers/rankings.js";
-import {keyBy} from "../../helpers/funcs";
+} from "helpers/rankings";
+import {keyBy} from "helpers/funcs";
+import {range} from "helpers/utils";
 
 class Rankings extends React.Component {
   constructor(props) {
@@ -35,12 +35,17 @@ class Rankings extends React.Component {
       data: null,
       category: this.props.params.category || "country",
       measure: this.props.params.measure || "eci",
-      range: null
+      filter: null
     };
+    this.changeRange = this.changeRange.bind(this);
   }
 
-  createColumns(category, range, measure) {
+  createColumns(category, measure, filter) {
+    const {lng} = this.props;
     const categoryHeader = category === "country" ? "Country" : "Product";
+    const firstYear = filter.split("-")[0] * 1;
+    const lastYear = filter.split("-")[1] * 1;
+
     const columns = [
       {
         id: "id",
@@ -67,12 +72,8 @@ class Rankings extends React.Component {
             <img
               src={
                 category === "country"
-                  ? `/images/icons/country/country_${props.original["Country ID"].slice(
-                    props.original["Country ID"].length - 3
-                  )}.png`
-                  :                   `/images/icons/hs/hs_${props.original["HS6 ID"].toString().length === 7
-                    ? props.original["HS6 ID"].toString().slice(0, 1)
-                    : props.original["HS6 ID"].toString().slice(0, 2)}.png`
+                  ? `/images/icons/country/country_${props.original["Icon ID"]}.png`
+                  :                   `/images/icons/hs/hs_${props.original["Icon ID"]}.png`
 
               }
               alt="icon"
@@ -81,10 +82,8 @@ class Rankings extends React.Component {
             <a
               href={
                 category === "country"
-                  ? `/en/profile/country/${props.original["Country ID"].slice(
-                    props.original["Country ID"].length - 3
-                  )}`
-                  :                   `/en/profile/${measure}/${props.original["HS6 ID"]}`
+                  ? `/${lng}/profile/country/${props.original["Icon ID"]}`
+                  :                   `/${lng}/profile/${measure}/${props.original["HS6 ID"]}`
 
               }
               className="link"
@@ -95,9 +94,10 @@ class Rankings extends React.Component {
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
+
       },
-      ...RANGE_YEARS[range].map((year, index) => ({
-        id: RANGE_YEARS[range].length - index > 1 ? `${year}` : "lastyear",
+      ...range(firstYear, lastYear).map((year, index, {length}) => ({
+        id: length === index + 1 ? "lastyear" : `year${index}`,
         Header: () =>
           <div className="header">
             <span className="year">{year}</span>
@@ -108,8 +108,8 @@ class Rankings extends React.Component {
           </div>,
         accessor: d => d[`${year}`],
         Cell: props =>
-          Numeral(props.original[`${year}`]).format("0.00000") * 1 !== 0
-            ? Numeral(props.original[`${year}`]).format("0.00000")
+          numeral(props.original[`${year}`]).format("0.00000") * 1 !== 0
+            ? numeral(props.original[`${year}`]).format("0.00000")
             : "",
         width: 140,
         className: "year"
@@ -135,25 +135,24 @@ class Rankings extends React.Component {
     return columns.filter(f => f !== null);
   }
 
-  // Change the settings for the react table
   changeRange(category, measure, fltr) {
     const {lng} = this.props;
-    const range = fltr ? fltr : FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1];
-    const path = `/${lng}/rankings/${category}/${measure}/?year_range=${range}`;
+    const filter = fltr ? fltr : FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1];
+    const path = `/${lng}/rankings/${category}/${measure}/?year_range=${filter}`;
 
     browserHistory.push(path);
-    this.setState({category, measure, range});
+    this.setState({category, measure, filter});
   }
 
   componentDidMount() {
     const {category, measure} = this.state;
 
-    const range = FILTER_YEARS[measure].find(
+    const filter = FILTER_YEARS[measure].find(
       d => d === this.props.location.search.split("=")[1]
     );
 
     const futureData = FILTER_YEARS[measure].map(d => {
-      const columns = this.createColumns(category, d, measure);
+      const columns = this.createColumns(category, measure, d);
       const lastYear = d.split("-")[1] * 1;
 
       const path =
@@ -162,33 +161,36 @@ class Rankings extends React.Component {
           : `/json/rankings/oec_pci_hs6_${measure}_${d}.json`;
 
       return axios.get(path).then(resp => {
-        resp.data.sort((a, b) => b[`${lastYear}`] - a[`${lastYear}`]);
-        return {range: d, data: resp.data, cols: columns};
+        category === "country"
+          ? resp.data.map(d => d["Icon ID"] = d["Country ID"].slice(2))
+          : resp.data.map(d => d["Icon ID"] = d["HS6 ID"].toString().slice(0, -6));
+        resp.data.sort((a, b) => b[lastYear] - a[lastYear]);
+        return {filter: d, data: resp.data, cols: columns};
       });
     });
 
     Promise.all(futureData).then(data =>
       this.setState({
-        data: keyBy(data, "range"),
-        range: range || FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1]
+        data: keyBy(data, "filter"),
+        filter: filter || FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1]
       })
     );
   }
 
   render() {
-    const {title, text, data, category, measure, range} = this.state;
-    const {lng, t} = this.props;
+    const {title, text, data, category, measure, filter} = this.state;
+    const {t} = this.props;
 
     return (
       <div className="rankings-page">
         <Helmet>
-          <title>{`${title}`}</title>
+          <title>{t(title)}</title>
         </Helmet>
+
         <OECNavbar />
 
         <div className="rankings-content">
           <h1 className="title">{t(title)}</h1>
-
           <div className="about">
             {text.map((d, k) =>
               <p
@@ -200,83 +202,62 @@ class Rankings extends React.Component {
           </div>
 
           <div className="download">
-            {DOWNLOAD_BUTTONS.map((d, k) =>
+            {DOWNLOAD_BUTTONS.map((d, k, {length}) =>
               <AnchorButton
                 text={d[0]}
                 href={d[1][category]}
                 key={k}
-                className={DOWNLOAD_BUTTONS.length - k > 1 ? "" : "last"}
+                className={classnames("anchor-button", {last: length === k + 1})}
               />
             )}
           </div>
 
           <div className="settings">
-            <div className="setup showing">
-              <div className="title">{t("Showing")}</div>
-              <div className="buttons">
-                <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_CATEGORY.map((d, k) =>
-                    <a
-                      role="button"
-                      href={`/${lng}/rankings/${d[1]}/${d[2]}/`}
-                      className={`${Classes.BUTTON} ${d[1] === category
-                        ? "isactive"
-                        : ""}`}
-                      key={k}
-                      tabIndex="0"
-                      data-refresh="true"
-                    >{`${d[0]}`}</a>
-                  )}
-                </ButtonGroup>
-              </div>
-            </div>
+            <RankingTableButtons
+              t={t}
+              anchor={true}
+              type={"showing"}
+              title={"Showing"}
+              array={CATEGORY_BUTTONS}
+              active={category}
+            />
             {category === "product" &&
-              <div className="setup product">
-                <div className="title">{t("Product Classification")}</div>
-                <div className="buttons">
-                  <ButtonGroup style={{minWidth: 200}}>
-                    {FILTER_PRODUCT.map((d, k) =>
-                      <a
-                        role="button"
-                        href={`/${lng}/rankings/product/${d[1]}/`}
-                        className={`${Classes.BUTTON} ${d[1] === measure
-                          ? "isactive"
-                          : ""}`}
-                        key={k}
-                        tabIndex="0"
-                        data-refresh="true"
-                      >{`${d[0]}`}</a>
-                    )}
-                  </ButtonGroup>
-                </div>
-              </div>
+              <RankingTableButtons
+                t={t}
+                anchor={true}
+                type={"product"}
+                title={"Product Classification"}
+                array={PRODUCT_BUTTONS}
+                active={measure}
+              />
             }
-            <div className="setup year">
-              <div className="title">{t("Year Range")}</div>
-              <div className="buttons">
-                <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_YEARS[measure] &&
-                    FILTER_YEARS[measure].map((d, k) =>
-                      <Button
-                        key={k}
-                        onClick={() => this.changeRange(category, measure, d)}
-                        className={`${d === range ? "isactive" : ""}`}
-                      >{`${d}`}</Button>
-                    )}
-                </ButtonGroup>
-              </div>
-            </div>
+            <RankingTableButtons
+              t={t}
+              anchor={false}
+              type={"year"}
+              title={"Year Range"}
+              array={FILTER_YEARS[measure]}
+              onclick={
+                {
+                  function: this.changeRange,
+                  category,
+                  measure
+                }
+              }
+              active={filter}
+            />
           </div>
 
           <div className="ranking">
             {data &&
               <RankingTable
-                data={data[range].data}
-                columns={data[range].cols}
-                length={data[range].data.length}
+                data={data[filter].data}
+                columns={data[filter].cols}
+                length={data[filter].data.length}
               />
             }
           </div>
+
         </div>
         <Footer />
       </div>
