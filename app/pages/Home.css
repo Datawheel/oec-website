@@ -47,8 +47,11 @@
       & .cms-profilesearch {
         margin: 0 auto var(--gutter-sm);
         max-width: 500px;
+        & .cp-input {
+          background: var(--dark-4);
+        }
         & .cms-profilesearch-container {
-          margin: -2px var(--gutter-md) 0;
+          margin: 0 var(--gutter-md) 0;
           & .bp3-non-ideal-state {
             background-color: var(--dark-3);
             & .bp3-heading {
@@ -132,7 +135,7 @@
         & .home-hero-twinkling {
           @mixin absolute-expand;
           animation: twinkle 200s linear infinite;
-          background: transparent url(/images/home/twinkling-black.png) repeat top center;
+          background: transparent url(/images/home/twinkling.png) repeat top center;
           display: block;
           z-index: 1;
         }
