@@ -289,7 +289,7 @@ export default {
     },
     width: "200px"
   },
-  topojsonFill: style["dark-3"],
+  topojsonFill: style["dark-2"],
   topojsonFilter: d => d.id !== "ata",
   total: "Trade Value",
   totalConfig: {
