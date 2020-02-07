@@ -1,8 +1,10 @@
 import React from "react";
 import axios from "axios";
-import {Treemap, StackedArea, LinePlot, Geomap, Network} from "d3plus-react";
+import {Treemap, StackedArea, LinePlot, Geomap, Network, Rings, Plot} from "d3plus-react";
 import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
+
+import colors from "helpers/colors";
 
 import "./VbChart.css";
 
@@ -61,7 +63,11 @@ class VbChart extends React.Component {
     const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
     const dd = {
-      show: isTechnology ? isFilter ? ddTech[viztype.length - 1] : "Subclass" : "HS4",
+      show: isTechnology
+        ? isFilter
+          ? ddTech[viztype.length - 1]
+          : "Subclass"
+        : countryId.length === 0 || isProduct ? countryTypeBalance : "HS4",
       all: countryTypeBalance
     };
 
@@ -72,15 +78,18 @@ class VbChart extends React.Component {
 
     const drilldowns = ["Year"];
     if (!isTechnology) drilldowns.push(!dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
-    if (isTechnology) drilldowns.push(countryTypeBalance);
-    console.log(drilldowns);
+    if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
+    if (isTechnology && partner === "all") drilldowns.push("Subclass");
+
+    const cubeName = !isTechnology
+      ? `trade_i_baci_a_${cube.replace("hs", "")}`
+      : "patents_i_uspto_w_cpc";
+    const measureName = isTechnology ? "Patent Share" : "Trade Value";
 
     const params = {
-      cube: !isTechnology
-        ? `trade_i_baci_a_${cube.replace("hs", "")}`
-        : "patents_i_uspto_w_cpc",
+      cube: cubeName,
       drilldowns: drilldowns.join(),
-      measures: isTechnology ? "Patent Share" : "Trade Value",
+      measures: measureName,
       parents: true,
       Year: ["tree_map", "geomap"].includes(chart)
         ? time.replace(".", ",")
@@ -89,12 +98,61 @@ class VbChart extends React.Component {
 
     if (countryId) params[countryType] = countryId.map(d => d.value).join();
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
-    if (isProduct) params.HS4 = viztype;
+    if (isProduct) {
+      const productTemp = viztype.split(".")[0];
+      const productLevels = ["Section", "HS2", "HS4", "HS6"];
+      const n = (productTemp.length - (productTemp.length / 2 >> 0)) / 2;
+      params[productLevels[n]] = viztype.replace(".", ",");
+    }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
-    if (params.drilldowns.includes("Country")) params.properties = `${countryTypeBalance} ISO 3`;
+    if (params.drilldowns.includes(countryTypeBalance)) params.properties = `${countryTypeBalance} ISO 3`;
 
-    axios.get("https://api.oec.world/tesseract/data", {
+    if (chart === "network") {
+      // eslint-disable-next-line guard-for-in
+      for (const member in params) {
+        delete params[member];
+      }
+      const apiStatsParams = {
+        cube: cubeName,
+        alias: "HS4,Country",
+        rca: `HS4,Exporter Country,${measureName}`,
+        measures: measureName,
+        parents: true,
+        filter_Country: countryId.map(d => d.value)[0],
+        Year: 2017
+      };
+
+      const endpoint = flow === "pgi"
+        ? "opportunity_gain" : "relatedness";
+
+      return axios.get(`/api/stats/${endpoint}`, {
+        params: apiStatsParams
+      }).then(resp => {
+        const data = resp.data.data;
+        this.setState({
+          data,
+          loading: false,
+          routeParams
+        });
+      });
+    }
+    else if (chart === "rings") {
+      const ringsParams = {
+        Country: countryId.map(d => d.value)[0],
+        Year: 2017
+      };
+      return axios.get("/api/connections/hs4", {params: ringsParams}).then(resp => {
+        const data = resp.data;
+        this.setState({
+          data,
+          loading: false,
+          routeParams
+        });
+      });
+    }
+
+    return axios.get("https://api.oec.world/tesseract/data", {
       params
     }).then(resp => {
       const data = resp.data.data;
@@ -117,6 +175,8 @@ class VbChart extends React.Component {
     const {routeParams} = this.state;
     const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype} = routeParams;
+
+    console.log(data);
 
     if (loading) return <div>Loading...</div>;
 
@@ -203,25 +263,45 @@ class VbChart extends React.Component {
         />
       </div>;
     }
-    else if (chart === "network") {
+    else if (chart === "network" && data && data.length > 0) {
+      const measureNetworkName = flow === "pgi"
+        ? "Trade Value Opportunity Gain"
+        : flow === "export" ? "Trade Value RCA" : "Trade Value Relatedness";
+      const networkConfig = {
+        shapeConfig: {
+          Circle: {
+            fill: d => d["Trade Value RCA"] > 1
+              ? (console.log(d),  colors.Section[d["Section ID"]] || "gray")
+              : "gray"
+          }
+        },
+        colorScaleConfig: {
+          scale: "jenks"
+        }
+      };
+      if (flow !== "export") {
+        networkConfig.colorScale = measureNetworkName;
+        networkConfig.shapeConfig = {
+          fill: "D3PLUS-COMMON-RESET",
+          Circle: {
+            fill: "D3PLUS-COMMON-RESET"
+          }
+        };
+      }
+
       return <div className="vb-chart">
         <Network
+          // forceUpdate={true}
           config={{
             ...baseConfig,
+            ...networkConfig,
             nodes: "/network/network_hs4.json",
             links: "/network/network_hs4.json",
-            groupBy: ["id"],
-
-            size: d => 1,
-            sizeMin: 2,
-            sizeMax: 9,
-            shapeConfig: {
-            // strokeWidth: d => 1,
-              stroke: d => "#444444",
-              Path: {
-                stroke: d => "#ccd0d6"
-              }
-            },
+            groupBy: ["Section ID", "HS4 ID"],
+            size: d => d["Trade Value"] * 1 || 1,
+            sizeMin: 5,
+            sizeMax: 15,
+            legend: false,
             total: undefined
           }}
           nodesFormat={resp => resp.nodes}
@@ -230,12 +310,50 @@ class VbChart extends React.Component {
             d => {
               const newData = d
                 .map(dd => Object.assign(dd, {"id": `${dd["HS4 ID"]}`, "HS4 ID": `${dd["HS4 ID"]}`}));
-              // .filter(dd => dd["HS4 ID"] === "10101");
-              console.log(newData);
+
               return newData;
             }
           }
         /></div>;
+    }
+
+    else if (chart === "rings" && data && data.length > 0) {
+      return <div className="vb-chart">
+        <Rings
+          config={{
+            links: data,
+            center: viztype,
+            // nodeGroupBy: ["Section ID"],
+            // size: "Trade Value",
+            label: "",
+            shapeConfig: {
+              Circle: {
+                fill: d => colors.Section[d.id.slice(0, -4)] || "gray"
+              }
+            },
+            total: "Trade Value"
+          }}
+        />;
+      </div>;
+    }
+
+    else if (chart === "scatter" && data && data.length > 0) {
+      return <div className="vb-chart">
+        <Plot
+          config={{
+            data: "/api/gdp/eci",
+            groupBy: ["Country ID"],
+            x: "Trade Value ECI",
+            y: "Measure",
+            xConfig: {
+              // scale: "log"
+            },
+            yConfig: {
+              scale: "log"
+            }
+          }}
+        />
+      </div>;
     }
 
     return <div />;

@@ -11,20 +11,15 @@ class RankingTable extends React.Component {
     const {data, columns, length} = this.props;
     return (
       <div className="rankingtable-component">
-        {data.length > 0 && 
+        {data &&
           <ReactTable
             data={data}
             columns={columns}
-            showPagination={false}
-            defaultPageSize={length}
-            minRows={length}
+            showPagination={true}
+            defaultPageSize={50}
+            minRows={1}
             resizable={false}
-            defaultSorted={[
-              {
-                id: "fifthYear",
-                desc: true
-              }
-            ]}
+            defaultSorted={[{id: "lastyear", desc: true}]}
           />
         }
       </div>

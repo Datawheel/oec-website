@@ -9,5 +9,6 @@
   "files.insertFinalNewline": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
-  }
+  },
+  "python.pythonPath": "venv\\Scripts\\python.exe"
 }

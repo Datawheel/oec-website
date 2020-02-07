@@ -1,0 +1,11 @@
+.menu-item-text {
+  display: flex;
+  & img {
+    width: 20px;
+    margin-right: 5px;
+  }
+}
+
+.bp3-menu-item-label {
+  text-transform: uppercase;
+}

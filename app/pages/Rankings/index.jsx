@@ -1,184 +1,192 @@
 import React from "react";
+import axios from "axios";
+import numeral from "numeral";
+import classnames from "classnames";
 import {connect} from "react-redux";
+import {Helmet} from "react-helmet";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
-import {Button, ButtonGroup} from "@blueprintjs/core";
-
-import axios from "axios";
-import Numeral from "numeral";
-import {Icon} from "@blueprintjs/core";
 import {Sparklines, SparklinesLine} from "react-sparklines";
+import {AnchorButton, Icon} from "@blueprintjs/core";
 
 import "./Rankings.css";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
-import RankingTable from "../../components/RankingTable";
+import RankingTable from "components/RankingTable";
+import RankingTableButtons from "components/RankingTableButtons";
 
-import {PAGE, FILTER_CATEGORY, FILTER_YEARS} from "helpers/rankings.js";
+import {
+  PAGE,
+  CATEGORY_BUTTONS,
+  PRODUCT_BUTTONS,
+  FILTER_YEARS,
+  DOWNLOAD_BUTTONS
+} from "helpers/rankings";
+import {keyBy} from "helpers/funcs";
+import {range} from "helpers/utils";
 
 class Rankings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: null,
-      text: [],
+      title: PAGE[0][this.props.params.category].title,
+      text: PAGE[0][this.props.params.category].text,
+      data: null,
       category: this.props.params.category || "country",
       measure: this.props.params.measure || "eci",
-      filter: this.props.location.search.split("=")[1] || "2013-2017",
-      data: [],
-      length: null,
-      columns: []
+      filter: null
     };
+    this.changeRange = this.changeRange.bind(this);
   }
 
-  componentDidMount() {
-    const {category} = this.state;
-
-    this.setState({
-      title: PAGE[0][category].title,
-      text: PAGE[0][category].text
-    });
-  }
-
-  componentDidUpdate() {
-    const {filter} = this.state;
+  createColumns(category, measure, filter) {
+    const {lng} = this.props;
+    const categoryHeader = category === "country" ? "Country" : "Product";
     const firstYear = filter.split("-")[0] * 1;
     const lastYear = filter.split("-")[1] * 1;
 
-    let columns = [];
-
-    columns = [
+    const columns = [
       {
-        id: "countryId",
+        id: "id",
         Header: "",
         className: "col-id",
-        accessor: d => d.table_id,
-        width: 50,
+        Cell: props => props.index + 1,
+        width: 40,
         sortable: false
       },
       {
-        id: "countryName",
-        Header: "Country",
-        className: "col-country",
-        width: 300,
+        id: "category",
+        accessor: d => category === "country" ? d.Country : d.HS6,
+        Header: () =>
+          <div className="header">
+            <span className="year">{categoryHeader}</span>
+            <div className="icons">
+              <Icon icon={"caret-up"} iconSize={16} />
+              <Icon icon={"caret-down"} iconSize={16} />
+            </div>
+          </div>,
+        style: {whiteSpace: "unset"},
         Cell: props =>
-          <div className="country">
+          <div className="category">
             <img
-              src={`/images/icons/country/country_${props.original["Country ID"].slice(
-                props.original["Country ID"].length - 3
-              )}.png`}
-              alt="flag"
-              className="flag"
+              src={
+                category === "country"
+                  ? `/images/icons/country/country_${props.original["Icon ID"]}.png`
+                  : `/images/icons/hs/hs_${props.original["Icon ID"]}.png`
+
+              }
+              alt="icon"
+              className="icon"
             />
             <a
-              href={`/en/profile/country/${props.original["Country ID"].slice(
-                props.original["Country ID"].length - 3
-              )}`}
+              href={
+                category === "country"
+                  ? `/${lng}/profile/country/${props.original["Icon ID"]}`
+                  : `/${lng}/profile/${measure}/${props.original["HS6 ID"]}`
+
+              }
               className="link"
             >
-              <span className="name">{props.original.Country}</span>
+              <div className="name">
+                {category === "country" ? props.original.Country : props.original.HS6}
+              </div>
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
 
       },
-      {
-        id: "firstYear",
-        Header: `${firstYear}`,
-        accessor: d => d[`${firstYear}`],
-        Cell: props =>
-          Numeral(props.original[`${firstYear}`]).format("0.00000") * 1 !== 0
-            ? Numeral(props.original[`${firstYear}`]).format("0.00000")
-            : "",
-        width: 160,
-        className: "firstYear"
-      },
-      {
-        id: "secondYear",
-        Header: `${firstYear + 1}`,
-        accessor: d => d[`${firstYear + 1}`],
-        Cell: props =>
-          Numeral(props.original[`${firstYear + 1}`]).format("0.00000") * 1 !== 0
-            ? Numeral(props.original[`${firstYear + 1}`]).format("0.00000")
-            : "",
-        width: 160,
-        className: "secondYear"
-      },
-      {
-        id: "thirdYear",
-        Header: `${firstYear + 2}`,
-        accessor: d => d[`${firstYear + 2}`],
-        Cell: props =>
-          Numeral(props.original[`${firstYear + 2}`]).format("0.00000") * 1 !== 0
-            ? Numeral(props.original[`${firstYear + 2}`]).format("0.00000")
-            : "",
-        width: 160,
-        className: "thirdYear"
-      },
-      {
-        id: "fourthYear",
-        Header: `${firstYear + 3}`,
-        accessor: d => d[`${firstYear + 3}`],
-        Cell: props =>
-          Numeral(props.original[`${firstYear + 3}`]).format("0.00000") * 1 !== 0
-            ? Numeral(props.original[`${firstYear + 3}`]).format("0.00000")
-            : "",
-        width: 160,
-        className: "fourthYear",
-        sortable: true
-      },
-      {
-        id: "fifthYear",
-        Header: `${firstYear + 4}`,
-        accessor: d => d[`${firstYear + 4}`],
-        Cell: props =>
-          Numeral(props.original[`${firstYear + 4}`]).format("0.00000") * 1 !== 0
-            ? Numeral(props.original[`${firstYear + 4}`]).format("0.00000")
-            : "",
-        width: 160,
-        className: "fifthYear",
-        sortable: true
-      },
-      {
-        id: "sparkline",
-        Header: "",
-        accessor: "sparkline",
-        Cell: props =>
-          <div>
-            <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
-              <SparklinesLine color="white" style={{fill: "none"}} />
-            </Sparklines>
+      ...range(firstYear, lastYear).map((year, index, {length}) => ({
+        id: length === index + 1 ? "lastyear" : `year${index}`,
+        Header: () =>
+          <div className="header">
+            <span className="year">{year}</span>
+            <div className="icons">
+              <Icon icon={"caret-up"} iconSize={16} />
+              <Icon icon={"caret-down"} iconSize={16} />
+            </div>
           </div>,
-        className: "sparkline",
-        sortable: false
-      }
+        accessor: d => d[`${year}`],
+        Cell: props =>
+          numeral(props.original[`${year}`]).format("0.00000") * 1 !== 0
+            ? numeral(props.original[`${year}`]).format("0.00000")
+            : "",
+        width: 140,
+        className: "year"
+      })),
+      category === "country"
+        ? {
+          id: "sparkline",
+          Header: "",
+          accessor: "sparkline",
+          Cell: props =>
+            <div>
+              <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
+                <SparklinesLine color="white" style={{fill: "none"}} />
+              </Sparklines>
+            </div>,
+          className: "sparkline",
+          width: 220,
+          sortable: false
+        }
+        : null
     ];
 
-    axios
-      .get(`/json/rankings/oec_eci_${filter}.json`)
-      .then(
-        resp => (
-          resp.data.sort((a, b) => b[`${lastYear}`] - a[`${lastYear}`]),
-          resp.data.map((d, k) => d.table_id = k + 1),
-          this.setState({data: resp.data, length: resp.data.length, columns})
-        )
-      );
+    return columns.filter(f => f !== null);
   }
 
-  redirectPage(category, measure, filter) {
+  changeRange(category, measure, fltr) {
     const {lng} = this.props;
+    const filter = fltr ? fltr : FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1];
     const path = `/${lng}/rankings/${category}/${measure}/?year_range=${filter}`;
+
     browserHistory.push(path);
     this.setState({category, measure, filter});
   }
 
+  componentDidMount() {
+    const {category, measure} = this.state;
+
+    const filter = FILTER_YEARS[measure].find(
+      d => d === this.props.location.search.split("=")[1]
+    );
+
+    const futureData = FILTER_YEARS[measure].map(d => {
+      const columns = this.createColumns(category, measure, d);
+      const lastYear = d.split("-")[1] * 1;
+
+      const path =
+        category === "country"
+          ? `/json/rankings/oec_eci_${d}.json`
+          : `/json/rankings/oec_pci_hs6_${measure}_${d}.json`;
+
+      return axios.get(path).then(resp => {
+        category === "country"
+          ? resp.data.map(d => d["Icon ID"] = d["Country ID"].slice(2))
+          : resp.data.map(d => d["Icon ID"] = d["HS6 ID"].toString().slice(0, -6));
+        resp.data.sort((a, b) => b[lastYear] - a[lastYear]);
+        return {filter: d, data: resp.data, cols: columns};
+      });
+    });
+
+    Promise.all(futureData).then(data =>
+      this.setState({
+        data: keyBy(data, "filter"),
+        filter: filter || FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1]
+      })
+    );
+  }
+
   render() {
-    const {title, text, category, measure, filter, data, length, columns} = this.state;
+    const {title, text, data, category, measure, filter} = this.state;
     const {t} = this.props;
 
     return (
       <div className="rankings-page">
+        <Helmet>
+          <title>{t(title)}</title>
+        </Helmet>
+
         <OECNavbar />
 
         <div className="rankings-content">
@@ -192,43 +200,65 @@ class Rankings extends React.Component {
               />
             )}
           </div>
-          <div className="download">Here it goes the download buttons</div>
-          <div className="settings">
-            <div className="setup showing">
-              <div className="title">{t("Showing")}</div>
-              <div className="buttons">
-                <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_CATEGORY.map((d, k) =>
-                    <Button
-                      key={k}
-                      onClick={() => this.redirectPage(d[1], d[2], filter)}
-                      className={`${d[1] === category ? "isactive" : ""}`}
-                    >{`${d[0]}`}</Button>
-                  )}
-                </ButtonGroup>
-              </div>
-            </div>
-            <div className="setup year">
-              <div className="title">{t("Year Range")}</div>
-              <div className="buttons">
-                <ButtonGroup style={{minWidth: 200}}>
-                  {FILTER_YEARS.map((d, k) =>
-                    <Button
-                      key={k}
-                      onClick={() => this.redirectPage(category, measure, d)}
-                      className={`${d === filter ? "isactive" : ""}`}
-                    >{`${d}`}</Button>
-                  )}
-                </ButtonGroup>
-              </div>
-            </div>
-          </div>
-          <div className="ranking">
-            {/* data && <RankingTable filter={filter} /> */}
-            {data && <RankingTable data={data} columns={columns} length={length} />}
-          </div>
-        </div>
 
+          <div className="download">
+            {DOWNLOAD_BUTTONS.map((d, k, {length}) =>
+              <AnchorButton
+                text={d[0]}
+                href={d[1][category]}
+                key={k}
+                className={classnames("anchor-button", {last: length === k + 1})}
+              />
+            )}
+          </div>
+
+          <div className="settings">
+            <RankingTableButtons
+              t={t}
+              anchor={true}
+              type={"showing"}
+              title={"Showing"}
+              array={CATEGORY_BUTTONS}
+              active={category}
+            />
+            {category === "product" &&
+              <RankingTableButtons
+                t={t}
+                anchor={true}
+                type={"product"}
+                title={"Product Classification"}
+                array={PRODUCT_BUTTONS}
+                active={measure}
+              />
+            }
+            <RankingTableButtons
+              t={t}
+              anchor={false}
+              type={"year"}
+              title={"Year Range"}
+              array={FILTER_YEARS[measure]}
+              onclick={
+                {
+                  function: this.changeRange,
+                  category,
+                  measure
+                }
+              }
+              active={filter}
+            />
+          </div>
+
+          <div className="ranking">
+            {data &&
+              <RankingTable
+                data={data[filter].data}
+                columns={data[filter].cols}
+                length={data[filter].data.length}
+              />
+            }
+          </div>
+
+        </div>
         <Footer />
       </div>
     );

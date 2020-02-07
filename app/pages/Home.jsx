@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
 import "./Home.css";
+import {profileSearchConfig} from "helpers/search";
 
 import OECNavbar from "../components/OECNavbar";
 import Footer from "../components/Footer";
@@ -64,13 +65,16 @@ class Home extends Component {
 
           <div className="home-hero-content">
 
-            <img className="home-hero-logo" src="/images/big_logo.png" alt="" />
-            <span className="home-hero-tagline u-font-md">The world’s leading data visualization tool for international trade data.</span>
+            <img key="logo" className="home-hero-logo" src="/images/big_logo.png" alt="" />
+            <span key="tagline" className="home-hero-tagline u-font-md">The world’s leading data visualization tool for international trade data.</span>
 
-            <ProfileSearch position="absolute" inputFontSize="xl" />
+            <ProfileSearch key="search"
+              {...profileSearchConfig}
+              inputFontSize="xl"
+              position="absolute"
+              showExamples={true} />
 
-            {/* logos */}
-            <ul className="home-hero-sponsor-list">
+            <ul key="logos" className="home-hero-sponsor-list">
               <li className="home-hero-sponsor-item">
                 <a href="https://www.datawheel.us/" className="home-hero-sponsor-link">
                   <img

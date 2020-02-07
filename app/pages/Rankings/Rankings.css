@@ -26,6 +26,35 @@
       }
     }
 
+    & .download {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--gutter-md);
+
+      & .bp3-button {
+        background: var(--dark-2);
+        color: var(--white);
+        border: 0px;
+        border-radius: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+        margin-right: var(--gutter-sm);
+
+        & .bp3-button-text {
+          padding: var(--button-padding);
+          font-size: var(--font-sm);
+        }
+      }
+
+      & .bp3-button:hover {
+        background: var(--dark-3);
+      }
+
+      & .last {
+        margin-right: 0px;
+      }
+    }
+
     & .settings {
       display: flex;
       background: var(--dark-2);
@@ -42,16 +71,28 @@
           & .bp3-button {
             background: none;
             color: var(--white);
+            font-size: var(--font-xs);
+            opacity: 1;
           }
 
-          & .isactive {
-            background: #212831;
+          & .bp3-button:hover {
+            background: rgba(33, 40, 49, 0.4);
+          }
+
+          & .is-active {
+            background: rgba(33, 40, 49, 1) !important;
+            font-weight: var(--field-font-weight);
+            opacity: 1;
           }
         }
       }
 
       & .showing {
         flex: 1;
+      }
+
+      & .product {
+        flex: 2;
       }
 
       & .year {

@@ -12,6 +12,8 @@ import VirtualSelector from "../../components/VirtualSelector";
 import {Client} from "@datawheel/olap-client";
 import OECMultiSelect from "../../components/OECMultiSelect";
 import VbTitle from "../../components/VbTitle";
+import axios from "axios";
+import colors from "../../helpers/colors";
 
 
 const datasets = [
@@ -28,7 +30,7 @@ const flow = [
   {value: "import", title: "Imports"}
 ];
 
-const years = [...Array(56).keys()].map(d => ({value: 2017 - d, title: 2017 - d}));
+const years = [...Array(56).keys()].map(d => ({value: 2019 - d, title: 2019 - d}));
 
 class Vizbuilder extends React.Component {
   constructor(props) {
@@ -63,54 +65,31 @@ class Vizbuilder extends React.Component {
 
   componentDidMount() {
     const {routeParams} = this.props;
-    const {country, partner, time} = routeParams;
+    const {country, cube, partner, time, viztype} = routeParams;
     window.addEventListener("scroll", this.handleScroll);
 
-    Client.fromURL("https://api.oec.world/tesseract")
-      .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
-        const query = cube.query;
-        query.addMeasure("Trade Value");
-        return client.getMembers({level: "HS2"});
+    // Gets members of HS products, Countries and Technologies
+    axios.all([
+      axios.get("/members/products_hs92.json"),
+      axios.get("/members/country.json"),
+      axios.get("/members/technology.json")
+    ]).then(axios.spread((resp1, resp2, resp3) => {
+      const productData = resp1.data.map(d => ({
+        ...d, color: colors.Section[d.parent_id]}));
+      const countryData = resp2.data.map(d => ({
+        ...d, color: colors.Continent[d.parent_id]}));
+      const technologyData = resp3.data.map(d => ({
+        ...d, color: colors["CPC Section"][d.parent_id]}));
 
-      }))
-      .then(data => {
-        this.setState({product: data.map(d => ({value: d.key, title: d.name}))});
-      });
+      // Sorts alphabetically country names
+      countryData.sort((a, b) => a.title > b.title ? 1 : -1);
 
-    Client.fromURL("https://api.oec.world/tesseract")
-      .then(client => client.getCube("patents_i_uspto_w_cpc").then(cube => {
-        const query = cube.query;
-        query.addMeasure("Patent Share");
-        return client.getMembers({level: "Subclass"});
-
-      }))
-      .then(data => {
-        this.setState({technology: data.map(d => ({value: d.key, title: d.name}))});
-      });
-
-    Client.fromURL("https://api.oec.world/tesseract")
-      .then(client => client.getCube("trade_i_baci_a_92").then(cube => {
-        const query = cube.query;
-        query.addMeasure("Trade Value");
-        return client.getMembers({level: "Exporter Country"});
-
-      }))
-      .then(data => {
-        const countryData = data.map(d => ({value: d.key, title: d.name}));
-        const _selectedItemsCountry = countryData
-          .filter(d => country.split(".").includes(d.value.slice(2, 5)));
-        const _selectedItemsPartner = countryData
-          .filter(d => partner.split(".").includes(d.value.slice(2, 5)));
-        const _selectedItemsYear = years
-          .filter(d => time.split(".").includes(d.value.toString()));
-
-        this.setState({
-          country: countryData,
-          _selectedItemsCountry,
-          _selectedItemsPartner,
-          _selectedItemsYear
-        });
-      });
+      this.updateFilterSelected({
+        country: countryData,
+        product: productData,
+        technology: technologyData
+      }, true);
+    }));
 
   }
 
@@ -131,7 +110,7 @@ class Vizbuilder extends React.Component {
 
   handleTabOption = d => {
     const {router} = this.props;
-    this.setState(d);
+    this.setState(d, () => this.updateFilterSelected());
     router.push(d.permalink);
   }
 
@@ -150,22 +129,26 @@ class Vizbuilder extends React.Component {
       _selectedItemsTechnology
     } = this.state;
 
-    const countryIds = _selectedItemsCountry.map(d => d.value.slice(2, 5)).join(".");
+    const countryIds = _selectedItemsCountry.map(d => d.label).join(".");
     const partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
-      ? _selectedItemsPartner.map(d => d.value.slice(2, 5)).join(".")
+      ? _selectedItemsPartner.map(d => d.label).join(".")
       : "all";
 
-    const productId = _dataset.value === "cpc"
-      ? _selectedItemsTechnology.length > 0
+    const isTechnologyFilter = _selectedItemsTechnology.length > 0;
+    const isTradeFilter = _selectedItemsProduct.length > 0;
+
+    const filterIds = isTechnologyFilter || isTradeFilter
+      ? isTechnologyFilter
         ? _selectedItemsTechnology.map(d => d.value).join(".")
-        : "show"
-      : _selectedItemsProduct.length > 0
-        ? _selectedItemsProduct.map(d => d.value).join(".")
-        : "show";
+        : _selectedItemsProduct.map(d => d.value).join(".")
+      : "show";
 
+    const dataset = isTechnologyFilter ? "cpc" : _dataset.value;
+    const flow = isTechnologyFilter ? "uspto" : _flow.value;
 
-    const permalink = `/en/visualize/tree_map/${_dataset.value}/${_flow.value}/${countryIds}/${partnerIds}/${productId}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
-    this.setState({permalink});
+    const permalink = `/en/visualize/tree_map/${dataset}/${flow}/${countryIds}/${partnerIds}/${filterIds}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
+
+    this.updateFilterSelected({permalink});
     router.push(permalink);
   };
 
@@ -176,6 +159,37 @@ class Vizbuilder extends React.Component {
     });
   };
 
+  /**
+   * Updates selected options (countries, technologies, products) for Selector section
+   */
+  updateFilterSelected = (prevState, usePrevState = false) => {
+    const countryData = usePrevState ? prevState.country : this.state.country;
+    const technologyData = usePrevState ? prevState.technology : this.state.technology;
+    const productData = usePrevState ? prevState.product : this.state.product;
+    const {routeParams} = this.props;
+    const {country, cube, partner, time, viztype} = routeParams;
+
+    const _selectedItemsCountry = countryData
+      .filter(d => country.split(".").includes(d.label));
+    const _selectedItemsPartner = countryData
+      .filter(d => partner.split(".").includes(d.label));
+    const _selectedItemsYear = years
+      .filter(d => time.split(".").includes(d.value.toString()));
+    const _selectedItemsProduct = !["cpc"].includes(cube) ? productData
+      .filter(d => viztype.split(".").includes(d.value.toString())) : [];
+    const _selectedItemsTechnology = ["cpc"].includes(cube) ? technologyData
+      .filter(d => viztype.split(".").includes(d.value)) : [];
+
+    this.setState({
+      ...prevState,
+      _selectedItemsCountry,
+      _selectedItemsPartner,
+      _selectedItemsProduct,
+      _selectedItemsTechnology,
+      _selectedItemsYear
+    });
+  }
+
   handleItemMultiSelect = (key, d) => {
     this.setState({[key]: d});
   }
@@ -183,6 +197,10 @@ class Vizbuilder extends React.Component {
   render() {
     const {activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
+    const {chart, cube} = routeParams;
+
+    const isTrade = cube.includes("hs");
+    const isTechnology = !isTrade;
 
     return <div id="vizbuilder">
       <OECNavbar
@@ -200,7 +218,7 @@ class Vizbuilder extends React.Component {
               callback={d => this.handleTabOption(d)}
             />
 
-            <div className="columns">
+            {!["network"].includes(chart) && isTrade && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.product}
@@ -209,9 +227,9 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsProduct", d)}
                 />
               </div>
-            </div>
+            </div>}
 
-            <div className="columns">
+            {!["network"].includes(chart) && isTechnology && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.technology}
@@ -220,12 +238,13 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsTechnology", d)}
                 />
               </div>
-            </div>
+            </div>}
 
             <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
+                  itemType={"country"}
                   selectedItems={this.state._selectedItemsCountry}
                   title={"Country"}
                   callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
@@ -233,16 +252,17 @@ class Vizbuilder extends React.Component {
               </div>
             </div>
 
-            <div className="columns">
+            {!["network", "rings"].includes(chart) && isTrade && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
+                  itemType="country"
                   selectedItems={this.state._selectedItemsPartner}
                   title={"Partner"}
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
-            </div>
+            </div>}
 
             <div className="columns">
               <div className="column-1-2">
@@ -292,6 +312,10 @@ class Vizbuilder extends React.Component {
           <div className="vb-column">
             <VbTitle
               countryData={this.state.country}
+              selectedItemsCountry={this.state._selectedItemsCountry}
+              selectedItemsProduct={this.state._selectedItemsProduct}
+              selectedItemsPartner={this.state._selectedItemsCountry}
+              selectedItemsTechnology={this.state._selectedItemsTechnology}
               routeParams={routeParams}
             />
             <VbChart

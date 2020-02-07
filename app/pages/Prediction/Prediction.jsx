@@ -1,143 +1,89 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
-
 import axios from "axios";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
+import queryString from "query-string";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
+import SearchMultiSelect from "components/SearchMultiSelect";
 import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
-import {toHS} from "helpers/funcs.js";
-import colors from "helpers/colors";
+import {PREDICTION_DATASETS} from "helpers/consts";
 import "./Prediction.css";
-
 import {Alignment, AnchorButton, Button, Collapse, Navbar, Tabs, Tab} from "@blueprintjs/core";
 
-import SearchMultiSelect from "components/SearchMultiSelect";
-
-const DATASETS = [
-  {
-    name: "Trade (annual)",
-    slug: "trade-annual",
-    cube: "trade_i_baci_a_92",
-    selectionsLoaded: false,
-    dateDrilldown: "Year",
-    selections: [
-      {
-        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
-        data: [],
-        dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-        dimName: "Exporter Country",
-        id: "origins",
-        name: "Origin Country",
-        selected: []
-      },
-      {
-        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
-        data: [],
-        dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
-        dimName: "HS4",
-        id: "products",
-        name: "Product",
-        selected: []
-      },
-      {
-        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
-        data: [],
-        dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-        dimName: "Importer Country",
-        id: "destinations",
-        name: "Destination Country",
-        selected: []
-      }
-    ]
-  },
-  {
-    name: "Trade (monthly)",
-    slug: "trade-monthly",
-    cube: "trade_i_comtrade_m_hs",
-    selectionsLoaded: false,
-    dateDrilldown: "Time",
-    selections: [
-      {
-        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=Reporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
-        data: [],
-        dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-        dimName: "Reporter Country",
-        id: "origins",
-        name: "Origin Country",
-        selected: []
-      },
-      {
-        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
-        data: [],
-        dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
-        dimName: "HS4",
-        id: "products",
-        name: "Product",
-        selected: []
-      },
-      {
-        dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=Partner+Country&measures=Trade+Value&parents=true&sparse=false&properties=Partner+Country+ISO+3",
-        data: [],
-        dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-        dimName: "Partner Country",
-        id: "destinations",
-        name: "Destination Country",
-        selected: []
-      }
-    ]
-  }
-];
-
-const getQueryParam = (location, param) => {
-  const searchParams = new URLSearchParams(location.search);
-  return searchParams.get(param) || "";
-};
-
 class Prediction extends React.Component {
-  state = {
-    activeTabId: null,
-    advParams: [{
-      changepointPriorScale: 0.05,
-      changepointRange: 0.80,
-      seasonalityMode: "multiplicative"
-    }],
-    currentDrilldown: null,
-    // dataset: getQueryParam(this.props.router.location, "dataset") ? DATASETS[0] : DATASETS[0],
-    dataset: getQueryParam(this.props.router.location, "dataset")
-      ? DATASETS.find(d => d.slug === getQueryParam(this.props.router.location, "dataset"))
-      : DATASETS[0],
-    datasetSelections: [],
-    datatableOpen: false,
-    destinations: [],
-    drilldowns: [],
-    error: false,
-    loading: false,
-    origins: [],
-    predictionData: [],
-    products: [],
-    scrolled: false,
-    updateKey: null
-  };
+
+  constructor(props) {
+    super();
+    const parsedQueryString = queryString.parse(props.router.location.search, {arrayFormat: "comma"});
+    this.state = {
+      activeTabId: null,
+      advParams: [{
+        changepointPriorScale: 0.05,
+        changepointRange: 0.80,
+        seasonalityMode: "multiplicative"
+      }],
+      currentDrilldown: null,
+      dataset: parsedQueryString.dataset
+        ? PREDICTION_DATASETS.find(d => d.slug === parsedQueryString.dataset) || PREDICTION_DATASETS[0]
+        : PREDICTION_DATASETS[0],
+      datasetSelections: [],
+      datatableOpen: false,
+      destinations: [],
+      drilldowns: [],
+      error: false,
+      loading: false,
+      origins: [],
+      predictionData: [],
+      products: [],
+      scrolled: false,
+      updateKey: null
+    };
+  }
 
   componentDidMount() {
     window.addEventListener("scroll", this.handleScroll);
     const {dataset} = this.state;
     const selectionApiUrls = dataset.selections.map(d => axios.get(d.dataUrl));
+    const parsedQueryString = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
+    let drillDownFound = false;
     axios.all(selectionApiUrls)
       .then(axios.spread((...responses) => {
-        console.log("responses!!!", responses);
+
+        // populate dropdowns
         responses.forEach((resp, i) => {
           const {data} = resp.data;
-          dataset.selections[i].data = data.map(dataset.selections[i].dataMap).sort((a, b) => a.name.localeCompare(b.name));
+          const selectionId = dataset.selections[i].id;
+          drillDownFound = parsedQueryString.drilldown === selectionId || drillDownFound;
+          const thisSelectionQParams = parsedQueryString[selectionId];
+          dataset.selections[i].data = data
+            .map(dataset.selections[i].dataMap)
+            .sort((a, b) => a.name.localeCompare(b.name));
+          dataset.selections[i].data.forEach(d => {
+            if (thisSelectionQParams && thisSelectionQParams.includes(`${d.id}`)) {
+              dataset.selections[i].selected.push(d);
+            }
+          });
         });
         dataset.selectionsLoaded = true;
-        this.setState({dataset});
+
+        // read query params to determine if there are selections
+        // const qSelections = [["origins", "sachl"], ["destinations", "nausa"]];
+        // qSelections.forEach(qs => {
+        //   const selectionSlug = qs[0];
+        //   const selectionDataId = qs[1];
+        //   const thisSelection = dataset.selections.find(s => s.id === selectionSlug);
+        //   const x = thisSelection.data.find(d => d.id === selectionDataId);
+        //   thisSelection.selected.push(x);
+        // });
+
+        const currentDrilldown = drillDownFound ? parsedQueryString.drilldown : null;
+        this.setState({dataset, currentDrilldown}, this.buildPrediction);
       }));
   }
 
@@ -159,6 +105,7 @@ class Prediction extends React.Component {
     // newItems is the array returned
     const {dataset} = this.state;
     let {advParams, currentDrilldown} = this.state;
+    const {router} = this.context;
     const datasetSelections = dataset.selections.map(selection => {
       if (selection.id === selectionId) {
         selection.selected = newItems;
@@ -177,6 +124,11 @@ class Prediction extends React.Component {
       return selection;
     });
     dataset.selections = datasetSelections;
+    // set query params for this selection
+    const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
+    queryArgs[selectionId] = newItems.map(d => d.id);
+    const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
+    router.replace(`/en/prediction/?${stringifiedQueryArgs}`);
     this.setState({advParams, currentDrilldown, dataset});
   };
 
@@ -267,13 +219,19 @@ class Prediction extends React.Component {
   toggleDrilldown = selectorType => e => {
     // first check if any items have been added:
     const {currentDrilldown, dataset} = this.state;
+    const {router} = this.context;
+    let newDrilldown = currentDrilldown;
     const drillSelection = dataset.selections.find(s => s.id === selectorType);
     if (drillSelection.selected.length) {
-      this.setState({currentDrilldown: e.target.checked ? selectorType : null});
+      newDrilldown = e.target.checked ? selectorType : null;
     }
-    else {
-      this.setState({currentDrilldown});
-    }
+    this.setState({currentDrilldown: newDrilldown});
+
+    // set query params for this selection
+    const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
+    queryArgs.drilldown = newDrilldown;
+    const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
+    router.replace(`/en/prediction/?${stringifiedQueryArgs}`);
   };
 
   handleControlTabChange = newTabId => this.setState({activeTabId: newTabId})
@@ -311,7 +269,7 @@ class Prediction extends React.Component {
                 <h1>Predictions</h1>
               </Navbar.Heading>
               <Navbar.Divider />
-              {DATASETS.map(dset =>
+              {PREDICTION_DATASETS.map(dset =>
                 <AnchorButton
                   href={`?dataset=${dset.slug}`}
                   key={dset.slug}
@@ -323,12 +281,14 @@ class Prediction extends React.Component {
             </Navbar.Group>
           </Navbar>
 
+          {/* prediction selection dropdowns */}
           <div className="prediction-controls">
             {dataset.selectionsLoaded
               ? dataset.selections.map(selection =>
                 <SearchMultiSelect
                   key={selection.id}
                   updateSelection={this.updateSelection(selection.id)}
+                  initialItems={selection.selected}
                   isDrilldown={currentDrilldown === selection.id ? true : false}
                   itemType={selection.name}
                   items={selection.data}
@@ -385,9 +345,8 @@ class Prediction extends React.Component {
 Prediction.need = [
 ];
 
-Prediction.childContextTypes = {
+Prediction.contextTypes = {
   formatters: PropTypes.object,
-  locale: PropTypes.string,
   router: PropTypes.object
 };
 

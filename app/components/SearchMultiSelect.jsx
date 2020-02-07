@@ -10,7 +10,7 @@ class SearchMultiSelect extends React.Component {
     super(props);
     this.state = {
       items: props.items,
-      selectedItems: []
+      selectedItems: props.initialItems || []
     };
   }
 
