@@ -185,6 +185,7 @@ module.exports = {
       cube: "trade_s_esp_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
+        {name: "Autonomous", level: "Autonomous", slug: "autonomous"},
         {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
       ]
     }
