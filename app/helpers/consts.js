@@ -169,8 +169,26 @@ module.exports = {
           ]
         }
       ]
+    },
+    {
+      name: "Turkey",
+      code: "tur",
+      cube: "trade_s_tur_m_countries",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+      ]
+    },
+    {
+      name: "Spain",
+      code: "esp",
+      cube: "trade_s_esp_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+      ]
     }
-    // TODO: CHL, ECU, FRA, TUR, ESP
+    // TODO: CHL, ECU, FRA
     // TBD: ZAF -> ports, take a look , SWE -> no units, ignore it.
   ],
 
