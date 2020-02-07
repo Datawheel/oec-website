@@ -1,4 +1,5 @@
 import colors from "./helpers/colors";
+import style from "style.yml";
 import {formatAbbreviate} from "d3plus-format";
 import {mean} from "d3-array";
 
@@ -79,7 +80,6 @@ const axisStyles = {
   },
   labelConfig: {
     fontColor: () => "#FFFFFF",
-    // fontFamily: () => "Source Sans Pro",
     fontFamily: () => "'Source Sans Pro', sans-serif",
     fontSize: () => 12,
     fontWeight: () => 400
@@ -87,7 +87,6 @@ const axisStyles = {
   shapeConfig: {
     labelConfig: {
       fontColor: () => "#FFFFFF",
-      // fontFamily: () => "Source Sans Pro",
       fontFamily: () => "'Source Sans Pro', sans-serif",
       fontSize: () => 12,
       fontWeight: () => 400
@@ -103,44 +102,6 @@ const axisStyles = {
   }
 };
 
-const colorScaleConfig = {
-  axisConfig: {
-    labelOffset: true,
-    labelRotation: false,
-    shapeConfig: {
-      labelConfig: {
-        // fontColor: () => "#211f1a",
-        fontColor: () => "#ffffff",
-        fontSize: () => 12,
-        fontWeight: () => 400
-      },
-      stroke: "#979797"
-    },
-    titleConfig: {
-      // fontColor: () => "#211f1a",
-      fontColor: () => "#ffffff",
-      fontSize: () => 12,
-      fontWeight: () => 400
-    },
-    barConfig: {
-      stroke: "white"
-    },
-    tickFormat: d => formatAbbreviate(d)
-  },
-  legendConfig: {
-    shapeConfig: {
-      labelConfig: {
-        fontSize: () => 16,
-        fontColor: () => "#ffffff"
-      },
-      fontColor: () => "#ffffff",
-      height: () => 15,
-      stroke: "#383e44",
-      width: () => 15
-    }
-  }
-};
-
 export default {
   aggs: {
     "Section ID": mean,
@@ -149,7 +110,47 @@ export default {
   backgroundConfig: {
     fill: "#383e44"
   },
-  colorScaleConfig,
+  colorScaleConfig: {
+    axisConfig: {
+      labelOffset: true,
+      labelRotation: false,
+      shapeConfig: {
+        labelConfig: {
+          fontColor: () => "#ffffff",
+          fontFamily: () => "'Source Sans Pro', sans-serif",
+          fontSize: () => 12,
+          fontWeight: () => 400
+        },
+        stroke: style["dark-1"]
+      },
+      titleConfig: {
+        fontColor: () => "#ffffff",
+        fontFamily: () => "'Palanquin', sans-serif",
+        fontSize: () => 12,
+        fontWeight: () => 400
+      },
+      barConfig: {
+        stroke: "white"
+      },
+      tickFormat: d => formatAbbreviate(d)
+    },
+    color: colors.viridis,
+    legendConfig: {
+      shapeConfig: {
+        labelConfig: {
+          fontSize: () => 16,
+          fontColor: () => "#ffffff"
+        },
+        fontColor: () => "#ffffff",
+        height: () => 15,
+        stroke: "#383e44",
+        width: () => 15
+      }
+    },
+    rectConfig: {
+      stroke: style["dark-1"]
+    }
+  },
   xConfig: axisStyles,
   yConfig: axisStyles,
   barPadding: 0,
@@ -164,7 +165,6 @@ export default {
   layoutPadding: 1,
   legendTooltip: {
     title: d => {
-      const title = d.Country;
       const bgColor = findColor(d);
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
@@ -176,6 +176,9 @@ export default {
       return tooltip;
     }
   },
+  ocean: false,
+  projection: "geoMiller",
+  tiles: false,
   tooltipConfig: {
     title: d => {
       const dd = ["Product", "HS6", "HS4", "HS2", "Subclass", "Class", "Superclass", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
@@ -286,6 +289,8 @@ export default {
     },
     width: "200px"
   },
+  topojsonFill: style["dark-3"],
+  topojsonFilter: d => d.id !== "ata",
   total: "Trade Value",
   totalConfig: {
     "fontColor": () => "#FFFFFF",
@@ -314,8 +319,8 @@ export default {
       //   const c = findColor(d);
       //   return [good, bad].includes(c) ? 1 : 0;
       // },
-      strokeWidth: d => 2,
-      strokeFill: d => "#212831",
+      strokeWidth: () => 2,
+      strokeFill: () => "#212831",
       fill: findColor
     },
     fill: findColor,
