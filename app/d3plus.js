@@ -152,7 +152,7 @@ export default {
     }
   },
   xConfig: axisStyles,
-  yConfig: axisStyles,
+  yConfig: {...axisStyles, scale: "auto"},
   barPadding: 0,
   legendConfig: {
     label: "",
