@@ -15,7 +15,7 @@
 - Go to [GADM](https://gadm.org/download_country_v3.html) or [IGISMAP](https://www.igismap.com/) or any official place to get the shapes and find the right map for each level.
 - If file size is too big for web -probably it is- simplify it, we don't need too many details. You can use any tool. [MapShaper](https://mapshaper.org/) works great, is easy to use and in-browser. Also resolve some overlapping points.
 - Export the maps in `TOPOJSON` format and save it (static/shapes)[static/shapes] with name `subnational_<3 letter country code>_<level slug (plural)>.topojson`;
-- Open for edit the topojson file using [geojson.io](http://geojson.io/) table view (or any other tool).
+- Open for edit the topojson file using [geojson.io](http://geojson.io/) table view (or any other tool). You can edit using also: [https://geoman.io/](https://geoman.io/)
 - Make sure to create/update an `id` and  `name` columns based on tesseract ui query to match the ids with shapes. Pay attention on that.
 - Remove any other useless property. We just need `id` and `name`.
 - Sometimes we use `type` column for clarify geo level that are mixed in the same file.
