@@ -32,9 +32,11 @@ class SubnationalMap extends React.Component {
 
     const ignoreIds = selectedGeoLevel.ignoreIds ? selectedGeoLevel.ignoreIds : [];
 
+    const extraConfig = selectedGeoLevel.extraMapConfig ? selectedGeoLevel.extraMapConfig : {};
+
     const {router} = this.context;
 
-    return {
+    return Object.assign({
       id: `geomap-${country}`,
       data: items,
       height: 500,
@@ -58,7 +60,7 @@ class SubnationalMap extends React.Component {
       },
       tiles: false,
       tooltipConfig: {
-        title: d => {
+        title: (d, a) => {
           let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
           const imgUrl = `/images/icons/country/country_${country}.png`;
           tooltip += `<div class="icon"><img src="${imgUrl}" /></div>`;
@@ -105,15 +107,15 @@ class SubnationalMap extends React.Component {
       topojson: `/shapes/subnational_${country}_${selectedGeoLevel.slug}.topojson`,
       topojsonId: d => d.properties.id,
       topojsonFilter: d => {
-        let pass = true;
+        let ignore = false;
         if (ignoreIds.length > 0) {
-          pass = ignoreIds.indexOf(d.properties.id) > -1;
+          ignore = ignoreIds.indexOf(d.properties.id) > -1;
         }
-        return pass;
+        return !ignore;
       },
       topojsonKey: "objects",
       zoom: false
-    };
+    }, extraConfig);
   }
 
   render() {
