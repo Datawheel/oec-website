@@ -62,6 +62,7 @@ module.exports = {
       code: "bra",
       cube: "trade_s_bra_mun_m_hs",
       dimension: "Subnat Geography",
+      limit: 7000,
       geoLevels: [
         {name: "Region", level: "Region", slug: "regions", ignoreIds: []},
         {name: "States", level: "State", slug: "states", ignoreIds: []},
@@ -84,8 +85,22 @@ module.exports = {
       cube: "trade_s_rus_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Districts", level: "District", slug: "districts"},
-        {name: "Regions", level: "Subnat Geography", slug: "regions"}
+        {
+          name: "Districts",
+          level: "District",
+          slug: "districts",
+          extraMapConfig: {
+            projectionRotate: [-70, 0]
+          }
+        },
+        {
+          name: "Regions",
+          level: "Subnat Geography",
+          slug: "regions",
+          extraMapConfig: {
+            projectionRotate: [-90, 0]
+          }
+        }
       ]
     },
     {
@@ -122,11 +137,59 @@ module.exports = {
       cube: "trade_s_usa_district_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "States", level: "State", slug: "states", ignoreIds: ["04000US02", "04000US15", "04000US60", "04000US69", "04000US66"]},
-        {name: "District", level: "Subnat Geography", slug: "districts", ignoreIds: []}
+        {
+          name: "States",
+          level: "State",
+          slug: "states",
+          ignoreIds: [
+            "04000US02", "04000US15", "04000US60",
+            "04000US69", "04000US66"
+          ]
+        },
+        {
+          name: "District",
+          level: "Subnat Geography",
+          slug: "districts",
+          ignoreIds: [
+            "05000US02016", "05000US66010", "05000US69100",
+            "05000US69120", "05000US69110", "05000US69085",
+            "05000US60010", "05000US60050", "05000US60020",
+            "05000US15001", "05000US15009", "05000US15009",
+            "05000US15007", "05000US15005", "05000US02185",
+            "05000US02290", "05000US02188", "05000US02180",
+            "05000US02158", "05000US02050", "05000US02090",
+            "05000US02068", "05000US02240", "05000US02261",
+            "05000US02282", "05000US02105", "05000US02220",
+            "05000US02110", "05000US02195", "05000US02198",
+            "05000US02130", "05000US02275", "05000US02100",
+            "05000US02230", "05000US02170", "05000US02164",
+            "05000US02188", "05000US02013", "05000US02016",
+            "05000US02070", "05000US02060", "05000US02122",
+            "05000US02020", "05000US02150", "05000US15003"
+          ]
+        }
+      ]
+    },
+    {
+      name: "Turkey",
+      code: "tur",
+      cube: "trade_s_tur_m_countries",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+      ]
+    },
+    {
+      name: "Spain",
+      code: "esp",
+      cube: "trade_s_esp_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Autonomous", level: "Autonomous", slug: "autonomous"},
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
       ]
     }
-    // TODO: CHL, ECU, FRA, TUR
+    // TODO: CHL, ECU, FRA
     // TBD: ZAF -> ports, take a look , SWE -> no units, ignore it.
   ],
 
@@ -175,7 +238,7 @@ module.exports = {
       dateDrilldown: "Time",
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=Reporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&drilldowns=Reporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Reporter Country",
@@ -193,7 +256,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=Partner+Country&measures=Trade+Value&parents=true&sparse=false&properties=Partner+Country+ISO+3",
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&drilldowns=Partner+Country&measures=Trade+Value&parents=true&sparse=false&properties=Partner+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
