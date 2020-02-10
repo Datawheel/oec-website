@@ -60,7 +60,8 @@ Subnational.need = [(params, store) => {
   const promisesList = [];
   const countriesData = {};
   SUBNATIONAL_COUNTRIES.map((country, ix) => {
-    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=1000`;
+    const limit = country.limit ? `${country.limit}` : "1000";
+    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}`;
     countriesData[encodeURI(url)] = country;
     promisesList.push(url);
   });

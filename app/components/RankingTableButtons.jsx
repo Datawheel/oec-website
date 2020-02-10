@@ -23,7 +23,7 @@ class RankingTableButtons extends React.Component {
                   tabIndex="0"
                   data-refresh="true"
                 >
-                  {d.display}
+                  {t(d.display)}
                 </a>
               )
               : array.map((d, k) =>
@@ -32,7 +32,7 @@ class RankingTableButtons extends React.Component {
                   onClick={() => onclick.function(onclick.category, onclick.measure, d)}
                   className={`${d === active ? "is-active" : ""}`}
                 >
-                  {d}
+                  {t(d)}
                 </Button>
               )
             }

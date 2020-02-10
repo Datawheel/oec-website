@@ -3,32 +3,25 @@ const locale = "en";
 module.exports = {
   PAGE: [
     {
-      country: {
-        title: "Economic Complexity Rankings (ECI)",
-        text: [
-          `The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product. ECI measures the knowledge intensity of an economy by considering the knowledge intensity of the products it exports. PCI measures the knowledge intensity of a product by considering the knowledge intensity of its exporters. This circular argument is mathematically tractable and can be used to construct relative measures of the knowledge intensity of economies and products (see <a href=${"/en/resources/methodology/"} class=link>methodology section</a> for more details).`,
-          `ECI has been validated as a relevant economic measure by showing its ability to predict future economic growth (see <a href=${"https://oec.world/en/rankings/country/eci/?download=true"} class=link>Hidalgo and Hausmann 2009</a>), and explain international variations in income inequality (see <a href=${"/oec.world/static/pdf/LinkingEconomicComplexityInstitutionsAndIncomeInequality.pdf"} class=link>Hartmann et al. 2017</a>).`,
-          "This page includes rankings using the Economic Complexity Index (ECI)."
-        ]
+      title: {
+        country: "rankings_title_country",
+        product: "rankings_title_product"
       },
-      product: {
-        title: "Product Complexity Rankings (PCI)",
-        text: [
-          `The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product. ECI measures the knowledge intensity of an economy by considering the knowledge intensity of the products it exports. PCI measures the knowledge intensity of a product by considering the knowledge intensity of its exporters. This circular argument is mathematically tractable and can be used to construct relative measures of the knowledge intensity of economies and products (see <a href=${"/en/resources/methodology/"} class=link>methodology section</a> for more details).`,
-          `ECI has been validated as a relevant economic measure by showing its ability to predict future economic growth (see <a href=${"https://oec.world/en/rankings/country/eci/?download=true"} class=link>Hidalgo and Hausmann 2009</a>), and explain international variations in income inequality (see <a href=${"/oec.world/static/pdf/LinkingEconomicComplexityInstitutionsAndIncomeInequality.pdf"} class=link>Hartmann et al. 2017</a>).`,
-          "This page includes rankings using the Economic Complexity Index (ECI)."
-        ]
-      }
+      text: [
+        "rankings_text_1",
+        "rankings_text_2",
+        "rankings_text_3"
+      ]
     }
   ],
   CATEGORY_BUTTONS: [
     {
-      display: "Country",
+      display: "rankings_active_country",
       value: "country",
       href: `/${locale}/rankings/country/eci/`
     },
     {
-      display: "Product",
+      display: "rankings_active_product",
       value: "product",
       href: `/${locale}/rankings/product/hs92/`
     }
@@ -63,7 +56,7 @@ module.exports = {
     hs07: ["2008-2012", "2013-2017"]
   },
   DOWNLOAD_BUTTONS: [
-    ["Download", {country: "https://oec.world/en/rankings/country/eci/?download=true", product: "https://oec.world/en/rankings/product/sitc/?download=true"}],
-    ["Download All Years", {country: "https://oec.world/en/rankings/country/eci/?download=true&download_all=true", product: "https://oec.world/en/rankings/product/sitc/?download=true&download_all=true"}]
+    ["rankings_download_1", {country: `/${locale}/rankings/country/eci/?download=true`, product: `/${locale}/rankings/product/sitc/?download=true`}],
+    ["rankings_download_2", {country: `/${locale}/rankings/country/eci/?download=true&download_all=true`, product: `/${locale}/rankings/product/sitc/?download=true&download_all=true`}]
   ]
 };
