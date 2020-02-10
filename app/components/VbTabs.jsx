@@ -27,8 +27,6 @@ class VbTabs extends React.Component {
   render() {
     const {activeOption, activeTab, t} = this.props;
 
-    console.log(activeTab, "activeTab");
-
     return <div>
       <div className="columns is-tabs">
         <div className="column-1 tab">

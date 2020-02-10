@@ -23,7 +23,6 @@ class VbTitle extends React.Component {
     const _partnerNames = selectedItemsPartner.map(d => d.title).join(", ");
     const _productNames = selectedItemsProduct.map(d => d.title).join(", ");
     const _technologyNames = selectedItemsTechnology.map(d => d.title).join(", ");
-    console.log(selectedItemsProduct);
 
     const isTrade = new RegExp(/(export|import)/).test(flow);
     const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country);
