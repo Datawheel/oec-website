@@ -309,7 +309,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
 
-            <div className="columns">
+            {/* <div className="columns">
               <div className="column-1">
                 <OECMultiSelectV2
                   items={this.state.testing}
@@ -318,7 +318,7 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="columns">
               <div className="column-1-2">
