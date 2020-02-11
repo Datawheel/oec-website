@@ -143,13 +143,18 @@ module.exports = {
           slug: "states",
           ignoreIds: [
             "04000US60", "04000US69", "04000US66"
-          ]
+          ],
+          extraMapConfig: {
+            projection: "geoAlbersUsa"
+          }
         },
         {
           name: "Districts",
           level: "Subnat Geography",
           slug: "districts",
-          ignoreIds: []
+          extraMapConfig: {
+            projection: "geoAlbersUsa"
+          }
         }
       ]
     },
@@ -171,9 +176,8 @@ module.exports = {
         {name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous"},
         {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
       ]
-    }
-
-    /* {
+    },
+    {
       name: "South Africa",
       code: "zaf",
       cube: "trade_s_zaf_m_hs",
@@ -181,7 +185,7 @@ module.exports = {
       geoLevels: [
         {name: "Ports", level: "Port of Entry", slug: "ports"}
       ]
-    }*/
+    }
     // TODO: CHL, ECU, FRA
     // TBD: ZAF -> ports, take a look , SWE -> no units, ignore it.
   ],
