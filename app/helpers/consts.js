@@ -172,6 +172,16 @@ module.exports = {
         {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
       ]
     }
+
+    /* {
+      name: "South Africa",
+      code: "zaf",
+      cube: "trade_s_zaf_m_hs",
+      dimension: "Port of Entry",
+      geoLevels: [
+        {name: "Ports", level: "Port of Entry", slug: "ports"}
+      ]
+    }*/
     // TODO: CHL, ECU, FRA
     // TBD: ZAF -> ports, take a look , SWE -> no units, ignore it.
   ],

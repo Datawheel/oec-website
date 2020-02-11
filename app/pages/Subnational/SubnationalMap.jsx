@@ -56,7 +56,11 @@ class SubnationalMap extends React.Component {
         Path: {
           fill: d => d.type === "Feature" ? "none" : "#fff",
           stroke: "#ccc",
-          hover: d => d.type === "Feature" ? "none" : "#6297CB",
+          hoverOpacity: 0.5,
+          hoverStyle: d => {
+            const fillColor = d.type === "Feature" ? "none" : "#6297CB";
+            return `fill: "${fillColor}"`;
+          },
           strokeWidth: "1px",
           pointerEvents: d => d.type === "Feature" ? "none" : "visiblePoint"
         }
