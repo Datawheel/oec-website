@@ -64,9 +64,9 @@ module.exports = {
       dimension: "Subnat Geography",
       limit: 7000,
       geoLevels: [
-        {name: "Region", level: "Region", slug: "regions", ignoreIds: []},
-        {name: "States", level: "State", slug: "states", ignoreIds: []},
-        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities", ignoreIds: []}
+        {name: "Region", level: "Region", slug: "regions"},
+        {name: "States", level: "State", slug: "states", ignoreIdsList: ["93", "95"]},
+        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
       ]
     },
     {
@@ -75,8 +75,8 @@ module.exports = {
       cube: "trade_s_jpn_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Regions", level: "Area", slug: "regions", ignoreIds: []},
-        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures", ignoreIds: []}
+        {name: "Regions", level: "Area", slug: "regions"},
+        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures"}
       ]
     },
     {
@@ -141,7 +141,7 @@ module.exports = {
           name: "States",
           level: "State",
           slug: "states",
-          ignoreIds: [
+          ignoreIdsMap: [
             "04000US60", "04000US69", "04000US66"
           ],
           extraMapConfig: {

@@ -30,7 +30,7 @@ class SubnationalMap extends React.Component {
   getGeoConfig() {
     const {items, country, selectedGeoLevel, locale} = this.props;
 
-    const ignoreIds = selectedGeoLevel.ignoreIds ? selectedGeoLevel.ignoreIds : [];
+    const ignoreIdsMap = selectedGeoLevel.ignoreIdsMap ? selectedGeoLevel.ignoreIdsMap : [];
 
     const extraConfig = selectedGeoLevel.extraMapConfig ? selectedGeoLevel.extraMapConfig : {};
 
@@ -115,8 +115,8 @@ class SubnationalMap extends React.Component {
       topojsonId: d => d.properties.id,
       topojsonFilter: d => {
         let ignore = false;
-        if (ignoreIds.length > 0) {
-          ignore = ignoreIds.indexOf(d.properties.id) > -1;
+        if (ignoreIdsMap.length > 0) {
+          ignore = ignoreIdsMap.indexOf(d.properties.id) > -1;
         }
         return !ignore;
       },
