@@ -64,9 +64,9 @@ module.exports = {
       dimension: "Subnat Geography",
       limit: 7000,
       geoLevels: [
-        {name: "Region", level: "Region", slug: "regions", ignoreIds: []},
-        {name: "States", level: "State", slug: "states", ignoreIds: []},
-        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities", ignoreIds: []}
+        {name: "Region", level: "Region", slug: "regions"},
+        {name: "States", level: "State", slug: "states", ignoreIdsList: ["93", "95"]},
+        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
       ]
     },
     {
@@ -75,8 +75,8 @@ module.exports = {
       cube: "trade_s_jpn_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Regions", level: "Area", slug: "regions", ignoreIds: []},
-        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures", ignoreIds: []}
+        {name: "Regions", level: "Area", slug: "regions"},
+        {name: "Prefectures", level: "Subnat Geography", slug: "prefectures"}
       ]
     },
     {
@@ -141,32 +141,20 @@ module.exports = {
           name: "States",
           level: "State",
           slug: "states",
-          ignoreIds: [
-            "04000US02", "04000US15", "04000US60",
-            "04000US69", "04000US66"
-          ]
+          ignoreIdsMap: [
+            "04000US60", "04000US69", "04000US66"
+          ],
+          extraMapConfig: {
+            projection: "geoAlbersUsa"
+          }
         },
         {
-          name: "District",
+          name: "Districts",
           level: "Subnat Geography",
           slug: "districts",
-          ignoreIds: [
-            "05000US02016", "05000US66010", "05000US69100",
-            "05000US69120", "05000US69110", "05000US69085",
-            "05000US60010", "05000US60050", "05000US60020",
-            "05000US15001", "05000US15009", "05000US15009",
-            "05000US15007", "05000US15005", "05000US02185",
-            "05000US02290", "05000US02188", "05000US02180",
-            "05000US02158", "05000US02050", "05000US02090",
-            "05000US02068", "05000US02240", "05000US02261",
-            "05000US02282", "05000US02105", "05000US02220",
-            "05000US02110", "05000US02195", "05000US02198",
-            "05000US02130", "05000US02275", "05000US02100",
-            "05000US02230", "05000US02170", "05000US02164",
-            "05000US02188", "05000US02013", "05000US02016",
-            "05000US02070", "05000US02060", "05000US02122",
-            "05000US02020", "05000US02150", "05000US15003"
-          ]
+          extraMapConfig: {
+            projection: "geoAlbersUsa"
+          }
         }
       ]
     },
@@ -187,6 +175,15 @@ module.exports = {
       geoLevels: [
         {name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous"},
         {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+      ]
+    },
+    {
+      name: "South Africa",
+      code: "zaf",
+      cube: "trade_s_zaf_m_hs",
+      dimension: "Port of Entry",
+      geoLevels: [
+        {name: "Ports", level: "Port of Entry", slug: "ports"}
       ]
     }
     // TODO: CHL, ECU, FRA

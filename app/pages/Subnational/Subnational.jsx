@@ -61,8 +61,8 @@ Subnational.need = [(params, store) => {
   const countriesData = {};
   SUBNATIONAL_COUNTRIES.map((country, ix) => {
     const limit = country.limit ? `${country.limit}` : "1000";
-    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}`;
-    countriesData[encodeURI(url)] = country;
+    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}&ref=${country.code}`;
+    countriesData[country.code] = country;
     promisesList.push(url);
   });
 
@@ -72,17 +72,24 @@ Subnational.need = [(params, store) => {
     let reponseMetadata;
     let records;
     let responseURL;
+    let codeInURL;
+    let nestResponse;
     responses.map(res => {
       responseURL = res.request.responseURL ? res.request.responseURL : res.request.res.responseUrl;
-      reponseMetadata = countriesData[responseURL];
+      codeInURL = responseURL.split("&ref=")[1];
+      reponseMetadata = countriesData[codeInURL];
       if (reponseMetadata) {
-
         records = res.data.results.filter(datum =>
-          // datum.profile === `subnational_${reponseMetadata.code}` &&
           datum.dimension === reponseMetadata.dimension &&
           reponseMetadata.geoLevels.map(gl => gl.level).indexOf(datum.hierarchy) > -1
         );
-        finalResponse[reponseMetadata.code] = d3Nest().key(d => d.hierarchy).object(records);
+        nestResponse = d3Nest().key(d => d.hierarchy).object(records);
+        if (finalResponse[reponseMetadata.code]) {
+          finalResponse[reponseMetadata.code] = {...finalResponse[reponseMetadata.code], ...nestResponse};
+        }
+        else {
+          finalResponse[reponseMetadata.code] = nestResponse;
+        }
       }
       else {
         console.warn("responseURL", res.request.res.responseUrl);
