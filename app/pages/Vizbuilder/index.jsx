@@ -14,7 +14,9 @@ import OECMultiSelect from "../../components/OECMultiSelect";
 import VbTitle from "../../components/VbTitle";
 import axios from "axios";
 import colors from "../../helpers/colors";
+import OECMultiSelectV2 from "../../components/OECMultiSelectV2";
 
+import {nest} from "d3-collection";
 
 const datasets = [
   {value: "hs92", title: "HS92"},
@@ -58,7 +60,9 @@ class Vizbuilder extends React.Component {
       _selectedItemsCountry: [],
       _selectedItemsPartner: [],
       _selectedItemsTechnology: [],
-      _selectedItemsYear: []
+      _selectedItemsYear: [],
+
+      testing: []
     };
   }
 
@@ -91,7 +95,51 @@ class Vizbuilder extends React.Component {
       }, true);
     }));
 
+    axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false").then(resp => {
+      const data = resp.data.data;
+      const testing = [];
+      nest()
+        .key(d => `${d["Section ID"]}|${d.Section}`)
+        .key(d => `${d["HS2 ID"]}|${d.HS2}`)
+        .key(d => `${d["HS4 ID"]}|${d.HS4}`)
+        // .rollup(d => console.log(d))
+        .entries(data)
+        .forEach(d => testing.push(d));
+
+      testing.forEach(d => {
+        const fullName = d.key.split("|");
+        delete d.key;
+        const parent = fullName[0];
+        d.id = fullName[0];
+        d.name = fullName[1];
+        d.icon = `/images/icons/hs/hs_${parent}.png`;
+        const color = colors.Section[parent];
+        d.color = color;
+        d.values.forEach(h => {
+          const fullName = h.key.split("|");
+          delete h.key;
+          h.id = fullName[0];
+          h.name = fullName[1];
+          h.icon = `/images/icons/hs/hs_${parent}.png`;
+          h.color = color;
+          h.values.forEach(x => {
+            const fullName = x.key.split("|");
+            delete x.key;
+            x.id = fullName[0];
+            x.name = fullName[1];
+            x.icon = `/images/icons/hs/hs_${parent}.png`;
+            x.color = color;
+            delete x.values;
+          });
+        });
+      });
+      console.log(testing);
+      this.setState({testing});
+    });
+
   }
+
+
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
@@ -117,10 +165,7 @@ class Vizbuilder extends React.Component {
   buildViz = () => {
     const {router} = this.props;
     const {
-      activeTab,
-      _countryId,
       _flow,
-      _yearId,
       _dataset,
       _selectedItemsCountry,
       _selectedItemsPartner,
@@ -263,6 +308,17 @@ class Vizbuilder extends React.Component {
                 />
               </div>
             </div>}
+
+            {/* <div className="columns">
+              <div className="column-1">
+                <OECMultiSelectV2
+                  items={this.state.testing}
+                  selectedItems={this.state._selectedItemsPartner}
+                  title={"Partner"}
+                  callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
+                />
+              </div>
+            </div> */}
 
             <div className="columns">
               <div className="column-1-2">

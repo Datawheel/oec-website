@@ -30,8 +30,8 @@ class Rankings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: PAGE[0][this.props.params.category].title,
-      text: PAGE[0][this.props.params.category].text,
+      title: PAGE[0].title[this.props.params.category],
+      text: PAGE[0].text,
       data: null,
       category: this.props.params.category || "country",
       measure: this.props.params.measure || "eci",
@@ -41,8 +41,8 @@ class Rankings extends React.Component {
   }
 
   createColumns(category, measure, filter) {
-    const {lng} = this.props;
-    const categoryHeader = category === "country" ? "Country" : "Product";
+    const {t, lng} = this.props;
+    const categoryHeader = category === "country" ? "rankings_active_country" : "rankings_active_product";
     const firstYear = filter.split("-")[0] * 1;
     const lastYear = filter.split("-")[1] * 1;
 
@@ -60,7 +60,7 @@ class Rankings extends React.Component {
         accessor: d => category === "country" ? d.Country : d.HS6,
         Header: () =>
           <div className="header">
-            <span className="year">{categoryHeader}</span>
+            <span className="year">{t(categoryHeader)}</span>
             <div className="icons">
               <Icon icon={"caret-up"} iconSize={16} />
               <Icon icon={"caret-down"} iconSize={16} />
@@ -204,7 +204,7 @@ class Rankings extends React.Component {
           <div className="download">
             {DOWNLOAD_BUTTONS.map((d, k, {length}) =>
               <AnchorButton
-                text={d[0]}
+                text={t(d[0])}
                 href={d[1][category]}
                 key={k}
                 className={classnames("anchor-button", {last: length === k + 1})}
@@ -217,7 +217,7 @@ class Rankings extends React.Component {
               t={t}
               anchor={true}
               type={"showing"}
-              title={"Showing"}
+              title={t("rankings_settings_showing")}
               array={CATEGORY_BUTTONS}
               active={category}
             />
@@ -226,7 +226,7 @@ class Rankings extends React.Component {
                 t={t}
                 anchor={true}
                 type={"product"}
-                title={"Product Classification"}
+                title={t("rankings_settings_product_classification")}
                 array={PRODUCT_BUTTONS}
                 active={measure}
               />
@@ -235,7 +235,7 @@ class Rankings extends React.Component {
               t={t}
               anchor={false}
               type={"year"}
-              title={"Year Range"}
+              title={t("rankings_settings_year_range")}
               array={FILTER_YEARS[measure]}
               onclick={
                 {

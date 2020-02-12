@@ -176,8 +176,6 @@ class VbChart extends React.Component {
     const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype} = routeParams;
 
-    console.log(data);
-
     if (loading) return <div>Loading...</div>;
 
     const isTechnology = cube.includes("cpc");
@@ -271,7 +269,7 @@ class VbChart extends React.Component {
         shapeConfig: {
           Circle: {
             fill: d => d["Trade Value RCA"] > 1
-              ? (console.log(d),  colors.Section[d["Section ID"]] || "gray")
+              ? colors.Section[d["Section ID"]] || "gray"
               : "gray"
           }
         },

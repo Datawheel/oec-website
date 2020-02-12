@@ -108,8 +108,8 @@
 .virtual-selector-item {
   height: 50px;
   position: absolute;
-  padding: 5px 10px;
-  background: var(--dark-4) !important;
+  padding: 0px;
+  background: var(--dark-2) !important;
   color: var(--white);
   -webkit-box-align: left;
   -ms-flex-align: left;
@@ -132,10 +132,10 @@
     flex-direction: row;
     display: flex;
     align-items: center;
-
-    & .product-id {
-      font-size: 12px;
-      color: gray;
+    height: 100%;
+    & .item-icon {
+      width: 30px;
+      height: 30px;
     }
   }
 
