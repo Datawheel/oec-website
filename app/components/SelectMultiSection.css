@@ -1,0 +1,72 @@
+.sm-section--popover {
+  & .bp3-popover-content {
+    background: var(--dark-4) !important;
+    color: var(--white) !important;
+    border: 1px solid var(--white);
+    border-radius: 0px;
+    padding: 0px !important;
+    min-width: 0px !important;
+  }
+  & .bp3-menu {
+    border: 0 none !important;
+    margin-bottom: 2px !important;
+  }
+}
+
+.sm-section--level {
+  & .bp3-button {
+    margin: 1px;
+    color: var(--white) !important;
+  }
+}
+
+.sm-section--hielist-header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+.sm-section--hielist-htoken {
+  margin-left: 0.5rem;
+  max-width: 260px;
+}
+.sm-section--hielist-content {
+  will-change: transform;
+}
+
+.sm-section--list-item {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.sm-section--option {
+  flex: 1 0 0;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+
+  & > div {
+    width: 250px;
+  }
+}
+.sm-section--descendants {
+  flex: 0 0;
+}
+.sm-section--hs-icon {
+  width: 24px;
+  margin: -2px;
+  margin-right: 0.5rem;
+
+  .bp3-tag & {
+    width: 16px;
+  }
+}
+
+.sm-section--show-all {
+  & .sm-section--type-HS2 {
+    padding-left: 0.5rem;
+  }
+  & .sm-section--type-HS4 {
+    padding-left: 1rem;
+  }
+}
