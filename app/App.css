@@ -78,3 +78,46 @@ p > a,
     text-decoration: none;
   }
 }
+
+/* --------------------------
+// d3plus
+-------------------------- */
+
+/* .d3plus-textBox text {
+  font-family: "Fira Sans Condensed", sans-serif !important;
+  font-weight: 600 !important;
+} */
+
+.d3plus-Message {
+  color: var(--white);
+}
+
+.d3plus-tooltip {
+  & td {
+    text-align: right;
+    padding: 5px 10px;
+    &:first-child {
+      text-align: left;
+      font-weight: var(--display-font-weight);
+    }
+    &:last-child {
+      text-transform: uppercase;
+    }
+  }
+  z-index: 101 !important;
+}
+
+.d3plus-tooltip-title-wrapper {
+  display: flex;
+  align-items: center;
+  & .icon {
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    & img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+}
