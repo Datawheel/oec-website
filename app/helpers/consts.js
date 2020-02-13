@@ -64,7 +64,8 @@ module.exports = {
       dimension: "Subnat Geography",
       limit: 7000,
       geoLevels: [
-        {name: "Region", level: "Region", slug: "regions"},
+
+        /* {name: "Region", level: "Region", slug: "regions"},*/
         {name: "States", level: "State", slug: "states", ignoreIdsList: ["93", "95"]},
         {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
       ]
@@ -109,7 +110,7 @@ module.exports = {
       cube: "trade_s_can_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces", ignoreIdsList: ["1"]}
       ]
     },
     {
@@ -118,8 +119,8 @@ module.exports = {
       cube: "trade_s_ury_a_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Corridor", level: "Corridor", slug: "corridors"},
-        {name: "Departments", level: "Subnat Geography", slug: "departments"}
+        {name: "Corridor", level: "Corridor", slug: "corridors", ignoreIdsList: ["na"]},
+        {name: "Departments", level: "Subnat Geography", slug: "departments", ignoreIdsList: ["5"]}
       ]
     },
     {
