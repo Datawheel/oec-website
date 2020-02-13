@@ -4,6 +4,8 @@ import classNames from "classnames";
 import React, {Fragment, useMemo, useRef, useState} from "react";
 import List from "react-viewport-list";
 
+const levels = ["Section", "HS2", "HS4"];
+
 /** @type {React.FC<import("@blueprintjs/select").IItemListRendererProps<import("./SelectMultiSection").SelectedItem>>} */
 const HierarchyList = ({activeItem, renderItem, items}) => {
   const viewPortRef = useRef(null);
@@ -26,26 +28,23 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
     setStack(nextStack);
   };
 
+  const currentLevel = levels[stackIndex];
   const finalList = useMemo(() => {
     if (showAll) return items;
-    const level = ["Section", "HS2", "HS4"][stackIndex];
     return stack.reduce(
-      (list, token) => list.filter(item => token.startsWith("All") || item.searchIndex.indexOf(token) > -1),
-      items.filter(item => item.type === level)
+      (list, token) => list.filter(item =>
+        !token || token.startsWith("All") || item.searchIndex.indexOf(token) > -1
+      ),
+      items.filter(item => item.type === currentLevel)
     );
   }, [items, showAll, stackIndex]);
 
-  const headerTokens = stack.map((token, index) =>
-    <Text
-      className={`sm-section--hielist-htoken level-${index}`}
-      ellipsize={true}
-      key={`${index}-${token}`}
-    >
-      {token}
-    </Text>
-  );
+  const headerTokens = stack.filter(Boolean);
+  if (stack.length > 0 && headerTokens.length === 0) {
+    headerTokens.push(`All ${currentLevel}`);
+  }
 
-  const activeIndex = finalList.indexOf(activeItem) || 1;
+  const activeIndex = finalList.indexOf(activeItem);
 
   return (
     <Fragment>
@@ -58,35 +57,37 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
           }}
           text="All"
         />
-        <Button
-          active={!showAll && stackIndex === 0}
-          onClick={() => {
-            showAll && setShowAll(false);
-            setStack([]);
-          }}
-          text="Section"
-        />
-        <Button
-          active={!showAll && stackIndex === 1}
-          onClick={() => {
-            showAll && setShowAll(false);
-            setStack([stack[0] || "All HS2"]);
-          }}
-          text="HS2"
-        />
-        <Button
-          active={!showAll && stackIndex === 2}
-          onClick={() => {
-            showAll && setShowAll(false);
-            setStack([stack[0] || "All HS2", stack[1] || "All HS4"]);
-          }}
-          text="HS4"
-        />
+        {levels.map((level, index) =>
+          <Button
+            active={!showAll && stackIndex === index}
+            key={`${index}-${level}`}
+            onClick={() => {
+              showAll && setShowAll(false);
+              const nextStack = [];
+              let n = index;
+              while (n--) {
+                nextStack[n] = stack[n] || null;
+              }
+              setStack(nextStack);
+            }}
+            text={level}
+          />
+        )}
       </ButtonGroup>
       {stackIndex > 0 &&
         <div className="sm-section--hielist-header">
           <Button icon="arrow-left" onClick={popCategory} minimal={true} />
-          <div className="sm-section--hielist-htokens">{headerTokens}</div>
+          <div className="sm-section--hielist-htokens">
+            {headerTokens.map((token, index) =>
+              <Text
+                className={`sm-section--hielist-htoken level-${index}`}
+                ellipsize={true}
+                key={`${index}-${token}`}
+              >
+                {token}
+              </Text>
+            )}
+          </div>
         </div>
       }
       <Menu
@@ -113,7 +114,7 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
                 style={style}
               >
                 {renderItem(item, index)}
-                {!showAll && item.type !== "HS4" &&
+                {!showAll && item.type !== levels[levels.length - 1] &&
                   <button
                     className={classNames(
                       "sm-section--descendants",
