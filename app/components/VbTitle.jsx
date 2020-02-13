@@ -99,6 +99,12 @@ class VbTitle extends React.Component {
           {country: _countryNames, time}
         );
       }
+      else if (chart === "geomap") {
+        title = t(
+          "vb_title_which_countries_patent",
+          {names: _technologyNames, time}
+        );
+      }
     }
 
 

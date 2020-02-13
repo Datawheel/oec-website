@@ -5,6 +5,7 @@ import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
 
 import colors from "helpers/colors";
+import {formatAbbreviate} from "d3plus-format";
 
 import "./VbChart.css";
 
@@ -188,7 +189,7 @@ class VbChart extends React.Component {
   render() {
     const {routeParams} = this.state;
     const {data, loading} = this.state;
-    const {chart, cube, flow, country, partner, viztype} = routeParams;
+    const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
     if (loading) return <div>Loading...</div>;
 
@@ -263,7 +264,6 @@ class VbChart extends React.Component {
             },
             groupBy: "ISO 3",
             legend: false,
-            projection: "geoBoggs",
             topojsonId: "id",
             topojsonKey: "id",
             tiles: false,
@@ -364,6 +364,14 @@ class VbChart extends React.Component {
               Circle: {
                 fill: d => colors.Continent[d["Continent ID"]]
               }
+            },
+            tooltipConfig: {
+              tbody: d => [
+                ["Country ID", d["Country ID"].slice(-3).toUpperCase()],
+                ["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`],
+                ["Measure", `$${formatAbbreviate(d.Measure)}`],
+                ["Year", time]
+              ]
             },
             total: undefined,
             xConfig: {
