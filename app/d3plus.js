@@ -61,8 +61,11 @@ function backgroundImage(d) {
   else if ("Parent Service ID" in d) {
     return `/images/icons/service/service_${[d["Parent Service ID"]]}.png`;
   }
+  else if ("Service ID" in d) {
+    return `/images/icons/service/service_${[d["Service ID"]]}.png`;
+  }
   else if ("Trade Flow" in d) {
-    const options = {1: "export", 2: "import"};
+    const options = {2: "export", 1: "import"};
     return `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
   }
   else {
@@ -181,9 +184,9 @@ export default {
   tiles: false,
   tooltipConfig: {
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Subclass", "Class", "Superclass", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
+      const dd = ["Product", "HS6", "HS4", "HS2", "Subclass", "Class", "Superclass", "Section", "Country", "Service", "Parent Service", "Flow", "Trade Flow", "Organization"].find(h => h in d);
       const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
-      const options = {1: "export", 2: "import"};
+      const options = {2: "export", 1: "import"};
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
       let imgUrl = "/images/icons/product/product.svg";
@@ -207,6 +210,9 @@ export default {
         imgUrl = `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
       }
       if ("Parent Service" in d) {
+        imgUrl = `/images/icons/service/service_${d["Parent Service ID"]}.png`;
+      }
+      if ("Service" in d) {
         imgUrl = `/images/icons/service/service_${d["Parent Service ID"]}.png`;
       }
 

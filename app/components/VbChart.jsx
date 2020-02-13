@@ -151,6 +151,20 @@ class VbChart extends React.Component {
         });
       });
     }
+    else if (chart === "scatter") {
+      const scatterParams = {
+        Year: time,
+        measure: flow
+      };
+      return axios.get("/api/gdp/eci", {params: scatterParams}).then(resp => {
+        const data = resp.data;
+        this.setState({
+          data,
+          loading: false,
+          routeParams
+        });
+      });
+    }
 
     return axios.get("https://api.oec.world/tesseract/data", {
       params
@@ -339,10 +353,19 @@ class VbChart extends React.Component {
       return <div className="vb-chart">
         <Plot
           config={{
-            data: "/api/gdp/eci",
-            groupBy: ["Country ID"],
+            data,
+            groupBy: ["Continent", "Country"],
             x: "Trade Value ECI",
             y: "Measure",
+            size: "Trade Value",
+            sizeMin: 5,
+            sizeMax: 40,
+            shapeConfig: {
+              Circle: {
+                fill: d => colors.Continent[d["Continent ID"]]
+              }
+            },
+            total: undefined,
             xConfig: {
               // scale: "log"
             },
