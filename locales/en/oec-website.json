@@ -98,6 +98,7 @@
   "vb_title_where_country_flow": "Where does {{country}} {{flow}} {{prep}}? ({{time}})",
   "vb_title_where_country_flow_product": "Where does {{country}} {{flow}} {{product}} {{prep}}? (2017)",
   "vb_title_which_countries_flow_product": "Which countries {{flow}} {{product}}? ({{time}})",
+  "vb_title_which_countries_patent": "Which countries patent {{names}} on USPTO? ({{time}})",
   "vs GDP": "vs GDP",
   "vs GDPpc (constant '05 US$)": "vs GDPpc (constant '05 US$)",
   "vs GDPpc (current US$)": "vs GDPpc (current US$)",
