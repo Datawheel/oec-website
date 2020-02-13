@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, {useEffect, useState} from "react";
-import SelectMultiSection from "../../components/SelectMultiSection";
+import SelectMultiSection from "components/SelectMultiSection";
 
 const SECTION_DATA_URL =
   "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false";
