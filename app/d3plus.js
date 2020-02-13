@@ -334,7 +334,7 @@ export default {
       fontSize: () => 13
     },
     Circle: {
-      fill: d => d["Trade Value RCA"] ? d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6" : findColor(d)
+      fill: d => d["Trade Value RCA"] >= -1 ? (d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6") : findColor(d)
     },
     Line: {
       curve: "monotoneX",
