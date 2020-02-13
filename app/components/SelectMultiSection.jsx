@@ -229,6 +229,14 @@ SelectMultiSection.defaultProps = {
   },
 
   itemListRenderer(itemListProps) {
+    if (itemListProps.filteredItems.length === 0) {
+      return (
+        <div className="sm--section--no-results">
+          <em>No results found</em>
+        </div>
+      );
+    }
+
     return itemListProps.query
       ? React.createElement(FilterList, itemListProps)
       : React.createElement(HierarchyList, itemListProps);
