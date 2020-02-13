@@ -45,7 +45,7 @@ import "./SelectMultiSection.css";
  * This function will be called when the user selects an option in the list. The first parameter is the selected item.
  * @property {(e: React.MouseEvent<HTMLButtonElement>, item: SelectedItem) => void} [onItemRemove]
  * This function will be called when the user presses the cross in the tag of the selected item wanted to remove.
- * Note the first parameter is the MouseClick event, this because `evt.stopPropagation()` might be needed to be called.
+ * Note the first parameter is the MouseClick event; this is because you must call `evt.stopPropagation()`.
  * @property {import("@blueprintjs/select").ItemListPredicate<SelectedItem>} [itemListPredicate]
  * This function calculates the resulting list of items after applying a query filter.
  * It's defined on the component defaultProps, so no need to provide it.
@@ -75,9 +75,8 @@ import "./SelectMultiSection.css";
  *   onItemRemove={(evt, item) => {
  *     // evt: MouseEvent<HTMLButtonElement>
  *     // item: SelectedItem
- *     evt.preventDefault();
- *     const itemId = item.id;
- *     const nextItems = selectedItems.filter(item => item.id === itemId);
+ *     evt.stopPropagation();
+ *     const nextItems = selectedItems.filter(i => i !== item);
  *     setSelectedItems(nextItems);
  *   }}
  *   onClear={() => {
@@ -108,9 +107,9 @@ const SelectMultiSection = ({
       onItemSelect={onItemSelect}
       popoverProps={{
         boundary: "viewport",
+        captureDismiss: true,
         fill: true,
         minimal: true,
-        captureDismiss: true,
         popoverClassName: "sm-section--popover"
       }}
     >
@@ -126,9 +125,7 @@ const SelectMultiSection = ({
                 />
               }
               key={item.id}
-              onRemove={
-                onItemRemove ? evt => onItemRemove(evt, item) : undefined
-              }
+              onRemove={onItemRemove ? evt => onItemRemove(evt, item) : undefined}
             >
               {`${item.type}: ${item.name}`}
             </Tag>
