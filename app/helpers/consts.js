@@ -120,7 +120,7 @@ module.exports = {
       dimension: "Subnat Geography",
       geoLevels: [
         {name: "Corridor", level: "Corridor", slug: "corridors", ignoreIdsList: ["na"]},
-        {name: "Departments", level: "Subnat Geography", slug: "departments"}
+        {name: "Departments", level: "Subnat Geography", slug: "departments", ignoreIdsList: ["5"]}
       ]
     },
     {
