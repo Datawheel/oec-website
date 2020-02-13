@@ -1,7 +1,7 @@
 export const profileSearchConfig = {
   profileTitles: {
     "bilateral-country/country": "Bilateral Country",
-    "bilateral-product/country": "Product in Coutnry",
+    "bilateral-product/country": "Product in Country",
     "country": "Country",
     "services": "Services",
     "subnational_bra": "Brazil Subnational",
