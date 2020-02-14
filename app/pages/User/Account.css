@@ -23,7 +23,7 @@
       padding: var(--gutter-md);
       & .account-meta-table {
         border-collapse: collapse;
-        margin-bottom: var(--gutter-md);
+        margin-bottom: var(--gutter-sm);
         width: 100%;
         & tr {
           &:not(:first-child) td {
@@ -36,6 +36,24 @@
             }
           }
         }
+      }
+      & .bp3-callout {
+        margin-bottom: var(--gutter-sm);
+        & h5 {
+          margin: 0 0 10px;
+          text-align: center;
+        }
+        &.bp3-intent-success {
+          & h5 {
+            margin: 0;
+          }
+          & .bp3-button {
+            display: none;
+          }
+        }
+      }
+      & .logout-button {
+        border: 0;
       }
     }
     & .account-panel {

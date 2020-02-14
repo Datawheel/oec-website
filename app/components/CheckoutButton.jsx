@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import axios from "axios";
+import {Tooltip} from "@blueprintjs/core";
 import Button from "@datawheel/canon-cms/src/components/fields/Button.jsx";
 import "./CheckoutButton.css";
 
@@ -41,17 +42,20 @@ class CheckoutButton extends Component {
 
     const {error, loading} = this.state;
     const {className, link, onClick, text} = this.props;
+    const {user} = this.props.auth;
 
-    return <Button
-      className={`checkout-button ${className}`}
-      disabled={loading}
-      fill={true}
-      fontSize="md"
-      rebuilding={loading}
-      onClick={link ? undefined : onClick || this.onClick.bind(this)}
-    >
-      {error ? "Please Retry" : link ? <a href={link}>{text}</a> : text}
-    </Button>;
+    return <Tooltip fill={true} content={!link && user && !user.activated ? "Please verify your e-mail before upgrading." : false}>
+      <Button
+        className={`checkout-button ${className}`}
+        disabled={!link && (loading || !user || !user.activated)}
+        fill={true}
+        fontSize="md"
+        rebuilding={loading}
+        onClick={link ? undefined : onClick || this.onClick.bind(this)}
+      >
+        {error ? "Please Retry" : link ? <a href={link}>{text}</a> : text}
+      </Button>
+    </Tooltip>;
   }
 }
 
@@ -59,4 +63,7 @@ CheckoutButton.defaultProps = {
   text: "Subscribe"
 };
 
-export default connect(state => ({STRIPE: state.env.STRIPE}))(CheckoutButton);
+export default connect(state => ({
+  auth: state.auth,
+  STRIPE: state.env.STRIPE
+}))(CheckoutButton);
