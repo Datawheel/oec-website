@@ -46,6 +46,32 @@ p > a,
   width: 100%;
 }
 
+.cp-button {
+  & a {
+    color: var(--label-color);
+  }
+  &:hover a, &:focus a {
+    color: var(--white);
+    text-decoration: none;
+  }
+}
+
+/* --------------------------
+// blueprint
+-------------------------- */
+
+.bp3-dialog {
+  background-color: var(--dark-1) !important;
+  color: var(--white);
+  & .bp3-dialog-header {
+    background-color: var(--dark-2) !important;
+    & .bp3-heading {
+      @mixin font-sm;
+      color: var(--white);
+    }
+  }
+}
+
 .bp3-popover-target {
   width: 100%;
 }
@@ -66,16 +92,6 @@ p > a,
   & .bp3-heading {
     @mixin font-md;
     color: var(--gray);
-  }
-}
-
-.cp-button {
-  & a {
-    color: var(--label-color);
-  }
-  &:hover a, &:focus a {
-    color: var(--white);
-    text-decoration: none;
   }
 }
 

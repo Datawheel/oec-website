@@ -8,7 +8,7 @@ import "./Account.css";
 import {Activate} from "@datawheel/canon-core";
 import Button from "@datawheel/canon-cms/src/components/fields/Button.jsx";
 
-import {Intent, NonIdealState, Spinner, Tag} from "@blueprintjs/core";
+import {Dialog, Intent, NonIdealState, Spinner, Tag} from "@blueprintjs/core";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
@@ -41,7 +41,10 @@ class Account extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      cancel: false,
+      loading: false
+    };
   }
 
   componentDidMount() {
@@ -69,10 +72,23 @@ class Account extends Component {
       });
   }
 
+  cancelSubscription() {
+    this.setState({loading: true});
+    axios.get("/auth/stripe/cancel")
+      .then(resp => resp.data)
+      .then(resp => {
+        if (resp.error) this.setState({loading: false, cancel: false});
+        else window.location.reload(true);
+      })
+      .catch(() => {
+        this.setState({loading: false, cancel: false});
+      });
+  }
+
   render() {
 
     const {user} = this.props.auth;
-    const {stripe} = this.state;
+    const {loading, stripe} = this.state;
 
     return (
       <div className="account">
@@ -136,12 +152,32 @@ class Account extends Component {
                         </table>
                         : <Spinner />}
                     </div>
+                    <Button className="cancel-button" fill icon="delete" onClick={() => this.setState({cancel: true})}>
+                      Cancel Subscription
+                    </Button>
                   </div>
                     : null}
               </div>
             </div>
             : <NonIdealState icon={<Spinner />} title="Authenticating" />
         }
+        <Dialog
+          className="cancel-dialog"
+          icon="delete"
+          isOpen={this.state.cancel}
+          onClose={() => this.setState({cancel: false})}
+          title="Cancel Subscription"
+        >
+          <div className="cancel-text">Are you sure you want to cancel your subscription?</div>
+          <div className="cancel-buttons">
+            <Button disabled={loading} className="cancel-dialog-button cancel-dialog-cancel" onClick={() => this.setState({cancel: false})}>
+            Nevermind
+            </Button>
+            <Button disabled={loading} className="cancel-dialog-button cancel-dialog-confirm" onClick={this.cancelSubscription.bind(this)}>
+            Cancel Subscription
+            </Button>
+          </div>
+        </Dialog>
         <Footer />
       </div>
     );

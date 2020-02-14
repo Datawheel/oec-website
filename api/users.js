@@ -87,6 +87,17 @@ module.exports = function(app) {
 
   });
 
+  app.get("/auth/stripe/cancel", isRole(1), stripeUser, async(req, res) => {
+
+    const {id} = req.stripeUser.subscriptions.data[0];
+
+    const status = await stripe.subscriptions.del(id)
+      .catch(error => ({error}));
+
+    res.json(status);
+
+  });
+
   app.post("/auth/stripe/hooks", async(req, res) => {
 
     const sig = req.headers["stripe-signature"];

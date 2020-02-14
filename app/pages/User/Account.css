@@ -1,3 +1,5 @@
+@import "../../helpers/mixins.css";
+
 .account {
   align-items: center;
   background: var(--dark-3);
@@ -65,6 +67,38 @@
         & table {
           width: 100%;
         }
+      }
+      & .cancel-button {
+        margin-top: var(--gutter-md);
+      }
+    }
+  }
+}
+
+.cancel-dialog {
+  & .cancel-text {
+    @mixin font-lg;
+    font-weight: 800;
+    margin: var(--gutter-sm);
+    text-align: center;
+  }
+  & .cancel-buttons {
+    text-align: center;
+    & .cancel-dialog-button {
+      border: 0;
+      color: var(--white);
+      margin: 0 var(--gutter-sm);
+    }
+    & .cancel-dialog-cancel {
+      background-color: var(--dark-2);
+      &:hover, &:focus {
+        background-color: var(--dark-3);
+      }
+    }
+    & .cancel-dialog-confirm {
+      background-color: var(--accent-dark);
+      &:hover, &:focus {
+        background-color: var(--accent);
       }
     }
   }
