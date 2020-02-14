@@ -6,13 +6,31 @@ import {mean} from "d3-array";
 const bad = "#cf5555";
 const good = "#3182bd";
 
-/**
-  The object exported by this file will be used as a base config for any
-  d3plus-react visualization rendered on the page.
-*/
 
-const badMeasures = [];
-export {badMeasures};
+/**
+ * Finds a tooltip title based on a data point
+ * @param {Object} d
+ */
+function findTitle(d) {
+  const firstAvailable = [
+    "Product",
+    "HS6",
+    "HS4",
+    "HS2",
+    "Subclass",
+    "Class",
+    "Superclass",
+    "Section",
+    "Country",
+    "Service",
+    "Parent Service",
+    "Flow",
+    "Trade Flow",
+    "Organization"
+  ].find(h => h in d && !Array.isArray(d[h]));
+  return firstAvailable ? d[firstAvailable] : "Multiple Items";
+}
+
 
 /**
  * Finds a color if defined in the color lookup.
@@ -23,11 +41,8 @@ function findColor(d) {
   if (this && this._filteredData) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
-  // if (d["Parent Service"]) {
-  //   console.log("findColor!!!!", d, detectedColors);
-  // }
 
-  if ("Section" in d) {
+  if ("Section" in d && !Array.isArray(d.Section)) {
     return "Patent Share" in d
       ? colors["CPC Section"][`${d["Section ID"]}`]
       : colors.Section[`${d["Section ID"]}`];
@@ -36,12 +51,11 @@ function findColor(d) {
   if (detectedColors.length !== 1) {
     for (const key in colors) {
       if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || "red" || colors.colorGrey;
+        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
       }
     }
   }
-  return detectedColors[0] || "red";
-  // return Object.keys(d).some(v => badMeasures.includes(v)) ? bad : good;
+  return detectedColors[0] || colors.colorGrey;
 }
 
 /**
@@ -49,24 +63,36 @@ function findColor(d) {
  * @param {Object} d
  */
 function backgroundImage(d) {
-  if ("Section ID" in d && "Patent Share" in d) {
+  const options = {2: "export", 1: "import"};
+  if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
     return `/images/icons/cpc/${d["Section ID"]}.png`;
   }
-  else if ("Section ID" in d) {
+  else if ("Section ID" in d && !Array.isArray(d.Section)) {
     return `/images/icons/hs/hs_${d["Section ID"]}.png`;
   }
-  else if ("Continent" in d) {
+  else if ("Continent ID" in d && !Array.isArray(d.Continent)) {
     return `/images/icons/country/country_${d["Continent ID"]}.png`;
   }
-  else if ("Parent Service ID" in d) {
+  else if ("Parent Service ID" in d && !Array.isArray(d["Parent Service"])) {
     return `/images/icons/service/service_${[d["Parent Service ID"]]}.png`;
   }
-  else if ("Trade Flow" in d) {
-    const options = {1: "export", 2: "import"};
+  else if ("Service ID" in d && !Array.isArray(d.Service)) {
+    return `/images/icons/service/service_${[d["Service ID"]]}.png`;
+  }
+  else if ("Trade Flow ID" in d && !Array.isArray(d["Trade Flow"])) {
     return `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
   }
+  else if ("Flow ID" in d && !Array.isArray(d.Flow)) {
+    return `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
+  }
+  else if ("Organization ID" in d && !Array.isArray(d.Organization)) {
+    return "/images/icons/patent.png";
+  }
+  else if ("Country ID" in d && !Array.isArray(d.Country)) {
+    return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
+  }
   else {
-    return undefined;
+    return "/images/icons/hs/hs_22.png";
   }
 }
 
@@ -163,57 +189,23 @@ export default {
     }
   },
   layoutPadding: 1,
-  legendTooltip: {
-    title: d => {
-      const bgColor = findColor(d);
-
-      let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-      const imgUrl = backgroundImage(d);
-
-      tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-      tooltip += `<span>${d.Continent || d.Section || d["Parent Service"] || d.Flow}</span>`;
-      tooltip += "</div>";
-      return tooltip;
-    }
-  },
   ocean: false,
   projection: "geoMiller",
   tiles: false,
   tooltipConfig: {
     title: d => {
-      const dd = ["Product", "HS6", "HS4", "HS2", "Subclass", "Class", "Superclass", "Section", "Country", "Parent Service", "Flow", "Trade Flow", "Service", "Organization"].find(h => h in d);
+
+      const title = findTitle(d);
       const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
-      const options = {1: "export", 2: "import"};
+      const imgUrl = backgroundImage(d);
 
       let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-      let imgUrl = "/images/icons/product/product.svg";
-      if ("Organization" in d) {
-        imgUrl = "/images/icons/patent.png";
-      }
-      if ("Country" in d) {
-        imgUrl = `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
-      }
-      if ("Section" in d) {
-        imgUrl = `/images/icons/hs/hs_${d["Section ID"]}.png`;
-      }
-      if ("Section ID" in d && "Patent Share" in d) {
-        imgUrl = `/images/icons/cpc/${d["Section ID"]}.png`;
-      }
-      if ("Flow" in d) {
-        imgUrl = `/images/icons/balance/${options[d["Flow ID"]]}_val.png`;
-      }
-      if ("Trade Flow" in d) {
-        const options = {1: "import", 2: "export"};
-        imgUrl = `/images/icons/balance/${options[d["Trade Flow ID"]]}_val.png`;
-      }
-      if ("Parent Service" in d) {
-        imgUrl = `/images/icons/service/service_${d["Parent Service ID"]}.png`;
-      }
-
       tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-      tooltip += `<span>${d[dd]}</span>`;
+      tooltip += `<span>${title}</span>`;
       tooltip += "</div>";
+
       return tooltip;
+
     },
     tbody: d => {
       const tbodyData = [];
@@ -328,7 +320,7 @@ export default {
       fontSize: () => 13
     },
     Circle: {
-      fill: d => d["Trade Value RCA"] && d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6"
+      fill: d => d["Trade Value RCA"] >= -1 ? d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6" : findColor(d)
     },
     Line: {
       curve: "monotoneX",

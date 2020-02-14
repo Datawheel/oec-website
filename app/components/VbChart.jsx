@@ -5,6 +5,7 @@ import {Client} from "@datawheel/olap-client";
 import {range} from "helpers/utils";
 
 import colors from "helpers/colors";
+import {formatAbbreviate} from "d3plus-format";
 
 import "./VbChart.css";
 
@@ -151,6 +152,20 @@ class VbChart extends React.Component {
         });
       });
     }
+    else if (chart === "scatter") {
+      const scatterParams = {
+        Year: time,
+        measure: flow
+      };
+      return axios.get("/api/gdp/eci", {params: scatterParams}).then(resp => {
+        const data = resp.data;
+        this.setState({
+          data,
+          loading: false,
+          routeParams
+        });
+      });
+    }
 
     return axios.get("https://api.oec.world/tesseract/data", {
       params
@@ -174,7 +189,7 @@ class VbChart extends React.Component {
   render() {
     const {routeParams} = this.state;
     const {data, loading} = this.state;
-    const {chart, cube, flow, country, partner, viztype} = routeParams;
+    const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
     if (loading) return <div>Loading...</div>;
 
@@ -249,7 +264,6 @@ class VbChart extends React.Component {
             },
             groupBy: "ISO 3",
             legend: false,
-            projection: "geoBoggs",
             topojsonId: "id",
             topojsonKey: "id",
             tiles: false,
@@ -339,10 +353,27 @@ class VbChart extends React.Component {
       return <div className="vb-chart">
         <Plot
           config={{
-            data: "/api/gdp/eci",
-            groupBy: ["Country ID"],
+            data,
+            groupBy: ["Continent", "Country"],
             x: "Trade Value ECI",
             y: "Measure",
+            size: "Trade Value",
+            sizeMin: 5,
+            sizeMax: 40,
+            shapeConfig: {
+              Circle: {
+                fill: d => colors.Continent[d["Continent ID"]]
+              }
+            },
+            tooltipConfig: {
+              tbody: d => [
+                ["Country ID", d["Country ID"].slice(-3).toUpperCase()],
+                ["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`],
+                ["Measure", `$${formatAbbreviate(d.Measure)}`],
+                ["Year", time]
+              ]
+            },
+            total: undefined,
             xConfig: {
               // scale: "log"
             },

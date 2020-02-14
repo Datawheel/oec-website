@@ -10,15 +10,37 @@ module.exports = function(app) {
       rca: "Exporter Country,HS4,Trade Value",
       alias: "Country,HS4",
       measures: "Trade Value",
-      filter_Country: queryParams.Country,
+      // filter_Country: queryParams.Country,
       Year: queryParams.Year || 2017,
       parents: true
     };
 
+    const measure = {
+      gdp: "NY.GDP.MKTP.CD",
+      gdp_constant: "NY.GDP.MKTP.KD",
+      gdp_pc_current: "NY.GDP.PCAP.CD",
+      gdp_pc_constant: "NY.GDP.PCAP.KD",
+      gdp_pc_current_ppp: "NY.GDP.PCAP.PP.CD",
+      gdp_pc_constant_ppp: "NY.GDP.PCAP.PP.KD"
+    };
+
     axios.all([
       axios.get("http://localhost:3300/api/stats/eci", {params}),
-      axios.get("https://api.oec.world/tesseract/data.jsonrecords?Indicator=NY.GDP.MKTP.CD&Year=2017&cube=indicators_i_wdi_a&drilldowns=Country&measures=Measure&parents=false&sparse=false")
-    ]).then(axios.spread((resp1, resp2) => {
+      axios.get("https://api.oec.world/tesseract/data", {params: {
+        Indicator: measure[queryParams.measure || "GDP Current"],
+        Year: queryParams.Year || 2017,
+        cube: "indicators_i_wdi_a",
+        drilldowns: "Country",
+        measures: "Measure"
+      }}),
+      axios.get("https://api.oec.world/tesseract/data", {params: {
+        Year: queryParams.Year || 2017,
+        cube: "trade_i_baci_a_92",
+        drilldowns: "Exporter Country",
+        measures: "Trade Value",
+        parents: true
+      }})
+    ]).then(axios.spread((resp1, resp2, resp3) => {
       const eciData = resp1.data.data;
       const gdpData = resp2.data.data;
 
@@ -27,8 +49,8 @@ module.exports = function(app) {
           ...a2.find(item => item["Country ID"] === itm["Country ID"] && item),
           ...itm
         }));
-      const data = mergeById(eciData, gdpData).filter(d => d.Measure && d["Trade Value ECI"]);
-
+      let data = mergeById(eciData, gdpData).filter(d => d.Measure && d["Trade Value ECI"]);
+      data = mergeById(data, resp3.data.data);
       res.json(data);
     }));
   });

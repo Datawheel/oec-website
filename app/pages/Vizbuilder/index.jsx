@@ -9,7 +9,6 @@ import "./Vizbuilder.css";
 import VbTabs from "../../components/VbTabs";
 import VbChart from "../../components/VbChart";
 import VirtualSelector from "../../components/VirtualSelector";
-import {Client} from "@datawheel/olap-client";
 import OECMultiSelect from "../../components/OECMultiSelect";
 import VbTitle from "../../components/VbTitle";
 import axios from "axios";
@@ -32,6 +31,15 @@ const flow = [
   {value: "import", title: "Imports"}
 ];
 
+const scatterYAxisOptions = [
+  {value: "gdp", title: "GDP"},
+  {value: "gdp_constant", title: "GDP (constant '10 US$)"},
+  {value: "gdp_pc_current", title: "GDPpc (current US$)"},
+  {value: "gdp_pc_constant", title: "GDPpc (constant '10 US$)"},
+  {value: "gdp_pc_current_ppp", title: "GDPpc PP (current US$)"},
+  {value: "gdp_pc_constant_ppp", title: "GDPpc PP (constant '11 US$)"}
+];
+
 const years = [...Array(56).keys()].map(d => ({value: 2019 - d, title: 2019 - d}));
 
 class Vizbuilder extends React.Component {
@@ -44,6 +52,7 @@ class Vizbuilder extends React.Component {
       country: [],
       product: [],
       technology: [],
+      permalink: undefined,
 
       _product: undefined,
       _country: undefined,
@@ -55,12 +64,19 @@ class Vizbuilder extends React.Component {
       _year: undefined,
       _yearId: "2017",
       scrolled: false,
-
+      _yAxis: params && params.flow
+        ? scatterYAxisOptions.find(d => d.value === params.flow) || scatterYAxisOptions[0]
+        : scatterYAxisOptions[0],
       _selectedItemsProduct: [],
       _selectedItemsCountry: [],
       _selectedItemsPartner: [],
       _selectedItemsTechnology: [],
       _selectedItemsYear: [],
+      _selectedItemsProductTitle: [],
+      _selectedItemsCountryTitle: [],
+      _selectedItemsPartnerTitle: [],
+      _selectedItemsTechnologyTitle: [],
+      _selectedItemsYearTitle: [],
 
       testing: []
     };
@@ -162,11 +178,17 @@ class Vizbuilder extends React.Component {
     router.push(d.permalink);
   }
 
+  /**
+   * Creates a visualization after to click "Build Visualization" button
+   * By default, creates a chart for the same type of visualization
+   */
   buildViz = () => {
-    const {router} = this.props;
+    const {router, routeParams} = this.props;
+    const {chart} = routeParams;
     const {
       _flow,
       _dataset,
+      _yAxis,
       _selectedItemsCountry,
       _selectedItemsPartner,
       _selectedItemsYear,
@@ -174,25 +196,32 @@ class Vizbuilder extends React.Component {
       _selectedItemsTechnology
     } = this.state;
 
-    const countryIds = _selectedItemsCountry.map(d => d.label).join(".");
-    const partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
+    let countryIds = _selectedItemsCountry.map(d => d.label).join(".");
+    let partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
       ? _selectedItemsPartner.map(d => d.label).join(".")
       : "all";
 
     const isTechnologyFilter = _selectedItemsTechnology.length > 0;
     const isTradeFilter = _selectedItemsProduct.length > 0;
 
-    const filterIds = isTechnologyFilter || isTradeFilter
+    let filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
         ? _selectedItemsTechnology.map(d => d.value).join(".")
         : _selectedItemsProduct.map(d => d.value).join(".")
       : "show";
 
     const dataset = isTechnologyFilter ? "cpc" : _dataset.value;
-    const flow = isTechnologyFilter ? "uspto" : _flow.value;
+    let flow = isTechnologyFilter ? "uspto" : _flow.value;
 
-    const permalink = `/en/visualize/tree_map/${dataset}/${flow}/${countryIds}/${partnerIds}/${filterIds}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
+    /** Creates permalink config for scatter plot */
+    if (chart === "scatter") {
+      flow = _yAxis.value;
+      countryIds = "show";
+      partnerIds = "all";
+      filterIds = "all";
+    }
 
+    const permalink = `/en/visualize/${chart}/${dataset}/${flow}/${countryIds}/${partnerIds}/${filterIds}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
     this.updateFilterSelected({permalink});
     router.push(permalink);
   };
@@ -212,8 +241,12 @@ class Vizbuilder extends React.Component {
     const technologyData = usePrevState ? prevState.technology : this.state.technology;
     const productData = usePrevState ? prevState.product : this.state.product;
     const {routeParams} = this.props;
-    const {country, cube, partner, time, viztype} = routeParams;
 
+    let {country, cube, flow, partner, time, viztype} = routeParams;
+    if (prevState && prevState.permalink) {
+      [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
+    }
+    console.log(country);
     const _selectedItemsCountry = countryData
       .filter(d => country.split(".").includes(d.label));
     const _selectedItemsPartner = countryData
@@ -225,13 +258,21 @@ class Vizbuilder extends React.Component {
     const _selectedItemsTechnology = ["cpc"].includes(cube) ? technologyData
       .filter(d => viztype.split(".").includes(d.value)) : [];
 
+    const _yAxis = scatterYAxisOptions.find(d => d.value === flow) || scatterYAxisOptions[0];
+
     this.setState({
       ...prevState,
       _selectedItemsCountry,
       _selectedItemsPartner,
       _selectedItemsProduct,
       _selectedItemsTechnology,
-      _selectedItemsYear
+      _selectedItemsYear,
+      _selectedItemsCountryTitle: _selectedItemsCountry,
+      _selectedItemsPartnerTitle: _selectedItemsPartner,
+      _selectedItemsProductTitle: _selectedItemsProduct,
+      _selectedItemsTechnologyTitle: _selectedItemsTechnology,
+      _selectedItemsYearTitle: _selectedItemsYear,
+      _yAxis
     });
   }
 
@@ -263,7 +304,7 @@ class Vizbuilder extends React.Component {
               callback={d => this.handleTabOption(d)}
             />
 
-            {!["network"].includes(chart) && isTrade && <div className="columns">
+            {!["network", "scatter"].includes(chart) && isTrade && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.product}
@@ -274,7 +315,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
 
-            {!["network"].includes(chart) && isTechnology && <div className="columns">
+            {!["network", "scatter"].includes(chart) && isTechnology && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.technology}
@@ -285,7 +326,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
 
-            <div className="columns">
+            {!["scatter", "geomap"].includes(chart) && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
@@ -295,9 +336,9 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
                 />
               </div>
-            </div>
+            </div>}
 
-            {!["network", "rings"].includes(chart) && isTrade && <div className="columns">
+            {!["network", "rings", "scatter", "geomap"].includes(chart) && isTrade && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
@@ -309,7 +350,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
 
-            <div className="columns">
+            {/* <div className="columns">
               <div className="column-1">
                 <OECMultiSelectV2
                   items={this.state.testing}
@@ -318,7 +359,17 @@ class Vizbuilder extends React.Component {
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
-            </div>
+            </div> */}
+
+            {["scatter"].includes(chart) && <div className="column-1-2">
+              <VirtualSelector
+                items={scatterYAxisOptions}
+                title={"Y Axis"}
+                state="_yAxis"
+                selectedItem={this.state._yAxis}
+                run={this.updateFilter}
+              />
+            </div>}
 
             <div className="columns">
               <div className="column-1-2">
@@ -331,7 +382,7 @@ class Vizbuilder extends React.Component {
                 />
               </div>
 
-              <div className="column-1-2">
+              {!["scatter"].includes(chart) && <div className="column-1-2">
                 <VirtualSelector
                   items={flow}
                   title={"Trade Flow"}
@@ -339,8 +390,8 @@ class Vizbuilder extends React.Component {
                   selectedItem={this.state._flow}
                   run={this.updateFilter}
                 />
+              </div>}
 
-              </div>
             </div>
 
             <div className="columns">
@@ -358,7 +409,7 @@ class Vizbuilder extends React.Component {
               <div className="column-1 tab">
                 <button
                   className="button build click"
-                  onClick={() => this.buildViz()}
+                  onClick={this.buildViz}
                 >
                   {t("Build Visualization")}
                 </button>
@@ -368,10 +419,10 @@ class Vizbuilder extends React.Component {
           <div className="vb-column">
             <VbTitle
               countryData={this.state.country}
-              selectedItemsCountry={this.state._selectedItemsCountry}
-              selectedItemsProduct={this.state._selectedItemsProduct}
-              selectedItemsPartner={this.state._selectedItemsCountry}
-              selectedItemsTechnology={this.state._selectedItemsTechnology}
+              selectedItemsCountry={this.state._selectedItemsCountryTitle}
+              selectedItemsProduct={this.state._selectedItemsProductTitle}
+              selectedItemsPartner={this.state._selectedItemsCountryTitle}
+              selectedItemsTechnology={this.state._selectedItemsTechnologyTitle}
               routeParams={routeParams}
             />
             <VbChart

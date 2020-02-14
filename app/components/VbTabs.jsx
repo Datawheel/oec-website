@@ -90,7 +90,11 @@ class VbTabs extends React.Component {
                     },
                     {
                       name: t("Technology"), nest: [
-                        {name: t("Patenters"), permalink: "cpc/import/chl/all/all/2019/"}]
+                        {
+                          name: t("Patenters"),
+                          permalink: "cpc/uspto/chl/all/all/2019/",
+                          regexp: new RegExp(/tree_map\/cpc\/uspto\/[a-z0-9.-]+\/all\/[a-z0-9.-]+\/[0-9.-]+\//)
+                        }]
                     },
                     {
                       name: t("Bilateral"), nest: [
@@ -327,7 +331,11 @@ class VbTabs extends React.Component {
                     },
                     {
                       name: t("Technology"), nest: [
-                        {name: t("Patenters"), permalink: "cpc/uspto/show/all/A21/2019/"}
+                        {
+                          name: t("Patenters"),
+                          permalink: "cpc/uspto/show/all/A21/2019/",
+                          regexp: new RegExp(/\w{2}\/visualize\/geomap\/cpc\/uspto\/show\/all\/\w+\/\w+\//)
+                        }
                       ]
                     }
                   ]}
@@ -435,11 +443,31 @@ class VbTabs extends React.Component {
                   items={[
                     {
                       name: t("Economic Complexity"), nest: [
-                        {name: t("vs GDP")},
-                        {name: t("vs GDPpc (constant '05 US$)")},
-                        {name: t("vs GDPpc (current US$)")},
-                        {name: t("vs GDPpc PPP (constant '11)")},
-                        {name: t("vs GDPpc PPP (current)")}
+                        {
+                          name: t("vs GDP"),
+                          permalink: "hs92/gdp/show/all/all/2017/",
+                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp\/show\/all\/all\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("vs GDPpc (constant '10 US$)"),
+                          permalink: "hs92/gdp_pc_constant/show/all/all/2017/",
+                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_constant\/show\/all\/all\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("vs GDPpc (current US$)"),
+                          permalink: "hs92/gdp_pc_current/show/all/all/2017/",
+                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_current\/show\/all\/all\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("vs GDPpc PPP (constant '11)"),
+                          permalink: "hs92/gdp_pc_constant_ppp/show/all/all/2017/",
+                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_constant_ppp\/show\/all\/all\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("vs GDPpc PPP (current)"),
+                          permalink: "hs92/gdp_pc_current_ppp/show/all/all/2017/",
+                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_current_ppp\/show\/all\/all\/[0-9.-]+\//)
+                        }
                       ]
                     }
                   ]}

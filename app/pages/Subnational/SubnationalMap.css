@@ -1,10 +1,5 @@
 .subnational-map {
   & .geomap-subnational-viz{
-    & .d3plus-Path {
-      cursor: pointer;
-      &:hover {
-        fill: var(--accent);
-      }
-    }
+
   }
 }

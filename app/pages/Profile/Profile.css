@@ -43,6 +43,9 @@
 /* stats */
 .cp-stat-value-text {
   font-weight: var(--base-font-weight);
+  & a {
+    text-decoration: underline !important;
+  }
 }
 
 /* scale down fonts for long stats */
@@ -85,6 +88,8 @@
 }
 
 .cp-hero-figure {
+  background-color: rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--light-3);
   padding-bottom: 0;
   padding-top: 0;
 }
@@ -97,6 +102,7 @@
 .cp-hero {
   min-height: auto;
   position: relative;
+  text-shadow: 0 0 5px var(--black);
   z-index: 1;
 
   @mixin min-sm {
@@ -245,49 +251,6 @@
 /* TODO: delete when these lines are added to canon */
 .cp-button-group > .cp-button:hover, .cp-button-group > .cp-button:focus { border-color: var(--button-hover-border-color); }
 .cp-button > .cp-button-icon { vertical-align: middle; position: relative; }
-
-/* --------------------------
-// d3plus
--------------------------- */
-
-/* .d3plus-textBox text {
-  font-family: "Fira Sans Condensed", sans-serif !important;
-  font-weight: 600 !important;
-} */
-
-.d3plus-Message {
-  color: var(--white);
-}
-
-.d3plus-tooltip {
-  & td {
-    text-align: right;
-    padding: 5px 10px;
-    &:first-child {
-      text-align: left;
-      font-weight: var(--display-font-weight);
-    }
-    &:last-child {
-      text-transform: uppercase;
-    }
-  }
-}
-
-.d3plus-tooltip-title-wrapper {
-  display: flex;
-  align-items: center;
-  & .icon {
-    margin-right: 10px;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    & img {
-      width: 40px;
-      height: 40px;
-    }
-  }
-}
-
 
 .cp-viz-container > .cp-viz-header > .cp-viz-title:not(:last-child) {
   text-align: center;

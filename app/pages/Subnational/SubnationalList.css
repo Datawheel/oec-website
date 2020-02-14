@@ -1,4 +1,7 @@
 .subnational-list {
+  min-height: 500px;
+  overflow-x: hidden;
+  overflow-y: scroll;
   & ul {
     list-style: none;
     padding: 0;

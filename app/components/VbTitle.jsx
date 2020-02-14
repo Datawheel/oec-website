@@ -52,6 +52,18 @@ class VbTitle extends React.Component {
     else if (chart === "rings") {
       title = t("vb_title_rings", {country: _countryNames, product: _productNames, time});
     }
+    else if (chart === "scatter") {
+      const measures = {
+        gdp: "GDP",
+        gdp_constant: "GDP",
+        gdp_pc_current: "GDP per capita",
+        gdp_pc_constant: "GDP per capita",
+        gdp_pc_current_ppp: "GDP per capita",
+        gdp_pc_constant_ppp: "GDP per capita"
+      };
+      const measure = measures[flow];
+      title = t("vb_title_scatter", {measure, time});
+    }
     else if (isTrade) {
       // Titles for Trade charts
       if (!isCountry && isProduct) {
@@ -85,6 +97,12 @@ class VbTitle extends React.Component {
         title = t(
           "vb_title_what_country_patent",
           {country: _countryNames, time}
+        );
+      }
+      else if (chart === "geomap") {
+        title = t(
+          "vb_title_which_countries_patent",
+          {names: _technologyNames, time}
         );
       }
     }
