@@ -1,0 +1,8 @@
+.about-team {
+  & .title {
+    font-size: var(--font-xxl);
+    font-weight: var(--);
+    margin-bottom: var(--gutter-sm);
+    color: var(--accent-dark);
+  }
+}
