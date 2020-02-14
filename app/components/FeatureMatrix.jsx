@@ -80,7 +80,7 @@ const versions = [
     title: "Enterprise",
     price: "Custom",
     buyText: "Contact Us",
-    buyLink: "https://www.datawheel.us/contact",
+    buyLink: "mailto:support@oec.world",
     featureLookup: {
       8: "Unlimited",
       9: "Dedicated Account Representative"
