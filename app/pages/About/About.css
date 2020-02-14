@@ -1,0 +1,34 @@
+.about-page {
+  background-color: var(--dark-4);
+  color: var(--white);
+  min-height: 100vh;
+
+  & .about-content {
+    margin-left: 12rem;
+    margin-right: 12rem;
+    padding-top: var(--nav-height);
+
+    & .about-info {
+      padding-top: var(--gutter-sm);
+
+      & .info-title {
+        font-size: var(--font-xxl);
+        font-weight: var(--base-font-weight);
+        line-height: 1;
+        margin-bottom: var(--gutter-sm);
+      }
+
+      & .info-text {
+        & .text {
+          color: var(--gray);
+          font-size: var(--font-xs);
+          margin-bottom: var(--gutter-sm);
+
+          & .link {
+            color: var(--accent);
+          }
+        }
+      }
+    }
+  }
+}
