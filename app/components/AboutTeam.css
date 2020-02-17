@@ -1,8 +1,74 @@
 .about-team {
   & .title {
+    color: var(--accent-dark);
     font-size: var(--font-xxl);
     font-weight: var(--);
+    margin-top: var(--gutter-lg);
     margin-bottom: var(--gutter-sm);
-    color: var(--accent-dark);
+  }
+
+  & .card {
+    display: flex;
+    flex-direction: row;
+    padding: var(--gutter-md) var(--gutter-xs);
+
+    & .member-photo {
+      min-width: 160px;
+      height: 160px;
+      background-size: 160px;
+      border-radius: 100px;
+      border: 2px solid white;
+      background-position: center center;
+      background-repeat: no-repeat;
+      filter: saturate(10%);
+    }
+
+    & .member-profile {
+      margin-left: var(--gutter-md);
+
+      & .profile-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        & .header-name {
+          text-transform: uppercase;
+          color: var(--accent-light);
+          opacity: 0.8;
+          font-size: var(--font-lg);
+          letter-spacing: var(--display-letter-spacing);
+        }
+
+        & .header-socials {
+          & .icon {
+            height: var(--font-md);
+            width: var(--font-md);
+            color: var(--accent);
+            margin-left: var(--gutter-xs);
+            opacity: 0.6;
+          }
+
+          & .icon:hover {
+            opacity: 1;
+          }
+        }
+      }
+
+      & .profile-time {
+        color: var(--gray);
+        font-size: var(--font-lg);
+      }
+
+      & .profile-description {
+        & .text {
+          color: var(--white);
+          font-size: var(--font-xs);
+        }
+        & .link {
+          color: var(--accent);
+        }
+      }
+    }
   }
 }

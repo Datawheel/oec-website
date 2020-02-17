@@ -1,7 +1,7 @@
 const locale = "en";
 
 module.exports = {
-  ABOUT: [
+  SITE: [
     {
       info: {
         title: "about_info_title",
@@ -28,7 +28,7 @@ module.exports = {
             name: "Dave Landry",
             time: "about_team_dave_time",
             description: "about_team_dave_description",
-            img: "",
+            img: "dave_landry.jpg",
             twitter: "https://twitter.com/davelandry",
             github: "https://github.com/davelandry",
             linkedin: "https://www.linkedin.com/in/davelandry/"
@@ -37,7 +37,7 @@ module.exports = {
             name: "César Hidalgo",
             time: "about_team_cesar_time",
             description: "about_team_cesar_description",
-            img: "",
+            img: "cesar_hidalgo.jpg",
             twitter: "https://twitter.com/cesifoti",
             linkedin: "https://www.linkedin.com/pub/cesar-a-hidalgo/5/30a/a61"
           }
