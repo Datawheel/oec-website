@@ -61,7 +61,7 @@ class SubnationalMap extends React.Component {
             const fillColor = d.type === "Feature" ? "none" : "#6297CB";
             return `fill: "${fillColor}"`;
           },
-          strokeWidth: "1px",
+          strokeWidth: "0.5px",
           pointerEvents: d => d.type === "Feature" ? "none" : "visiblePoint"
         }
       },
