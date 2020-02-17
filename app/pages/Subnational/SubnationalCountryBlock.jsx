@@ -62,7 +62,7 @@ class SubnationalCountryBlock extends React.Component {
 
     const imgUrl = `/images/icons/country/country_${metadata.code}.png`;
 
-    return <div className="subnational-country-block">
+    return <div id={`subnational-country-block-${metadata.code}`} className="subnational-country-block">
       <div className="subnational-header">
         <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
       </div>
