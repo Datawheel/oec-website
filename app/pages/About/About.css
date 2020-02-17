@@ -13,9 +13,9 @@
         padding-top: var(--gutter-sm);
 
         & .info-title {
-          letter-spacing: var(--display-letter-spacing);
+          letter-spacing: var(--label-letter-spacing);
           font-size: var(--font-xxl);
-          font-weight: var(--base-font-weight);
+          font-weight: 200;
           margin-bottom: var(--gutter-sm);
         }
 
@@ -23,6 +23,7 @@
           & .text {
             color: var(--gray);
             font-size: var(--font-xs);
+            font-weight: 200;
             line-height: 1.5;
             margin-bottom: var(--gutter-sm);
 

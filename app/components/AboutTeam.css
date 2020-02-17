@@ -2,7 +2,7 @@
   & .title {
     color: var(--accent-dark);
     font-size: var(--font-xxl);
-    font-weight: var(--);
+    font-weight: 200;
     margin-top: var(--gutter-lg);
     margin-bottom: var(--gutter-sm);
   }
@@ -24,6 +24,7 @@
     }
 
     & .member-profile {
+      width: 100%;
       margin-left: var(--gutter-md);
 
       & .profile-header {
@@ -62,12 +63,23 @@
 
       & .profile-description {
         & .text {
-          color: var(--white);
+          color: var(--gray);
           font-size: var(--font-xs);
+          font-weight: 200;
         }
         & .link {
           color: var(--accent);
         }
+      }
+    }
+  }
+
+  & .contributors {
+    & .card {
+      & .member-photo {
+        min-width: 90px;
+        height: 90px;
+        background-size: 90px;
       }
     }
   }

@@ -50,7 +50,7 @@ module.exports = {
             name: "Melissa Teng",
             time: "2015 – 2017",
             description: "about_contributors_melissa",
-            img: "",
+            img: "melissa_teng.png",
             twitter: "https://twitter.com/melisteng",
             github: "https://github.com/melteng",
             linkedin: "https://www.linkedin.com/in/mqteng/"
@@ -59,7 +59,7 @@ module.exports = {
             name: "Eric Franco",
             time: "2012 – 2013",
             description: "about_contributors_eric",
-            img: "",
+            img: "eric_franco.png",
             github: "https://github.com/ericjohnf",
             linkedin: "https://www.linkedin.com/in/ericjohnf"
           },
@@ -67,21 +67,21 @@ module.exports = {
             name: "Sarah Chung",
             time: "2011 – 2012",
             description: "about_contributors_sarah",
-            img: "",
+            img: "sarah_chung.png",
             linkedin: "https://www.linkedin.com/in/sarahchung7/"
           },
           {
             name: "Crystal Noel",
             time: "2011 – 2012",
             description: "about_contributors_crystal",
-            img: "",
+            img: "crystal_noel.png",
             twitter: "https://twitter.com/crystalMIT13"
           },
           {
             name: "Ali Almossawi",
             time: "2010 – 2011",
             description: "about_contributors_ali",
-            img: "",
+            img: "ali_almossawi.png",
             twitter: "https://twitter.com/alialmossawi",
             github: "https://github.com/almossawi",
             linkedin: "https://www.linkedin.com/in/almossawi"
@@ -89,5 +89,30 @@ module.exports = {
         ]
       }
     }
-  ]
+  ],
+  FAQ: {
+    title: "about_faq_title",
+    questions: [
+      {
+        question: "about_faq_question_1",
+        answer: "about_faq_answer_1"
+      },
+      {
+        question: "about_faq_question_2",
+        answer: "about_faq_answer_2"
+      },
+      {
+        question: "about_faq_question_3",
+        answer: "about_faq_answer_3"
+      },
+      {
+        question: "about_faq_question_4",
+        answer: "about_faq_answer_4"
+      },
+      {
+        question: "about_faq_question_5",
+        answer: "about_faq_answer_5"
+      }
+    ]
+  }
 };
