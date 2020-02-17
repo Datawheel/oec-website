@@ -186,6 +186,15 @@ module.exports = {
       geoLevels: [
         {name: "Ports", level: "Port of Entry", slug: "ports"}
       ]
+    },
+    {
+      name: "China",
+      code: "chn",
+      cube: "trade_s_chn_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+      ]
     }
     // TODO: CHL, ECU, FRA
     // TBD: ZAF -> ports, take a look , SWE -> no units, ignore it.
