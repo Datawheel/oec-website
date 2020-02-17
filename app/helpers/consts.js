@@ -1,5 +1,6 @@
 const toHS = require("helpers/funcs.js").toHS;
 const colors = require("helpers/colors.js");
+const d3_composite = require("d3-composite-projections");
 const locale = "en";
 
 module.exports = {
@@ -146,7 +147,7 @@ module.exports = {
             "04000US60", "04000US69", "04000US66"
           ],
           extraMapConfig: {
-            projection: "geoAlbersUsa"
+            projection: d3_composite.geoAlbersUsaTerritories()
           }
         },
         {
@@ -154,7 +155,7 @@ module.exports = {
           level: "Subnat Geography",
           slug: "districts",
           extraMapConfig: {
-            projection: "geoAlbersUsa"
+            projection: d3_composite.geoAlbersUsaTerritories()
           }
         }
       ]
@@ -174,8 +175,18 @@ module.exports = {
       cube: "trade_s_esp_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous"},
-        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+        {
+          name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous",
+          extraMapConfig: {
+            projection: d3_composite.geoConicConformalSpain()
+          }
+        },
+        {
+          name: "Provinces", level: "Subnat Geography", slug: "provinces",
+          extraMapConfig: {
+            projection: d3_composite.geoConicConformalSpain()
+          }
+        }
       ]
     },
     {
