@@ -4,10 +4,13 @@ import classNames from "classnames";
 import React, {Fragment, useMemo, useRef, useState} from "react";
 import List from "react-viewport-list";
 
-const levels = ["Section", "HS2", "HS4"];
+/**
+ * @typedef OwnProps
+ * @property {string[]} levels
+ */
 
-/** @type {React.FC<import("@blueprintjs/select").IItemListRendererProps<import("./SelectMultiSection").SelectedItem>>} */
-const HierarchyList = ({activeItem, renderItem, items}) => {
+/** @type {React.FC<import("@blueprintjs/select").IItemListRendererProps<import("./SelectMultiHierarchy").SelectedItem> & OwnProps>} */
+const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
   const viewPortRef = useRef(null);
 
   const [showAll, setShowAll] = useState(false);
@@ -32,9 +35,7 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
   const finalList = useMemo(() => {
     if (showAll) return items;
     return stack.reduce(
-      (list, token) => list.filter(item =>
-        !token || token.startsWith("All") || item.searchIndex.indexOf(token) > -1
-      ),
+      (list, token) => list.filter(item => !token || item.searchIndex.indexOf(token) > -1),
       items.filter(item => item.type === currentLevel)
     );
   }, [items, showAll, stackIndex]);
@@ -134,4 +135,4 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
   );
 };
 
-export default HierarchyList;
+export default SMHNaviList;

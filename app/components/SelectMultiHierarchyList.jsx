@@ -3,8 +3,13 @@ import {Button, ButtonGroup, Menu} from "@blueprintjs/core";
 import React, {Fragment, useRef, useState} from "react";
 import List from "react-viewport-list";
 
-/** @type {React.FC<import("@blueprintjs/select").IItemListRendererProps<import("./SelectMultiSection").SelectedItem>>} */
-const FilterList = ({activeItem, filteredItems, renderItem}) => {
+/**
+ * @typedef OwnProps
+ * @property {string[]} levels
+ */
+
+/** @type {React.FC<import("@blueprintjs/select").IItemListRendererProps<import("./SelectMultiHierarchy").SelectedItem> & OwnProps>} */
+const SMHFullList = ({activeItem, filteredItems, levels, renderItem}) => {
   const viewPortRef = useRef(null);
 
   const [typeFilter, setTypeFilter] = useState(undefined);
@@ -13,26 +18,19 @@ const FilterList = ({activeItem, filteredItems, renderItem}) => {
   const finalList = typeFilter
     ? filteredItems.filter(item => item.type === typeFilter)
     : filteredItems;
-  const activeIndex = finalList.indexOf(activeItem) || 1;
+  const activeIndex = finalList.indexOf(activeItem);
 
   return (
     <Fragment>
       <ButtonGroup className="sm-section--level" fill={true} minimal={true}>
-        <Button
-          active={typeFilter === "Section"}
-          onClick={toggleTypeFilter("Section")}
-          text="Section"
-        />
-        <Button
-          active={typeFilter === "HS2"}
-          onClick={toggleTypeFilter("HS2")}
-          text="HS2"
-        />
-        <Button
-          active={typeFilter === "HS4"}
-          onClick={toggleTypeFilter("HS4")}
-          text="HS4"
-        />
+        {levels.map(level =>
+          <Button
+            key={level}
+            active={typeFilter === level}
+            onClick={toggleTypeFilter(level)}
+            text={level}
+          />
+        )}
       </ButtonGroup>
       <Menu
         className="sm-section--hielist-content sm-section--show-all"
@@ -64,4 +62,4 @@ const FilterList = ({activeItem, filteredItems, renderItem}) => {
   );
 };
 
-export default FilterList;
+export default SMHFullList;
