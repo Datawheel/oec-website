@@ -7,5 +7,30 @@
     & h1{
       text-align: center;
     }
+    & .subnational-country-index{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      & .subnational-country-item{
+        display: flex;
+        flex-direction: column;
+        max-width: 150px;
+        padding: 15px;
+        & .subnational-country-item-flag{
+
+        }
+        & .subnational-country-item-name{
+          text-align: center;
+          color: var(--light-3);
+        }
+        &:hover {
+          background-color: var(--light-3);
+          & .subnational-country-item-name{
+            color: var(--dark-2);
+          }
+        }
+      }
+    }
   }
 }

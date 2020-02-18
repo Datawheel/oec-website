@@ -39,3 +39,16 @@ export function permalink(vbKey) {
   const url = `/visualize/${vbKey.chart}/${vbKey.flow ? `${vbKey.flow}/` : ""}${_from}/${_to}${vbKey.product ? `/${vbKey.product}` : ""}/${vbKey.time}/?locale=${vbKey.lng}`;
   return url;
 }
+
+/** Str to title case */
+export function toTitleCase(str) {
+  return str.replace(
+    /\w\S*/g,
+    txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  );
+}
+
+/** */
+export function normalizeString(str) {
+  return str.normalize("NFD").toLowerCase().replace(/[\u0300-\u036f]/g, "");
+}
