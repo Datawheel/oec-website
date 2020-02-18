@@ -15,13 +15,15 @@ class VbTitle extends React.Component {
       selectedItemsPartner,
       selectedItemsProduct,
       selectedItemsTechnology,
+      xScale,
+      yScale,
       t
     } = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
     const _countryNames = selectedItemsCountry.map(d => d.title).join(", ");
     const _partnerNames = selectedItemsPartner.map(d => d.title).join(", ");
-    const _productNames = selectedItemsProduct.map(d => d.title).join(", ");
+    const _productNames = selectedItemsProduct.map(d => d.name).join(", ");
     const _technologyNames = selectedItemsTechnology.map(d => d.title).join(", ");
 
     const isTrade = new RegExp(/(export|import)/).test(flow);
@@ -53,16 +55,8 @@ class VbTitle extends React.Component {
       title = t("vb_title_rings", {country: _countryNames, product: _productNames, time});
     }
     else if (chart === "scatter") {
-      const measures = {
-        gdp: "GDP",
-        gdp_constant: "GDP",
-        gdp_pc_current: "GDP per capita",
-        gdp_pc_constant: "GDP per capita",
-        gdp_pc_current_ppp: "GDP per capita",
-        gdp_pc_constant_ppp: "GDP per capita"
-      };
-      const measure = measures[flow];
-      title = t("vb_title_scatter", {measure, time});
+
+      title = t("vb_title_scatter", {measure: xScale.title, compare: yScale.title, time});
     }
     else if (isTrade) {
       // Titles for Trade charts
@@ -99,7 +93,7 @@ class VbTitle extends React.Component {
           {country: _countryNames, time}
         );
       }
-      else if (chart === "geomap") {
+      else if (!isCountry && isProduct) {
         title = t(
           "vb_title_which_countries_patent",
           {names: _technologyNames, time}

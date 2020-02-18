@@ -1,0 +1,16 @@
+.oec-button-group {
+  display: flex;
+  align-items: center;
+  & .oec-button-group-title {
+    font-size: var(--font-md);
+    margin-right: var(--gutter-sm) !important;
+    flex: 0;
+  }
+  & .oec-button-group-items {
+    & .cp-button.is-active {
+      background-color: var(--white);
+      border-color: var(--white);
+      color: var(--dark-4);
+    }
+  }
+}

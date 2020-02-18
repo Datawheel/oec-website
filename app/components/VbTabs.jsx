@@ -92,8 +92,8 @@ class VbTabs extends React.Component {
                       name: t("Technology"), nest: [
                         {
                           name: t("Patenters"),
-                          permalink: "cpc/uspto/chl/all/all/2019/",
-                          regexp: new RegExp(/tree_map\/cpc\/uspto\/[a-z0-9.-]+\/all\/[a-z0-9.-]+\/[0-9.-]+\//)
+                          permalink: "cpc/uspto/show/all/A21/2019/",
+                          regexp: new RegExp(/tree_map\/cpc\/uspto\/show\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         }]
                     },
                     {
@@ -117,20 +117,15 @@ class VbTabs extends React.Component {
                           name: t("Imports by Product"),
                           permalink: "hs92/import/chl/all/10101/2017/",
                           regexp: new RegExp(/tree_map\/\w+\/import\/\w{3}\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
-                        },
-                        {
-                          name: t("Patents by Category"),
-                          permalink: "cpc/uspto/show/all/A01B/2019/",
-                          regexp: new RegExp(/tree_map\/cpc\/uspto\/show\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         }
                       ]
-                    },
-                    {
-                      name: t("Bilateral Technology"), nest: [
-                        {name: t("Countries by Technology"), permalink: "cpc/export/all/all/H01/2019/"},
-                        {name: t("Technologies by Country"), permalink: "cpc/export/chl/all/show/2019/"}
-                      ]
                     }
+                    // {
+                    //   name: t("Bilateral Technology"), nest: [
+                    //     {name: t("Countries by Technology"), permalink: "cpc/export/all/all/H01/2019/"},
+                    //     {name: t("Technologies by Country"), permalink: "cpc/export/chl/all/show/2019/"}
+                    //   ]
+                    // }
                   ]}
                 />
               }
@@ -190,7 +185,11 @@ class VbTabs extends React.Component {
                     },
                     {
                       name: t("Technology"), nest: [
-                        {name: t("Patenters"), permalink: "cpc/import/chl/all/all/2019/"}]
+                        {
+                          name: t("Patenters"),
+                          permalink: "cpc/import/chl/all/all/2019/",
+                          regexp: new RegExp(/stacked\/cpc\/uspto\/show\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                        }]
                     },
                     {
                       name: t("Bilateral"), nest: [
@@ -253,17 +252,17 @@ class VbTabs extends React.Component {
                         {
                           name: t("Product Space"),
                           permalink: "hs92/export/deu/all/show/2017/",
-                          regexp: new RegExp(/\w{2}\/visualize\/network\/\w+\/export\/\w+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/network\/\w+\/export\/\w+\/all\/show\/[0-9.-]+\//)
                         },
                         {
-                          name: t("PGI Product Space"),
+                          name: t("Opportunity Gain Space"),
                           permalink: "hs92/pgi/deu/all/show/2017/",
-                          regexp: new RegExp(/\w{2}\/visualize\/network\/\w+\/pgi\/\w+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/network\/\w+\/pgi\/\w+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Relatedness Space"),
                           permalink: "hs92/relatedness/deu/all/show/2017/",
-                          regexp: new RegExp(/\w{2}\/visualize\/network\/\w+\/relatedness\/\w+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/network\/\w+\/relatedness\/\w+\/all\/show\/[0-9.-]+\//)
                         }
                       ]
                     }
@@ -320,12 +319,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exporters"),
                           permalink: "hs92/export/show/all/10101/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/geomap\/\w+\/export\/show\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/geomap\/\w+\/export\/show\/all\/\w+\/\w+\//)
                         },
                         {
                           name: t("Importers"),
                           permalink: "hs92/import/show/all/10101/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/geomap\/\w+\/import\/show\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/geomap\/\w+\/import\/show\/all\/\w+\/\w+\//)
                         }
                       ]
                     },
@@ -334,7 +333,7 @@ class VbTabs extends React.Component {
                         {
                           name: t("Patenters"),
                           permalink: "cpc/uspto/show/all/A21/2019/",
-                          regexp: new RegExp(/\w{2}\/visualize\/geomap\/cpc\/uspto\/show\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/geomap\/cpc\/uspto\/show\/all\/\w+\/\w+\//)
                         }
                       ]
                     }
@@ -356,19 +355,23 @@ class VbTabs extends React.Component {
                       name: t("Country"), nest: [
                         {
                           name: t("Exports"),
-                          permalink: "hs92/export/arg/all/show/2014.2017/"
+                          permalink: "hs92/export/arg/all/show/2014.2017/",
+                          regexp: new RegExp(/line\/\w+\/export\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports"),
-                          permalink: "hs92/import/arg/all/show/2014.2017/"
+                          permalink: "hs92/import/arg/all/show/2014.2017/",
+                          regexp: new RegExp(/line\/\w+\/import\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Export Destinations"),
-                          permalink: "hs92/export/arg/show/all/2014.2017/"
+                          permalink: "hs92/export/arg/show/all/2014.2017/",
+                          regexp: new RegExp(/line\/\w+\/export\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("Import Origins"),
-                          permalink: "hs92/import/arg/show/all/2014.2017/"
+                          permalink: "hs92/import/arg/show/all/2014.2017/",
+                          regexp: new RegExp(/\w{2}\/visualize\/line\/\w+\/import\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
                         }
                       ]
                     },
@@ -377,12 +380,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exporters"),
                           permalink: "hs92/export/show/all/10101/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/export\/show\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/line\/\w+\/export\/show\/all\/[a-z0-9.-]+\/[0-9.-]+\//)
                         },
                         {
                           name: t("Importers"),
                           permalink: "hs92/import/show/all/10101/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/import\/show\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/line\/\w+\/import\/show\/all\/[a-z0-9.-]+\/[0-9.-]+\//)
                         }
                       ]
                     },
@@ -391,22 +394,22 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports to Destination"),
                           permalink: "hs92/export/chl/arg/show/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/export\/\w+\/\w+\/show\/\w+\//)
+                          regexp: new RegExp(/line\/\w+\/export\/[a-z0-9.-]+\/[a-z0-9.-]+\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports from Origin"),
                           permalink: "hs92/import/chl/arg/show/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/import\/\w+\/\w+\/show\/\w+\//)
+                          regexp: new RegExp(/line\/\w+\/import\/[a-z0-9.-]+\/[a-z0-9.-]+\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         },
                         {
-                          name: t("Exports by Product"),
+                          name: t("Exports by Product"), // ((?!.*(all|show)).*)
                           permalink: "hs92/export/chl/all/10101/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/export\/\w+\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/line\/\w+\/export\/[a-z0-9.-]+\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports by Product"),
                           permalink: "hs92/import/chl/all/10101/2014.2017/",
-                          regexp: new RegExp(/\w+\/visualize\/line\/\w+\/import\/\w+\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/line\/\w+\/import\/[a-z0-9.-]+\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         },
                         {name: t("Trade Balance")}
                       ]
@@ -445,28 +448,28 @@ class VbTabs extends React.Component {
                       name: t("Economic Complexity"), nest: [
                         {
                           name: t("vs GDP"),
-                          permalink: "hs92/gdp/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.MKTP.CD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.MKTP.CD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc (constant '10 US$)"),
-                          permalink: "hs92/gdp_pc_constant/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_constant\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.KD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.KD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc (current US$)"),
-                          permalink: "hs92/gdp_pc_current/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_current\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.CD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.CD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc PPP (constant '11)"),
-                          permalink: "hs92/gdp_pc_constant_ppp/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_constant_ppp\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.PP.KD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.PP.KD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc PPP (current)"),
-                          permalink: "hs92/gdp_pc_current_ppp/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_current_ppp\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.PP.CD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.PP.CD\/all\/all\/[0-9.-]+\//)
                         }
                       ]
                     }

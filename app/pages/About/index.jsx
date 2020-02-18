@@ -9,13 +9,20 @@ import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 
 import AboutSite from "components/AboutSite";
+import AboutFAQ from "components/AboutFAQ";
 
 class index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      _active: "site"
+      _active: ""
     };
+  }
+
+  componentDidMount() {
+    this.setState({
+      _active: this.props.location.hash.split("#")[1] || "site"
+    });
   }
 
   render() {
@@ -30,6 +37,7 @@ class index extends React.Component {
         <OECNavbar />
         <div className="about-content">
           {_active === "site" && <AboutSite />}
+          {_active === "faq" && <AboutFAQ />}
         </div>
         <Footer />
       </div>
