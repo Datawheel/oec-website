@@ -1,6 +1,6 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
-
+import {toTitleCase} from "../../helpers/utils";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
@@ -31,7 +31,7 @@ class SubnationalList extends React.Component {
           {options.sort((a, b) => a.name > b.name ? 1 : -1).map(profile =>
             <li key={profile.slug}>
               <a href={`/${locale}/profile/subnational_${country}/${profile.slug}`}>
-                {profile.name.toLowerCase().replace(/\b(\w)/g, x => x.toUpperCase())}
+                {toTitleCase(profile.name)}
               </a>
             </li>
           )}

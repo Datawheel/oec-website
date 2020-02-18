@@ -54,14 +54,14 @@ class SubnationalMap extends React.Component {
       projectionPadding: "10 10 10 10",
       shapeConfig: {
         Path: {
-          fill: d => d.type === "Feature" ? "none" : "#fff",
-          stroke: "#ccc",
+          fill: d => d.type === "Feature" ? "#444" : "#fff",
+          stroke: "#666",
           hoverOpacity: 0.5,
           hoverStyle: d => {
             const fillColor = d.type === "Feature" ? "none" : "#6297CB";
             return `fill: "${fillColor}"`;
           },
-          strokeWidth: "1px",
+          strokeWidth: "0.5px",
           pointerEvents: d => d.type === "Feature" ? "none" : "visiblePoint"
         }
       },
