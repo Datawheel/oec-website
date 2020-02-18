@@ -27,6 +27,21 @@ class VirtualSelector extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
+  shouldComponentUpdate = (prevProps, prevState) =>
+    prevProps.selectedItem !== this.props.selectedItem ||
+    prevProps.items !== this.props.items ||
+    prevState.active !== this.state.active ||
+    prevState.isOpen !== this.state.isOpen ||
+    prevState.search !== this.state.search;
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const active = this.props.selectedItem.scale;
+    if (active && prevState.active === this.state.active) {
+      this.props.callbackButton(`${this.props.state}Scale`, active);
+      this.setState({active});
+    }
+  }
+
   handleInteraction(nextOpenState) {
     this.setState({isOpen: nextOpenState, search: undefined});
   }

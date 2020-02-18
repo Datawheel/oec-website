@@ -448,28 +448,28 @@ class VbTabs extends React.Component {
                       name: t("Economic Complexity"), nest: [
                         {
                           name: t("vs GDP"),
-                          permalink: "hs92/gdp/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.MKTP.CD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.MKTP.CD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc (constant '10 US$)"),
-                          permalink: "hs92/gdp_pc_constant/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_constant\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.KD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.KD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc (current US$)"),
-                          permalink: "hs92/gdp_pc_current/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_current\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.CD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.CD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc PPP (constant '11)"),
-                          permalink: "hs92/gdp_pc_constant_ppp/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_constant_ppp\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.PP.KD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.PP.KD\/all\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("vs GDPpc PPP (current)"),
-                          permalink: "hs92/gdp_pc_current_ppp/show/all/all/2017/",
-                          regexp: new RegExp(/\w+\/visualize\/scatter\/\w+\/gdp_pc_current_ppp\/show\/all\/all\/[0-9.-]+\//)
+                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.PP.CD/all/all/2017/",
+                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.PP.CD\/all\/all\/[0-9.-]+\//)
                         }
                       ]
                     }

@@ -98,8 +98,8 @@ class Vizbuilder extends React.Component {
       _selectedItemsYearTitle: [],
 
       wdiIndicators: [],
-      _yAxis: [],
-      _xAxis: [],
+      _yAxis: {},
+      _xAxis: {},
       _xAxisTitle: {},
       _yAxisTitle: {},
       _xAxisScale: "Log",
@@ -139,11 +139,10 @@ class Vizbuilder extends React.Component {
     }));
 
     axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false").then(resp => {
-      const data = resp.data.data.map(d => ({value: d["Indicator ID"], title: d.Indicator}));
+      const data = [{value: "OEC.ECI", title: "Economic Complexity Index (ECI)", scale: "Linear"}]
+        .concat(resp.data.data.map(d => ({value: d["Indicator ID"], title: d.Indicator})));
       this.setState({
-        wdiIndicators: data,
-        _yAxis: data.find(d => d.value === country),
-        _xAxis: data.find(d => d.value === flow)
+        wdiIndicators: data
       });
     });
 
@@ -157,12 +156,7 @@ class Vizbuilder extends React.Component {
 
   handleScroll = () => {
     throttle(() => {
-      if (window.scrollY > 220) {
-        this.setState({scrolled: true});
-      }
-      else {
-        this.setState({scrolled: false});
-      }
+      this.setState({scrolled: window.scrollY > 220});
     }, 30);
   };
 
@@ -234,16 +228,17 @@ class Vizbuilder extends React.Component {
   updateFilterSelected = (prevState, usePrevState = false) => {
     const countryData = usePrevState ? prevState.country : this.state.country;
     const technologyData = usePrevState ? prevState.technology : this.state.technology;
-    const productData = usePrevState ? prevState.product : this.state.product;
     const productKeys = usePrevState ? prevState.productKeys : this.state.productKeys;
 
     const {routeParams} = this.props;
-    const {_xAxis, _yAxis} = this.state;
-
+    const {wdiIndicators} = this.state;
     let {country, cube, flow, partner, time, viztype} = routeParams;
     if (prevState && prevState.permalink) {
       [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
     }
+
+    const _yAxis = wdiIndicators.find(d => d.value === country);
+    const _xAxis = wdiIndicators.find(d => d.value === flow);
 
     const _selectedItemsCountry = countryData
       .filter(d => country.split(".").includes(d.label));
@@ -269,6 +264,8 @@ class Vizbuilder extends React.Component {
       _selectedItemsProductTitle: _selectedItemsProduct,
       _selectedItemsTechnologyTitle: _selectedItemsTechnology,
       _selectedItemsYearTitle: _selectedItemsYear,
+      _xAxis,
+      _yAxis,
       _xAxisTitle: _xAxis,
       _yAxisTitle: _yAxis
     });
