@@ -6,6 +6,7 @@ import {InputGroup, Tab, Tabs} from "@blueprintjs/core";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
+import {normalizeString} from "../../helpers/utils";
 import SubnationalList from "./SubnationalList";
 import SubnationalMap from "./SubnationalMap";
 
@@ -33,9 +34,10 @@ class SubnationalCountryBlock extends React.Component {
   filterList(event) {
     const {options} = this.props;
     const filtered = {};
+    const searchTerm = normalizeString(event.target.value);
     Object.keys(options).map(level => {
-      filtered[level] = options[level].filter(item => item.name.toLowerCase().search(
-        event.target.value.toLowerCase()) !== -1);
+      filtered[level] = options[level].filter(item => normalizeString(item.name).search(
+        searchTerm) !== -1);
     });
 
     this.setState({items: filtered, searchText: event.target.value});
@@ -62,7 +64,8 @@ class SubnationalCountryBlock extends React.Component {
 
     const imgUrl = `/images/icons/country/country_${metadata.code}.png`;
 
-    return <div id={`subnational-country-block-${metadata.code}`} className="subnational-country-block">
+    return <div className="subnational-country-block">
+      <a id={`subnational-country-block-${metadata.code}`} className="subnational-country-block-anchor"></a>
       <div className="subnational-header">
         <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
       </div>

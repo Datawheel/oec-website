@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import axios from "axios";
 
 import {connect} from "react-redux";
+import {AnchorLink} from "@datawheel/canon-core";
+
 import {withNamespaces} from "react-i18next";
 
 import OECNavbar from "components/OECNavbar";
@@ -40,10 +42,10 @@ class Subnational extends React.Component {
         <p>Subnational information is available in the following countries. More to come!</p>
         <div className="subnational-country-index">
           {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map(country =>
-            <a key={country.code} href={`#subnational-country-block-${country.code}`} className="subnational-country-item">
+            <AnchorLink key={country.code} to={`subnational-country-block-${country.code}`} className="subnational-country-item">
               <span className="subnational-country-item-flag"><img src={`/images/icons/country/country_${country.code}.png`} /></span>
               <span className="subnational-country-item-name">{country.name}</span>
-            </a>
+            </AnchorLink>
           )}
         </div>
 
