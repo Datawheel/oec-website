@@ -13,16 +13,33 @@ import {
 import List from "react-virtualized/dist/commonjs/List";
 
 import "./VirtualSelector.css";
+import OECButtonGroup from "./OECButtonGroup";
 
 class VirtualSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      active: "Log",
       isOpen: false,
       search: undefined
     };
     this.rowRenderer = this.rowRenderer.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  shouldComponentUpdate = (prevProps, prevState) =>
+    prevProps.selectedItem !== this.props.selectedItem ||
+    prevProps.items !== this.props.items ||
+    prevState.active !== this.state.active ||
+    prevState.isOpen !== this.state.isOpen ||
+    prevState.search !== this.state.search;
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const active = this.props.selectedItem.scale;
+    if (active && prevState.active === this.state.active) {
+      this.props.callbackButton(`${this.props.state}Scale`, active);
+      this.setState({active});
+    }
   }
 
   handleInteraction(nextOpenState) {
@@ -45,10 +62,10 @@ class VirtualSelector extends React.Component {
     isVisible,   // This row is visible within the List (eg it is not an overscanned row)
     style        // Style object to be applied to row (to position it)
   ) => {
-    const {items, selectedItem, t} = this.props;
+    const {items, selectedItem} = this.props;
     const {search} = this.state;
     const filteredItems = search ? items.filter(d =>
-      d.title.toLowerCase().includes(search.toLowerCase()) || d.prevId.includes(search.toLowerCase())
+      d.title.toLowerCase().includes(search.toLowerCase())
     ) : items;
 
     const d = filteredItems[key.index];
@@ -75,10 +92,10 @@ class VirtualSelector extends React.Component {
 
 
   render() {
-    const {items, selectedItem, title, t} = this.props;
+    const {items, selectedItem, scale, title, t} = this.props;
     const {search} = this.state;
     const filteredItems = search ? items.filter(d =>
-      d.title.toLowerCase().includes(search.toLowerCase()) || d.prevId.includes(search.toLowerCase())
+      d.title.toLowerCase().includes(search.toLowerCase())
     ) : items;
 
     const len = filteredItems.length;
@@ -122,6 +139,11 @@ class VirtualSelector extends React.Component {
               <img src={`/images/icons/hs/hs_${selected}.png`} /></div>}
             <span className="text">{selected && selected.title}</span></div></div>} rightIcon="chevron-down" />
       </Popover>
+      {scale && <OECButtonGroup
+        items={["Log", "Linear"]}
+        selected={this.state.active}
+        callback={active => (this.props.callbackButton(`${this.props.state}Scale`, active), this.setState({active}))}
+      />}
     </div>;
 
   }
@@ -131,7 +153,8 @@ VirtualSelector.defaultProps = {
   icon: undefined,
   items: [],
   selectedItem: undefined,
-  title: "Title"
+  title: "Title",
+  scale: false
 };
 
 export default withNamespaces()(VirtualSelector);

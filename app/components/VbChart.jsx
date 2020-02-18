@@ -1,4 +1,5 @@
 import React from "react";
+import {withNamespaces} from "react-i18next";
 import axios from "axios";
 import {Treemap, StackedArea, LinePlot, Geomap, Network, Rings, Plot} from "d3plus-react";
 import {Client} from "@datawheel/olap-client";
@@ -10,6 +11,7 @@ import {formatAbbreviate} from "d3plus-format";
 import "./VbChart.css";
 
 import countryMembers from "../../static/members/country.json";
+import OECButtonGroup from "./OECButtonGroup";
 
 class VbChart extends React.Component {
   constructor(props) {
@@ -17,7 +19,9 @@ class VbChart extends React.Component {
     this.state = {
       data: [],
       loading: true,
-      routeParams: this.props.routeParams
+      routeParams: this.props.routeParams,
+      scale: "Log",
+      depth: "HS4"
     };
   }
 
@@ -26,7 +30,9 @@ class VbChart extends React.Component {
   }
 
   shouldComponentUpdate = (prevProps, prevState) => prevProps.permalink !== this.props.permalink ||
-    prevState.loading !== this.state.loading
+    prevProps.xScale !== this.props.xScale || prevProps.yScale !== this.props.yScale ||
+    prevState.loading !== this.state.loading || prevState.depth !== this.state.depth ||
+    prevState.scale !== this.state.scale
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
@@ -155,10 +161,12 @@ class VbChart extends React.Component {
     else if (chart === "scatter") {
       const scatterParams = {
         Year: time,
-        measure: flow
+        x: flow,
+        y: country
       };
       return axios.get("/api/gdp/eci", {params: scatterParams}).then(resp => {
         const data = resp.data;
+        console.log(resp);
         this.setState({
           data,
           loading: false,
@@ -191,7 +199,32 @@ class VbChart extends React.Component {
     const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) {
+      return <div className="vb-loading">
+        <div className="vb-loading-spinner">
+          <svg className="viz-spinner" width="60px" height="60px" viewBox="0 0 317 317" xmlns="http://www.w3.org/2000/svg">
+            <path className="outer" d="M16.43 157.072c0 34.797 12.578 66.644 33.428 91.277l-11.144 11.141c-23.673-27.496-37.992-63.283-37.992-102.418 0-39.133 14.319-74.921 37.992-102.423l11.144 11.144c-20.85 24.63-33.428 56.481-33.428 91.279z"></path>
+            <path className="outer" d="M157.793 15.708c34.798 0 66.648 12.58 91.28 33.427l11.143-11.144c-27.502-23.676-63.29-37.991-102.423-37.991-39.132 0-74.919 14.315-102.422 37.991l11.148 11.144c24.627-20.847 56.477-33.427 91.274-33.427"></path>
+            <path className="outer" d="M299.159 157.072c0 34.797-12.578 66.644-33.43 91.277l11.145 11.141c23.674-27.496 37.992-63.283 37.992-102.418 0-39.133-14.318-74.921-37.992-102.423l-11.145 11.144c20.852 24.63 33.43 56.481 33.43 91.279"></path>
+            <path className="outer" d="M157.793 298.432c-34.797 0-66.647-12.574-91.274-33.424l-11.148 11.138c27.503 23.682 63.29 37.997 102.422 37.997 39.133 0 74.921-14.315 102.423-37.997l-11.143-11.138c-24.632 20.85-56.482 33.424-91.28 33.424"></path>
+            <path className="middle" d="M226.59 61.474l-7.889 13.659c24.997 18.61 41.184 48.382 41.184 81.94 0 33.555-16.187 63.329-41.184 81.936l7.889 13.664c29.674-21.394 49.004-56.23 49.004-95.6 0-39.373-19.33-74.21-49.004-95.599"></path>
+            <path className="middle" d="M157.793 259.169c-52.398 0-95.553-39.485-101.399-90.317h-15.814c5.912 59.524 56.131 106.018 117.213 106.018 17.26 0 33.633-3.742 48.404-10.406l-7.893-13.672c-12.425 5.38-26.114 8.377-40.511 8.377"></path>
+            <path className="middle" d="M157.793 54.976c14.397 0 28.086 2.993 40.511 8.371l7.893-13.667c-14.771-6.669-31.144-10.412-48.404-10.412-61.082 0-111.301 46.493-117.213 106.021h15.814c5.846-50.831 49.001-90.313 101.399-90.313"></path>
+            <path className="inner" d="M95.371 164.193c-3.476-30.475 15.471-58.324 43.723-67.097l-1.804-15.842c-36.899 9.931-61.986 45.602-57.524 84.719 4.461 39.115 36.934 68.219 75.122 69.584l-1.806-15.838c-29.504-2.186-54.235-25.054-57.711-55.526"></path>
+            <path className="inner" d="M162.504 94.425c29.508 2.185 54.235 25.053 57.711 55.529 3.476 30.469-15.466 58.319-43.724 67.096l1.806 15.834c36.898-9.927 61.986-45.598 57.525-84.712-4.461-39.117-36.936-68.223-75.125-69.588l1.807 15.841z"></path>
+          </svg>
+        </div>
+        <div className="vb-loading-text">
+          Loading...
+        </div>
+        <div className="vb-loading-built">
+          <a href="https://www.datawheel.us/" target="_blank" rel="noopener noreferrer">
+            Built by Datawheel
+          </a>
+        </div>
+
+      </div>;
+    }
 
     const isTechnology = cube.includes("cpc");
     const isFilter = !["show", "all"].includes(viztype);
@@ -212,6 +245,7 @@ class VbChart extends React.Component {
     }
 
     const measure = isTechnology ? "Patent Share" : "Trade Value";
+    console.log(data);
 
     if (chart === "tree_map" && data && data.length > 0) {
       return <div className="vb-chart">
@@ -221,6 +255,12 @@ class VbChart extends React.Component {
             sum: measure,
             total: measure
           }}
+        />
+        <OECButtonGroup
+          items={["HS2", "HS4", "HS6"]}
+          selected={this.state.depth}
+          title={"Depth"}
+          callback={depth => this.setState({depth})}
         />
       </div>;
     }
@@ -241,16 +281,26 @@ class VbChart extends React.Component {
     else if (chart === "line" && data && data.length > 0) {
       return <div className="vb-chart">
         <LinePlot
+          forceUpdate={true}
+          key={`lineplot_${this.state.scale}`}
           config={{
             ...baseConfig,
             groupBy: viztype === "all" || isFinite(viztype)
-              ? ["Continent"]
+              ? ["Continent", "Country"]
               : ["Section"],
             y: measure,
-            x: "Year"
-          // time: "Year"
+            yConfig: {
+              scale: this.state.scale.toLowerCase()
+            },
+            x: "Year",
+            discrete: "x",
+            total: undefined,
+            timeline: false,
+            // legend: false
+            time: "Year"
           }}
         />
+        <OECButtonGroup items={["Log", "Linear"]} selected={this.state.scale} title={"Scale"} callback={scale => this.setState({scale})} />
       </div>;
     }
     else if (chart === "geomap" && data && data.length > 0) {
@@ -321,7 +371,7 @@ class VbChart extends React.Component {
           dataFormat={
             d => {
               const newData = d
-                .map(dd => Object.assign(dd, {"id": `${dd["HS4 ID"]}`, "HS4 ID": `${dd["HS4 ID"]}`}));
+                .map(dd => Object.assign(dd, {"id": dd["HS4 ID"], "HS4 ID": `${dd["HS4 ID"]}`}));
 
               return newData;
             }
@@ -335,15 +385,13 @@ class VbChart extends React.Component {
           config={{
             links: data,
             center: viztype,
-            // nodeGroupBy: ["Section ID"],
-            // size: "Trade Value",
+            total: undefined,
             label: "",
             shapeConfig: {
               Circle: {
                 fill: d => colors.Section[d.id.slice(0, -4)] || "gray"
               }
-            },
-            total: "Trade Value"
+            }
           }}
         />;
       </div>;
@@ -355,16 +403,11 @@ class VbChart extends React.Component {
           config={{
             data,
             groupBy: ["Continent", "Country"],
-            x: "Trade Value ECI",
-            y: "Measure",
+            x: flow,
+            y: country,
             size: "Trade Value",
             sizeMin: 5,
             sizeMax: 40,
-            shapeConfig: {
-              Circle: {
-                fill: d => colors.Continent[d["Continent ID"]]
-              }
-            },
             tooltipConfig: {
               tbody: d => [
                 ["Country ID", d["Country ID"].slice(-3).toUpperCase()],
@@ -375,10 +418,10 @@ class VbChart extends React.Component {
             },
             total: undefined,
             xConfig: {
-              // scale: "log"
+              scale: this.props.xScale.toLowerCase()
             },
             yConfig: {
-              scale: "log"
+              scale: this.props.yScale.toLowerCase()
             }
           }}
         />
@@ -389,4 +432,4 @@ class VbChart extends React.Component {
   }
 }
 
-export default VbChart;
+export default withNamespaces()(VbChart);

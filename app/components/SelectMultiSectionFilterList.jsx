@@ -13,7 +13,7 @@ const FilterList = ({activeItem, filteredItems, renderItem}) => {
   const finalList = typeFilter
     ? filteredItems.filter(item => item.type === typeFilter)
     : filteredItems;
-  const activeIndex = finalList.indexOf(activeItem) || 1;
+  const activeIndex = finalList.indexOf(activeItem);
 
   return (
     <Fragment>
