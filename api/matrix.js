@@ -12,13 +12,24 @@ const catcher = e => {
   return false;
 };
 
-const datePad = d => {
+const dateFormat = d => {
   d = String(d);
   if (d.length === 4) {
-    d = `${d}1231`;
-  } 
+    return d;
+  }
   else if (d.length === 6) {
-    d = `${d}31`;
+    const year = d.substr(0, 4);
+    const month = d.substr(4, 2);
+    return `${year}-${month}`;
+  }
+  else if (d.length === 8) {
+    const year = d.substr(0, 4);
+    const month = d.substr(4, 2);
+    const day = d.substr(6, 2);
+    return `${year}-${month}-${day}`;
+  }
+  else {
+    return d;
   }
 };
 
@@ -35,10 +46,12 @@ module.exports = function(app) {
     const matrix = [];
     
     if (cubeData && cubeData.cubes) {
-      for (const thisCube of cubeData.cubes.slice(0, 5)) {
+      for (const thisCube of cubeData.cubes) {
         const {name, dimensions, measures, annotations} = thisCube;
         let drilldown, measure, timeResolution;
         if (measures[0]) measure = measures[0].name;
+        
+        // Determine the Time Resolution
         const names = dimensions.map(d => d.name);
         if (names.includes("Year")) {
           drilldown = "Year";
@@ -56,19 +69,28 @@ module.exports = function(app) {
             }
           }
           catch (e) { 
-            console.log(thisCube.name);
             catcher(e);
           }
         }
-        if (!name || !drilldown || !measure || !timeResolution) continue;
+
+        // Determine the smallest resolution of each non-time Dimension
+        const dataDims = dimensions.filter(d => d.name !== "Time" && d.name !== "Year");
+        const resolutions = dataDims.reduce((acc, d) => {
+          const level = d.hierarchies[0].levels[d.hierarchies[0].levels.length - 1];
+          const name = `${d.name}${d.hierarchies[0].name === "Geography" ? " (Geography)" : ""}`;
+          const resolution = level.annotations && level.annotations.level ? level.annotations.level : level.name;
+          return {...acc, [name]: resolution};
+        }, {time: timeResolution});
+
+        if (!name || !drilldown || !measure) continue;
         const rangeURL = `${CANON_CMS_CUBES}/data.jsonrecords?cube=${name}&drilldowns=${drilldown}&measures=${measure}&parents=false&sparse=false`;
         const range = await axios.get(rangeURL).then(d => d.data.data).catch(catcher);
         if (range && Array.isArray(range)) {
-          const start = range[0][drilldown];
-          const end = range[range.length - 1][drilldown];
+          const start = dateFormat(range[0][drilldown]);
+          const end = dateFormat(range[range.length - 1][drilldown]);
           matrix.push({
             name,
-            timeResolution,
+            resolutions,
             start,
             end
           });
