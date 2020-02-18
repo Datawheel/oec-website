@@ -1,0 +1,38 @@
+.about-page {
+  background-color: var(--dark-4);
+  color: var(--white);
+  min-height: 100vh;
+
+  & .about-content {
+    max-width: 695px;
+    margin: 0 auto 0 auto;
+    padding-top: var(--nav-height);
+
+    & .about-site {
+      & .site-info {
+        padding-top: var(--gutter-sm);
+
+        & .info-title {
+          letter-spacing: var(--label-letter-spacing);
+          font-size: var(--font-xxl);
+          font-weight: 200;
+          margin-bottom: var(--gutter-sm);
+        }
+
+        & .info-text {
+          & .text {
+            color: var(--gray);
+            font-size: var(--font-xs);
+            font-weight: 200;
+            line-height: 1.5;
+            margin-bottom: var(--gutter-sm);
+
+            & .link {
+              color: var(--accent);
+            }
+          }
+        }
+      }
+    }
+  }
+}

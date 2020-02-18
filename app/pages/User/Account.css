@@ -1,3 +1,5 @@
+@import "../../helpers/mixins.css";
+
 .account {
   align-items: center;
   background: var(--dark-3);
@@ -23,7 +25,7 @@
       padding: var(--gutter-md);
       & .account-meta-table {
         border-collapse: collapse;
-        margin-bottom: var(--gutter-md);
+        margin-bottom: var(--gutter-sm);
         width: 100%;
         & tr {
           &:not(:first-child) td {
@@ -37,6 +39,24 @@
           }
         }
       }
+      & .bp3-callout {
+        margin-bottom: var(--gutter-sm);
+        & h5 {
+          margin: 0 0 10px;
+          text-align: center;
+        }
+        &.bp3-intent-success {
+          & h5 {
+            margin: 0;
+          }
+          & .bp3-button {
+            display: none;
+          }
+        }
+      }
+      & .logout-button {
+        border: 0;
+      }
     }
     & .account-panel {
       flex: 1 1 auto;
@@ -47,6 +67,38 @@
         & table {
           width: 100%;
         }
+      }
+      & .cancel-button {
+        margin-top: var(--gutter-md);
+      }
+    }
+  }
+}
+
+.cancel-dialog {
+  & .cancel-text {
+    @mixin font-lg;
+    font-weight: 800;
+    margin: var(--gutter-sm);
+    text-align: center;
+  }
+  & .cancel-buttons {
+    text-align: center;
+    & .cancel-dialog-button {
+      border: 0;
+      color: var(--white);
+      margin: 0 var(--gutter-sm);
+    }
+    & .cancel-dialog-cancel {
+      background-color: var(--dark-2);
+      &:hover, &:focus {
+        background-color: var(--dark-3);
+      }
+    }
+    & .cancel-dialog-confirm {
+      background-color: var(--accent-dark);
+      &:hover, &:focus {
+        background-color: var(--accent);
       }
     }
   }

@@ -9,9 +9,13 @@ const stripe = require("stripe")(CANON_STRIPE_SECRET);
 const isRole = role => (req, res, next) => {
   if (req.isAuthenticated()) {
     if (req.user.role >= role) return next();
-    else res.status(401).send("user does not have sufficient privileges");
+    else {
+      res.status(401).send("user does not have sufficient privileges").end();
+      return;
+    }
   }
-  return res.status(401).send("not logged in");
+  res.status(401).send("not logged in").end();
+  return;
 };
 
 module.exports = function(app) {
@@ -80,6 +84,17 @@ module.exports = function(app) {
       .catch(() => []);
 
     res.json({invoices, user});
+
+  });
+
+  app.get("/auth/stripe/cancel", isRole(1), stripeUser, async(req, res) => {
+
+    const {id} = req.stripeUser.subscriptions.data[0];
+
+    const status = await stripe.subscriptions.del(id)
+      .catch(error => ({error}));
+
+    res.json(status);
 
   });
 

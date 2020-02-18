@@ -21,7 +21,7 @@ class SignUp extends Component {
           <h1 className="signup-page-title">Welcome to OEC</h1>
           <h3 className="signup-page-subtitle">Please create an account</h3>
           <div className="signup-page-form">
-            <CanonSignUp redirect={`/${locale}/subscription`} />
+            <CanonSignUp redirect={`/${locale}/account`} />
             <div className="signup-page-signup">
               Already have an account? <Link to={`/${locale}/login`}>Login</Link>
             </div>
