@@ -37,8 +37,8 @@ class Matrix extends React.Component {
           {matrix.map(row => 
             <tr key={row.name}>
               <td>{row.name}</td>
-              <td>-</td>
-              <td>-</td>
+              <td>{row.resolutions.geography || "-"}</td>
+              <td>{row.resolutions.product || "-"}</td>
               <td>{row.resolutions.time}</td>
               <td>{row.start}</td>
               <td>{row.end}</td>
