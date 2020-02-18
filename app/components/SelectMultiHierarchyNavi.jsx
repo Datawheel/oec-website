@@ -109,7 +109,7 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
             const item = finalList[index];
             return (
               <li
-                className={`sm-section--list-item sm-section--type-${item.type}`}
+                className={`sm-section--list-item sm-section--level-${levels.indexOf(item.type)}`}
                 key={item.id}
                 ref={innerRef}
                 style={style}

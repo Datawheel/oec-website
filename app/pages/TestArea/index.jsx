@@ -64,6 +64,8 @@ const TestArea = () => {
           levels={["Section", "Superclass", "Class", "Subclass"]}
           items={techsData}
           selectedItems={selectedTechs}
+          getColor={d => colors["CPC Section"][d["Section ID"]]}
+          getIcon={d => `/images/icons/cpc/${d["Section ID"]}.png`}
           onItemSelect={item => {
             const nextItems = selectedTechs.concat(item);
             setSelectedTechs(nextItems);
