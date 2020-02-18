@@ -23,6 +23,10 @@
       filter: saturate(10%);
     }
 
+    & .member-photo:hover {
+      filter: none;
+    }
+
     & .member-profile {
       width: 100%;
       margin-left: var(--gutter-md);
