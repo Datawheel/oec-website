@@ -10,48 +10,47 @@ module.exports = function(app) {
       rca: "Exporter Country,HS4,Trade Value",
       alias: "Country,HS4",
       measures: "Trade Value",
-      // filter_Country: queryParams.Country,
       Year: queryParams.Year || 2017,
       parents: true
     };
 
-    const measure = {
-      gdp: "NY.GDP.MKTP.CD",
-      gdp_constant: "NY.GDP.MKTP.KD",
-      gdp_pc_current: "NY.GDP.PCAP.CD",
-      gdp_pc_constant: "NY.GDP.PCAP.KD",
-      gdp_pc_current_ppp: "NY.GDP.PCAP.PP.CD",
-      gdp_pc_constant_ppp: "NY.GDP.PCAP.PP.KD"
-    };
-
     axios.all([
       axios.get("http://localhost:3300/api/stats/eci", {params}),
-      axios.get("https://api.oec.world/tesseract/data", {params: {
-        Indicator: measure[queryParams.measure || "GDP Current"],
-        Year: queryParams.Year || 2017,
-        cube: "indicators_i_wdi_a",
-        drilldowns: "Country",
-        measures: "Measure"
-      }}),
       axios.get("https://api.oec.world/tesseract/data", {params: {
         Year: queryParams.Year || 2017,
         cube: "trade_i_baci_a_92",
         drilldowns: "Exporter Country",
         measures: "Trade Value",
         parents: true
+      }}),
+      axios.get("https://api.oec.world/tesseract/data", {params: {
+        Indicator: queryParams.x,
+        Year: queryParams.Year || 2017,
+        cube: "indicators_i_wdi_a",
+        drilldowns: "Country",
+        measures: "Measure"
+      }}),
+      axios.get("https://api.oec.world/tesseract/data", {params: {
+        Indicator: queryParams.y,
+        Year: queryParams.Year || 2017,
+        cube: "indicators_i_wdi_a",
+        drilldowns: "Country",
+        measures: "Measure"
       }})
-    ]).then(axios.spread((resp1, resp2, resp3) => {
+    ]).then(axios.spread((resp1, resp2, resp3, resp4) => {
       const eciData = resp1.data.data;
       const gdpData = resp2.data.data;
+      console.log("I'm here!");
 
       const mergeById = (a1, a2) =>
         a1.map(itm => ({
           ...a2.find(item => item["Country ID"] === itm["Country ID"] && item),
           ...itm
         }));
-      let data = mergeById(eciData, gdpData).filter(d => d.Measure && d["Trade Value ECI"]);
-      data = mergeById(data, resp3.data.data);
-      res.json(data);
+      let data = mergeById(eciData, gdpData).filter(d => d["Trade Value"] && d["Trade Value ECI"]);
+      data = mergeById(data, resp3.data.data.map(d => ({...d, [queryParams.x]: d.Measure})));
+      data = mergeById(data, resp4.data.data.map(d => ({...d, [queryParams.y]: d.Measure})));
+      res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
     }));
   });
 

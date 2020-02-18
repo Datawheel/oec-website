@@ -16,6 +16,7 @@ import colors from "../../helpers/colors";
 import OECMultiSelectV2 from "../../components/OECMultiSelectV2";
 
 import {nest} from "d3-collection";
+import SelectMultiSection from "../../components/SelectMultiSection";
 
 const datasets = [
   {value: "hs92", title: "HS92"},
@@ -42,6 +43,26 @@ const scatterYAxisOptions = [
 
 const years = [...Array(56).keys()].map(d => ({value: 2019 - d, title: 2019 - d}));
 
+/** */
+function createItems(data, levels, iconUrl) {
+  return data.reduce((obj, d) => {
+    levels.forEach(type => {
+      const id = d[`${type} ID`];
+      if (!(id in obj)) {
+        const sId = d["Section ID"];
+        obj[id] = {
+          color: colors.Section[sId],
+          icon: `${iconUrl}${sId}.png`,
+          id,
+          name: d[type],
+          type
+        };
+      }
+    });
+    return obj;
+  }, {});
+}
+
 class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -64,9 +85,7 @@ class Vizbuilder extends React.Component {
       _year: undefined,
       _yearId: "2017",
       scrolled: false,
-      _yAxis: params && params.flow
-        ? scatterYAxisOptions.find(d => d.value === params.flow) || scatterYAxisOptions[0]
-        : scatterYAxisOptions[0],
+
       _selectedItemsProduct: [],
       _selectedItemsCountry: [],
       _selectedItemsPartner: [],
@@ -78,24 +97,31 @@ class Vizbuilder extends React.Component {
       _selectedItemsTechnologyTitle: [],
       _selectedItemsYearTitle: [],
 
-      testing: []
+      wdiIndicators: [],
+      _yAxis: [],
+      _xAxis: [],
+      _xAxisTitle: {},
+      _yAxisTitle: {},
+      _xAxisScale: "Log",
+      _yAxisScale: "Log"
     };
   }
 
 
   componentDidMount() {
     const {routeParams} = this.props;
-    const {country, cube, partner, time, viztype} = routeParams;
+    const {country, cube, partner, time, viztype, flow} = routeParams;
     window.addEventListener("scroll", this.handleScroll);
 
     // Gets members of HS products, Countries and Technologies
     axios.all([
-      axios.get("/members/products_hs92.json"),
+      axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false"),
       axios.get("/members/country.json"),
       axios.get("/members/technology.json")
     ]).then(axios.spread((resp1, resp2, resp3) => {
-      const productData = resp1.data.map(d => ({
-        ...d, color: colors.Section[d.parent_id]}));
+      const productData = resp1.data.data;
+      const productKeys = createItems(productData, ["Section", "HS2", "HS4"], "/images/icons/hs/hs_");
+
       const countryData = resp2.data.map(d => ({
         ...d, color: colors.Continent[d.parent_id]}));
       const technologyData = resp3.data.map(d => ({
@@ -107,50 +133,18 @@ class Vizbuilder extends React.Component {
       this.updateFilterSelected({
         country: countryData,
         product: productData,
+        productKeys,
         technology: technologyData
       }, true);
     }));
 
-    axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false").then(resp => {
-      const data = resp.data.data;
-      const testing = [];
-      nest()
-        .key(d => `${d["Section ID"]}|${d.Section}`)
-        .key(d => `${d["HS2 ID"]}|${d.HS2}`)
-        .key(d => `${d["HS4 ID"]}|${d.HS4}`)
-        // .rollup(d => console.log(d))
-        .entries(data)
-        .forEach(d => testing.push(d));
-
-      testing.forEach(d => {
-        const fullName = d.key.split("|");
-        delete d.key;
-        const parent = fullName[0];
-        d.id = fullName[0];
-        d.name = fullName[1];
-        d.icon = `/images/icons/hs/hs_${parent}.png`;
-        const color = colors.Section[parent];
-        d.color = color;
-        d.values.forEach(h => {
-          const fullName = h.key.split("|");
-          delete h.key;
-          h.id = fullName[0];
-          h.name = fullName[1];
-          h.icon = `/images/icons/hs/hs_${parent}.png`;
-          h.color = color;
-          h.values.forEach(x => {
-            const fullName = x.key.split("|");
-            delete x.key;
-            x.id = fullName[0];
-            x.name = fullName[1];
-            x.icon = `/images/icons/hs/hs_${parent}.png`;
-            x.color = color;
-            delete x.values;
-          });
-        });
+    axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false").then(resp => {
+      const data = resp.data.data.map(d => ({value: d["Indicator ID"], title: d.Indicator}));
+      this.setState({
+        wdiIndicators: data,
+        _yAxis: data.find(d => d.value === country),
+        _xAxis: data.find(d => d.value === flow)
       });
-      console.log(testing);
-      this.setState({testing});
     });
 
   }
@@ -188,6 +182,7 @@ class Vizbuilder extends React.Component {
     const {
       _flow,
       _dataset,
+      _xAxis,
       _yAxis,
       _selectedItemsCountry,
       _selectedItemsPartner,
@@ -207,7 +202,7 @@ class Vizbuilder extends React.Component {
     let filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
         ? _selectedItemsTechnology.map(d => d.value).join(".")
-        : _selectedItemsProduct.map(d => d.value).join(".")
+        : _selectedItemsProduct.map(d => d.id).join(".")
       : "show";
 
     const dataset = isTechnologyFilter ? "cpc" : _dataset.value;
@@ -215,8 +210,8 @@ class Vizbuilder extends React.Component {
 
     /** Creates permalink config for scatter plot */
     if (chart === "scatter") {
-      flow = _yAxis.value;
-      countryIds = "show";
+      flow = _xAxis.value;
+      countryIds = _yAxis.value;
       partnerIds = "all";
       filterIds = "all";
     }
@@ -240,25 +235,27 @@ class Vizbuilder extends React.Component {
     const countryData = usePrevState ? prevState.country : this.state.country;
     const technologyData = usePrevState ? prevState.technology : this.state.technology;
     const productData = usePrevState ? prevState.product : this.state.product;
+    const productKeys = usePrevState ? prevState.productKeys : this.state.productKeys;
+
     const {routeParams} = this.props;
+    const {_xAxis, _yAxis} = this.state;
 
     let {country, cube, flow, partner, time, viztype} = routeParams;
     if (prevState && prevState.permalink) {
       [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
     }
-    console.log(country);
+
     const _selectedItemsCountry = countryData
       .filter(d => country.split(".").includes(d.label));
     const _selectedItemsPartner = countryData
       .filter(d => partner.split(".").includes(d.label));
     const _selectedItemsYear = years
       .filter(d => time.split(".").includes(d.value.toString()));
-    const _selectedItemsProduct = !["cpc"].includes(cube) ? productData
-      .filter(d => viztype.split(".").includes(d.value.toString())) : [];
+    const _selectedItemsProduct = isFinite(viztype.split(".")[0])
+      ? viztype.split(".").map(d => productKeys[d]) : [];
+
     const _selectedItemsTechnology = ["cpc"].includes(cube) ? technologyData
       .filter(d => viztype.split(".").includes(d.value)) : [];
-
-    const _yAxis = scatterYAxisOptions.find(d => d.value === flow) || scatterYAxisOptions[0];
 
     this.setState({
       ...prevState,
@@ -272,7 +269,8 @@ class Vizbuilder extends React.Component {
       _selectedItemsProductTitle: _selectedItemsProduct,
       _selectedItemsTechnologyTitle: _selectedItemsTechnology,
       _selectedItemsYearTitle: _selectedItemsYear,
-      _yAxis
+      _xAxisTitle: _xAxis,
+      _yAxisTitle: _yAxis
     });
   }
 
@@ -306,12 +304,27 @@ class Vizbuilder extends React.Component {
 
             {!["network", "scatter"].includes(chart) && isTrade && <div className="columns">
               <div className="column-1">
-                <OECMultiSelect
-                  items={this.state.product}
-                  selectedItems={this.state._selectedItemsProduct}
-                  title={"Product"}
-                  callback={d => this.handleItemMultiSelect("_selectedItemsProduct", d)}
-                />
+                <div className="select-multi-section-wrapper">
+                  <h4 className="title">Product</h4>
+                  <SelectMultiSection
+                    items={this.state.product}
+                    onItemSelect={item => {
+                      const nextItems = this.state._selectedItemsProduct.concat(item);
+                      this.setState({_selectedItemsProduct: nextItems});
+                    }}
+                    onItemRemove={(evt, item) => {
+                    // evt: MouseEvent<HTMLButtonElement>
+                    // item: SelectedItem
+                      evt.stopPropagation();
+                      const nextItems = this.state._selectedItemsProduct.filter(i => i !== item);
+                      this.setState({_selectedItemsProduct: nextItems});
+                    }}
+                    onClear={() => {
+                    // setSelectedItems([]);
+                    }}
+                    selectedItems={this.state._selectedItemsProduct}
+                  />
+                </div>
               </div>
             </div>}
 
@@ -363,16 +376,30 @@ class Vizbuilder extends React.Component {
 
             {["scatter"].includes(chart) && <div className="column-1-2">
               <VirtualSelector
-                items={scatterYAxisOptions}
-                title={"Y Axis"}
-                state="_yAxis"
-                selectedItem={this.state._yAxis}
+                items={this.state.wdiIndicators}
                 run={this.updateFilter}
+                scale
+                selectedItem={this.state._xAxis}
+                state="_xAxis"
+                title={"X Axis"}
+                callbackButton={(key, value) => this.setState({[key]: value})}
+              />
+            </div>}
+
+            {["scatter"].includes(chart) && <div className="column-1-2">
+              <VirtualSelector
+                items={this.state.wdiIndicators}
+                run={this.updateFilter}
+                scale
+                selectedItem={this.state._yAxis}
+                state="_yAxis"
+                title={"Y Axis"}
+                callbackButton={(key, value) => this.setState({[key]: value})}
               />
             </div>}
 
             <div className="columns">
-              <div className="column-1-2">
+              {!["scatter"].includes(chart) && <div className="column-1-2">
                 <VirtualSelector
                   items={datasets}
                   title={"Dataset"}
@@ -380,7 +407,7 @@ class Vizbuilder extends React.Component {
                   selectedItem={this.state._dataset}
                   run={this.updateFilter}
                 />
-              </div>
+              </div>}
 
               {!["scatter"].includes(chart) && <div className="column-1-2">
                 <VirtualSelector
@@ -421,13 +448,17 @@ class Vizbuilder extends React.Component {
               countryData={this.state.country}
               selectedItemsCountry={this.state._selectedItemsCountryTitle}
               selectedItemsProduct={this.state._selectedItemsProductTitle}
-              selectedItemsPartner={this.state._selectedItemsCountryTitle}
+              selectedItemsPartner={this.state._selectedItemsPartnerTitle}
               selectedItemsTechnology={this.state._selectedItemsTechnologyTitle}
               routeParams={routeParams}
+              xScale={this.state._xAxisTitle}
+              yScale={this.state._yAxisTitle}
             />
             <VbChart
               countryData={this.state.country}
               permalink={this.state.permalink}
+              xScale={this.state._xAxisScale}
+              yScale={this.state._yAxisScale}
               routeParams={routeParams}
             />
           </div>

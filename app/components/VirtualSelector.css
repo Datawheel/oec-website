@@ -1,5 +1,12 @@
 .selector {
   margin-bottom: 10px;
+  & .oec-button-group-items {
+    display: flex;
+    & .cp-button {
+      flex: 1;
+      font-size: var(--font-xs) !important;
+    }
+  }
   & .title {
     font-family: "Montserrat", sans-serif;
     font-size: var(--font-xs);

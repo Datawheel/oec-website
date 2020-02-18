@@ -93,7 +93,7 @@
 
 }
 
-.multi-select-wrapper {
+.multi-select-wrapper, .select-multi-section-wrapper {
   margin-bottom: 12px;
   & .title {
     font-family: "Montserrat", sans-serif;
