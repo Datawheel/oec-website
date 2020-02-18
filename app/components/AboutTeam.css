@@ -76,6 +76,7 @@
 
   & .contributors {
     & .card {
+      padding: var(--gutter-sm) var(--gutter-xs);
       & .member-photo {
         min-width: 90px;
         height: 90px;
