@@ -95,23 +95,37 @@ module.exports = {
     questions: [
       {
         question: "about_faq_question_1",
-        answer: "about_faq_answer_1"
+        answer: [
+          {type: "paragraph", text: "about_faq_answer_1"}
+        ]
       },
       {
         question: "about_faq_question_2",
-        answer: "about_faq_answer_2"
+        answer: [
+          {type: "paragraph", text: "about_faq_answer_2"}
+        ]
       },
       {
         question: "about_faq_question_3",
-        answer: "about_faq_answer_3"
+        answer: [
+          {type: "paragraph", text: "about_faq_answer_3_1"},
+          {type: "link", text: "about_faq_answer_3_l1", href: "https://docs.google.com/spreadsheets/d/1iPk4UDFffbWG4kqoh6wOJY7j7WEvWPxaEImfljiTOB0/edit?usp=sharing"},
+          {type: "link", text: "about_faq_answer_3_l2", href: "https://docs.google.com/spreadsheets/d/1mPG5zgQmeh3vRsGQrIOq8hPONXNRGW1OC449ExAqMVs/edit?usp=sharing"},
+          {type: "link", text: "about_faq_answer_3_l3", href: "https://docs.google.com/spreadsheets/d/1Ue5cRW2rWlsZrnISWEgzuUsouIt6C0YI9t_tAPewMio/edit"},
+          {type: "paragraph", text: "about_faq_answer_3_2"}
+        ]
       },
       {
         question: "about_faq_question_4",
-        answer: "about_faq_answer_4"
+        answer: [
+          {type: "paragraph", text: "about_faq_answer_4"}
+        ]
       },
       {
         question: "about_faq_question_5",
-        answer: "about_faq_answer_5"
+        answer: [
+          {type: "paragraph", text: "about_faq_answer_5"}
+        ]
       }
     ]
   }
