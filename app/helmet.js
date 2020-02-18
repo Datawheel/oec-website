@@ -4,7 +4,7 @@ export default {
   link: [
     {rel: "icon", href: "/images/favicon.ico"},
     {rel: "preconnect", href: "https://fonts.gstatic.com/", crossorigin: ""},
-    {rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,600&display=swap"}
+    {rel: "stylesheet", href: "https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,400i,600&display=swap"}
   ],
   meta: [
     {charset: "utf-8"},

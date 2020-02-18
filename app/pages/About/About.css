@@ -4,28 +4,32 @@
   min-height: 100vh;
 
   & .about-content {
-    margin-left: 12rem;
-    margin-right: 12rem;
+    max-width: 695px;
+    margin: 0 auto 0 auto;
     padding-top: var(--nav-height);
 
-    & .about-info {
-      padding-top: var(--gutter-sm);
+    & .about-site {
+      & .site-info {
+        padding-top: var(--gutter-sm);
 
-      & .info-title {
-        font-size: var(--font-xxl);
-        font-weight: var(--base-font-weight);
-        line-height: 1;
-        margin-bottom: var(--gutter-sm);
-      }
-
-      & .info-text {
-        & .text {
-          color: var(--gray);
-          font-size: var(--font-xs);
+        & .info-title {
+          letter-spacing: var(--label-letter-spacing);
+          font-size: var(--font-xxl);
+          font-weight: 200;
           margin-bottom: var(--gutter-sm);
+        }
 
-          & .link {
-            color: var(--accent);
+        & .info-text {
+          & .text {
+            color: var(--gray);
+            font-size: var(--font-xs);
+            font-weight: 200;
+            line-height: 1.5;
+            margin-bottom: var(--gutter-sm);
+
+            & .link {
+              color: var(--accent);
+            }
           }
         }
       }

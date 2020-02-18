@@ -7,17 +7,26 @@ import "./About.css";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
-import AboutTeam from "components/AboutTeam";
 
-import {ABOUT} from "helpers/about";
+import AboutSite from "components/AboutSite";
+import AboutFAQ from "components/AboutFAQ";
 
 class index extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      _active: "site"
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      _active: this.props.location.hash.split("#")[1] || "site"
+    });
   }
 
   render() {
+    const {_active} = this.state;
     const {t} = this.props;
 
     return (
@@ -27,22 +36,8 @@ class index extends React.Component {
         </Helmet>
         <OECNavbar />
         <div className="about-content">
-          <div className="about-info">
-            <div className="info-title">{t(ABOUT[0].info.title)}</div>
-            <div className="info-text">
-              {ABOUT[0].info.text.map((d, k) =>
-                <p
-                  className={"text"}
-                  key={`${k}`}
-                  dangerouslySetInnerHTML={{__html: t(d)}}
-                />
-              )}
-            </div>
-          </div>
-
-          <AboutTeam data={ABOUT[0].team} type={"team"} t={t}/>
-
-          <AboutTeam data={ABOUT[0].contributors} type={"contributors"} t={t}/>
+          {_active === "site" && <AboutSite />}
+          {_active === "faq" && <AboutFAQ />}
         </div>
         <Footer />
       </div>
