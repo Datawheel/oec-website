@@ -57,6 +57,67 @@ class VbChart extends React.Component {
     const isTechnology = cube.includes("cpc");
     const isProduct = isFinite(viztype);
     const isFilter = !["show", "all"].includes(viztype);
+    const isTradeBalance = flow === "show";
+    const interval = time.split(".");
+    if (interval.length === 1) interval.push(interval[0]);
+
+    const cubeName = !isTechnology
+      ? `trade_i_baci_a_${cube.replace("hs", "")}`
+      : "patents_i_uspto_w_cpc";
+    const measureName = isTechnology ? "Patent Share" : "Trade Value";
+
+    if (isTradeBalance) {
+      const exportsBalanceParams = {
+        "cube": cubeName,
+        "drilldowns": "Year",
+        "measures": measureName,
+        "parents": true,
+        "Year": range(interval[0], interval[interval.length - 1]).join(),
+        "Exporter Country": countryId.map(d => d.value).join()
+      };
+
+      const importsBalanceParams = {
+        "cube": cubeName,
+        "drilldowns": "Year",
+        "measures": measureName,
+        "parents": true,
+        "Year": range(interval[0], interval[interval.length - 1]).join(),
+        "Importer Country": countryId.map(d => d.value).join()
+      };
+
+      if (partnerId) {
+        exportsBalanceParams["Importer Country"] = partnerId.map(d => d.value).join();
+        importsBalanceParams["Exporter Country"] = partnerId.map(d => d.value).join();
+      }
+
+      return axios.all([
+        axios.get("https://api.oec.world/tesseract/data", {
+          params: exportsBalanceParams
+        }),
+        axios.get("https://api.oec.world/tesseract/data", {
+          params: importsBalanceParams
+        })
+      ]).then(axios.spread((resp1, resp2) => {
+        const exportData = resp1.data.data;
+        const importData = resp2.data.data;
+        exportData.forEach(d => {
+          d["Trade Flow ID"] = 1;
+          d["Trade Flow"] = "Exports";
+        });
+
+        importData.forEach(d => {
+          d["Trade Flow ID"] = 2;
+          d["Trade Flow"] = "Imports";
+        });
+
+        this.setState({
+          data: [...exportData, ...importData],
+          loading: false,
+          scale: "Linear",
+          routeParams
+        });
+      }));
+    }
 
     const countryType = isTechnology ? "Organization Country" : flow === "export"
       ? "Exporter Country"
@@ -82,18 +143,10 @@ class VbChart extends React.Component {
 
     if (chart === "line") dd.show = isFilter ? countryType : "Section";
 
-    const interval = time.split(".");
-    if (interval.length === 1) interval.push(interval[0]);
-
     const drilldowns = ["Year"];
     if (!isTechnology) drilldowns.push(!dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance);
     if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
     if (isTechnology && partner === "all" && !isFilter) drilldowns.push(this.state.techDepth);
-
-    const cubeName = !isTechnology
-      ? `trade_i_baci_a_${cube.replace("hs", "")}`
-      : "patents_i_uspto_w_cpc";
-    const measureName = isTechnology ? "Patent Share" : "Trade Value";
 
     const params = {
       cube: cubeName,
@@ -201,6 +254,8 @@ class VbChart extends React.Component {
     const {routeParams} = this.state;
     const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
+
+    console.log(data);
 
     if (loading) {
       return <div className="vb-loading">
@@ -317,7 +372,7 @@ class VbChart extends React.Component {
           key={`lineplot_${this.state.scale}`}
           config={{
             ...baseConfig,
-            groupBy: viztype === "all" || isFinite(viztype)
+            groupBy: flow === "show" ? ["Trade Flow"] : viztype === "all" || isFinite(viztype)
               ? ["Continent", "Country"]
               : ["Section"],
             y: measure,

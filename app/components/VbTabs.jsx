@@ -348,6 +348,11 @@ class VbTabs extends React.Component {
                     {
                       name: t("Country"), nest: [
                         {
+                          name: t("Trade Balance"),
+                          permalink: "hs92/show/chl/all/all/1995.2017/",
+                          regexp: new RegExp(/line\/\w+\/show\/[a-z0-9.-]+\/all\/all\/[0-9.-]+\//)
+                        },
+                        {
                           name: t("Exports"),
                           permalink: "hs92/export/arg/all/show/2014.2017/",
                           regexp: new RegExp(/line\/\w+\/export\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
@@ -405,15 +410,19 @@ class VbTabs extends React.Component {
                           permalink: "hs92/import/chl/show/10101/2014.2017/",
                           regexp: new RegExp(/line\/\w+\/import\/[a-z0-9.-]+\/show\/((?!.*(all|show)).*)\/[0-9.-]+\//)
                         },
-                        {name: t("Trade Balance")}
-                      ]
-                    },
-                    {
-                      name: t("ECI Rankings"), nest: [
-                        {name: t("All Countries")},
-                        {name: t("Specific Country")}
+                        {
+                          name: t("Trade Balance"),
+                          permalink: "hs92/show/chl/chn/all/1995.2017/",
+                          regexp: new RegExp(/line\/\w+\/show\/[a-z0-9.-]+\/((?!.*(all|show)).*)\/all\/[0-9.-]+\//)
+                        }
                       ]
                     }
+                    // {
+                    //   name: t("ECI Rankings"), nest: [
+                    //     {name: t("All Countries")},
+                    //     {name: t("Specific Country")}
+                    //   ]
+                    // }
                   ]}
                 />
               }
