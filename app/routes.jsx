@@ -81,7 +81,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/subscription" component={Subscription} />
       <Route exact path="/:lang/subnational" component={Subnational} />
       <Route exact path="/:lang/prediction" component={Prediction} />
-      <Route exact path="/:lang/about/" component={About} />
+      <Route exact path="/:lang/about" component={About} />
       <Route exact path="/:lang/matrix" component={Matrix} />
       <Route exact path="/:lang/rankings/:category/:measure/" component={Rankings} />
     </Route>

@@ -12,7 +12,7 @@ import SearchMultiSelect from "components/SearchMultiSelect";
 import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
-import {PREDICTION_DATASETS} from "helpers/consts";
+import {DEFAULT_PREDICTION_COLOR, PREDICTION_DATASETS} from "helpers/consts";
 import "./Prediction.css";
 import {Alignment, AnchorButton, Button, Collapse, Navbar, Tabs, Tab} from "@blueprintjs/core";
 
@@ -150,7 +150,7 @@ class Prediction extends React.Component {
     // step 1: build api URLs
     const apiUrlRoot = `/api/predict?cube=${dataset.cube}&drilldowns=${dataset.dateDrilldown}&measures=Trade+Value`;
     let apiUrls = [apiUrlRoot];
-    let drilldowns = [{name: "Aggregate", color: "red", id: "xx"}];
+    let drilldowns = [{name: "Aggregate", color: DEFAULT_PREDICTION_COLOR, id: "xx"}];
     // Are there any drilldowns?
     const drillSelection = dataset.selections.find(s => s.id === currentDrilldown);
     if (drillSelection) {
@@ -305,6 +305,7 @@ class Prediction extends React.Component {
                 error={error}
                 loading={loading}
                 updateKey={updateKey}
+                currencyFormat={dataset.currencyFormat}
               />
               : null}
           </div>
@@ -328,6 +329,7 @@ class Prediction extends React.Component {
                 data={predictionData}
                 error={error}
                 loading={loading}
+                currencyFormat={dataset.currencyFormat}
               />
             </Collapse>
           </div>

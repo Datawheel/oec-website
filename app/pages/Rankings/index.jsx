@@ -13,6 +13,7 @@ import "./Rankings.css";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
+import Loading from "components/Loading";
 import RankingTable from "components/RankingTable";
 import RankingTableButtons from "components/RankingTableButtons";
 
@@ -30,12 +31,14 @@ class Rankings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: PAGE[0].title[this.props.params.category],
-      text: PAGE[0].text,
+      title: null,
+      text: null,
       data: null,
-      category: this.props.params.category || "country",
-      measure: this.props.params.measure || "eci",
-      filter: null
+      category: null,
+      measure: null,
+      filter: null,
+      _loading: true,
+      _valid: true
     };
     this.changeRange = this.changeRange.bind(this);
   }
@@ -145,41 +148,84 @@ class Rankings extends React.Component {
   }
 
   componentDidMount() {
-    const {category, measure} = this.state;
+    const category = this.props.params.category || "country";
+    const measure = this.props.params.measure || "eci";
+    const validCategory = ["country", "product"];
+    const _valid = validCategory.some(d => d === category);
 
-    const filter = FILTER_YEARS[measure].find(
-      d => d === this.props.location.search.split("=")[1]
-    );
+    // valid category on hash
+    if (_valid) {
+      const title = PAGE[0].title[category];
+      const text = PAGE[0].text;
+      const filter = FILTER_YEARS[measure].find(
+        d => d === this.props.location.search.split("=")[1]
+      );
 
-    const futureData = FILTER_YEARS[measure].map(d => {
-      const columns = this.createColumns(category, measure, d);
-      const lastYear = d.split("-")[1] * 1;
+      const futureData = FILTER_YEARS[measure].map(d => {
+        const columns = this.createColumns(category, measure, d);
+        const lastYear = d.split("-")[1] * 1;
 
-      const path =
-        category === "country"
-          ? `/json/rankings/oec_eci_${d}.json`
-          : `/json/rankings/oec_pci_hs6_${measure}_${d}.json`;
+        const path =
+          category === "country"
+            ? `/json/rankings/oec_eci_${d}.json`
+            : `/json/rankings/oec_pci_hs6_${measure}_${d}.json`;
 
-      return axios.get(path).then(resp => {
-        category === "country"
-          ? resp.data.map(d => d["Icon ID"] = d["Country ID"].slice(2))
-          : resp.data.map(d => d["Icon ID"] = d["HS6 ID"].toString().slice(0, -6));
-        resp.data.sort((a, b) => b[lastYear] - a[lastYear]);
-        return {filter: d, data: resp.data, cols: columns};
+        return axios.get(path).then(resp => {
+          category === "country"
+            ? resp.data.map(d => d["Icon ID"] = d["Country ID"].slice(2))
+            : resp.data.map(d => d["Icon ID"] = d["HS6 ID"].toString().slice(0, -6));
+          resp.data.sort((a, b) => b[lastYear] - a[lastYear]);
+          return {filter: d, data: resp.data, cols: columns};
+        });
       });
-    });
 
-    Promise.all(futureData).then(data =>
+      Promise.all(futureData).then(data =>
+        this.setState({
+          data: keyBy(data, "filter"),
+          filter: filter || FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1],
+          category,
+          measure,
+          title,
+          text,
+          _loading: false,
+          _valid
+        })
+      );
+    }
+
+    // invalid category on hash
+    if (!_valid) {
       this.setState({
-        data: keyBy(data, "filter"),
-        filter: filter || FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1]
-      })
-    );
+        _loading: false,
+        _valid
+      });
+    }
   }
 
   render() {
-    const {title, text, data, category, measure, filter} = this.state;
+    const {title, text, data, category, measure, filter, _loading, _valid} = this.state;
     const {t} = this.props;
+
+    if (_loading) {
+      return (
+        <div>
+          <Helmet>
+            <title>{t("Loading")}</title>
+          </Helmet>
+          <OECNavbar />
+          <Loading />
+          <Footer />
+        </div>
+      );
+    }
+
+    if (!_valid) {
+      return (
+        <div>
+          ERROR 404
+        </div>
+      );
+    }
 
     return (
       <div className="rankings-page">

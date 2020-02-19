@@ -86,3 +86,13 @@
     }
   }
 }
+
+.app-loading {
+  background-color: var(--dark-4);
+  color: var(--white);
+  min-height: 82vh;
+
+  & .bp3-heading {
+    display: none;
+  }
+}

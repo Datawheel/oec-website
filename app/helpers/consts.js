@@ -1,9 +1,12 @@
 const toHS = require("helpers/funcs.js").toHS;
 const colors = require("helpers/colors.js");
 const d3_composite = require("d3-composite-projections");
+const d3plus_format = require("d3plus-format");
 const locale = "en";
+const DEFAULT_PREDICTION_COLOR = "#209292";
 
 module.exports = {
+  DEFAULT_PREDICTION_COLOR,
   NAV: [
     // profiles
     {title: "Profiles", items: [
@@ -34,7 +37,7 @@ module.exports = {
     ]},
     // about
     {title: "About", items: [
-      {title: "About OEC",    url: `/${locale}/about/`},
+      {title: "About OEC",    url: `/${locale}/about`},
       {title: "OEC Pro",      url: `/${locale}/about#oec-pro`},
       {title: "FAQ",          url: `/${locale}/about#faq`},
       {title: "Publications", url: `/${locale}/about#publications`}
@@ -218,6 +221,7 @@ module.exports = {
       cube: "trade_i_baci_a_92",
       selectionsLoaded: false,
       dateDrilldown: "Year",
+      currencyFormat: d => `$${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
           dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
@@ -254,6 +258,7 @@ module.exports = {
       cube: "trade_i_comtrade_m_hs",
       selectionsLoaded: false,
       dateDrilldown: "Time",
+      currencyFormat: d => `$${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
           dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&drilldowns=Reporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
@@ -275,6 +280,191 @@ module.exports = {
         },
         {
           dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&drilldowns=Partner+Country&measures=Trade+Value&parents=true&sparse=false&properties=Partner+Country+ISO+3",
+          data: [],
+          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+          dimName: "Partner Country",
+          id: "destinations",
+          name: "Destination Country",
+          selected: []
+        }
+      ]
+    },
+    {
+      name: "Russian Subnational",
+      slug: "subnat-rus",
+      cube: "trade_s_rus_m_hs",
+      selectionsLoaded: false,
+      dateDrilldown: "Time",
+      currencyFormat: d => `${d3plus_format.formatAbbreviate(d)} ₽`,
+      selections: [
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_rus_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "Subnat Geography",
+          id: "subnats",
+          name: "Russian Region",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_rus_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+          dimName: "HS4",
+          id: "products",
+          name: "Product",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          data: [],
+          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+          dimName: "Partner Country",
+          id: "destinations",
+          name: "Destination Country",
+          selected: []
+        }
+      ]
+    },
+    {
+      name: "Japanese Subnational",
+      slug: "subnat-jpn",
+      cube: "trade_s_jpn_m_hs",
+      selectionsLoaded: false,
+      dateDrilldown: "Time",
+      currencyFormat: d => `¥ ${d3plus_format.formatAbbreviate(d)}`,
+      selections: [
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_jpn_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "Subnat Geography",
+          id: "subnats",
+          name: "Prefecture",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_jpn_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+          dimName: "HS4",
+          id: "products",
+          name: "Product",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_jpn_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          data: [],
+          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+          dimName: "Partner Country",
+          id: "destinations",
+          name: "Destination Country",
+          selected: []
+        }
+      ]
+    },
+    {
+      name: "Spanish Subnational",
+      slug: "subnat-esp",
+      cube: "trade_s_esp_m_hs",
+      selectionsLoaded: false,
+      dateDrilldown: "Time",
+      currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
+      selections: [
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_esp_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "Subnat Geography",
+          id: "subnats",
+          name: "City",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_esp_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+          dimName: "HS4",
+          id: "products",
+          name: "Product",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          data: [],
+          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+          dimName: "Partner Country",
+          id: "destinations",
+          name: "Destination Country",
+          selected: []
+        }
+      ]
+    },
+    {
+      name: "Canadian Provinces",
+      slug: "subnat-can",
+      cube: "trade_s_can_m_hs",
+      selectionsLoaded: false,
+      dateDrilldown: "Time",
+      currencyFormat: d => `CAN ${d3plus_format.formatAbbreviate(d)}`,
+      selections: [
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_can_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "Subnat Geography",
+          id: "subnats",
+          name: "Province or Territory",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_can_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+          dimName: "HS4",
+          id: "products",
+          name: "Product",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_can_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          data: [],
+          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+          dimName: "Partner Country",
+          id: "destinations",
+          name: "Destination Country",
+          selected: []
+        }
+      ]
+    },
+    {
+      name: "German States",
+      slug: "subnat-deu",
+      cube: "trade_s_deu_m_egw",
+      selectionsLoaded: false,
+      dateDrilldown: "Time",
+      currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
+      selections: [
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_deu_m_egw&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "Subnat Geography",
+          id: "subnats",
+          name: "Province or Territory",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_deu_m_egw&Year=2017&drilldowns=Product&measures=Trade+Value&parents=true&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Product ID"], displayId: d["Product ID"], name: d.Product, color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "HS4",
+          id: "products",
+          name: "Product",
+          selected: []
+        },
+        {
+          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_deu_m_egw&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",

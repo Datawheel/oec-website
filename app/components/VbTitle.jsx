@@ -31,6 +31,7 @@ class VbTitle extends React.Component {
     const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
     const isGeoGrouping = new RegExp(/show/).test(partner);
     const isProduct = new RegExp(/^(?!(all|show)).*$/).test(viztype);
+    const isTradeBalance = flow === "show";
 
     const preps = {
       export: "to",
@@ -55,8 +56,12 @@ class VbTitle extends React.Component {
       title = t("vb_title_rings", {country: _countryNames, product: _productNames, time});
     }
     else if (chart === "scatter") {
-
       title = t("vb_title_scatter", {measure: xScale.title, compare: yScale.title, time});
+    }
+    else if (isTradeBalance) {
+      title = isPartner
+        ? t("vb_title_trade_balance_partner", {country: _countryNames, partner: _partnerNames, time})
+        : t("vb_title_trade_balance", {country: _countryNames, time});
     }
     else if (isTrade) {
       // Titles for Trade charts
