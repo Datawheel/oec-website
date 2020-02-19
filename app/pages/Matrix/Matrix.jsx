@@ -1,6 +1,8 @@
 import axios from "axios";
 import React from "react";
 
+const cap = s => s && typeof s === "string" ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+
 class Matrix extends React.Component {
   
   constructor(props) {
@@ -22,32 +24,39 @@ class Matrix extends React.Component {
 
     if (!matrix) return null;
 
-    const international = matrix.filter(d => d.grouping.includes("International"));
-    const subnational = matrix.filter(d => d.grouping.includes("Subnational"));
-
     return (
       <div className="matrix-page">
-        <h3>Data Availability Matrix</h3>
-        <table>
-          <tr>
-            <th>CubeName</th>
-            <th>Geo Resolution</th>
-            <th>Product Resolution</th>
-            <th>Time Resolution</th>
-            <th>Data Start</th>
-            <th>Data End</th>
-          </tr>
-          {matrix.map(row => 
-            <tr key={row.name}>
-              <td>{row.name}</td>
-              <td>{row.resolutions.geography || "-"}</td>
-              <td>{row.resolutions.product || "-"}</td>
-              <td>{row.resolutions.time}</td>
-              <td>{row.start}</td>
-              <td>{row.end}</td>
-            </tr>
-          )}
-        </table>
+        <h1>Data Availability Matrix</h1>
+        {Object.keys(matrix).map(nation => 
+          <div key={nation}>
+            <h2>{cap(nation)}</h2>
+            {Object.keys(matrix[nation]).map(group => 
+              <div key={group}>
+                <h3>{cap(group)}</h3>
+                <table border="1">
+                  <tr>
+                    <th>Dataset</th>
+                    <th>Geo Resolution</th>
+                    <th>Product Resolution</th>
+                    <th>Time Resolution</th>
+                    <th>Data Start</th>
+                    <th>Data End</th>
+                  </tr>
+                  {matrix[nation][group].map(cube => 
+                    <tr key={cube.name}>
+                      <td>{cube.fullName}</td>
+                      <td>{cube.resolutions.geography || "-"}</td>
+                      <td>{cube.resolutions.product || "-"}</td>
+                      <td>{cube.resolutions.time}</td>
+                      <td>{cube.start}</td>
+                      <td>{cube.end}</td>
+                    </tr>
+                  )}
+                </table>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     );
   }
