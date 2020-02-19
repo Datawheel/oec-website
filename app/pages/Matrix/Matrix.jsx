@@ -22,6 +22,9 @@ class Matrix extends React.Component {
 
     if (!matrix) return null;
 
+    const international = matrix.filter(d => d.grouping.includes("International"));
+    const subnational = matrix.filter(d => d.grouping.includes("Subnational"));
+
     return (
       <div className="matrix-page">
         <h3>Data Availability Matrix</h3>
