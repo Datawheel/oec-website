@@ -19,7 +19,7 @@ class PredictionViz extends React.Component {
   toggleVizShowOptions = stateKey => () => this.setState({[stateKey]: !this.state[stateKey]})
 
   render() {
-    const {data, error, loading, updateKey} = this.props;
+    const {data, currencyFormat, error, loading, updateKey} = this.props;
     const {showObserved, showPrediction, showTrend} = this.state;
     const actualPoints = showObserved ? data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `${d.Drilldown.name} (Observed)`, color: d.Drilldown.color, shape: "Circle"})) : [];
     const trendLine = showTrend ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Trend)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.trend, "yhat_upper": d.trend, "yhat_lower": d.trend})) : [];
@@ -72,9 +72,15 @@ class PredictionViz extends React.Component {
             stroke: "#15191F"
           },
           gridConfig: {
-            stroke: "#15191F",
+            stroke: d => d.id === 0 ? "#919ca4" : "#15191F",
             strokeWidth: 1
-          }
+          },
+          shapeConfig: {
+            labelConfig: {
+              fontSize: () => 17
+            }
+          },
+          tickFormat: currencyFormat
         },
         x: "ds",
         time: "ds",
@@ -86,6 +92,11 @@ class PredictionViz extends React.Component {
           gridConfig: {
             stroke: "#15191F",
             strokeWidth: 1
+          },
+          shapeConfig: {
+            labelConfig: {
+              fontSize: () => 17
+            }
           }
         }
       }} />

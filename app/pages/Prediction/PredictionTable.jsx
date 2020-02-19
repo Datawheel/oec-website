@@ -31,8 +31,11 @@ class PredictionTable extends React.Component {
     seasonalityMode: "multiplicative"
   };
 
+  // could also use this to format numbers:
+  // new Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(props.value)
+
   render() {
-    const {data} = this.props;
+    const {data, currencyFormat} = this.props;
     const columns = [{
       id: "drilldown", // Required because our accessor is not a string
       Header: "Name",
@@ -44,22 +47,22 @@ class PredictionTable extends React.Component {
     }, {
       Header: "Observed Value",
       accessor: "y_orig",
-      Cell: props => <div className="number">{new Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(props.value)}</div>,
+      Cell: props => <div className="number">{currencyFormat(props.value)}</div>,
       width: getColumnWidth(data, "y_orig", "Observed Value")
     }, {
       Header: "Predicted Value",
       accessor: "yhat",
-      Cell: props => <div className="number">{new Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(props.value)}</div>,
+      Cell: props => <div className="number">{currencyFormat(props.value)}</div>,
       width: getColumnWidth(data, "yhat", "Predicted Value")
     }, {
       Header: "Predicted Value (lower)",
       accessor: "yhat_lower",
-      Cell: props => <div className="number">{new Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(props.value)}</div>,
+      Cell: props => <div className="number">{currencyFormat(props.value)}</div>,
       width: getColumnWidth(data, "yhat_lower", "Predicted Value (lower)")
     }, {
       Header: "Predicted Value (upper)",
       accessor: "yhat_upper",
-      Cell: props => <div className="number">{new Intl.NumberFormat("en-US", {style: "currency", currency: "USD"}).format(props.value)}</div>,
+      Cell: props => <div className="number">{currencyFormat(props.value)}</div>,
       width: getColumnWidth(data, "yhat_Upper", "Predicted Value (upper)")
     }];
 

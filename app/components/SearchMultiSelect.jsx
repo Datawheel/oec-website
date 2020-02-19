@@ -107,7 +107,7 @@ class SearchMultiSelect extends React.Component {
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={this.handleItemSelect}
         popoverProps={{minimal: true}}
-        resetOnSelect={false}
+        resetOnSelect={true}
         resetOnQuery={false}
         tagInputProps={{
           onRemove: this.handleTagRemove,
@@ -117,6 +117,11 @@ class SearchMultiSelect extends React.Component {
             return {
               style: {backgroundColor: thisItem.color}
             };
+          },
+          inputProps: {
+            onBlur: () => {
+              // console.log("this1!!", this);
+            }
           }
         }}
         tagRenderer={this.renderTag}

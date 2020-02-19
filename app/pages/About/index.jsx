@@ -15,7 +15,7 @@ class index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      _active: "site"
+      _active: ""
     };
   }
 

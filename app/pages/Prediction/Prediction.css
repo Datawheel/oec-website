@@ -23,6 +23,7 @@
 
     &.advanced-params {
       border: solid 1px var(--light-1);
+      margin: 0 0 20px 0;
     }
 
     & .prediction-control {
@@ -125,13 +126,14 @@ tabs
 
     /* interactions */
     &:hover, &:focus {
-      color: var(--dark-1) !important;
+      color: var(--light-1) !important;
     }
 
     /* active tab */
     &[aria-selected=true] {
-      background-color: var(--light-1) !important;
-      color: var(--dark-1);
+      /* background-color: var(--light-1) !important; */
+      background-color: rgba(115, 134, 148, 0.3) !important;
+      color: var(--light-1);
       border-color: var(--light-2);
       border-bottom-color: var(--light-1);
       z-index: 1;

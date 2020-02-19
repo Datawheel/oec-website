@@ -1,6 +1,13 @@
 .subnational-country-block {
   border-bottom: 1px solid #666;
   padding: 10px 0px;
+  & .subnational-country-block-anchor{
+    display: inline-block;
+    margin-top: -60px;
+    outline: 0;
+    padding-top: 60px;
+    position: relative;
+  }
   & .subnational-block-content{
     display: flex;
   }
