@@ -1,22 +1,21 @@
 import React from "react";
+import axios from "axios";
+import {withNamespaces} from "react-i18next";
 import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import {connect} from "react-redux";
-import {withNamespaces} from "react-i18next";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 
-import "./Vizbuilder.css";
-import VbTabs from "../../components/VbTabs";
-import VbChart from "../../components/VbChart";
-import VirtualSelector from "../../components/VirtualSelector";
-import OECMultiSelect from "../../components/OECMultiSelect";
-import VbTitle from "../../components/VbTitle";
-import axios from "axios";
-import colors from "../../helpers/colors";
-import OECMultiSelectV2 from "../../components/OECMultiSelectV2";
+import VbTabs from "components/VbTabs";
+import VbChart from "components/VbChart";
+import VirtualSelector from "components/VirtualSelector";
+import OECMultiSelect from "components/OECMultiSelect";
+import VbTitle from "components/VbTitle";
+import colors from "helpers/colors";
+import OECMultiSelectV2 from "components/OECMultiSelectV2";
+import SelectMultiSection from "components/SelectMultiSection";
 
-import {nest} from "d3-collection";
-import SelectMultiSection from "../../components/SelectMultiSection";
+import "./Vizbuilder.css";
 
 const datasets = [
   {value: "hs92", title: "HS92"},
@@ -30,15 +29,6 @@ const datasets = [
 const flow = [
   {value: "export", title: "Exports"},
   {value: "import", title: "Imports"}
-];
-
-const scatterYAxisOptions = [
-  {value: "gdp", title: "GDP"},
-  {value: "gdp_constant", title: "GDP (constant '10 US$)"},
-  {value: "gdp_pc_current", title: "GDPpc (current US$)"},
-  {value: "gdp_pc_constant", title: "GDPpc (constant '10 US$)"},
-  {value: "gdp_pc_current_ppp", title: "GDPpc PP (current US$)"},
-  {value: "gdp_pc_constant_ppp", title: "GDPpc PP (constant '11 US$)"}
 ];
 
 const years = [...Array(56).keys()].map(d => ({value: 2019 - d, title: 2019 - d}));
@@ -107,10 +97,7 @@ class Vizbuilder extends React.Component {
     };
   }
 
-
-  componentDidMount() {
-    const {routeParams} = this.props;
-    const {country, cube, partner, time, viztype, flow} = routeParams;
+  componentDidMount = () => {
     window.addEventListener("scroll", this.handleScroll);
 
     // Gets members of HS products, Countries and Technologies
@@ -148,9 +135,7 @@ class Vizbuilder extends React.Component {
 
   }
 
-
-
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener("scroll", this.handleScroll);
   }
 
@@ -158,12 +143,18 @@ class Vizbuilder extends React.Component {
     throttle(() => {
       this.setState({scrolled: window.scrollY > 220});
     }, 30);
-  };
+  }
 
   handleTabOption = d => {
     const {router} = this.props;
-    this.setState(d, () => this.updateFilterSelected());
-    router.push(d.permalink);
+    const permalink = d.permalink;
+    if (permalink) {
+      this.updateFilterSelected({permalink});
+      router.push(permalink);
+    }
+    else {
+      this.setState(d);
+    }
   }
 
   /**
@@ -237,8 +228,8 @@ class Vizbuilder extends React.Component {
       [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
     }
 
-    const _yAxis = wdiIndicators.find(d => d.value === country);
-    const _xAxis = wdiIndicators.find(d => d.value === flow);
+    const _yAxis = wdiIndicators.find(d => d.value === country) || {};
+    const _xAxis = wdiIndicators.find(d => d.value === flow) || {};
 
     const _selectedItemsCountry = countryData
       .filter(d => country.split(".").includes(d.label));
@@ -286,7 +277,7 @@ class Vizbuilder extends React.Component {
     return <div id="vizbuilder">
       <OECNavbar
         className={scrolled ? "background" : ""}
-        title={"Hello"}
+        title={"OEC"}
         scrolled={scrolled}
       />
 
@@ -302,7 +293,7 @@ class Vizbuilder extends React.Component {
             {!["network", "scatter"].includes(chart) && isTrade && <div className="columns">
               <div className="column-1">
                 <div className="select-multi-section-wrapper">
-                  <h4 className="title">Product</h4>
+                  <h4 className="title">{t("Product")}</h4>
                   <SelectMultiSection
                     items={this.state.product}
                     onItemSelect={item => {

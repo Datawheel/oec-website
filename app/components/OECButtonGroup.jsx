@@ -6,7 +6,6 @@ import "./OECButtonGroup.css";
 export default class OECButtonGroup extends React.Component {
   render() {
     const {items, selected, title} = this.props;
-    console.log(selected, items);
     return <div className="oec-button-group cp-button-group">
       {title && <h6 className="oec-button-group-title">{title}</h6>}
       <div className="oec-button-group-items">{items.map((d, i) => <Button
