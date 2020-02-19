@@ -37,7 +37,7 @@ module.exports = {
     ]},
     // about
     {title: "About", items: [
-      {title: "About OEC",    url: `/${locale}/about/`},
+      {title: "About OEC",    url: `/${locale}/about`},
       {title: "OEC Pro",      url: `/${locale}/about#oec-pro`},
       {title: "FAQ",          url: `/${locale}/about#faq`},
       {title: "Publications", url: `/${locale}/about#publications`}
