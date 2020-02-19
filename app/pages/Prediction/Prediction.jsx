@@ -294,7 +294,7 @@ class Prediction extends React.Component {
                   items={selection.data}
                   toggleDrilldown={this.toggleDrilldown(selection.id)} />)
               : null}
-            <Button rightIcon="arrow-right" intent="success" text="Go" minimal={true} onClick={this.buildPrediction} />
+            <Button className="build-prediction-btn" rightIcon="arrow-right" text="Build" minimal={true} onClick={this.buildPrediction} />
           </div>
 
           {/* prediction viz line chart */}
