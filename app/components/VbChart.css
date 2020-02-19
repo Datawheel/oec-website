@@ -2,6 +2,12 @@
   height: calc(100vh - var(--nav-height) - 8rem);
 }
 
+.vb-chart-options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .vb-loading {
   height: calc(100vh - var(--nav-height) - 8rem);
   width: 100%;

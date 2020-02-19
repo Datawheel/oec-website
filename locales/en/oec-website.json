@@ -159,6 +159,8 @@
   "vb_title_network_relatedness": "What are the export opportunities of {{country}}? ({{time}})",
   "vb_title_rings": "What does {{country}} export that is similar to {{product}}? ({{time}})",
   "vb_title_scatter": "How does {{measure}} compare to {{compare}}? ({{time}})",
+  "vb_title_trade_balance": "What is the trade balance for {{country}}? ({{time}})",
+  "vb_title_trade_balance_partner": "What is the trade balance for {{country}} to {{partner}}? ({{time}})",
   "vb_title_what_country_flow": "What does {{country}} {{flow}}? ({{time}})",
   "vb_title_what_country_flow_partner": "What does {{country}} {{flow}} to {{partner}}? ({{time}})",
   "vb_title_what_country_patent": "What does {{country}} patent? ({{time}})",

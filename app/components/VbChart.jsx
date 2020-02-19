@@ -13,6 +13,8 @@ import "./VbChart.css";
 import countryMembers from "../../static/members/country.json";
 import OECButtonGroup from "./OECButtonGroup";
 
+const ddTech = ["Section", "Superclass", "Class", "Subclass"];
+
 class VbChart extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,8 @@ class VbChart extends React.Component {
       loading: true,
       routeParams: this.props.routeParams,
       scale: "Log",
-      depth: "HS4"
+      depth: "HS4",
+      techDepth: ddTech[ddTech.length - 1]
     };
   }
 
@@ -54,6 +57,67 @@ class VbChart extends React.Component {
     const isTechnology = cube.includes("cpc");
     const isProduct = isFinite(viztype);
     const isFilter = !["show", "all"].includes(viztype);
+    const isTradeBalance = flow === "show";
+    const interval = time.split(".");
+    if (interval.length === 1) interval.push(interval[0]);
+
+    const cubeName = !isTechnology
+      ? `trade_i_baci_a_${cube.replace("hs", "")}`
+      : "patents_i_uspto_w_cpc";
+    const measureName = isTechnology ? "Patent Share" : "Trade Value";
+
+    if (isTradeBalance) {
+      const exportsBalanceParams = {
+        "cube": cubeName,
+        "drilldowns": "Year",
+        "measures": measureName,
+        "parents": true,
+        "Year": range(interval[0], interval[interval.length - 1]).join(),
+        "Exporter Country": countryId.map(d => d.value).join()
+      };
+
+      const importsBalanceParams = {
+        "cube": cubeName,
+        "drilldowns": "Year",
+        "measures": measureName,
+        "parents": true,
+        "Year": range(interval[0], interval[interval.length - 1]).join(),
+        "Importer Country": countryId.map(d => d.value).join()
+      };
+
+      if (partnerId) {
+        exportsBalanceParams["Importer Country"] = partnerId.map(d => d.value).join();
+        importsBalanceParams["Exporter Country"] = partnerId.map(d => d.value).join();
+      }
+
+      return axios.all([
+        axios.get("https://api.oec.world/tesseract/data", {
+          params: exportsBalanceParams
+        }),
+        axios.get("https://api.oec.world/tesseract/data", {
+          params: importsBalanceParams
+        })
+      ]).then(axios.spread((resp1, resp2) => {
+        const exportData = resp1.data.data;
+        const importData = resp2.data.data;
+        exportData.forEach(d => {
+          d["Trade Flow ID"] = 1;
+          d["Trade Flow"] = "Exports";
+        });
+
+        importData.forEach(d => {
+          d["Trade Flow ID"] = 2;
+          d["Trade Flow"] = "Imports";
+        });
+
+        this.setState({
+          data: [...exportData, ...importData],
+          loading: false,
+          scale: "Linear",
+          routeParams
+        });
+      }));
+    }
 
     const countryType = isTechnology ? "Organization Country" : flow === "export"
       ? "Exporter Country"
@@ -67,31 +131,22 @@ class VbChart extends React.Component {
       ? "Importer Country"
       : "Exporter Country";
 
-    const ddTech = ["Section", "Superclass", "Class", "Subclass"];
-
     const dd = {
       show: isTechnology
         ? isFilter
           ? ddTech[viztype.length - 1]
-          : "Subclass"
-        : countryId.length === 0 || isProduct ? countryTypeBalance : "HS4",
-      all: countryTypeBalance
+          : this.state.techDepth
+        : countryId.length === 0 || isProduct ? countryTypeBalance : this.state.depth,
+      all: countryTypeBalance,
+      wildcard: isProduct && countryId.length === 0 ? countryType : countryTypeBalance
     };
 
-    if (chart === "line") dd.show = "Section";
-
-    const interval = time.split(".");
-    if (interval.length === 1) interval.push(interval[0]);
+    if (chart === "line") dd.show = isFilter ? countryType : "Section";
 
     const drilldowns = ["Year"];
-    if (!isTechnology) drilldowns.push(!dd[viztype] ? dd.show : dd[viztype] || countryTypeBalance);
+    if (!isTechnology) drilldowns.push(!dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance);
     if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
-    if (isTechnology && partner === "all") drilldowns.push("Subclass");
-
-    const cubeName = !isTechnology
-      ? `trade_i_baci_a_${cube.replace("hs", "")}`
-      : "patents_i_uspto_w_cpc";
-    const measureName = isTechnology ? "Patent Share" : "Trade Value";
+    if (isTechnology && partner === "all" && !isFilter) drilldowns.push(this.state.techDepth);
 
     const params = {
       cube: cubeName,
@@ -103,12 +158,12 @@ class VbChart extends React.Component {
         : range(interval[0], interval[interval.length - 1]).join()
     };
 
-    if (countryId) params[countryType] = countryId.map(d => d.value).join();
+    if (countryId && countryId.length > 0) params[countryType] = countryId.map(d => d.value).join();
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
     if (isProduct) {
       const productTemp = viztype.split(".")[0];
       const productLevels = ["Section", "HS2", "HS4", "HS6"];
-      const n = (productTemp.length - (productTemp.length / 2 >> 0)) / 2;
+      const n = Math.ceil((productTemp.length - (productTemp.length / 2 >> 0)) / 2);
       params[productLevels[n]] = viztype.replace(".", ",");
     }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
@@ -166,7 +221,6 @@ class VbChart extends React.Component {
       };
       return axios.get("/api/gdp/eci", {params: scatterParams}).then(resp => {
         const data = resp.data;
-        console.log(resp);
         this.setState({
           data,
           loading: false,
@@ -174,6 +228,8 @@ class VbChart extends React.Component {
         });
       });
     }
+
+    console.log(params);
 
     return axios.get("https://api.oec.world/tesseract/data", {
       params
@@ -198,6 +254,8 @@ class VbChart extends React.Component {
     const {routeParams} = this.state;
     const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
+
+    console.log(data);
 
     if (loading) {
       return <div className="vb-loading">
@@ -229,13 +287,16 @@ class VbChart extends React.Component {
     const isTechnology = cube.includes("cpc");
     const isFilter = !["show", "all"].includes(viztype);
 
+    const tickFormatter = value => !isTechnology ? `$${formatAbbreviate(value)}` : formatAbbreviate(value);
+
     const baseConfig = {
       data: data || [],
       groupBy: isTechnology && isFilter
-        ? country === "show" ? ["Continent", "Country"] : ["Section", "Subclass"]
+        ? country === "show" ? ["Continent", "Country"] : ["Section", this.state.techDepth]
         : viztype === "all" || isFinite(viztype) || isFilter
           ? ["Continent", "Country"]
-          : isTechnology ? ["Section", "Subclass"] : ["Section", "HS4"]
+          : isTechnology ? ["Section", this.state.techDepth] : ["Section", this.state.depth],
+      totalFormat: d => `Total: ${tickFormatter(d)}`
     };
 
     if (isTechnology) {
@@ -245,7 +306,6 @@ class VbChart extends React.Component {
     }
 
     const measure = isTechnology ? "Patent Share" : "Trade Value";
-    console.log(data);
 
     if (chart === "tree_map" && data && data.length > 0) {
       return <div className="vb-chart">
@@ -256,12 +316,20 @@ class VbChart extends React.Component {
             total: measure
           }}
         />
-        <OECButtonGroup
-          items={["HS2", "HS4", "HS6"]}
-          selected={this.state.depth}
-          title={"Depth"}
-          callback={depth => this.setState({depth})}
-        />
+        <div className="vb-chart-options">
+          {!isTechnology && <OECButtonGroup
+            items={["HS2", "HS4", "HS6"]}
+            selected={this.state.depth}
+            title={"Depth"}
+            callback={depth => this.setState({depth}, () => this.fetchData())}
+          />}
+          {isTechnology && <OECButtonGroup
+            items={ddTech.slice(1)}
+            selected={this.state.techDepth}
+            title={"Depth"}
+            callback={depth => this.setState({techDepth: depth}, () => this.fetchData())}
+          />}
+        </div>
       </div>;
     }
 
@@ -270,11 +338,30 @@ class VbChart extends React.Component {
         <StackedArea
           config={{
             ...baseConfig,
+            total: undefined,
             y: measure,
+            yConfig: {
+              tickFormat: d => tickFormatter(d),
+              scale: "linear"
+            },
             x: "Year"
           // time: "Year"
           }}
         />
+        <div className="vb-chart-options">
+          {!isTechnology && <OECButtonGroup
+            items={["HS2", "HS4", "HS6"]}
+            selected={this.state.depth}
+            title={"Depth"}
+            callback={depth => this.setState({depth}, () => this.fetchData())}
+          />}
+          {isTechnology && <OECButtonGroup
+            items={ddTech.slice(1)}
+            selected={this.state.techDepth}
+            title={"Depth"}
+            callback={depth => this.setState({techDepth: depth}, () => this.fetchData())}
+          />}
+        </div>
       </div>;
     }
 
@@ -285,7 +372,7 @@ class VbChart extends React.Component {
           key={`lineplot_${this.state.scale}`}
           config={{
             ...baseConfig,
-            groupBy: viztype === "all" || isFinite(viztype)
+            groupBy: flow === "show" ? ["Trade Flow"] : viztype === "all" || isFinite(viztype)
               ? ["Continent", "Country"]
               : ["Section"],
             y: measure,
