@@ -14,6 +14,7 @@ import Methodology from "./Methodology";
 import Permissions from "./Permissions";
 import Privacy from "./Privacy";
 import Publications from "./Publications";
+import Terms from "./Terms";
 
 class Resources extends Component {
   render() {
@@ -41,6 +42,8 @@ class Resources extends Component {
                 return <Privacy />;
               case "publications":
                 return <Publications />;
+              case "terms":
+                return <Terms />;
               default:
                 return <Error />;
             }
