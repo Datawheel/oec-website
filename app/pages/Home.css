@@ -58,6 +58,11 @@
               color: var(--light-3);
             }
           }
+          & .cms-profilesearch-list {
+            background: var(--dark-3);
+            height: auto;
+            max-height: 300px;
+          }
           & .cms-profilesearch-list-item-link {
             @mixin font-md;
             background-color: var(--dark-3);
