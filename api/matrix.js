@@ -28,12 +28,6 @@ const FEATURE_MATRIX = {
       {
         cubeName: "trade_i_baci_a_92",
         fullName: "International Trade Data (BACI 92)"
-      }
-    ],
-    services: [
-      {
-        cubeName: "services_i_comtrade_a_eb02",
-        fullName: "Comtrade Services (EB02)"
       },
       {
         cubeName: "trade_i_comtrade_a_sitc2",
@@ -42,6 +36,12 @@ const FEATURE_MATRIX = {
       {
         cubeName: "trade_i_comtrade_m_hs",
         fullName: "Comtrade Services (HS)"
+      }
+    ],
+    services: [
+      {
+        cubeName: "services_i_comtrade_a_eb02",
+        fullName: "Comtrade Services (EB02)"
       }
     ],
     tariffs: [
