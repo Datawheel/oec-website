@@ -6,6 +6,7 @@ const locale = "en";
 const DEFAULT_PREDICTION_COLOR = "#209292";
 
 module.exports = {
+  EMAIL: "support@oec.world",
   DEFAULT_PREDICTION_COLOR,
   NAV: [
     // profiles

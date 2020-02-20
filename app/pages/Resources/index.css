@@ -1,0 +1,10 @@
+.resources {
+  background: var(--dark-4);
+  color: var(--white);
+  padding-top: var(--nav-height);
+  & .resources-content {
+    margin: var(--gutter-sm) auto;
+    max-width: 600px;
+    width: 100%;
+  }
+}

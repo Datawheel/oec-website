@@ -16,6 +16,7 @@ import Account from "./pages/User/Account";
 import Subscription from "./pages/User/Subscription";
 import Rankings from "./pages/Rankings";
 import About from "./pages/About";
+import Resources from "./pages/Resources";
 
 /** */
 export default function RouteCreate() {
@@ -81,6 +82,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/subnational" component={Subnational} />
       <Route exact path="/:lang/prediction" component={Prediction} />
       <Route exact path="/:lang/about" component={About} />
+      <Route exact path="/:lang/resources/:page" component={Resources} />
       <Route exact path="/:lang/rankings/:category/:measure/" component={Rankings} />
     </Route>
   );
