@@ -38,17 +38,17 @@ module.exports = {
     ]},
     // about
     {title: "About", items: [
-      {title: "About OEC",    url: `/${locale}/about`},
-      {title: "OEC Pro",      url: `/${locale}/about#oec-pro`},
-      {title: "FAQ",          url: `/${locale}/about#faq`},
-      {title: "Publications", url: `/${locale}/about#publications`}
+      {title: "About OEC",    url: `/${locale}/resources/about`},
+      {title: "OEC Pro",      url: `/${locale}/resources/oec-pro`},
+      {title: "FAQ",          url: `/${locale}/resources/faq`},
+      {title: "Publications", url: `/${locale}/resources/publications`}
     ]},
     // data
     {title: "Data", items: [
-      {title: "The data",     url: `/${locale}/data/`},
-      {title: "Methodology",  url: `/${locale}/data#methodology`},
-      {title: "Permissions",  url: `/${locale}/data#permissions`},
-      {title: "API",          url: `/${locale}/data#api`}
+      {title: "The data",     url: `/${locale}/resources/data/`},
+      {title: "Methodology",  url: `/${locale}/resources/methodology`},
+      {title: "Permissions",  url: `/${locale}/resources/permissions`},
+      {title: "API",          url: `/${locale}/resources/api`}
     ]},
     // rankings
     {title: "Rankings", items: [

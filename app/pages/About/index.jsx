@@ -11,6 +11,7 @@ import Loading from "components/Loading";
 
 import AboutSite from "components/AboutSite";
 import AboutFAQ from "components/AboutFAQ";
+import AboutPublications from "components/AboutPublications";
 
 class index extends React.Component {
   constructor(props) {
@@ -72,6 +73,7 @@ class index extends React.Component {
         <div className="about-content">
           {_active === "site" && <AboutSite />}
           {_active === "faq" && <AboutFAQ />}
+          {_active === "publications" && <AboutPublications />}
         </div>
         <Footer />
       </div>
