@@ -88,10 +88,10 @@
     "Confirm Password": "Confirm Password",
     "E-mail": "E-mail",
     "Password": "Password",
-    "PrivacyTermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a> and <a href='{{privacy}}'>Privacy Policy</a>",
+    "PrivacyTermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms and Conditions</a> and <a href='{{privacy}}'>Privacy Policy</a>",
     "PrivacyText": "By checking this box, you agree to our <a href='{{privacy}}'>Privacy Policy</a>",
     "Sign Up": "Sign Up",
-    "TermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a>",
+    "TermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms and Conditions</a>",
     "Username": "Username",
     "error": {
       "Exists": "E-mail or Username already in use",

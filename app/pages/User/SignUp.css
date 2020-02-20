@@ -48,6 +48,13 @@
           background: var(--accent);
         }
       }
+      & .bp3-control.bp3-checkbox {
+        color: var(--white);
+        & a {
+          color: var(--white);
+          font-weight: bold;
+        }
+      }
     }
     & .signup-page-signup {
       color: var(--light-3);
