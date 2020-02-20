@@ -7,6 +7,7 @@ import Footer from "../../components/Footer";
 
 import Error from "../../components/Error";
 import Privacy from "./Privacy";
+import Terms from "./Terms";
 
 class Resources extends Component {
 
@@ -22,6 +23,8 @@ class Resources extends Component {
             switch (page) {
               case "privacy":
                 return <Privacy />;
+              case "terms":
+                return <Terms />;
               default:
                 return <Error />;
             }
