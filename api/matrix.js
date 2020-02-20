@@ -1,5 +1,6 @@
 const axios = require("axios");
 const yn = require("yn");
+const {timeFormat} = require("d3-time-format");
 
 let {CANON_CMS_CUBES} = process.env;
 if (CANON_CMS_CUBES.substr(-1) === "/") CANON_CMS_CUBES = CANON_CMS_CUBES.substr(0, CANON_CMS_CUBES.length - 1);
@@ -26,7 +27,7 @@ const FEATURE_MATRIX = {
       },
       {
         cubeName: "trade_i_baci_a_92",
-        fullName: "International Trade Data (BACI 96)"
+        fullName: "International Trade Data (BACI 92)"
       }
     ],
     services: [
@@ -144,18 +145,18 @@ const catcher = e => {
 const dateFormat = d => {
   d = String(d);
   if (d.length === 4) {
-    return d;
+    return timeFormat("%Y")(new Date(d));
   }
   else if (d.length === 6) {
     const year = d.substr(0, 4);
     const month = d.substr(4, 2);
-    return `${year}-${month}`;
+    return timeFormat("%b %Y")(new Date(year, month));
   }
   else if (d.length === 8) {
     const year = d.substr(0, 4);
     const month = d.substr(4, 2);
     const day = d.substr(6, 2);
-    return `${year}-${month}-${day}`;
+    return timeFormat("%b %d %Y")(new Date(year, month, day));
   }
   else {
     return d;
@@ -210,24 +211,22 @@ module.exports = function(app) {
 
             // Find only the Geo and Product Dimensions
             const dataDims = dimensions.filter(d => {
-              const isProduct = d.name === "HS Product";
+              const isProduct = d.name.includes("Product") || d.hierarchies[0].name.includes("Product");
+              const isService = d.name.includes("Service") || d.hierarchies[0].name.includes("Service");
               const isSubnat = d.hierarchies[0].name === "Subnat Geography";
               const isLoneGeo = d.hierarchies[0].name === "Geography" && !dimensions.map(o => o.name).includes("Subnat Geography");
-              return isProduct || isSubnat || isLoneGeo;
+              return isProduct || isService || isSubnat || isLoneGeo;
             });
 
             const resolutions = dataDims.reduce((acc, d) => {
-              const isGeo = d.hierarchies[0].name.includes("Geography");
-              const isProd = d.name === "HS Product";
-              if (isGeo || isProd) {
-                const topLevel = isGeo ? "geography" : "product";
-                const resolution = d.hierarchies[0].levels.reduce((acc2, d2) => 
-                  acc2.concat(d2.annotations && d2.annotations.level ? d2.annotations.level : d2.name), []
-                ).join(", ");
-                return {...acc, [topLevel]: resolution};  
-              }
-              else return acc;
-            }, {time: timeResolution});
+              const isProduct = d.name.includes("Product") || d.hierarchies[0].name.includes("Product");
+              const isService = d.name.includes("Service") || d.hierarchies[0].name.includes("Service");
+              const topLevel = isProduct || isService ? "product" : "geography";
+              const resolution = d.hierarchies[0].levels.reduce((acc2, d2) => 
+                acc2.concat(d2.annotations && d2.annotations.level ? d2.annotations.level : d2.name), []
+              ).join(", ");
+              return {...acc, [topLevel]: resolution};  
+            }, {time: `${timeResolution}ly`});
 
             if (!name || !drilldown || !measure) continue;
             const rangeURL = `${CANON_CMS_CUBES}/data.jsonrecords?cube=${name}&drilldowns=${drilldown}&measures=${measure}&parents=false&sparse=false`;

@@ -22,7 +22,7 @@ class Matrix extends React.Component {
 
     const {matrix} = this.state;
 
-    if (!matrix) return null;
+    if (!matrix) return <div>Loading Data Availability Matrix...</div>;
 
     return (
       <div className="matrix-page">
@@ -36,20 +36,16 @@ class Matrix extends React.Component {
                 <table border="1">
                   <tr>
                     <th>Dataset</th>
-                    <th>Geo Resolution</th>
-                    <th>Product Resolution</th>
-                    <th>Time Resolution</th>
-                    <th>Data Start</th>
-                    <th>Data End</th>
+                    <th>Location Resolution</th>
+                    <th>Product Classification</th>
+                    <th>Time Span</th>
                   </tr>
                   {matrix[nation][group].map(cube => 
                     <tr key={cube.name}>
                       <td>{cube.fullName}</td>
                       <td>{cube.resolutions.geography || "-"}</td>
                       <td>{cube.resolutions.product || "-"}</td>
-                      <td>{cube.resolutions.time}</td>
-                      <td>{cube.start}</td>
-                      <td>{cube.end}</td>
+                      <td>{`${cube.start} - ${cube.end} (${cube.resolutions.time})`}</td>
                     </tr>
                   )}
                 </table>
