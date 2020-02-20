@@ -156,6 +156,7 @@ class Rankings extends React.Component {
     // valid category on hash
     if (_valid) {
       const title = PAGE[0].title[category];
+
       const text = PAGE[0].text;
       const filter = FILTER_YEARS[measure].find(
         d => d === this.props.location.search.split("=")[1]

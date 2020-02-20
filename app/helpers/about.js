@@ -127,6 +127,36 @@ module.exports = {
           {type: "paragraph", text: "about_faq_answer_5"}
         ]
       }
+    ],
+    PUBLICATIONS: [
+      {
+        highlighted: [
+          {title: "", authors: ""}
+        ],
+        research: [
+          {title: "about_research_title_1", year: "2020", authors: [""], description: "about_research_description_1", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_2", year: "2019", authors: [""], description: "about_research_description_2", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_3", year: "2018", authors: [""], description: "about_research_description_3", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_4", year: "2018", authors: [""], description: "about_research_description_4", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_5", year: "2018", authors: [""], description: "about_research_description_5", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_6", year: "2018", authors: [""], description: "about_research_description_6", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_7", year: "2018", authors: [""], description: "about_research_description_7", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_8", year: "2017", authors: [""], description: "about_research_description_8", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_9", year: "2017", authors: [""], description: "about_research_description_9", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_10", year: "2015", authors: [""], description: "about_research_description_10", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_11", year: "2015", authors: [""], description: "about_research_description_11", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_12", year: "2015", authors: [""], description: "about_research_description_12", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_13", year: "2014", authors: [""], description: "about_research_description_13", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_14", year: "2012", authors: [""], description: "about_research_description_14", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_15", year: "2011", authors: [""], description: "about_research_description_15", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_16", year: "2011", authors: [""], description: "about_research_description_16", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_17", year: "2011", authors: [""], description: "about_research_description_17", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_18", year: "2009", authors: [""], description: "about_research_description_18", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_19", year: "2009", authors: [""], description: "about_research_description_19", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_20", year: "2008", authors: [""], description: "about_research_description_20", link: "", pdf: "", preview: ""},
+          {title: "about_research_title_21", year: "2007", authors: [""], description: "about_research_description_21", link: "", pdf: "", preview: ""}
+        ]
+      }
     ]
   }
 };
