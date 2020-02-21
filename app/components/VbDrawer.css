@@ -1,0 +1,29 @@
+.bp3-overlay {
+  z-index: 22 !important;
+}
+
+.bp3-drawer {
+  background: var(--dark-2) !important;
+  color: var(--white);
+  & .bp3-drawer-header {
+    background: var(--dark-4) !important;
+    & .bp3-heading {
+      color: var(--white);
+    }
+  }
+  & .bp3-drawer-body {
+    padding: 20px !important;
+    & .vb-drawer-stat {
+      font-size: var(--font-lg);
+      width: 100%;
+      flex: 1;
+      display: flex;
+      border-bottom: 1px solid var(--dark-1);
+      padding: var(--gutter-sm) 0px;
+      justify-content: space-between;
+      & .title {
+        font-weight: bold;
+      }
+    }
+  }
+}

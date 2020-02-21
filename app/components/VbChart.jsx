@@ -12,6 +12,7 @@ import "./VbChart.css";
 
 import countryMembers from "../../static/members/country.json";
 import OECButtonGroup from "./OECButtonGroup";
+import VbDrawer from "./VbDrawer";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
@@ -20,6 +21,8 @@ class VbChart extends React.Component {
     super(props);
     this.state = {
       data: [],
+      isOpenDrawer: false,
+      relatedItems: {},
       loading: true,
       routeParams: this.props.routeParams,
       scale: "Log",
@@ -35,7 +38,7 @@ class VbChart extends React.Component {
   shouldComponentUpdate = (prevProps, prevState) => prevProps.permalink !== this.props.permalink ||
     prevProps.xScale !== this.props.xScale || prevProps.yScale !== this.props.yScale ||
     prevState.loading !== this.state.loading || prevState.depth !== this.state.depth ||
-    prevState.scale !== this.state.scale
+    prevState.scale !== this.state.scale || prevState.isOpenDrawer !== this.state.isOpenDrawer
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
@@ -255,8 +258,6 @@ class VbChart extends React.Component {
     const {data, loading} = this.state;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
-    console.log(data);
-
     if (loading) {
       return <div className="vb-loading">
         <div className="vb-loading-spinner">
@@ -313,7 +314,10 @@ class VbChart extends React.Component {
           config={{
             ...baseConfig,
             sum: measure,
-            total: measure
+            total: measure,
+            on: {
+              click: d => this.setState({isOpenDrawer: true, relatedItems: d})
+            }
           }}
         />
         <div className="vb-chart-options">
@@ -329,6 +333,13 @@ class VbChart extends React.Component {
             title={"Depth"}
             callback={depth => this.setState({techDepth: depth}, () => this.fetchData())}
           />}
+
+          <VbDrawer
+            isOpen={this.state.isOpenDrawer}
+            relatedItems={this.state.relatedItems}
+            routeParams={routeParams}
+            callback={d => this.setState({isOpenDrawer: d})}
+          />
         </div>
       </div>;
     }
