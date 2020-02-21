@@ -6,8 +6,7 @@
   color: var(--light-3);
   /* sizing */
   margin: 0;
-  padding-top: var(--gutter-lg);
-  padding-bottom: var(--gutter-lg);
+  padding: var(--gutter-lg) var(--gutter-md);
   /* layout */
   display: flex;
   text-align: center;
@@ -15,15 +14,105 @@
   justify-content: center;
   flex-wrap: wrap; /* prevent from breaking on small screens */
   width: 100%;
-  /* positioning */
-  z-index: 1; /* in front of home page ring */
 
   & .container {
-    width: var(--container-width);
-    max-width: 100%;
+    max-width: var(--container-width);
+    display: flex;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    & ul {
+      list-style-type: none;
+      padding-left: 0;
+      & .footer-group {
+        @mixin font-md;
+        font-weight: var(--label-font-weight);
+      }
+      & .footer-subgroup {
+        @mixin font-sm;
+        font-weight: var(--label-font-weight);
+        margin: var(--gutter-sm) 0 0;
+      }
+      & .footer-link {
+        @mixin font-md;
+        color: var(--light-3);
+        display: block;
+        font-weight: 200;
+        padding-top: 0.625em;
+        padding-bottom: 0.625em;
+
+        /* adjust padding & font size on bigger screens */
+        @mixin min-sm {
+          padding-top: var(--gutter-xs);
+          padding-bottom: var(--gutter-xs);
+        }
+        @mixin min-md {
+          @mixin font-sm;
+          padding-top: 0.25em;
+          padding-bottom: 0.25em;
+        }
+
+        /* interactions */
+        &:hover, &:focus {
+          color: var(--white);
+          background-color: var(--black);
+          text-decoration: none;
+
+          @mixin min-sm {
+            background-color: var(--dark-4);
+          }
+        }
+
+        &.is-pro:after {
+          @mixin font-xxs;
+          background-color: var(--accent-dark);
+          border-radius: 4px;
+          content: "PRO";
+          display: inline-block;
+          font-weight: bold;
+          margin-left: 4px;
+          margin-top: -2px;
+          padding: 1px 4px;
+          vertical-align: top;
+        }
+
+      }
+    }
+    & > ul {
+      flex: 1;
+    }
+    & .footer-contact {
+      flex: 2;
+    }
   }
   & a {
     color: var(--white);
     font-weight: 400;
+  }
+
+  & .footer-sponsor-list {
+    @mixin list-reset;
+    & .footer-sponsor-item {
+      width: auto;
+      display: inline-block;
+      & .footer-sponsor-link {
+        display: block;
+        padding: 1rem 1.5rem 1rem 0;
+        /* transitions */
+        opacity: 0.75;
+        transition:
+          opacity 0.1s ease-out,
+          transform 0.1s ease-out;
+
+        &:hover, &:focus {
+          opacity: 1;
+          transform: scale(1.075);
+        }
+        & .footer-sponsor-img {
+          max-height: 1.875rem;
+        }
+      }
+    }
   }
 }

@@ -1,21 +1,60 @@
 import React from "react";
+import {Link} from "react-router";
+import {hot} from "react-hot-loader/root";
 import "./Footer.css";
+import {EMAIL, NAV} from "helpers/consts";
 
 class Footer extends React.Component {
   render() {
     return <div className="footer">
       <div className="container">
-        <p className="footer-legal u-font-xxs u-margin-bottom-off">
-          The Observatory of Economic Complexity by <a href="http://alexandersimoes.com/">Alexander Simoes</a> is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. Permissions beyond the scope of this license may be available <a href="/permissions/">here</a>.
-        </p>
-        <p className="footer-license-container u-margin-top-xs">
-          <a className="license" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
-            <img alt="Creative Commons License" src="//i.creativecommons.org/l/by-sa/3.0/80x15.png" />
-          </a>
-        </p>
+        {NAV.map((group, i) => {
+          const {items, title} = group;
+          return <ul key={i}>
+            <p className="footer-group display">{title}</p>
+            {items.map((item, ii) => {
+              const {items, pro, title, url} = item;
+              return items
+                ? <ul key={ii}>
+                  <p className="footer-subgroup display">{title}</p>
+                  {items.map((item, ii) => {
+                    const {pro, title, url} = item;
+                    return <li key={ii}><Link className={`footer-link${pro ? " is-pro" : ""}`} to={url}>{title}</Link></li>;
+                  })}
+                </ul>
+                : <li key={ii}><Link className={`footer-link${pro ? " is-pro" : ""}`} to={url}>{title}</Link></li>;
+            })}
+          </ul>;
+        })}
+        <div className="footer-contact">
+          <ul key="logos" className="footer-sponsor-list">
+            <li className="footer-sponsor-item">
+              <a href="https://www.datawheel.us/" className="footer-sponsor-link">
+                <img
+                  className="footer-sponsor-img"
+                  src="/images/logos/datawheel-logo.svg"
+                  alt="Datawheel"
+                  draggable="false"
+                />
+              </a>
+            </li>
+            <li className="footer-sponsor-item">
+              <a href="https://www.iadb.org" className="footer-sponsor-link">
+                <img
+                  className="footer-sponsor-img"
+                  src="/images/logos/idb-logo.svg"
+                  alt="Inter-American Development Bank"
+                  draggable="false"
+                />
+              </a>
+            </li>
+          </ul>
+          <p>Have questions, comments, or concerns?</p>
+          <p>Send us an e-mail: <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+        </div>
       </div>
     </div>;
   }
 }
 
-export default Footer;
+export default hot(Footer);
