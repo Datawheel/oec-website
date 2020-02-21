@@ -37,12 +37,12 @@ module.exports = {
       {title: "🇮🇳 India",     url: `/${locale}/subnational/#subnational-country-block-ind`},
       {title: "🇯🇵 Japan",     url: `/${locale}/subnational/#subnational-country-block-jpn`},
       {title: "🇷🇺 Russia",    url: `/${locale}/subnational/#subnational-country-block-rus`},
-      {title: "🇿🇦 S. Africa", url: `/${locale}/subnational/#subnational-country-block-zaf`},
+      {title: "🇿🇦 South Africa", url: `/${locale}/subnational/#subnational-country-block-zaf`},
       {title: "🇪🇸 Spain",     url: `/${locale}/subnational/#subnational-country-block-esp`},
       {title: "🇹🇷 Turkey",    url: `/${locale}/subnational/#subnational-country-block-tur`},
-      {title: "🇺🇾 Uruguay",   url: `/${locale}/subnational/#subnational-country-block-ury`},
-      {title: "🇺🇸 USA",       url: `/${locale}/subnational/#subnational-country-block-usa`},
-      {title: "🇬🇧 UK",        url: `/${locale}/subnational/#subnational-country-block-gbr`}
+      {title: "🇬🇧 United Kingdom",        url: `/${locale}/subnational/#subnational-country-block-gbr`},
+      {title: "🇺🇸 United States",       url: `/${locale}/subnational/#subnational-country-block-usa`},
+      {title: "🇺🇾 Uruguay",   url: `/${locale}/subnational/#subnational-country-block-ury`}
     ]},
     // visualizations
     {title: "Visualizations", items: [
