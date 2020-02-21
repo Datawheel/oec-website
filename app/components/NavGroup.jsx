@@ -34,7 +34,7 @@ class NavGroup extends Component {
 
   /** the link markup is the same whether it's rendered in a nested list or not */
   renderLink(item) {
-    return <a href={item.url} className="nav-group-link" onFocus={() => this.setState({isOpen: true})}>
+    return <a href={item.url} className={`nav-group-link${item.pro ? " is-pro" : ""}`} onFocus={() => this.setState({isOpen: true})}>
       {item.icon &&
         <img className="nav-group-link-icon" src={`/images/icons/${item.icon}.png`} alt="" />
       }
@@ -43,7 +43,7 @@ class NavGroup extends Component {
   }
 
   render() {
-    const {title, items} = this.props;
+    const {pro, title, items} = this.props;
     const {isOpen} = this.state;
 
     return (
@@ -56,7 +56,7 @@ class NavGroup extends Component {
           key="b"
         >
           <span className="u-visually-hidden">{isOpen ? "hide" : "show"} </span>
-          <span className="nav-group-button-text">{title} </span>
+          <span className={`nav-group-button-text${pro ? " is-pro" : ""}`}>{title} </span>
           <Icon icon="caret-down" className="nav-group-button-icon" />
         </button>
 

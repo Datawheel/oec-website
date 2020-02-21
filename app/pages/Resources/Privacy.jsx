@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
+import Helmet from "react-helmet";
 import {EMAIL} from "helpers/consts";
 
 export default class Privacy extends Component {
@@ -8,6 +9,7 @@ export default class Privacy extends Component {
 
     return (
       <div className="privacy">
+        <Helmet title="Privacy Policy" />
 
         <h1>Privacy Policy</h1>
 

@@ -204,3 +204,17 @@
     }
   }
 }
+
+.nav-group-button-text.is-pro:after,
+.nav-group-link.is-pro:after {
+  @mixin font-xxs;
+  background-color: var(--accent-dark);
+  border-radius: 4px;
+  box-sizing: border-box;
+  content: "PRO";
+  display: inline;
+  font-weight: bold;
+  margin-left: 4px;
+  padding: 1px 4px;
+  vertical-align: top;
+}
