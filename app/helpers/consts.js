@@ -36,20 +36,6 @@ module.exports = {
       {title: "Scatter plot", url: `/${locale}/visualize/scatter`, icon: "visualizations/scatter"},
       {title: "Geo map",      url: `/${locale}/visualize/geo-map`, icon: "visualizations/geo-map"}
     ]},
-    // about
-    {title: "About", items: [
-      {title: "About OEC",    url: `/${locale}/resources/about`},
-      {title: "OEC Pro",      url: `/${locale}/resources/oec-pro`},
-      {title: "FAQ",          url: `/${locale}/resources/faq`},
-      {title: "Publications", url: `/${locale}/resources/publications`}
-    ]},
-    // data
-    {title: "Data", items: [
-      {title: "The data",     url: `/${locale}/resources/data/`},
-      {title: "Methodology",  url: `/${locale}/resources/methodology`},
-      {title: "Permissions",  url: `/${locale}/resources/permissions`},
-      {title: "API",          url: `/${locale}/resources/api`}
-    ]},
     // rankings
     {title: "Rankings", items: [
       {title: "Country rankings", url: `/${locale}/rankings/country/eci/`},
@@ -59,6 +45,18 @@ module.exports = {
     {title: "Predictions", items: [
       {title: "World Trade Predictions (annual)", url: `/${locale}/prediction?dataset=trade-annual`},
       {title: "World Trade Predictions (monthly)", url: `/${locale}/prediction?dataset=trade-monthly`}
+    ]},
+    // about
+    {title: "Resources", items: [
+      {title: "About the OEC",  url: `/${locale}/resources/about`},
+      {title: "Methodology",    url: `/${locale}/resources/methodology`},
+      {title: "FAQs",           url: `/${locale}/resources/faq`},
+      {title: "Publications",   url: `/${locale}/resources/publications`},
+      {title: "Data Sources",   url: `/${locale}/resources/data/`},
+      {title: "API",            url: `/${locale}/resources/api`},
+      {title: "Permissions",    url: `/${locale}/resources/permissions`},
+      {title: "Privacy Policy", url: `/${locale}/resources/privacy`},
+      {title: "Terms",          url: `/${locale}/resources/terms`}
     ]}
   ],
   SUBNATIONAL_COUNTRIES: [

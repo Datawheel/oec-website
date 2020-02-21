@@ -22,28 +22,33 @@ class OECNavbar extends Component {
       navVisible: false,
       searchVisible: false
     };
+    this.keyDownBind = this.keyDown.bind(this);
   }
 
   componentDidMount() {
+    select(document).on("keydown.oecnavbar", this.keyDownBind, false);
+  }
 
-    select(document).on("keydown.oecnavbar", () => {
+  componentWillUnmount() {
+    select(document).on("keydown.oecnavbar", null);
+  }
 
-      const activeKeyCode = "S".charCodeAt(0);
-      const ESC = 27;
-      const key = event.keyCode;
-      const tagName = event.target.tagName.toLowerCase();
-      const {searchVisible} = this.state;
+  keyDown() {
 
-      if (!searchVisible && key === activeKeyCode && !["input", "textarea"].includes(tagName)) {
-        event.preventDefault();
-        this.toggleSearch.bind(this)();
-      }
-      else if (searchVisible && key === ESC) {
-        event.preventDefault();
-        this.toggleSearch.bind(this)();
-      }
+    const activeKeyCode = "S".charCodeAt(0);
+    const ESC = 27;
+    const key = event.keyCode;
+    const tagName = event.target.tagName.toLowerCase();
+    const {searchVisible} = this.state;
 
-    }, false);
+    if (!searchVisible && key === activeKeyCode && !["input", "textarea"].includes(tagName)) {
+      event.preventDefault();
+      this.toggleSearch.bind(this)();
+    }
+    else if (searchVisible && key === ESC) {
+      event.preventDefault();
+      this.toggleSearch.bind(this)();
+    }
 
   }
 

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router";
+import Helmet from "react-helmet";
 import {EMAIL} from "helpers/consts";
 
 export default class Terms extends Component {
@@ -8,6 +9,7 @@ export default class Terms extends Component {
 
     return (
       <div className="terms">
+        <Helmet title="Terms and Conditions" />
 
         <h1>Terms and Conditions</h1>
 

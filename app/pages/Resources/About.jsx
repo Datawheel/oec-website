@@ -81,7 +81,7 @@ export default class About extends Component {
     return (
       <div className="about">
 
-        <h1> About the Observatory </h1>
+        <h1>About the OEC</h1>
 
         <p> The Observatory of Economic Complexity is a tool that allows users to quickly compose a visual narrative about countries and the products they exchange. It was <a href="https://www.media.mit.edu/publications/the-observatory-designing-data__driven-decision-making-tools/" className="link" target="_blank" rel="noopener noreferrer">Alexander Simoes&apos; Master Thesis</a> in Media Arts and Sciences at the MIT Media Lab. </p>
 
