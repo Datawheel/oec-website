@@ -61,46 +61,49 @@
 
     & .settings {
       display: flex;
+      flex-direction: column;
       background: var(--dark-2);
       margin-top: var(--gutter-md);
 
-      & .setup {
-        margin: var(--gutter-sm);
+      & .bp3-button {
+        background: rgba(33, 40, 49, 0.5);
+        color: var(--white);
+        font-size: var(--font-xs);
+        opacity: 1;
+      }
 
-        & .title {
-          margin-bottom: var(--gutter-sm);
+      & .bp3-button:hover {
+        background: rgba(33, 40, 49, 0.7);
+      }
+
+      & .is-active {
+        background: rgba(33, 40, 49, 1) !important;
+        font-weight: var(--field-font-weight);
+        opacity: 1;
+      }
+
+      & .button-settings {
+        display: flex;
+        flex-direction: row;
+        margin: 0px 30px;
+
+        & .category-settings {
+          margin-right: 50px;
         }
-
-        & .buttons {
-          & .bp3-button {
-            background: none;
-            color: var(--white);
-            font-size: var(--font-xs);
-            opacity: 1;
-          }
-
-          & .bp3-button:hover {
-            background: rgba(33, 40, 49, 0.4);
-          }
-
-          & .is-active {
-            background: rgba(33, 40, 49, 1) !important;
-            font-weight: var(--field-font-weight);
-            opacity: 1;
-          }
-        }
       }
 
-      & .showing {
-        flex: 1;
+      & .slider-settings {
+        margin: 0px 30px;
       }
 
-      & .product {
-        flex: 2;
+      & .calculate-button {
+        margin: 10px 30px;
       }
+    }
 
-      & .year {
-        flex: 3;
+    & .ranking {
+      & .app-loading {
+        margin-top: 50px;
       }
     }
   }

@@ -3,11 +3,11 @@ import axios from "axios";
 import numeral from "numeral";
 import classnames from "classnames";
 import {connect} from "react-redux";
-import {Helmet} from "react-helmet";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
-import {Sparklines, SparklinesLine} from "react-sparklines";
-import {AnchorButton, Icon} from "@blueprintjs/core";
+// import {Sparklines, SparklinesLine} from "react-sparklines";
+import {formatAbbreviate} from "d3plus-format";
+import {Radio, RadioGroup, Slider, Button, ButtonGroup, Icon} from "@blueprintjs/core";
 
 import "./Rankings.css";
 
@@ -16,13 +16,6 @@ import Footer from "components/Footer";
 import Loading from "components/Loading";
 import RankingTable from "components/RankingTable";
 
-import {
-  PAGE,
-  CATEGORY_BUTTONS,
-  PRODUCT_BUTTONS,
-  FILTER_YEARS,
-  DOWNLOAD_BUTTONS
-} from "helpers/rankings";
 import {keyBy} from "helpers/funcs";
 import {range} from "helpers/utils";
 
@@ -30,24 +23,18 @@ class Rankings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: null,
-      text: null,
+      catValue: "country",
+      depthValue: "HS4",
+      revValue: "HS92",
+      yearValue: 2017,
+      exportThreshold: 100000000,
       data: null,
-      category: null,
-      measure: null,
-      filter: null,
-      _loading: true,
-      _valid: true
+      columns: null,
+      _loading: false
     };
-    this.changeRange = this.changeRange.bind(this);
   }
 
-  createColumns(category, measure, filter) {
-    const {t, lng} = this.props;
-    const categoryHeader = category === "country" ? "rankings_active_country" : "rankings_active_product";
-    const firstYear = filter.split("-")[0] * 1;
-    const lastYear = filter.split("-")[1] * 1;
-
+  createColumns(yearValue) {
     const columns = [
       {
         id: "id",
@@ -59,207 +46,251 @@ class Rankings extends React.Component {
       },
       {
         id: "category",
-        accessor: d => category === "country" ? d.Country : d.HS6,
-        Header: () =>
+        accessor: d => d.Country,
+        Header: () => 
           <div className="header">
-            <span className="year">{t(categoryHeader)}</span>
+            <span className="year">Country</span>
             <div className="icons">
               <Icon icon={"caret-up"} iconSize={16} />
               <Icon icon={"caret-down"} iconSize={16} />
             </div>
-          </div>,
+          </div>,        
         style: {whiteSpace: "unset"},
-        Cell: props =>
+        Cell: props => 
           <div className="category">
             <img
-              src={
-                category === "country"
-                  ? `/images/icons/country/country_${props.original["Icon ID"]}.png`
-                  : `/images/icons/hs/hs_${props.original["Icon ID"]}.png`
-
-              }
+              src={`/images/icons/country/country_${props.original["Country ID"].substr(
+                props.original["Country ID"].length - 3
+              )}.png`}
               alt="icon"
               className="icon"
             />
             <a
-              href={
-                category === "country"
-                  ? `/${lng}/profile/country/${props.original["Icon ID"]}`
-                  : `/${lng}/profile/${measure}/${props.original["HS6 ID"]}`
-
-              }
+              href={`/en/profile/country/${props.original["Country ID"].substr(
+                props.original["Country ID"].length - 3
+              )}`}
               className="link"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <div className="name">
-                {category === "country" ? props.original.Country : props.original.HS6}
-              </div>
+              <div className="name">{props.original.Country}</div>
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
-
+        
       },
-      ...range(firstYear, lastYear).map((year, index, {length}) => ({
-        id: length === index + 1 ? "lastyear" : `year${index}`,
-        Header: () =>
+      {
+        id: `${yearValue}`,
+        Header: () => 
           <div className="header">
-            <span className="year">{year}</span>
+            <span className="year">{yearValue}</span>
             <div className="icons">
               <Icon icon={"caret-up"} iconSize={16} />
               <Icon icon={"caret-down"} iconSize={16} />
             </div>
-          </div>,
-        accessor: d => d[`${year}`],
+          </div>,        
+        accessor: d => d["Trade Value ECI"],
         Cell: props =>
-          numeral(props.original[`${year}`]).format("0.00000") * 1 !== 0
-            ? numeral(props.original[`${year}`]).format("0.00000")
+          numeral(props.original["Trade Value ECI"]).format("0.00000") * 1 !== 0
+            ? numeral(props.original["Trade Value ECI"]).format("0.00000")
             : "",
-        width: 140,
         className: "year"
-      })),
-      category === "country"
-        ? {
-          id: "sparkline",
-          Header: "",
-          accessor: "sparkline",
-          Cell: props =>
-            <div>
-              <Sparklines data={props.row.sparkline} limit={5} width={100} height={20}>
-                <SparklinesLine color="white" style={{fill: "none"}} />
-              </Sparklines>
-            </div>,
-          className: "sparkline",
-          width: 220,
-          sortable: false
-        }
-        : null
+      }
     ];
 
     return columns.filter(f => f !== null);
   }
 
-  changeRange(category, measure, fltr) {
-    const {lng} = this.props;
-    const filter = fltr ? fltr : FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1];
-    const path = `/${lng}/rankings/${category}/${measure}/?year_range=${filter}`;
-
-    browserHistory.push(path);
-    this.setState({category, measure, filter});
+  handleValueChange(key, value) {
+    this.setState({[key]: value});
   }
 
-  componentDidMount() {
-    const category = this.props.params.category || "country";
-    const measure = this.props.params.measure || "eci";
-    const validCategory = ["country", "product"];
-    const _valid = validCategory.some(d => d === category);
+  handleCategoryChange(value) {
+    this.setState({catValue: value});
+  }
 
-    // valid category on hash
-    if (_valid) {
-      const title = PAGE[0].title[category];
+  handleDepthChange(value) {
+    this.setState({depthValue: value});
+  }
 
-      const text = PAGE[0].text;
-      const filter = FILTER_YEARS[measure].find(
-        d => d === this.props.location.search.split("=")[1]
-      );
+  handleRevisionChange(value) {
+    this.setState({revValue: value});
+  }
 
-      const futureData = FILTER_YEARS[measure].map(d => {
-        const columns = this.createColumns(category, measure, d);
-        const lastYear = d.split("-")[1] * 1;
+  getChangeHandler(key) {
+    return value => this.setState({[key]: value});
+  }
 
-        const path =
-          category === "country"
-            ? `/json/rankings/oec_eci_${d}.json`
-            : `/json/rankings/oec_pci_hs6_${measure}_${d}.json`;
+  renderExportThresholdLabel(val) {
+    return `$${formatAbbreviate(val)}`;
+  }
 
-        return axios.get(path).then(resp => {
-          category === "country"
-            ? resp.data.map(d => d["Icon ID"] = d["Country ID"].slice(2))
-            : resp.data.map(d => d["Icon ID"] = d["HS6 ID"].toString().slice(0, -6));
-          resp.data.sort((a, b) => b[lastYear] - a[lastYear]);
-          return {filter: d, data: resp.data, cols: columns};
-        });
-      });
+  recalculateData() {
+    const {catValue, depthValue, revValue, yearValue, exportThreshold} = this.state;
+    this.setState({_loading: true});
+    // revValue = revision
+    let path =
+      catValue === "country"
+        ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
+          2
+        )}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
+        : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
+          2
+        )}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
 
-      Promise.all(futureData).then(data =>
+    axios.all([axios.get(path)]).then(
+      axios.spread(resp => {
+        const data = resp.data.data.sort(
+          (a, b) => b["Trade Value ECI"] - a["Trade Value ECI"]
+        );
+        const columns = this.createColumns(yearValue);
         this.setState({
-          data: keyBy(data, "filter"),
-          filter: filter || FILTER_YEARS[measure][FILTER_YEARS[measure].length - 1],
-          category,
-          measure,
-          title,
-          text,
-          _loading: false,
-          _valid
-        })
-      );
-    }
-
-    // invalid category on hash
-    if (!_valid) {
-      this.setState({
-        _loading: false,
-        _valid
-      });
-    }
+          data,
+          columns,
+          _loading: false
+        });
+      })
+    );
   }
 
   render() {
-    const {title, text, data, category, measure, filter, _loading, _valid} = this.state;
-    const {t} = this.props;
+    const {
+      catValue,
+      depthValue,
+      revValue,
+      yearValue,
+      exportThreshold,
+      data,
+      columns,
+      _loading
+    } = this.state;
 
-    if (_loading) {
-      return (
-        <div>
-          <Helmet>
-            <title>{t("Loading")}</title>
-          </Helmet>
-          <OECNavbar />
-          <Loading />
-          <Footer />
-        </div>
-      );
-    }
-
-    if (!_valid) {
-      return (
-        <div>
-          ERROR 404
-        </div>
-      );
-    }
-
+    const depthButtons = ["HS2", "HS4", "HS6"];
+    const revisionButtons = ["HS92", "HS96", "HS02", "HS07", "HS12"];
+    console.log(catValue, depthValue, revValue, yearValue, exportThreshold);
     return (
       <div className="rankings-page">
-        <Helmet>
-          <title>{t(title)}</title>
-        </Helmet>
-
         <OECNavbar />
 
         <div className="rankings-content">
-          <h1 className="title">{t(title)}</h1>
+          <h1 className="title">Dynamic Rankings</h1>
           <div className="about">
-            {text.map((d, k) =>
-              <p
-                className={"text"}
-                key={`${k}`}
-                dangerouslySetInnerHTML={{__html: t(d)}}
-              />
-            )}
+            <p>
+              {" "}
+              The Economic Complexity Index (ECI) and the Product Complexity Index (PCI)
+              are, respectively, measures of the relative knowledge intensity of an
+              economy or a product. ECI measures the knowledge intensity of an economy by
+              considering the knowledge intensity of the products it exports. PCI measures
+              the knowledge intensity of a product by considering the knowledge intensity
+              of its exporters. This circular argument is mathematically tractable and can
+              be used to construct relative measures of the knowledge intensity of
+              economies and products (see{" "}
+              <a href="/en/resources/methodology/" className="link" target="_blank">
+                methodology section
+              </a>{" "}
+              for more details).{" "}
+            </p>
+            <p>
+              {" "}
+              ECI has been validated as a relevant economic measure by showing its ability
+              to predict future economic growth (see{" "}
+              <a
+                href="http://www.pnas.org/content/106/26/10570.short"
+                className="link"
+                target="_blank"
+              >
+                Hidalgo and Hausmann 2009
+              </a>), and explain international variations in income inequality (see{" "}
+              <a
+                href="/pdf/LinkingEconomicComplexityInstitutionsAndIncomeInequality.pdf"
+                className="link"
+                target="_blank"
+              >
+                Hartmann et al. 2017
+              </a>).
+            </p>
+            <p>This page includes rankings using the Economic Complexity Index (ECI).</p>
           </div>
 
           <div className="settings">
+            <div className="button-settings">
+              <div className="category-settings">
+                <h3>Category: </h3>
+                <RadioGroup
+                  onChange={event => {
+                    this.handleCategoryChange(event.currentTarget.value);
+                  }}
+                  selectedValue={catValue}
+                >
+                  <Radio label="Country" value="country" />
+                  <Radio label="Product" value="product" disabled={true} />
+                </RadioGroup>
+              </div>
+              <div className="depth-settings">
+                <h3>Depth: </h3>
+                <ButtonGroup style={{minWidth: 200}}>
+                  {depthButtons.map((d, k) => 
+                    <Button
+                      key={k}
+                      onClick={() => this.handleDepthChange(d)}
+                      className={`${depthValue === d ? "is-active" : ""}`}
+                    >
+                      {d}
+                    </Button>
+                  )}
+                </ButtonGroup>
+              </div>
+              <div className="revision-setting">
+                <h3>Revision: </h3>
+                <ButtonGroup style={{minWidth: 200}}>
+                  {revisionButtons.map((d, k) => 
+                    <Button
+                      key={k}
+                      onClick={() => this.handleRevisionChange(d)}
+                      className={`${revValue === d ? "is-active" : ""}`}
+                    >
+                      {d}
+                    </Button>
+                  )}
+                </ButtonGroup>
+              </div>
+            </div>
+            <div className="slider-settings">
+              <div className="year-settings">
+                <h3>Year: </h3>
+                <Slider
+                  min={2003}
+                  max={2017}
+                  stepSize={1}
+                  labelStepSize={1}
+                  onChange={this.getChangeHandler("yearValue")}
+                  value={yearValue}
+                  showTrackFill={false}
+                />
+              </div>
+              <div className="export-settings">
+                <h3>Export Value Threshold: </h3>
+                <Slider
+                  min={0}
+                  max={1000000000}
+                  stepSize={50000000}
+                  labelStepSize={100000000}
+                  onChange={this.getChangeHandler("exportThreshold")}
+                  labelRenderer={this.renderExportThresholdLabel}
+                  value={exportThreshold}
+                />
+              </div>
+            </div>
+            <div className="calculate-button">
+              <Button onClick={() => this.recalculateData()}>Calculate</Button>
+            </div>
           </div>
-
           <div className="ranking">
-            {data &&
-              <RankingTable
-                data={data[filter].data}
-                columns={data[filter].cols}
-                length={data[filter].data.length}
-              />
+            {_loading 
+              ? <Loading />
+              :               data && <RankingTable data={data} columns={columns} />
             }
           </div>
-
         </div>
         <Footer />
       </div>
