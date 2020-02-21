@@ -278,21 +278,6 @@ class Rankings extends React.Component {
                 active={measure}
               />
             }
-            <RankingTableButtons
-              t={t}
-              anchor={false}
-              type={"year"}
-              title={t("rankings_settings_year_range")}
-              array={FILTER_YEARS[measure]}
-              onclick={
-                {
-                  function: this.changeRange,
-                  category,
-                  measure
-                }
-              }
-              active={filter}
-            />
           </div>
 
           <div className="ranking">
