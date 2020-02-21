@@ -1,12 +1,4 @@
 .selector {
-  & .menu-item-text {
-    display: flex;
-    & img {
-      width: 20px;
-      margin-right: 5px;
-    }
-  }
-
   & .bp3-menu-item-label {
     text-transform: uppercase;
   }
@@ -71,5 +63,13 @@
     & .bp3-tag {
       margin: 2px;
     }
+  }
+}
+
+.menu-item-text {
+  display: flex;
+  & img {
+    width: 20px;
+    margin-right: 5px;
   }
 }
