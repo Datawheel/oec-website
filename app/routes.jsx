@@ -5,6 +5,7 @@ import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
 import Subnational from "./pages/Subnational/Subnational";
 import Prediction from "./pages/Prediction/Prediction";
+import Tariffs from "./pages/Tariffs/Tariffs";
 
 import App from "./App";
 import Home from "./pages/Home";
@@ -83,6 +84,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/subnational" component={Subnational} />
       <Route exact path="/:lang/prediction" component={Prediction} />
       <Route exact path="/:lang/resources/:page" component={Resources} />
+      <Route exact path="/:lang/tariffs" component={Tariffs} />
       <Route exact path="/:lang/rankings/:category/:measure/" component={Rankings} />
     </Route>
   );
