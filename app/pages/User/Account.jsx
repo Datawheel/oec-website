@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import {connect} from "react-redux";
+import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
 import {timeFormat} from "d3-time-format";
 const formatDate = timeFormat("%B %d, %Y");
@@ -160,7 +161,11 @@ class Account extends Component {
                       Cancel Subscription
                     </Button>
                   </div>
-                    : null}
+                    : <div>
+                      <Button fill icon="build">
+                        <Link  to="/admin">Hello, contributor. Would you like to go to the CMS?</Link>
+                      </Button>
+                    </div>}
               </div>
             </div>
             : <NonIdealState icon={<Spinner />} title="Authenticating" />

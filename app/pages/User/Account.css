@@ -20,6 +20,7 @@
     & .account-meta {
       box-sizing: border-box;
       min-width: 300px;
+      padding-bottom: var(--gutter-xl);
       & .account-meta-info {
         background: var(--dark-4);
         border-radius: 1em;
