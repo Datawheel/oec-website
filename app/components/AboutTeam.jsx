@@ -1,19 +1,18 @@
-import React from "react";
+import React, {Component} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTwitter, faGithubAlt, faLinkedin} from "@fortawesome/free-brands-svg-icons";
 
 import "./AboutTeam.css";
 
-class AboutTeam extends React.Component {
+class AboutTeam extends Component {
   state = {};
   render() {
-    const {data, type, t} = this.props;
+    const {data, type} = this.props;
 
     return (
       <div className="about-team">
         <div className={`team ${type}`}>
-          <div className="title">{t(data.title)}</div>
-          {data.members.map((d, k) =>
+          {data.map((d, k) =>
             <div className="card" key={k}>
               <div
                 className="member-photo"
@@ -21,7 +20,7 @@ class AboutTeam extends React.Component {
               />
               <div className="member-profile">
                 <div className="profile-header">
-                  <div className="header-name">{t(d.name)}</div>
+                  <div className="header-name">{d.name}</div>
                   <div className="header-socials">
                     {d.twitter &&
                         <a href={d.twitter} target="_blank" rel="noopener noreferrer">
@@ -49,12 +48,9 @@ class AboutTeam extends React.Component {
                     }
                   </div>
                 </div>
-                <div className="profile-time">{t(d.time)}</div>
+                <div className="profile-time">{d.time}</div>
                 <div className="profile-description">
-                  <p
-                    className={"text"}
-                    dangerouslySetInnerHTML={{__html: t(d.description)}}
-                  />
+                  {d.description}
                 </div>
               </div>
             </div>
