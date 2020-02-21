@@ -43,9 +43,9 @@ class NavGroup extends Component {
   }
 
   render() {
-    const {title, items} = this.props;
+    const {pro, title, items} = this.props;
     const {isOpen} = this.state;
-
+    console.log(title, pro);
     return (
       <li className="nav-group" onBlur={e => this.onBlur(e)} onClick={() => this.onFocusButton()} key={`${title}-nav-group`}>
         {/* click the title to toggle the menu */}
@@ -56,7 +56,7 @@ class NavGroup extends Component {
           key="b"
         >
           <span className="u-visually-hidden">{isOpen ? "hide" : "show"} </span>
-          <span className="nav-group-button-text">{title} </span>
+          <span className={`nav-group-button-text${pro ? " is-pro" : ""}`}>{title} </span>
           <Icon icon="caret-down" className="nav-group-button-icon" />
         </button>
 

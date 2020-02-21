@@ -14,35 +14,35 @@ module.exports = {
       {title: "Location", items: [
         {title: "Country",            url: `/${locale}/profile/country/`},
         {title: "Subnational",        url: `/${locale}/subnational/`, pro: true},
-        {title: "Country to country", url: `/${locale}/profile/bilateral-country/`, pro: true}
+        {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`, pro: true}
       ]},
       {title: "Product", items: [
         {title: "Product",            url: `/${locale}/profile/hs92/`},
-        {title: "Product in country", url: `/${locale}/profile/bilateral-product/`, pro: true}
+        {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`, pro: true}
       ]},
       {title: "Research", items: [
         {title: "Technology",         url: `/${locale}/profile/technology`},
         {title: "Firm",               url: `/${locale}/profile/firm`}
       ]}
     ]},
-    {title: "Subnational", items: [
-      {title: "🇧🇷 Brazil", url: `/${locale}/subnational/#subnational-country-block-bra`},
-      {title: "🇧🇴 Bolivia", url: `/${locale}/subnational/#subnational-country-block-bol`},
-      {title: "🇨🇦 Canada", url: `/${locale}/subnational/#subnational-country-block-can`},
-      {title: "🇨🇱 Chile", url: `/${locale}/subnational/#subnational-country-block-chl`},
-      {title: "🇨🇳 China", url: `/${locale}/subnational/#subnational-country-block-chn`},
-      {title: "🇨🇴 Colombia", url: `/${locale}/subnational/#subnational-country-block-col`},
-      {title: "🇫🇷 France", url: `/${locale}/subnational/#subnational-country-block-fra`},
-      {title: "🇩🇪 Germany", url: `/${locale}/subnational/#subnational-country-block-deu`},
-      {title: "🇮🇳 India", url: `/${locale}/subnational/#subnational-country-block-ind`},
-      {title: "🇯🇵 Japan", url: `/${locale}/subnational/#subnational-country-block-jpn`},
-      {title: "🇷🇺 Russia", url: `/${locale}/subnational/#subnational-country-block-rus`},
+    {title: "Subnational", pro: true, items: [
+      {title: "🇧🇷 Brazil",    url: `/${locale}/subnational/#subnational-country-block-bra`},
+      {title: "🇧🇴 Bolivia",   url: `/${locale}/subnational/#subnational-country-block-bol`},
+      {title: "🇨🇦 Canada",    url: `/${locale}/subnational/#subnational-country-block-can`},
+      {title: "🇨🇱 Chile",     url: `/${locale}/subnational/#subnational-country-block-chl`},
+      {title: "🇨🇳 China",     url: `/${locale}/subnational/#subnational-country-block-chn`},
+      {title: "🇨🇴 Colombia",  url: `/${locale}/subnational/#subnational-country-block-col`},
+      {title: "🇫🇷 France",    url: `/${locale}/subnational/#subnational-country-block-fra`},
+      {title: "🇩🇪 Germany",   url: `/${locale}/subnational/#subnational-country-block-deu`},
+      {title: "🇮🇳 India",     url: `/${locale}/subnational/#subnational-country-block-ind`},
+      {title: "🇯🇵 Japan",     url: `/${locale}/subnational/#subnational-country-block-jpn`},
+      {title: "🇷🇺 Russia",    url: `/${locale}/subnational/#subnational-country-block-rus`},
       {title: "🇿🇦 S. Africa", url: `/${locale}/subnational/#subnational-country-block-zaf`},
-      {title: "🇪🇸 Spain", url: `/${locale}/subnational/#subnational-country-block-esp`},
-      {title: "🇹🇷 Turkey", url: `/${locale}/subnational/#subnational-country-block-tur`},
-      {title: "🇺🇾 Uruguay", url: `/${locale}/subnational/#subnational-country-block-ury`},
-      {title: "🇺🇸 USA", url: `/${locale}/subnational/#subnational-country-block-usa`},
-      {title: "🇬🇧 UK", url: `/${locale}/subnational/#subnational-country-block-gbr`}
+      {title: "🇪🇸 Spain",     url: `/${locale}/subnational/#subnational-country-block-esp`},
+      {title: "🇹🇷 Turkey",    url: `/${locale}/subnational/#subnational-country-block-tur`},
+      {title: "🇺🇾 Uruguay",   url: `/${locale}/subnational/#subnational-country-block-ury`},
+      {title: "🇺🇸 USA",       url: `/${locale}/subnational/#subnational-country-block-usa`},
+      {title: "🇬🇧 UK",        url: `/${locale}/subnational/#subnational-country-block-gbr`}
     ]},
     // visualizations
     {title: "Visualizations", items: [
@@ -56,11 +56,12 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Country rankings", url: `/${locale}/rankings/country/eci/`},
-      {title: "Product rankings", url: `/${locale}/rankings/product/hs92/`}
+      {title: "Country Rankings", url: `/${locale}/rankings/country/eci/`},
+      {title: "Product Rankings", url: `/${locale}/rankings/product/hs92/`}
     ]},
     // about
     {title: "Resources", items: [
+      {title: "Tariff Explorer", url: `/${locale}/tariffs/?destinations=xxwld`},
       {title: "About the OEC",  url: `/${locale}/resources/about`},
       {title: "Methodology",    url: `/${locale}/resources/methodology`},
       {title: "FAQs",           url: `/${locale}/resources/faq`},
@@ -73,16 +74,14 @@ module.exports = {
     ]},
     // predictions
     {title: "Predictions", items: [
-      {title: "🌐 World Trade Predictions (annual)", url: `/${locale}/prediction?dataset=trade-annual`},
-      {title: "🌐 World Trade Predictions (monthly)", url: `/${locale}/prediction?dataset=trade-monthly`},
-      {title: "🇨🇦 Canada Subnational Predictions", url: `/${locale}/prediction?dataset=subnat-can`},
-      {title: "🇩🇪 Germany Subnational Predictions", url: `/${locale}/prediction?dataset=subnat-deu`},
-      {title: "🇯🇵 Japan Subnational Predictions", url: `/${locale}/prediction?dataset=subnat-jpn`},
-      {title: "🇷🇺 Russia Subnational Predictions", url: `/${locale}/prediction?dataset=subnat-rus`},
-      {title: "🇪🇸 Spain Subnational Predictions", url: `/${locale}/prediction?dataset=subnat-esp`}
-    ]},
-    // tariffs
-    {title: "Tariff Explorer", url: `/${locale}/tariffs/?destinations=xxwld`}
+      {title: "🌐 World Trade Predictions (annual)",  url: `/${locale}/prediction?dataset=trade-annual`},
+      {title: "🌐 World Trade Predictions (monthly)", url: `/${locale}/prediction?dataset=trade-monthly`, pro: true},
+      {title: "🇨🇦 Canada Subnational Predictions",   url: `/${locale}/prediction?dataset=subnat-can`, pro: true},
+      {title: "🇩🇪 Germany Subnational Predictions",  url: `/${locale}/prediction?dataset=subnat-deu`, pro: true},
+      {title: "🇯🇵 Japan Subnational Predictions",    url: `/${locale}/prediction?dataset=subnat-jpn`, pro: true},
+      {title: "🇷🇺 Russia Subnational Predictions",   url: `/${locale}/prediction?dataset=subnat-rus`, pro: true},
+      {title: "🇪🇸 Spain Subnational Predictions",    url: `/${locale}/prediction?dataset=subnat-esp`, pro: true}
+    ]}
   ],
   SUBNATIONAL_COUNTRIES: [
     {

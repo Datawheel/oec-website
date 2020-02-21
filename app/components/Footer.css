@@ -53,6 +53,13 @@
           padding-bottom: 0.25em;
         }
 
+        /* icon sizing & positioning */
+        & .footer-link-icon {
+          width: 0.75em;
+          margin-right: 0.5em;
+          transition: 0.1s ease-out;
+        }
+
         /* interactions */
         &:hover, &:focus {
           color: var(--white);
@@ -61,6 +68,10 @@
 
           @mixin min-sm {
             background-color: var(--dark-4);
+          }
+
+          & .footer-link-icon {
+            transform: scale(1.25);
           }
         }
 

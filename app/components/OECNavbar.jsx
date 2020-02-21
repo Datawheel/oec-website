@@ -98,7 +98,7 @@ class OECNavbar extends Component {
         <nav className={`navbar-nav ${navVisible ? "is-visible" : "is-hidden"}`}>
           <ul className="navbar-nav-list">
             {NAV.map(group =>
-              <NavGroup title={group.title} items={group.items} key={group.title} />
+              <NavGroup {...group} key={group.title} />
             )}
           </ul>
         </nav>

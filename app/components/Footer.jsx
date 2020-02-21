@@ -5,26 +5,33 @@ import "./Footer.css";
 import {EMAIL, NAV} from "helpers/consts";
 
 class Footer extends React.Component {
+
+  renderLink(item) {
+    return <Link to={item.url} className={`footer-link${item.pro ? " is-pro" : ""}`}>
+      {item.icon && <img className="footer-link-icon" src={`/images/icons/${item.icon}.png`} alt="" />}
+      {item.title}
+    </Link>;
+  }
+
   render() {
     return <div className="footer">
       <div className="container">
         {NAV.map((group, i) => {
           const {items, title} = group;
-          return <ul key={i}>
-            <p className="footer-group display">{title}</p>
-            {items.map((item, ii) => {
-              const {items, pro, title, url} = item;
-              return items
-                ? <ul key={ii}>
-                  <p className="footer-subgroup display">{title}</p>
-                  {items.map((item, ii) => {
-                    const {pro, title, url} = item;
-                    return <li key={ii}><Link className={`footer-link${pro ? " is-pro" : ""}`} to={url}>{title}</Link></li>;
-                  })}
-                </ul>
-                : <li key={ii}><Link className={`footer-link${pro ? " is-pro" : ""}`} to={url}>{title}</Link></li>;
-            })}
-          </ul>;
+          return items
+            ? <ul key={i}>
+              <p className="footer-group display">{title}</p>
+              {items.map((item, ii) => {
+                const {items, title} = item;
+                return items
+                  ? <ul key={ii}>
+                    <p className="footer-subgroup display">{title}</p>
+                    {items.map((item, ii) => <li key={ii}>{this.renderLink(item)}</li>)}
+                  </ul>
+                  : <li key={ii}>{this.renderLink(item)}</li>;
+              })}
+            </ul>
+            : <li key={i}>{this.renderLink(group)}</li>;
         })}
         <div className="footer-contact">
           <ul key="logos" className="footer-sponsor-list">
