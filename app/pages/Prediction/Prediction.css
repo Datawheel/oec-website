@@ -209,6 +209,10 @@ Under viz options (key)
 /* ---------------------------
 Datatable styles
 --------------------------- */
-.number {
-  text-align: right;
+.prediction-datatable-container {
+  & .rt-td {
+    & .number {
+      text-align: right;
+    }
+  }
 }
