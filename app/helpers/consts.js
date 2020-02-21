@@ -44,8 +44,8 @@ module.exports = {
       {title: "🇺🇸 United States",       url: `/${locale}/subnational/#subnational-country-block-usa`},
       {title: "🇺🇾 Uruguay",   url: `/${locale}/subnational/#subnational-country-block-ury`}
     ]},
-    // visualizations
-    {title: "Visualizations", items: [
+    // viz builder
+    {title: "Viz Builder", items: [
       {title: "Tree map",     url: `/${locale}/visualize/tree_map/hs92/export/deu/all/show/2017/`, icon: "visualizations/tree-map"},
       {title: "Stacked area", url: `/${locale}/visualize/stacked/hs92/export/pry/all/show/1995.2017/`, icon: "visualizations/stacked"},
       {title: "Line chart",   url: `/${locale}/visualize/line/hs92/export/pry/all/show/1995.2017/`, icon: "visualizations/line"},
@@ -59,6 +59,16 @@ module.exports = {
       {title: "Country Rankings", url: `/${locale}/rankings/country/eci/`},
       {title: "Product Rankings", url: `/${locale}/rankings/product/hs92/`}
     ]},
+    // predictions
+    {title: "Predictions", items: [
+      {title: "🌐 World Trade Predictions (annual)",  url: `/${locale}/prediction?dataset=trade-annual`},
+      {title: "🌐 World Trade Predictions (monthly)", url: `/${locale}/prediction?dataset=trade-monthly`, pro: true},
+      {title: "🇨🇦 Canada Subnational Predictions",   url: `/${locale}/prediction?dataset=subnat-can`, pro: true},
+      {title: "🇩🇪 Germany Subnational Predictions",  url: `/${locale}/prediction?dataset=subnat-deu`, pro: true},
+      {title: "🇯🇵 Japan Subnational Predictions",    url: `/${locale}/prediction?dataset=subnat-jpn`, pro: true},
+      {title: "🇷🇺 Russia Subnational Predictions",   url: `/${locale}/prediction?dataset=subnat-rus`, pro: true},
+      {title: "🇪🇸 Spain Subnational Predictions",    url: `/${locale}/prediction?dataset=subnat-esp`, pro: true}
+    ]},
     // about
     {title: "Resources", items: [
       {title: "Tariff Explorer", url: `/${locale}/tariffs/?destinations=xxwld`},
@@ -71,16 +81,6 @@ module.exports = {
       {title: "Permissions",    url: `/${locale}/resources/permissions`},
       {title: "Privacy Policy", url: `/${locale}/resources/privacy`},
       {title: "Terms",          url: `/${locale}/resources/terms`}
-    ]},
-    // predictions
-    {title: "Predictions", items: [
-      {title: "🌐 World Trade Predictions (annual)",  url: `/${locale}/prediction?dataset=trade-annual`},
-      {title: "🌐 World Trade Predictions (monthly)", url: `/${locale}/prediction?dataset=trade-monthly`, pro: true},
-      {title: "🇨🇦 Canada Subnational Predictions",   url: `/${locale}/prediction?dataset=subnat-can`, pro: true},
-      {title: "🇩🇪 Germany Subnational Predictions",  url: `/${locale}/prediction?dataset=subnat-deu`, pro: true},
-      {title: "🇯🇵 Japan Subnational Predictions",    url: `/${locale}/prediction?dataset=subnat-jpn`, pro: true},
-      {title: "🇷🇺 Russia Subnational Predictions",   url: `/${locale}/prediction?dataset=subnat-rus`, pro: true},
-      {title: "🇪🇸 Spain Subnational Predictions",    url: `/${locale}/prediction?dataset=subnat-esp`, pro: true}
     ]}
   ],
   SUBNATIONAL_COUNTRIES: [
