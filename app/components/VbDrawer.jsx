@@ -6,13 +6,14 @@ import {
 } from "@blueprintjs/core";
 
 import {formatAbbreviate} from "d3plus-format";
+import colors from "../helpers/colors";
 
 import "./VbDrawer.css";
 
 /** */
 function VbDrawerStat(props) {
   return <div className="vb-drawer-stat">
-    <span className="title">{props.title}:</span>
+    <span className="title">{props.title}</span>
     <span className="value">{props.value}</span>
   </div>;
 }
@@ -46,7 +47,7 @@ class VbDrawer extends React.Component {
   };
 
   render() {
-    const drilldowns = ["HS6", "HS4", "HS2", "Section"];
+    const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
     const {relatedItems, routeParams, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
@@ -64,6 +65,11 @@ class VbDrawer extends React.Component {
     const isGeoGrouping = new RegExp(/show/).test(partner);
     const isProduct = new RegExp(/^(?!(all|show)).*$/).test(viztype);
     const isTradeBalance = flow === "show";
+    const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
+
+    const icon = !["Continent", "Country"].includes(titleKey)
+      ? `/images/icons/hs/hs_${parentId}.png`
+      : `/images/icons/country/country_${titleId.slice(2, 5)}.png`;
 
     // Use this logic for doing related visualizations
     // "vb_title_where_country_flow_product"
@@ -74,7 +80,9 @@ class VbDrawer extends React.Component {
     return <div>
       <Drawer
         className={"vb-drawer"}
-        icon="info-sign"
+        icon={<div className="vb-drawer-icon" style={{backgroundColor: colors.Section[parentId]}}>
+          <img src={icon} />
+        </div>}
         onClose={this.handleClose}
         title={`${titleName} (ID ${titleId})`}
         {...this.state}
@@ -82,7 +90,7 @@ class VbDrawer extends React.Component {
         <div className="bp3-drawer-body">
           <VbDrawerStat
             title="Trade Value"
-            value={formatAbbreviate(relatedItems["Trade Value"])}
+            value={`$${formatAbbreviate(relatedItems["Trade Value"])}`}
           />
           <VbDrawerStat
             title={timeId}
