@@ -20,7 +20,7 @@ class Footer extends React.Component {
           const {items, title} = group;
           return items
             ? <ul key={i}>
-              <p className="footer-group display">{title}</p>
+              <p className={`footer-group display${group.pro ? " is-pro" : ""}`}>{title}</p>
               {items.map((item, ii) => {
                 const {items, title} = item;
                 return items

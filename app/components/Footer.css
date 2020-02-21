@@ -75,19 +75,6 @@
           }
         }
 
-        &.is-pro:after {
-          @mixin font-xxs;
-          background-color: var(--accent-dark);
-          border-radius: 4px;
-          content: "PRO";
-          display: inline-block;
-          font-weight: bold;
-          margin-left: 4px;
-          margin-top: -2px;
-          padding: 1px 4px;
-          vertical-align: top;
-        }
-
       }
     }
     & > ul {
@@ -100,6 +87,19 @@
   & a {
     color: var(--white);
     font-weight: 400;
+  }
+
+  & .is-pro:after {
+    @mixin font-xxs;
+    background-color: var(--accent-dark);
+    border-radius: 4px;
+    content: "PRO";
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 4px;
+    margin-top: -2px;
+    padding: 1px 4px;
+    vertical-align: top;
   }
 
   & .footer-sponsor-list {

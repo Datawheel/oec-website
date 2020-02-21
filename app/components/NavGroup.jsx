@@ -45,7 +45,7 @@ class NavGroup extends Component {
   render() {
     const {pro, title, items} = this.props;
     const {isOpen} = this.state;
-    console.log(title, pro);
+
     return (
       <li className="nav-group" onBlur={e => this.onBlur(e)} onClick={() => this.onFocusButton()} key={`${title}-nav-group`}>
         {/* click the title to toggle the menu */}
