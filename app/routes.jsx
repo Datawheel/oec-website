@@ -12,6 +12,7 @@ import Welcome from "./pages/Welcome";
 import Vizbuilder from "./pages/Vizbuilder";
 import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
+import Reset from "./pages/User/Reset";
 import Account from "./pages/User/Account";
 import Subscription from "./pages/User/Subscription";
 import Rankings from "./pages/Rankings";
@@ -76,6 +77,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/visualize/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={Vizbuilder} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
+      <Route exact path="/:lang/reset" component={Reset} />
       <Route exact path="/:lang/account" component={Account} />
       <Route exact path="/:lang/subscription" component={Subscription} />
       <Route exact path="/:lang/subnational" component={Subnational} />
