@@ -55,7 +55,8 @@
 
         /* icon sizing & positioning */
         & .footer-link-icon {
-          width: 0.75em;
+          display: inline-block;
+          width: 0.9em;
           margin-right: 0.5em;
           transition: 0.1s ease-out;
         }

@@ -184,6 +184,7 @@
 
   /* icon sizing & positioning */
   & .nav-group-link-icon {
+    display: inline-block;
     width: 0.75em;
     margin-right: 0.5em;
     transition: 0.1s ease-out;
