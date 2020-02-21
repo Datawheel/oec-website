@@ -275,7 +275,6 @@ class Prediction extends React.Component {
                   key={dset.slug}
                   active={dataset.slug === dset.slug}
                   className="bp3-minimal"
-                  icon="timeline-line-chart"
                   text={dset.name} />
               )}
             </Navbar.Group>

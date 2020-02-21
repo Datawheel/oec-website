@@ -127,15 +127,17 @@ class SearchMultiSelect extends React.Component {
         tagRenderer={this.renderTag}
         selectedItems={this.state.selectedItems}
       />
-      <Label className={Classes.INLINE}>
-        Aggregate&nbsp;
-        <Switch
-          alignIndicator={Alignment.LEFT}
-          checked={isDrilldown}
-          labelElement={"Drilldown"}
-          inline={true}
-          onChange={toggleDrilldown} />
-      </Label>
+      {isDrilldown === true || isDrilldown === false
+        ? <Label className={Classes.INLINE}>
+          Aggregate&nbsp;
+          <Switch
+            alignIndicator={Alignment.LEFT}
+            checked={isDrilldown}
+            labelElement={"Drilldown"}
+            inline={true}
+            onChange={toggleDrilldown} />
+        </Label>
+        : null}
     </div>;
   }
 }
