@@ -15,7 +15,6 @@ import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import Loading from "components/Loading";
 import RankingTable from "components/RankingTable";
-import RankingTableButtons from "components/RankingTableButtons";
 
 import {
   PAGE,
@@ -248,36 +247,7 @@ class Rankings extends React.Component {
             )}
           </div>
 
-          <div className="download">
-            {DOWNLOAD_BUTTONS.map((d, k, {length}) =>
-              <AnchorButton
-                text={t(d[0])}
-                href={d[1][category]}
-                key={k}
-                className={classnames("anchor-button", {last: length === k + 1})}
-              />
-            )}
-          </div>
-
           <div className="settings">
-            <RankingTableButtons
-              t={t}
-              anchor={true}
-              type={"showing"}
-              title={t("rankings_settings_showing")}
-              array={CATEGORY_BUTTONS}
-              active={category}
-            />
-            {category === "product" &&
-              <RankingTableButtons
-                t={t}
-                anchor={true}
-                type={"product"}
-                title={t("rankings_settings_product_classification")}
-                array={PRODUCT_BUTTONS}
-                active={measure}
-              />
-            }
           </div>
 
           <div className="ranking">
