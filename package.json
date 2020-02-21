@@ -24,7 +24,7 @@
   "homepage": "https://github.com/observatory-economic-complexity/oec-website#readme",
   "dependencies": {
     "@blueprintjs/select": "^3.11.2",
-    "@datawheel/canon-cms": "^0.12.16",
+    "@datawheel/canon-cms": "^0.12.17",
     "@datawheel/canon-core": "^0.18.7",
     "@datawheel/canon-stats": "git+https://x-oauth-basic@github.com/Datawheel/canon-stats.git",
     "@datawheel/olap-client": "^1.2.1",
