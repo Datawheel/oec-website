@@ -34,7 +34,7 @@ class NavGroup extends Component {
 
   /** the link markup is the same whether it's rendered in a nested list or not */
   renderLink(item) {
-    return <a href={item.url} className="nav-group-link" onFocus={() => this.setState({isOpen: true})}>
+    return <a href={item.url} className={`nav-group-link${item.pro ? " is-pro" : ""}`} onFocus={() => this.setState({isOpen: true})}>
       {item.icon &&
         <img className="nav-group-link-icon" src={`/images/icons/${item.icon}.png`} alt="" />
       }
