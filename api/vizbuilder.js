@@ -25,6 +25,7 @@ module.exports = function(app) {
           measures: "Trade Value",
           Year: queryParams.Year || 2017,
           parents: true
+          // threshold_Country: 10000000
         }});
       }
     };
