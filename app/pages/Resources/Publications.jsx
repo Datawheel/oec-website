@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Helmet from "react-helmet";
 
 export default class Publications extends Component {
   render() {
@@ -224,6 +225,8 @@ export default class Publications extends Component {
     ];
     console.log(scrapping);
     return (
+      <Helmet title="Publications" />
+
       <div className="publications">
         <h1> Publications </h1>
       </div>
