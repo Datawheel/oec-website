@@ -336,6 +336,7 @@ class VbChart extends React.Component {
             isOpen={this.state.isOpenDrawer}
             relatedItems={this.state.relatedItems}
             routeParams={routeParams}
+            router={this.props.router}
             callback={d => this.setState({isOpenDrawer: d})}
           />
         </div>

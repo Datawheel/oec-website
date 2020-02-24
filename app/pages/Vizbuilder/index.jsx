@@ -335,7 +335,7 @@ class Vizbuilder extends React.Component {
                   items={this.state.country}
                   itemType={"country"}
                   selectedItems={this.state._selectedItemsCountry}
-                  title={"Country"}
+                  title={t("Country")}
                   callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
                 />
               </div>
@@ -347,7 +347,7 @@ class Vizbuilder extends React.Component {
                   items={this.state.country}
                   itemType="country"
                   selectedItems={this.state._selectedItemsPartner}
-                  title={"Partner"}
+                  title={t("Partner")}
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
@@ -450,6 +450,7 @@ class Vizbuilder extends React.Component {
               xScale={this.state._xAxisScale}
               yScale={this.state._yAxisScale}
               routeParams={routeParams}
+              router={this.props.router}
             />
           </div>
         </div>
