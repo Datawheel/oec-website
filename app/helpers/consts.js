@@ -239,7 +239,7 @@ module.exports = {
       cube: "trade_s_fra_q_cpf",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Regions", level: "Region", slug: "regions"},
+        {name: "Regions", level: "Region", slug: "regions", ignoreIdsList: ["24"]},
         {name: "Departments", level: "Subnat Geography", slug: "departments"}
       ]
     }
