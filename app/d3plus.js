@@ -168,6 +168,7 @@ const axisStyles = {
 
 export default {
   aggs: {
+    "Trade Value Growth": d => d.length > 1 ? 0 : d[0],
     "Section ID": mean,
     "Flow ID": mean
   },

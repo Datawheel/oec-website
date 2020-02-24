@@ -76,18 +76,27 @@ class VbDrawer extends React.Component {
 
     // ["export", "import"].map(d => t("vb_title_where_country_flow_product"));
 
+    const color = colors.Section[parentId] || colors.Continent[parentId];
+
 
     return <div>
       <Drawer
         className={"vb-drawer"}
-        icon={<div className="vb-drawer-icon" style={{backgroundColor: colors.Section[parentId]}}>
+        icon={<div className="vb-drawer-icon" style={{backgroundColor: color}}>
           <img src={icon} />
         </div>}
         onClose={this.handleClose}
-        title={`${titleName} (ID ${titleId})`}
+        title={<div>
+          <div>{titleName}</div>
+          <div><a style={{color}} href={`/en/profile/hs92/${titleId}`}>View profile</a></div>
+        </div>}
         {...this.state}
       >
         <div className="bp3-drawer-body">
+          <VbDrawerStat
+            title={`${titleKey} ID`}
+            value={titleId}
+          />
           <VbDrawerStat
             title="Trade Value"
             value={`$${formatAbbreviate(relatedItems["Trade Value"])}`}
