@@ -1,11 +1,10 @@
-import React from "react";
+import React, {Component} from "react";
 import axios from "axios";
 import numeral from "numeral";
 import classnames from "classnames";
 import {connect} from "react-redux";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
-// import {Sparklines, SparklinesLine} from "react-sparklines";
 import {formatAbbreviate} from "d3plus-format";
 import {Radio, RadioGroup, Slider, Button, ButtonGroup, Icon} from "@blueprintjs/core";
 
@@ -19,7 +18,7 @@ import RankingTable from "components/RankingTable";
 import {keyBy} from "helpers/funcs";
 import {range} from "helpers/utils";
 
-class Rankings extends React.Component {
+class Rankings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,16 +46,16 @@ class Rankings extends React.Component {
       {
         id: "category",
         accessor: d => d.Country,
-        Header: () => 
+        Header: () =>
           <div className="header">
             <span className="year">Country</span>
             <div className="icons">
               <Icon icon={"caret-up"} iconSize={16} />
               <Icon icon={"caret-down"} iconSize={16} />
             </div>
-          </div>,        
+          </div>,
         style: {whiteSpace: "unset"},
-        Cell: props => 
+        Cell: props =>
           <div className="category">
             <img
               src={`/images/icons/country/country_${props.original["Country ID"].substr(
@@ -77,18 +76,18 @@ class Rankings extends React.Component {
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
-        
+
       },
       {
         id: `${yearValue}`,
-        Header: () => 
+        Header: () =>
           <div className="header">
             <span className="year">{yearValue}</span>
             <div className="icons">
               <Icon icon={"caret-up"} iconSize={16} />
               <Icon icon={"caret-down"} iconSize={16} />
             </div>
-          </div>,        
+          </div>,
         accessor: d => d["Trade Value ECI"],
         Cell: props =>
           numeral(props.original["Trade Value ECI"]).format("0.00000") * 1 !== 0
@@ -103,18 +102,6 @@ class Rankings extends React.Component {
 
   handleValueChange(key, value) {
     this.setState({[key]: value});
-  }
-
-  handleCategoryChange(value) {
-    this.setState({catValue: value});
-  }
-
-  handleDepthChange(value) {
-    this.setState({depthValue: value});
-  }
-
-  handleRevisionChange(value) {
-    this.setState({revValue: value});
   }
 
   getChangeHandler(key) {
@@ -176,7 +163,6 @@ class Rankings extends React.Component {
           <h1 className="title">Dynamic Rankings</h1>
           <div className="about">
             <p>
-              {" "}
               The Economic Complexity Index (ECI) and the Product Complexity Index (PCI)
               are, respectively, measures of the relative knowledge intensity of an
               economy or a product. ECI measures the knowledge intensity of an economy by
@@ -184,27 +170,33 @@ class Rankings extends React.Component {
               the knowledge intensity of a product by considering the knowledge intensity
               of its exporters. This circular argument is mathematically tractable and can
               be used to construct relative measures of the knowledge intensity of
-              economies and products (see{" "}
-              <a href="/en/resources/methodology/" className="link" target="_blank">
+              economies and products (see {" "}
+              <a
+                href="/en/resources/methodology/"
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 methodology section
               </a>{" "}
-              for more details).{" "}
+               for more details).
             </p>
             <p>
-              {" "}
               ECI has been validated as a relevant economic measure by showing its ability
-              to predict future economic growth (see{" "}
+              to predict future economic growth (see {" "}
               <a
                 href="http://www.pnas.org/content/106/26/10570.short"
                 className="link"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Hidalgo and Hausmann 2009
-              </a>), and explain international variations in income inequality (see{" "}
+              </a>), and explain international variations in income inequality (see {" "}
               <a
                 href="/pdf/LinkingEconomicComplexityInstitutionsAndIncomeInequality.pdf"
                 className="link"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Hartmann et al. 2017
               </a>).
@@ -215,10 +207,10 @@ class Rankings extends React.Component {
           <div className="settings">
             <div className="button-settings">
               <div className="category-settings">
-                <h3>Category: </h3>
+                <h3>Category </h3>
                 <RadioGroup
                   onChange={event => {
-                    this.handleCategoryChange(event.currentTarget.value);
+                    this.handleValueChange("catValue", event.currentTarget.value);
                   }}
                   selectedValue={catValue}
                 >
@@ -227,12 +219,12 @@ class Rankings extends React.Component {
                 </RadioGroup>
               </div>
               <div className="depth-settings">
-                <h3>Depth: </h3>
+                <h3>Depth </h3>
                 <ButtonGroup style={{minWidth: 200}}>
-                  {depthButtons.map((d, k) => 
+                  {depthButtons.map((d, k) =>
                     <Button
                       key={k}
-                      onClick={() => this.handleDepthChange(d)}
+                      onClick={() => this.handleValueChange("depthValue", d)}
                       className={`${depthValue === d ? "is-active" : ""}`}
                     >
                       {d}
@@ -241,12 +233,12 @@ class Rankings extends React.Component {
                 </ButtonGroup>
               </div>
               <div className="revision-setting">
-                <h3>Revision: </h3>
+                <h3>Revision </h3>
                 <ButtonGroup style={{minWidth: 200}}>
-                  {revisionButtons.map((d, k) => 
+                  {revisionButtons.map((d, k) =>
                     <Button
                       key={k}
-                      onClick={() => this.handleRevisionChange(d)}
+                      onClick={() => this.handleValueChange("revValue", d)}
                       className={`${revValue === d ? "is-active" : ""}`}
                     >
                       {d}
@@ -257,7 +249,7 @@ class Rankings extends React.Component {
             </div>
             <div className="slider-settings">
               <div className="year-settings">
-                <h3>Year: </h3>
+                <h3>Year </h3>
                 <Slider
                   min={2003}
                   max={2017}
@@ -269,7 +261,7 @@ class Rankings extends React.Component {
                 />
               </div>
               <div className="export-settings">
-                <h3>Export Value Threshold: </h3>
+                <h3>Export Value Threshold </h3>
                 <Slider
                   min={0}
                   max={1000000000}
@@ -286,9 +278,9 @@ class Rankings extends React.Component {
             </div>
           </div>
           <div className="ranking">
-            {_loading 
+            {_loading
               ? <Loading />
-              :               data && <RankingTable data={data} columns={columns} />
+              : data && <RankingTable data={data} columns={columns} />
             }
           </div>
         </div>
