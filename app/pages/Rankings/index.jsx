@@ -6,7 +6,15 @@ import {connect} from "react-redux";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {formatAbbreviate} from "d3plus-format";
-import {Radio, RadioGroup, Slider, RangeSlider, Button, ButtonGroup, Icon} from "@blueprintjs/core";
+import {
+  Radio,
+  RadioGroup,
+  Slider,
+  RangeSlider,
+  Button,
+  ButtonGroup,
+  Icon
+} from "@blueprintjs/core";
 
 import "./Rankings.css";
 
@@ -36,7 +44,8 @@ class Rankings extends Component {
     };
   }
 
-  createColumns(yearValue) {
+  createColumns(type, array) {
+    const years = type === "single" ? [array, array] : array;
     const columns = [
       {
         id: "id",
@@ -81,11 +90,11 @@ class Rankings extends Component {
           </div>
 
       },
-      {
-        id: `${yearValue}`,
+      ...range(years[0], years[1]).map((year, index, {length}) => ({
+        id: length === index + 1 ? "lastyear" : `year${index}`,
         Header: () =>
           <div className="header">
-            <span className="year">{yearValue}</span>
+            <span className="year">{year}</span>
             <div className="icons">
               <Icon icon={"caret-up"} iconSize={16} />
               <Icon icon={"caret-down"} iconSize={16} />
@@ -97,7 +106,7 @@ class Rankings extends Component {
             ? numeral(props.original["Trade Value ECI"]).format("0.00000")
             : "",
         className: "year"
-      }
+      }))
     ];
 
     return columns.filter(f => f !== null);
@@ -116,27 +125,58 @@ class Rankings extends Component {
   }
 
   recalculateData() {
-    const {catValue, depthValue, revValue, yearValue, exportThreshold} = this.state;
+    const {
+      catValue,
+      depthValue,
+      revValue,
+      yearValue,
+      yearRange,
+      exportThreshold,
+      _yearSelection
+    } = this.state;
     this.setState({_loading: true});
 
-    let path =
-      catValue === "country"
-        ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
-        : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
+    if (_yearSelection === "single") {
+      let path =
+        catValue === "country"
+          ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
+          : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
 
-    axios.all([axios.get(path)]).then(
-      axios.spread(resp => {
-        const data = resp.data.data.sort(
-          (a, b) => b["Trade Value ECI"] - a["Trade Value ECI"]
+      axios.all([axios.get(path)]).then(
+        axios.spread(resp => {
+          const data = resp.data.data.sort(
+            (a, b) => b["Trade Value ECI"] - a["Trade Value ECI"]
+          );
+          const columns = this.createColumns(_yearSelection, yearValue);
+          console.log(columns);
+          this.setState({
+            data,
+            columns,
+            _loading: false
+          });
+        })
+      );
+    }
+    else {
+      const data = [];
+      range(yearRange[0], yearRange[1]).map(year => {
+        let path =
+          catValue === "country"
+            ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${year}&parents=true&threshold_Country=${exportThreshold}`
+            : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${year}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
+        axios.all([axios.get(path)]).then(
+          axios.spread(resp => {
+            const yeardata = resp.data.data.sort(
+              (a, b) => b["Trade Value ECI"] - a["Trade Value ECI"]
+            );
+            console.log(year, yeardata, path);
+          })
         );
-        const columns = this.createColumns(yearValue);
-        this.setState({
-          data,
-          columns,
-          _loading: false
-        });
-      })
-    );
+      });
+      this.setState({
+        _loading: false
+      });
+    }
   }
 
   render() {
@@ -156,7 +196,14 @@ class Rankings extends Component {
 
     const depthButtons = ["HS2", "HS4", "HS6"];
     const revisionButtons = ["HS92", "HS96", "HS02", "HS07", "HS12"];
-    console.log(catValue, depthValue, revValue, initialYear[revValue], _yearSelection === "single" ? yearValue : yearRange, exportThreshold);
+    console.log(
+      catValue,
+      depthValue,
+      revValue,
+      initialYear[revValue],
+      _yearSelection === "single" ? yearValue : yearRange,
+      exportThreshold
+    );
     return (
       <div className="rankings-page">
         <OECNavbar />
@@ -181,7 +228,7 @@ class Rankings extends Component {
               >
                 methodology section
               </a>{" "}
-               for more details).
+              for more details).
             </p>
             <p>
               ECI has been validated as a relevant economic measure by showing its ability
@@ -259,7 +306,7 @@ class Rankings extends Component {
                   inline={true}
                 >
                   <Radio label="Single-Year" value="single" />
-                  <Radio label="Multi-Year" value="multi"/>
+                  <Radio label="Multi-Year" value="multi" />
                 </RadioGroup>
                 {_yearSelection === "single" &&
                   <Slider
@@ -303,7 +350,7 @@ class Rankings extends Component {
           <div className="ranking">
             {_loading
               ? <Loading />
-              : data && <RankingTable data={data} columns={columns} />
+              :               data && <RankingTable data={data} columns={columns} />
             }
           </div>
         </div>
