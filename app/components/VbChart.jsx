@@ -232,8 +232,6 @@ class VbChart extends React.Component {
       });
     }
 
-    console.log(params);
-
     return axios.get("https://api.oec.world/tesseract/data", {
       params
     }).then(resp => {

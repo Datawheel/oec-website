@@ -258,7 +258,9 @@ class Vizbuilder extends React.Component {
       _xAxis,
       _yAxis,
       _xAxisTitle: _xAxis,
-      _yAxisTitle: _yAxis
+      _yAxisTitle: _yAxis,
+      _xAxisScale: _xAxis.scale || "Log",
+      _yAxisScale: _yAxis.scale || "Log"
     });
   }
 
@@ -367,7 +369,7 @@ class Vizbuilder extends React.Component {
                 items={this.state.wdiIndicators}
                 run={this.updateFilter}
                 scale
-                selectedItem={this.state._xAxis}
+                selectedItem={this.state._xAxisTitle}
                 state="_xAxis"
                 title={"X Axis"}
                 callbackButton={(key, value) => this.setState({[key]: value})}
@@ -379,7 +381,7 @@ class Vizbuilder extends React.Component {
                 items={this.state.wdiIndicators}
                 run={this.updateFilter}
                 scale
-                selectedItem={this.state._yAxis}
+                selectedItem={this.state._yAxisTitle}
                 state="_yAxis"
                 title={"Y Axis"}
                 callbackButton={(key, value) => this.setState({[key]: value})}
