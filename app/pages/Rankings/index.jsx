@@ -25,6 +25,7 @@ class Rankings extends Component {
       catValue: "country",
       depthValue: "HS4",
       revValue: "HS92",
+      initialYear: {HS92: 1995, HS96: 1998, HS02: 2003, HS07: 2008, HS12: 2012},
       yearValue: 2017,
       exportThreshold: 100000000,
       data: null,
@@ -145,6 +146,7 @@ class Rankings extends Component {
       catValue,
       depthValue,
       revValue,
+      initialYear,
       yearValue,
       exportThreshold,
       data,
@@ -154,7 +156,7 @@ class Rankings extends Component {
 
     const depthButtons = ["HS2", "HS4", "HS6"];
     const revisionButtons = ["HS92", "HS96", "HS02", "HS07", "HS12"];
-    console.log(catValue, depthValue, revValue, yearValue, exportThreshold);
+    console.log(catValue, depthValue, revValue, initialYear[revValue], yearValue, exportThreshold);
     return (
       <div className="rankings-page">
         <OECNavbar />
@@ -251,7 +253,7 @@ class Rankings extends Component {
               <div className="year-settings">
                 <h3>Year </h3>
                 <Slider
-                  min={2003}
+                  min={initialYear[revValue]}
                   max={2017}
                   stepSize={1}
                   labelStepSize={1}
