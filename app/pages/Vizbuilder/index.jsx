@@ -258,7 +258,9 @@ class Vizbuilder extends React.Component {
       _xAxis,
       _yAxis,
       _xAxisTitle: _xAxis,
-      _yAxisTitle: _yAxis
+      _yAxisTitle: _yAxis,
+      _xAxisScale: _xAxis.scale || "Log",
+      _yAxisScale: _yAxis.scale || "Log"
     });
   }
 
@@ -333,7 +335,7 @@ class Vizbuilder extends React.Component {
                   items={this.state.country}
                   itemType={"country"}
                   selectedItems={this.state._selectedItemsCountry}
-                  title={"Country"}
+                  title={t("Country")}
                   callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
                 />
               </div>
@@ -345,7 +347,7 @@ class Vizbuilder extends React.Component {
                   items={this.state.country}
                   itemType="country"
                   selectedItems={this.state._selectedItemsPartner}
-                  title={"Partner"}
+                  title={t("Partner")}
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
@@ -367,7 +369,7 @@ class Vizbuilder extends React.Component {
                 items={this.state.wdiIndicators}
                 run={this.updateFilter}
                 scale
-                selectedItem={this.state._xAxis}
+                selectedItem={this.state._xAxisTitle}
                 state="_xAxis"
                 title={"X Axis"}
                 callbackButton={(key, value) => this.setState({[key]: value})}
@@ -379,7 +381,7 @@ class Vizbuilder extends React.Component {
                 items={this.state.wdiIndicators}
                 run={this.updateFilter}
                 scale
-                selectedItem={this.state._yAxis}
+                selectedItem={this.state._yAxisTitle}
                 state="_yAxis"
                 title={"Y Axis"}
                 callbackButton={(key, value) => this.setState({[key]: value})}
@@ -448,6 +450,7 @@ class Vizbuilder extends React.Component {
               xScale={this.state._xAxisScale}
               yScale={this.state._yAxisScale}
               routeParams={routeParams}
+              router={this.props.router}
             />
           </div>
         </div>

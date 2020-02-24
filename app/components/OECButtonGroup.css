@@ -2,6 +2,9 @@
   align-items: center;
   display: flex;
   width: auto;
+  & .cp-button {
+    border: 1px solid var(--dark-1);
+  }
   & .oec-button-group-title {
     font-size: var(--font-md);
     margin-right: var(--gutter-sm) !important;

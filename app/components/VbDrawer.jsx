@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {
   Drawer,
@@ -16,6 +17,15 @@ function VbDrawerStat(props) {
     <span className="title">{props.title}</span>
     <span className="value">{props.value}</span>
   </div>;
+}
+
+/** */
+function VbRelatedVizTitle(props) {
+  const {permalink, t, titleName, titleConfig} = props;
+  return <Link className="vb-related-viz" to={permalink} onClick={() => props.router.push(permalink)}>
+    <img className="icon" src="/images/icons/app/app_tree_map.png" alt=""/>
+    {t(titleName, titleConfig)}
+  </Link>;
 }
 
 class VbDrawer extends React.Component {
@@ -76,18 +86,27 @@ class VbDrawer extends React.Component {
 
     // ["export", "import"].map(d => t("vb_title_where_country_flow_product"));
 
+    const color = colors.Section[parentId] || colors.Continent[parentId];
+
 
     return <div>
       <Drawer
         className={"vb-drawer"}
-        icon={<div className="vb-drawer-icon" style={{backgroundColor: colors.Section[parentId]}}>
+        icon={<div className="vb-drawer-icon" style={{backgroundColor: color}}>
           <img src={icon} />
         </div>}
         onClose={this.handleClose}
-        title={`${titleName} (ID ${titleId})`}
+        title={<div>
+          <div>{titleName}</div>
+          <div><a style={{color}} href={`/en/profile/hs92/${titleId}`}>View profile</a></div>
+        </div>}
         {...this.state}
       >
         <div className="bp3-drawer-body">
+          <VbDrawerStat
+            title={`${titleKey} ID`}
+            value={titleId}
+          />
           <VbDrawerStat
             title="Trade Value"
             value={`$${formatAbbreviate(relatedItems["Trade Value"])}`}
@@ -97,10 +116,31 @@ class VbDrawer extends React.Component {
             value={timeName}
           />
           <h3>RELATED VISUALIZATIONS</h3>
-
-          {isCountry && ["export", "import"].map(d => <p>{t("vb_title_what_country_flow", {country, flow: d, time})}</p>)}
-          {isCountry && ["export", "import"].map(d => <p>{t("vb_title_where_country_flow_product", {country, flow: d})}</p>)}
-          {isCountry && ["export", "import"].map(d => <p>{t("vb_title_where_country_flow_product", {country, flow: d, product: titleName})}</p>)}
+          {isCountry && ["export", "import"].reduce((all, d) => {
+            const permalink = `/en/visualize/tree_map/hs92/${d}/${country}/all/show/${time}/`;
+            all.push(<VbRelatedVizTitle
+              permalink={permalink}
+              router={this.props.router}
+              titleConfig={{country, flow: d, time}}
+              titleName="vb_title_what_country_flow"
+              t={t}
+            />);
+            all.push(<VbRelatedVizTitle
+              permalink={permalink}
+              router={this.props.router}
+              titleConfig={{country, flow: d, time}}
+              titleName="vb_title_where_country_flow_product"
+              t={t}
+            />);
+            all.push(<VbRelatedVizTitle
+              permalink={permalink}
+              router={this.props.router}
+              titleConfig={{country, flow: d, product: titleName}}
+              titleName="vb_title_where_country_flow_product"
+              t={t}
+            />);
+            return all;
+          }, [])}
         </div>
       </Drawer>
     </div>;
