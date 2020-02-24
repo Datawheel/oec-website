@@ -64,6 +64,7 @@
       }
 
       & .slider-settings {
+        margin-top: var(--gutter-md);
       }
 
       & .calculate-button {

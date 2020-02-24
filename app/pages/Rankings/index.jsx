@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 import {browserHistory} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {formatAbbreviate} from "d3plus-format";
-import {Radio, RadioGroup, Slider, Button, ButtonGroup, Icon} from "@blueprintjs/core";
+import {Radio, RadioGroup, Slider, RangeSlider, Button, ButtonGroup, Icon} from "@blueprintjs/core";
 
 import "./Rankings.css";
 
@@ -27,10 +27,12 @@ class Rankings extends Component {
       revValue: "HS92",
       initialYear: {HS92: 1995, HS96: 1998, HS02: 2003, HS07: 2008, HS12: 2012},
       yearValue: 2017,
+      yearRange: [2012, 2017],
       exportThreshold: 100000000,
       data: null,
       columns: null,
-      _loading: false
+      _loading: false,
+      _yearSelection: "single"
     };
   }
 
@@ -116,15 +118,11 @@ class Rankings extends Component {
   recalculateData() {
     const {catValue, depthValue, revValue, yearValue, exportThreshold} = this.state;
     this.setState({_loading: true});
-    // revValue = revision
+
     let path =
       catValue === "country"
-        ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
-          2
-        )}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
-        : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
-          2
-        )}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
+        ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
+        : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
 
     axios.all([axios.get(path)]).then(
       axios.spread(resp => {
@@ -148,15 +146,17 @@ class Rankings extends Component {
       revValue,
       initialYear,
       yearValue,
+      yearRange,
       exportThreshold,
       data,
       columns,
-      _loading
+      _loading,
+      _yearSelection
     } = this.state;
 
     const depthButtons = ["HS2", "HS4", "HS6"];
     const revisionButtons = ["HS92", "HS96", "HS02", "HS07", "HS12"];
-    console.log(catValue, depthValue, revValue, initialYear[revValue], yearValue, exportThreshold);
+    console.log(catValue, depthValue, revValue, initialYear[revValue], _yearSelection === "single" ? yearValue : yearRange, exportThreshold);
     return (
       <div className="rankings-page">
         <OECNavbar />
@@ -251,16 +251,37 @@ class Rankings extends Component {
             </div>
             <div className="slider-settings">
               <div className="year-settings">
-                <h3>Year </h3>
-                <Slider
-                  min={initialYear[revValue]}
-                  max={2017}
-                  stepSize={1}
-                  labelStepSize={1}
-                  onChange={this.getChangeHandler("yearValue")}
-                  value={yearValue}
-                  showTrackFill={false}
-                />
+                <RadioGroup
+                  onChange={event => {
+                    this.handleValueChange("_yearSelection", event.currentTarget.value);
+                  }}
+                  selectedValue={_yearSelection}
+                  inline={true}
+                >
+                  <Radio label="Single-Year" value="single" />
+                  <Radio label="Multi-Year" value="multi"/>
+                </RadioGroup>
+                {_yearSelection === "single" &&
+                  <Slider
+                    min={initialYear[revValue]}
+                    max={2017}
+                    stepSize={1}
+                    labelStepSize={1}
+                    onChange={this.getChangeHandler("yearValue")}
+                    value={yearValue}
+                    showTrackFill={false}
+                  />
+                }
+                {_yearSelection === "multi" &&
+                  <RangeSlider
+                    min={initialYear[revValue]}
+                    max={2017}
+                    stepSize={1}
+                    labelStepSize={1}
+                    onChange={this.getChangeHandler("yearRange")}
+                    value={yearRange}
+                  />
+                }
               </div>
               <div className="export-settings">
                 <h3>Export Value Threshold </h3>
