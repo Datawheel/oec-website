@@ -103,7 +103,7 @@ module.exports = {
       cube: "trade_s_jpn_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Regions", level: "Area", slug: "regions"},
+        {name: "Regions", level: "Region", slug: "regions"},
         {name: "Prefectures", level: "Subnat Geography", slug: "prefectures"}
       ]
     },
@@ -232,9 +232,19 @@ module.exports = {
       geoLevels: [
         {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
       ]
+    },
+    {
+      name: "France",
+      code: "fra",
+      cube: "trade_s_fra_q_cpf",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Regions", level: "Region", slug: "regions"},
+        {name: "Departments", level: "Subnat Geography", slug: "departments"}
+      ]
     }
-    // TODO: CHL, ECU, FRA
-    // TBD: ZAF -> ports, take a look , SWE -> no units, ignore it.
+    // TODO: CHL, ECU
+    // TBD: SWE -> no units, ignore it.
   ],
 
   PREDICTION_DATASETS: [
