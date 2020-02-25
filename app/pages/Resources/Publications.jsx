@@ -225,9 +225,9 @@ export default class Publications extends Component {
     ];
     console.log(scrapping);
     return (
-      <Helmet title="Publications" />
-
       <div className="publications">
+        <Helmet title="Publications" />
+
         <h1> Publications </h1>
       </div>
     );
