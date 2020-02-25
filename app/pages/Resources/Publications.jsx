@@ -229,26 +229,32 @@ export default class Publications extends Component {
         <Helmet title="Publications" />
 
         <div className="papers">
-
           <h2> Research Papers </h2>
 
           {papers.map((d, k) =>
             <div className="paper" key={k}>
-              <div className="preview">{/* Aqui va la Foto */}</div>
+              <div className="preview">
+                {d.pdf
+                  ? <a href={`/pdf/${d.pdf}`} target="_blank" rel="noopener noreferrer" title="View PDF">
+                    <img src={`/images/publications/${d.img}`} alt="paper-preview" />
+                  </a>
+                  : <img src={`/images/publications/${d.img}`} alt="paper-preview" />
+                }
+              </div>
               <div className="data">
-                <div className="name">{d.name}</div>
+                <h3>
+                  <a href={d.link} target="_blank" rel="noopener noreferrer" className="name">
+                    {`${d.name} (${d.year})`}
+                  </a>
+                </h3>
                 <div className="info">
-                  <div className="year">{d.year}</div>
-                  <div className="text">
-                    <div className="authors">{d.author}</div>
-                    <div className="abstract">{d.abstract}</div>
-                  </div>
+                  <h4 className="authors">{d.author}</h4>
+                  <p className="abstract">{d.abstract}</p>
                 </div>
               </div>
             </div>
           )}
         </div>
-
       </div>
     );
   }
