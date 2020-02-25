@@ -2,6 +2,9 @@
   align-items: center;
   display: flex;
   width: auto;
+  &.cp-button-group {
+    margin-bottom: 0;
+  }
   & .cp-button {
     border: 1px solid var(--dark-1);
   }

@@ -1,0 +1,6 @@
+.vb-radiogroup {
+  margin-top: var(--gutter-sm);
+  & label {
+    font-size: var(--font-md);
+  }
+}
