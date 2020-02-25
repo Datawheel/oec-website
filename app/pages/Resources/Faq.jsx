@@ -1,10 +1,12 @@
 import React, {Component} from "react";
+import Helmet from "react-helmet";
 
 export default class Faq extends Component {
 
   render() {
     return (
       <div className="faq">
+        <Helmet title="Frequently Asked Questions" />
 
         <h1> Frequently Asked Questions </h1>
 
