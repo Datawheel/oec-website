@@ -49,7 +49,7 @@ class VbShare extends React.Component {
       canOutsideClickClose: true,
       enforceFocus: true,
       hasBackdrop: true,
-      isOpen: true,
+      isOpen: false,
       position: Position.RIGHT,
       size: undefined,
       usePortal: true
