@@ -3,7 +3,7 @@ import Helmet from "react-helmet";
 
 export default class Publications extends Component {
   render() {
-    const scrapping = [
+    const papers = [
       {
         name: "Complex economic activities concentrate in large cities",
         link: "https://www.nature.com/articles/s41562-019-0803-3",
@@ -223,12 +223,32 @@ export default class Publications extends Component {
         img: "psconditions.png"
       }
     ];
-    console.log(scrapping);
+
     return (
       <div className="publications">
         <Helmet title="Publications" />
 
-        <h1> Publications </h1>
+        <div className="papers">
+
+          <h2> Research Papers </h2>
+
+          {papers.map((d, k) =>
+            <div className="paper" key={k}>
+              <div className="preview">{/* Aqui va la Foto */}</div>
+              <div className="data">
+                <div className="name">{d.name}</div>
+                <div className="info">
+                  <div className="year">{d.year}</div>
+                  <div className="text">
+                    <div className="authors">{d.author}</div>
+                    <div className="abstract">{d.abstract}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
       </div>
     );
   }

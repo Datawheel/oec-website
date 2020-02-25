@@ -8,3 +8,27 @@
     width: 100%;
   }
 }
+
+.publications-content {
+  background: var(--dark-4);
+  color: var(--white);
+  padding-top: var(--nav-height);
+
+  & .papers {
+    background: #D1D2D4;
+
+    & h2 {
+      color: var(--dark-3);
+      font-size: var(--font-xxl);
+      font-weight: 300;
+      margin: 0;
+      padding: var(--gutter-md) var(--gutter-xl);
+    }
+
+    & .paper {
+
+      & .data {
+      }
+    }
+  }
+}
