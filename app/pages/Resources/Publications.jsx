@@ -3,6 +3,13 @@ import Helmet from "react-helmet";
 
 export default class Publications extends Component {
   render() {
+    const information = {
+      title: "",
+      subtitle: "",
+      author: "",
+      abstract: "",
+      amazon: ""
+    };
     const papers = [
       {
         name: "Complex economic activities concentrate in large cities",
