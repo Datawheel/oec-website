@@ -1,8 +1,9 @@
 import React, {Component} from "react";
+import Helmet from "react-helmet";
 
 export default class Publications extends Component {
   render() {
-    const scrapping = [
+    const papers = [
       {
         name: "Complex economic activities concentrate in large cities",
         link: "https://www.nature.com/articles/s41562-019-0803-3",
@@ -222,10 +223,38 @@ export default class Publications extends Component {
         img: "psconditions.png"
       }
     ];
-    console.log(scrapping);
+
     return (
       <div className="publications">
-        <h1> Publications </h1>
+        <Helmet title="Publications" />
+
+        <div className="papers">
+          <h2> Research Papers </h2>
+
+          {papers.map((d, k) =>
+            <div className="paper" key={k}>
+              <div className="preview">
+                {d.pdf
+                  ? <a href={`/pdf/${d.pdf}`} target="_blank" rel="noopener noreferrer" title="View PDF">
+                    <img src={`/images/publications/${d.img}`} alt="paper-preview" />
+                  </a>
+                  : <img src={`/images/publications/${d.img}`} alt="paper-preview" />
+                }
+              </div>
+              <div className="data">
+                <h3>
+                  <a href={d.link} target="_blank" rel="noopener noreferrer" className="name">
+                    {`${d.name} (${d.year})`}
+                  </a>
+                </h3>
+                <div className="info">
+                  <h4 className="authors">{d.author}</h4>
+                  <p className="abstract">{d.abstract}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     );
   }

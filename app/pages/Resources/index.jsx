@@ -20,6 +20,16 @@ class Resources extends Component {
   render() {
     const {page} = this.props.router.params;
 
+    if (page === "publications") {
+      return (
+        <div className="publications-content">
+          <OECNavbar />
+          <Publications />
+          <Footer />
+        </div>
+      );
+    }
+
     return (
       <div className="resources">
         <OECNavbar />
@@ -40,8 +50,6 @@ class Resources extends Component {
                 return <Permissions />;
               case "privacy":
                 return <Privacy />;
-              case "publications":
-                return <Publications />;
               case "terms":
                 return <Terms />;
               default:

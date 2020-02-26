@@ -13,6 +13,8 @@ import "./VbChart.css";
 import countryMembers from "../../static/members/country.json";
 import OECButtonGroup from "./OECButtonGroup";
 import VbDrawer from "./VbDrawer";
+import VbShare from "./VbShare";
+import VbDownload from "./VbDownload";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
@@ -32,6 +34,7 @@ class VbChart extends React.Component {
   }
 
   componentDidMount = () => {
+    this.setState({location: window.location});
     this.fetchData();
   }
 
@@ -232,8 +235,6 @@ class VbChart extends React.Component {
       });
     }
 
-    console.log(params);
-
     return axios.get("https://api.oec.world/tesseract/data", {
       params
     }).then(resp => {
@@ -334,10 +335,18 @@ class VbChart extends React.Component {
             callback={depth => this.setState({techDepth: depth}, () => this.fetchData())}
           />}
 
+          <VbShare />
+          <VbDownload
+            data={data}
+            location={this.state.location}
+            title="download"
+          />
+
           <VbDrawer
             isOpen={this.state.isOpenDrawer}
             relatedItems={this.state.relatedItems}
             routeParams={routeParams}
+            router={this.props.router}
             callback={d => this.setState({isOpenDrawer: d})}
           />
         </div>

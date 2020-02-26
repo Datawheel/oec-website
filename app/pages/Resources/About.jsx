@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Helmet from "react-helmet";
 
 import AboutTeam from "../../components/AboutTeam";
 
@@ -80,6 +81,7 @@ export default class About extends Component {
 
     return (
       <div className="about">
+        <Helmet title="About the Site" />
 
         <h1>About the OEC</h1>
 
