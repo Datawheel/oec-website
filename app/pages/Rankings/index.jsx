@@ -35,7 +35,7 @@ class Rankings extends Component {
       revValue: "HS92",
       initialYear: {HS92: 1995, HS96: 1998, HS02: 2003, HS07: 2008, HS12: 2012},
       yearValue: 2017,
-      yearRange: [2012, 2017],
+      yearRange: [2013, 2017],
       exportThreshold: 100000000,
       data: null,
       columns: null,
@@ -45,6 +45,7 @@ class Rankings extends Component {
   }
 
   createColumns(type, array) {
+    const {catValue, depthValue, revValue} = this.state;
     const years = type === "single" ? [array, array] : array;
     const columns = [
       {
@@ -70,21 +71,44 @@ class Rankings extends Component {
         Cell: props =>
           <div className="category">
             <img
-              src={`/images/icons/country/country_${props.original["Country ID"].substr(
-                props.original["Country ID"].length - 3
-              )}.png`}
+              src={
+                catValue === "country"
+                  ? `/images/icons/country/country_${props.original["Country ID"].substr(
+                    props.original["Country ID"].length - 3
+                  )}.png`
+                  : `/images/icons/hs/hs_${props.original[`${depthValue} ID`]
+                    .toString()
+                    .substr(
+                      0,
+                      props.original[`${depthValue} ID`].toString().length * 1 -
+                        depthValue.substr(2) * 1
+                    )}.png`
+
+              }
               alt="icon"
               className="icon"
             />
             <a
-              href={`/en/profile/country/${props.original["Country ID"].substr(
-                props.original["Country ID"].length - 3
-              )}`}
+              href={
+                catValue === "country"
+                  ? `/en/profile/country/${props.original["Country ID"].substr(
+                    props.original["Country ID"].length - 3
+                  )}`
+                  :                   `/en/profile/${revValue.toLowerCase()}/${props.original[
+                    `${depthValue} ID`
+                  ]}`
+
+              }
               className="link"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <div className="name">{props.original.Country}</div>
+              <div className="name">
+                {catValue === "country"
+                  ? props.original.Country
+                  :                   props.original[`${depthValue}`]
+                }
+              </div>
               <Icon icon={"chevron-right"} iconSize={14} />
             </a>
           </div>
@@ -120,6 +144,14 @@ class Rankings extends Component {
     return value => this.setState({[key]: value});
   }
 
+  getRangeChangeHandler(key) {
+    return value => {
+      if (range(value[0], value[1]).length <= 5) {
+        this.setState({[key]: value});
+      }
+    };
+  }
+
   renderExportThresholdLabel(val) {
     return `$${formatAbbreviate(val)}`;
   }
@@ -139,8 +171,12 @@ class Rankings extends Component {
     if (_yearSelection === "single") {
       let path =
         catValue === "country"
-          ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
-          : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
+          ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
+            2
+          )}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
+          : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
+            2
+          )}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
 
       axios.all([axios.get(path)]).then(
         axios.spread(resp => {
@@ -148,7 +184,7 @@ class Rankings extends Component {
             (a, b) => b["Trade Value ECI"] - a["Trade Value ECI"]
           );
           const columns = this.createColumns(_yearSelection, yearValue);
-          console.log(columns);
+          console.log("data:", data, "columns:", columns);
           this.setState({
             data,
             columns,
@@ -162,8 +198,12 @@ class Rankings extends Component {
       range(yearRange[0], yearRange[1]).map(year => {
         let path =
           catValue === "country"
-            ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${year}&parents=true&threshold_Country=${exportThreshold}`
-            : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${year}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
+            ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
+              2
+            )}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${year}&parents=true&threshold_Country=${exportThreshold}`
+            : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
+              2
+            )}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${year}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
         axios.all([axios.get(path)]).then(
           axios.spread(resp => {
             const yeardata = resp.data.data.sort(
@@ -202,6 +242,8 @@ class Rankings extends Component {
       revValue,
       initialYear[revValue],
       _yearSelection === "single" ? yearValue : yearRange,
+      "rango",
+      range(yearRange[0], yearRange[1]),
       exportThreshold
     );
     return (
@@ -264,7 +306,7 @@ class Rankings extends Component {
                   selectedValue={catValue}
                 >
                   <Radio label="Country" value="country" />
-                  <Radio label="Product" value="product" disabled={true} />
+                  <Radio label="Product" value="product" />
                 </RadioGroup>
               </div>
               <div className="depth-settings">
@@ -325,7 +367,7 @@ class Rankings extends Component {
                     max={2017}
                     stepSize={1}
                     labelStepSize={1}
-                    onChange={this.getChangeHandler("yearRange")}
+                    onChange={this.getRangeChangeHandler("yearRange")}
                     value={yearRange}
                   />
                 }
