@@ -77,28 +77,25 @@ class VbDrawer extends React.Component {
     const isTradeBalance = flow === "show";
     const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
 
+    const isGeoSelected = relatedItems["Continent ID"];
+    const profileId = isGeoSelected ? titleId.slice(2, 5) : titleId;
+
     const icon = !["Continent", "Country"].includes(titleKey)
       ? `/images/icons/hs/hs_${parentId}.png`
       : `/images/icons/country/country_${titleId.slice(2, 5)}.png`;
 
-    // Use this logic for doing related visualizations
-    // "vb_title_where_country_flow_product"
-
-    // ["export", "import"].map(d => t("vb_title_where_country_flow_product"));
-
     const color = colors.Section[parentId] || colors.Continent[parentId];
-
 
     return <div>
       <Drawer
         className={"vb-drawer"}
-        icon={<div className="vb-drawer-icon" style={{backgroundColor: color}}>
+        icon={<div className="vb-drawer-icon" style={{backgroundColor: isGeoSelected ? "transparent" : color}}>
           <img src={icon} />
         </div>}
         onClose={this.handleClose}
         title={<div>
           <div>{titleName}</div>
-          <div><a style={{color}} href={`/en/profile/hs92/${titleId}`}>View profile</a></div>
+          <div><a style={{color}} href={`/en/profile/${isGeoGrouping ? "country" : "hs92"}/${profileId}`}>View profile</a></div>
         </div>}
         {...this.state}
       >

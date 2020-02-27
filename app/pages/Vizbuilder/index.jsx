@@ -369,7 +369,7 @@ class Vizbuilder extends React.Component {
                 items={this.state.wdiIndicators}
                 run={this.updateFilter}
                 scale
-                selectedItem={this.state._xAxisTitle}
+                selectedItem={this.state._xAxis}
                 state="_xAxis"
                 title={"X Axis"}
                 callbackButton={(key, value) => this.setState({[key]: value})}
@@ -381,7 +381,7 @@ class Vizbuilder extends React.Component {
                 items={this.state.wdiIndicators}
                 run={this.updateFilter}
                 scale
-                selectedItem={this.state._yAxisTitle}
+                selectedItem={this.state._yAxis}
                 state="_yAxis"
                 title={"Y Axis"}
                 callbackButton={(key, value) => this.setState({[key]: value})}

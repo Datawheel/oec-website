@@ -34,6 +34,13 @@
   }
 }
 
+li.panel-option.is-selected:before {
+  content: url(/images/icons/app/arrow.png);
+  position: absolute;
+  margin-top: 0px;
+  margin-left: -10px;
+}
+
 .is-margin-bottom {
   margin-bottom: 10px !important;
 }

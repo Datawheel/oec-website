@@ -174,7 +174,7 @@ class VbChart extends React.Component {
     }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
-    if (params.drilldowns.includes(countryTypeBalance)) params.properties = `${countryTypeBalance} ISO 3`;
+    if (params.drilldowns.includes(countryType)) params.properties = `${countryType} ISO 3`;
 
     if (chart === "network") {
       // eslint-disable-next-line guard-for-in
@@ -411,13 +411,14 @@ class VbChart extends React.Component {
       </div>;
     }
     else if (chart === "geomap" && data && data.length > 0) {
+      console.log(data);
       return <div className="vb-chart">
         <Geomap
           config={{
             ...baseConfig,
             colorScale: measure,
             colorScaleConfig: {
-              scale: "jenks"
+              scale: "log"
             },
             groupBy: "ISO 3",
             legend: false,
