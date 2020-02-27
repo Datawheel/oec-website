@@ -277,8 +277,8 @@ class Vizbuilder extends React.Component {
     const isTechnology = !isTrade;
 
     const isProduct = isFinite(viztype.split(".")[0]);
-    const productSelector = isProduct;
-    const countrySelector = !["show", "all"].includes(country);
+    const productSelector = isProduct && !["scatter"].includes(chart);
+    const countrySelector = !["show", "all"].includes(country) && !["scatter"].includes(chart);
     const partnerSelector = countrySelector && !productSelector;
 
     return <div id="vizbuilder">
