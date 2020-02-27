@@ -370,7 +370,7 @@ class VbTabs extends React.Component {
                         {
                           name: t("Import Origins"),
                           permalink: "hs92/import/arg/show/all/2014.2017/",
-                          regexp: new RegExp(/\w{2}\/visualize\/line\/\w+\/import\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/line\/\w+\/import\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
                         }
                       ]
                     },
@@ -393,12 +393,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports to Destination"),
                           permalink: "hs92/export/chl/arg/show/2014.2017/",
-                          regexp: new RegExp(/line\/\w+\/export\/[a-z0-9.-]+\/[a-z0-9.-]+\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                          regexp: new RegExp(/line\/\w+\/export\/((?!.*all).*)\/((?!.*all).*)\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports from Origin"),
                           permalink: "hs92/import/chl/arg/show/2014.2017/",
-                          regexp: new RegExp(/line\/\w+\/import\/[a-z0-9.-]+\/[a-z0-9.-]+\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                          regexp: new RegExp(/line\/\w+\/import\/((?!.*all).*)\/((?!.*all).*)\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Exports by Product"), // ((?!.*(all|show)).*)
@@ -413,7 +413,7 @@ class VbTabs extends React.Component {
                         {
                           name: t("Trade Balance"),
                           permalink: "hs92/show/chl/chn/all/1995.2017/",
-                          regexp: new RegExp(/line\/\w+\/show\/[a-z0-9.-]+\/((?!.*(all|show)).*)\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/line\/\w+\/show\/[a-z0-9.-]+\/[a-z0-9.-]+\/all\/[0-9.-]+\//)
                         }
                       ]
                     }

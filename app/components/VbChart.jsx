@@ -388,26 +388,27 @@ class VbChart extends React.Component {
     else if (chart === "line" && data && data.length > 0) {
       return <div className="vb-chart">
         <LinePlot
-          forceUpdate={true}
-          key={`lineplot_${this.state.scale}`}
           config={{
             ...baseConfig,
-            groupBy: flow === "show" ? ["Trade Flow"] : viztype === "all" || isFinite(viztype)
-              ? ["Continent", "Country"]
-              : ["Section"],
+            discrete: "x",
+            groupBy: flow === "show"
+              ? ["Trade Flow ID"]
+              : viztype === "all" || isFinite(viztype)
+                ? ["Continent", "Country"] : ["Section"],
+            time: "Year",
+            timeline: false,
+            total: undefined,
+            x: "Year",
             y: measure,
             yConfig: {
-              scale: this.state.scale.toLowerCase()
-            },
-            x: "Year",
-            discrete: "x",
-            total: undefined,
-            timeline: false,
-            // legend: false
-            time: "Year"
+              scale: this.state.scale.toLowerCase(),
+              tickFormat: d => tickFormatter(d)
+            }
           }}
         />
-        <OECButtonGroup items={["Log", "Linear"]} selected={this.state.scale} title={"Scale"} callback={scale => this.setState({scale})} />
+        <div className="vb-chart-options">
+          <OECButtonGroup items={["Log", "Linear"]} selected={this.state.scale} title={"Scale"} callback={scale => this.setState({scale})} />
+        </div>
       </div>;
     }
     else if (chart === "geomap" && data && data.length > 0) {
