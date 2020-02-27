@@ -66,12 +66,12 @@ class VbTabs extends React.Component {
                           name: t("Import Origins"),
                           permalink: "hs92/import/chl/show/all/2017/",
                           regexp: new RegExp(/tree_map\/\w+\/import\/[a-z.-]+\/show\/all\/[0-9.-]+\//)
-                        },
-                        {
-                          name: t("Technology"),
-                          permalink: "cpc/uspto/chl/all/show/2019/",
-                          regexp: new RegExp(/tree_map\/cpc\/uspto\/[a-z.-]+\/all\/show\/[0-9.-]+\//)
                         }
+                        // {
+                        //   name: t("Technology"),
+                        //   permalink: "cpc/uspto/chl/all/show/2019/",
+                        //   regexp: new RegExp(/tree_map\/cpc\/uspto\/[a-z.-]+\/all\/show\/[0-9.-]+\//)
+                        // }
                       ]
                     },
                     {
@@ -88,14 +88,14 @@ class VbTabs extends React.Component {
                         }
                       ]
                     },
-                    {
-                      name: t("Technology"), nest: [
-                        {
-                          name: t("Patenters"),
-                          permalink: "cpc/uspto/show/all/A21/2019/",
-                          regexp: new RegExp(/tree_map\/cpc\/uspto\/show\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
-                        }]
-                    },
+                    // {
+                    //   name: t("Technology"), nest: [
+                    //     {
+                    //       name: t("Patenters"),
+                    //       permalink: "cpc/uspto/show/all/A21/2019/",
+                    //       regexp: new RegExp(/tree_map\/cpc\/uspto\/show\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                    //     }]
+                    // },
                     {
                       name: t("Bilateral"), nest: [
                         {
@@ -161,12 +161,12 @@ class VbTabs extends React.Component {
                           name: t("Import Origins"),
                           permalink: "hs92/import/chl/show/all/2014.2017/",
                           regexp: new RegExp(/stacked\/\w+\/import\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
-                        },
-                        {
-                          name: t("Technology"),
-                          permalink: "cpc/export/chl/all/show/2019/",
-                          regexp: new RegExp(/\w{2}\/visualize\/stacked\/cpc\/\w+\/\w+\/show\/all\/[0-9.-]+\//)
                         }
+                        // {
+                        //   name: t("Technology"),
+                        //   permalink: "cpc/export/chl/all/show/2019/",
+                        //   regexp: new RegExp(/\w{2}\/visualize\/stacked\/cpc\/\w+\/\w+\/show\/all\/[0-9.-]+\//)
+                        // }
                       ]
                     },
                     {
@@ -183,14 +183,14 @@ class VbTabs extends React.Component {
                         }
                       ]
                     },
-                    {
-                      name: t("Technology"), nest: [
-                        {
-                          name: t("Patenters"),
-                          permalink: "cpc/import/chl/all/all/2019/",
-                          regexp: new RegExp(/stacked\/cpc\/uspto\/show\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
-                        }]
-                    },
+                    // {
+                    //   name: t("Technology"), nest: [
+                    //     {
+                    //       name: t("Patenters"),
+                    //       permalink: "cpc/import/chl/all/all/2019/",
+                    //       regexp: new RegExp(/stacked\/cpc\/uspto\/show\/all\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                    //     }]
+                    // },
                     {
                       name: t("Bilateral"), nest: [
                         {
@@ -321,16 +321,16 @@ class VbTabs extends React.Component {
                           regexp: new RegExp(/geomap\/\w+\/import\/show\/all\/\w+\/\w+\//)
                         }
                       ]
-                    },
-                    {
-                      name: t("Technology"), nest: [
-                        {
-                          name: t("Patenters"),
-                          permalink: "cpc/uspto/show/all/A21/2019/",
-                          regexp: new RegExp(/geomap\/cpc\/uspto\/show\/all\/\w+\/\w+\//)
-                        }
-                      ]
                     }
+                    // {
+                    //   name: t("Technology"), nest: [
+                    //     {
+                    //       name: t("Patenters"),
+                    //       permalink: "cpc/uspto/show/all/A21/2019/",
+                    //       regexp: new RegExp(/geomap\/cpc\/uspto\/show\/all\/\w+\/\w+\//)
+                    //     }
+                    //   ]
+                    // }
                   ]}
                 />
               }

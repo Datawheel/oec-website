@@ -271,10 +271,15 @@ class Vizbuilder extends React.Component {
   render() {
     const {activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
-    const {chart, cube} = routeParams;
+    const {chart, cube, country, viztype} = routeParams;
 
     const isTrade = cube.includes("hs");
     const isTechnology = !isTrade;
+
+    const isProduct = isFinite(viztype.split(".")[0]);
+    const productSelector = isProduct;
+    const countrySelector = !["show", "all"].includes(country);
+    const partnerSelector = countrySelector && !productSelector;
 
     return <div id="vizbuilder">
       <OECNavbar
@@ -292,7 +297,7 @@ class Vizbuilder extends React.Component {
               callback={d => this.handleTabOption(d)}
             />
 
-            {!["network", "scatter"].includes(chart) && isTrade && <div className="columns">
+            {productSelector && <div className="columns">
               <div className="column-1">
                 <div className="select-multi-section-wrapper">
                   <h4 className="title">{t("Product")}</h4>
@@ -329,7 +334,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
 
-            {!["scatter", "geomap"].includes(chart) && <div className="columns">
+            {countrySelector && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
@@ -341,28 +346,18 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
 
-            {!["network", "rings", "scatter", "geomap"].includes(chart) && isTrade && <div className="columns">
+            {partnerSelector && <div className="columns">
               <div className="column-1">
                 <OECMultiSelect
                   items={this.state.country}
                   itemType="country"
+                  placeholder={t("Select a partner...")}
                   selectedItems={this.state._selectedItemsPartner}
                   title={t("Partner")}
                   callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
                 />
               </div>
             </div>}
-
-            {/* <div className="columns">
-              <div className="column-1">
-                <OECMultiSelectV2
-                  items={this.state.testing}
-                  selectedItems={this.state._selectedItemsPartner}
-                  title={"Partner"}
-                  callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
-                />
-              </div>
-            </div> */}
 
             {["scatter"].includes(chart) && <div className="column-1-2">
               <VirtualSelector

@@ -24,8 +24,8 @@ module.exports = function(app) {
           alias: "Country,HS4",
           measures: "Trade Value",
           Year: queryParams.Year || 2017,
-          parents: true
-          // threshold_Country: 10000000
+          parents: true,
+          threshold_Country: 1000000000
         }});
       }
     };

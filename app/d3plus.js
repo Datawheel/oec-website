@@ -347,6 +347,9 @@ export default {
     "fontSize": () => 16,
     "text-transform": "uppercase"
   },
+  linkSize: d => d.strength + 1,
+  linkSizeMin: 0,
+  linkSizeScale: "identity",
   shapeConfig: {
     Area: {
       strokeWidth: d => {

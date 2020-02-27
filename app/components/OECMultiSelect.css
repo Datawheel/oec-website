@@ -73,3 +73,7 @@
     margin-right: 5px;
   }
 }
+
+::placeholder {
+  color: red;
+}
