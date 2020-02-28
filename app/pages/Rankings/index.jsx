@@ -10,10 +10,12 @@ import {
   Radio,
   RadioGroup,
   Slider,
+  Switch,
   RangeSlider,
   Button,
   ButtonGroup,
-  Icon
+  Icon,
+  HTMLSelect
 } from "@blueprintjs/core";
 
 import "./Rankings.css";
@@ -31,12 +33,14 @@ class Rankings extends Component {
     super(props);
     this.state = {
       catValue: "country",
+      subnationalValue: false,
       depthValue: "HS4",
       revValue: "HS92",
       initialYear: {HS92: 1995, HS96: 1998, HS02: 2003, HS07: 2008, HS12: 2012},
       yearValue: 2017,
       yearRange: [2013, 2017],
-      exportThreshold: 100000000,
+      countryExpThreshold: 100000000,
+      productExpThreshold: 100000000,
       data: null,
       columns: null,
       _loading: false,
@@ -47,6 +51,7 @@ class Rankings extends Component {
   createColumns(type, array) {
     const {catValue, depthValue, revValue} = this.state;
     const years = type === "single" ? [array, array] : array;
+
     const columns = [
       {
         id: "id",
@@ -76,7 +81,7 @@ class Rankings extends Component {
                   ? `/images/icons/country/country_${props.original["Country ID"].substr(
                     props.original["Country ID"].length - 3
                   )}.png`
-                  : `/images/icons/hs/hs_${props.original[`${depthValue} ID`]
+                  :                   `/images/icons/hs/hs_${props.original[`${depthValue} ID`]
                     .toString()
                     .substr(
                       0,
@@ -163,7 +168,8 @@ class Rankings extends Component {
       revValue,
       yearValue,
       yearRange,
-      exportThreshold,
+      countryExpThreshold,
+      productExpThreshold,
       _yearSelection
     } = this.state;
     this.setState({_loading: true});
@@ -171,12 +177,8 @@ class Rankings extends Component {
     if (_yearSelection === "single") {
       let path =
         catValue === "country"
-          ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
-            2
-          )}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}`
-          : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
-            2
-          )}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
+          ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}`
+          : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Product=${productExpThreshold}&iterations=21`;
 
       axios.all([axios.get(path)]).then(
         axios.spread(resp => {
@@ -198,12 +200,9 @@ class Rankings extends Component {
       range(yearRange[0], yearRange[1]).map(year => {
         let path =
           catValue === "country"
-            ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
-              2
-            )}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${year}&parents=true&threshold_Country=${exportThreshold}`
-            : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(
-              2
-            )}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${year}&parents=true&threshold_Country=${exportThreshold}&iterations=21`;
+            ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${year}&parents=true&threshold_Country=${countryExpThreshold}`
+            : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${year}&parents=true&threshold_Country=${countryExpThreshold}&iterations=21`;
+
         axios.all([axios.get(path)]).then(
           axios.spread(resp => {
             const yeardata = resp.data.data.sort(
@@ -213,6 +212,7 @@ class Rankings extends Component {
           })
         );
       });
+
       this.setState({
         _loading: false
       });
@@ -222,12 +222,14 @@ class Rankings extends Component {
   render() {
     const {
       catValue,
+      subnationalValue,
       depthValue,
       revValue,
       initialYear,
       yearValue,
       yearRange,
-      exportThreshold,
+      countryExpThreshold,
+      productExpThreshold,
       data,
       columns,
       _loading,
@@ -236,16 +238,34 @@ class Rankings extends Component {
 
     const depthButtons = ["HS2", "HS4", "HS6"];
     const revisionButtons = ["HS92", "HS96", "HS02", "HS07", "HS12"];
+    const FILTER_OPTIONS = [
+      "Brazil",
+      "Bolivia",
+      "Canada",
+      "Chile",
+      "China",
+      "Colombia",
+      "France",
+      "Germany",
+      "India",
+      "Japan",
+      "Russia",
+      "South Africa",
+      "Spain",
+      "Turkey",
+      "United Kingdom",
+      "United States",
+      "Uruguay"
+    ];
     console.log(
       catValue,
       depthValue,
       revValue,
       initialYear[revValue],
       _yearSelection === "single" ? yearValue : yearRange,
-      "rango",
-      range(yearRange[0], yearRange[1]),
-      exportThreshold
+      countryExpThreshold
     );
+    console.log("aqui", subnationalValue);
     return (
       <div className="rankings-page">
         <OECNavbar />
@@ -308,6 +328,22 @@ class Rankings extends Component {
                   <Radio label="Country" value="country" />
                   <Radio label="Product" value="product" />
                 </RadioGroup>
+              </div>
+              <div className="country-settings">
+                <h3>Country Depth </h3>
+                <Switch
+                  label="Subnational"
+                  onChange={event =>
+                    this.handleValueChange(
+                      "subnationalValue",
+                      event.currentTarget.checked
+                    )}
+                  disabled={catValue === "product" ? true : false}
+                />
+                <HTMLSelect
+                  options={FILTER_OPTIONS}
+                  disabled={catValue === "product" ? true : !subnationalValue}
+                />
               </div>
               <div className="depth-settings">
                 <h3>Depth </h3>
@@ -372,16 +408,29 @@ class Rankings extends Component {
                   />
                 }
               </div>
-              <div className="export-settings">
-                <h3>Export Value Threshold </h3>
+              <div className="country export-settings">
+                <h3>Country Export Value Threshold </h3>
                 <Slider
                   min={0}
                   max={1000000000}
                   stepSize={50000000}
                   labelStepSize={100000000}
-                  onChange={this.getChangeHandler("exportThreshold")}
+                  onChange={this.getChangeHandler("countryExpThreshold")}
                   labelRenderer={this.renderExportThresholdLabel}
-                  value={exportThreshold}
+                  value={countryExpThreshold}
+                />
+              </div>
+              <div className="product export-settings">
+                <h3>Product Export Value Threshold </h3>
+                <Slider
+                  min={0}
+                  max={1000000000}
+                  stepSize={50000000}
+                  labelStepSize={100000000}
+                  onChange={this.getChangeHandler("productExpThreshold")}
+                  labelRenderer={this.renderExportThresholdLabel}
+                  value={productExpThreshold}
+                  disabled={true}
                 />
               </div>
             </div>

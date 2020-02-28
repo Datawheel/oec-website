@@ -61,6 +61,10 @@
         & .category-settings {
           margin-right: var(--gutter-lg);
         }
+
+        & .country-settings {
+          margin-right: var(--gutter-lg);
+        }
       }
 
       & .slider-settings {
