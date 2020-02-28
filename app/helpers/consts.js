@@ -51,8 +51,8 @@ module.exports = {
       {title: "Line chart",   url: `/${locale}/visualize/line/hs92/export/pry/all/show/1995.2017/`, icon: "visualizations/line"},
       {title: "Network",      url: `/${locale}/visualize/network/hs92/export/deu/all/show/2017/`, icon: "visualizations/network"},
       {title: "Ring",         url: `/${locale}/visualize/rings/hs92/export/deu/all/show/2017/`, icon: "visualizations/ring"},
-      {title: "Scatter plot", url: `/${locale}/visualize/scatter`, icon: "visualizations/scatter"},
-      {title: "Geo map",      url: `/${locale}/visualize/geo-map`, icon: "visualizations/geo-map"}
+      {title: "Scatter plot", url: `/${locale}/visualize/scatter/hs92/OEC.ECI/NY.GDP.MKTP.CD/all/all/2012/`, icon: "visualizations/scatter"},
+      {title: "Geo map",      url: `/${locale}/visualize/geomap/hs92/export/show/all/10101/2017/`, icon: "visualizations/geo-map"}
     ]},
     // rankings
     {title: "Rankings", items: [

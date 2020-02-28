@@ -15,7 +15,7 @@ import colors from "helpers/colors";
 import SelectMultiSection from "components/SelectMultiSection";
 import SimpleSelect from "components/SimpleSelect";
 
-import {Button, Icon} from "@blueprintjs/core";
+import {Button, Switch} from "@blueprintjs/core";
 
 import "./Vizbuilder.css";
 
@@ -58,10 +58,11 @@ function createItems(data, levels, iconUrl) {
 class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
-    const {params} = this.props;
-
+    const {location, params} = this.props;
     this.state = {
       activeTab: params ? params.chart : "tree_map",
+      controls: location.query.controls
+        ? location.query.controls === "true" : true,
       country: [],
       product: [],
       technology: [],
@@ -270,6 +271,8 @@ class Vizbuilder extends React.Component {
     this.setState({[key]: d});
   }
 
+  handleControls = () => this.setState({controls: !this.state.controls})
+
   render() {
     const {activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
@@ -296,143 +299,152 @@ class Vizbuilder extends React.Component {
 
       <div className="vb-profile">
         <div className="vb-columns">
-          <div className="vb-column aside">
-            <VbTabs
-              activeOption={this.props.location.pathname}
-              activeTab={activeTab}
-              callback={d => this.handleTabOption(d)}
-            />
+          <div className="vb-column aside" style={!this.state.controls ? {marginLeft: -250} : {}}>
+            <div className="controls">
+              <Switch
+                checked={this.state.controls}
+                onChange={this.handleControls}
+                alignIndicator={"right"}
+              />
+            </div>
+            {this.state.controls && <div className="content">
+              <VbTabs
+                activeOption={this.props.location.pathname}
+                activeTab={activeTab}
+                callback={d => this.handleTabOption(d)}
+              />
 
-            {productSelector && <div className="columns">
-              <div className="column-1">
-                <div className="select-multi-section-wrapper">
-                  <h4 className="title">{t("Product")}</h4>
-                  <SelectMultiSection
-                    items={this.state.product}
-                    onItemSelect={item => {
-                      const nextItems = this.state._selectedItemsProduct.concat(item);
-                      this.setState({_selectedItemsProduct: nextItems});
-                    }}
-                    onItemRemove={(evt, item) => {
-                    // evt: MouseEvent<HTMLButtonElement>
-                    // item: SelectedItem
-                      evt.stopPropagation();
-                      const nextItems = this.state._selectedItemsProduct.filter(i => i !== item);
-                      this.setState({_selectedItemsProduct: nextItems});
-                    }}
-                    onClear={() => {
-                    // setSelectedItems([]);
-                    }}
-                    selectedItems={this.state._selectedItemsProduct}
+              {productSelector && <div className="columns">
+                <div className="column-1">
+                  <div className="select-multi-section-wrapper">
+                    <h4 className="title">{t("Product")}</h4>
+                    <SelectMultiSection
+                      items={this.state.product}
+                      onItemSelect={item => {
+                        const nextItems = this.state._selectedItemsProduct.concat(item);
+                        this.setState({_selectedItemsProduct: nextItems});
+                      }}
+                      onItemRemove={(evt, item) => {
+                        // evt: MouseEvent<HTMLButtonElement>
+                        // item: SelectedItem
+                        evt.stopPropagation();
+                        const nextItems = this.state._selectedItemsProduct.filter(i => i !== item);
+                        this.setState({_selectedItemsProduct: nextItems});
+                      }}
+                      onClear={() => {
+                        // setSelectedItems([]);
+                      }}
+                      selectedItems={this.state._selectedItemsProduct}
+                    />
+                  </div>
+                </div>
+              </div>}
+
+              {!["network", "scatter"].includes(chart) && isTechnology && <div className="columns">
+                <div className="column-1">
+                  <OECMultiSelect
+                    items={this.state.technology}
+                    selectedItems={this.state._selectedItemsTechnology}
+                    title={"Technology"}
+                    callback={d => this.handleItemMultiSelect("_selectedItemsTechnology", d)}
+                  />
+                </div>
+              </div>}
+
+              {countrySelector && <div className="columns">
+                <div className="column-1">
+                  <OECMultiSelect
+                    items={this.state.country}
+                    itemType={"country"}
+                    selectedItems={this.state._selectedItemsCountry}
+                    title={t("Country")}
+                    callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
+                  />
+                </div>
+              </div>}
+
+              {partnerSelector && <div className="columns">
+                <div className="column-1">
+                  <OECMultiSelect
+                    items={this.state.country}
+                    itemType="country"
+                    placeholder={t("Select a partner...")}
+                    selectedItems={this.state._selectedItemsPartner}
+                    title={t("Partner")}
+                    callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
+                  />
+                </div>
+              </div>}
+
+              {["scatter"].includes(chart) && <div className="column-1-2">
+                <VirtualSelector
+                  items={this.state.wdiIndicators}
+                  run={this.updateFilter}
+                  scale
+                  selectedItem={this.state._xAxis}
+                  state="_xAxis"
+                  title={"X Axis"}
+                  callbackButton={(key, value) => this.setState({[key]: value})}
+                />
+              </div>}
+
+              {["scatter"].includes(chart) && <div className="column-1-2">
+                <VirtualSelector
+                  items={this.state.wdiIndicators}
+                  run={this.updateFilter}
+                  scale
+                  selectedItem={this.state._yAxis}
+                  state="_yAxis"
+                  title={"Y Axis"}
+                  callbackButton={(key, value) => this.setState({[key]: value})}
+                />
+              </div>}
+
+              <div className="columns">
+                {!["scatter"].includes(chart) && <div className="column-1-2">
+                  <SimpleSelect
+                    items={datasets}
+                    title={"Dataset"}
+                    state="_dataset"
+                    selectedItem={this.state._dataset}
+                    callback={this.updateFilter}
+                  />
+                </div>}
+
+                {!["scatter"].includes(chart) && <div className="column-1-2">
+                  <SimpleSelect
+                    items={flow}
+                    title={"Trade Flow"}
+                    state="_flow"
+                    selectedItem={this.state._flow}
+                    callback={this.updateFilter}
+                  />
+                </div>}
+
+              </div>
+
+              <div className="columns">
+                <div className="column-1">
+                  <OECMultiSelect
+                    items={years}
+                    selectedItems={this.state._selectedItemsYear}
+                    title={"Year"}
+                    callback={d => this.handleItemMultiSelect("_selectedItemsYear", d)}
                   />
                 </div>
               </div>
-            </div>}
 
-            {!["network", "scatter"].includes(chart) && isTechnology && <div className="columns">
-              <div className="column-1">
-                <OECMultiSelect
-                  items={this.state.technology}
-                  selectedItems={this.state._selectedItemsTechnology}
-                  title={"Technology"}
-                  callback={d => this.handleItemMultiSelect("_selectedItemsTechnology", d)}
-                />
+              <div className="columns">
+                <div className="column-1 tab">
+                  <button
+                    className="button build click"
+                    onClick={this.buildViz}
+                  >
+                    {t("Build Visualization")}
+                  </button>
+                </div>
               </div>
             </div>}
-
-            {countrySelector && <div className="columns">
-              <div className="column-1">
-                <OECMultiSelect
-                  items={this.state.country}
-                  itemType={"country"}
-                  selectedItems={this.state._selectedItemsCountry}
-                  title={t("Country")}
-                  callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
-                />
-              </div>
-            </div>}
-
-            {partnerSelector && <div className="columns">
-              <div className="column-1">
-                <OECMultiSelect
-                  items={this.state.country}
-                  itemType="country"
-                  placeholder={t("Select a partner...")}
-                  selectedItems={this.state._selectedItemsPartner}
-                  title={t("Partner")}
-                  callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
-                />
-              </div>
-            </div>}
-
-            {["scatter"].includes(chart) && <div className="column-1-2">
-              <VirtualSelector
-                items={this.state.wdiIndicators}
-                run={this.updateFilter}
-                scale
-                selectedItem={this.state._xAxis}
-                state="_xAxis"
-                title={"X Axis"}
-                callbackButton={(key, value) => this.setState({[key]: value})}
-              />
-            </div>}
-
-            {["scatter"].includes(chart) && <div className="column-1-2">
-              <VirtualSelector
-                items={this.state.wdiIndicators}
-                run={this.updateFilter}
-                scale
-                selectedItem={this.state._yAxis}
-                state="_yAxis"
-                title={"Y Axis"}
-                callbackButton={(key, value) => this.setState({[key]: value})}
-              />
-            </div>}
-
-            <div className="columns">
-              {!["scatter"].includes(chart) && <div className="column-1-2">
-                <SimpleSelect
-                  items={datasets}
-                  title={"Dataset"}
-                  state="_dataset"
-                  selectedItem={this.state._dataset}
-                  callback={this.updateFilter}
-                />
-              </div>}
-
-              {!["scatter"].includes(chart) && <div className="column-1-2">
-                <SimpleSelect
-                  items={flow}
-                  title={"Trade Flow"}
-                  state="_flow"
-                  selectedItem={this.state._flow}
-                  callback={this.updateFilter}
-                />
-              </div>}
-
-            </div>
-
-            <div className="columns">
-              <div className="column-1">
-                <OECMultiSelect
-                  items={years}
-                  selectedItems={this.state._selectedItemsYear}
-                  title={"Year"}
-                  callback={d => this.handleItemMultiSelect("_selectedItemsYear", d)}
-                />
-              </div>
-            </div>
-
-            <div className="columns">
-              <div className="column-1 tab">
-                <button
-                  className="button build click"
-                  onClick={this.buildViz}
-                >
-                  {t("Build Visualization")}
-                </button>
-              </div>
-            </div>
           </div>
           <div className="vb-column">
             <div className="vb-title-wrapper">
