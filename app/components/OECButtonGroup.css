@@ -1,6 +1,7 @@
 .oec-button-group {
   align-items: center;
   display: flex;
+  margin-left: var(--gutter-sm);
   width: auto;
   &.cp-button-group {
     margin-bottom: 0;
@@ -10,7 +11,7 @@
   }
   & .oec-button-group-title {
     font-size: var(--font-md);
-    margin-right: var(--gutter-sm) !important;
+    margin-right: var(--gutter-xs) !important;
     flex: 0;
   }
   & .oec-button-group-items {

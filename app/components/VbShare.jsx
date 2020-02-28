@@ -27,6 +27,8 @@ class VbShare extends React.Component {
       enforceFocus: true,
       hasBackdrop: true,
       isOpen: false,
+      isCopiedLink: false,
+      isCopiedEmbed: false,
       position: Position.RIGHT,
       size: undefined,
       usePortal: true
@@ -38,7 +40,8 @@ class VbShare extends React.Component {
   }
 
   shouldComponentUpdate = (prevProps, prevState) => this.state.isOpen !== prevState.isOpen ||
-  this.state.permalink !== prevState.permalink;
+  this.state.permalink !== prevState.permalink || this.state.isCopiedEmbed !== prevState.isCopiedEmbed ||
+  this.state.isCopiedLink !== prevState.isCopiedLink;
 
   handleOpen = () => this.setState({isOpen: true});
   handleClose = () => {
@@ -46,8 +49,16 @@ class VbShare extends React.Component {
     // this.props.callback(false);
   };
 
+  handleCopyClipboard = (key, text) => {
+    console.log("Mr blue sky");
+    this.setState({[key]: true});
+    navigator.clipboard.writeText(text);
+  }
+
   render() {
-    const {permalink} = this.state;
+    const {isCopiedEmbed, isCopiedLink, permalink} = this.state;
+
+    const embed = `<iframe width="560" height="315" src="${permalink}?controls=false" frameborder="0"></iframe>`;
 
     const facebookMessage = `https://www.facebook.com/sharer/sharer.php?u=${permalink}`;
     const linkedInMessage = `http://www.linkedin.com/shareArticle?mini=true&url=${permalink}`;
@@ -68,15 +79,21 @@ class VbShare extends React.Component {
             <h5 className="title">Short URL</h5>
             <InputGroup
               value={permalink}
-              rightElement={<Button text="Copy" />}
+              rightElement={<Button
+                onClick={() => this.handleCopyClipboard("isCopiedLink", permalink)}
+                text={isCopiedLink ? "Copied" : "Copy"}
+              />}
             />
           </div>
 
           <div className="vb-share-option">
             <h5 className="title">Embed URL</h5>
             <InputGroup
-              value={`<iframe width="560" height="315" src="${permalink}?controls=false" frameborder="0"></iframe>`}
-              rightElement={<Button text="Copy" />}
+              value={embed}
+              rightElement={<Button
+                onClick={() => this.handleCopyClipboard("isCopiedEmbed", embed)}
+                text={isCopiedEmbed ? "Copied" : "Copy"}
+              />}
             />
           </div>
 
