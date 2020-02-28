@@ -34,6 +34,10 @@
   }
 }
 
+.bp3-tab.is-selected[data-tab-id='scatter'] {
+  width: 100% !important;
+}
+
 li.panel-option.is-selected:before {
   content: url(/images/icons/app/arrow.png);
   position: absolute;

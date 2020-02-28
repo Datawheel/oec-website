@@ -413,7 +413,7 @@ class VbTabs extends React.Component {
                         {
                           name: t("Trade Balance"),
                           permalink: "hs92/show/chl/chn/all/1995.2017/",
-                          regexp: new RegExp(/line\/\w+\/show\/[a-z0-9.-]+\/[a-z0-9.-]+\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/line\/\w+\/show\/[a-z0-9.-]+\/(?!all\/)(.*)\/all\/[0-9.-]+\//)
                         }
                       ]
                     }

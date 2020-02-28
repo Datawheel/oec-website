@@ -49,6 +49,11 @@ class VbShare extends React.Component {
   render() {
     const {permalink} = this.state;
 
+    const facebookMessage = `https://www.facebook.com/sharer/sharer.php?u=${permalink}`;
+    const linkedInMessage = `http://www.linkedin.com/shareArticle?mini=true&url=${permalink}`;
+    const twitterMessage = `http://twitter.com/share?text=&url=${permalink}&hashtags=OEC,OECworld`;
+    const whatsAppMessage = `https://wa.me/?text=${permalink}`;
+
     return <div>
       <Button className="vb-chart-button-option" icon="share" text="Share" onClick={() => this.handleOpen()} />
       <Drawer
@@ -77,28 +82,28 @@ class VbShare extends React.Component {
 
           <div className="vb-share-option">
             <h5 className="title">Social Media</h5>
-            <a href={""} className="vb-share-social" target="_blank" rel="noopener noreferrer">
+            <a href={twitterMessage} className="vb-share-social" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon
                 className="fas fa-twitter icon"
                 icon={faTwitter}
               />
               Share on Twitter
             </a>
-            <a href={""} className="vb-share-social" target="_blank" rel="noopener noreferrer">
+            <a href={facebookMessage} className="vb-share-social" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon
                 className="fas fa-twitter icon"
                 icon={faFacebook}
               />
               Share on Facebook
             </a>
-            <a href={""} className="vb-share-social" target="_blank" rel="noopener noreferrer">
+            <a href={linkedInMessage} className="vb-share-social" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon
                 className="fas fa-twitter icon"
                 icon={faLinkedin}
               />
               Share on LinkedIn
             </a>
-            <a href={""} className="vb-share-social" target="_blank" rel="noopener noreferrer">
+            <a href={whatsAppMessage} className="vb-share-social" target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon
                 className="fas fa-twitter icon"
                 icon={faWhatsapp}

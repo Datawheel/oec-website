@@ -74,11 +74,11 @@
 
   & .build {
     background-color: var(--dark-1);
-    border-radius: 2px;
+    border-radius: 0;
     border: 0;
     color: var(--white);
-    font-size: 12px;
-    font-weight: 200;
+    cursor: pointer;
+    font-size: var(--font-sm);
     height: auto;
     margin-bottom: 5px;
     outline: none;

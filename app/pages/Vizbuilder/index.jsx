@@ -12,8 +12,10 @@ import VirtualSelector from "components/VirtualSelector";
 import OECMultiSelect from "components/OECMultiSelect";
 import VbTitle from "components/VbTitle";
 import colors from "helpers/colors";
-import OECMultiSelectV2 from "components/OECMultiSelectV2";
 import SelectMultiSection from "components/SelectMultiSection";
+import SimpleSelect from "components/SimpleSelect";
+
+import {Button, Icon} from "@blueprintjs/core";
 
 import "./Vizbuilder.css";
 
@@ -22,8 +24,8 @@ const datasets = [
   {value: "hs96", title: "HS96"},
   {value: "hs02", title: "HS02"},
   {value: "hs07", title: "HS07"},
-  {value: "sitc", title: "SITC"},
-  {value: "cpc", title: "Technology"}
+  {value: "sitc", title: "SITC"}
+  // {value: "cpc", title: "Technology"}
 ];
 
 const flow = [
@@ -31,7 +33,7 @@ const flow = [
   {value: "import", title: "Imports"}
 ];
 
-const years = [...Array(56).keys()].map(d => ({value: 2019 - d, title: 2019 - d}));
+const years = [...Array(54).keys()].map(d => ({value: 2017 - d, title: 2017 - d}));
 
 /** */
 function createItems(data, levels, iconUrl) {
@@ -271,7 +273,7 @@ class Vizbuilder extends React.Component {
   render() {
     const {activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
-    const {chart, cube, country, viztype} = routeParams;
+    const {chart, cube, country, viztype, time} = routeParams;
 
     const isTrade = cube.includes("hs");
     const isTechnology = !isTrade;
@@ -280,6 +282,10 @@ class Vizbuilder extends React.Component {
     const productSelector = isProduct && !["scatter"].includes(chart);
     const countrySelector = !["show", "all"].includes(country) && !["scatter"].includes(chart);
     const partnerSelector = countrySelector && !productSelector;
+
+    const timeIndex = years.findIndex(d => d.value === time * 1);
+    const prevTime = !["line", "stacked"].includes(chart) ? years[timeIndex + 1] : undefined;
+    const nextTime = !["line", "stacked"].includes(chart) ? years[timeIndex - 1] : undefined;
 
     return <div id="vizbuilder">
       <OECNavbar
@@ -385,22 +391,22 @@ class Vizbuilder extends React.Component {
 
             <div className="columns">
               {!["scatter"].includes(chart) && <div className="column-1-2">
-                <VirtualSelector
+                <SimpleSelect
                   items={datasets}
                   title={"Dataset"}
                   state="_dataset"
                   selectedItem={this.state._dataset}
-                  run={this.updateFilter}
+                  callback={this.updateFilter}
                 />
               </div>}
 
               {!["scatter"].includes(chart) && <div className="column-1-2">
-                <VirtualSelector
+                <SimpleSelect
                   items={flow}
                   title={"Trade Flow"}
                   state="_flow"
                   selectedItem={this.state._flow}
-                  run={this.updateFilter}
+                  callback={this.updateFilter}
                 />
               </div>}
 
@@ -429,16 +435,38 @@ class Vizbuilder extends React.Component {
             </div>
           </div>
           <div className="vb-column">
-            <VbTitle
-              countryData={this.state.country}
-              selectedItemsCountry={this.state._selectedItemsCountryTitle}
-              selectedItemsProduct={this.state._selectedItemsProductTitle}
-              selectedItemsPartner={this.state._selectedItemsPartnerTitle}
-              selectedItemsTechnology={this.state._selectedItemsTechnologyTitle}
-              routeParams={routeParams}
-              xScale={this.state._xAxisTitle}
-              yScale={this.state._yAxisTitle}
-            />
+            <div className="vb-title-wrapper">
+              <div className="vb-title-button">
+                {prevTime && <Button
+                  icon="chevron-left"
+                  minimal={true}
+                  onClick={() => {
+                    this.setState({_selectedItemsYear: [prevTime]}, () => this.buildViz());
+                  }}
+                  text={prevTime.title}
+                />}
+              </div>
+              <VbTitle
+                countryData={this.state.country}
+                routeParams={routeParams}
+                selectedItemsCountry={this.state._selectedItemsCountryTitle}
+                selectedItemsPartner={this.state._selectedItemsPartnerTitle}
+                selectedItemsProduct={this.state._selectedItemsProductTitle}
+                selectedItemsTechnology={this.state._selectedItemsTechnologyTitle}
+                xScale={this.state._xAxisTitle}
+                yScale={this.state._yAxisTitle}
+              />
+              <div className="vb-title-button">
+                {nextTime && <Button
+                  minimal={true}
+                  rightIcon="chevron-right"
+                  onClick={() => {
+                    this.setState({_selectedItemsYear: [nextTime]}, () => this.buildViz());
+                  }}
+                  text={nextTime.title}
+                />}
+              </div>
+            </div>
             <VbChart
               countryData={this.state.country}
               permalink={this.state.permalink}
