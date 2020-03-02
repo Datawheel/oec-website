@@ -1,6 +1,7 @@
 import React from "react";
 import ReactTable from "react-table";
 import {get} from "lodash";
+import {format} from "d3-format";
 
 const getColumnWidth = (data, accessor, headerText) => {
   const cellLength = Math.max(
@@ -40,14 +41,17 @@ class TariffTable extends React.Component {
       id: "drilldown", // Required because our accessor is not a string
       Header: "Year",
       accessor: d => d.Year
+      // width: getColumnWidth(data, "Year", "Year")
     }, {
-      id: "Country",
-      Header: "Country",
-      accessor: d => d.Country
+      id: "Reporter Country",
+      Header: "Reporter Country",
+      accessor: d => d["Reporter Country"]
+      // width: getColumnWidth(data, "Reporter Country", "Reporter Country")
     }, {
       id: "Product Depth",
-      Header: "Product",
+      Header: "Product Depth",
       Cell: props => {
+        if (props.original.HS6) return <div>HS6</div>;
         if (props.original.HS4) return <div>HS4</div>;
         if (props.original.HS2) return <div>HS2</div>;
         if (props.original.Section) return <div>Section</div>;
@@ -56,14 +60,16 @@ class TariffTable extends React.Component {
       id: "Product ID",
       Header: "Product ID",
       Cell: props => {
-        if (props.original.HS4) return <div>{props.original["HS4 ID"]}</div>;
-        if (props.original.HS2) return <div>{props.original["HS2 ID"]}</div>;
+        if (props.original.HS6) return <div>{`${props.original["HS6 ID"]}`.length === 7 ? `${props.original["HS6 ID"]}`.slice(1) : `${props.original["HS6 ID"]}`.slice(2)}</div>;
+        if (props.original.HS4) return <div>{`${props.original["HS4 ID"]}`.length === 5 ? `${props.original["HS4 ID"]}`.slice(1) : `${props.original["HS4 ID"]}`.slice(2)}</div>;
+        if (props.original.HS2) return <div>{`${props.original["HS2 ID"]}`.length === 3 ? `${props.original["HS2 ID"]}`.slice(1) : `${props.original["HS2 ID"]}`.slice(2)}</div>;
         if (props.original.Section) return <div>{props.original["Section ID"]}</div>;
       }
     }, {
       id: "Product",
       Header: "Product",
       Cell: props => {
+        if (props.original.HS6) return <div>{props.original.HS6}</div>;
         if (props.original.HS4) return <div>{props.original.HS4}</div>;
         if (props.original.HS2) return <div>{props.original.HS2}</div>;
         if (props.original.Section) return <div>{props.original.Section}</div>;
@@ -72,11 +78,13 @@ class TariffTable extends React.Component {
       id: "Tariff",
       Header: "Tariff",
       accessor: d => d.Measure
+      // width: getColumnWidth(data, "Measure", "Tariff")
     }, {
       id: "Tariff Value",
       Header: "Tariff Value",
       accessor: "Ad Valorem",
-      Cell: props => <div className="number">{props.value}</div>
+      Cell: props => <div className="number">{format(".2f")(props.value)}</div>
+      // width: getColumnWidth(data, "Ad Valorem", "Tariff Value")
     }];
     // const columns = [{
     //   id: "drilldown", // Required because our accessor is not a string

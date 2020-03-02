@@ -35,13 +35,14 @@ module.exports = {
   },
 
   "Continent": {
-    eu: "#642a6c", // Europe
-    as: "#a92c20", // Asia
-    sa: "#3d8446", // South America,
-    af: "#e0b546", // Africa
-    oc: "#c6732e", // Oceania
-    na: "#0c1b87", // NA
-    ac: "#1e040a" // Antarctic
+    eu: "#642a6c", // Europe (purple)
+    as: "#a92c20", // Asia (red)
+    sa: "#3d8446", // South America (green)
+    af: "#e0b546", // Africa (yellow)
+    oc: "#c6732e", // Oceania (orange)
+    na: "#0c1b87", // North America (blue)
+    ac: "#1e040a", // Antarctic (black)
+    xx: "#878384" // no continent (gray)
   },
 
   "Parent Service": {

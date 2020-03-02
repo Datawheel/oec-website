@@ -523,8 +523,8 @@ module.exports = {
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Reporter Country",
-          id: "origins",
-          name: "Exporting Country",
+          id: "reporters",
+          name: "Reporting Country",
           selected: []
         },
         {
@@ -532,9 +532,9 @@ module.exports = {
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
-          id: "destinations",
-          name: "Destination Country",
-          selected: []
+          id: "partners",
+          name: "Partner Country",
+          selected: [{id: "xxwld", displayId: "wld", name: "World", color: "#d4d4d4"}]
         },
         {
           dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&time=year.latest&drilldowns=HS4&measures=Ad+Valorem&parents=true&sparse=false",
