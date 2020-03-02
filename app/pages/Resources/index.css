@@ -12,7 +12,6 @@
         font-size: var(--font-xxl);
         font-weight: 300;
       }
-
       & p {
         font-size: var(--font-sm);
         font-weight: 200;
@@ -67,6 +66,10 @@
 
         & img {
           max-width: 100%;
+        }
+
+        & .link {
+          padding: var(--gutter-sm) var(--gutter-sm);
         }
       }
 
