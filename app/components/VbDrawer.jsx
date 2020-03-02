@@ -66,17 +66,25 @@ class VbDrawer extends React.Component {
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
     const {countryData, relatedItems, routeParams, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
-
+    const preps = {
+      export: "to",
+      import: "from",
+      uspto: ""
+    };
     const titleKey = drilldowns.find(d => d in relatedItems);
     const titleName = relatedItems[titleKey];
     const titleId = relatedItems[`${titleKey} ID`];
+
+    const isProductSelected = ["HS6", "HS4", "HS2", "Section"].some(d => relatedItems[d]) && relatedItems["Trade Value"];
 
     // Sets time dimension
     const timeId = "Year";
     const timeName = relatedItems.Year;
 
+    console.log(relatedItems, titleId, titleName);
+
     const isTrade = new RegExp(/(export|import)/).test(flow);
-    const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country);
+    const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country) || new RegExp(/(Country)/).test(titleKey);
     const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
     const isGeoGrouping = new RegExp(/show/).test(partner);
     const isProduct = new RegExp(/^(?!(all|show)).*$/).test(viztype);
@@ -124,14 +132,28 @@ class VbDrawer extends React.Component {
             value={timeName}
           />
           <h3>RELATED VISUALIZATIONS</h3>
+          {isProductSelected && ["export", "import"].reduce((all, d) => {
+            const permalink = `/en/visualize/tree_map/hs92/${d}/show/all/${titleId}/${time}/`;
+
+            all.push(<VbRelatedVizTitle
+              permalink={permalink}
+              router={this.props.router}
+              titleConfig={{country: countryNames, product: titleName, flow: d, time, prep: preps[d]}}
+              titleName="vb_title_which_countries_flow_product"
+              callback={d => this.props.run(d)}
+              t={t}
+            />);
+            return all;
+          }, [])}
           {isCountry && ["export", "import"].reduce((all, d) => {
             const permalink = `/en/visualize/tree_map/hs92/${d}/${country}/all/show/${time}/`;
             const permalinkWhere = `/en/visualize/tree_map/hs92/${d}/${country}/show/all/${time}/`;
             const permalinkProduct = `/en/visualize/tree_map/hs92/${d}/${country}/show/${titleId}/${time}/`;
+
             all.push(<VbRelatedVizTitle
               permalink={permalink}
               router={this.props.router}
-              titleConfig={{country: countryNames, flow: d, time}}
+              titleConfig={{country: countryNames, flow: d, time, prep: preps[d]}}
               titleName="vb_title_what_country_flow"
               callback={d => this.props.run(d)}
               t={t}
@@ -139,7 +161,7 @@ class VbDrawer extends React.Component {
             all.push(<VbRelatedVizTitle
               permalink={permalinkWhere}
               router={this.props.router}
-              titleConfig={{country: countryNames, flow: d, time}}
+              titleConfig={{country: countryNames, flow: d, time, prep: preps[d]}}
               titleName="vb_title_where_country_flow_product"
               callback={d => this.props.run(d)}
               t={t}
@@ -147,7 +169,7 @@ class VbDrawer extends React.Component {
             all.push(<VbRelatedVizTitle
               permalink={permalinkProduct}
               router={this.props.router}
-              titleConfig={{country: countryNames, flow: d, product: titleName}}
+              titleConfig={{country: countryNames, flow: d, product: titleName, prep: preps[d]}}
               titleName="vb_title_where_country_flow_product"
               callback={d => this.props.run(d)}
               t={t}
