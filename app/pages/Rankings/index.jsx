@@ -177,8 +177,8 @@ class Rankings extends Component {
     if (_yearSelection === "single") {
       let path =
         catValue === "country"
-          ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}`
-          : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Product=${productExpThreshold}&iterations=21`;
+          ? path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=Exporter+Country,${depthValue},Trade+Value&alias=Country,${depthValue}&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${depthValue}=${productExpThreshold}`
+          : path = `/api/stats/eci?cube=trade_i_baci_a_${revValue.substr(2)}&rca=${depthValue},Exporter+Country,Trade+Value&alias=${depthValue},Country&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${depthValue}=${productExpThreshold}&iterations=21`;
 
       axios.all([axios.get(path)]).then(
         axios.spread(resp => {
@@ -430,7 +430,6 @@ class Rankings extends Component {
                   onChange={this.getChangeHandler("productExpThreshold")}
                   labelRenderer={this.renderExportThresholdLabel}
                   value={productExpThreshold}
-                  disabled={true}
                 />
               </div>
             </div>
