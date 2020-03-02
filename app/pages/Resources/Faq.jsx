@@ -22,11 +22,17 @@ export default class Faq extends Component {
 
         <p> Sure! You can download the latest dump of the entire data (in MySQL format) here. Or if you are looking for data on a particular country or product, you can click the CSV download button on the right-hand side of all explore pages. </p>
 
-        <a href="" className="link">SITC Products</a>
+        <div className="link-container">
+          <a href="" className="link">SITC Products</a>
+        </div>
 
-        <a href="" className="link">HS Products</a>
+        <div className="link-container">
+          <a href="" className="link">HS Products</a>
+        </div>
 
-        <a href="" className="link">Site-Wide Translations</a>
+        <div className="link-container">
+          <a href="" className="link">Site-Wide Translations</a>
+        </div>
 
         <p> Instructions: these documents are open to the public for view and commenting. If you want to contribute your own translation, right-click on a cell and select &apos;Insert Comment&apos;. </p>
 

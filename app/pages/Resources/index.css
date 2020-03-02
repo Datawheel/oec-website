@@ -6,6 +6,23 @@
     margin: var(--gutter-sm) auto;
     max-width: 600px;
     width: 100%;
+
+    & .faq {
+      & h1 {
+        font-size: var(--font-xxl);
+        font-weight: 300;
+      }
+      & h2 {
+        text-transform: uppercase;
+        font-weight: 300;
+        color: var(--accent);
+        opacity: 0.8;
+      }
+      & .link-container {
+        margin-left: var(--gutter-md);
+        margin-bottom: var(--gutter-sm);
+      }
+    }
   }
 }
 
