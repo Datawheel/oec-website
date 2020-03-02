@@ -58,6 +58,7 @@ class VbChart extends React.Component {
 
   shouldComponentUpdate = (prevProps, prevState) =>
     prevProps.permalink !== this.props.permalink ||
+    prevProps.countryData !== this.props.countryData ||
     prevProps.xScale !== this.props.xScale ||
     prevProps.yScale !== this.props.yScale ||
     prevState.loading !== this.state.loading ||
@@ -503,10 +504,12 @@ class VbChart extends React.Component {
             />
 
             <VbDrawer
+              countryData={this.props.countryData}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
               routeParams={routeParams}
               router={this.props.router}
+              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
               callback={d => this.setState({isOpenDrawer: d})}
             />
           </div>

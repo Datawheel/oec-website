@@ -22,7 +22,10 @@ function VbDrawerStat(props) {
 /** */
 function VbRelatedVizTitle(props) {
   const {permalink, t, titleName, titleConfig} = props;
-  return <Link className="vb-related-viz" to={permalink} onClick={() => props.router.push(permalink)}>
+  return <Link className="vb-related-viz" to={permalink} onClick={() => {
+    props.router.push(permalink);
+    props.callback(permalink);
+  }}>
     <img className="icon" src="/images/icons/app/app_tree_map.png" alt=""/>
     {t(titleName, titleConfig)}
   </Link>;
@@ -44,7 +47,10 @@ class VbDrawer extends React.Component {
     };
   }
 
-  shouldComponentUpdate = (prevProps, prevState) => this.props.isOpen !== prevProps.isOpen || this.state.isOpen !== prevState.isOpen;
+  shouldComponentUpdate = (prevProps, prevState) =>
+    this.props.isOpen !== prevProps.isOpen ||
+    this.props.countryData !== prevProps.countryData ||
+    this.state.isOpen !== prevState.isOpen;
 
   componentDidUpdate = () => {
     this.setState({isOpen: this.props.isOpen});
@@ -58,7 +64,7 @@ class VbDrawer extends React.Component {
 
   render() {
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
-    const {relatedItems, routeParams, t} = this.props;
+    const {countryData, relatedItems, routeParams, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
     const titleKey = drilldowns.find(d => d in relatedItems);
@@ -86,12 +92,17 @@ class VbDrawer extends React.Component {
 
     const color = colors.Section[parentId] || colors.Continent[parentId];
 
+    const countryNames = isCountry ? countryData.reduce((all, d) => {
+      if (country.split(".").includes(d.label)) all.push(d.title);
+      return all;
+    }, []).join(", ") : "";
+
     return <div>
       <Drawer
-        className={"vb-drawer"}
-        icon={<div className="vb-drawer-icon" style={{backgroundColor: isGeoSelected ? "transparent" : color}}>
-          <img src={icon} />
-        </div>}
+        className="vb-drawer"
+        icon={<div className="vb-drawer-icon"
+          style={{backgroundColor: isGeoSelected ? "transparent" : color}}
+        ><img src={icon} /></div>}
         onClose={this.handleClose}
         title={<div>
           <div>{titleName}</div>
@@ -115,25 +126,30 @@ class VbDrawer extends React.Component {
           <h3>RELATED VISUALIZATIONS</h3>
           {isCountry && ["export", "import"].reduce((all, d) => {
             const permalink = `/en/visualize/tree_map/hs92/${d}/${country}/all/show/${time}/`;
+            const permalinkWhere = `/en/visualize/tree_map/hs92/${d}/${country}/show/all/${time}/`;
+            const permalinkProduct = `/en/visualize/tree_map/hs92/${d}/${country}/show/${titleId}/${time}/`;
             all.push(<VbRelatedVizTitle
               permalink={permalink}
               router={this.props.router}
-              titleConfig={{country, flow: d, time}}
+              titleConfig={{country: countryNames, flow: d, time}}
               titleName="vb_title_what_country_flow"
+              callback={d => this.props.run(d)}
               t={t}
             />);
             all.push(<VbRelatedVizTitle
-              permalink={permalink}
+              permalink={permalinkWhere}
               router={this.props.router}
-              titleConfig={{country, flow: d, time}}
+              titleConfig={{country: countryNames, flow: d, time}}
               titleName="vb_title_where_country_flow_product"
+              callback={d => this.props.run(d)}
               t={t}
             />);
             all.push(<VbRelatedVizTitle
-              permalink={permalink}
+              permalink={permalinkProduct}
               router={this.props.router}
-              titleConfig={{country, flow: d, product: titleName}}
+              titleConfig={{country: countryNames, flow: d, product: titleName}}
               titleName="vb_title_where_country_flow_product"
+              callback={d => this.props.run(d)}
               t={t}
             />);
             return all;

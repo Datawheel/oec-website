@@ -124,7 +124,6 @@ class Vizbuilder extends React.Component {
 
       // Sorts alphabetically country names
       countryData.sort((a, b) => a.title > b.title ? 1 : -1);
-
       this.updateFilterSelected({
         country: countryData,
         product: productData,
@@ -550,6 +549,7 @@ class Vizbuilder extends React.Component {
               yScale={this.state._yAxisScale}
               routeParams={routeParams}
               router={this.props.router}
+              callback={d => this.setState({permalink: d})}
             />
           </div>
         </div>
