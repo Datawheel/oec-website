@@ -21,7 +21,7 @@ module.exports = function(app) {
     if (!apiToken) {
       apiToken = jwt.sign(
         {
-          role: user ? user.role : 0,
+          auth_level: user ? user.role : 0,
           sub: user ? user.id : "localhost",
           status: "valid"
         },
