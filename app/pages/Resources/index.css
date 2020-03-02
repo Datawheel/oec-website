@@ -33,6 +33,16 @@
       margin-bottom: var(--gutter-sm);
     }
 
+    & .link {
+      font-size: var(--font-sm);
+      margin-left: var(--gutter-sm);
+      margin-bottom: var(--gutter-xs);
+
+      & a {
+        color: var(--accent-light);
+      }
+    }
+
     & .data {
       & h3 {
         font-size: var(--font-md);

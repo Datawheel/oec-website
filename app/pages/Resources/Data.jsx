@@ -9,12 +9,14 @@ export default class Data extends Component {
         content: [
           {
             title: "Product Trade by Year and Country",
-            href: "year_origin_sitc_rev2.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_sitc_rev2.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (bilateral)",
-            href: "year_origin_destination_sitc_rev2.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_sitc_rev2.tsv.bz2"
           }
         ]
       },
@@ -23,21 +25,23 @@ export default class Data extends Component {
         content: [
           {
             title: "Product Trade by Year and Country (6 digit depth)",
-            href: "year_origin_hs92_6.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs92_6.tsv.bz2"
           },
           {
             title: "Product Trade by Year and Country (4 digit depth)",
-            href: "year_origin_hs92_4.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs92_4.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (6 digit depth, bilateral)",
-            href: "year_origin_destination_hs92_6.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs92_6.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (4 digit depth, bilateral)",
-            href: "year_origin_destination_hs92_4.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs92_4.tsv.bz2"
           }
         ]
       },
@@ -46,21 +50,23 @@ export default class Data extends Component {
         content: [
           {
             title: "Product Trade by Year and Country (6 digit depth)",
-            href: "year_origin_hs96_6.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs96_6.tsv.bz2"
           },
           {
             title: "Product Trade by Year and Country (4 digit depth)",
-            href: "year_origin_hs96_4.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs96_4.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (6 digit depth, bilateral)",
-            href: "year_origin_destination_hs96_6.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs96_6.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (4 digit depth, bilateral)",
-            href: "year_origin_destination_hs96_4.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs96_4.tsv.bz2"
           }
         ]
       },
@@ -69,21 +75,23 @@ export default class Data extends Component {
         content: [
           {
             title: "Product Trade by Year and Country (6 digit depth)",
-            href: "year_origin_hs02_6.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs02_6.tsv.bz2"
           },
           {
             title: "Product Trade by Year and Country (4 digit depth)",
-            href: "year_origin_hs02_4.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs02_4.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (6 digit depth, bilateral)",
-            href: "year_origin_destination_hs02_6.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs02_6.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (4 digit depth, bilateral)",
-            href: "year_origin_destination_hs02_4.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs02_4.tsv.bz2"
           }
         ]
       },
@@ -92,33 +100,53 @@ export default class Data extends Component {
         content: [
           {
             title: "Product Trade by Year and Country (6 digit depth)",
-            href: "year_origin_hs07_6.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs07_6.tsv.bz2"
           },
           {
             title: "Product Trade by Year and Country (4 digit depth)",
-            href: "year_origin_hs07_4.tsv.bz2"
+            href: "https://atlas.media.mit.edu/static/db/raw/year_origin_hs07_4.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (6 digit depth, bilateral)",
-            href: "year_origin_destination_hs07_6.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs07_6.tsv.bz2"
           },
           {
             title:
               "Product Trade between Origin and Destination Country by Year (4 digit depth, bilateral)",
-            href: "year_origin_destination_hs07_4.tsv.bz2"
+            href:
+              "https://atlas.media.mit.edu/static/db/raw/year_origin_destination_hs07_4.tsv.bz2"
           }
         ]
       },
       {
         section: "Attributes",
         content: [
-          {title: "Country Names", href: "country_names.tsv.bz2"},
-          {title: "SITC revision 2 Product Names", href: "products_sitc_rev2.tsv.bz2"},
-          {title: "HS 1992 Product Names", href: "products_hs_92.tsv.bz2"},
-          {title: "HS 1996 Product Names", href: "products_hs_96.tsv.bz2"},
-          {title: "HS 2002 Product Names", href: "products_hs_02.tsv.bz2"},
-          {title: "HS 2007 Product Names", href: "products_hs_07.tsv.bz2"}
+          {
+            title: "Country Names",
+            href: "https://atlas.media.mit.edu/static/db/raw/country_names.tsv.bz2"
+          },
+          {
+            title: "SITC revision 2 Product Names",
+            href: "https://atlas.media.mit.edu/static/db/raw/products_sitc_rev2.tsv.bz2"
+          },
+          {
+            title: "HS 1992 Product Names",
+            href: "https://atlas.media.mit.edu/static/db/raw/products_hs_92.tsv.bz2"
+          },
+          {
+            title: "HS 1996 Product Names",
+            href: "https://atlas.media.mit.edu/static/db/raw/products_hs_96.tsv.bz2"
+          },
+          {
+            title: "HS 2002 Product Names",
+            href: "https://atlas.media.mit.edu/static/db/raw/products_hs_02.tsv.bz2"
+          },
+          {
+            title: "HS 2007 Product Names",
+            href: "https://atlas.media.mit.edu/static/db/raw/products_hs_07.tsv.bz2"
+          }
         ]
       }
     ];
@@ -193,7 +221,11 @@ export default class Data extends Component {
           <div className="data-section" key={k}>
             <h3>{d.section}</h3>
             {d.content.map((f, h) =>
-              <a href="/db/" target="_blank" rel="noopener noreferrer">{f.title}</a>
+              <div className="link" key={h}>
+                <a href={f.href} target="_blank" rel="noopener noreferrer">
+                  {f.title}
+                </a>
+              </div>
             )}
           </div>
         )}
