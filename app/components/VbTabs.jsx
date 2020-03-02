@@ -448,31 +448,11 @@ class VbTabs extends React.Component {
                   callback={d => this.props.callback(d)}
                   items={[
                     {
-                      name: t("Economic Complexity"), nest: [
+                      name: t("Select"), nest: [
                         {
-                          name: t("vs GDP"),
+                          name: t("Show options"),
                           permalink: "hs92/OEC.ECI/NY.GDP.MKTP.CD/all/all/2012/",
-                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.MKTP.CD\/all\/all\/[0-9.-]+\//)
-                        },
-                        {
-                          name: t("vs GDPpc (constant '10 US$)"),
-                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.KD/all/all/2012/",
-                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.KD\/all\/all\/[0-9.-]+\//)
-                        },
-                        {
-                          name: t("vs GDPpc (current US$)"),
-                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.CD/all/all/2012/",
-                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.CD\/all\/all\/[0-9.-]+\//)
-                        },
-                        {
-                          name: t("vs GDPpc PPP (constant '11)"),
-                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.PP.KD/all/all/2012/",
-                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.PP.KD\/all\/all\/[0-9.-]+\//)
-                        },
-                        {
-                          name: t("vs GDPpc PPP (current)"),
-                          permalink: "hs92/OEC.ECI/NY.GDP.PCAP.PP.CD/all/all/2012/",
-                          regexp: new RegExp(/scatter\/\w+\/OEC.ECI\/NY.GDP.PCAP.PP.CD\/all\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/scatter/)
                         }
                       ]
                     }
