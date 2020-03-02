@@ -49,26 +49,16 @@
     }
   }
 
-  & .prediction-viz-container {
-    border: solid 1px var(--black);
+  & .tariffs-datatable-container {
     min-height: 400px;
+    margin: 20px 0 0 0;
 
-    & .prediction-viz {
-      position: relative;
-
-      & .prediction-overlay {
-        background-color: var(--dark-4);
-        color: var(--light-3);
-        font-size: 20px;
-        height: 100%;
-        left: 0;
-        opacity: 0.8;
-        padding: 100px 0 0 0;
-        position: absolute;
-        text-align: center;
-        top: 0;
-        width: 100%;
-        z-index: 99;
+    /* ---------------------------
+    Datatable styles
+    --------------------------- */
+    & .rt-td {
+      & .number {
+        text-align: right;
       }
     }
   }
@@ -90,3 +80,4 @@
     }
   }
 }
+

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import Helmet from "react-helmet";
+import {Icon} from "@blueprintjs/core";
 
 export default class Publications extends Component {
   render() {
@@ -247,6 +248,18 @@ export default class Publications extends Component {
                   </a>
                   : <img src={`/images/publications/${d.img}`} alt="paper-preview" />
                 }
+                <div className="links">
+                  {d.pdf &&
+                    <a href={d.pdf} className="link">
+                      <Icon icon={"document"} iconSize={22} />
+                    </a>
+                  }
+                  {d.link &&
+                    <a href={d.link} className="link">
+                      <Icon icon={"share"} iconSize={22} />
+                    </a>
+                  }
+                </div>
               </div>
               <div className="data">
                 <h3>
