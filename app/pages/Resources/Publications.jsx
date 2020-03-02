@@ -248,18 +248,6 @@ export default class Publications extends Component {
                   </a>
                   : <img src={`/images/publications/${d.img}`} alt="paper-preview" />
                 }
-                <div className="links">
-                  {d.pdf &&
-                    <a href={d.pdf} className="link">
-                      <Icon icon={"document"} iconSize={22} />
-                    </a>
-                  }
-                  {d.link &&
-                    <a href={d.link} className="link">
-                      <Icon icon={"share"} iconSize={22} />
-                    </a>
-                  }
-                </div>
               </div>
               <div className="data">
                 <h3>
@@ -270,6 +258,18 @@ export default class Publications extends Component {
                 <div className="info">
                   <h4 className="authors">{d.author}</h4>
                   <p className="abstract">{d.abstract}</p>
+                </div>
+                <div className="links">
+                  {d.pdf &&
+                    <a href={`/pdf/${d.pdf}`} target="_blank" rel="noopener noreferrer" title="Download PDF" className="link">
+                      <Icon icon={"document"} iconSize={24} />
+                    </a>
+                  }
+                  {d.link &&
+                    <a href={d.link} target="_blank" rel="noopener noreferrer" className="link">
+                      <Icon icon={"share"} iconSize={24} />
+                    </a>
+                  }
                 </div>
               </div>
             </div>

@@ -6,7 +6,6 @@ import AboutTeam from "../../components/AboutTeam";
 export default class About extends Component {
 
   render() {
-
     const team = [
       {
         name: "Alexander Simoes",
