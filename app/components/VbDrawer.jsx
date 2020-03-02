@@ -81,18 +81,18 @@ class VbDrawer extends React.Component {
     const timeId = "Year";
     const timeName = relatedItems.Year;
 
-    console.log(relatedItems, titleId, titleName);
-
     const isTrade = new RegExp(/(export|import)/).test(flow);
+    const isCountryPermalink = new RegExp(/^(?!(all|show)).*$/).test(country);
     const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country) || new RegExp(/(Country)/).test(titleKey);
     const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
     const isGeoGrouping = new RegExp(/show/).test(partner);
-    const isProduct = new RegExp(/^(?!(all|show)).*$/).test(viztype);
+    const isProductPermalink = new RegExp(/^(?!(all|show)).*$/).test(viztype);
     const isTradeBalance = flow === "show";
     const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
 
     const isGeoSelected = relatedItems["Continent ID"];
     const profileId = isGeoSelected ? titleId.slice(2, 5) : titleId;
+    const countryIdSelected = relatedItems["Country ID"] ? relatedItems["Country ID"].slice(2, 5) : undefined;
 
     const icon = !["Continent", "Country"].includes(titleKey)
       ? `/images/icons/hs/hs_${parentId}.png`
@@ -105,6 +105,15 @@ class VbDrawer extends React.Component {
       return all;
     }, []).join(", ") : "";
 
+    const countryNameSelected = countryIdSelected ? countryData.reduce((all, d) => {
+      if (countryIdSelected === d.label) all.push(d.title);
+      return all;
+    }, []).join(", ") : "";
+
+    const countries = [];
+    if (isCountryPermalink) countries.push({id: country, name: countryNames});
+    if (countryIdSelected) countries.push({id: countryIdSelected, name: countryNameSelected});
+    console.log(countryIdSelected !== country && countryIdSelected && isCountryPermalink);
     return <div>
       <Drawer
         className="vb-drawer"
@@ -132,48 +141,87 @@ class VbDrawer extends React.Component {
             value={timeName}
           />
           <h3>RELATED VISUALIZATIONS</h3>
-          {isProductSelected && ["export", "import"].reduce((all, d) => {
-            const permalink = `/en/visualize/tree_map/hs92/${d}/show/all/${titleId}/${time}/`;
+          {["export", "import"].reduce((all, d) => {
+            // Checks bilateral permalink
+            if (countryIdSelected !== country && countryIdSelected && isCountryPermalink) {
+              const permalinkBilateralA = `/en/visualize/tree_map/hs92/${d}/${countryIdSelected}/${country}/show/${time}/`;
+              const permalinkBilateralB = `/en/visualize/tree_map/hs92/${d}/${country}/${countryIdSelected}/show/${time}/`;
 
-            all.push(<VbRelatedVizTitle
-              permalink={permalink}
-              router={this.props.router}
-              titleConfig={{country: countryNames, product: titleName, flow: d, time, prep: preps[d]}}
-              titleName="vb_title_which_countries_flow_product"
-              callback={d => this.props.run(d)}
-              t={t}
-            />);
-            return all;
-          }, [])}
-          {isCountry && ["export", "import"].reduce((all, d) => {
-            const permalink = `/en/visualize/tree_map/hs92/${d}/${country}/all/show/${time}/`;
-            const permalinkWhere = `/en/visualize/tree_map/hs92/${d}/${country}/show/all/${time}/`;
-            const permalinkProduct = `/en/visualize/tree_map/hs92/${d}/${country}/show/${titleId}/${time}/`;
+              all.push(<VbRelatedVizTitle
+                permalink={permalinkBilateralA}
+                router={this.props.router}
+                titleConfig={{country: countryNameSelected, product: titleName, partner: countryNames, flow: d, time, prep: preps[d]}}
+                titleName="vb_title_what_country_flow_partner"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+              all.push(<VbRelatedVizTitle
+                permalink={permalinkBilateralB}
+                router={this.props.router}
+                titleConfig={{country: countryNames, product: titleName, partner: countryNameSelected, flow: d, time, prep: preps[d]}}
+                titleName="vb_title_what_country_flow_partner"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+            }
+            // Filter by product selected
+            if (isProductSelected) {
+              const permalink = `/en/visualize/tree_map/hs92/${d}/show/all/${titleId}/${time}/`;
 
-            all.push(<VbRelatedVizTitle
-              permalink={permalink}
-              router={this.props.router}
-              titleConfig={{country: countryNames, flow: d, time, prep: preps[d]}}
-              titleName="vb_title_what_country_flow"
-              callback={d => this.props.run(d)}
-              t={t}
-            />);
-            all.push(<VbRelatedVizTitle
-              permalink={permalinkWhere}
-              router={this.props.router}
-              titleConfig={{country: countryNames, flow: d, time, prep: preps[d]}}
-              titleName="vb_title_where_country_flow_product"
-              callback={d => this.props.run(d)}
-              t={t}
-            />);
-            all.push(<VbRelatedVizTitle
-              permalink={permalinkProduct}
-              router={this.props.router}
-              titleConfig={{country: countryNames, flow: d, product: titleName, prep: preps[d]}}
-              titleName="vb_title_where_country_flow_product"
-              callback={d => this.props.run(d)}
-              t={t}
-            />);
+              all.push(<VbRelatedVizTitle
+                permalink={permalink}
+                router={this.props.router}
+                titleConfig={{country: countryNames, product: titleName, flow: d, time, prep: preps[d]}}
+                titleName="vb_title_which_countries_flow_product"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+            }
+            if (isProductPermalink) {
+              const permalink = `/en/visualize/tree_map/hs92/${d}/show/all/${viztype}/${time}/`;
+
+              all.push(<VbRelatedVizTitle
+                permalink={permalink}
+                router={this.props.router}
+                titleConfig={{product: this.props.selectedProducts.map(d => d.name), flow: d, time, prep: preps[d]}}
+                titleName="vb_title_which_countries_flow_product"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+            }
+
+            countries.forEach(h => {
+              const permalinkWhat = `/en/visualize/tree_map/hs92/${d}/${h.id}/all/show/${time}/`;
+              const permalinkWhere = `/en/visualize/tree_map/hs92/${d}/${h.id}/show/all/${time}/`;
+
+              all.push(<VbRelatedVizTitle
+                permalink={permalinkWhat}
+                router={this.props.router}
+                titleConfig={{country: h.name, flow: d, time, prep: preps[d]}}
+                titleName="vb_title_what_country_flow"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+              all.push(<VbRelatedVizTitle
+                permalink={permalinkWhere}
+                router={this.props.router}
+                titleConfig={{country: h.name, flow: d, time, prep: preps[d]}}
+                titleName="vb_title_where_country_flow_product"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+              if (isProductSelected) {
+                const permalinkProduct = `/en/visualize/tree_map/hs92/${d}/${h.id}/show/${titleId}/${time}/`;
+                all.push(<VbRelatedVizTitle
+                  permalink={permalinkProduct}
+                  router={this.props.router}
+                  titleConfig={{country: h.name, flow: d, product: titleName, prep: preps[d]}}
+                  titleName="vb_title_where_country_flow_product"
+                  callback={d => this.props.run(d)}
+                  t={t}
+                />);
+              }
+            });
             return all;
           }, [])}
         </div>

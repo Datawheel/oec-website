@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 import axios from "axios";
 import {
@@ -307,6 +308,8 @@ class VbChart extends React.Component {
       });
     }
 
+    console.log(process.env);
+
     return axios
       .get("https://api.oec.world/tesseract/data", {
         params
@@ -507,6 +510,7 @@ class VbChart extends React.Component {
               countryData={this.props.countryData}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
+              selectedProducts={this.props.selectedProducts}
               routeParams={routeParams}
               router={this.props.router}
               run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
@@ -762,4 +766,17 @@ class VbChart extends React.Component {
   }
 }
 
-export default withNamespaces()(VbChart);
+const mapStateToProps = state => {
+  console.log(state.env.BASE);
+  return {
+    auth: state.auth
+  };
+};
+
+// const mapDispatchToProps = dispatch => ({
+//   isAuthenticated: () => {
+//     dispatch(isAuthenticated());
+//   }
+// });
+
+export default connect(mapStateToProps, {})(withNamespaces()(VbChart));
