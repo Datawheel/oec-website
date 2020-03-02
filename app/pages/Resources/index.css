@@ -12,8 +12,17 @@
       font-weight: 300;
     }
 
+    & h2 {
+      font-size: var(--font-xxl);
+      font-weight: 300;
+      color: var(--accent);
+      opacity: 0.8;
+    }
+
     & h3 {
-      font-weight: 400;
+      text-transform: uppercase;
+      font-size: var(--font-lg);
+      font-weight: 300;
       color: var(--accent);
       opacity: 0.8;
     }
@@ -25,15 +34,18 @@
     }
 
     & .data {
+      & h3 {
+        font-size: var(--font-md);
+      }
       & .reference {
         display: flex;
+        font-size: var(--font-xs);
+        font-weight: 400;
+        margin-bottom: var(--gutter-xs);
       }
     }
 
     & .faq {
-      & h3 {
-        text-transform: uppercase;
-      }
       & .link-container {
         margin-left: var(--gutter-md);
         margin-bottom: var(--gutter-sm);
