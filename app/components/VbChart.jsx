@@ -433,7 +433,7 @@ class VbChart extends React.Component {
     const measure = isTechnology ? "Patent Share" : "Trade Value";
 
     if (this.state.selected.includes("Growth")) {
-      const isLinearColorScale = [1, 2].includes(this.state.selected.value);
+      const isLinearColorScale = this.state.selected === measures[2];
       const colorScaleMeasure = isLinearColorScale ? `${measure} Growth` : `${measure} Growth Value`;
       baseConfig.colorScale = colorScaleMeasure;
       baseConfig.colorScaleConfig = {
