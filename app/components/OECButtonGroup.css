@@ -1,7 +1,6 @@
 .oec-button-group {
   align-items: center;
   display: flex;
-  margin-left: var(--gutter-sm);
   width: auto;
   &.cp-button-group {
     margin-bottom: 0;
@@ -20,5 +19,11 @@
       border-color: var(--white);
       color: var(--dark-4);
     }
+  }
+}
+
+.vb-chart-options {
+  & .oec-button-group {
+    margin-left: var(--gutter-sm);
   }
 }

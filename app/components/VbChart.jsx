@@ -27,7 +27,7 @@ import SimpleSelect from "./SimpleSelect";
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
 const measures = [
-  {title: "Trade Value", value: 0, diff: 0},
+  {title: "Category", value: 0, diff: 0},
   {title: "Annual Growth Rate (1 Year)", value: 1, diff: 1},
   {title: "Annual Growth Rate (5 Year)", value: 2, diff: 5},
   {title: "Growth Value (1 Year)", value: 3, diff: 1},
@@ -44,6 +44,7 @@ class VbChart extends React.Component {
       loading: true,
       routeParams: this.props.routeParams,
       scale: "Log",
+      stackLayout: "Value",
       selected: measures[0],
       depth: "HS4",
       techDepth: ddTech[ddTech.length - 1]
@@ -63,7 +64,8 @@ class VbChart extends React.Component {
     prevState.depth !== this.state.depth ||
     prevState.scale !== this.state.scale ||
     prevState.isOpenDrawer !== this.state.isOpenDrawer ||
-    prevState.selected !== this.state.selected;
+    prevState.selected !== this.state.selected ||
+    prevState.stackLayout !== this.state.stackLayout;
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
@@ -77,19 +79,26 @@ class VbChart extends React.Component {
 
     this.setState({data: [], loading: true});
 
-    const countryId = countryMembers.filter(d =>
-      country.split(".").includes(d.value.slice(2, 5))
-    );
+    // Gets countries and partners
+    const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
+    const countryId = countryMembers.filter(d => geoFilter(d, country));
     const partnerId = !["show", "all"].includes(partner)
-      ? countryMembers.filter(d => partner.split(".").includes(d.value.slice(2, 5)))
+      ? countryMembers.filter(d => geoFilter(d, partner))
       : undefined;
 
-    const isTechnology = cube.includes("cpc");
-    const isProduct = isFinite(viztype);
     const isFilter = !["show", "all"].includes(viztype);
+    const isProduct = isFinite(viztype);
+    const isTechnology = cube.includes("cpc");
     const isTradeBalance = flow === "show";
-    const interval = time.split(".");
-    if (interval.length === 1) interval.push(interval[0]);
+
+    // Creates time filter
+    const timeInterval = time.split(".");
+    const timeSeriesChart = ["line", "stacked"].includes(chart);
+    const timeFilter =  !timeSeriesChart
+      ? timeInterval.join()
+      : range(timeInterval[0], timeInterval[timeInterval.length - 1]).join();
+
+    if (timeInterval.length === 1) timeInterval.push(timeInterval[0]);
 
     const cubeName = !isTechnology
       ? `trade_i_baci_a_${cube.replace("hs", "")}`
@@ -103,7 +112,7 @@ class VbChart extends React.Component {
         "drilldowns": "Year",
         "measures": measureName,
         "parents": true,
-        "Year": range(interval[0], interval[interval.length - 1]).join(),
+        "Year": timeFilter,
         "Exporter Country": countryId.map(d => d.value).join()
       };
 
@@ -112,7 +121,7 @@ class VbChart extends React.Component {
         "drilldowns": "Year",
         "measures": measureName,
         "parents": true,
-        "Year": range(interval[0], interval[interval.length - 1]).join(),
+        "Year": timeFilter,
         "Importer Country": countryId.map(d => d.value).join()
       };
 
@@ -207,9 +216,7 @@ class VbChart extends React.Component {
       drilldowns: drilldowns.join(),
       measures: measureName,
       parents: true,
-      Year: ["tree_map", "geomap"].includes(chart)
-        ? time.replace(".", ",")
-        : range(interval[0], interval[interval.length - 1]).join()
+      Year: timeFilter
     };
 
     const {diff} = this.state.selected;
@@ -249,7 +256,7 @@ class VbChart extends React.Component {
         measures: measureName,
         parents: true,
         filter_Country: countryId.map(d => d.value)[0],
-        Year: 2017
+        Year: timeFilter
       };
 
       const endpoint = flow === "pgi" ? "opportunity_gain" : "relatedness";
@@ -270,7 +277,7 @@ class VbChart extends React.Component {
     else if (chart === "rings") {
       const ringsParams = {
         Country: countryId.map(d => d.value)[0],
-        Year: 2017
+        Year: timeFilter
       };
       return axios
         .get("/api/connections/hs4", {params: ringsParams})
@@ -420,10 +427,14 @@ class VbChart extends React.Component {
     const measure = isTechnology ? "Patent Share" : "Trade Value";
 
     if (this.state.selected.diff > 0) {
-      baseConfig.colorScale = [1, 2].includes(this.state.selected.value) ? `${measure} Growth` : `${measure} Growth Value`;
+      const isLinearColorScale = [1, 2].includes(this.state.selected.value);
+      const colorScaleMeasure = isLinearColorScale ? `${measure} Growth` : `${measure} Growth Value`;
+      baseConfig.colorScale = colorScaleMeasure;
       baseConfig.colorScaleConfig = {
-        // color: "D3PLUS-RESET-COMMON",
-        scale: "log",
+        axisConfig: {
+          tickFormat: d => isLinearColorScale ? `${formatAbbreviate(d * 100)}%` : tickFormatter(d)
+        },
+        scale: isLinearColorScale ? "linear" : "log",
         midpoint: 0
       };
       baseConfig.shapeConfig = {
@@ -438,7 +449,6 @@ class VbChart extends React.Component {
     }
 
     if (chart === "tree_map" && data && data.length > 0) {
-      console.log(this.state.selected);
       return (
         <div className="vb-chart">
           <Treemap
@@ -481,6 +491,7 @@ class VbChart extends React.Component {
                 selectedItem={this.state.selected}
                 callback={this.updateFilter}
                 state="selected"
+                popoverPosition="top-left"
               />
             </div>
 
@@ -503,6 +514,7 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "stacked" && data && data.length > 0) {
+      if (this.state.stackLayout === "Share") baseConfig.stackOffset = "expand";
       return (
         <div className="vb-chart">
           <StackedArea
@@ -511,7 +523,7 @@ class VbChart extends React.Component {
               total: undefined,
               y: measure,
               yConfig: {
-                tickFormat: d => tickFormatter(d),
+                tickFormat: d => this.state.stackLayout === "Share" ? `${formatAbbreviate(d * 100)}%` : tickFormatter(d),
                 scale: "linear"
               },
               x: "Year"
@@ -537,8 +549,15 @@ class VbChart extends React.Component {
                 callback={depth =>
                   this.setState({techDepth: depth}, () => this.fetchData())
                 }
-              />
-            }
+              />}
+            <OECButtonGroup
+              items={["Value", "Share"]}
+              selected={this.state.stackLayout}
+              title={"Layout"}
+              callback={depth =>
+                this.setState({stackLayout: depth})
+              }
+            />
           </div>
         </div>
       );

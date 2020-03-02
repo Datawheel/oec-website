@@ -7,36 +7,6 @@ const bad = "#cf5555";
 const good = "#3182bd";
 
 /**
- * Finds a tooltip title based on a data point and order
- * @param {Object} d
- * @param {boolean} ascending
- */
-function findTitle(d, ascending) {
-  let categories = [
-    "Product",
-    "HS6",
-    "HS4",
-    "HS2",
-    "Subclass",
-    "Class",
-    "Superclass",
-    "Section",
-    "Country",
-    "Continent",
-    "Service",
-    "Parent Service",
-    "Flow",
-    "Trade Flow",
-    "Organization"
-  ];
-
-  categories = ascending ? categories : categories.reverse();
-
-  const firstAvailable = categories.find(h => h in d && !Array.isArray(d[h]));
-  return firstAvailable ? d[firstAvailable] : "Multiple Items";
-}
-
-/**
  * Finds a color if defined in the color lookup.
  * @param {Object} d
  */
@@ -58,6 +28,38 @@ function findColor(d) {
     }
   }
   return detectedColors[0] || colors.colorGrey;
+}
+
+/**
+ * New function for finding a icon for legend.
+ * @param {*} d
+ */
+function backgroundImageV2(key, d) {
+  const options = {2: "export", 1: "import"};
+  switch (key) {
+    case "Continent":
+      return `/images/icons/country/country_${d["Continent ID"]}.png`;
+    case "Country":
+      return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
+    case "Flow":
+    case "Trade Flow":
+      return `/images/icons/balance/${options[d[`${key} ID`]]}_val.png`;
+    case "Organization":
+      return "/images/icons/patent.png";
+    case "Section":
+      return `/images/icons/hs/hs_${d["Section ID"]}.png`;
+    case "Service":
+    case "Parent Service":
+      return `/images/icons/service/service_${[d[`${key} ID`]]}.png`;
+    default:
+      return "/images/icons/hs/hs_22.png";
+  }
+}
+
+/** */
+function findColorV2(key, d) {
+  if (key === "Country" || key === "ISO 3") return "transparent";
+  return colors[key][d[`${key} ID`]] || colors[key][d[key]] || colors.colorGrey;
 }
 
 /**
@@ -133,6 +135,14 @@ function backgroundImage(d, ascending) {
     }
   }
 }
+
+const tooltipTitle = (bgColor, imgUrl, title) => {
+  let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
+  tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
+  tooltip += `<span>${title}</span>`;
+  tooltip += "</div>";
+  return tooltip;
+};
 
 const axisStyles = {
   barConfig: {
@@ -219,46 +229,79 @@ export default {
   xConfig: axisStyles,
   yConfig: {...axisStyles, scale: "auto"},
   barPadding: 0,
+  layoutPadding: 1,
   legendConfig: {
     label: "",
     shapeConfig: {
       height: () => 25,
       width: () => 25,
-      backgroundImage: d => backgroundImage(d)
+      backgroundImage(d, i, x) {
+        // const parentName = this._groupBy[0](d);
+        // let parent = Object.entries(d).find(h => h[1] === parentName) || [undefined];
+        // let parentId = parent[0];
+        // if (parentId.includes(" ID")) {
+        //   parentId = parentId.slice(0, -3);
+        //   parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
+        // }
+        return backgroundImage(d);
+      }
     }
   },
-  layoutPadding: 1,
   legendTooltip: {
-    title: d => {
-      const title = findTitle(d, false);
-      const bgColor = findColor(d);
+    title(d) {
+      const parentName = this._groupBy[0](d);
+      let parent = Object.entries(d).find(h => h[1] === parentName) || [undefined];
+      let parentId = parent[0];
+      if (parentId.includes(" ID")) {
+        parentId = parentId.slice(0, -3);
+        parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
+      }
+      const title = parent[1];
+      const bgColor = findColorV2(parentId, d);
+      const imgUrl = backgroundImageV2(parentId, d);
 
-      let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-      const imgUrl = backgroundImage(d, false);
-
-      tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-      tooltip += `<span>${title}</span>`;
-      tooltip += "</div>";
-      return tooltip;
+      return tooltipTitle(bgColor, imgUrl, title);
     }
   },
   ocean: false,
   projection: "geoMiller",
   tiles: false,
+  titleConfig: {
+    "fontColor": () => "#FFFFFF",
+    "fontFamily": () => "'Palanquin', sans-serif",
+    "fontSize": () => 16,
+    "text-transform": "uppercase"
+  },
   tooltipConfig: {
-    title: d => {
-      const title = findTitle(d, true);
-      const bgColor = "Country" in d || "Organization" in d ? "transparent" : findColor(d);
-      const imgUrl = backgroundImage(d, true);
+    title(d, i, x) {
+      const len = this._groupBy.length;
+      const parentName = this._groupBy[0](d);
+      let parent = Object.entries(d).find(h => h[1] === parentName) || [undefined];
+      let parentId = parent[0];
+      if (parentId.includes(" ID")) {
+        parentId = parentId.slice(0, -3);
+        parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
+      }
+      const itemName = this._groupBy[len - 1](d);
+      let item = Object.entries(d).find(h => h[1] === itemName) || [undefined];
+      let itemId = item[0];
+      if (itemId.includes(" ID")) {
+        itemId = itemId.slice(0, -3);
+        item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
+      }
+      if (itemId === "ISO 3") {
+        itemId = "Country";
+        item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
+      }
+      const title = item[1];
+      const itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
 
-      let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-      tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-      tooltip += `<span>${title}</span>`;
-      tooltip += "</div>";
+      const imgUrl = backgroundImageV2(itemBgImg, d);
+      const bgColor = findColorV2(itemBgImg, d);
 
-      return tooltip;
+      return tooltipTitle(bgColor, imgUrl, title);
     },
-    tbody: d => {
+    tbody: (d, i, x) => {
       const tbodyData = [];
       // Look for IDs...
       let idVal = [];
@@ -282,8 +325,8 @@ export default {
       if (d["Trade Value RCA"]) {
         tbodyData.push(["Trade Value RCA", `${formatAbbreviate(d["Trade Value RCA"])}`]);
       }
-      if (d["Trade Value Density"]) {
-        tbodyData.push(["Trade Value Density", `${formatAbbreviate(d["Trade Value Density"])}`]);
+      if (d["Trade Value Relatedness"]) {
+        tbodyData.push(["Trade Value Relatedness", `${formatAbbreviate(d["Trade Value Relatedness"])}`]);
       }
       if (d.shareDelta) {
         tbodyData.push(["Market Share ∆", `${formatAbbreviate(d.shareDelta * 100)}%`]);
@@ -295,11 +338,20 @@ export default {
         tbodyData.push(["Total 2017", `${formatAbbreviate(d.currYear)}`]);
         tbodyData.push(["Total 2016", `${formatAbbreviate(d.prevYear)}`]);
       }
-      else if (d["Trade Value"]) {
+      if (d["Trade Value"]) {
         tbodyData.push(["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`]);
       }
       if (d["Trade Value Growth"]) {
         tbodyData.push(["Trade Value Growth", `${formatAbbreviate(d["Trade Value Growth"] * 100)}%`]);
+      }
+      if (d["Trade Value Growth Value"]) {
+        tbodyData.push(["Trade Value Growth Value", `$${formatAbbreviate(d["Trade Value Growth Value"])}`]);
+      }
+      if (x && x[0] && x[0].__data__.share) {
+        tbodyData.push(["Percent", `${formatAbbreviate(x[0].__data__.share * 100)}%`]);
+      }
+      if (d.Year) {
+        tbodyData.push(["Year", d.Year]);
       }
       return tbodyData;
     },
@@ -339,12 +391,6 @@ export default {
     "fontColor": () => "#FFFFFF",
     "fontFamily": () => "'Source Sans Pro', sans-serif",
     "fontSize": () => 14,
-    "text-transform": "uppercase"
-  },
-  titleConfig: {
-    "fontColor": () => "#FFFFFF",
-    "fontFamily": () => "'Palanquin', sans-serif",
-    "fontSize": () => 16,
     "text-transform": "uppercase"
   },
   linkSize: d => d.strength + 1,

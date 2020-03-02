@@ -18,6 +18,7 @@ import SimpleSelect from "components/SimpleSelect";
 import {Button, Switch} from "@blueprintjs/core";
 
 import "./Vizbuilder.css";
+import {getVbTitle} from "../../helpers/vbTitle";
 
 const datasets = [
   {value: "hs92", title: "HS92"},
@@ -28,7 +29,7 @@ const datasets = [
   // {value: "cpc", title: "Technology"}
 ];
 
-const flow = [
+const flowItems = [
   {value: "export", title: "Exports"},
   {value: "import", title: "Imports"}
 ];
@@ -72,11 +73,15 @@ class Vizbuilder extends React.Component {
       _country: undefined,
       _countryId: "all",
       _dataset: datasets[0],
-      _flow: flow[0],
+      _flow: flowItems[0],
       _partner: undefined,
       _partnerId: "all",
       _year: undefined,
       _yearId: "2017",
+      _endYear: {title: 2017, value: 2017},
+      _endYearTitle: {title: 2017, value: 2017},
+      _startYear: {title: 2017, value: 2017},
+      _startYearTitle: {title: 2017, value: 2017},
       scrolled: false,
 
       _selectedItemsProduct: [],
@@ -168,18 +173,22 @@ class Vizbuilder extends React.Component {
     const {router, routeParams} = this.props;
     const {chart} = routeParams;
     const {
-      _flow,
       _dataset,
-      _xAxis,
-      _yAxis,
+      _endYear,
+      _flow,
       _selectedItemsCountry,
       _selectedItemsPartner,
-      _selectedItemsYear,
       _selectedItemsProduct,
-      _selectedItemsTechnology
+      _selectedItemsTechnology,
+      _selectedItemsYear,
+      _startYear,
+      _xAxis,
+      _yAxis
     } = this.state;
 
-    let countryIds = _selectedItemsCountry.map(d => d.label).join(".");
+    let countryIds = _selectedItemsCountry && _selectedItemsCountry.length > 0
+      ? _selectedItemsCountry.map(d => d.label).join(".")
+      : "show";
     let partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
       ? _selectedItemsPartner.map(d => d.label).join(".")
       : "all";
@@ -204,7 +213,23 @@ class Vizbuilder extends React.Component {
       filterIds = "all";
     }
 
-    const permalink = `/en/visualize/${chart}/${dataset}/${flow}/${countryIds}/${partnerIds}/${filterIds}/${_selectedItemsYear.map(d => d.value).join(".")}/`;
+    const timeSeriesChart = ["line", "stacked"].includes(chart);
+    const timeIds = timeSeriesChart
+      ? `${_startYear.value}.${_endYear.value}`
+      : _selectedItemsYear.map(d => d.value).join(".");
+
+    const permalinkItems = [
+      "en",
+      "visualize",
+      chart,
+      dataset,
+      flow,
+      countryIds,
+      partnerIds,
+      filterIds,
+      timeIds
+    ];
+    const permalink = `/${permalinkItems.join("/")}/`;
     this.updateFilterSelected({permalink});
     router.push(permalink);
   };
@@ -227,6 +252,7 @@ class Vizbuilder extends React.Component {
     const {routeParams} = this.props;
     const {wdiIndicators} = this.state;
     let {country, cube, flow, partner, time, viztype} = routeParams;
+    const {chart} = routeParams;
     if (prevState && prevState.permalink) {
       [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
     }
@@ -246,6 +272,13 @@ class Vizbuilder extends React.Component {
     const _selectedItemsTechnology = ["cpc"].includes(cube) ? technologyData
       .filter(d => viztype.split(".").includes(d.value)) : [];
 
+    const isTimeSeriesChart = ["line", "stacked"].includes(chart);
+    const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
+    const _startYear = isTimeSeriesChart ? timeIds[0] : {};
+    const _endYear = isTimeSeriesChart ? timeIds[1] : {};
+
+    if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
+
     this.setState({
       ...prevState,
       _selectedItemsCountry,
@@ -263,7 +296,11 @@ class Vizbuilder extends React.Component {
       _xAxisTitle: _xAxis,
       _yAxisTitle: _yAxis,
       _xAxisScale: _xAxis.scale || "Log",
-      _yAxisScale: _yAxis.scale || "Log"
+      _yAxisScale: _yAxis.scale || "Log",
+      _endYear,
+      _startYear,
+      _endYearTitle: _endYear,
+      _startYearTitle: _startYear
     });
   }
 
@@ -278,22 +315,35 @@ class Vizbuilder extends React.Component {
     const {routeParams, t} = this.props;
     const {chart, cube, country, viztype, time} = routeParams;
 
+    const isCountry = !["show", "all"].includes(country);
+    const isProduct = isFinite(viztype.split(".")[0]);
+    const isScatterChart = ["scatter"].includes(chart);
+    const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const isTrade = cube.includes("hs");
     const isTechnology = !isTrade;
 
-    const isProduct = isFinite(viztype.split(".")[0]);
-    const productSelector = isProduct && !["scatter"].includes(chart);
-    const countrySelector = !["show", "all"].includes(country) && !["scatter"].includes(chart);
+    const productSelector = isProduct && !isScatterChart;
+    const countrySelector = isCountry && !isScatterChart;
     const partnerSelector = countrySelector && !productSelector;
 
     const timeIndex = years.findIndex(d => d.value === time * 1);
-    const prevTime = !["line", "stacked"].includes(chart) ? years[timeIndex + 1] : undefined;
-    const nextTime = !["line", "stacked"].includes(chart) ? years[timeIndex - 1] : undefined;
+    const prevTime = !isTimeSeriesChart ? years[timeIndex + 1] : undefined;
+    const nextTime = !isTimeSeriesChart ? years[timeIndex - 1] : undefined;
+
+    const {vbTitle, vbParams} = getVbTitle(
+      routeParams,
+      this.state._selectedItemsCountryTitle,
+      this.state._selectedItemsPartnerTitle,
+      this.state._selectedItemsProductTitle,
+      this.state._selectedItemsTechnologyTitle,
+      this.state._xAxisTitle,
+      this.state._yAxisTitle
+    );
 
     return <div id="vizbuilder">
       <OECNavbar
         className={scrolled ? "background" : ""}
-        title={"OEC"}
+        title={t(vbTitle, Object.assign(vbParams, {interpolation: {escapeValue: false}}))}
         scrolled={scrolled}
       />
 
@@ -304,7 +354,7 @@ class Vizbuilder extends React.Component {
               <Switch
                 checked={this.state.controls}
                 onChange={this.handleControls}
-                alignIndicator={"right"}
+                alignIndicator="right"
               />
             </div>
             {this.state.controls && <div className="content">
@@ -413,7 +463,7 @@ class Vizbuilder extends React.Component {
 
                 {!["scatter"].includes(chart) && <div className="column-1-2">
                   <SimpleSelect
-                    items={flow}
+                    items={flowItems}
                     title={"Trade Flow"}
                     state="_flow"
                     selectedItem={this.state._flow}
@@ -423,7 +473,7 @@ class Vizbuilder extends React.Component {
 
               </div>
 
-              <div className="columns">
+              {!["line", "stacked"].includes(chart) ? <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
                     items={years}
@@ -432,7 +482,26 @@ class Vizbuilder extends React.Component {
                     callback={d => this.handleItemMultiSelect("_selectedItemsYear", d)}
                   />
                 </div>
-              </div>
+              </div> : <div className="columns">
+                <div className="column-1-2">
+                  <SimpleSelect
+                    items={years}
+                    title={"Start Year"}
+                    state="_startYear"
+                    selectedItem={this.state._startYear}
+                    callback={this.updateFilter}
+                  />
+                </div>
+                <div className="column-1-2">
+                  <SimpleSelect
+                    items={years}
+                    title={"End Year"}
+                    state="_endYear"
+                    selectedItem={this.state._endYear}
+                    callback={this.updateFilter}
+                  />
+                </div>
+              </div>}
 
               <div className="columns">
                 <div className="column-1 tab">
@@ -458,15 +527,10 @@ class Vizbuilder extends React.Component {
                   text={prevTime.title}
                 />}
               </div>
+
               <VbTitle
-                countryData={this.state.country}
-                routeParams={routeParams}
-                selectedItemsCountry={this.state._selectedItemsCountryTitle}
-                selectedItemsPartner={this.state._selectedItemsPartnerTitle}
-                selectedItemsProduct={this.state._selectedItemsProductTitle}
-                selectedItemsTechnology={this.state._selectedItemsTechnologyTitle}
-                xScale={this.state._xAxisTitle}
-                yScale={this.state._yAxisTitle}
+                title={vbTitle}
+                params={vbParams}
               />
               <div className="vb-title-button">
                 {nextTime && <Button

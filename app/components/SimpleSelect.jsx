@@ -9,8 +9,6 @@ export default class SimpleSelect extends React.Component {
     isOpen: false
   }
 
-  handleItemClick = d => (console.log(d), this.props.callback(d.target.value));
-
   renderItem = (item, {modifiers, handleClick}) => {
     if (!modifiers.matchesPredicate) {
       return null;
@@ -27,11 +25,12 @@ export default class SimpleSelect extends React.Component {
 
   };
   render() {
-    const {items, selectedItem, title} = this.props;
+    const {items, popoverPosition, selectedItem, title} = this.props;
     const {isOpen} = this.state;
     return <div className="selector">
       <h6 className="title is-6">{title}</h6>
       <Select
+        activeItem={selectedItem}
         className="popover-virtual-selector filter-selector"
         filterable={false}
         isOpen={isOpen}
@@ -39,7 +38,7 @@ export default class SimpleSelect extends React.Component {
         items={items}
         minimal={true}
         onItemSelect={d => this.props.callback(this.props.state, d)}
-        popoverProps={{minimal: true}}
+        popoverProps={{minimal: true, position: popoverPosition}}
       >
         <Button
           className="button-virtual-selector"
@@ -50,3 +49,7 @@ export default class SimpleSelect extends React.Component {
     </div>;
   }
 }
+
+SimpleSelect.defaultProps = {
+  popoverPosition: "bottom-left"
+};
