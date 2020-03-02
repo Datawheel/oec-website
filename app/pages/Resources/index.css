@@ -7,6 +7,19 @@
     max-width: 600px;
     width: 100%;
 
+    & .about {
+      & h1 {
+        font-size: var(--font-xxl);
+        font-weight: 300;
+      }
+
+      & p {
+        font-size: var(--font-sm);
+        font-weight: 200;
+        margin-bottom: var(--gutter-sm);
+      }
+    }
+
     & .faq {
       & h1 {
         font-size: var(--font-xxl);
