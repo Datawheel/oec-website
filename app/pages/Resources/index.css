@@ -7,28 +7,32 @@
     max-width: 600px;
     width: 100%;
 
-    & .about {
-      & h1 {
-        font-size: var(--font-xxl);
-        font-weight: 300;
-      }
-      & p {
-        font-size: var(--font-sm);
-        font-weight: 200;
-        margin-bottom: var(--gutter-sm);
+    & h1 {
+      font-size: var(--font-xxl);
+      font-weight: 300;
+    }
+
+    & h3 {
+      font-weight: 400;
+      color: var(--accent);
+      opacity: 0.8;
+    }
+
+    & p {
+      font-size: var(--font-sm);
+      font-weight: 200;
+      margin-bottom: var(--gutter-sm);
+    }
+
+    & .data {
+      & .reference {
+        display: flex;
       }
     }
 
     & .faq {
-      & h1 {
-        font-size: var(--font-xxl);
-        font-weight: 300;
-      }
-      & h2 {
+      & h3 {
         text-transform: uppercase;
-        font-weight: 300;
-        color: var(--accent);
-        opacity: 0.8;
       }
       & .link-container {
         margin-left: var(--gutter-md);
@@ -66,10 +70,6 @@
 
         & img {
           max-width: 100%;
-        }
-
-        & .link {
-          padding: var(--gutter-sm) var(--gutter-sm);
         }
       }
 
@@ -111,6 +111,18 @@
             color: var(--dark-3);
             margin: 0;
             margin-bottom: var(--gutter-xs);
+          }
+        }
+
+        & .links {
+          & .link {
+            color: var(--dark-2);
+            opacity: 0.7;
+            margin-right: var(--gutter-sm);
+          }
+
+          & .link:hover {
+            opacity: 0.55;
           }
         }
       }
