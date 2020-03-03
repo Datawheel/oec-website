@@ -35,12 +35,19 @@
 
     & .link {
       font-size: var(--font-sm);
-      margin-left: var(--gutter-sm);
+      margin-left: var(--gutter-md);
       margin-bottom: var(--gutter-xs);
 
       & a {
         color: var(--accent-light);
       }
+    }
+
+    & .citation {
+      color: white;
+      font-style: italic;
+      font-weight: 600;
+      margin-left: var(--gutter-md);
     }
 
     & .data {
@@ -52,13 +59,6 @@
         font-size: var(--font-xs);
         font-weight: 400;
         margin-bottom: var(--gutter-xs);
-      }
-    }
-
-    & .faq {
-      & .link-container {
-        margin-left: var(--gutter-md);
-        margin-bottom: var(--gutter-sm);
       }
     }
   }
