@@ -492,7 +492,7 @@ class VbChart extends React.Component {
               <OECButtonGroup
                 items={measures}
                 selected={this.state.selected}
-                title={"Color"}
+                title={""}
                 callback={selected =>
                   this.setState({selected}, () => this.fetchData())
                 }

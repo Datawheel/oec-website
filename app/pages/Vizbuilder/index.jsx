@@ -112,33 +112,36 @@ class Vizbuilder extends React.Component {
     axios.all([
       axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false"),
       axios.get("/members/country.json"),
-      axios.get("/members/technology.json")
+      axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false")
+      // axios.get("/members/technology.json")
     ]).then(axios.spread((resp1, resp2, resp3) => {
       const productData = resp1.data.data;
       const productKeys = createItems(productData, ["Section", "HS2", "HS4"], "/images/icons/hs/hs_");
 
       const countryData = resp2.data.map(d => ({
         ...d, color: colors.Continent[d.parent_id]}));
-      const technologyData = resp3.data.map(d => ({
-        ...d, color: colors["CPC Section"][d.parent_id]}));
+      // const technologyData = resp4.data.map(d => ({
+      //   ...d, color: colors["CPC Section"][d.parent_id]}));
+      const technologyData = [];
 
       // Sorts alphabetically country names
       countryData.sort((a, b) => a.title > b.title ? 1 : -1);
+
+      const wdi = resp3.data.data
+        .map(d => ({value: d["Indicator ID"], title: d.Indicator}))
+        .sort((a, b) => a.title > b.title ? 1 : -1);
+      const data = [{value: "OEC.ECI", title: "Economic Complexity Index (ECI)", scale: "Linear"}]
+        .concat(wdi);
+
       this.updateFilterSelected({
         country: countryData,
         product: productData,
         productKeys,
-        technology: technologyData
+        technology: technologyData,
+        wdiIndicators: data
       }, true);
     }));
 
-    axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false").then(resp => {
-      const data = [{value: "OEC.ECI", title: "Economic Complexity Index (ECI)", scale: "Linear"}]
-        .concat(resp.data.data.map(d => ({value: d["Indicator ID"], title: d.Indicator})));
-      this.setState({
-        wdiIndicators: data
-      });
-    });
 
   }
 
@@ -251,17 +254,18 @@ class Vizbuilder extends React.Component {
     const countryData = usePrevState ? prevState.country : this.state.country;
     const technologyData = usePrevState ? prevState.technology : this.state.technology;
     const productKeys = usePrevState ? prevState.productKeys : this.state.productKeys;
-
+    const wdiIndicators = usePrevState ? prevState.wdiIndicators : this.state.wdiIndicators;
     const {routeParams} = this.props;
-    const {wdiIndicators} = this.state;
+
     let {country, cube, flow, partner, time, viztype} = routeParams;
     const {chart} = routeParams;
     if (prevState && prevState.permalink) {
       [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
     }
 
-    const _yAxis = wdiIndicators.find(d => d.value === country) || {};
     const _xAxis = wdiIndicators.find(d => d.value === flow) || {};
+    const _yAxis = wdiIndicators.find(d => d.value === country) || {};
+    console.log(_xAxis, _yAxis);
 
     const _selectedItemsCountry = countryData
       .filter(d => country.split(".").includes(d.label));
@@ -429,7 +433,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {["scatter"].includes(chart) && <div className="column-1-2">
+              {isScatterChart && <div className="column-1-2">
                 <VirtualSelector
                   items={this.state.wdiIndicators}
                   run={this.updateFilter}
@@ -441,7 +445,7 @@ class Vizbuilder extends React.Component {
                 />
               </div>}
 
-              {["scatter"].includes(chart) && <div className="column-1-2">
+              {isScatterChart && <div className="column-1-2">
                 <VirtualSelector
                   items={this.state.wdiIndicators}
                   run={this.updateFilter}
@@ -454,7 +458,7 @@ class Vizbuilder extends React.Component {
               </div>}
 
               <div className="columns">
-                {!["scatter"].includes(chart) && <div className="column-1-2">
+                {!isScatterChart && <div className="column-1-2">
                   <SimpleSelect
                     items={datasets}
                     title={"Dataset"}
@@ -464,7 +468,7 @@ class Vizbuilder extends React.Component {
                   />
                 </div>}
 
-                {!["scatter"].includes(chart) && <div className="column-1-2">
+                {!isScatterChart && <div className="column-1-2">
                   <SimpleSelect
                     items={flowItems}
                     title={"Trade Flow"}

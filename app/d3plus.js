@@ -293,7 +293,7 @@ export default {
         itemId = "Country";
         item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
       }
-      const title = item[1];
+      const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
       const itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
 
       const imgUrl = backgroundImageV2(itemBgImg, d);
@@ -413,10 +413,6 @@ export default {
       labelConfig: {
         fontSize: () => 13
       },
-      // strokeWidth: d => {
-      //   const c = findColor(d);
-      //   return [good, bad].includes(c) ? 1 : 0;
-      // },
       strokeWidth: () => 2,
       strokeFill: () => "#212831",
       fill: findColor
