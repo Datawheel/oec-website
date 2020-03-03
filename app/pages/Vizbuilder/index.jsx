@@ -56,6 +56,8 @@ function createItems(data, levels, iconUrl) {
   }, {});
 }
 
+const parseIdsToURL = (data, key = "id") => data.map(d => d[key]).join(".");
+
 class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
@@ -153,24 +155,6 @@ class Vizbuilder extends React.Component {
     window.removeEventListener("scroll", this.handleScroll);
   }
 
-  handleScroll = () => {
-    throttle(() => {
-      this.setState({scrolled: window.scrollY > 220});
-    }, 30);
-  }
-
-  handleTabOption = d => {
-    const {router} = this.props;
-    const permalink = d.permalink;
-    if (permalink) {
-      this.updateFilterSelected({permalink});
-      router.push(permalink);
-    }
-    else {
-      this.setState(d);
-    }
-  }
-
   /**
    * Creates a visualization after to click "Build Visualization" button
    * By default, creates a chart for the same type of visualization
@@ -193,10 +177,10 @@ class Vizbuilder extends React.Component {
     } = this.state;
 
     let countryIds = _selectedItemsCountry && _selectedItemsCountry.length > 0
-      ? _selectedItemsCountry.map(d => d.label).join(".")
+      ? parseIdsToURL(_selectedItemsCountry, "label")
       : "show";
     let partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
-      ? _selectedItemsPartner.map(d => d.label).join(".")
+      ? parseIdsToURL(_selectedItemsPartner, "label")
       : "all";
 
     const isTechnologyFilter = _selectedItemsTechnology.length > 0;
@@ -204,8 +188,8 @@ class Vizbuilder extends React.Component {
 
     let filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
-        ? _selectedItemsTechnology.map(d => d.value).join(".")
-        : _selectedItemsProduct.map(d => d.id).join(".")
+        ? parseIdsToURL(_selectedItemsTechnology, "value")
+        : parseIdsToURL(_selectedItemsProduct)
       : "show";
 
     const dataset = isTechnologyFilter ? "cpc" : _dataset.value;
@@ -240,6 +224,30 @@ class Vizbuilder extends React.Component {
     router.push(permalink);
   };
 
+  handleControls = () => this.setState({controls: !this.state.controls})
+
+  handleItemMultiSelect = (key, d) => {
+    this.setState({[key]: d});
+  }
+
+  handleScroll = () => {
+    throttle(() => {
+      this.setState({scrolled: window.scrollY > 220});
+    }, 30);
+  }
+
+  handleTabOption = d => {
+    const {router} = this.props;
+    const permalink = d.permalink;
+    if (permalink) {
+      this.updateFilterSelected({permalink});
+      router.push(permalink);
+    }
+    else {
+      this.setState(d);
+    }
+  }
+
   updateFilter = (key, value) => {
     this.setState({
       [key]: value,
@@ -263,14 +271,16 @@ class Vizbuilder extends React.Component {
       [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
     }
 
+    const isTimeSeriesChart = ["line", "stacked"].includes(chart);
+
     const _xAxis = wdiIndicators.find(d => d.value === flow) || {};
     const _yAxis = wdiIndicators.find(d => d.value === country) || {};
-    console.log(_xAxis, _yAxis);
 
-    const _selectedItemsCountry = countryData
-      .filter(d => country.split(".").includes(d.label));
-    const _selectedItemsPartner = countryData
-      .filter(d => partner.split(".").includes(d.label));
+    // Get selected countries
+    const filterCountry = type => countryData.filter(d => type.split(".").includes(d.label));
+    const _selectedItemsCountry = filterCountry(country);
+    const _selectedItemsPartner = filterCountry(partner);
+
     const _selectedItemsYear = years
       .filter(d => time.split(".").includes(d.value.toString()));
     const _selectedItemsProduct = isFinite(viztype.split(".")[0])
@@ -279,7 +289,6 @@ class Vizbuilder extends React.Component {
     const _selectedItemsTechnology = ["cpc"].includes(cube) ? technologyData
       .filter(d => viztype.split(".").includes(d.value)) : [];
 
-    const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
     const _startYear = isTimeSeriesChart ? timeIds[0] : {};
     const _endYear = isTimeSeriesChart ? timeIds[1] : {};
@@ -310,12 +319,6 @@ class Vizbuilder extends React.Component {
       _startYearTitle: _startYear
     });
   }
-
-  handleItemMultiSelect = (key, d) => {
-    this.setState({[key]: d});
-  }
-
-  handleControls = () => this.setState({controls: !this.state.controls})
 
   render() {
     const {activeTab, scrolled} = this.state;
@@ -402,7 +405,7 @@ class Vizbuilder extends React.Component {
                   <OECMultiSelect
                     items={this.state.technology}
                     selectedItems={this.state._selectedItemsTechnology}
-                    title={"Technology"}
+                    title={t("Technology")}
                     callback={d => this.handleItemMultiSelect("_selectedItemsTechnology", d)}
                   />
                 </div>
@@ -440,7 +443,7 @@ class Vizbuilder extends React.Component {
                   scale
                   selectedItem={this.state._xAxis}
                   state="_xAxis"
-                  title={"X Axis"}
+                  title={t("X Axis")}
                   callbackButton={(key, value) => this.setState({[key]: value})}
                 />
               </div>}
@@ -452,7 +455,7 @@ class Vizbuilder extends React.Component {
                   scale
                   selectedItem={this.state._yAxis}
                   state="_yAxis"
-                  title={"Y Axis"}
+                  title={t("Y Axis")}
                   callbackButton={(key, value) => this.setState({[key]: value})}
                 />
               </div>}
@@ -461,7 +464,7 @@ class Vizbuilder extends React.Component {
                 {!isScatterChart && <div className="column-1-2">
                   <SimpleSelect
                     items={datasets}
-                    title={"Dataset"}
+                    title={t("Dataset")}
                     state="_dataset"
                     selectedItem={this.state._dataset}
                     callback={this.updateFilter}
@@ -471,7 +474,7 @@ class Vizbuilder extends React.Component {
                 {!isScatterChart && <div className="column-1-2">
                   <SimpleSelect
                     items={flowItems}
-                    title={"Trade Flow"}
+                    title={t("Trade Flow")}
                     state="_flow"
                     selectedItem={this.state._flow}
                     callback={this.updateFilter}
@@ -485,7 +488,7 @@ class Vizbuilder extends React.Component {
                   <OECMultiSelect
                     items={years}
                     selectedItems={this.state._selectedItemsYear}
-                    title={"Year"}
+                    title={t("Year")}
                     callback={d => this.handleItemMultiSelect("_selectedItemsYear", d)}
                   />
                 </div>
@@ -493,7 +496,7 @@ class Vizbuilder extends React.Component {
                 <div className="column-1-2">
                   <SimpleSelect
                     items={years}
-                    title={"Start Year"}
+                    title={t("Start Year")}
                     state="_startYear"
                     selectedItem={this.state._startYear}
                     callback={this.updateFilter}
@@ -502,7 +505,7 @@ class Vizbuilder extends React.Component {
                 <div className="column-1-2">
                   <SimpleSelect
                     items={years}
-                    title={"End Year"}
+                    title={t("End Year")}
                     state="_endYear"
                     selectedItem={this.state._endYear}
                     callback={this.updateFilter}

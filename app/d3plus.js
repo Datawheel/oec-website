@@ -257,9 +257,9 @@ export default {
         parentId = parentId.slice(0, -3);
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
-      const title = parent[1];
+      const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
       const bgColor = findColorV2(parentId, d);
-      const imgUrl = backgroundImageV2(parentId, d);
+      const imgUrl = backgroundImageV2(Array.isArray(parent[1]) ? "WildCard" : parentId, d);
 
       return tooltipTitle(bgColor, imgUrl, title);
     }
