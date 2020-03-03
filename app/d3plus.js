@@ -393,6 +393,12 @@ export default {
     "fontSize": () => 14,
     "text-transform": "uppercase"
   },
+  totalFormat(d) {
+    if (this._filteredData && this._filteredData[0] && this._filteredData[0]["Trade Value"]) {
+      return `Total: $${formatAbbreviate(d)}`;
+    }
+    return `Total: ${formatAbbreviate(d)}`;
+  },
   linkSize: d => d.strength + 1,
   linkSizeMin: 0,
   linkSizeScale: "identity",
