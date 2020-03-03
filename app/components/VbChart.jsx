@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 import axios from "axios";
 import {
@@ -26,13 +27,14 @@ import SimpleSelect from "./SimpleSelect";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
-const measures = [
-  {title: "Category", value: 0, diff: 0},
-  {title: "Annual Growth Rate (1 Year)", value: 1, diff: 1},
-  {title: "Annual Growth Rate (5 Year)", value: 2, diff: 5},
-  {title: "Growth Value (1 Year)", value: 3, diff: 1},
-  {title: "Growth Value (5 Year)", value: 4, diff: 5}
-];
+// const measures = [
+//   {title: "Category", value: 0, diff: 0},
+//   {title: "Annual Growth Rate (1 Year)", value: 1, diff: 1},
+//   {title: "Annual Growth Rate (5 Year)", value: 2, diff: 5},
+//   {title: "Growth Value (1 Year)", value: 3, diff: 1},
+//   {title: "Growth Value (5 Year)", value: 4, diff: 5}
+// ];
+const measures = ["Trade Value", "Growth", "Growth (%)"];
 
 class VbChart extends React.Component {
   constructor(props) {
@@ -220,8 +222,9 @@ class VbChart extends React.Component {
       Year: timeFilter
     };
 
-    const {diff} = this.state.selected;
-    if (diff > 0) {
+    // const {diff} = this.state.selected;
+    if (this.state.selected.includes("Growth")) {
+      const diff = 1;
       params.growth = growth;
       const year = time * 1;
       params.Year = `${year - diff},${year}`;
@@ -307,13 +310,15 @@ class VbChart extends React.Component {
       });
     }
 
+    console.log(process.env);
+
     return axios
       .get("https://api.oec.world/tesseract/data", {
         params
       })
       .then(resp => {
         let data = resp.data.data;
-        if (diff > 0) data = data.filter(d => d.Year === time * 1);
+        if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         this.setState({
           data,
           loading: false,
@@ -427,8 +432,8 @@ class VbChart extends React.Component {
     };
     const measure = isTechnology ? "Patent Share" : "Trade Value";
 
-    if (this.state.selected.diff > 0) {
-      const isLinearColorScale = [1, 2].includes(this.state.selected.value);
+    if (this.state.selected.includes("Growth")) {
+      const isLinearColorScale = this.state.selected === measures[2];
       const colorScaleMeasure = isLinearColorScale ? `${measure} Growth` : `${measure} Growth Value`;
       baseConfig.colorScale = colorScaleMeasure;
       baseConfig.colorScaleConfig = {
@@ -472,8 +477,7 @@ class VbChart extends React.Component {
                 callback={depth =>
                   this.setState({depth}, () => this.fetchData())
                 }
-              />
-            }
+              />}
             {isTechnology &&
               <OECButtonGroup
                 items={ddTech.slice(1)}
@@ -482,10 +486,19 @@ class VbChart extends React.Component {
                 callback={depth =>
                   this.setState({techDepth: depth}, () => this.fetchData())
                 }
-              />
-            }
+              />}
 
-            <div className="oec-button-group">
+            {!isTechnology &&
+              <OECButtonGroup
+                items={measures}
+                selected={this.state.selected}
+                title={"Color"}
+                callback={selected =>
+                  this.setState({selected}, () => this.fetchData())
+                }
+              />}
+
+            {/* <div className="oec-button-group">
               <h6 className="oec-button-group-title">Color</h6>
               <SimpleSelect
                 items={measures}
@@ -494,7 +507,7 @@ class VbChart extends React.Component {
                 state="selected"
                 popoverPosition="top-left"
               />
-            </div>
+            </div> */}
 
             <VbShare />
             <VbDownload
@@ -507,6 +520,7 @@ class VbChart extends React.Component {
               countryData={this.props.countryData}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
+              selectedProducts={this.props.selectedProducts}
               routeParams={routeParams}
               router={this.props.router}
               run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
@@ -762,4 +776,17 @@ class VbChart extends React.Component {
   }
 }
 
-export default withNamespaces()(VbChart);
+const mapStateToProps = state => {
+  console.log(state.env.BASE);
+  return {
+    auth: state.auth
+  };
+};
+
+// const mapDispatchToProps = dispatch => ({
+//   isAuthenticated: () => {
+//     dispatch(isAuthenticated());
+//   }
+// });
+
+export default connect(mapStateToProps, {})(withNamespaces()(VbChart));

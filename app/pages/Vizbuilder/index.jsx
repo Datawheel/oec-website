@@ -545,6 +545,7 @@ class Vizbuilder extends React.Component {
             <VbChart
               countryData={this.state.country}
               permalink={this.state.permalink}
+              selectedProducts={this.state._selectedItemsProductTitle}
               xScale={this.state._xAxisScale}
               yScale={this.state._yAxisScale}
               routeParams={routeParams}

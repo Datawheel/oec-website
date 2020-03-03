@@ -108,3 +108,14 @@
     text-transform: uppercase;
   }
 }
+
+@media (max-width: 700px) {
+  .vb-profile {
+    & .vb-columns {
+      flex-direction: column;
+      & .vb-column.aside {
+        max-width: 100%;
+      }
+    }
+  }
+}
