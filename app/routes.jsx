@@ -36,11 +36,11 @@ export default function RouteCreate() {
       const c1Index = Math.floor(Math.random() * countryCandidates.slice(0, 80).length);
       const c1 = countryCandidates.splice(c1Index, 1)[0];
       const c2 = countryCandidates[Math.floor(Math.random() * countryCandidates.length)];
-      return `${c1}/country/${c2}`;
+      return `${c1}/partner/${c2}`;
     }
     if (path.includes("bilateral-product")) {
       const [bilatProd, bilatCountry] = hs4BilatCandidates[Math.floor(Math.random() * hs4BilatCandidates.length)];
-      return `${bilatProd}/country/${bilatCountry}`;
+      return `${bilatProd}/reporter/${bilatCountry}`;
     }
     if (path.includes("country")) {
       return countryCandidates[Math.floor(Math.random() * countryCandidates.length)];

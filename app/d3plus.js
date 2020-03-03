@@ -228,6 +228,7 @@ export default {
   },
   xConfig: axisStyles,
   yConfig: {...axisStyles, scale: "auto"},
+  y2Config: {...axisStyles, scale: "auto"},
   barPadding: 0,
   layoutPadding: 1,
   legendConfig: {
@@ -256,9 +257,9 @@ export default {
         parentId = parentId.slice(0, -3);
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
-      const title = parent[1];
+      const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
       const bgColor = findColorV2(parentId, d);
-      const imgUrl = backgroundImageV2(parentId, d);
+      const imgUrl = backgroundImageV2(Array.isArray(parent[1]) ? "WildCard" : parentId, d);
 
       return tooltipTitle(bgColor, imgUrl, title);
     }
@@ -293,7 +294,7 @@ export default {
         itemId = "Country";
         item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
       }
-      const title = item[1];
+      const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
       const itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
 
       const imgUrl = backgroundImageV2(itemBgImg, d);
@@ -413,10 +414,6 @@ export default {
       labelConfig: {
         fontSize: () => 13
       },
-      // strokeWidth: d => {
-      //   const c = findColor(d);
-      //   return [good, bad].includes(c) ? 1 : 0;
-      // },
       strokeWidth: () => 2,
       strokeFill: () => "#212831",
       fill: findColor
