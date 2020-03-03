@@ -776,17 +776,10 @@ class VbChart extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  console.log(state.env.BASE);
-  return {
-    auth: state.auth
-  };
-};
-
 // const mapDispatchToProps = dispatch => ({
 //   isAuthenticated: () => {
 //     dispatch(isAuthenticated());
 //   }
 // });
 
-export default connect(mapStateToProps, {})(withNamespaces()(VbChart));
+export default withNamespaces()(VbChart);
