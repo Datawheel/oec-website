@@ -228,6 +228,7 @@ export default {
   },
   xConfig: axisStyles,
   yConfig: {...axisStyles, scale: "auto"},
+  y2Config: {...axisStyles, scale: "auto"},
   barPadding: 0,
   layoutPadding: 1,
   legendConfig: {

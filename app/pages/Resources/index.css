@@ -4,7 +4,7 @@
   padding-top: var(--nav-height);
   & .resources-content {
     margin: var(--gutter-sm) auto;
-    max-width: 600px;
+    max-width: 700px;
     width: 100%;
 
     & h1 {
@@ -27,15 +27,35 @@
       opacity: 0.8;
     }
 
+    & h4 {
+      color: var(--gray);
+      font-size: var(--font-lg);
+      font-weight: 200;
+    }
+
     & p {
       font-size: var(--font-sm);
-      font-weight: 200;
+      font-weight: 300;
       margin-bottom: var(--gutter-sm);
+    }
+
+    & .citation {
+      color: white;
+      font-style: italic;
+      font-weight: 600;
+      margin-left: var(--gutter-md);
+    }
+
+    & .highlight {
+      font-size: var(--font-sm);
+      font-weight: 600;
+      margin-bottom: var(--gutter-sm);
+      margin-left: var(--gutter-md);
     }
 
     & .link {
       font-size: var(--font-sm);
-      margin-left: var(--gutter-sm);
+      margin-left: var(--gutter-md);
       margin-bottom: var(--gutter-xs);
 
       & a {
@@ -52,13 +72,6 @@
         font-size: var(--font-xs);
         font-weight: 400;
         margin-bottom: var(--gutter-xs);
-      }
-    }
-
-    & .faq {
-      & .link-container {
-        margin-left: var(--gutter-md);
-        margin-bottom: var(--gutter-sm);
       }
     }
   }
@@ -140,7 +153,11 @@
           & .link {
             color: var(--dark-2);
             opacity: 0.7;
-            margin-right: var(--gutter-sm);
+            margin-right: var(--gutter-xs);
+
+            & img {
+              width: 36px;
+            }
           }
 
           & .link:hover {
