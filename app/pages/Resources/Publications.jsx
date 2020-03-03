@@ -4,11 +4,32 @@ import Helmet from "react-helmet";
 export default class Publications extends Component {
   render() {
     const information = {
-      title: "",
-      subtitle: "",
-      author: "",
-      abstract: "",
-      amazon: ""
+      title: "Why Information Grows",
+      subtitle: "The Evolution of Order, from Atoms to Economies",
+      author: "César Hidalgo",
+      abstract: "What is economic growth? And why, historically, has it occurred in only a few places? Previous efforts to answer these questions have focused on institutions, geography, finances, and psychology. But according to MIT's antidisciplinarian César Hidalgo, understanding the nature of economic growth demands transcending the social sciences and including the natural sciences of information, networks, and complexity. To understand the growth of economies, Hidalgo argues, we first need to understand the growth of order.",
+      link: "https://www.amazon.com/Why-Information-Grows-Evolution-Economies/dp/0465048994/ref=sr_1_1?ie=UTF8&qid=1435945119&sr=8-1&keywords=why+information+grows",
+      background: "information-bg.png",
+      preview: "information.png"
+    };
+    const atlas = {
+      title: "The Atlas of Economic Complexity",
+      subtitle: "Mapping Paths to Prosperity",
+      authors: ["Ricardo Hausmann", "César A. Hidalgo", "Sebastián Bustos", "Michele Coscia", "Sarah Chung", "Juan Jimenez", "Alexander Simoes", "Muhammed A. Yildirim"],
+      quotes: [
+        {quote: "Emphasizing that not all products are the same for development is a significant departure from the establishment.", author: "Changyong Rhee, Chief Economist", from: "Asian Development Bank (Cambridge, MA 2011)"},
+        {quote: "The ECI can play a very important role. It can help identify the role of developing countries.", author: "Justin Lin, Chief Economist", from: "World Bank (Cambridge, MA 2011)"}
+      ],
+      previews: [
+        {title: "Revised 2014", preview: "atlas2014.jpg"},
+        {title: "Original 2011", preview: "atlas.png"}
+      ],
+      link: "https://www.amazon.com/Atlas-Economic-Complexity-Mapping-Prosperity/dp/0262525429/ref=sr_1_1?s=books&ie=UTF8&qid=1440535970&sr=1-1&keywords=atlas+of+economic+complexity&pebp=1440535985572&perid=0HN41KMX8PH1JSFPDB35",
+      downloads: [
+        {title: "Full Version", size: "364 pages (85.7 MB)", pdf: "AtlasOfEconomicComplexity.pdf"},
+        {title: "Part I: Why, What and How & Rankings", size: "91 pages (8.2 MB)", pdf: "AtlasOfEconomicComplexity_Part_I.pdf"},
+        {title: "Part II: Country Pages", size: "271 pages (75.4 MB)", pdf: "AtlasOfEconomicComplexity_Part_II.pdf"}
+      ]
     };
     const papers = [
       {
@@ -234,6 +255,32 @@ export default class Publications extends Component {
     return (
       <div className="publications">
         <Helmet title="Publications" />
+
+        <div className="information">
+          <div className="card">
+            <div className="header">
+              <a href={information.link} target="_blank" rel="noopener noreferrer">
+                <h2>{information.title}</h2>
+              </a>
+              <span>by {information.author}</span>
+            </div>
+            <div className="content">
+              <p className="subtitle">{information.subtitle}</p>
+              <p className="abstract">{information.abstract}
+                <div className="link">
+                  <a href={information.link} target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+                </div>
+              </p>
+              <img src="/images/publications/information.png" alt=""/>
+            </div>
+          </div>
+        </div>
+
+        <div className="atlas">
+          <div className="card">
+
+          </div>
+        </div>
 
         <div className="papers">
           <h2> Research Papers </h2>

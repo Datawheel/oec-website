@@ -82,6 +82,76 @@
   color: var(--white);
   padding-top: var(--nav-height);
 
+  & .information {
+    background: #3b9343 url('/images/background/information-bg.png') repeat 50% 0% fixed;
+    padding: 70px 5% 70px 5%;
+    & .card {
+      background: var(--white);
+      width: 1000px;
+      margin: 0 auto;
+      padding: var(--gutter-md) var(--gutter-lg);
+
+      & .header {
+        display: flex;
+        align-items: baseline;
+        color: #3b9343;
+        margin-bottom: var(--gutter-sm);
+
+        & a {
+          text-decoration: none;
+        }
+
+        & h2 {
+          color: #3b9343;
+          text-transform: uppercase;
+          font-size: 2.4rem;
+          font-weight: 900;
+          margin: 0;
+          margin-right: var(--gutter-xs);
+        }
+
+        & h2:hover {
+          text-decoration: none;
+          opacity: 0.8;
+        }
+
+        & span {
+          font-size: var(--font-xl);
+          font-weight: 300;
+          margin: 0;
+        }
+      }
+
+      & .content {
+        display: flex;
+        flex-direction: row;
+
+        & .subtitle {
+          width: 34rem;
+          color: #3b9343;
+          font-size: var(--font-xl);
+          font-weight: 300;
+          margin-right: var(--gutter-md);
+        }
+
+        & .abstract {
+          color: var(--black);
+          font-size: var(--font-md);
+          font-weight: 400;
+        }
+      }
+    }
+  }
+
+  & .atlas {
+    background: #212831 url('/images/background/atlas-bg.png') repeat 50% 50%;
+    padding: 70px 5% 70px 5%;
+    & .card {
+      background: rgba(255,255,255,0.9);
+      height: 80vh;
+    }
+  }
+
   & .papers {
     background: #d1d2d4;
 
