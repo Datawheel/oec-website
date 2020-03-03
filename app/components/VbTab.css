@@ -3,11 +3,11 @@
   opacity: 1;
   margin-bottom: 0px!important;
   & .text {
-    font-size: var(--font-xs);
+    font-size: var(--font-sm);
     text-transform: uppercase;
   }
   & .panel-option {
-    font-size: var(--font-xs);
+    font-size: var(--font-sm);
     line-height: 20px;
     display: block;
     color: var(--white);

@@ -142,6 +142,10 @@ class Vizbuilder extends React.Component {
 
   }
 
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   console.log(prevState.permalink, this.state.permalink);
+  // }
+
   componentWillUnmount = () => {
     window.removeEventListener("scroll", this.handleScroll);
   }
@@ -526,18 +530,17 @@ class Vizbuilder extends React.Component {
                   text={prevTime.title}
                 />}
               </div>
-
               <VbTitle
-                title={vbTitle}
                 params={vbParams}
+                title={vbTitle}
               />
               <div className="vb-title-button">
                 {nextTime && <Button
                   minimal={true}
-                  rightIcon="chevron-right"
                   onClick={() => {
                     this.setState({_selectedItemsYear: [nextTime]}, () => this.buildViz());
                   }}
+                  rightIcon="chevron-right"
                   text={nextTime.title}
                 />}
               </div>
@@ -545,12 +548,18 @@ class Vizbuilder extends React.Component {
             <VbChart
               countryData={this.state.country}
               permalink={this.state.permalink}
+              routeParams={routeParams}
+              router={this.props.router}
               selectedProducts={this.state._selectedItemsProductTitle}
               xScale={this.state._xAxisScale}
               yScale={this.state._yAxisScale}
-              routeParams={routeParams}
-              router={this.props.router}
-              callback={d => this.setState({permalink: d})}
+              callback={d => {
+                const permalink = {permalink: d};
+                this.setState(
+                  permalink,
+                  () => this.updateFilterSelected(permalink)
+                );
+              }}
             />
           </div>
         </div>

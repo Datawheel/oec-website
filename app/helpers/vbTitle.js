@@ -70,6 +70,10 @@ export const getVbTitle = (routeParams,
       title = "vb_title_which_countries_flow_product";
       // params = {flow, product: _productNames, time};
     }
+    else if (isCountry && isProduct) {
+      title = "vb_title_where_country_flow_product";
+      // params = {country: _countryNames, flow, time, product: _productNames, prep: preps[flow]};
+    }
     else if (isGeoGrouping) {
       title = "vb_title_where_country_flow";
       // params = {country: _countryNames, flow, time, prep: preps[flow]};
@@ -77,10 +81,6 @@ export const getVbTitle = (routeParams,
     else if (isCountry && isPartner) {
       title = "vb_title_what_country_flow_partner";
       // params = {country: _countryNames, partner: _partnerNames, flow, time};
-    }
-    else if (isCountry && isProduct) {
-      title = "vb_title_where_country_flow_product";
-      // params = {country: _countryNames, flow, time, product: _productNames, prep: preps[flow]};
     }
   }
   else {
