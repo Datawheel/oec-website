@@ -265,10 +265,10 @@ class Vizbuilder extends React.Component {
     const wdiIndicators = usePrevState ? prevState.wdiIndicators : this.state.wdiIndicators;
     const {routeParams} = this.props;
 
-    let {country, cube, flow, partner, time, viztype} = routeParams;
-    const {chart} = routeParams;
+    let {country, chart, cube, flow, partner, time, viztype} = routeParams;
+
     if (prevState && prevState.permalink) {
-      [cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(3);
+      [chart, cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(2);
     }
 
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
@@ -290,6 +290,7 @@ class Vizbuilder extends React.Component {
       .filter(d => viztype.split(".").includes(d.value)) : [];
 
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
+    console.log(timeIds, isTimeSeriesChart);
     const _startYear = isTimeSeriesChart ? timeIds[0] : {};
     const _endYear = isTimeSeriesChart ? timeIds[1] : {};
 
