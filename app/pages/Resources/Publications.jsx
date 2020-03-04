@@ -264,13 +264,17 @@ export default class Publications extends Component {
               <span>by {information.author}</span>
             </div>
             <div className="content">
-              <p className="subtitle">{information.subtitle}</p>
-              <p className="abstract">{information.abstract}
-                <div className="link">
-                  <a href={information.link} target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
-                </div>
-              </p>
-              <img src="/images/publications/information.png" alt=""/>
+              <div className="text">
+                <p className="subtitle">{information.subtitle}</p>
+                <p className="abstract">{information.abstract}
+                  <div>
+                    <a href={information.link} target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+                  </div>
+                </p>
+              </div>
+              <div className="preview">
+                <img src="/images/publications/information.png" alt="" />
+              </div>
             </div>
           </div>
         </div>
@@ -300,13 +304,21 @@ export default class Publications extends Component {
                   ))}
                 </div>
               </div>
-              <div className="previews">
+              <div className="links">
+                <div className="previews">
+                  {atlas.previews.map(d => (
+                    <div className="preview">
+                      <h3>{d.title}</h3>
+                      <img src={`/images/publications/${d.preview}`} alt="" />
+                    </div>
+                  ))}
+                </div>
                 <div className="downloads">
                   <h3>Downloads</h3>
                   {atlas.downloads.map(d => (
                     <div className="download">
                       <a href={`/pdf/${d.pdf}`} target="_blank" rel="noopener noreferrer">{d.title}</a>
-                      <span>{` - ${d.size}`}</span>
+                      <span>{` – ${d.size}`}</span>
                     </div>
                   ))}
                 </div>
