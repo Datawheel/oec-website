@@ -87,9 +87,9 @@
     padding: 70px 5% 70px 5%;
     & .card {
       background: var(--white);
-      width: 1000px;
+      width: 55rem;
       margin: 0 auto;
-      padding: var(--gutter-md) var(--gutter-lg);
+      padding: var(--gutter-md) var(--gutter-md);
 
       & .header {
         display: flex;
@@ -127,7 +127,7 @@
         flex-direction: row;
 
         & .subtitle {
-          width: 34rem;
+          width: 40rem;
           color: #3b9343;
           font-size: var(--font-xl);
           font-weight: 300;
@@ -148,7 +148,111 @@
     padding: 70px 5% 70px 5%;
     & .card {
       background: rgba(255,255,255,0.9);
-      height: 80vh;
+      width: 55rem;
+      margin: 0 auto;
+      padding: var(--gutter-md) var(--gutter-md);
+
+      & .header {
+        & a {
+          text-decoration: none;
+        }
+
+        & h2 {
+          color: #333333;
+          text-transform: uppercase;
+          font-size: 2.4rem;
+          font-weight: 900;
+          margin: 0;
+          margin-right: var(--gutter-xs);
+        }
+
+        & h2:hover {
+          text-decoration: none;
+          opacity: 0.8;
+        }
+      }
+
+      & .content {
+        color: #333333;
+        display: flex;
+        flex-direction: row;
+
+        & .data {
+          width: 50%;
+
+          & h3 {
+            font-size: var(--font-xl);
+            font-weight: 300;
+            margin: 0;
+            margin-bottom: 1.2rem;
+          }
+
+          & .authors {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            height: 8rem;
+
+            & h4 {
+              font-size: 1.2rem;
+              font-weight: 300;
+              margin: 0;
+              margin-bottom: 0.3rem;
+            }
+          }
+
+          & .quotes {
+            & .quote {
+              margin-bottom: var(--gutter-md);
+              & span {
+                display: flex;
+                justify-content: flex-end;
+                font-size: var(--font-md);
+                font-weight: 400;
+                font-style: italic;
+                margin-left: var(--gutter-md);
+                margin-bottom: var(--gutter-xs);
+              }
+              & div {
+                display: flex;
+                justify-content: flex-end;
+                font-size: var(--font-md);
+                font-weight: 400;
+                margin-bottom: 0.3rem;
+              }
+            }
+          }
+        }
+
+        & .previews {
+          width: 50%;
+
+          & .downloads {
+            & h3 {
+              font-size: var(--font-xl);
+              font-weight: 300;
+              margin: 0;
+              margin-bottom: 0.7rem;
+            }
+
+            & .download {
+              color: #5083b5;
+              font-size: 0.8rem;
+              font-weight: 500;
+              margin-bottom: 0.3rem;
+
+              & a {
+                font-weight: 700;
+                text-decoration: none;
+              }
+
+              & a:hover {
+                opacity: 0.7;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
