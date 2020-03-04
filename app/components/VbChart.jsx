@@ -80,7 +80,9 @@ class VbChart extends React.Component {
     const {routeParams} = this.props;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
 
-    this.setState({data: [], loading: true});
+    const prevState = {data: [], loading: true};
+    if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
+    this.setState(prevState);
 
     // Gets countries and partners
     const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
@@ -343,8 +345,8 @@ class VbChart extends React.Component {
   };
 
   render() {
-    const {routeParams} = this.state;
-    const {data, loading} = this.state;
+    const {data, loading, routeParams} = this.state;
+    const {t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
     if (loading) {
@@ -500,17 +502,6 @@ class VbChart extends React.Component {
                 }
               />}
 
-            {/* <div className="oec-button-group">
-              <h6 className="oec-button-group-title">Color</h6>
-              <SimpleSelect
-                items={measures}
-                selectedItem={this.state.selected}
-                callback={this.updateFilter}
-                state="selected"
-                popoverPosition="top-left"
-              />
-            </div> */}
-
             <div className="vb-share-download-options">
               <VbShare />
               <VbDownload
@@ -537,20 +528,28 @@ class VbChart extends React.Component {
     else if (chart === "stacked" && data && data.length > 0) {
       if (this.state.stackLayout === "Share") baseConfig.stackOffset = "expand";
       return (
-        <div className="vb-chart">
-          <StackedArea
-            config={{
-              ...baseConfig,
-              total: undefined,
-              y: measure,
-              yConfig: {
-                tickFormat: d => this.state.stackLayout === "Share" ? `${formatAbbreviate(d * 100)}%` : tickFormatter(d),
-                scale: "linear"
-              },
-              x: "Year"
-              // time: "Year"
-            }}
-          />
+        <div>
+          <div className="vb-chart">
+            <StackedArea
+              config={{
+                ...baseConfig,
+                colorScale: undefined,
+                on: {
+                  click: d =>
+                    this.setState({isOpenDrawer: true, relatedItems: d})
+                },
+                total: undefined,
+                x: "Year",
+                xConfig: {
+                  title: t("Year")
+                },
+                y: measure,
+                yConfig: {
+                  tickFormat: d => this.state.stackLayout === "Share" ? `${formatAbbreviate(d * 100)}%` : tickFormatter(d),
+                  scale: "linear"
+                }
+              }}
+            /></div>
           <div className="vb-chart-options">
             {!isTechnology &&
               <OECButtonGroup
@@ -579,34 +578,59 @@ class VbChart extends React.Component {
                 this.setState({stackLayout: depth})
               }
             />
+            <div className="vb-share-download-options">
+              <VbShare />
+              <VbDownload
+                data={data}
+                location={this.state.location}
+                title="download"
+              />
+            </div>
+            <VbDrawer
+              countryData={this.props.countryData}
+              isOpen={this.state.isOpenDrawer}
+              relatedItems={this.state.relatedItems}
+              selectedProducts={this.props.selectedProducts}
+              routeParams={routeParams}
+              router={this.props.router}
+              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
+              callback={d => this.setState({isOpenDrawer: d})}
+            />
           </div>
         </div>
       );
     }
     else if (chart === "line" && data && data.length > 0) {
       return (
-        <div className="vb-chart">
-          <LinePlot
-            config={{
-              ...baseConfig,
-              discrete: "x",
-              groupBy:
+        <div>
+          <div className="vb-chart">
+            <LinePlot
+              config={{
+                ...baseConfig,
+                colorScale: undefined,
+                discrete: "x",
+                groupBy:
                 flow === "show"
                   ? ["Trade Flow ID"]
                   : viztype === "all" || isFinite(viztype)
                     ? ["Continent", "Country"]
                     : ["Section"],
-              time: "Year",
-              timeline: false,
-              total: undefined,
-              x: "Year",
-              y: measure,
-              yConfig: {
-                scale: this.state.scale.toLowerCase(),
-                tickFormat: d => tickFormatter(d)
-              }
-            }}
-          />
+                on: {
+                  click: d =>
+                    this.setState({isOpenDrawer: true, relatedItems: d})
+                },
+                time: "Year",
+                timeline: false,
+                total: undefined,
+                x: "Year",
+                y: measure,
+                yConfig: {
+                  scale: this.state.scale.toLowerCase(),
+                  tickFormat: d => tickFormatter(d)
+                }
+              }}
+            />
+          </div>
           <div className="vb-chart-options">
             <OECButtonGroup
               items={["Log", "Linear"]}
@@ -614,32 +638,75 @@ class VbChart extends React.Component {
               title={"Scale"}
               callback={scale => this.setState({scale})}
             />
+            <div className="vb-share-download-options">
+              <VbShare />
+              <VbDownload
+                data={data}
+                location={this.state.location}
+                title="download"
+              />
+            </div>
+            <VbDrawer
+              countryData={this.props.countryData}
+              isOpen={this.state.isOpenDrawer}
+              relatedItems={this.state.relatedItems}
+              selectedProducts={this.props.selectedProducts}
+              routeParams={routeParams}
+              router={this.props.router}
+              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
+              callback={d => this.setState({isOpenDrawer: d})}
+            />
           </div>
         </div>
       );
     }
     else if (chart === "geomap" && data && data.length > 0) {
-      console.log(data);
       return (
-        <div className="vb-chart">
-          <Geomap
-            config={{
-              ...baseConfig,
-              colorScale: measure,
-              colorScaleConfig: {
-                scale: "log"
-              },
-              groupBy: "ISO 3",
-              legend: false,
-              topojsonId: "id",
-              topojsonKey: "id",
-              tiles: false,
-              topojson: "/topojson/world-50m.json",
-              topojsonFilter: d => d.id !== "ata",
-              ocean: false,
-              total: false
-            }}
-          />
+        <div>
+          <div className="vb-chart">
+            <Geomap
+              config={{
+                ...baseConfig,
+                colorScale: measure,
+                colorScaleConfig: {
+                  scale: "log"
+                },
+                groupBy: "ISO 3",
+                legend: false,
+                on: {
+                  click: d =>
+                    this.setState({isOpenDrawer: true, relatedItems: d})
+                },
+                topojsonId: "id",
+                topojsonKey: "id",
+                tiles: false,
+                topojson: "/topojson/world-50m.json",
+                topojsonFilter: d => d.id !== "ata",
+                ocean: false,
+                total: false
+              }}
+            />
+          </div>
+          <div className="vb-chart-options">
+            <div className="vb-share-download-options">
+              <VbShare />
+              <VbDownload
+                data={data}
+                location={this.state.location}
+                title="download"
+              />
+            </div>
+            <VbDrawer
+              countryData={this.props.countryData}
+              isOpen={this.state.isOpenDrawer}
+              relatedItems={this.state.relatedItems}
+              selectedProducts={this.props.selectedProducts}
+              routeParams={routeParams}
+              router={this.props.router}
+              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
+              callback={d => this.setState({isOpenDrawer: d})}
+            />
+          </div>
         </div>
       );
     }
@@ -657,6 +724,10 @@ class VbChart extends React.Component {
               d["Trade Value RCA"] > 1
                 ? colors.Section[d["Section ID"]] || "gray"
                 : "gray"
+          },
+          Path: {
+            sort: (a, b) => a.size - b.size,
+            stroke: d => "#585D6B"
           }
         },
         colorScaleConfig: {
@@ -669,108 +740,163 @@ class VbChart extends React.Component {
           fill: "D3PLUS-COMMON-RESET",
           Circle: {
             fill: "D3PLUS-COMMON-RESET"
+          },
+          Path: {
+            sort: (a, b) => a.size - b.size,
+            stroke: d => "#585D6B"
           }
         };
       }
 
       return (
-        <div className="vb-chart">
-          <Network
+        <div>
+          <div className="vb-chart">
+            <Network
             // forceUpdate={true}
-            config={{
-              ...baseConfig,
-              ...networkConfig,
-              nodes: "/network/network_hs4.json",
-              links: "/network/network_hs4.json",
-              groupBy: ["Section ID", "HS4 ID"],
-              size: d => d["Trade Value"] * 1 || 1,
-              sizeMin: 5,
-              sizeMax: 15,
-              total: undefined,
-              shapeConfig: {
-                Path: {
-                  sort: (a, b) => a.size - b.size,
-                  stroke: d => "#585D6B"
-                  // stroke: d => {
-                  //   const proximity = d.size - 1;
-                  //   const ranges = [
-                  //     {min: 0, max: 0.326532, color: "#585D6B"},
-                  //     {min: 0.326532, max: 0.357962, color: "#666679"},
-                  //     {min: 0.357962, max: 0.464879, color: "#766E86"},
-                  //     {min: 0.464879, max: 1, color: "#8A7591"}
-                  //   ];
-                  //   const selected = ranges.find(
-                  //     h => h.min <= proximity && proximity < h.max
-                  //   );
-                  //   return selected.color || "gray";
-                  // }
-                }
-              }
-            }}
-            nodesFormat={resp => resp.nodes}
-            linksFormat={resp => resp.edges}
-            dataFormat={d => {
-              const newData = d.map(dd =>
-                Object.assign(dd, {
-                  "id": dd["HS4 ID"],
-                  "HS4 ID": `${dd["HS4 ID"]}`
-                })
-              );
+              config={{
+                ...baseConfig,
+                ...networkConfig,
+                nodes: "/network/network_hs4.json",
+                links: "/network/network_hs4.json",
+                groupBy: ["Section ID", "HS4 ID"],
+                size: d => d["Trade Value"] * 1 || 1,
+                sizeMin: 5,
+                sizeMax: 15,
+                total: undefined
 
-              return newData;
-            }}
-          />
+                // stroke: d => {
+                //   const proximity = d.size - 1;
+                //   const ranges = [
+                //     {min: 0, max: 0.326532, color: "#585D6B"},
+                //     {min: 0.326532, max: 0.357962, color: "#666679"},
+                //     {min: 0.357962, max: 0.464879, color: "#766E86"},
+                //     {min: 0.464879, max: 1, color: "#8A7591"}
+                //   ];
+                //   const selected = ranges.find(
+                //     h => h.min <= proximity && proximity < h.max
+                //   );
+                //   return selected.color || "gray";
+                // }
+
+
+              }}
+              nodesFormat={resp => resp.nodes}
+              linksFormat={resp => resp.edges}
+              dataFormat={d => {
+                const newData = d.map(dd =>
+                  Object.assign(dd, {
+                    "id": dd["HS4 ID"],
+                    "HS4 ID": `${dd["HS4 ID"]}`
+                  })
+                );
+
+                return newData;
+              }}
+            />
+          </div>
+          <div className="vb-chart-options">
+            <div className="vb-share-download-options">
+              <VbShare />
+              <VbDownload
+                data={data}
+                location={this.state.location}
+                title="download"
+              />
+            </div>
+          </div>
         </div>
       );
     }
     else if (chart === "rings" && data && data.length > 0) {
       return (
-        <div className="vb-chart">
-          <Rings
-            config={{
-              links: data,
-              center: viztype,
-              total: undefined,
-              label: "",
-              shapeConfig: {
-                Circle: {
-                  fill: d => colors.Section[d.id.slice(0, -4)] || "gray"
+        <div>
+          <div className="vb-chart">
+            <Rings
+              config={{
+                links: data,
+                center: viztype,
+                total: undefined,
+                label: "",
+                tooltipConfig: {
+                  title: d => ""
+                },
+                shapeConfig: {
+                  Circle: {
+                    fill: d => colors.Section[d.id.slice(0, -4)] || "gray"
+                  }
                 }
-              }
-            }}
-          />
+              }}
+            />
           ;
+          </div>
+          <div className="vb-chart-options">
+            <div className="vb-share-download-options">
+              <VbShare />
+              <VbDownload
+                data={data}
+                location={this.state.location}
+                title="download"
+              />
+            </div>
+          </div>
         </div>
       );
     }
     else if (chart === "scatter" && data && data.length > 0) {
       return (
-        <div className="vb-chart">
-          <Plot
-            config={{
-              data,
-              groupBy: ["Continent", "Country"],
-              x: flow,
-              y: country,
-              size: "Trade Value",
-              sizeMin: 5,
-              sizeMax: 40,
-              tooltipConfig: {
-                tbody: d => [
-                  ["Country ID", d["Country ID"].slice(-3).toUpperCase()],
-                  ["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`],
-                  ["Measure", `$${formatAbbreviate(d.Measure)}`],
-                  ["Year", time]
-                ]
-              },
-              total: undefined,
-              xConfig: {
-                scale: this.props.xScale.toLowerCase()
-              },
-              yConfig: {
-                scale: this.props.yScale.toLowerCase()
-              }
-            }}
+        <div>
+          <div className="vb-chart">
+            <Plot
+              config={{
+                data,
+                groupBy: ["Continent", "Country"],
+                x: flow,
+                y: country,
+                on: {
+                  click: d =>
+                    this.setState({isOpenDrawer: true, relatedItems: d})
+                },
+                size: "Trade Value",
+                sizeMin: 5,
+                sizeMax: 40,
+                tooltipConfig: {
+                  tbody: d => [
+                    ["Country ID", d["Country ID"].slice(-3).toUpperCase()],
+                    ["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`],
+                    [country, formatAbbreviate(d[country])],
+                    [flow, formatAbbreviate(d[flow])],
+                    ["Year", time]
+                  ]
+                },
+                total: undefined,
+                xConfig: {
+                  scale: this.props.xScale.toLowerCase()
+                },
+                yConfig: {
+                  scale: this.props.yScale.toLowerCase()
+                }
+              }}
+            />
+          </div>
+          <div className="vb-chart-options">
+            <div className="vb-share-download-options">
+              <VbShare />
+              <VbDownload
+                data={data}
+                location={this.state.location}
+                title="download"
+              />
+            </div>
+          </div>
+          <VbDrawer
+            countryData={this.props.countryData}
+            isOpen={this.state.isOpenDrawer}
+            relatedItems={this.state.relatedItems}
+            selectedProducts={this.props.selectedProducts}
+            routeParams={routeParams}
+            router={this.props.router}
+            run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
+            callback={d => this.setState({isOpenDrawer: d})}
           />
         </div>
       );

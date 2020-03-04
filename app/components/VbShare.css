@@ -31,6 +31,11 @@
   }
 }
 
+.bp3-button.is-copy {
+  background: var(--accent-dark) !important;
+  color: var(--white) !important;
+}
+
 .bp3-button.vb-chart-button-option {
   background: transparent !important;
   color: var(--dark-1) !important;
