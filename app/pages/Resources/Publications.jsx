@@ -9,7 +9,6 @@ export default class Publications extends Component {
       author: "César Hidalgo",
       abstract: "What is economic growth? And why, historically, has it occurred in only a few places? Previous efforts to answer these questions have focused on institutions, geography, finances, and psychology. But according to MIT's antidisciplinarian César Hidalgo, understanding the nature of economic growth demands transcending the social sciences and including the natural sciences of information, networks, and complexity. To understand the growth of economies, Hidalgo argues, we first need to understand the growth of order.",
       link: "https://www.amazon.com/Why-Information-Grows-Evolution-Economies/dp/0465048994/ref=sr_1_1?ie=UTF8&qid=1435945119&sr=8-1&keywords=why+information+grows",
-      background: "information-bg.png",
       preview: "information.png"
     };
     const atlas = {
@@ -278,7 +277,41 @@ export default class Publications extends Component {
 
         <div className="atlas">
           <div className="card">
-
+            <div className="header">
+              <a href={atlas.link} target="_blank" rel="noopener noreferrer">
+                <h2>{atlas.title}</h2>
+              </a>
+            </div>
+            <div className="content">
+              <div className="data">
+                <h3>{atlas.subtitle}</h3>
+                <div className="authors">
+                  {atlas.authors.map(d => (
+                    <h4>{d}</h4>
+                  ))}
+                </div>
+                <div className="quotes">
+                  {atlas.quotes.map(d => (
+                    <div className="quote">
+                      <span>{`"${d.quote}"`}</span>
+                      <div>{`—${d.author}`}</div>
+                      <div>{d.from}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="previews">
+                <div className="downloads">
+                  <h3>Downloads</h3>
+                  {atlas.downloads.map(d => (
+                    <div className="download">
+                      <a href={`/pdf/${d.pdf}`} target="_blank" rel="noopener noreferrer">{d.title}</a>
+                      <span>{` - ${d.size}`}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
