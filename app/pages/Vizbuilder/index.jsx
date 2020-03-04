@@ -290,7 +290,6 @@ class Vizbuilder extends React.Component {
       .filter(d => viztype.split(".").includes(d.value)) : [];
 
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
-    console.log(timeIds, isTimeSeriesChart);
     const _startYear = isTimeSeriesChart ? timeIds[0] : {};
     const _endYear = isTimeSeriesChart ? timeIds[1] : {};
 
@@ -402,7 +401,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {!["network", "scatter"].includes(chart) && isTechnology && <div className="columns">
+              {!isNetworkChart && !isScatterChart && isTechnology && <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
                     items={this.state.technology}
@@ -560,6 +559,8 @@ class Vizbuilder extends React.Component {
               routeParams={routeParams}
               router={this.props.router}
               selectedProducts={this.state._selectedItemsProductTitle}
+              xAxis={this.state._xAxisTitle}
+              yAxis={this.state._yAxisTitle}
               xScale={this.state._xAxisScale}
               yScale={this.state._yAxisScale}
               callback={d => {

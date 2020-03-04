@@ -827,7 +827,6 @@ class VbChart extends React.Component {
                 }
               }}
             />
-          ;
           </div>
           <div className="vb-chart-options">
             <div className="vb-share-download-options">
