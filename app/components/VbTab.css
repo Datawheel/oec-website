@@ -1,7 +1,7 @@
 .panel {
   color: var(--white);
   opacity: 1;
-  margin-bottom: 0px!important;
+  margin-bottom: 0px !important;
   & .text {
     font-size: var(--font-sm);
     text-transform: uppercase;
@@ -19,7 +19,7 @@
     & .panel-option:hover {
       cursor: pointer;
       opacity: 0.9;
-      list-style-image: url(/images/icons/app/arrow-fill.png);
+      margin-top: 0px;
       text-decoration: none;
     }
   }
@@ -29,7 +29,6 @@
   & .is-selected {
     font-weight: bold;
     opacity: 1;
-    list-style-image: url(/images/icons/app/arrow-fill.png);
     color: var(--white);
   }
 }
@@ -38,7 +37,7 @@
   width: 100% !important;
 }
 
-li.panel-option.is-selected:before {
+a.panel-option.is-selected:before {
   content: url(/images/icons/app/arrow.png);
   position: absolute;
   margin-top: 0px;

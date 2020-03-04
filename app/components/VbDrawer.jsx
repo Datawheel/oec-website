@@ -22,9 +22,10 @@ function VbDrawerStat(props) {
 /** */
 function VbRelatedVizTitle(props) {
   const {permalink, t, titleName, titleConfig} = props;
-  return <Link className="vb-related-viz" to={permalink} onClick={() => {
-    props.router.push(permalink);
-    props.callback(permalink);
+  const link = `/en/visualize/tree_map${permalink}`;
+  return <Link className="vb-related-viz" to={link} onClick={() => {
+    props.router.push(link);
+    props.callback(link);
   }}>
     <img className="icon" src="/images/icons/app/app_tree_map.png" alt=""/>
     {t(titleName, titleConfig)}
@@ -144,8 +145,8 @@ class VbDrawer extends React.Component {
           {["export", "import"].reduce((all, d) => {
             // Checks bilateral permalink
             if (countryIdSelected !== country && countryIdSelected && isCountryPermalink) {
-              const permalinkBilateralA = `/en/visualize/tree_map/hs92/${d}/${countryIdSelected}/${country}/show/${time}/`;
-              const permalinkBilateralB = `/en/visualize/tree_map/hs92/${d}/${country}/${countryIdSelected}/show/${time}/`;
+              const permalinkBilateralA = `/hs92/${d}/${countryIdSelected}/${country}/show/${time}/`;
+              const permalinkBilateralB = `/hs92/${d}/${country}/${countryIdSelected}/show/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalinkBilateralA}
@@ -166,7 +167,7 @@ class VbDrawer extends React.Component {
             }
             // Filter by product selected
             if (isProductSelected) {
-              const permalink = `/en/visualize/tree_map/hs92/${d}/show/all/${titleId}/${time}/`;
+              const permalink = `/hs92/${d}/show/all/${titleId}/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
@@ -178,7 +179,7 @@ class VbDrawer extends React.Component {
               />);
             }
             if (isProductPermalink) {
-              const permalink = `/en/visualize/tree_map/hs92/${d}/show/all/${viztype}/${time}/`;
+              const permalink = `/hs92/${d}/show/all/${viztype}/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
@@ -191,8 +192,8 @@ class VbDrawer extends React.Component {
             }
 
             countries.forEach(h => {
-              const permalinkWhat = `/en/visualize/tree_map/hs92/${d}/${h.id}/all/show/${time}/`;
-              const permalinkWhere = `/en/visualize/tree_map/hs92/${d}/${h.id}/show/all/${time}/`;
+              const permalinkWhat = `/hs92/${d}/${h.id}/all/show/${time}/`;
+              const permalinkWhere = `/hs92/${d}/${h.id}/show/all/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalinkWhat}
@@ -211,7 +212,7 @@ class VbDrawer extends React.Component {
                 t={t}
               />);
               if (isProductSelected) {
-                const permalinkProduct = `/en/visualize/tree_map/hs92/${d}/${h.id}/show/${titleId}/${time}/`;
+                const permalinkProduct = `/hs92/${d}/${h.id}/show/${titleId}/${time}/`;
                 all.push(<VbRelatedVizTitle
                   permalink={permalinkProduct}
                   router={this.props.router}
