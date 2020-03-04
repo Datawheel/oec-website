@@ -300,13 +300,21 @@ export default class Publications extends Component {
                   ))}
                 </div>
               </div>
-              <div className="previews">
+              <div className="links">
+                <div className="previews">
+                  {atlas.previews.map(d => (
+                    <div className="preview">
+                      <h3>{d.title}</h3>
+                      <img src={`/images/publications/${d.preview}`} alt=""/>
+                    </div>
+                  ))}
+                </div>
                 <div className="downloads">
                   <h3>Downloads</h3>
                   {atlas.downloads.map(d => (
                     <div className="download">
                       <a href={`/pdf/${d.pdf}`} target="_blank" rel="noopener noreferrer">{d.title}</a>
-                      <span>{` - ${d.size}`}</span>
+                      <span>{` – ${d.size}`}</span>
                     </div>
                   ))}
                 </div>
