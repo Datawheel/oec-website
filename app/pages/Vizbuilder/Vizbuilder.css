@@ -117,5 +117,17 @@
         max-width: 100%;
       }
     }
+
+    & .vb-chart-options {
+      flex-direction: row;
+      flex-wrap: wrap;
+      & .oec-button-group-title {
+        margin: 0;
+      }
+      & .oec-button-group, & .vb-share-download-options {
+        margin-top: var(--gutter-sm);
+        margin-top: var(--gutter-sm);
+      }
+    }
   }
 }

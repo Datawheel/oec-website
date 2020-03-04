@@ -456,18 +456,20 @@ class VbChart extends React.Component {
 
     if (chart === "tree_map" && data && data.length > 0) {
       return (
-        <div className="vb-chart">
-          <Treemap
-            config={{
-              ...baseConfig,
-              sum: measure,
-              total: measure,
-              on: {
-                click: d =>
-                  this.setState({isOpenDrawer: true, relatedItems: d})
-              }
-            }}
-          />
+        <div>
+          <div className="vb-chart">
+            <Treemap
+              config={{
+                ...baseConfig,
+                sum: measure,
+                total: measure,
+                on: {
+                  click: d =>
+                    this.setState({isOpenDrawer: true, relatedItems: d})
+                }
+              }}
+            />
+          </div>
           <div className="vb-chart-options">
             {!isTechnology &&
               <OECButtonGroup
@@ -509,12 +511,14 @@ class VbChart extends React.Component {
               />
             </div> */}
 
-            <VbShare />
-            <VbDownload
-              data={data}
-              location={this.state.location}
-              title="download"
-            />
+            <div className="vb-share-download-options">
+              <VbShare />
+              <VbDownload
+                data={data}
+                location={this.state.location}
+                title="download"
+              />
+            </div>
 
             <VbDrawer
               countryData={this.props.countryData}
