@@ -351,7 +351,7 @@ export default {
       if (x && x[0] && x[0].__data__.share) {
         tbodyData.push(["Percent", `${formatAbbreviate(x[0].__data__.share * 100)}%`]);
       }
-      if (d.Year) {
+      if (d.Year && d.Year < 3000) {
         tbodyData.push(["Year", d.Year]);
       }
       return tbodyData;
@@ -391,7 +391,7 @@ export default {
   totalConfig: {
     "fontColor": () => "#FFFFFF",
     "fontFamily": () => "'Source Sans Pro', sans-serif",
-    "fontSize": () => 14,
+    "fontSize": () => 18,
     "text-transform": "uppercase"
   },
   totalFormat(d) {

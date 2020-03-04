@@ -682,24 +682,24 @@ class VbChart extends React.Component {
               size: d => d["Trade Value"] * 1 || 1,
               sizeMin: 5,
               sizeMax: 15,
-              legend: false,
               total: undefined,
               shapeConfig: {
                 Path: {
                   sort: (a, b) => a.size - b.size,
-                  stroke: d => {
-                    const proximity = d.size - 1;
-                    const ranges = [
-                      {min: 0, max: 0.326532, color: "#585D6B"},
-                      {min: 0.326532, max: 0.357962, color: "#666679"},
-                      {min: 0.357962, max: 0.464879, color: "#766E86"},
-                      {min: 0.464879, max: 1, color: "#8A7591"}
-                    ];
-                    const selected = ranges.find(
-                      h => h.min <= proximity && proximity < h.max
-                    );
-                    return selected.color || "gray";
-                  }
+                  stroke: d => "#585D6B"
+                  // stroke: d => {
+                  //   const proximity = d.size - 1;
+                  //   const ranges = [
+                  //     {min: 0, max: 0.326532, color: "#585D6B"},
+                  //     {min: 0.326532, max: 0.357962, color: "#666679"},
+                  //     {min: 0.357962, max: 0.464879, color: "#766E86"},
+                  //     {min: 0.464879, max: 1, color: "#8A7591"}
+                  //   ];
+                  //   const selected = ranges.find(
+                  //     h => h.min <= proximity && proximity < h.max
+                  //   );
+                  //   return selected.color || "gray";
+                  // }
                 }
               }
             }}
