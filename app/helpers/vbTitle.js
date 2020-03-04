@@ -1,3 +1,11 @@
+export const getList = n => n.reduce((str, item, i) => {
+  if (!i) str += item;
+  else if (i === n.length - 1 && i === 1) str += ` and ${item}`;
+  else if (i === n.length - 1) str += `, and ${item}`;
+  else str += `, ${item}`;
+  return str;
+}, "");
+
 export const getVbTitle = (routeParams,
   selectedItemsCountry,
   selectedItemsPartner,
@@ -7,10 +15,10 @@ export const getVbTitle = (routeParams,
   yScale) => {
 
   const {chart, flow, country, partner, viztype, time} = routeParams;
-  const _countryNames = selectedItemsCountry.map(d => d.title).join(", ");
-  const _partnerNames = selectedItemsPartner.map(d => d.title).join(", ");
-  const _productNames = selectedItemsProduct.map(d => d.name).join(", ");
-  const _technologyNames = selectedItemsTechnology.map(d => d.title).join(", ");
+  const _countryNames = getList(selectedItemsCountry.map(d => d.title));
+  const _partnerNames = getList(selectedItemsPartner.map(d => d.title));
+  const _productNames = getList(selectedItemsProduct.map(d => d.name));
+  const _technologyNames = getList(selectedItemsTechnology.map(d => d.title));
 
   const isTrade = new RegExp(/(export|import)/).test(flow);
   const isTimeSeriesChart = new RegExp(/(stacked|line)/).test(chart);

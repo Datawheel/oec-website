@@ -80,6 +80,8 @@ class VbShare extends React.Component {
             <InputGroup
               value={permalink}
               rightElement={<Button
+                className="is-copy"
+                minimal={true}
                 onClick={() => this.handleCopyClipboard("isCopiedLink", permalink)}
                 text={isCopiedLink ? "Copied" : "Copy"}
               />}
@@ -90,7 +92,9 @@ class VbShare extends React.Component {
             <h5 className="title">Embed URL</h5>
             <InputGroup
               value={embed}
+              minimal={true}
               rightElement={<Button
+                className="is-copy"
                 onClick={() => this.handleCopyClipboard("isCopiedEmbed", embed)}
                 text={isCopiedEmbed ? "Copied" : "Copy"}
               />}

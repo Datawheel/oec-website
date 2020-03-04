@@ -136,7 +136,7 @@ function backgroundImage(d, ascending) {
   }
 }
 
-const tooltipTitle = (bgColor, imgUrl, title) => {
+export const tooltipTitle = (bgColor, imgUrl, title) => {
   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
   tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
   tooltip += `<span>${title}</span>`;
@@ -292,6 +292,10 @@ export default {
       }
       if (itemId === "ISO 3") {
         itemId = "Country";
+        item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
+      }
+      if (itemId === "id") {
+        itemId = "HS4";
         item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
       }
       const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];

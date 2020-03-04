@@ -329,13 +329,14 @@ class Vizbuilder extends React.Component {
     const isCountry = !["show", "all"].includes(country);
     const isProduct = isFinite(viztype.split(".")[0]);
     const isScatterChart = ["scatter"].includes(chart);
+    const isNetworkChart = ["network"].includes(chart);
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const isTrade = cube.includes("hs");
     const isTechnology = !isTrade;
 
     const productSelector = isProduct && !isScatterChart;
     const countrySelector = isCountry && !isScatterChart;
-    const partnerSelector = countrySelector && !productSelector;
+    const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
 
     const timeIndex = years.findIndex(d => d.value === time * 1);
     const prevTime = !isTimeSeriesChart ? years[timeIndex + 1] : undefined;

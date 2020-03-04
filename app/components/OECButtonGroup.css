@@ -14,6 +14,7 @@
     flex: 0;
   }
   & .oec-button-group-items {
+    display: flex;
     & .cp-button.is-active {
       background-color: var(--white);
       border-color: var(--white);
