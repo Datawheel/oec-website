@@ -71,13 +71,14 @@ class PredictClass(object):
       return df
 
   def load_data(self):
-    req = requests.Request("GET", API, params=params)
+    api_token = params.pop("apiToken")
+    req = requests.Request("GET", API, headers={'x-tesseract-jwt-token': api_token}, params=params)
     prep = req.prepare()
     # print(json.dumps({"url": prep.url}))
     if DEBUG:
       print("\nAPI URL:\n________________\n")
       print(prep.url)
-    req = requests.get(API, params=params)
+    req = requests.get(API, headers={'x-tesseract-jwt-token': api_token}, params=params)
     self.raw_df = pd.DataFrame(req.json()["data"])
 
   def predict(self):

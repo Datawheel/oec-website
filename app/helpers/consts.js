@@ -257,7 +257,7 @@ module.exports = {
       currencyFormat: d => `$${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
+          dataUrl: "?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Exporter Country",
@@ -266,7 +266,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          dataUrl: "?cube=trade_i_baci_a_92&time=year.latest&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dimName: "HS4",
@@ -275,7 +275,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
+          dataUrl: "?cube=trade_i_baci_a_92&time=year.latest&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Exporter+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Importer Country",
@@ -294,7 +294,7 @@ module.exports = {
       currencyFormat: d => `$${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&drilldowns=Reporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
+          dataUrl: "?cube=trade_i_comtrade_m_hs&drilldowns=Reporter+Country&measures=Trade+Value&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Reporter Country",
@@ -303,7 +303,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          dataUrl: "?cube=trade_i_comtrade_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dimName: "HS4",
@@ -312,7 +312,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_comtrade_m_hs&drilldowns=Partner+Country&measures=Trade+Value&parents=true&sparse=false&properties=Partner+Country+ISO+3",
+          dataUrl: "?cube=trade_i_comtrade_m_hs&drilldowns=Partner+Country&measures=Trade+Value&parents=true&sparse=false&properties=Partner+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
@@ -331,7 +331,7 @@ module.exports = {
       currencyFormat: d => `CAN ${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_can_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          dataUrl: "?cube=trade_s_can_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
           data: [],
           dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
           dimName: "Subnat Geography",
@@ -340,7 +340,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_can_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          dataUrl: "?cube=trade_s_can_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dimName: "HS4",
@@ -349,7 +349,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_can_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          dataUrl: "?cube=trade_s_can_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
@@ -377,7 +377,7 @@ module.exports = {
       currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_deu_m_egw&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          dataUrl: "?cube=trade_s_deu_m_egw&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
           data: [],
           dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
           dimName: "Subnat Geography",
@@ -386,7 +386,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_deu_m_egw&Year=2017&drilldowns=Product&measures=Trade+Value&parents=true&sparse=false",
+          dataUrl: "?cube=trade_s_deu_m_egw&Year=2017&drilldowns=Product&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["Product ID"], displayId: d["Product ID"], name: d.Product, color: DEFAULT_PREDICTION_COLOR}),
           dimName: "HS4",
@@ -395,7 +395,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_deu_m_egw&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          dataUrl: "?cube=trade_s_deu_m_egw&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
@@ -423,7 +423,7 @@ module.exports = {
       currencyFormat: d => `¥ ${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_jpn_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          dataUrl: "?cube=trade_s_jpn_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
           data: [],
           dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
           dimName: "Subnat Geography",
@@ -432,7 +432,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_jpn_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          dataUrl: "?cube=trade_s_jpn_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dimName: "HS4",
@@ -441,7 +441,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_jpn_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          dataUrl: "?cube=trade_s_jpn_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
@@ -469,7 +469,7 @@ module.exports = {
       currencyFormat: d => `${d3plus_format.formatAbbreviate(d)} ₽`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_rus_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
           data: [],
           dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
           dimName: "Subnat Geography",
@@ -478,7 +478,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_rus_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          dataUrl: "?cube=trade_s_rus_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dimName: "HS4",
@@ -487,7 +487,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
@@ -515,7 +515,7 @@ module.exports = {
       currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_esp_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
           data: [],
           dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
           dimName: "Subnat Geography",
@@ -524,7 +524,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_esp_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          dataUrl: "?cube=trade_s_esp_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dimName: "HS4",
@@ -533,7 +533,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",

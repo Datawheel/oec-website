@@ -15,7 +15,7 @@ import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
 import {DEFAULT_PREDICTION_COLOR, PREDICTION_DATASETS} from "helpers/consts";
 import "./Prediction.css";
-import {Alignment, AnchorButton, Button, Collapse, Navbar, Tabs, Tab} from "@blueprintjs/core";
+import {Alignment, AnchorButton, Button, Collapse, Icon, IconNames, Navbar, Tabs, Tab} from "@blueprintjs/core";
 
 class Prediction extends React.Component {
 
@@ -48,9 +48,10 @@ class Prediction extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener("scroll", this.handleScroll);
+    const {BASE} = this.props.env;
+    // window.addEventListener("scroll", this.handleScroll);
     const {dataset} = this.state;
-    const selectionApiUrls = dataset.selections.map(d => axios.get(d.dataUrl));
+    const selectionApiUrls = dataset.selections.map(d => axios.get(`${BASE}.jsonrecords${d.dataUrl}`));
     const parsedQueryString = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
     let drillDownFound = false;
     axios.all(selectionApiUrls)
@@ -211,7 +212,7 @@ class Prediction extends React.Component {
       }
       apiUrls[0] = `${apiUrls[0]}${advParamStrings[0]}`;
     }
-    console.log("apiUrls!", apiUrls);
+    // console.log("apiUrls!", apiUrls);
     // Step 2: make XHR requests:
     axios.all(apiUrls.map(url => axios.get(url)))
       .then(axios.spread((...responses) => {
@@ -253,7 +254,7 @@ class Prediction extends React.Component {
       newDrilldown = e.target.checked ? selectorType : null;
     }
     this.setState({currentDrilldown: newDrilldown});
-    console.log("newDrilldown!!", newDrilldown);
+    // console.log("newDrilldown!!", newDrilldown);
 
     // set query params for this selection
     const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
@@ -372,6 +373,44 @@ class Prediction extends React.Component {
             </Collapse>
           </div>
 
+          {/* prediction about text */}
+          <div className="prediction-about-container">
+            <h2>About OEC Trade Predictions</h2>
+            <p>
+              The predictions shown in this tool use a long short-term memory model or LSTM. The LSTM approach is a form of machine learning which utilizes a recurrent neural network. In the case of the predictions shown on this page we are using a data time series (based on the user selected dataset) as input for the model. The model is then able to learn order dependence and produce a sequence prediction.
+            </p>
+            <h2>How to use this tool</h2>
+            <p>
+              The first step to creating your custom prediction is to choose a dataset from the options above. We strive to include as many datasets from the OEC as possible in this tool but you will notice some are missing.
+            </p>
+            <div className="info-card">
+              <div className="info-card-icon">
+                <Icon icon="warning-sign" iconSize={40} />
+              </div>
+              <div className="info-card-text">
+                <h3><a href="#">Why are some datasets missing?</a></h3>
+                <p>The reason is that some datasets do not contain enough historical data to produce a meaningful prediction.</p>
+              </div>
+            </div>
+            <p>
+              The next step is to choose your selection. Any selection box that is left empty will be marginalized over and aggregated. For example, in the annual trade data, choosing an origin country and product without selecting a destination country will show a prediction of the total export amount of the chosen country in the chosen product. You will also notice a toggle underneath each selection box to switch between &ldquo;Aggregate&rdquo; and &ldquo;Drilldown&ldquo;. If multiple selections are chosen, choosing the aggregate option will sum all the values of these selections while choosing the drilldown option will maintain them as separate prediciton.
+            </p>
+            <h2>Visual Representation</h2>
+            <p>
+              Each prediction made using the selection boxes will be displayed using 3 distinct visual indicators in the chart that is produced. The dots will represent the actual observed values in the dataset. The line prepresents the prediction using the advanced parameters below. And finally the shaded region surrounding each line represents the upper and lower bound confidence estimates of the prediction.
+            </p>
+            <h2>Advanced Parameters</h2>
+            <p>
+              <strong>Seasonality Mode:</strong> By default the prediction fits additive seasonalities, meaning the effect of the seasonality is added to the trend to get the forecast. When the seasonality mode is set to multiplicative, seasonal effects will also be modeled as multiplicative. A good candidate for using a multiplicative seasonality mode predction would be a time series with a clear yearly cycle, in which the seasonality in the forecast is too large at the start and too small at the end.
+            </p>
+            <p>
+              <strong>Changepoint Prior Scale:</strong> In general increasing this value will produce a more flexible model. By increasing the value of the changepoint prior scale, each changepoint in the trend will be allowed to change by a greater degree of freedom. Like many prediction parameters, if this value is too large you run the risk of over-fitting your model or trend changes, whereas if the changepoint prior scale is too small then the model may under-fit.
+            </p>
+            <p>
+              <strong>Changepoint Range:</strong> This parameter determines how much of the observed (or historical) data will be used to make the prediction. By default this is set to 80%, meaning the model will use the first 80% of the time series to calculate the prediction.
+            </p>
+          </div>
+
         </div>
 
       </div>
@@ -394,6 +433,7 @@ Prediction.contextTypes = {
 export default hot(withNamespaces()(
   connect(state => ({
     formatters: state.data.formatters,
-    locale: state.i18n.locale
+    locale: state.i18n.locale,
+    env: state.env
   }))(Prediction)
 ));
