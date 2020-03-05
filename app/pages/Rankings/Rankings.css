@@ -1,85 +1,83 @@
 @import "../../helpers/mixins.css";
 
 .rankings-page {
-  background-color: var(--dark-4);
-  color: var(--white);
-  min-height: 100vh;
+	background-color: var(--dark-4);
+	color: var(--white);
+	min-height: 100vh;
 
-  & .rankings-content {
-    margin-left: 2rem;
-    margin-right: 2rem;
-    padding-top: var(--nav-height);
+	& .rankings-content {
+		margin-left: 2rem;
+		margin-right: 2rem;
+		padding-top: var(--nav-height);
 
-    & .title {
-      font-size: var(--font-xxl);
-      font-weight: 300;
-      line-height: 1.25;
-    }
+		& .title {
+			font-size: var(--font-xxl);
+			font-weight: 300;
+			line-height: 1.25;
+		}
 
-    & .about {
-      & .text {
-        min-width: 20%;
-        font-size: var(--font-xs);
-        letter-spacing: 0.01em;
-        line-height: 1.5;
-        margin-right: 0.01rem;
+		& .about {
+			& .text {
+				min-width: 20%;
+				font-size: var(--font-xs);
+				letter-spacing: 0.01em;
+				line-height: 1.5;
+				margin-right: 0.01rem;
 
-        & .link {
-          color: var(--accent);
-        }
-      }
-    }
+				& .link {
+					color: var(--accent);
+				}
+			}
+		}
 
-    & .settings {
-      display: flex;
-      flex-direction: column;
-      background: var(--dark-2);
-      margin-top: var(--gutter-md);
-      padding: 0 var(--gutter-md);
+		& .settings {
+			display: flex;
+			flex-direction: column;
+			background: var(--dark-2);
+			margin-top: var(--gutter-md);
+			padding: 0 var(--gutter-md);
 
-      & .bp3-button {
-        background: rgba(33, 40, 49, 0.5);
-        color: var(--white);
-        font-size: var(--font-xs);
-        opacity: 1;
-      }
+			& .bp3-button {
+				background: rgba(33, 40, 49, 0.5);
+				color: var(--white);
+				font-size: var(--font-xs);
+				opacity: 1;
+			}
 
-      & .bp3-button:hover {
-        background: rgba(33, 40, 49, 0.7);
-      }
+			& .bp3-button:hover {
+				background: rgba(33, 40, 49, 0.7);
+			}
 
-      & .is-active {
-        background: rgba(33, 40, 49, 1) !important;
-        font-weight: var(--field-font-weight);
-        opacity: 1;
-      }
+			& .is-active {
+				background: rgba(33, 40, 49, 1) !important;
+				font-weight: var(--field-font-weight);
+				opacity: 1;
+			}
 
-      & .button-settings {
-        display: flex;
-        flex-direction: row;
+			& .button-settings {
+				display: flex;
+				flex-direction: row;
 
-        & .category-settings {
-          margin-right: var(--gutter-lg);
-        }
+				& .category-settings {
+					margin-right: var(--gutter-lg);
+				}
 
-        & .country-settings {
-          margin-right: var(--gutter-lg);
-        }
-      }
+				& .country-settings {
+					margin-right: var(--gutter-lg);
+				}
+			}
 
-      & .slider-settings {
-        margin-top: var(--gutter-md);
-      }
+			& .slider-settings {
+				margin-top: var(--gutter-md);
+			}
 
-      & .calculate-button {
-        margin: var(--gutter-sm) 0;
-      }
-    }
+			& .calculate-button {
+				margin: var(--gutter-sm) 0;
+			}
+		}
 
-    & .ranking {
-      & .app-loading {
-        margin-top: var(--gutter-lg);
-      }
-    }
-  }
+		& .app-loading {
+			margin-top: var(--gutter-lg);
+		}
+	}
 }
