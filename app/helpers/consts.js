@@ -357,6 +357,15 @@ module.exports = {
           name: "Destination Country",
           selected: []
         }
+      ],
+      toggles: [
+        {
+          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+          dimName: "Trade Flow",
+          id: "trade_flow",
+          name: "Trade Flow",
+          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
+        }
       ]
     },
     {
@@ -393,6 +402,15 @@ module.exports = {
           id: "destinations",
           name: "Destination Country",
           selected: []
+        }
+      ],
+      toggles: [
+        {
+          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+          dimName: "Trade Flow",
+          id: "trade_flow",
+          name: "Trade Flow",
+          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
         }
       ]
     },
@@ -431,6 +449,15 @@ module.exports = {
           name: "Destination Country",
           selected: []
         }
+      ],
+      toggles: [
+        {
+          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+          dimName: "Trade Flow",
+          id: "trade_flow",
+          name: "Trade Flow",
+          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
+        }
       ]
     },
     {
@@ -468,6 +495,15 @@ module.exports = {
           name: "Destination Country",
           selected: []
         }
+      ],
+      toggles: [
+        {
+          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+          dimName: "Trade Flow",
+          id: "trade_flow",
+          name: "Trade Flow",
+          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
+        }
       ]
     },
     {
@@ -504,6 +540,15 @@ module.exports = {
           id: "destinations",
           name: "Destination Country",
           selected: []
+        }
+      ],
+      toggles: [
+        {
+          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+          dimName: "Trade Flow",
+          id: "trade_flow",
+          name: "Trade Flow",
+          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
         }
       ]
     }

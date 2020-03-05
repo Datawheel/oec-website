@@ -9,6 +9,7 @@ import queryString from "query-string";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import SearchMultiSelect from "components/SearchMultiSelect";
+import ToggleSelect from "components/ToggleSelect";
 import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
@@ -37,7 +38,7 @@ class Prediction extends React.Component {
       destinations: [],
       drilldowns: [],
       error: false,
-      loading: false,
+      loading: true,
       origins: [],
       predictionData: [],
       products: [],
@@ -72,8 +73,20 @@ class Prediction extends React.Component {
         });
         dataset.selectionsLoaded = true;
 
-        // read query params to determine if there are selections
-        // const qSelections = [["origins", "sachl"], ["destinations", "nausa"]];
+        // populate toggles from dropdown
+        if (dataset.toggles) {
+          dataset.toggles.forEach(toggle => {
+            drillDownFound = parsedQueryString.drilldown === toggle.id || drillDownFound;
+            toggle.data.forEach(d => {
+              const thisToggleQParams = parsedQueryString[toggle.id];
+              if (thisToggleQParams && thisToggleQParams.includes(`${d.id}`)) {
+                toggle.selected = toggle.selected.find(ts => `${ts.id}` === `${d.id}`)
+                  ? toggle.selected
+                  : toggle.selected.concat([d]);
+              }
+            });
+          });
+        }
         // qSelections.forEach(qs => {
         //   const selectionSlug = qs[0];
         //   const selectionDataId = qs[1];
@@ -106,7 +119,7 @@ class Prediction extends React.Component {
     const {dataset} = this.state;
     let {advParams, currentDrilldown} = this.state;
     const {router} = this.context;
-    const datasetSelections = dataset.selections.map(selection => {
+    const selectionMap = selection => {
       if (selection.id === selectionId) {
         selection.selected = newItems;
         // if deleting items and new selected array is empty
@@ -122,8 +135,13 @@ class Prediction extends React.Component {
         }
       }
       return selection;
-    });
+    };
+    const datasetSelections = dataset.selections.map(selectionMap);
     dataset.selections = datasetSelections;
+    if (dataset.toggles) {
+      const datasetToggles = dataset.toggles.map(selectionMap);
+      dataset.toggles = datasetToggles;
+    }
     // set query params for this selection
     const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
     queryArgs[selectionId] = newItems.map(d => d.id);
@@ -152,13 +170,16 @@ class Prediction extends React.Component {
     let apiUrls = [apiUrlRoot];
     let drilldowns = [{name: "Aggregate", color: DEFAULT_PREDICTION_COLOR, id: "xx"}];
     // Are there any drilldowns?
-    const drillSelection = dataset.selections.find(s => s.id === currentDrilldown);
+    const drillSelection = dataset.toggles ? dataset.toggles.concat(dataset.selections).find(s => s.id === currentDrilldown) : dataset.selections.find(s => s.id === currentDrilldown);
     if (drillSelection) {
       apiUrls = [];
       drilldowns = drillSelection.selected.slice();
       myAdvParamStrings = advParams.length === drilldowns.length ? advParamStrings : drilldowns.map(() => `&seasonality_mode=${advParams[0].seasonalityMode}&changepoint_prior_scale=${advParams[0].changepointPriorScale}&changepoint_range=${advParams[0].changepointRange}`);
       // first get all non drilldown selections:
-      const nonDrillSelections = dataset.selections.filter(s => s.id !== currentDrilldown);
+      let nonDrillSelections = dataset.selections.filter(s => s.id !== currentDrilldown);
+      if (dataset.toggles) {
+        nonDrillSelections = nonDrillSelections.concat(dataset.toggles.filter(s => s.id !== currentDrilldown));
+      }
       let drillApiUrlBase = `${apiUrlRoot}`;
       nonDrillSelections.forEach(s => {
         if (s.selected.length) {
@@ -172,19 +193,25 @@ class Prediction extends React.Component {
     else {
       let selectionCount = 0;
       let singlePotentialDrilldown = null;
-      dataset.selections.forEach(selection => {
+      let totalTrade = true;
+      const selectionsAndToggles = dataset.toggles ? dataset.selections.concat(dataset.toggles) : dataset.selections;
+      selectionsAndToggles.forEach(selection => {
         if (selection.selected.length) {
           selectionCount += selection.selected.length;
           singlePotentialDrilldown = selection.selected[0];
           apiUrls[0] = `${apiUrls[0]}&${selection.dimName}=${selection.selected.map(this.grabIds)}`;
+          totalTrade = false;
         }
       });
       if (selectionCount === 1) {
         drilldowns = [singlePotentialDrilldown];
       }
+      else if (totalTrade) {
+        drilldowns = [{name: "Total Trade", color: DEFAULT_PREDICTION_COLOR, id: "xxwld"}];
+      }
       apiUrls[0] = `${apiUrls[0]}${advParamStrings[0]}`;
     }
-    // console.log("apiUrls!", apiUrls);
+    console.log("apiUrls!", apiUrls);
     // Step 2: make XHR requests:
     axios.all(apiUrls.map(url => axios.get(url)))
       .then(axios.spread((...responses) => {
@@ -221,15 +248,17 @@ class Prediction extends React.Component {
     const {currentDrilldown, dataset} = this.state;
     const {router} = this.context;
     let newDrilldown = currentDrilldown;
-    const drillSelection = dataset.selections.find(s => s.id === selectorType);
+    const drillSelection = dataset.toggles ? dataset.toggles.concat(dataset.selections).find(s => s.id === selectorType) : dataset.selections.find(s => s.id === selectorType);
     if (drillSelection.selected.length) {
       newDrilldown = e.target.checked ? selectorType : null;
     }
     this.setState({currentDrilldown: newDrilldown});
+    console.log("newDrilldown!!", newDrilldown);
 
     // set query params for this selection
     const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
     queryArgs.drilldown = newDrilldown;
+    if (newDrilldown === null) delete queryArgs.drilldown;
     const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
     router.replace(`/en/prediction/?${stringifiedQueryArgs}`);
   };
@@ -281,9 +310,9 @@ class Prediction extends React.Component {
           </Navbar>
 
           {/* prediction selection dropdowns */}
-          <div className="prediction-controls">
-            {dataset.selectionsLoaded
-              ? dataset.selections.map(selection =>
+          {dataset.selectionsLoaded
+            ? <div className="prediction-controls">
+              {dataset.selections.map(selection =>
                 <SearchMultiSelect
                   key={selection.id}
                   updateSelection={this.updateSelection(selection.id)}
@@ -292,21 +321,31 @@ class Prediction extends React.Component {
                   itemType={selection.name}
                   items={selection.data}
                   toggleDrilldown={this.toggleDrilldown(selection.id)} />)
-              : null}
-            <Button className="build-prediction-btn" rightIcon="arrow-right" text="Build" minimal={true} onClick={this.buildPrediction} />
-          </div>
+              }
+              {dataset.toggles
+                ? dataset.toggles.map(toggle =>
+                  <ToggleSelect
+                    key={toggle.id}
+                    updateSelection={this.updateSelection(toggle.id)}
+                    initialItems={toggle.selected}
+                    isDrilldown={currentDrilldown === toggle.id ? true : false}
+                    itemType={toggle.name}
+                    items={toggle.data}
+                    toggleDrilldown={this.toggleDrilldown(toggle.id)} />)
+                : null}
+              <Button className="build-prediction-btn" rightIcon="arrow-right" text="Build" minimal={true} onClick={this.buildPrediction} />
+            </div>
+            : null}
 
           {/* prediction viz line chart */}
           <div className="prediction-viz-container">
-            {predictionData.length
-              ? <PredictionViz
-                data={predictionData}
-                error={error}
-                loading={loading}
-                updateKey={updateKey}
-                currencyFormat={dataset.currencyFormat}
-              />
-              : null}
+            <PredictionViz
+              data={predictionData}
+              error={error}
+              loading={loading}
+              updateKey={updateKey}
+              currencyFormat={dataset.currencyFormat}
+            />
           </div>
 
           {/* prediction advanced controls */}

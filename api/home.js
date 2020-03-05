@@ -3,7 +3,7 @@ const sequelize = require("sequelize");
 
 const tiles = [
   {
-    link: "/profile/bilateral-country/usa/country/chn",
+    link: "/profile/bilateral-country/usa/partner/chn",
     large: true
   },
   "/profile/country/chl",
@@ -29,14 +29,14 @@ const tiles = [
     link: "/profile/hs92/semiconductor-devices",
     large: true
   },
-  "/profile/bilateral-product/cars/country/chn",
-  "/profile/bilateral-product/planes-helicopters-andor-spacecraft/country/fra",
+  "/profile/bilateral-product/cars/reporter/chn",
+  "/profile/bilateral-product/planes-helicopters-andor-spacecraft/reporter/fra",
   {
-    link: "/profile/bilateral-product/crude-petroleum/country/irn",
+    link: "/profile/bilateral-product/crude-petroleum/reporter/irn",
     large: true
   },
-  "/profile/bilateral-product/lithium-carbonates/country/chl",
-  "/profile/bilateral-country/jpn/country/kor"
+  "/profile/bilateral-product/lithium-carbonates/reporter/chl",
+  "/profile/bilateral-country/jpn/partner/kor"
 ];
 
 // To add once sub-nat profile IDs are resolved:
