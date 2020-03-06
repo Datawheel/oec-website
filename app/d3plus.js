@@ -182,6 +182,12 @@ export default {
     "Section ID": mean,
     "Flow ID": mean
   },
+  backConfig: {
+    fontColor: () => style["light-3"],
+    fontFamily: () => "'Palanquin', sans-serif",
+    fontSize: () => 20,
+    fontWeight: () => 400
+  },
   backgroundConfig: {
     fill: "#383e44"
   },
