@@ -58,7 +58,7 @@ class VbShare extends React.Component {
   render() {
     const {isCopiedEmbed, isCopiedLink, permalink} = this.state;
 
-    const embed = `<iframe width="560" height="315" src="${permalink}?controls=false" frameborder="0"></iframe>`;
+    const embed = `<iframe width="560" height="315" src="${permalink.replace("visualize", "visualize/embed")}?controls=false" frameborder="0"></iframe>`;
 
     const facebookMessage = `https://www.facebook.com/sharer/sharer.php?u=${permalink}`;
     const linkedInMessage = `http://www.linkedin.com/shareArticle?mini=true&url=${permalink}`;

@@ -109,6 +109,27 @@
   }
 }
 
+.vb-embed {
+  & .d3plus-viz-total, & .d3plus-viz-colorScale, & .d3plus-plot-y-axis, & .d3plus-plot-x-axis {
+    & .grid {
+      & line {
+        stroke: var(--light-2);
+      }
+    }
+    & text {
+      fill: var(--black);
+    }
+  }
+  & .d3plus-plot-background {
+    display: none;
+  }
+  & .oec-button-group .oec-button-group-items .cp-button.is-active {
+    background-color: var(--dark-1);
+    border-color: var(--dark-1);
+    color: var(--white);
+}
+}
+
 @media (max-width: 700px) {
   .vb-profile {
     & .vb-columns {

@@ -90,6 +90,7 @@ class VbDrawer extends React.Component {
     const isProductPermalink = new RegExp(/^(?!(all|show)).*$/).test(viztype);
     const isTradeBalance = flow === "show";
     const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
+    console.log(isProductPermalink);
 
     const isGeoSelected = relatedItems["Continent ID"];
     const profileId = isGeoSelected ? titleId.slice(2, 5) : titleId;
@@ -114,7 +115,7 @@ class VbDrawer extends React.Component {
     const countries = [];
     if (isCountryPermalink) countries.push({id: country, name: countryNames});
     if (countryIdSelected) countries.push({id: countryIdSelected, name: countryNameSelected});
-    console.log(countryIdSelected !== country && countryIdSelected && isCountryPermalink);
+
     return <div>
       <Drawer
         className="vb-drawer"
@@ -189,6 +190,18 @@ class VbDrawer extends React.Component {
                 callback={d => this.props.run(d)}
                 t={t}
               />);
+
+              if (countryIdSelected) {
+                const bilateralPermalink = `/hs92/${d}/${countryIdSelected}/all/${viztype}/${time}/`;
+                all.push(<VbRelatedVizTitle
+                  permalink={bilateralPermalink}
+                  router={this.props.router}
+                  titleConfig={{product: this.props.selectedProducts.map(d => d.name), country: countryNameSelected, flow: d, time, prep: preps[d]}}
+                  titleName="vb_title_where_country_flow_product"
+                  callback={d => this.props.run(d)}
+                  t={t}
+                />);
+              }
             }
 
             countries.forEach(h => {

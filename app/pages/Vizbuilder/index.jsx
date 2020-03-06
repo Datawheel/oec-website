@@ -16,16 +16,19 @@ import SelectMultiSection from "components/SelectMultiSection";
 import SimpleSelect from "components/SimpleSelect";
 
 import {Button, Switch} from "@blueprintjs/core";
+import {range} from "helpers/utils";
 
 import "./Vizbuilder.css";
 import {getVbTitle} from "../../helpers/vbTitle";
 
+const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
+
 const datasets = [
-  {value: "hs92", title: "HS92"},
-  {value: "hs96", title: "HS96"},
-  {value: "hs02", title: "HS02"},
-  {value: "hs07", title: "HS07"},
-  {value: "sitc", title: "SITC"}
+  {value: "hs92", title: "HS92", data: cubeData(1995, 2017)},
+  {value: "hs96", title: "HS96", data: cubeData(1998, 2017)},
+  {value: "hs02", title: "HS02", data: cubeData(2003, 2017)},
+  {value: "hs07", title: "HS07", data: cubeData(2008, 2017)}
+  // {value: "sitc", title: "SITC", data: cubeData(1964, 2017)}
   // {value: "cpc", title: "Technology"}
 ];
 
@@ -34,10 +37,8 @@ const flowItems = [
   {value: "import", title: "Imports"}
 ];
 
-const years = [...Array(54).keys()].map(d => ({value: 2017 - d, title: 2017 - d}));
-
 /** */
-function createItems(data, levels, iconUrl) {
+export function createItems(data, levels, iconUrl) {
   return data.reduce((obj, d) => {
     levels.forEach(type => {
       const id = d[`${type} ID`];
@@ -82,8 +83,8 @@ class Vizbuilder extends React.Component {
       _yearId: "2017",
       _endYear: {title: 2017, value: 2017},
       _endYearTitle: {title: 2017, value: 2017},
-      _startYear: {title: 2017, value: 2017},
-      _startYearTitle: {title: 2017, value: 2017},
+      _startYear: {title: 2014, value: 2014},
+      _startYearTitle: {title: 2014, value: 2014},
       scrolled: false,
 
       _selectedItemsProduct: [],
@@ -224,6 +225,64 @@ class Vizbuilder extends React.Component {
     router.push(permalink);
   };
 
+  getPermalinkIds = () => {
+    const {
+      _selectedItemsCountryTitle,
+      _selectedItemsPartnerTitle,
+      _selectedItemsTechnologyTitle,
+      _selectedItemsProductTitle,
+      _dataset,
+      _flow,
+      _xAxis,
+      _yAxis,
+      _startYearTitle,
+      _endYearTitle,
+      _selectedItemsYearTitle
+    } = this.state;
+    const {routeParams} = this.props;
+    const {chart} = routeParams;
+
+    let countryIds = _selectedItemsCountryTitle && _selectedItemsCountryTitle.length > 0
+      ? parseIdsToURL(_selectedItemsCountryTitle, "label")
+      : "deu";
+    let partnerIds = _selectedItemsPartnerTitle && _selectedItemsPartnerTitle.length > 0
+      ? parseIdsToURL(_selectedItemsPartnerTitle, "label")
+      : "usa";
+
+    const isTechnologyFilter = _selectedItemsTechnologyTitle.length > 0;
+    const isTradeFilter = _selectedItemsProductTitle.length > 0;
+
+    let filterIds = isTechnologyFilter || isTradeFilter
+      ? isTechnologyFilter
+        ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
+        : parseIdsToURL(_selectedItemsProductTitle)
+      : "10101";
+    const dataset = isTechnologyFilter ? "cpc" : _dataset.value;
+    let flow = isTechnologyFilter ? "uspto" : _flow.value;
+
+    const timeIds = _selectedItemsYearTitle.map(d => d.value).join(".");
+
+    /** Creates permalink config for scatter plot */
+    if (chart === "scatter") {
+      flow = _xAxis.value;
+      countryIds = _yAxis.value;
+      partnerIds = "all";
+      filterIds = "all";
+    }
+
+    const output = {
+      cube: dataset,
+      country: countryIds,
+      partner: partnerIds,
+      flow,
+      viztype: filterIds,
+      time: timeIds,
+      timePlot: `${_startYearTitle.value}.${_endYearTitle.value}`
+    };
+
+    return output;
+  }
+
   handleControls = () => this.setState({controls: !this.state.controls})
 
   handleItemMultiSelect = (key, d) => {
@@ -231,6 +290,7 @@ class Vizbuilder extends React.Component {
   }
 
   handleScroll = () => {
+    console.log("hello");
     throttle(() => {
       this.setState({scrolled: window.scrollY > 220});
     }, 30);
@@ -265,6 +325,8 @@ class Vizbuilder extends React.Component {
     const wdiIndicators = usePrevState ? prevState.wdiIndicators : this.state.wdiIndicators;
     const {routeParams} = this.props;
 
+    const years = this.state._dataset.data;
+
     let {country, chart, cube, flow, partner, time, viztype} = routeParams;
 
     if (prevState && prevState.permalink) {
@@ -290,8 +352,8 @@ class Vizbuilder extends React.Component {
       .filter(d => viztype.split(".").includes(d.value)) : [];
 
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
-    const _startYear = isTimeSeriesChart ? timeIds[0] : {};
-    const _endYear = isTimeSeriesChart ? timeIds[1] : {};
+    const _startYear = isTimeSeriesChart ? timeIds[0] : this.state._startYear;
+    const _endYear = isTimeSeriesChart ? timeIds[1] : this.state._endYear;
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
@@ -321,6 +383,7 @@ class Vizbuilder extends React.Component {
   }
 
   render() {
+    const years = this.state._dataset.data.sort((a, b) => b.value - a.value);
     const {activeTab, scrolled} = this.state;
     const {routeParams, t} = this.props;
     const {chart, cube, country, viztype, time} = routeParams;
@@ -351,6 +414,8 @@ class Vizbuilder extends React.Component {
       this.state._yAxisTitle
     );
 
+    this.getPermalinkIds();
+
     return <div id="vizbuilder">
       <OECNavbar
         className={scrolled ? "background" : ""}
@@ -373,6 +438,7 @@ class Vizbuilder extends React.Component {
                 activeOption={this.props.location.pathname}
                 activeTab={activeTab}
                 callback={d => this.handleTabOption(d)}
+                permalinkIds={this.getPermalinkIds()}
               />
 
               {productSelector && <div className="columns">

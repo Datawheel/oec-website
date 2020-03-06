@@ -23,7 +23,6 @@ import OECButtonGroup from "./OECButtonGroup";
 import VbDrawer from "./VbDrawer";
 import VbShare from "./VbShare";
 import VbDownload from "./VbDownload";
-import SimpleSelect from "./SimpleSelect";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 
@@ -537,6 +536,11 @@ class VbChart extends React.Component {
                 on: {
                   click: d =>
                     this.setState({isOpenDrawer: true, relatedItems: d})
+                },
+                shapeConfig: {
+                  Area: {
+                    strokeWidth: 1
+                  }
                 },
                 total: undefined,
                 x: "Year",
