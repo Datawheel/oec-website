@@ -69,7 +69,6 @@ class Profile extends React.Component {
         .replace(/<\/a>/g, " ")
         .replace(/[\s]{1,}/g, " ");
     }
-    console.log("title", title);
 
     return (
       <div className="profile" id="top">
