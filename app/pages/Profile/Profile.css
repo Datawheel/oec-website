@@ -87,6 +87,11 @@
   }
 }
 
+.SourceGroup {
+  @mixin font-sm;
+  color: var(--light-3);
+}
+
 .cp-hero-figure {
   background-color: rgba(255, 255, 255, 0.25);
   border: 1px solid var(--light-3);
