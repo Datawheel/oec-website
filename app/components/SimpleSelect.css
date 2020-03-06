@@ -1,0 +1,7 @@
+.bp3-select-popover .bp3-popover-content {
+  padding: 0px;
+}
+
+.bp3-select-popover .bp3-menu {
+  min-width: 150px !important;
+}

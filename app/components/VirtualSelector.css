@@ -24,7 +24,7 @@
         justify-content: space-between;
         background: transparent;
         color: var(--white);
-        border: 1px solid var(--dark-1);
+        border: 1px solid var(--dark-1) !important;
         border-radius: 0px;
         box-shadow: none;
       }
@@ -82,8 +82,8 @@
 .bp3-menu {
   background: var(--dark-4) !important;
   color: var(--white) !important;
-  border: 1px solid var(--white);
-  border-radius: 0px;
+  border: 1px solid var(--dark-1);
+  border-radius: 0px !important;
   padding: 0px !important;
   max-height: 300px;
   overflow: scroll;
@@ -91,6 +91,13 @@
 
   & li {
     border-radius: 0px !important;
+  }
+
+  & .bp3-menu-item {
+    border-radius: 0px !important;
+    & .bp3-menu-item-label {
+      text-transform: uppercase;
+    }
   }
 
 

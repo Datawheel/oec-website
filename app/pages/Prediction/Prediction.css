@@ -20,6 +20,8 @@
 
   & .prediction-controls {
     display: flex;
+    align-items: center;
+    align-content: flex-start;
 
     &.advanced-params {
       border: solid 1px var(--light-1);
@@ -31,6 +33,17 @@
       padding: 5px 10px;
       &.slider-control {
         padding: 5px 15px;
+      }
+    }
+
+    & .build-prediction-btn {
+      background-color: rgba(115, 134, 148, 0.3);
+      color: #CFDAE2;
+      flex: 0 0 8rem;
+      padding: 20px 0;
+
+      &:hover {
+        color: #CFDAE2;
       }
     }
   }
@@ -196,6 +209,36 @@ Under viz options (key)
 /* ---------------------------
 Datatable styles
 --------------------------- */
-.number {
-  text-align: right;
+.prediction-datatable-container {
+  & .rt-td {
+    & .number {
+      text-align: right;
+    }
+  }
+  & .ReactTable .-pagination .-btn {
+    background-color: rgba(115, 134, 148, 0.3);
+    color: var(--light-3);
+  }
+}
+
+/* ---------------------------
+About text styles
+--------------------------- */
+.prediction-about-container {
+  width: 800px;
+  margin: 40px auto;
+
+  & .info-card {
+    align-items: center;
+    border: solid 1px var(--dark-2);
+    margin: 20px 0;
+    padding: 10px;
+    display: flex;
+    & h3 {
+      margin: 0 0 10px 0;
+    }
+    & .info-card-icon {
+      padding: 0 20px 0 0;
+    }
+  }
 }

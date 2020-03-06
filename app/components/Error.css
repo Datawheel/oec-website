@@ -1,0 +1,5 @@
+.app-error {
+  background-color: var(--dark-4);
+  min-height: 90vh;
+  padding-top: var(--nav-height);
+}

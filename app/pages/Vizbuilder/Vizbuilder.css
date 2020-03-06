@@ -11,6 +11,11 @@
       padding: var(--gutter-sm);
       &.aside {
         max-width: 300px;
+        transition: margin 0.7s ease 0s;
+        & .controls {
+          width: 100%;
+          height: 30px;
+        }
       }
     }
   }
@@ -74,11 +79,11 @@
 
   & .build {
     background-color: var(--dark-1);
-    border-radius: 2px;
+    border-radius: 0;
     border: 0;
     color: var(--white);
-    font-size: 12px;
-    font-weight: 200;
+    cursor: pointer;
+    font-size: var(--font-sm);
     height: auto;
     margin-bottom: 5px;
     outline: none;
@@ -101,5 +106,49 @@
     margin-bottom: 5px;
     margin-top: 5px;
     text-transform: uppercase;
+  }
+}
+
+.vb-embed {
+  & .d3plus-viz-total, & .d3plus-viz-colorScale, & .d3plus-plot-y-axis, & .d3plus-plot-x-axis {
+    & .grid {
+      & line {
+        stroke: var(--light-2);
+      }
+    }
+    & text {
+      fill: var(--black);
+    }
+  }
+  & .d3plus-plot-background {
+    display: none;
+  }
+  & .oec-button-group .oec-button-group-items .cp-button.is-active {
+    background-color: var(--dark-1);
+    border-color: var(--dark-1);
+    color: var(--white);
+}
+}
+
+@media (max-width: 700px) {
+  .vb-profile {
+    & .vb-columns {
+      flex-direction: column;
+      & .vb-column.aside {
+        max-width: 100%;
+      }
+    }
+
+    & .vb-chart-options {
+      flex-direction: row;
+      flex-wrap: wrap;
+      & .oec-button-group-title {
+        margin: 0;
+      }
+      & .oec-button-group, & .vb-share-download-options {
+        margin-top: var(--gutter-sm);
+        margin-top: var(--gutter-sm);
+      }
+    }
   }
 }

@@ -68,7 +68,7 @@ const versions = [
   },
   {
     title: "Pro",
-    price: "$14.99",
+    price: "$24.99",
     interval: "per month",
     buyText: "Upgrade",
     featureLookup: {

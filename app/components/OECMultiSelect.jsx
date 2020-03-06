@@ -104,7 +104,7 @@ class OECMultiSelect extends React.Component {
   };
 
   render() {
-    const {items, itemType, selectedItems, title} = this.props;
+    const {items, itemType, placeholder, selectedItems, title} = this.props;
     return <div className="selector">
       <h3 className="title">{title}</h3>
       <MultiSelect
@@ -116,19 +116,21 @@ class OECMultiSelect extends React.Component {
         items={this.props.items}
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={this.handleItemSelect}
+        placeholder={placeholder}
         popoverProps={{minimal: true}}
         resetOnSelect={false}
         resetOnQuery={false}
         selectedItems={this.props.selectedItems}
         tagInputProps={{
           onRemove: this.handleTagRemove,
+          placeholder,
           rightElement: this.props.selectedItems.length ? <Button icon="cross" minimal={true} onClick={this.handleClear} /> : null,
           tagProps: d => {
             const thisItem = items.find(dd => dd.title === d);
             return {
               style: {
-                // backgroundColor: thisItem.color,
-                // color: colorContrast(thisItem.color) || "white"
+                backgroundColor: thisItem.color,
+                color: colorContrast(thisItem.color) || "white"
               }
             };
           }
@@ -140,7 +142,8 @@ class OECMultiSelect extends React.Component {
 }
 
 OECMultiSelect.defaultProps = {
-  itemType: undefined
+  itemType: undefined,
+  placeholder: undefined
 };
 
 export default OECMultiSelect;

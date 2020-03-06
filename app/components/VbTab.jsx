@@ -6,9 +6,7 @@ import "./VbTab.css";
 class VbTab extends React.Component {
 
   render() {
-    const {activeOption, chart, countries, items, products, t} = this.props;
-    const vbKey = {};
-    const compare = false;
+    const {activeOption, chart, items, lng} = this.props;
 
     return (
       <div>
@@ -29,29 +27,20 @@ class VbTab extends React.Component {
               <ul className="options">
                 {d.nest.map((h, k) => {
                   const isSelected = h.regexp ? h.regexp.test(activeOption) : false;
-
-                  return <li
+                  const permalink = `/${lng}/visualize/${chart}/${h.permalink || "hs92/export/chl/all/show/2017/"}`;
+                  return <a
+                    className={classnames("panel-option", {"is-selected": isSelected})}
+                    href={permalink}
                     key={`${chart}_${i}_${k}_panel`}
-                    className={classnames(
-                      "panel-option",
-                      {"is-selected": isSelected}
-                    )}
-                    onClick={() => this.props.callback({
-                      activeOption: `${chart}_${d.name}_${h.name}`,
-                      permalink: `/en/visualize/${chart}/${h.permalink || "hs92/export/chl/all/show/2017/"}`
-                    })}
+                    onClick={() => this.props.callback({permalink})}
                   >
                     {h.name}
-                  </li>
-                  ;
+                  </a>;
                 })}
               </ul>
             </div>
-          </div>
-          ;
+          </div>;
         })}
-
-
       </div>
     );
   }
