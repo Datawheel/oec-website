@@ -146,32 +146,32 @@ export const tooltipTitle = (bgColor, imgUrl, title) => {
 
 const axisStyles = {
   barConfig: {
-    stroke: "#15191F"
+    stroke: "transparent"
   },
   gridConfig: {
-    stroke: "#15191F",
+    stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"],
     strokeWidth: 1
   },
   labelConfig: {
-    fontColor: () => "#FFFFFF",
+    fontColor: () => style["light-3"],
     fontFamily: () => "'Source Sans Pro', sans-serif",
-    fontSize: () => 12,
+    fontSize: () => 16,
     fontWeight: () => 400
   },
   shapeConfig: {
     labelConfig: {
-      fontColor: () => "#FFFFFF",
+      fontColor: () => style["light-3"],
       fontFamily: () => "'Source Sans Pro', sans-serif",
-      fontSize: () => 12,
+      fontSize: () => 16,
       fontWeight: () => 400
     },
-    stroke: "#15191F"
+    stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"]
   },
   tickSize: 5,
   titleConfig: {
-    fontColor: () => "#FFFFFF",
+    fontColor: () => style["light-3"],
     fontFamily: () => "'Palanquin', sans-serif",
-    fontSize: () => 18,
+    fontSize: () => 20,
     fontWeight: () => 400
   }
 };
@@ -181,6 +181,12 @@ export default {
     "Trade Value Growth": d => d.length > 1 ? 0 : d[0],
     "Section ID": mean,
     "Flow ID": mean
+  },
+  backConfig: {
+    fontColor: () => style["light-3"],
+    fontFamily: () => "'Palanquin', sans-serif",
+    fontSize: () => 20,
+    fontWeight: () => 400
   },
   backgroundConfig: {
     fill: "#383e44"
@@ -193,7 +199,7 @@ export default {
         labelConfig: {
           fontColor: () => "#ffffff",
           fontFamily: () => "'Source Sans Pro', sans-serif",
-          fontSize: () => 12,
+          fontSize: () => 16,
           fontWeight: () => 400
         },
         stroke: style["dark-1"]
@@ -201,7 +207,7 @@ export default {
       titleConfig: {
         fontColor: () => "#ffffff",
         fontFamily: () => "'Palanquin', sans-serif",
-        fontSize: () => 12,
+        fontSize: () => 16,
         fontWeight: () => 400
       },
       barConfig: {
@@ -418,8 +424,8 @@ export default {
       labelConfig: {
         fontSize: () => 13
       },
-      strokeWidth: () => 2,
-      strokeFill: () => "#212831",
+      strokeWidth: () => 1,
+      stroke: () => style["dark-3"],
       fill: findColor
     },
     fill: findColor,
@@ -427,7 +433,9 @@ export default {
       fontSize: () => 13
     },
     Circle: {
-      fill: d => d["Trade Value RCA"] >= -1 ? d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6" : findColor(d)
+      fill: d => d["Trade Value RCA"] >= -1 ? d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6" : findColor(d),
+      strokeWidth: () => 1,
+      stroke: () => style["dark-3"]
     },
     Line: {
       curve: "monotoneX",
@@ -437,7 +445,8 @@ export default {
     },
     Path: {
       fillOpacity: 1,
-      strokeOpacity: 1
+      strokeOpacity: 1,
+      stroke: () => "#56636e"
     },
     Rect: {
       labelConfig: {

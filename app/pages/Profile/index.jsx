@@ -2,6 +2,7 @@ import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
 import {Helmet} from "react-helmet";
+import {select} from "d3-selection";
 
 import {fetchData} from "@datawheel/canon-core";
 import throttle from "@datawheel/canon-cms/src/utils/throttle";
@@ -49,26 +50,26 @@ class Profile extends React.Component {
 
   handleScroll = () => {
     throttle(() => {
-      if (window.scrollY > 220) {
-        this.setState({scrolled: true});
-      }
-      else {
-        this.setState({scrolled: false});
-      }
-    }, 30);
+      const title = select(".cp-hero-heading").node();
+      this.setState({scrolled: title.getBoundingClientRect().top < 0});
+    }, 50);
   };
 
 
   render() {
-    const {profile, t} = this.props;
+    const {profile} = this.props;
     const {scrolled} = this.state;
 
     let title = null;
     if (profile.sections.length) {
       title = stripP(profile.sections[0].title)
         .replace(/\<br\>/g, "")
-        .replace(/\&nbsp\;/, "");
+        .replace(/\&nbsp\;/, "")
+        .replace(/<a[^>]+>/g, " ")
+        .replace(/<\/a>/g, " ")
+        .replace(/[\s]{1,}/g, " ");
     }
+    console.log("title", title);
 
     return (
       <div className="profile" id="top">

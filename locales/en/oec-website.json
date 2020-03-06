@@ -26,8 +26,15 @@
   "Contributor": "Contributor",
   "Countries by Technology": "Countries by Technology",
   "Country": "Country",
+  "CMS": {
+    "SourceGroup": {
+      "Data provided by": "Data from"
+    }
+  },
+  "Dataset": "Dataset",
   "ECI Rankings": "ECI Rankings",
   "Economic Complexity": "Economic Complexity",
+  "End Year": "End Year",
   "Export Destinations": "Export Destinations",
   "Exporters": "Exporters",
   "Exports": "Exports",
@@ -59,7 +66,9 @@
   "No results": {
     "": "No results."
   },
+  "Opportunity Gain Space": "Opportunity Gain Space",
   "PGI Product Space": "PGI Product Space",
+  "Partner": "Partner",
   "Patenters": "Patenters",
   "Patents by Category": "Patents by Category",
   "Product": "Product",
@@ -84,6 +93,15 @@
     }
   },
   "Role": "Role",
+  "Select": "Select",
+  "Select a partner": {
+    "": {
+      "": {
+        "": "Select a partner..."
+      }
+    }
+  },
+  "Show options": "Show options",
   "SignUp": {
     "Confirm Password": "Confirm Password",
     "E-mail": "E-mail",
@@ -102,11 +120,16 @@
     "success": "Successfully Signed Up"
   },
   "Specific Country": "Specific Country",
+  "Start Year": "Start Year",
   "Technologies by Country": "Technologies by Country",
   "Technology": "Technology",
   "Trade Balance": "Trade Balance",
+  "Trade Flow": "Trade Flow",
   "User": "User",
   "Username": "Username",
+  "X Axis": "X Axis",
+  "Y Axis": "Y Axis",
+  "Year": "Year",
   "rankings_active_country": "Country",
   "rankings_active_product": "Product",
   "rankings_download_1": "Download",
