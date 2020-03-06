@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import numeral from 'numeral';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { withNamespaces } from 'react-i18next';
@@ -47,6 +46,7 @@ class Rankings extends Component {
 			_loading: false,
 			_yearSelection: 'single'
 		};
+		this.handleValueChange = this.handleValueChange.bind(this);
 	}
 
 	createColumns(type, array) {
@@ -437,7 +437,10 @@ class Rankings extends Component {
 						</div>
 					</div>
 
-          <RankingBuilder />
+          <RankingBuilder
+						variables={{catValue, subnationalValue, depthValue}}
+						handleValueChange={this.handleValueChange}
+					/>
 
 					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} />}
 

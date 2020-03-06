@@ -1,45 +1,93 @@
-& .builder {
-  display: flex;
-  flex-direction: row;
-  min-height: 20rem;
-  margin-top: var(--gutter-md);
+.builder {
+	display: flex;
+	flex-direction: row;
+	min-height: 20rem;
+	margin-top: var(--gutter-md);
 
-  & .is-quarter {
-    width: 23%;
+	& .section {
+		margin: 0 1%;
+		border-radius: 10px;
+		background: var(--dark-2);
+		padding: var(--gutter-xs) var(--gutter-md);
   }
 
-  & .is-half {
-    width: 48%;
-  }
+  & .section.is-quarter {
+		width: 23%;
+	}
 
-  & .section {
-    margin: 0 1%;
-    border-radius: 10px;
-    background: var(--dark-2);
-    padding: var(--gutter-xs) var(--gutter-md);
-  }
+	& .section.is-half {
+		width: 48%;
+	}
 
-  & .bp3-switch {
-    margin: 0;
+  & .setting {
+    padding-bottom: var(--gutter-md);
+    border-bottom: 1px solid rgba(255,255,255,0.3);
 
-    & .bp3-control-indicator  {
-      background: #137cbd;
+    & h3 {
+      margin: 0;
+      margin-top: var(--gutter-sm);
+      margin-bottom: var(--gutter-md);
+    }
+
+    & .switch {
+      display: flex;
+      align-items: center;
+
+      & span {
+        font-size: var(--font-sm);
+        margin-right: var(--gutter-sm);
+      }
+    }
+
+    & .bp3-switch {
+      margin: 0;
+
+      & .bp3-control-indicator  {
+        min-width: 2rem !important;
+        background: #137cbd !important;
+      }
+    }
+
+    & .bp3-switch:hover {
+      & .bp3-control-indicator  {
+        background: #106ba3 !important;
+      }
     }
   }
 
-  & .bp3-switch:hover {
-    & .bp3-control-indicator  {
-      background: #106ba3;
+  & .setting.last {
+    border-bottom: 0;
+  }
+
+  & .setting.country-depth {
+    & .bp3-html-select {
+      margin-top: var(--gutter-md);
     }
   }
 
-  & .country-switch {
-    display: flex;
-    align-items: center;
+  & .setting.product-depth {
+    & .bp3-button-group {
+      width: 100%;
 
-    & span {
-      font-size: var(--font-sm);
-      margin-right: var(--gutter-sm);
+      & .bp3-button {
+        width: 33%;
+        color: var(--white);
+        background: rgba(33, 40, 49, 0.5);
+      }
+
+      & .bp3-button:hover {
+        background: rgba(33, 40, 49, 0.7);
+      }
+
+      & .active {
+        background: #106ba3 !important;
+        font-weight: var(--field-font-weight);
+        opacity: 1;
+      }
     }
+  }
+
+  & .bp3-html-select {
+    width: 99%;
   }
 }
