@@ -418,8 +418,8 @@ export default {
       labelConfig: {
         fontSize: () => 13
       },
-      strokeWidth: () => 2,
-      strokeFill: () => "#212831",
+      strokeWidth: () => 1,
+      stroke: () => style["dark-3"],
       fill: findColor
     },
     fill: findColor,
@@ -427,7 +427,9 @@ export default {
       fontSize: () => 13
     },
     Circle: {
-      fill: d => d["Trade Value RCA"] >= -1 ? d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6" : findColor(d)
+      fill: d => d["Trade Value RCA"] >= -1 ? d["Trade Value RCA"] > 1 ? findColor(d) : "#b1bac6" : findColor(d),
+      strokeWidth: () => 1,
+      stroke: () => style["dark-3"]
     },
     Line: {
       curve: "monotoneX",
@@ -437,7 +439,8 @@ export default {
     },
     Path: {
       fillOpacity: 1,
-      strokeOpacity: 1
+      strokeOpacity: 1,
+      stroke: () => "#56636e"
     },
     Rect: {
       labelConfig: {
