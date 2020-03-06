@@ -146,30 +146,30 @@ export const tooltipTitle = (bgColor, imgUrl, title) => {
 
 const axisStyles = {
   barConfig: {
-    stroke: "#15191F"
+    stroke: "transparent"
   },
   gridConfig: {
-    stroke: "#15191F",
+    stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"],
     strokeWidth: 1
   },
   labelConfig: {
-    fontColor: () => "#FFFFFF",
+    fontColor: () => style["light-3"],
     fontFamily: () => "'Source Sans Pro', sans-serif",
     fontSize: () => 12,
     fontWeight: () => 400
   },
   shapeConfig: {
     labelConfig: {
-      fontColor: () => "#FFFFFF",
+      fontColor: () => style["light-3"],
       fontFamily: () => "'Source Sans Pro', sans-serif",
       fontSize: () => 12,
       fontWeight: () => 400
     },
-    stroke: "#15191F"
+    stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"]
   },
   tickSize: 5,
   titleConfig: {
-    fontColor: () => "#FFFFFF",
+    fontColor: () => style["light-3"],
     fontFamily: () => "'Palanquin', sans-serif",
     fontSize: () => 18,
     fontWeight: () => 400
