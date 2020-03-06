@@ -155,14 +155,14 @@ const axisStyles = {
   labelConfig: {
     fontColor: () => style["light-3"],
     fontFamily: () => "'Source Sans Pro', sans-serif",
-    fontSize: () => 12,
+    fontSize: () => 16,
     fontWeight: () => 400
   },
   shapeConfig: {
     labelConfig: {
       fontColor: () => style["light-3"],
       fontFamily: () => "'Source Sans Pro', sans-serif",
-      fontSize: () => 12,
+      fontSize: () => 16,
       fontWeight: () => 400
     },
     stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"]
@@ -171,7 +171,7 @@ const axisStyles = {
   titleConfig: {
     fontColor: () => style["light-3"],
     fontFamily: () => "'Palanquin', sans-serif",
-    fontSize: () => 18,
+    fontSize: () => 20,
     fontWeight: () => 400
   }
 };
@@ -193,7 +193,7 @@ export default {
         labelConfig: {
           fontColor: () => "#ffffff",
           fontFamily: () => "'Source Sans Pro', sans-serif",
-          fontSize: () => 12,
+          fontSize: () => 16,
           fontWeight: () => 400
         },
         stroke: style["dark-1"]
@@ -201,7 +201,7 @@ export default {
       titleConfig: {
         fontColor: () => "#ffffff",
         fontFamily: () => "'Palanquin', sans-serif",
-        fontSize: () => 12,
+        fontSize: () => 16,
         fontWeight: () => 400
       },
       barConfig: {
