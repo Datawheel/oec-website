@@ -286,7 +286,7 @@
 }
 
 .cp-section {
-  padding: var(--gutter-sm);
+  padding: var(--gutter-sm) var(--gutter-lg);
 }
 
 .cp-section-content {
