@@ -10,6 +10,7 @@ import Tariffs from "./pages/Tariffs/Tariffs";
 import App from "./App";
 import Home from "./pages/Home";
 import Welcome from "./pages/Welcome";
+import Explorer from "./pages/Explorer";
 import Vizbuilder from "./pages/Vizbuilder";
 import EmbedVizbuilder from "./pages/Vizbuilder/EmbedVizbuilder";
 import Login from "./pages/User/Login";
@@ -76,6 +77,7 @@ export default function RouteCreate() {
       <Route path="/welcome" component={Welcome} />
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route exact path="/admin" component={Builder} />
+      <Route exact path="/explorer" component={Explorer} />
       <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={EmbedVizbuilder} />
       <Route exact path="/:lang/visualize/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={Vizbuilder} />
       <Route exact path="/:lang/login" component={Login} />

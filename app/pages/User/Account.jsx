@@ -165,6 +165,9 @@ class Account extends Component {
                       <Button fill icon="build">
                         <Link  to="/admin">Hello, contributor. Would you like to go to the CMS?</Link>
                       </Button>
+                      <Button fill icon="database">
+                        <Link  to="/explorer">Or... how about the Data Explorer?</Link>
+                      </Button>
                     </div>}
               </div>
             </div>

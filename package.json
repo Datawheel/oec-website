@@ -24,10 +24,12 @@
   "homepage": "https://github.com/observatory-economic-complexity/oec-website#readme",
   "dependencies": {
     "@blueprintjs/select": "^3.11.2",
+    "@blueprintjs/table": "^3.8.3",
     "@datawheel/canon-cms": "^0.12.21",
     "@datawheel/canon-core": "^0.18.7",
     "@datawheel/canon-stats": "git+https://x-oauth-basic@github.com/Datawheel/canon-stats.git",
     "@datawheel/olap-client": "^1.2.1",
+    "@datawheel/tesseract-explorer": "^0.5.11",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",

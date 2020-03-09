@@ -1,0 +1,11 @@
+.explorer {
+  & .animated-cube .cube span {
+    animation: none;
+  }
+  & .app-loading {
+    height: 100vh;
+    & .bp3-heading {
+      color: var(--dark-4);
+    }
+  }
+}

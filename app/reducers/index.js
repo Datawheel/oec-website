@@ -1,9 +1,7 @@
-/**
-  The object exported by this file should contain reducers to be
-  combined with the internal default canon reducers.
-*/
 import {cmsReducer} from "@datawheel/canon-cms";
+import {explorerReducer} from "@datawheel/tesseract-explorer";
 
 export default {
-  cms: cmsReducer
+  cms: cmsReducer,
+  explorer: explorerReducer
 };
