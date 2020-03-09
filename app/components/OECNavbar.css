@@ -155,7 +155,7 @@
   }
   & .navbar-search-toggle-button {
     position: relative;
-    z-index: 1; /* in front of open search */
+    z-index: 3; /* in front of open search */
     transition: transform 0.1s ease-out;
 
     &:hover, &:focus {
@@ -176,6 +176,7 @@
   transition:
     opacity 0.2s ease-out,
     transform 0.2s ease-out;
+  z-index: 2;
 
   &.is-hidden {
     /* transitions */
