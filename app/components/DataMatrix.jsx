@@ -10,7 +10,6 @@ class DataMatrix extends Component {
   render() {
 
     const {matrix} = this.props;
-    console.log(matrix);
 
     if (!matrix) return null;
 

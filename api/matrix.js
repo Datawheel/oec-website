@@ -11,130 +11,42 @@ const verbose = yn(process.env.CANON_CMS_LOGGING);
 const FEATURE_MATRIX = {
   international: {
     products: [
-      {
-        cubeName: "trade_i_baci_a_02",
-        fullName: "International Trade (BACI 02)"
-      },
-      {
-        cubeName: "trade_i_baci_a_12",
-        fullName: "International Trade (BACI 12)"
-      },
-      {
-        cubeName: "trade_i_baci_a_07",
-        fullName: "International Trade (BACI 07)"
-      },
-      {
-        cubeName: "trade_i_baci_a_96",
-        fullName: "International Trade (BACI 96)"
-      },
-      {
-        cubeName: "trade_i_baci_a_92",
-        fullName: "International Trade (BACI 92)"
-      },
-      {
-        cubeName: "trade_i_comtrade_a_sitc2",
-        fullName: "Comtrade Services (SITC2)"
-      },
-      {
-        cubeName: "trade_i_comtrade_m_hs",
-        fullName: "Comtrade Services (HS)"
-      }
+      {cubeName: "trade_i_baci_a_02",        fullName: "International Trade (BACI HS 2002)"},
+      {cubeName: "trade_i_baci_a_12",        fullName: "International Trade (BACI HS 2012)"},
+      {cubeName: "trade_i_baci_a_07",        fullName: "International Trade (BACI HS 2007)"},
+      {cubeName: "trade_i_baci_a_96",        fullName: "International Trade (BACI HS 1996)"},
+      {cubeName: "trade_i_baci_a_92",        fullName: "International Trade (BACI HS 1992)"},
+      {cubeName: "trade_i_comtrade_a_sitc2", fullName: "International Trade (UN Comtrade SITC2)"},
+      {cubeName: "trade_i_comtrade_m_hs",    fullName: "International Trade (UN Comtrade HS)"}
     ],
     services: [
-      {
-        cubeName: "services_i_comtrade_a_eb02",
-        fullName: "Comtrade Services (EB02)"
-      }
+      {cubeName: "services_i_comtrade_a_eb02", fullName: "Comtrade Services (EB02)"}
     ],
     tariffs: [
-      {
-        cubeName: "tariffs_i_wits_a_hs",
-        fullName: "Tariffs"
-      }
+      {cubeName: "tariffs_i_wits_a_hs", fullName: "Tariffs"}
     ],
     indicators: [
-      {
-        cubeName: "indicators_i_wdi_a",
-        fullName: "Indicators"
-      }
+      {cubeName: "indicators_i_wdi_a", fullName: "World Development Indicators (WDI)"}
     ]
   },
   subnational: {
     products: [
-      {
-        cubeName: "trade_s_usa_district_m_hs",
-        fullName: "United States Trade"
-      },
-      {
-        cubeName: "trade_s_chn_m_hs",
-        fullName: "China Trade"
-      },
-      {
-        cubeName: "trade_s_bra_mun_m_hs",
-        fullName: "Brazil Trade"
-      },
-      {
-        cubeName: "trade_s_can_m_hs",
-        fullName: "Canada Trade"
-      },
-      {
-        cubeName: "trade_s_esp_m_hs",
-        fullName: "Spain Trade"
-      },
-      {
-        cubeName: "trade_s_deu_m_egw",
-        fullName: "Germany Trade"
-      },
-      {
-        cubeName: "trade_s_tur_m_hs",
-        fullName: "Turkey Trade"
-      },
-      {
-        cubeName: "trade_s_swe_m_hs",
-        fullName: "Sweden Trade"
-      },
-      {
-        cubeName: "trade_s_ury_a_hs",
-        fullName: "Uruguay Trade"
-      },
-      {
-        cubeName: "trade_s_jpn_m_hs",
-        fullName: "Japan Trade"
-      },
-      {
-        cubeName: "trade_s_chl_m_hs",
-        fullName: "Chile Trade"
-      },
-      {
-        cubeName: "trade_s_rus_m_hs",
-        fullName: "Brazil Trade"
-      },
-      {
-        cubeName: "trade_s_zaf_m_hs",
-        fullName: "South Africa Trade"
-      }
+      {cubeName: "trade_s_bra_mun_m_hs",      fullName: "Brazil Trade"},
+      {cubeName: "trade_s_chn_m_hs",          fullName: "China Trade"},
+      {cubeName: "trade_s_can_m_hs",          fullName: "Canada Trade"},
+      {cubeName: "trade_s_chl_m_hs",          fullName: "Chile Trade"},
+      {cubeName: "trade_s_deu_m_egw",         fullName: "Germany Trade"},
+      {cubeName: "trade_s_jpn_m_hs",          fullName: "Japan Trade"},
+      {cubeName: "trade_s_rus_m_hs",          fullName: "Russia Trade"},
+      {cubeName: "trade_s_zaf_m_hs",          fullName: "South Africa Trade"},
+      {cubeName: "trade_s_esp_m_hs",          fullName: "Spain Trade"},
+      {cubeName: "trade_s_swe_m_hs",          fullName: "Sweden Trade"},
+      {cubeName: "trade_s_tur_m_hs",          fullName: "Turkey Trade"},
+      {cubeName: "trade_s_usa_district_m_hs", fullName: "United States Trade"},
+      {cubeName: "trade_s_ury_a_hs",          fullName: "Uruguay Trade"}
     ]
   }
 };
-
-
-/*
-{
-  cubeName: "patents_s_usa_w_cpc",
-  fullName: "t"
-  grouping:
-},
-{
-  cubeName: "patents_i_uspto_w_cpc",
-  fullName: "t"
-  grouping:
-},
-{
-  cubeName: "patents_i_uspto_w_organizations",
-  fullName: "t"
-  grouping:
-},
-*/
 
 
 const catcher = e => {
