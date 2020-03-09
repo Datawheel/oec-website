@@ -212,7 +212,7 @@
   top: var(--nav-height);
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 0;
   /* sizing */
   width: 100%;
   height: var(--subnav-height);
