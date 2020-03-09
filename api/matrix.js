@@ -59,18 +59,18 @@ const catcher = e => {
 const dateFormat = d => {
   d = String(d);
   if (d.length === 4) {
-    return timeFormat("%Y")(new Date(d));
+    return timeFormat("%Y")(new Date(`01/01/${d}`));
   }
   else if (d.length === 6) {
     const year = d.substr(0, 4);
     const month = d.substr(4, 2);
-    return timeFormat("%b %Y")(new Date(year, month));
+    return timeFormat("%b %Y")(new Date(`${month}/01/${year}`));
   }
   else if (d.length === 8) {
     const year = d.substr(0, 4);
     const month = d.substr(4, 2);
     const day = d.substr(6, 2);
-    return timeFormat("%b %d %Y")(new Date(year, month, day));
+    return timeFormat("%b %d %Y")(new Date(`${month}/${day}/${year}`));
   }
   else {
     return d;
