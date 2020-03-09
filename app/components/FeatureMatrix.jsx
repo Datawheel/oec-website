@@ -103,7 +103,6 @@ export default class FeatureMatrix extends Component {
     return (
       <div className="feature-matrix">
         <table>
-
           <thead>
             <tr>
               <th></th>
