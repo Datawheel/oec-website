@@ -1,0 +1,39 @@
+@import "helpers/mixins.css";
+
+.data-matrix {
+  & .data-matrix-group-title {
+    margin-top: var(--gutter-lg);
+    text-align: center;
+  }
+  & .data-matrix-table {
+    border: 1px solid var(--dark-2);
+    border-collapse: collapse;
+    margin-bottom: var(--gutter-md);
+    width: 100%;
+    & tr {
+      display: flex;
+      & td, & th {
+        display: table-cell;
+        flex: 1;
+        padding: 6px 8px 7px;
+        text-align: left;
+        vertical-align: middle;
+      }
+    }
+    & thead {
+      & tr {
+        background: var(--dark-2);
+      }
+      & .data-matrix-table-title {
+        @mixin font-md;
+        color: var(--dark-1);
+        text-transform: uppercase;
+      }
+    }
+    & tbody {
+      & tr:nth-child(even) {
+        background: var(--dark-3);
+      }
+    }
+  }
+}
