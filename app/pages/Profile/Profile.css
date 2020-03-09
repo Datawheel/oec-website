@@ -283,6 +283,13 @@
   }
 }
 
+.bp3-dialog.options-dialog {
+  background: var(--dark-3) !important;
+  & .clipboard-input {
+    background: var(--light-3);
+  }
+}
+
 /* TODO: delete when these lines are added to canon */
 .cp-button-group > .cp-button:hover, .cp-button-group > .cp-button:focus { border-color: var(--button-hover-border-color); }
 .cp-button > .cp-button-icon { vertical-align: middle; position: relative; }
