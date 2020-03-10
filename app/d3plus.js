@@ -405,7 +405,10 @@ export default {
     "text-transform": "uppercase"
   },
   totalFormat(d) {
-    if (this._filteredData && this._filteredData[0] && this._filteredData[0]["Trade Value"]) {
+    if (
+      this._filteredData &&
+      this._filteredData[0] &&
+      (this._filteredData[0]["Trade Value"] || this._filteredData[0]["Service Value"])) {
       return `Total: $${formatAbbreviate(d)}`;
     }
     return `Total: ${formatAbbreviate(d)}`;
