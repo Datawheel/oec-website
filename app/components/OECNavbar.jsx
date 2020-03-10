@@ -73,8 +73,7 @@ class OECNavbar extends Component {
         <Link className="navbar-logo-link" to="/">
           <img
             className="navbar-logo-img"
-            src="/images/oec-logo.png"
-            srcSet="/images/oec-logo.svg"
+            src="/images/oec-logo.svg"
             alt="Observatory of Economic Complexity"
             draggable="false"
           />
