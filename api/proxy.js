@@ -74,7 +74,7 @@ module.exports = function(app) {
     );
 
     const origin = `http${ req.connection.encrypted ? "s" : "" }://${ req.headers.host }`;
-    const baseURL = url.resolve(origin, "/olap-proxy/");
+    const baseURL = `${origin}/olap-proxy/`;
 
     const config = {
       url: baseURL,
