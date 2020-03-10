@@ -21,7 +21,7 @@ class Prediction extends React.Component {
 
   constructor(props) {
     super();
-    const parsedQueryString = queryString.parse(props.router.location.search, {arrayFormat: "comma"});
+    // const parsedQueryString = queryString.parse(props.router.location.search, {arrayFormat: "comma"});
     this.state = {
       activeTabId: null,
       advParams: [{
@@ -30,8 +30,8 @@ class Prediction extends React.Component {
         seasonalityMode: "multiplicative"
       }],
       currentDrilldown: null,
-      dataset: parsedQueryString.dataset
-        ? PREDICTION_DATASETS.find(d => d.slug === parsedQueryString.dataset) || PREDICTION_DATASETS[0]
+      dataset: props.params.dataset
+        ? PREDICTION_DATASETS.find(d => d.slug === props.params.dataset) || PREDICTION_DATASETS[0]
         : PREDICTION_DATASETS[0],
       datasetSelections: [],
       datatableOpen: false,
@@ -45,6 +45,14 @@ class Prediction extends React.Component {
       scrolled: false,
       updateKey: null
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const newDatasetSlug = this.props.params.dataset;
+    if (prevState.dataset.slug !== newDatasetSlug) {
+      const newDataset = PREDICTION_DATASETS.find(d => d.slug === newDataset) || PREDICTION_DATASETS[0];
+      this.setState({dataset: newDataset});
+    }
   }
 
   componentDidMount() {
@@ -287,7 +295,7 @@ class Prediction extends React.Component {
       <div className="welcome">
         {/* spinning orb thing */}
         <div className="welcome-bg">
-          <img className="welcome-bg-img" src="/images/stars.png" alt="" draggable="false" />
+          <img className="welcome-bg-img" src="/images/home/stars.png" alt="" draggable="false" />
         </div>
 
         {/* entity selection form */}
@@ -301,7 +309,7 @@ class Prediction extends React.Component {
               <Navbar.Divider />
               {PREDICTION_DATASETS.map(dset =>
                 <AnchorButton
-                  href={`?dataset=${dset.slug}`}
+                  href={`${dset.slug}`}
                   key={dset.slug}
                   active={dataset.slug === dset.slug}
                   className="bp3-minimal"
