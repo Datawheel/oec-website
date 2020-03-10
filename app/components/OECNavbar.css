@@ -49,7 +49,7 @@
   top: -2px;
 
   /* position below main navbar on small screens */
-  @mixin max-lg {
+  @mixin max-md {
     position: absolute;
     width: 100%;
     min-height: var(--nav-height);
@@ -86,7 +86,7 @@
   }
 
   /* space out evenly on medium screens */
-  @mixin max-lg {
+  @mixin max-md {
     justify-content: space-between;
   }
 }
@@ -106,7 +106,7 @@
 }
 .navbar-nav-toggle-button {
   /* move menu toggle button to the left on small screens */
-  @mixin max-lg {
+  @mixin max-md {
     order: -1;
   }
 

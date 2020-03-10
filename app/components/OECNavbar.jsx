@@ -89,7 +89,7 @@ class OECNavbar extends Component {
 
         {/* nav */}
         <button
-          className={`navbar-toggle-button navbar-nav-toggle-button display u-font-md u-hide-above-lg ${navVisible ? "is-active" : "is-inactive"}`}
+          className={`navbar-toggle-button navbar-nav-toggle-button display u-font-md u-hide-above-md ${navVisible ? "is-active" : "is-inactive"}`}
           onClick={() => this.setState({navVisible: !navVisible})}
         >
           <span className="u-visually-hidden">Menu</span>

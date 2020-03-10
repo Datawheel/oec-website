@@ -10,74 +10,35 @@ module.exports = {
   DEFAULT_PREDICTION_COLOR,
   NAV: [
     // profiles
-    {title: "Profiles", items: [
-      {title: "Location", items: [
-        {title: "Country",            url: `/${locale}/profile/country/`},
-        {title: "Subnational",        url: `/${locale}/subnational/`, pro: true},
-        {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`, pro: true}
-      ]},
-      {title: "Product", items: [
-        {title: "Product",            url: `/${locale}/profile/hs92/`},
-        {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`, pro: true}
-      ]},
-      {title: "Research", items: [
-        {title: "Technology",         url: `/${locale}/profile/technology`},
-        {title: "Firm",               url: `/${locale}/profile/firm`}
-      ]}
-    ]},
-    {title: "Subnational", pro: true, items: [
-      {title: "Brazil",         icon: "🇧🇷", url: `/${locale}/subnational/#subnational-country-block-bra`},
-      {title: "Bolivia",        icon: "🇧🇴", url: `/${locale}/subnational/#subnational-country-block-bol`},
-      {title: "Canada",         icon: "🇨🇦", url: `/${locale}/subnational/#subnational-country-block-can`},
-      {title: "Chile",          icon: "🇨🇱", url: `/${locale}/subnational/#subnational-country-block-chl`},
-      {title: "China",          icon: "🇨🇳", url: `/${locale}/subnational/#subnational-country-block-chn`},
-      {title: "Colombia",       icon: "🇨🇴", url: `/${locale}/subnational/#subnational-country-block-col`},
-      {title: "France",         icon: "🇫🇷", url: `/${locale}/subnational/#subnational-country-block-fra`},
-      {title: "Germany",        icon: "🇩🇪", url: `/${locale}/subnational/#subnational-country-block-deu`},
-      {title: "India",          icon: "🇮🇳", url: `/${locale}/subnational/#subnational-country-block-ind`},
-      {title: "Japan",          icon: "🇯🇵", url: `/${locale}/subnational/#subnational-country-block-jpn`},
-      {title: "Russia",         icon: "🇷🇺", url: `/${locale}/subnational/#subnational-country-block-rus`},
-      {title: "South Africa",   icon: "🇿🇦", url: `/${locale}/subnational/#subnational-country-block-zaf`},
-      {title: "Spain",          icon: "🇪🇸", url: `/${locale}/subnational/#subnational-country-block-esp`},
-      {title: "Turkey",         icon: "🇹🇷", url: `/${locale}/subnational/#subnational-country-block-tur`},
-      {title: "United Kingdom", icon: "🇬🇧", url: `/${locale}/subnational/#subnational-country-block-gbr`},
-      {title: "United States",  icon: "🇺🇸", url: `/${locale}/subnational/#subnational-country-block-usa`},
-      {title: "Uruguay",        icon: "🇺🇾", url: `/${locale}/subnational/#subnational-country-block-ury`}
-    ]},
-    // viz builder
-    {title: "Viz Builder", items: [
-      {title: "Tree map",     url: `/${locale}/visualize/tree_map/hs92/export/deu/all/show/2017/`, icon: "visualizations/tree-map"},
-      {title: "Stacked area", url: `/${locale}/visualize/stacked/hs92/export/pry/all/show/1995.2017/`, icon: "visualizations/stacked"},
-      {title: "Line chart",   url: `/${locale}/visualize/line/hs92/export/pry/all/show/1995.2017/`, icon: "visualizations/line"},
-      {title: "Network",      url: `/${locale}/visualize/network/hs92/export/deu/all/show/2017/`, icon: "visualizations/network"},
-      {title: "Ring",         url: `/${locale}/visualize/rings/hs92/export/deu/all/show/2017/`, icon: "visualizations/ring"},
-      {title: "Scatter plot", url: `/${locale}/visualize/scatter/hs92/OEC.ECI/NY.GDP.MKTP.CD/all/all/2012/`, icon: "visualizations/scatter"},
-      {title: "Geo map",      url: `/${locale}/visualize/geomap/hs92/export/show/all/10101/2017/`, icon: "visualizations/geo-map"}
+    {title: "Reports", items: [
+      {title: "Countries",          url: `/${locale}/profile/country/`},
+      {title: "Products",           url: `/${locale}/profile/hs92/`},
+      {title: "States/Provinces",   url: `/${locale}/subnational/`, pro: true},
+      {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`, pro: true},
+      {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`, pro: true}
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Country Rankings", url: `/${locale}/rankings/country/eci/`},
-      {title: "Product Rankings", url: `/${locale}/rankings/product/hs92/`}
+      {title: "Countries", url: `/${locale}/rankings/country/eci/`},
+      {title: "Products",  url: `/${locale}/rankings/product/hs92/`}
     ]},
-    // predictions
-    {title: "Predictions", items: [
-      {title: "World Trade Predictions (annual)",    icon: "🌐",  url: `/${locale}/prediction?dataset=trade-annual`},
-      {title: "World Trade Predictions (monthly)",   icon: "🌐",  url: `/${locale}/prediction?dataset=trade-monthly`, pro: true},
-      {title: "Canada Subnational Predictions",      icon: "🇨🇦", url: `/${locale}/prediction?dataset=subnat-can`, pro: true},
-      {title: "Germany Subnational Predictions",     icon: "🇩🇪", url: `/${locale}/prediction?dataset=subnat-deu`, pro: true},
-      {title: "Japan Subnational Predictions",       icon: "🇯🇵", url: `/${locale}/prediction?dataset=subnat-jpn`, pro: true},
-      {title: "Russia Subnational Predictions",      icon: "🇷🇺", url: `/${locale}/prediction?dataset=subnat-rus`, pro: true},
-      {title: "Spain Subnational Predictions",       icon: "🇪🇸", url: `/${locale}/prediction?dataset=subnat-esp`, pro: true}
+    // tools
+    {title: "Tools", items: [
+      {title: "Predictions",     url: `/${locale}/prediction?dataset=trade-annual`},
+      {title: "Tariff Explorer", url: `/${locale}/tariffs/?destinations=xxwld`},
+      {title: "Visualizations",  url: `/${locale}/visualize/tree_map/hs92/export/deu/all/show/2017/`},
+      {title: "Data Download",   url: `/${locale}/resources/data/`},
+      {title: "API",             url: `/${locale}/resources/api`}
+    ]},
+    // academy
+    {title: "Academy", items: [
+      {title: "Methodology",  url: `/${locale}/resources/methodology`},
+      {title: "FAQs",         url: `/${locale}/resources/faq`},
+      {title: "Publications", url: `/${locale}/resources/publications`}
     ]},
     // about
-    {title: "Resources", items: [
-      {title: "Tariff Explorer", url: `/${locale}/tariffs/?destinations=xxwld`},
+    {title: "About", items: [
       {title: "About the OEC",  url: `/${locale}/resources/about`},
-      {title: "Methodology",    url: `/${locale}/resources/methodology`},
-      {title: "FAQs",           url: `/${locale}/resources/faq`},
-      {title: "Publications",   url: `/${locale}/resources/publications`},
-      {title: "Data Sources",   url: `/${locale}/resources/data/`},
-      {title: "API",            url: `/${locale}/resources/api`},
       {title: "Permissions",    url: `/${locale}/resources/permissions`},
       {title: "Privacy Policy", url: `/${locale}/resources/privacy`},
       {title: "Terms",          url: `/${locale}/resources/terms`}

@@ -209,6 +209,7 @@
           grid-column: auto / span 2;
           grid-row: auto / span 2;
           height: calc(300px + var(--gutter-md));
+          & .cms-profilesearch-tile-link,
           & .cms-profilesearch-tile-image-container {
             height: calc(300px + var(--gutter-md));
           }
