@@ -369,11 +369,12 @@ export default {
     background: "#282f37",
     border: "1px solid #66737e",
     footerStyle: {
-      "color": "#666",
+      "color": style["light-2"],
       "fontFamily": () => "'Source Sans Pro', sans-serif",
       "font-size": "12px",
-      "font-weight": "300",
-      "padding-top": "5px",
+      "font-weight": "600",
+      "padding-bottom": "5px",
+      "padding-top": "0",
       "text-align": "center"
     },
     padding: "0px",
