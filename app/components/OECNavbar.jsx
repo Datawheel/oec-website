@@ -59,7 +59,9 @@ class OECNavbar extends Component {
 
     // focus the search input
     if (!searchVisible) {
-      document.querySelector(".navbar-search .cp-input").focus();
+      setTimeout(() => {
+        document.querySelector(".navbar-search .cp-input").focus();
+      }, 300);
     }
   }
 
