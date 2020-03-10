@@ -73,7 +73,7 @@ module.exports = function(app) {
       {expiresIn: "5y"}
     );
 
-    const origin = `http${ req.connection.encrypted ? "s" : "" }://${ req.headers.host }`;
+    const origin = `${ req.protocol }://${ req.headers.host }`;
     const baseURL = `${origin}/olap-proxy/`;
 
     const config = {
