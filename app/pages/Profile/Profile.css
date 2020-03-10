@@ -261,6 +261,9 @@
     border-color: inherit;
   }
 }
+.cp-select option {
+  color: var(--dark-4);
+}
 
 /* adjust viz options style */
 .cp-viz-container .cp-button-group > .cp-button {
