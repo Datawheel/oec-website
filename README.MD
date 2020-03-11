@@ -22,7 +22,13 @@ This also applies to all URLs that hit a `/stats` endpoint. For example:
 #### Correct URL ✅
 `/api/stats/relatedness?cube=trade_i_baci_a_92&filter_hs92=010101&time=year.latest&measures=Trade+Value&rca=Exporter+Country,Trade+Value`
 
-By starting URLs with a forward slash `/`, all CMS and client (d3plus) requests will be routed to localhost.
+By starting URLs with a forward slash `/`, all CMS and client (d3plus) requests will be routed to localhost. This also applies to all manually constructed anchor links. For example:
+
+#### Incorrect URL ❌
+`<a href="https://dev.oec.world/en/profile/country/usa">United States</a>`
+
+#### Correct URL ✅
+`<a href="/en/profile/country/usa">United States</a>`
 
 ## Subnational Data
 
