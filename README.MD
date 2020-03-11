@@ -14,6 +14,16 @@ All generator and visualization URLs should never contain the hostname of the se
 
 All data calls need to be routed through the `/olap-proxy` endpoint, which handles redirecting to the correct Tesseract endpoint. It also authenticates the request, so that PRO users receive data from cubes that are not open publically.
 
+This also applies to all URLs that hit a `/stats` endpoint. For example:
+
+#### Incorrect URL ❌
+`https://dev.oec.world/api/stats/relatedness?cube=trade_i_baci_a_92&filter_hs92=010101&time=year.latest&measures=Trade+Value&rca=Exporter+Country,Trade+Value`
+
+#### Correct URL ✅
+`/api/stats/relatedness?cube=trade_i_baci_a_92&filter_hs92=010101&time=year.latest&measures=Trade+Value&rca=Exporter+Country,Trade+Value`
+
+By starting URLs with a forward slash `/`, all CMS and client (d3plus) requests will be routed to localhost.
+
 ## Subnational Data
 
 ### How to add a new subnational map to `/subnational` section?
