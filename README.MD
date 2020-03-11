@@ -4,7 +4,7 @@
 
 ### Data URLs
 
-All generator and visualization URLs should never contain the hostname of the server, unless it is going to an external non-OEC source. For example:
+All generator and visualization URLs should never contain the hostname of the server, unless it is going to an external non-OEC source (like Macro Market). For example:
 
 #### Incorrect URL ❌
 `https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value`
