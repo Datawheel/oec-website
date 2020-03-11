@@ -1,10 +1,20 @@
 # OEC Canon Website
 
-...
+## CMS Best Practices
+
+### Data URLs
+
+All generator and visualization URLs should never contain the hostname of the server, unless it is going to an external non-OEC source. For example:
+
+#### Incorrect URL ❌
+`https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value`
+
+#### Correct URL ✅
+`/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value`
+
+All data calls need to be routed through the `/olap-proxy` endpoint, which handles redirecting to the correct Tesseract endpoint. It also authenticates the request, so that PRO users receive data from cubes that are not open publically.
 
 ## Subnational Data
-
-...
 
 ### How to add a new subnational map to `/subnational` section?
 - Requirement: Country data must be ingested.
