@@ -155,7 +155,7 @@ class Prediction extends React.Component {
     const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
     queryArgs[selectionId] = newItems.map(d => d.id);
     const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
-    router.replace(`/en/prediction/?${stringifiedQueryArgs}`);
+    router.replace(`/en/prediction/${dataset.slug}?${stringifiedQueryArgs}`);
     this.setState({advParams, currentDrilldown, dataset});
   };
 
@@ -269,7 +269,7 @@ class Prediction extends React.Component {
     queryArgs.drilldown = newDrilldown;
     if (newDrilldown === null) delete queryArgs.drilldown;
     const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
-    router.replace(`/en/prediction/?${stringifiedQueryArgs}`);
+    router.replace(`/en/prediction/${dataset.slug}?${stringifiedQueryArgs}`);
   };
 
   handleControlTabChange = newTabId => this.setState({activeTabId: newTabId})
