@@ -49,6 +49,9 @@
         max-width: 500px;
         & .cp-input {
           background: var(--dark-4);
+          &::placeholder {
+            color: var(--dark-1);
+          }
         }
         & .cms-profilesearch-container {
           margin: 0 var(--gutter-md) 0;

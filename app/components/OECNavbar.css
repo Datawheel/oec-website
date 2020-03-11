@@ -192,6 +192,11 @@
   & .cms-profilesearch {
     height: 100vh;
     padding: var(--gutter-xl) var(--gutter-lg) 0;
+    & .cp-input {
+      &::placeholder {
+        color: var(--dark-1);
+      }
+    }
     & .cms-profilecolumn-title {
       background: var(--dark-4);
       margin-top: var(--gutter-sm);
