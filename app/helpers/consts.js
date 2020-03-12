@@ -203,6 +203,15 @@ module.exports = {
         {name: "Regions", level: "Region", slug: "regions", ignoreIdsList: ["24"]},
         {name: "Departments", level: "Subnat Geography", slug: "departments"}
       ]
+    },
+    {
+      name: "Bolivia",
+      code: "bol",
+      cube: "trade_s_bol_m_sitc3",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Departments", level: "Subnat Geography", slug: "departments"}
+      ]
     }
     // TODO: CHL, ECU
     // TBD: SWE -> no units, ignore it.
