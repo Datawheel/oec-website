@@ -323,6 +323,18 @@
   color: var(--dark-4);
 }
 
+.cp-button.internal-link {
+  background: var(--accent-dark);
+  border: 0;
+  color: var(--white);
+  width: 100%;
+  &:hover, &:focus {
+    background: var(--accent);
+    color: var(--white);
+    text-decoration: none;
+  }
+}
+
 /* adjust viz options style */
 .cp-viz-container .cp-button-group > .cp-button {
   padding-left: 0.75em;
