@@ -289,6 +289,7 @@
   font-weight: 800;
   & .cp-select-text {
     min-width: 40px;
+    flex: 1 0 auto;
   }
 }
 .cp-button-group {
