@@ -3,6 +3,17 @@ import {Plot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 import {timeFormat, timeParse} from "d3-time-format";
 import {Button} from "@blueprintjs/core";
+import {colorLighter} from "d3plus-color";
+
+const getUniqColor = (color, id, colorsLookup) => {
+  if (Object.values(colorsLookup).includes(color)) {
+    color = colorLighter(color, 0.2);
+    color = getUniqColor(color, id, colorsLookup);
+  }
+  else {
+    colorsLookup[id] = color;
+  }
+};
 
 class PredictionViz extends React.Component {
   constructor(props) {
@@ -19,15 +30,30 @@ class PredictionViz extends React.Component {
   toggleVizShowOptions = stateKey => () => this.setState({[stateKey]: !this.state[stateKey]})
 
   render() {
-    const {data, currencyFormat, error, loading, updateKey} = this.props;
+    const {data, drilldownSelections, currencyFormat, error, loading, updateKey} = this.props;
     const {showObserved, showPrediction, showTrend} = this.state;
-    const actualPoints = showObserved ? data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `${d.Drilldown.name} (Observed)`, color: d.Drilldown.color, shape: "Circle"})) : [];
-    const trendLine = showTrend ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Trend)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.trend, "yhat_upper": d.trend, "yhat_lower": d.trend})) : [];
-    // const actualLine = data.map(d => ({...d, Title: "Actual Line", shape: "Line"}));
-    const predictionLine = showPrediction ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Predicted)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat})) : [];
+
+    // need to figure out if there are color overlaps!
+    const colorsLookup = {};
+    if (drilldownSelections) {
+      drilldownSelections.forEach(d => {
+        getUniqColor(d.color, d.id, colorsLookup);
+      });
+      console.log("colorsLookup!!!!", colorsLookup);
+    }
+
+    const actualPoints = showObserved
+      ? data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `${d.Drilldown.name} (Observed)`, color: colorsLookup[d.Drilldown.id] || d.Drilldown.color, shape: "Circle"}))
+      : [];
+    const trendLine = showTrend
+      ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Trend)`, "color": colorsLookup[d.Drilldown.id] || d.Drilldown.color, "shape": "Line", "Trade Value": d.trend, "yhat_upper": d.trend, "yhat_lower": d.trend}))
+      : [];
+    const predictionLine = showPrediction
+      ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Predicted)`, "color": colorsLookup[d.Drilldown.id] || d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat}))
+      : [];
 
     const combinedData = actualPoints.concat(predictionLine).concat(trendLine);
-    // console.log("combinedData!", combinedData);
+    console.log("drilldownSelections!", drilldownSelections);
 
     return <div className="prediction-viz">
       {loading ? <div className="prediction-overlay prediction-loading">Loading...</div> : null}
@@ -47,7 +73,24 @@ class PredictionViz extends React.Component {
           dataKey: updateKey,
           discrete: "x",
           groupBy: "Title",
-          legend: false,
+          legend: true,
+          legendConfig: {
+            shapeConfig: {
+              backgroundImage: false,
+              labelConfig: {
+                fontSize: () => 16,
+                fontColor: () => "#CFDAE2"
+              },
+              fontColor: () => "#CFDAE2"
+            },
+            label: d => d.Drilldown.name
+          },
+          legendSort: (a, b) => {
+            const aItem = a.Drilldown ? `${a.Drilldown.id}` : "";
+            const bItem = b.Drilldown ? `${b.Drilldown.id}` : "";
+            console.log(aItem, bItem);
+            return aItem.localeCompare(bItem, "en", {sensitivity: "base"});
+          },
           height: 700,
           shape: d => d.shape,
           shapeConfig: {

@@ -286,6 +286,8 @@ class Prediction extends React.Component {
     const {activeTabId, currentDrilldown, dataset, datatableOpen,
       drilldowns, error, loading, predictionData, scrolled, updateKey} = this.state;
 
+    const drillSelection = dataset.toggles ? dataset.toggles.concat(dataset.selections).find(s => s.id === currentDrilldown) : dataset.selections.find(s => s.id === currentDrilldown);
+
     return <div className="prediction" onScroll={this.handleScroll}>
       <OECNavbar
         className={scrolled ? "background" : ""}
@@ -350,6 +352,7 @@ class Prediction extends React.Component {
           <div className="prediction-viz-container">
             <PredictionViz
               data={predictionData}
+              drilldownSelections={drillSelection ? drillSelection.selected : null}
               error={error}
               loading={loading}
               updateKey={updateKey}
