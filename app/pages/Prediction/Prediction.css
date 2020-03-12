@@ -8,8 +8,11 @@
   & .prediction-about-l {
     margin: 0 35px;
     max-width: 350px;
-    padding-top: 75px;
     width: calc(100% - 70px);
+    & p {
+      font-size: 16px;
+      line-height: 23px;
+    }
   }
   & .prediction-about-r {
     & ul {
@@ -21,13 +24,36 @@
         margin: 10px;
         border: 1px solid var(--dark-1);
         height: 150px;
-        padding: 10px;
-        width: 150px;
+        overflow: hidden;
         position: relative;
+        width: 150px;
         z-index: 1;
+
         & a {
           color: var(--light-2);
-          display: block;
+          display: flex;
+          flex-wrap: wrap;
+          height: 100%;
+          padding: 5px;
+          text-align: center;
+          width: 100%;
+          &:hover {
+            text-decoration: none;
+          }
+
+          & .prediction-title {
+            align-self: flex-end;
+            display: block;
+            flex: 1 0 100%;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 2px 0;
+          }
+          & .prediction-subtitle {
+            display: block;
+            flex: 1 0 100%;
+            font-size: 13px;
+          }
         }
         & .prediction-bg {
           background-image: url('/images/predictions/prediction-placeholder.png');
@@ -41,8 +67,14 @@
           right: 0;
           position: absolute;
           opacity: .4;
+          transition: all .5s;
           width: 100%;
           z-index: -1;
+        }
+        &:hover {
+          & .prediction-bg {
+            transform: scale(1.2);
+          }
         }
       }
     }
