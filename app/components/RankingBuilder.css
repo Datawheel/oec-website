@@ -25,13 +25,18 @@
 
     & h3 {
       margin: 0;
+      margin-top: var(--gutter-md);
+      margin-bottom: var(--gutter-sm);
+    }
+
+    & h3.first {
       margin-top: var(--gutter-sm);
-      margin-bottom: var(--gutter-md);
     }
 
     & .switch {
       display: flex;
       align-items: center;
+      margin-top: var(--gutter-md);
 
       & span {
         font-size: var(--font-sm);
@@ -53,6 +58,11 @@
         background: #106ba3 !important;
       }
     }
+
+    & .bp3-slider {
+      margin-top: var(--gutter-lg);
+      margin-bottom: var(--gutter-md);
+    }
   }
 
   & .setting.last {
@@ -70,7 +80,7 @@
       width: 100%;
 
       & .bp3-button {
-        width: 33%;
+        width: 33.3%;
         color: var(--white);
         background: rgba(33, 40, 49, 0.5);
       }
@@ -89,5 +99,6 @@
 
   & .bp3-html-select {
     width: 99%;
+    margin-top: var(--gutter-sm);
   }
 }

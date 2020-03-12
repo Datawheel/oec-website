@@ -34,8 +34,10 @@ class Rankings extends Component {
 		this.state = {
 			catValue: 'country',
 			subnationalValue: false,
+			subnationalCountry: 'Brazil',
 			depthValue: 'HS4',
 			revValue: 'HS92',
+			multiYear: false,
 			initialYear: { HS92: 1995, HS96: 1998, HS02: 2003, HS07: 2008, HS12: 2012 },
 			yearValue: 2017,
 			yearRange: [ 2013, 2017 ],
@@ -47,6 +49,9 @@ class Rankings extends Component {
 			_yearSelection: 'single'
 		};
 		this.handleValueChange = this.handleValueChange.bind(this);
+		this.getChangeHandler = this.getChangeHandler.bind(this);
+		this.getChangeHandler = this.getChangeHandler.bind(this);
+		this.recalculateData = this.recalculateData.bind(this);
 	}
 
 	createColumns(type, array) {
@@ -165,7 +170,9 @@ class Rankings extends Component {
 		const {
 			catValue,
 			depthValue,
+			subnationalCountry,
 			revValue,
+			multiYear,
 			yearValue,
 			yearRange,
 			countryExpThreshold,
@@ -226,8 +233,10 @@ class Rankings extends Component {
 		const {
 			catValue,
 			subnationalValue,
+			subnationalCountry,
 			depthValue,
 			revValue,
+			multiYear,
 			initialYear,
 			yearValue,
 			yearRange,
@@ -261,14 +270,27 @@ class Rankings extends Component {
 			'Uruguay'
 		];
 		console.log(
+			'Country?',
 			catValue,
+			'Subnational?',
+			subnationalValue,
+			'Subnational Country:',
+			subnationalCountry,
+			'Product Depth',
 			depthValue,
+			'Revision',
 			revValue,
+			'Multiyear?',
+			multiYear,
+			'Year(s) Selected',
+			multiYear ? yearRange : yearValue,
+			'Year',
 			initialYear[revValue],
-			_yearSelection === 'single' ? yearValue : yearRange,
-			countryExpThreshold
+			'Country Threshold',
+			countryExpThreshold,
+			'Product Threshold',
+			productExpThreshold
 		);
-		console.log('aqui', subnationalValue);
 		return (
 			<div className="rankings-page">
 				<OECNavbar />
@@ -316,6 +338,23 @@ class Rankings extends Component {
 						</p>
 						<p>This page includes rankings using the Economic Complexity Index (ECI).</p>
 					</div>
+
+					<RankingBuilder
+						variables={{
+							catValue,
+							subnationalValue,
+							depthValue,
+							countryExpThreshold,
+							productExpThreshold,
+							initialYear,
+							revValue,
+							yearValue
+						}}
+						handleValueChange={this.handleValueChange}
+						renderExportThresholdLabel={this.renderExportThresholdLabel}
+						getChangeHandler={this.getChangeHandler}
+						recalculateData={this.recalculateData}
+					/>
 
 					<div className="settings">
 						<div className="button-settings">
@@ -437,13 +476,7 @@ class Rankings extends Component {
 						</div>
 					</div>
 
-          <RankingBuilder
-						variables={{catValue, subnationalValue, depthValue}}
-						handleValueChange={this.handleValueChange}
-					/>
-
 					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} />}
-
 				</div>
 				<Footer />
 			</div>
