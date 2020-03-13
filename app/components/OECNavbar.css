@@ -197,6 +197,9 @@
         color: var(--dark-1);
       }
     }
+    & .cms-profilecolumn {
+      flex: 1 0 calc(20% - var(--gutter-lg));
+    }
     & .cms-profilecolumn-title {
       background: var(--dark-4);
       margin-top: var(--gutter-sm);
