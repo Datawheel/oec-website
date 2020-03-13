@@ -1,11 +1,9 @@
-/*
 const axios = require("axios"),
       jwt = require("jsonwebtoken");
 const {OLAP_PROXY_ENDPOINT, OLAP_PROXY_SECRET} = process.env;
-*/
+
 module.exports = async function() {
 
-  /*
   const apiToken = jwt.sign(
     {
       auth_level: 10,
@@ -72,5 +70,4 @@ module.exports = async function() {
     };
   }
   return output;
-  */
 };

@@ -28,6 +28,7 @@ module.exports = function(app) {
     const queryString = url.parse(req.url).query;
     const fullURL = queryString ? `${baseURL}?${queryString}` : baseURL;
     const {user} = req;
+    console.log(user);
 
     let apiToken = req.headers["x-tesseract-jwt-token"];
     if (!apiToken) {
