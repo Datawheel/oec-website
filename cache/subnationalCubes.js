@@ -31,7 +31,6 @@ module.exports = async function() {
     const isTime = timeLevels.some(d => d === "Time");
     const timeLevel = ["Month", "Quarter", "Year"].find(d => timeLevels.includes(d));
 
-
     const fullDataURL = `${OLAP_PROXY_ENDPOINT}data?cube=${d.name}&drilldowns=${isTime ? "Time" : "Year"}&measures=Trade+Value`;
     let x = [];
     try {
@@ -55,7 +54,6 @@ module.exports = async function() {
 
     const latestYear = latestMonth < timeLag
       ? currYear - 1 : currYear;
-
 
     output[d.name] = {
       latestYear,

@@ -90,7 +90,6 @@ class VbDrawer extends React.Component {
     const isProductPermalink = new RegExp(/^(?!(all|show)).*$/).test(viztype);
     const isTradeBalance = flow === "show";
     const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
-    console.log(isProductPermalink);
 
     const isGeoSelected = relatedItems["Continent ID"];
     const profileId = isGeoSelected ? titleId.slice(2, 5) : titleId;
