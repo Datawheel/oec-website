@@ -9,18 +9,19 @@ import './RankingBuilder.css';
 class RankingsBuilder extends Component {
 	render() {
 		const {
-			catValue,
-			subnationalValue,
-			depthValue,
+			country,
+			subnational,
+			productDepth,
 			countryExpThreshold,
 			productExpThreshold,
-			revValue,
+			productRevision,
 			initialYear,
 			yearValue
 		} = this.props.variables;
 		const { handleValueChange, renderExportThresholdLabel, getChangeHandler, recalculateData } = this.props;
 		const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
-		const REVISION_OPTIONS = [ 'HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012' ];
+		const REVISION_OPTIONS_SITC = [ 'Tier 1 Product', 'Tier 2 Product', 'Tier 3 Product', 'Tier 4 Product' ];
+		const REVISION_OPTIONS_HS = [ 'HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012' ];
 		const FILTER_OPTIONS = [
 			'Brazil',
 			'Bolivia',
@@ -47,7 +48,7 @@ class RankingsBuilder extends Component {
 						<h3 className="first">Category</h3>
 						<div className="switch">
 							<span>Country</span>
-							<Switch onChange={(event) => handleValueChange('catValue', !event.currentTarget.checked)} />
+							<Switch onChange={(event) => handleValueChange('country', !event.currentTarget.checked)} />
 							<span>Product</span>
 						</div>
 					</div>
@@ -56,18 +57,15 @@ class RankingsBuilder extends Component {
 						<div className="switch">
 							<span>National</span>
 							<Switch
-								onChange={(event) => handleValueChange('subnationalValue', event.currentTarget.checked)}
+								onChange={(event) => handleValueChange('subnational', event.currentTarget.checked)}
 							/>
 							<span>Subnational</span>
 						</div>
 						<HTMLSelect
 							options={FILTER_OPTIONS}
 							onChange={(event) =>
-								handleValueChange(
-									'subnationalCountry',
-									event.currentTarget.selectedOptions[0].label
-								)}
-							disabled={subnationalValue === false ? true : false}
+								handleValueChange('subnationalValue', event.currentTarget.selectedOptions[0].label)}
+							disabled={subnational === false ? true : false}
 						/>
 					</div>
 					<div className="setting product-depth last">
@@ -76,19 +74,19 @@ class RankingsBuilder extends Component {
 							{PROD_DEPTH_OPTIONS.map((d, k) => (
 								<Button
 									key={k}
-									onClick={() => handleValueChange('depthValue', d)}
-									className={depthValue === d && 'active'}
+									onClick={() => handleValueChange('productDepth', d)}
+									className={productDepth === d && 'active'}
 								>
 									{d}
 								</Button>
 							))}
 						</ButtonGroup>
 						<HTMLSelect
-							options={REVISION_OPTIONS}
+							options={productDepth === "SITC" ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS}
 							onChange={(event) =>
 								handleValueChange(
-									'revValue',
-									event.currentTarget.selectedOptions[0].label.split(' ')[0]
+									'productRevision',
+									productDepth === "SITC" ? event.currentTarget.selectedOptions[0].label : event.currentTarget.selectedOptions[0].label.split(' ')[0]
 								)}
 						/>
 					</div>
@@ -99,25 +97,10 @@ class RankingsBuilder extends Component {
 						<div className="switch">
 							<span>Single-year</span>
 							<Switch
-								onChange={(event) => handleValueChange('multiYear', event.currentTarget.checked)}
+								onChange={(event) => handleValueChange('singleyear', !event.currentTarget.checked)}
 							/>
 							<span>Multi-year</span>
 						</div>
-						{/*
-						<div className="year-selector">
-								<ButtonGroup style={{ minWidth: 200 }}>
-								{range(initialYear[revValue], 2017).map((d, k) => (
-									<Button
-										key={k}
-										onClick={() => this.handleValueChange('yearValue', d)}
-										className={`${yearValue === d ? 'is-active' : ''}`}
-									>
-										{d}
-									</Button>
-								))}
-							</ButtonGroup>
-						</div>
-						*/}
 					</div>
 				</div>
 				<div className="section is-half">

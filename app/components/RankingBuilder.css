@@ -7,8 +7,9 @@
 	& .section {
 		margin: 0 1%;
 		border-radius: 10px;
-		background: var(--dark-2);
-		padding: var(--gutter-xs) var(--gutter-md);
+    background: var(--dark-2);
+    border: 1px solid var(--dark-1);
+    padding: var(--gutter-xs) var(--gutter-md);
   }
 
   & .section.is-quarter {
