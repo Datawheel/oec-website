@@ -1,9 +1,20 @@
 import React from "react";
-
+import {colorContrast} from "d3plus-color";
 import {Alignment, Button, Classes, Label, MenuItem, Switch} from "@blueprintjs/core";
 import {MultiSelect} from "@blueprintjs/select";
+import {Intent, Position, Toaster} from "@blueprintjs/core";
 
 import "@blueprintjs/select/lib/css/blueprint-select.css";
+
+const PredictionToaster = typeof window !== "undefined"
+  ? Toaster.create({
+    className: "prediction-toaster",
+    position: Position.TOP,
+    icon: "warning-sign",
+    maxToasts: 1,
+    intent: Intent.WARNING
+  })
+  : null;
 
 class SearchMultiSelect extends React.Component {
   constructor(props) {
@@ -50,6 +61,7 @@ class SearchMultiSelect extends React.Component {
   }
   arrayContainsItem = itemToFind => this.state.selectedItems.some(item => item.name === itemToFind.name);
   selectItems(itemsToSelect) {
+    const {isDrilldown} = this.props;
     const {selectedItems, items} = this.state;
     let nextSelectedItems = selectedItems.slice();
     const nextItems = items.slice();
@@ -57,7 +69,11 @@ class SearchMultiSelect extends React.Component {
     itemsToSelect.forEach(item => {
       nextSelectedItems = !this.arrayContainsItem(nextSelectedItems, item) ? [...nextSelectedItems, item] : nextSelectedItems;
     });
-
+    if (isDrilldown && nextSelectedItems.length > 5) {
+      this.setState({selectedItems});
+      PredictionToaster.show({message: "5 is the max numeber of drilldowns allowed."});
+      return;
+    }
     this.setState({
       selectedItems: nextSelectedItems,
       items: nextItems
@@ -93,8 +109,18 @@ class SearchMultiSelect extends React.Component {
     return text.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
+  validateDrilldown = x => {
+    const {isDrilldown, toggleDrilldown} = this.props;
+    const {selectedItems} = this.state;
+    if (!isDrilldown && selectedItems.length > 5) {
+      PredictionToaster.show({message: "5 is the max numeber of drilldowns allowed. Please remove selections and try again."});
+      return;
+    }
+    toggleDrilldown(x);
+  }
+
   render() {
-    const {disabled, isDrilldown, items, itemType, toggleDrilldown} = this.props;
+    const {disabled, isDrilldown, items, itemType} = this.props;
     return <div className="prediction-control">
       <h3>{itemType}</h3>
       <MultiSelect
@@ -116,7 +142,10 @@ class SearchMultiSelect extends React.Component {
           tagProps: d => {
             const thisItem = items.find(dd => dd.name === d);
             return {
-              style: {backgroundColor: thisItem.color}
+              style: {
+                backgroundColor: thisItem.color,
+                color: colorContrast(thisItem.color)
+              }
             };
           },
           inputProps: {
@@ -136,7 +165,7 @@ class SearchMultiSelect extends React.Component {
             checked={isDrilldown}
             labelElement={"Drilldown"}
             inline={true}
-            onChange={toggleDrilldown} />
+            onChange={this.validateDrilldown} />
         </Label>
         : null}
     </div>;
