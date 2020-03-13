@@ -203,6 +203,15 @@ module.exports = {
         {name: "Regions", level: "Region", slug: "regions", ignoreIdsList: ["24"]},
         {name: "Departments", level: "Subnat Geography", slug: "departments"}
       ]
+    },
+    {
+      name: "Bolivia",
+      code: "bol",
+      cube: "trade_s_bol_m_sitc3",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Departments", level: "Subnat Geography", slug: "departments"}
+      ]
     }
     // TODO: CHL, ECU
     // TBD: SWE -> no units, ignore it.
@@ -313,9 +322,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_can_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -350,7 +359,7 @@ module.exports = {
           dataUrl: "?cube=trade_s_deu_m_egw&Year=2017&drilldowns=Product&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["Product ID"], displayId: d["Product ID"], name: d.Product, color: DEFAULT_PREDICTION_COLOR}),
-          dimName: "HS4",
+          dimName: "Product",
           id: "products",
           name: "Product",
           selected: []
@@ -359,9 +368,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_deu_m_egw&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -405,9 +414,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_jpn_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -451,9 +460,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -497,9 +506,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],

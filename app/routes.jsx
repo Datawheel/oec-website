@@ -4,6 +4,7 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
 import Subnational from "./pages/Subnational/Subnational";
+import PredictionLanding from "./pages/Prediction/PredictionLanding";
 import Prediction from "./pages/Prediction/Prediction";
 import Tariffs from "./pages/Tariffs/Tariffs";
 
@@ -86,7 +87,8 @@ export default function RouteCreate() {
       <Route exact path="/:lang/account" component={Account} />
       <Route exact path="/:lang/subscription" component={Subscription} />
       <Route exact path="/:lang/subnational" component={Subnational} />
-      <Route exact path="/:lang/prediction" component={Prediction} />
+      <Route exact path="/:lang/prediction" component={PredictionLanding} />
+      <Route exact path="/:lang/prediction/:dataset" component={Prediction} />
       <Route exact path="/:lang/resources/:page" component={Resources} />
       <Route exact path="/:lang/tariffs" component={Tariffs} />
       <Route exact path="/:lang/rankings/:category/:measure/" component={Rankings} />

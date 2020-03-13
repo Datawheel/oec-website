@@ -47,12 +47,14 @@ function backgroundImageV2(key, d) {
     case "Organization":
       return "/images/icons/patent.png";
     case "Section":
-      return `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
+    case "EGW1":
+      return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Service":
     case "Parent Service":
       return `/images/icons/service/service_${[d[`${key} ID`]]}.png`;
     default:
-      return "/images/icons/hs/hs_22.png";
+      return "/images/icons/hs/hs_22.svg";
   }
 }
 
@@ -75,7 +77,10 @@ function backgroundImage(d, ascending) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section)) {
-      return `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
+    }
+    else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
+      return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     }
     else if ("Continent ID" in d && !Array.isArray(d.Continent)) {
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
@@ -99,7 +104,7 @@ function backgroundImage(d, ascending) {
       return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
     }
     else {
-      return "/images/icons/hs/hs_22.png";
+      return "/images/icons/hs/hs_22.svg";
     }
   }
   else {
@@ -124,14 +129,17 @@ function backgroundImage(d, ascending) {
     else if ("Continent ID" in d && !Array.isArray(d.Continent)) {
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
     }
+    else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
+      return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    }
     else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section)) {
-      return `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
     }
     else {
-      return "/images/icons/hs/hs_22.png";
+      return "/images/icons/hs/hs_22.svg";
     }
   }
 }
@@ -369,11 +377,12 @@ export default {
     background: "#282f37",
     border: "1px solid #66737e",
     footerStyle: {
-      "color": "#666",
+      "color": style["light-2"],
       "fontFamily": () => "'Source Sans Pro', sans-serif",
       "font-size": "12px",
-      "font-weight": "300",
-      "padding-top": "5px",
+      "font-weight": "600",
+      "padding-bottom": "5px",
+      "padding-top": "0",
       "text-align": "center"
     },
     padding: "0px",

@@ -1,10 +1,36 @@
 # OEC Canon Website
 
-...
+## CMS Best Practices
+
+### Data URLs
+
+All generator and visualization URLs should never contain the hostname of the server, unless it is going to an external non-OEC source (like Macro Market). For example:
+
+#### Incorrect URL ❌
+`https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value`
+
+#### Correct URL ✅
+`/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value`
+
+All data calls need to be routed through the `/olap-proxy` endpoint, which handles redirecting to the correct Tesseract endpoint. It also authenticates the request, so that PRO users receive data from cubes that are not open publically.
+
+This also applies to all URLs that hit a `/stats` endpoint. For example:
+
+#### Incorrect URL ❌
+`https://dev.oec.world/api/stats/relatedness?cube=trade_i_baci_a_92&filter_hs92=010101&time=year.latest&measures=Trade+Value&rca=Exporter+Country,Trade+Value`
+
+#### Correct URL ✅
+`/api/stats/relatedness?cube=trade_i_baci_a_92&filter_hs92=010101&time=year.latest&measures=Trade+Value&rca=Exporter+Country,Trade+Value`
+
+By starting URLs with a forward slash `/`, all CMS and client (d3plus) requests will be routed to localhost. This also applies to all manually constructed anchor links. For example:
+
+#### Incorrect URL ❌
+`<a href="https://dev.oec.world/en/profile/country/usa">United States</a>`
+
+#### Correct URL ✅
+`<a href="/en/profile/country/usa">United States</a>`
 
 ## Subnational Data
-
-...
 
 ### How to add a new subnational map to `/subnational` section?
 - Requirement: Country data must be ingested.

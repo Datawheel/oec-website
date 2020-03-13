@@ -63,7 +63,7 @@ class ToggleSelect extends React.Component {
   render() {
     const {isDrilldown, items, itemType, toggleDrilldown} = this.props;
     const {selectedItems} = this.state;
-    console.log("selectedItems!!!", selectedItems);
+
     return <div className="prediction-control">
       <h3>{itemType}</h3>
       <ButtonGroup minimal={false}>
