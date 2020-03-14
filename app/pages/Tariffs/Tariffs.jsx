@@ -67,7 +67,7 @@ class Tariffs extends React.Component {
             if (thisSelectionQParams && thisSelectionQParams.includes(`${d.id}`)) {
               if (selectionId === "products") {
                 const enrichedProduct = {...d,
-                  icon: `/images/icons/hs/hs_${d["Section ID"]}.png`,
+                  icon: `/images/icons/hs/hs_${d["Section ID"]}.svg`,
                   type: ["HS6", "HS4", "HS2", "Section"].find(dd => dd in d),
                   searchIndex: `${d.id}|${d.name}`
                 };

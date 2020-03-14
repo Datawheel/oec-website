@@ -147,7 +147,7 @@ function backgroundImage(d, ascending) {
 export const tooltipTitle = (bgColor, imgUrl, title) => {
   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
   tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-  tooltip += `<span>${title}</span>`;
+  tooltip += `<div class="title"><span>${title}</span></div>`;
   tooltip += "</div>";
   return tooltip;
 };

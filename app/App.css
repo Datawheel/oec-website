@@ -109,15 +109,33 @@ p > a,
 }
 
 .d3plus-tooltip {
+  & table {
+    min-width: 95% !important;
+    width: 95% !important;
+    align-items: center !important;
+    display: flex !important;
+    margin: 10px auto !important;
+  }
+  & tbody {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  & tr {
+    border-top: 1px solid var(--dark-1) !important;
+    width: 100% !important;
+    &:first-child {
+      border-top: 0px solid var(--dark-1) !important;
+    }
+  }
   & td {
     text-align: right;
-    padding: 5px 10px;
+    padding: 5px 5px;
+    flex: 1 !important;
+    width: 100% !important;
     &:first-child {
       text-align: left;
       font-weight: var(--display-font-weight);
-    }
-    &:last-child {
-      text-transform: uppercase;
     }
   }
   z-index: 101 !important;
@@ -137,10 +155,17 @@ p > a,
       height: 40px;
     }
   }
-  & span {
+  & .title {
     min-height: 40px;
     display: flex;
     align-items: center;
+    & span {
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical
+    }
   }
 }
 

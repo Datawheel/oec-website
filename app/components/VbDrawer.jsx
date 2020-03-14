@@ -96,7 +96,7 @@ class VbDrawer extends React.Component {
     const countryIdSelected = relatedItems["Country ID"] ? relatedItems["Country ID"].slice(2, 5) : undefined;
 
     const icon = !["Continent", "Country"].includes(titleKey)
-      ? `/images/icons/hs/hs_${parentId}.png`
+      ? `/images/icons/hs/hs_${parentId}.svg`
       : `/images/icons/country/country_${titleId.slice(2, 5)}.png`;
 
     const color = colors.Section[parentId] || colors.Continent[parentId];

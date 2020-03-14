@@ -76,7 +76,7 @@ class Rankings extends React.Component {
               src={
                 category === "country"
                   ? `/images/icons/country/country_${props.original["Icon ID"]}.png`
-                  : `/images/icons/hs/hs_${props.original["Icon ID"]}.png`
+                  : `/images/icons/hs/hs_${props.original["Icon ID"]}.svg`
 
               }
               alt="icon"

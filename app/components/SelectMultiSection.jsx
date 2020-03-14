@@ -146,7 +146,7 @@ const buildSelectionItemList = items => nest()
   .reduce((list, {key: sKey, values: sValues}) => {
     const [sId, sName] = sKey.split("|");
     const color = colors.Section[sId];
-    const icon = `/images/icons/hs/hs_${sId}.png`;
+    const icon = `/images/icons/hs/hs_${sId}.svg`;
 
     const keyItem = {
       color,
