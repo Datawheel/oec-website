@@ -14,9 +14,9 @@ class EmbedVizbuilder extends React.Component {
 
     // Gets members of HS products, Countries and Technologies
     axios.all([
-      axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false"),
+      axios.get("/olap-proxy/data?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false"),
       axios.get("/members/country.json"),
-      axios.get("https://api.oec.world/tesseract/data.jsonrecords?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false")
+      axios.get("/olap-proxy/data?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false")
       // axios.get("/members/technology.json")
     ]).then(axios.spread((resp1, resp2, resp3) => {
       const productData = resp1.data.data;

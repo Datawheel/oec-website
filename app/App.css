@@ -121,11 +121,12 @@ p > a,
     }
   }
   z-index: 101 !important;
+  border: 1px solid var(--dark-1) !important;
 }
 
 .d3plus-tooltip-title-wrapper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   & .icon {
     margin-right: 10px;
     width: 40px;
@@ -135,6 +136,11 @@ p > a,
       width: 40px;
       height: 40px;
     }
+  }
+  & span {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
   }
 }
 

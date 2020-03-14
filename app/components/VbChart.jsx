@@ -140,10 +140,10 @@ class VbChart extends React.Component {
 
       return axios
         .all([
-          axios.get("https://api.oec.world/tesseract/data", {
+          axios.get("/olap-proxy/data", {
             params: exportsBalanceParams
           }),
-          axios.get("https://api.oec.world/tesseract/data", {
+          axios.get("/olap-proxy/data", {
             params: importsBalanceParams
           })
         ])
