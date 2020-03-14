@@ -312,7 +312,7 @@ class VbChart extends React.Component {
     }
 
     return axios
-      .get("https://api.oec.world/tesseract/data", {
+      .get("/olap-proxy/data", {
         params
       })
       .then(resp => {

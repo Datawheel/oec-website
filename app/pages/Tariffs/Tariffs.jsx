@@ -118,7 +118,7 @@ class Tariffs extends React.Component {
     this.setState({error: false, loading: true});
     const {dataset, drilldown, selectionType} = this.state;
     let apiUrls = [];
-    const apiUrlRoot = "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&measures=Ad+Valorem&parents=false&sparse=false";
+    const apiUrlRoot = "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&measures=Ad+Valorem&parents=false&sparse=false";
     const selections = dataset.selections.filter(selection => selection.selected.length);
     const productSelection = selections.find(selection => selection.name === "Product");
     const nonProductSelections = selections.filter(selection => selection.name !== "Product");

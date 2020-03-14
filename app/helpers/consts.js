@@ -534,7 +534,7 @@ module.exports = {
       currencyFormat: d => `$${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Reporter+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
+          dataUrl: "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Reporter+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Reporter Country",
@@ -543,7 +543,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Partner+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Partner+Country+ISO+3",
+          dataUrl: "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Partner+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Partner+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
@@ -552,7 +552,7 @@ module.exports = {
           selected: [{id: "xxwld", displayId: "wld", name: "World", color: "#d4d4d4"}]
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&time=year.latest&drilldowns=HS4&measures=Ad+Valorem&parents=true&sparse=false",
+          dataUrl: "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&time=year.latest&drilldowns=HS4&measures=Ad+Valorem&parents=true&sparse=false",
           data: [],
           // dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dataMap: d => ({...d, id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),

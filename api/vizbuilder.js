@@ -9,7 +9,7 @@ module.exports = function(app) {
     const getDataFromWDI = param => {
       const isOEC = new RegExp(/OEC/).test(param);
       if (!isOEC) {
-        return axios.get("https://api.oec.world/tesseract/data", {params: {
+        return axios.get("/olap-proxy/data", {params: {
           Indicator: param,
           Year: queryParams.Year || 2017,
           cube: "indicators_i_wdi_a",
@@ -37,7 +37,7 @@ module.exports = function(app) {
       }));
 
     axios.all([
-      axios.get("https://api.oec.world/tesseract/data", {params: {
+      axios.get("/olap-proxy/data", {params: {
         Year: queryParams.Year || 2017,
         cube: "trade_i_baci_a_92",
         drilldowns: "Exporter Country",
