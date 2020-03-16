@@ -2,6 +2,7 @@ import colors from "./helpers/colors";
 import style from "style.yml";
 import {formatAbbreviate} from "d3plus-format";
 import {mean} from "d3-array";
+import {hsId} from "./helpers/formatters";
 
 const bad = "#cf5555";
 const good = "#3182bd";
@@ -315,7 +316,7 @@ export default {
       let idVal = [];
       ["Section", "HS2", "HS4", "HS6"].forEach(id => {
         if (d[`${id} ID`]) {
-          idVal = [`${id} ID`, `${d[`${id} ID`]}`];
+          idVal = [`${id} ID`, hsId(d[`${id} ID`])];
         }
       });
       if (idVal.length) {
