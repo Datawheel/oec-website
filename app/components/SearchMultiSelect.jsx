@@ -105,8 +105,9 @@ class SearchMultiSelect extends React.Component {
   }
 
   filterItems = (query, item) => {
-    const text = item.name;
-    return text.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+    const text = `${item.name} ${item.displayId}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    query = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return text.toLowerCase().indexOf(query) >= 0;
   };
 
   validateDrilldown = x => {
