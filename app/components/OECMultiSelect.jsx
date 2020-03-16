@@ -105,6 +105,8 @@ class OECMultiSelect extends React.Component {
 
   render() {
     const {items, itemType, placeholder, selectedItems, title} = this.props;
+    selectedItems.sort((a, b) => a.title > b.title ? 1 : -1);
+
     return <div className="selector">
       <h3 className="title">{title}</h3>
       <MultiSelect

@@ -24,10 +24,10 @@ import {getVbTitle} from "../../helpers/vbTitle";
 const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
 
 const datasets = [
-  {value: "hs92", title: "HS92", data: cubeData(1995, 2017)},
-  {value: "hs96", title: "HS96", data: cubeData(1998, 2017)},
-  {value: "hs02", title: "HS02", data: cubeData(2003, 2017)},
-  {value: "hs07", title: "HS07", data: cubeData(2008, 2017)}
+  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2017)},
+  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2017)},
+  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", data: cubeData(2003, 2017)},
+  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2017)}
   // {value: "sitc", title: "SITC", data: cubeData(1964, 2017)}
   // {value: "cpc", title: "Technology"}
 ];
@@ -36,6 +36,21 @@ const flowItems = [
   {value: "export", title: "Exports"},
   {value: "import", title: "Imports"}
 ];
+
+const permalinkDecode = permalink => {
+  const [
+    lang,
+    link,
+    chart,
+    cube,
+    flow,
+    country,
+    partner,
+    viztype,
+    time
+  ] = permalink.split("/").filter(d => d !== "");
+  return {lang, link, chart, cube, flow, country, partner, viztype, time};
+};
 
 /** */
 export function createItems(data, levels, iconUrl) {
@@ -46,7 +61,7 @@ export function createItems(data, levels, iconUrl) {
         const sId = d["Section ID"];
         obj[id] = {
           color: colors.Section[sId],
-          icon: `${iconUrl}${sId}.png`,
+          icon: `${iconUrl}${sId}.svg`,
           id,
           name: d[type],
           type
@@ -69,6 +84,7 @@ class Vizbuilder extends React.Component {
         ? location.query.controls === "true" : true,
       country: [],
       product: [],
+      productLevel: "HS6",
       technology: [],
       permalink: undefined,
 
@@ -108,18 +124,41 @@ class Vizbuilder extends React.Component {
     };
   }
 
+  fetchProductNames = async(cubeName, levelName) => {
+    const params = {
+      cube: cubeName,
+      drilldowns: levelName,
+      measures: "Trade Value",
+      parents: true,
+      sparse: false
+    };
+
+    const queryString = Object.entries(params).map(d => `${d[0]}=${d[1]}`).join("&");
+
+    const data = await axios.get(`/olap-proxy/data?${queryString}`)
+      .then(resp => resp.data);
+
+    const productData = data.data;
+    const productKeys = createItems(productData, [levelName], "/images/icons/hs/hs_");
+    // const _selectedItemsProduct = isFinite(viztype.split(".")[0])
+    //   ? viztype.split(".").map(d => productKeys[d]) : [];
+    console.log(productKeys);
+  }
+
   componentDidMount = () => {
+    const {productLevel, _dataset} = this.state;
+    const cubeName = _dataset.cubeName;
     window.addEventListener("scroll", this.handleScroll);
 
     // Gets members of HS products, Countries and Technologies
     axios.all([
-      axios.get("/olap-proxy/data?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false"),
+      axios.get(`/olap-proxy/data?cube=${cubeName}&drilldowns=${productLevel}&measures=Trade+Value&parents=true&sparse=false`),
       axios.get("/members/country.json"),
       axios.get("/olap-proxy/data?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false")
       // axios.get("/members/technology.json")
     ]).then(axios.spread((resp1, resp2, resp3) => {
       const productData = resp1.data.data;
-      const productKeys = createItems(productData, ["Section", "HS2", "HS4"], "/images/icons/hs/hs_");
+      const productKeys = createItems(productData, ["Section", "HS2", "HS4", "HS6"], "/images/icons/hs/hs_");
 
       const countryData = resp2.data.map(d => ({
         ...d, color: colors.Continent[d.parent_id]}));
@@ -207,7 +246,7 @@ class Vizbuilder extends React.Component {
     const timeSeriesChart = ["line", "stacked"].includes(chart);
     const timeIds = timeSeriesChart
       ? `${_startYear.value}.${_endYear.value}`
-      : _selectedItemsYear.map(d => d.value).join(".");
+      : _selectedItemsYear.map(d => d.value).sort((a, b) => a > b ? 1 : -1).join(".");
 
     const permalinkItems = [
       "en",
@@ -242,33 +281,42 @@ class Vizbuilder extends React.Component {
     const {routeParams} = this.props;
     const {chart} = routeParams;
 
-    let countryIds = _selectedItemsCountryTitle && _selectedItemsCountryTitle.length > 0
+    const countryIds = _selectedItemsCountryTitle && _selectedItemsCountryTitle.length > 0
       ? parseIdsToURL(_selectedItemsCountryTitle, "label")
       : "deu";
-    let partnerIds = _selectedItemsPartnerTitle && _selectedItemsPartnerTitle.length > 0
+    const partnerIds = _selectedItemsPartnerTitle && _selectedItemsPartnerTitle.length > 0
       ? parseIdsToURL(_selectedItemsPartnerTitle, "label")
       : "usa";
 
     const isTechnologyFilter = _selectedItemsTechnologyTitle.length > 0;
     const isTradeFilter = _selectedItemsProductTitle.length > 0;
 
-    let filterIds = isTechnologyFilter || isTradeFilter
+    const filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
         ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
         : parseIdsToURL(_selectedItemsProductTitle)
       : "10101";
     const dataset = isTechnologyFilter ? "cpc" : _dataset.value;
-    let flow = isTechnologyFilter ? "uspto" : _flow.value;
+    const flow = isTechnologyFilter ? "uspto" : _flow.value;
 
-    const timeIds = _selectedItemsYearTitle.map(d => d.value).join(".");
+    const timeIds = _selectedItemsYearTitle
+      .map(d => d.value)
+      .sort((a, b) => a > b ? 1 : -1)
+      .join(".");
 
     /** Creates permalink config for scatter plot */
-    if (chart === "scatter") {
-      flow = _xAxis.value;
-      countryIds = _yAxis.value;
-      partnerIds = "all";
-      filterIds = "all";
-    }
+    const scatterFlow = _xAxis.value;
+    const scatterCountry = _yAxis.value;
+    const scatterPartner = "all";
+    const scatterViztype = "all";
+
+    const outputScatter = {
+      scatterFlow,
+      scatterCountry,
+      scatterPartner,
+      scatterViztype
+    };
+
 
     const output = {
       cube: dataset,
@@ -280,7 +328,7 @@ class Vizbuilder extends React.Component {
       timePlot: `${_startYearTitle.value}.${_endYearTitle.value}`
     };
 
-    return output;
+    return Object.assign(output, outputScatter);
   }
 
   handleControls = () => this.setState({controls: !this.state.controls})
@@ -290,7 +338,6 @@ class Vizbuilder extends React.Component {
   }
 
   handleScroll = () => {
-    console.log("hello");
     throttle(() => {
       this.setState({scrolled: window.scrollY > 220});
     }, 30);
@@ -335,8 +382,8 @@ class Vizbuilder extends React.Component {
 
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
 
-    const _xAxis = wdiIndicators.find(d => d.value === flow) || {};
-    const _yAxis = wdiIndicators.find(d => d.value === country) || {};
+    const _xAxis = wdiIndicators.find(d => d.value === flow) || wdiIndicators.find(d => d.value === "OEC.ECI");
+    const _yAxis = wdiIndicators.find(d => d.value === country) || wdiIndicators.find(d => d.value === "NY.GDP.MKTP.CD");
 
     // Get selected countries
     const filterCountry = type => countryData.filter(d => type.split(".").includes(d.label));
@@ -414,7 +461,7 @@ class Vizbuilder extends React.Component {
       this.state._yAxisTitle
     );
 
-    this.getPermalinkIds();
+    // console.log(this.fetchProductNames("trade_i_baci_a_96", "HS6"));
 
     return <div id="vizbuilder">
       <OECNavbar
@@ -630,7 +677,8 @@ class Vizbuilder extends React.Component {
               xScale={this.state._xAxisScale}
               yScale={this.state._yAxisScale}
               callback={d => {
-                const permalink = {permalink: d};
+                const query = permalinkDecode(d);
+                const permalink = {permalink: d, activeTab: query.chart || "tree_map"};
                 this.setState(
                   permalink,
                   () => this.updateFilterSelected(permalink)
