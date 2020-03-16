@@ -82,7 +82,7 @@ class SubnationalCountryBlock extends React.Component {
             selectedTabId={navbarTabId}
           >
             {metadata.geoLevels.map((gl, ix) =>
-              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList country={metadata.code} options={items && items[gl.level] ? items[gl.level].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
+              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList slug={gl.profileSlug ? gl.profileSlug : `subnational_${metadata.code}`} options={items && items[gl.level] ? items[gl.level].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
             )}
             <Tabs.Expander />
             <InputGroup type="text"

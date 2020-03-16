@@ -46,7 +46,8 @@ class SubnationalMap extends React.Component {
       on: {
         "click.shape": d => {
           if (d) {
-            const url = `/${locale}/profile/subnational_${country}/${d.slug}`;
+            const profileSlug = selectedGeoLevel.profileSlug ? selectedGeoLevel.profileSlug : `subnational_${country}`;
+            const url = `/${locale}/profile/${profileSlug}/${d.slug}`;
             router.push(url);
           }
         }

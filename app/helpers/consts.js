@@ -135,7 +135,8 @@ module.exports = {
           ],
           extraMapConfig: {
             projection: d3_composite.geoAlbersUsaTerritories()
-          }
+          },
+          profileSlug: "subnational_usa_state"
         },
         {
           name: "Districts",
@@ -143,7 +144,8 @@ module.exports = {
           slug: "districts",
           extraMapConfig: {
             projection: d3_composite.geoAlbersUsaTerritories()
-          }
+          },
+          profileSlug: "subnational_usa_district"
         }
       ]
     },
