@@ -50,6 +50,7 @@
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  min-width: 270px;
 
   & > div {
     width: 250px;
@@ -59,7 +60,8 @@
   flex: 0 0;
 }
 .sm-section--hs-icon {
-  width: 24px;
+  height: 24px;
+  max-width: 36px;
   margin: -2px;
   margin-right: 0.5rem;
 
@@ -69,10 +71,19 @@
 }
 
 .sm-section--show-all {
-  & .sm-section--type-HS2 {
+  & .sm-section--level-1 {
     padding-left: 0.5rem;
   }
-  & .sm-section--type-HS4 {
+  & .sm-section--level-2 {
     padding-left: 1rem;
+  }
+  & .sm-section--level-3 {
+    padding-left: 1.5rem;
+  }
+  & .sm-section--level-4 {
+    padding-left: 2rem;
+  }
+  & .sm-section--level-5 {
+    padding-left: 2.5rem;
   }
 }
