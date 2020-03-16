@@ -222,11 +222,11 @@ class VbChart extends React.Component {
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
     if (isProduct) {
       const productTemp = viztype.split(".")[0];
-      const productLevels = ["Section", "HS2", "HS4", "HS6"];
-      const n = Math.ceil(
-        (productTemp.length - (productTemp.length / 2 >> 0)) / 2
-      );
-      params[productLevels[n]] = viztype.replace(".", ",");
+      const len = productTemp.length;
+      const digit = len + len % 2 - 2;
+      const productLevelsV2 = {1: "Section", 2: "HS2", 4: "HS4", 6: "HS6"};
+
+      params[productLevelsV2[digit]] = viztype.replace(".", ",");
     }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
