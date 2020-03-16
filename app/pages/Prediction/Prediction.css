@@ -123,6 +123,7 @@
       background-color: rgba(115, 134, 148, 0.3);
       color: #CFDAE2;
       flex: 0 0 8rem;
+      margin: 54px 0 0 0;
       padding: 20px 0;
 
       &:hover {
@@ -165,6 +166,17 @@
   z-index: 9 !important;
 }
 
+/* ---------------------------
+Multi select
+--------------------------- */
+input.bp3-input-ghost.bp3-multi-select-tag-input-input{
+  color:white
+}
+.bp3-menu-item.bp3-disabled {
+  & .bp3-text-overflow-ellipsis {
+    color:white
+  }
+}
 
 /* ---------------------------
 tabs
@@ -290,7 +302,7 @@ Under viz options (key)
 
 
 /* ---------------------------
-Datatable styles
+Data table styles
 --------------------------- */
 .prediction-datatable-container {
   & .rt-td {

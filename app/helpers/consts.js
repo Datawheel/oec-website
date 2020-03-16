@@ -490,7 +490,7 @@ module.exports = {
           dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
           dimName: "Subnat Geography",
           id: "subnats",
-          name: "City",
+          name: "Autonomous Community",
           selected: []
         },
         {
