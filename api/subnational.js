@@ -3,6 +3,8 @@ const axios = require("axios"),
 
 const {OLAP_PROXY_ENDPOINT, OLAP_PROXY_SECRET} = process.env;
 
+const catcher = e => ({data: [], error: "This cube is not public"});
+
 module.exports = function(app) {
   const subnationalCubes = async(req, res) => {
     const url = `${OLAP_PROXY_ENDPOINT}cubes`;
@@ -104,7 +106,9 @@ module.exports = function(app) {
     };
 
     const fullURL = `${origin}/olap-proxy/${queryParams}?${queryString}`;
-    const data = await axios.get(fullURL, config).then(resp => resp.data);
+    const data = await axios.get(fullURL, config)
+      .then(resp => resp.data)
+      .catch(catcher);
 
     res.send(Object.assign(data, {growth: dd})).end();
 
