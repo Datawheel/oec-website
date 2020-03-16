@@ -1,5 +1,4 @@
 import React from "react";
-import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 import axios from "axios";
 import {
@@ -12,7 +11,6 @@ import {
   Plot
 } from "d3plus-react";
 import {range} from "helpers/utils";
-
 import colors from "helpers/colors";
 import {formatAbbreviate} from "d3plus-format";
 
@@ -25,15 +23,10 @@ import VbShare from "./VbShare";
 import VbDownload from "./VbDownload";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
-
-// const measures = [
-//   {title: "Category", value: 0, diff: 0},
-//   {title: "Annual Growth Rate (1 Year)", value: 1, diff: 1},
-//   {title: "Annual Growth Rate (5 Year)", value: 2, diff: 5},
-//   {title: "Growth Value (1 Year)", value: 3, diff: 1},
-//   {title: "Growth Value (5 Year)", value: 4, diff: 5}
-// ];
 const measures = ["Trade Value", "Growth", "Growth (%)"];
+
+const CANON_STATS_API = "/api/stats/";
+const OLAP_API = "/olap-proxy/data";
 
 class VbChart extends React.Component {
   constructor(props) {
@@ -89,6 +82,7 @@ class VbChart extends React.Component {
     const partnerId = !["show", "all"].includes(partner)
       ? countryMembers.filter(d => geoFilter(d, partner))
       : undefined;
+    const countryIds = countryId.map(d => d.value).join();
 
     const isFilter = !["show", "all"].includes(viztype);
     const isProduct = isFinite(viztype);
@@ -101,7 +95,6 @@ class VbChart extends React.Component {
     const timeFilter =  !timeSeriesChart
       ? timeInterval.join()
       : range(timeInterval[0], timeInterval[timeInterval.length - 1]).join();
-
     if (timeInterval.length === 1) timeInterval.push(timeInterval[0]);
 
     const cubeName = !isTechnology
@@ -111,23 +104,19 @@ class VbChart extends React.Component {
     const growth = `Year,${measureName}`;
 
     if (isTradeBalance) {
-      const exportsBalanceParams = {
-        "cube": cubeName,
-        "drilldowns": "Year",
-        "measures": measureName,
-        "parents": true,
-        "Year": timeFilter,
-        "Exporter Country": countryId.map(d => d.value).join()
+      const balanceParams = {
+        cube: cubeName,
+        drilldowns: "Year",
+        measures: measureName,
+        parents: true,
+        Year: timeFilter
       };
-
-      const importsBalanceParams = {
-        "cube": cubeName,
-        "drilldowns": "Year",
-        "measures": measureName,
-        "parents": true,
-        "Year": timeFilter,
-        "Importer Country": countryId.map(d => d.value).join()
-      };
+      const exportsBalanceParams = Object.assign(
+        balanceParams, {"Exporter Country": countryIds}
+      );
+      const importsBalanceParams = Object.assign(
+        balanceParams, {"Importer Country": countryIds}
+      );
 
       if (partnerId) {
         exportsBalanceParams["Importer Country"] = partnerId
@@ -140,12 +129,8 @@ class VbChart extends React.Component {
 
       return axios
         .all([
-          axios.get("/olap-proxy/data", {
-            params: exportsBalanceParams
-          }),
-          axios.get("/olap-proxy/data", {
-            params: importsBalanceParams
-          })
+          axios.get(OLAP_API, {params: exportsBalanceParams}),
+          axios.get(OLAP_API, {params: importsBalanceParams})
         ])
         .then(
           axios.spread((resp1, resp2) => {
@@ -267,7 +252,7 @@ class VbChart extends React.Component {
       const endpoint = flow === "pgi" ? "opportunity_gain" : "relatedness";
 
       return axios
-        .get(`/api/stats/${endpoint}`, {
+        .get(`${CANON_STATS_API}${endpoint}`, {
           params: apiStatsParams
         })
         .then(resp => {
@@ -312,9 +297,7 @@ class VbChart extends React.Component {
     }
 
     return axios
-      .get("/olap-proxy/data", {
-        params
-      })
+      .get(OLAP_API, {params})
       .then(resp => {
         let data = resp.data.data;
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
@@ -333,12 +316,7 @@ class VbChart extends React.Component {
   */
 
   updateFilter = (key, value) => {
-    this.setState(
-      {
-        [key]: value
-      },
-      () => this.fetchData()
-    );
+    this.setState({[key]: value}, () => this.fetchData());
   };
 
   render() {
@@ -679,12 +657,12 @@ class VbChart extends React.Component {
                   click: d =>
                     this.setState({isOpenDrawer: true, relatedItems: d})
                 },
-                topojsonId: "id",
-                topojsonKey: "id",
+                ocean: false,
                 tiles: false,
                 topojson: "/topojson/world-50m.json",
                 topojsonFilter: d => d.id !== "ata",
-                ocean: false,
+                topojsonId: "id",
+                topojsonKey: "id",
                 total: false
               }}
             />
@@ -784,14 +762,8 @@ class VbChart extends React.Component {
               }}
               nodesFormat={resp => resp.nodes}
               linksFormat={resp => resp.edges}
-              dataFormat={d => {
-                const newData = d.map(dd =>
-                  Object.assign(dd, {
-                    "id": dd["HS4 ID"],
-                    "HS4 ID": `${dd["HS4 ID"]}`
-                  })
-                );
-
+              dataFormat={data => {
+                const newData = data.map(d => Object.assign(d, {id: d["HS4 ID"]}));
                 return newData;
               }}
             />
@@ -844,6 +816,9 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "scatter" && data && data.length > 0) {
+      const {xAxis, yAxis} = this.props;
+      const xTitle = xAxis.title || "";
+      const yTitle = yAxis.title || "";
       return (
         <div>
           <div className="vb-chart">
@@ -864,17 +839,19 @@ class VbChart extends React.Component {
                   tbody: d => [
                     ["Country ID", d["Country ID"].slice(-3).toUpperCase()],
                     ["Trade Value", `$${formatAbbreviate(d["Trade Value"])}`],
-                    [country, formatAbbreviate(d[country])],
-                    [flow, formatAbbreviate(d[flow])],
+                    [yTitle, formatAbbreviate(d[country])],
+                    [xTitle, formatAbbreviate(d[flow])],
                     ["Year", time]
                   ]
                 },
                 total: undefined,
                 xConfig: {
-                  scale: this.props.xScale.toLowerCase()
+                  scale: this.props.xScale.toLowerCase(),
+                  title: xTitle
                 },
                 yConfig: {
-                  scale: this.props.yScale.toLowerCase()
+                  scale: this.props.yScale.toLowerCase(),
+                  title: yTitle
                 }
               }}
             />

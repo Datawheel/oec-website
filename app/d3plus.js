@@ -152,6 +152,13 @@ export const tooltipTitle = (bgColor, imgUrl, title) => {
   return tooltip;
 };
 
+const labelStyle = {
+  fontColor: () => style["light-3"],
+  fontFamily: () => "'Source Sans Pro', sans-serif",
+  fontSize: () => 16,
+  fontWeight: () => 400
+};
+
 const axisStyles = {
   barConfig: {
     stroke: "transparent"
@@ -160,19 +167,9 @@ const axisStyles = {
     stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"],
     strokeWidth: 1
   },
-  labelConfig: {
-    fontColor: () => style["light-3"],
-    fontFamily: () => "'Source Sans Pro', sans-serif",
-    fontSize: () => 16,
-    fontWeight: () => 400
-  },
+  labelConfig: labelStyle,
   shapeConfig: {
-    labelConfig: {
-      fontColor: () => style["light-3"],
-      fontFamily: () => "'Source Sans Pro', sans-serif",
-      fontSize: () => 16,
-      fontWeight: () => 400
-    },
+    labelConfig: labelStyle,
     stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"]
   },
   tickSize: 5,
@@ -197,19 +194,14 @@ export default {
     fontWeight: () => 400
   },
   backgroundConfig: {
-    fill: "#383e44"
+    fill: style["dark-2"]
   },
   colorScaleConfig: {
     axisConfig: {
       labelOffset: true,
       labelRotation: false,
       shapeConfig: {
-        labelConfig: {
-          fontColor: () => "#ffffff",
-          fontFamily: () => "'Source Sans Pro', sans-serif",
-          fontSize: () => 16,
-          fontWeight: () => 400
-        },
+        labelConfig: labelStyle,
         stroke: style["dark-1"]
       },
       titleConfig: {
@@ -226,10 +218,7 @@ export default {
     color: colors.viridis,
     legendConfig: {
       shapeConfig: {
-        labelConfig: {
-          fontSize: () => 16,
-          fontColor: () => "#ffffff"
-        },
+        labelConfig: labelStyle,
         fontColor: () => "#ffffff",
         height: () => 15,
         stroke: "#383e44",
@@ -397,7 +386,7 @@ export default {
       "text-overflow": "ellipsis",
       "display": "-webkit-box",
       "-webkit-box-orient": "vertical",
-      "-webkit-line-clamp": "3"
+      "-webkit-line-clamp": "4"
     },
     tbodyStyle: {
       color: "#FFFFFF"

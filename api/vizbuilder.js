@@ -5,11 +5,12 @@ const TESSERACT_API = "/api/stats/relatedness";
 module.exports = function(app) {
   app.get("/api/gdp/eci", async(req, res) => {
     const queryParams = req.query;
+    const origin = `${req.protocol}://${req.headers.host}`;
 
     const getDataFromWDI = param => {
       const isOEC = new RegExp(/OEC/).test(param);
       if (!isOEC) {
-        return axios.get("/olap-proxy/data", {params: {
+        return axios.get(`${origin}/olap-proxy/data`, {params: {
           Indicator: param,
           Year: queryParams.Year || 2017,
           cube: "indicators_i_wdi_a",
@@ -18,7 +19,7 @@ module.exports = function(app) {
         }});
       }
       else {
-        return axios.get("http://localhost:3300/api/stats/eci", {params: {
+        return axios.get(`${origin}/api/stats/eci`, {params: {
           cube: "trade_i_baci_a_92",
           rca: "Exporter Country,HS4,Trade Value",
           alias: "Country,HS4",
@@ -37,7 +38,7 @@ module.exports = function(app) {
       }));
 
     axios.all([
-      axios.get("/olap-proxy/data", {params: {
+      axios.get(`${origin}/olap-proxy/data`, {params: {
         Year: queryParams.Year || 2017,
         cube: "trade_i_baci_a_92",
         drilldowns: "Exporter Country",

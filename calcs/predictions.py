@@ -41,7 +41,7 @@ class suppress_stdout_stderr(object):
       os.close(fd)
 
 
-API = str(sys.argv[2]) if len(sys.argv) > 2 else "/olap-proxy/data.jsonrecords"
+API = str(sys.argv[2]) if len(sys.argv) > 2 else "https://api.oec.world/tesseract/data.jsonrecords"
 # ?cube=trade_i_baci_a_92&Exporter Country=sapry&drilldowns=Year&measures=Trade Value
 default_params = {
   "cube": "trade_i_baci_a_92",
