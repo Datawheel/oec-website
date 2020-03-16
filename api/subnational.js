@@ -77,10 +77,12 @@ module.exports = function(app) {
     const cubeData = cubes[cube] || {};
     const queryParams = params[0];
 
+    let dd = cubeData.growthTime;
     if (drilldowns.includes("Time")) {
       query.Time = cubeData.growthTime.join();
     }
     else if (drilldowns.includes("Year")) {
+      dd = cubeData.growthYear;
       query.Year = cubeData.growthYear.join();
     }
 
@@ -104,7 +106,7 @@ module.exports = function(app) {
     const fullURL = `${origin}/olap-proxy/${queryParams}?${queryString}`;
     const data = await axios.get(fullURL, config).then(resp => resp.data);
 
-    res.send(data).end();
+    res.send(Object.assign(data, {growth: dd})).end();
 
   });
 
