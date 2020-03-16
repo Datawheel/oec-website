@@ -14,8 +14,19 @@ import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
 import {DEFAULT_PREDICTION_COLOR, PREDICTION_DATASETS} from "helpers/consts";
-import "./Prediction.css";
 import {Alignment, AnchorButton, Button, Collapse, Icon, IconNames, Navbar, Tabs, Tab} from "@blueprintjs/core";
+import {colorLighter} from "d3plus-color";
+import "./Prediction.css";
+
+const getUniqColor = (color, id, colorsLookup) => {
+  if (Object.values(colorsLookup).includes(color)) {
+    color = colorLighter(color, 0.2);
+    color = getUniqColor(color, id, colorsLookup);
+  }
+  else {
+    colorsLookup[id] = color;
+  }
+};
 
 class Prediction extends React.Component {
 
@@ -222,7 +233,7 @@ class Prediction extends React.Component {
     }
     // console.log("apiUrls!", apiUrls);
     // Step 2: make XHR requests:
-    axios.all(apiUrls.map(url => axios.get(url)))
+    axios.all(apiUrls.map(url => axios.get(url)).slice(0, 5))
       .then(axios.spread((...responses) => {
         let allResults = [];
         const errors = [];
@@ -245,7 +256,18 @@ class Prediction extends React.Component {
           this.setState({activeTabId: drilldowns[0].id, drilldowns, loading: false, error: true});
         }
         else {
-          this.setState({activeTabId: drilldowns[0].id, advParams: newAdvParams, drilldowns, loading: false, error: false, predictionData: allResults || [], updateKey: updateKey.join(",")});
+          // need to figure out if there are color overlaps!
+          const colorsLookup = {};
+          if (drillSelection) {
+            drillSelection.selected.forEach(d => {
+              getUniqColor(d.color, d.id, colorsLookup);
+            });
+          }
+          const predictionData = allResults.map(d => {
+            d.Drilldown.color = colorsLookup[d.Drilldown.id] || d.Drilldown.color;
+            return d;
+          });
+          this.setState({activeTabId: drilldowns[0].id, advParams: newAdvParams, drilldowns, loading: false, error: false, predictionData, updateKey: updateKey.join(",")});
         }
       }));
   }

@@ -15,6 +15,7 @@ import libs from "@datawheel/canon-cms/src/utils/libs";
 import {Profile as CMSProfile} from "@datawheel/canon-cms";
 import OECNavbar from "components/OECNavbar";
 
+import {profileSearchConfig} from "helpers/search";
 import Footer from "components/Footer";
 import "./Profile.css";
 
@@ -78,7 +79,7 @@ class Profile extends React.Component {
           title={title}
           scrolled={scrolled}
         />
-        <CMSProfile {...this.props} />
+        <CMSProfile searchProps={profileSearchConfig} {...this.props} />
 
         <Footer />
       </div>

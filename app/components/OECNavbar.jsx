@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {hot} from "react-hot-loader/root";
 import {Link} from "react-router";
@@ -68,6 +69,8 @@ class OECNavbar extends Component {
   render() {
     const {auth, locale, title, scrolled} = this.props;
     const {navVisible, searchVisible} = this.state;
+    const {basename, pathname, search} = this.context.router.location;
+    const currentURL = encodeURIComponent(`${basename}${pathname}${search}`);
 
     return (
       <div className="navbar">
@@ -116,7 +119,7 @@ class OECNavbar extends Component {
             </Button>
             : <React.Fragment>
               <Button className="navbar-user-login" rebuilding={auth.loading} disable={auth.loading}>
-                <Link to={`${locale}/login`}>Login</Link>
+                <Link to={`${locale}/login?redirect=${currentURL}`}>Login</Link>
               </Button>
               <Button className="navbar-user-signup" rebuilding={auth.loading} disable={auth.loading}>
                 <Link to={`${locale}/signup`}>Sign Up</Link>
@@ -147,6 +150,10 @@ class OECNavbar extends Component {
     );
   }
 }
+
+OECNavbar.contextTypes = {
+  router: PropTypes.object
+};
 
 export default connect(state => ({
   auth: state.auth,

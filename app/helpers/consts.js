@@ -333,9 +333,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_can_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -370,7 +370,7 @@ module.exports = {
           dataUrl: "?cube=trade_s_deu_m_egw&Year=2017&drilldowns=Product&measures=Trade+Value&parents=true&sparse=false",
           data: [],
           dataMap: d => ({id: d["Product ID"], displayId: d["Product ID"], name: d.Product, color: DEFAULT_PREDICTION_COLOR}),
-          dimName: "HS4",
+          dimName: "Product",
           id: "products",
           name: "Product",
           selected: []
@@ -379,9 +379,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_deu_m_egw&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -425,9 +425,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_jpn_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -471,9 +471,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -517,9 +517,9 @@ module.exports = {
           dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Partner Country",
+          dimName: "Country",
           id: "destinations",
-          name: "Destination Country",
+          name: "Partner Country",
           selected: []
         }
       ],
@@ -545,7 +545,7 @@ module.exports = {
       currencyFormat: d => `$${d3plus_format.formatAbbreviate(d)}`,
       selections: [
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Reporter+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
+          dataUrl: "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Reporter+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Reporter+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Reporter Country",
@@ -554,7 +554,7 @@ module.exports = {
           selected: []
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Partner+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Partner+Country+ISO+3",
+          dataUrl: "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&drilldowns=Partner+Country&measures=Ad+Valorem&parents=true&sparse=false&properties=Partner+Country+ISO+3",
           data: [],
           dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
           dimName: "Partner Country",
@@ -563,7 +563,7 @@ module.exports = {
           selected: [{id: "xxwld", displayId: "wld", name: "World", color: "#d4d4d4"}]
         },
         {
-          dataUrl: "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&time=year.latest&drilldowns=HS4&measures=Ad+Valorem&parents=true&sparse=false",
+          dataUrl: "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&time=year.latest&drilldowns=HS4&measures=Ad+Valorem&parents=true&sparse=false",
           data: [],
           // dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
           dataMap: d => ({...d, id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),

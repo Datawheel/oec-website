@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {hot} from "react-hot-loader/root";
 import {connect} from "react-redux";
 import Loading from "components/Loading";
+import {Helmet} from "react-helmet";
 
 import axios from "axios";
 import {Explorer as TesseractExplorer} from "@datawheel/tesseract-explorer";
@@ -41,6 +42,7 @@ class Explorer extends Component {
   render() {
     const {token} = this.state;
     return <div className="explorer">
+      <Helmet title="Data Explorer" />
       {token ? <TesseractExplorer src={token} title="OEC Explorer" /> : <Loading />}
     </div>;
   }

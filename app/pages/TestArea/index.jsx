@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import SelectMultiSection from "components/SelectMultiSection";
 
 const SECTION_DATA_URL =
-  "https://api.oec.world/tesseract/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false";
+  "/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false";
 
 /** @type {React.FC<import("react-router").RouteComponentProps>} */
 const TestArea = () => {

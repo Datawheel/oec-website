@@ -47,12 +47,14 @@ function backgroundImageV2(key, d) {
     case "Organization":
       return "/images/icons/patent.png";
     case "Section":
-      return `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
+    case "EGW1":
+      return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Service":
     case "Parent Service":
       return `/images/icons/service/service_${[d[`${key} ID`]]}.png`;
     default:
-      return "/images/icons/hs/hs_22.png";
+      return "/images/icons/hs/hs_22.svg";
   }
 }
 
@@ -75,7 +77,10 @@ function backgroundImage(d, ascending) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section)) {
-      return `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
+    }
+    else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
+      return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     }
     else if ("Continent ID" in d && !Array.isArray(d.Continent)) {
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
@@ -99,7 +104,7 @@ function backgroundImage(d, ascending) {
       return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
     }
     else {
-      return "/images/icons/hs/hs_22.png";
+      return "/images/icons/hs/hs_22.svg";
     }
   }
   else {
@@ -124,14 +129,17 @@ function backgroundImage(d, ascending) {
     else if ("Continent ID" in d && !Array.isArray(d.Continent)) {
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
     }
+    else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
+      return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    }
     else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section)) {
-      return `/images/icons/hs/hs_${d["Section ID"]}.png`;
+      return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
     }
     else {
-      return "/images/icons/hs/hs_22.png";
+      return "/images/icons/hs/hs_22.svg";
     }
   }
 }
@@ -139,9 +147,16 @@ function backgroundImage(d, ascending) {
 export const tooltipTitle = (bgColor, imgUrl, title) => {
   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
   tooltip += `<div class="icon" style="background-color: ${bgColor}"><img src="${imgUrl}" /></div>`;
-  tooltip += `<span>${title}</span>`;
+  tooltip += `<div class="title"><span>${title}</span></div>`;
   tooltip += "</div>";
   return tooltip;
+};
+
+const labelStyle = {
+  fontColor: () => style["light-3"],
+  fontFamily: () => "'Source Sans Pro', sans-serif",
+  fontSize: () => 16,
+  fontWeight: () => 400
 };
 
 const axisStyles = {
@@ -152,19 +167,9 @@ const axisStyles = {
     stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"],
     strokeWidth: 1
   },
-  labelConfig: {
-    fontColor: () => style["light-3"],
-    fontFamily: () => "'Source Sans Pro', sans-serif",
-    fontSize: () => 16,
-    fontWeight: () => 400
-  },
+  labelConfig: labelStyle,
   shapeConfig: {
-    labelConfig: {
-      fontColor: () => style["light-3"],
-      fontFamily: () => "'Source Sans Pro', sans-serif",
-      fontSize: () => 16,
-      fontWeight: () => 400
-    },
+    labelConfig: labelStyle,
     stroke: d => Math.abs(d.id) === 0 ? style["light-3"] : style["dark-3"]
   },
   tickSize: 5,
@@ -189,19 +194,14 @@ export default {
     fontWeight: () => 400
   },
   backgroundConfig: {
-    fill: "#383e44"
+    fill: style["dark-2"]
   },
   colorScaleConfig: {
     axisConfig: {
       labelOffset: true,
       labelRotation: false,
       shapeConfig: {
-        labelConfig: {
-          fontColor: () => "#ffffff",
-          fontFamily: () => "'Source Sans Pro', sans-serif",
-          fontSize: () => 16,
-          fontWeight: () => 400
-        },
+        labelConfig: labelStyle,
         stroke: style["dark-1"]
       },
       titleConfig: {
@@ -218,10 +218,7 @@ export default {
     color: colors.viridis,
     legendConfig: {
       shapeConfig: {
-        labelConfig: {
-          fontSize: () => 16,
-          fontColor: () => "#ffffff"
-        },
+        labelConfig: labelStyle,
         fontColor: () => "#ffffff",
         height: () => 15,
         stroke: "#383e44",
@@ -389,7 +386,7 @@ export default {
       "text-overflow": "ellipsis",
       "display": "-webkit-box",
       "-webkit-box-orient": "vertical",
-      "-webkit-line-clamp": "3"
+      "-webkit-line-clamp": "4"
     },
     tbodyStyle: {
       color: "#FFFFFF"
