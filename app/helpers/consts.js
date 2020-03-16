@@ -214,6 +214,15 @@ module.exports = {
       geoLevels: [
         {name: "Departments", level: "Subnat Geography", slug: "departments"}
       ]
+    },
+    {
+      name: "Ecuador",
+      code: "ecu",
+      cube: "trade_s_ecu_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Ports", level: "Subnat Geography", slug: "ports"}
+      ]
     }
     // TODO: CHL, ECU
     // TBD: SWE -> no units, ignore it.
