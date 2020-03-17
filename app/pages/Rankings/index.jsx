@@ -87,41 +87,29 @@ class Rankings extends Component {
 					<div className="category">
 						<img
 							src={
-								country ? (
-									`/images/icons/country/country_${props.original['Country ID'].substr(
-										props.original['Country ID'].length - 3
-									)}.png`
-								) : (
-									`/images/icons/hs/hs_${props.original[`${productDepth} ID`]
-										.toString()
-										.substr(
-											0,
-											props.original[`${productDepth} ID`].toString().length * 1 -
-												productDepth.substr(2) * 1
-										)}.png`
-								)
+								country
+								? (`/images/icons/country/country_${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}.png`)
+								: productDepth === "SITC"
+									? ""
+									: (`/images/icons/hs/hs_${props.original[`${productDepth} ID`].toString().substr(0,props.original[`${productDepth} ID`].toString().length * 1 -productDepth.substr(2) * 1)}.png`)
 							}
 							alt="icon"
 							className="icon"
 						/>
 						<a
 							href={
-								country ? (
-									`/en/profile/country/${props.original['Country ID'].substr(
-										props.original['Country ID'].length - 3
-									)}`
-								) : (
-									`/en/profile/${productRevision.toLowerCase()}/${props.original[
-										`${productDepth} ID`
-									]}`
-								)
+								country
+								? (`/en/profile/country/${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}`)
+								: productDepth === "SITC"
+									? ""
+									: (`/en/profile/${productRevision.toLowerCase()}/${props.original[`${productDepth} ID`]}`)
 							}
 							className="link"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
 							<div className="name">
-								{country ? props.original.Country : props.original[`${productDepth}`]}
+								{country ? props.original.Country : productDepth === "SITC" ? props.original[`${productRevision}`] : props.original[`${productDepth}`]}
 							</div>
 							<Icon icon={'chevron-right'} iconSize={14} />
 						</a>
@@ -219,16 +207,10 @@ class Rankings extends Component {
 			let path = country
 				? productDepth === 'SITC'
 					? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
-					: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
-							2
-						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
+					: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
 				: productDepth === 'SITC'
-					? (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
-							2
-						)}&rca=${productDepth},Exporter+Country,Trade+Value&alias=${productDepth},Country&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}&iterations=21`)
-					: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
-							2
-						)}&rca=${productDepth},Exporter+Country,Trade+Value&alias=${productDepth},Country&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}&iterations=21`);
+					? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=${productRevision},Reporter+Country,Trade+Value&alias=${productRevision},Country&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}&iterations=21`)
+					: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=${productDepth},Exporter+Country,Trade+Value&alias=${productDepth},Country&Year=${yearValue}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}&iterations=21`);
 
 			axios.all([ axios.get(path) ]).then(
 				axios.spread((resp) => {
