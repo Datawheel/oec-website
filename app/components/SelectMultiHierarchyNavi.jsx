@@ -49,7 +49,7 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
 
   return (
     <Fragment>
-      <ButtonGroup className="sm-section--level" fill={true} minimal={true}>
+      <ButtonGroup className="sh-hie--level" fill={true} minimal={true}>
         <Button
           active={showAll}
           onClick={() => {
@@ -76,12 +76,12 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
         )}
       </ButtonGroup>
       {stackIndex > 0 &&
-        <div className="sm-section--hielist-header">
+        <div className="sh-hie--hielist-header">
           <Button icon="arrow-left" onClick={popCategory} minimal={true} />
-          <div className="sm-section--hielist-htokens">
+          <div className="sh-hie--hielist-htokens">
             {headerTokens.map((token, index) =>
               <Text
-                className={`sm-section--hielist-htoken level-${index}`}
+                className={`sh-hie--hielist-htoken level-${index}`}
                 ellipsize={true}
                 key={`${index}-${token}`}
               >
@@ -93,8 +93,8 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
       }
       <Menu
         className={classNames({
-          "sm-section--hielist-content": true,
-          "sm-section--show-all": showAll
+          "sh-hie--hielist-content": true,
+          "sh-hie--show-all": showAll
         })}
         ulRef={viewPortRef}
       >
@@ -109,7 +109,7 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
             const item = finalList[index];
             return (
               <li
-                className={`sm-section--list-item sm-section--level-${levels.indexOf(item.type)}`}
+                className={`sh-hie--list-item sh-hie--level-${levels.indexOf(item.type)}`}
                 key={item.id}
                 ref={innerRef}
                 style={style}
@@ -118,7 +118,7 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
                 {!showAll && item.type !== levels[levels.length - 1] &&
                   <button
                     className={classNames(
-                      "sm-section--descendants",
+                      "sh-hie--descendants",
                       Classes.MENU_ITEM,
                       Classes.iconClass("caret-right")
                     )}

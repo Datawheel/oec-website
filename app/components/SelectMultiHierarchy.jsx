@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 // @ts-check
 import {Button, Classes, Tag, Text} from "@blueprintjs/core";
 import {Select} from "@blueprintjs/select";
@@ -52,7 +53,6 @@ import SMHNaviList from "./SelectMultiHierarchyNavi";
  */
 
 /**
- * SelectMultiSection Component
  * This component generates a hierarchical, navigable, filterable selection component.
  * The code is written under the assumption the IDs are available under the `Key ID` format.
  *
@@ -97,7 +97,7 @@ const SelectMultiHierarchy = ({
 
   const extendedItems = useMemo(() => {
     const keys = levels.slice();
-    const lastKey = keys.pop();
+    const lastKey = `${keys.pop()}`;
 
     const extendedItems = [];
 
@@ -175,7 +175,7 @@ const SelectMultiHierarchy = ({
         fill: true,
         minimal: true,
         // onInteraction: popoverInteractionHandler,
-        popoverClassName: "sm-section--popover"
+        popoverClassName: "sh-hie--popover"
       }}
     >
       <div className="bp3-input bp3-tag-input bp3-fill">
@@ -185,7 +185,7 @@ const SelectMultiHierarchy = ({
               icon={item.icon
                 ? <img
                   alt={`[Icon for ${item.type} "${item.name}"]`}
-                  className="sm-section--hs-icon"
+                  className="sh-hie--hs-icon"
                   src={item.icon}
                 />
                 : undefined
@@ -225,7 +225,7 @@ SelectMultiHierarchy.defaultProps = {
     return (
       <button
         className={classNames({
-          "sm-section--option": true,
+          "sh-hie--option": true,
           [Classes.ACTIVE]: modifiers.active,
           [Classes.DISABLED]: modifiers.disabled,
           [Classes.FILL]: true,
@@ -237,7 +237,7 @@ SelectMultiHierarchy.defaultProps = {
       >
         {item.icon != null && <img
           alt={`[Icon for ${item.type} "${item.name}"]`}
-          className="sm-section--hs-icon"
+          className="sh-hie--hs-icon"
           src={item.icon}
           style={{backgroundColor: item.color}}
         />}

@@ -22,7 +22,7 @@ const SMHFullList = ({activeItem, filteredItems, levels, renderItem}) => {
 
   return (
     <Fragment>
-      <ButtonGroup className="sm-section--level" fill={true} minimal={true}>
+      <ButtonGroup className="sh-hie--level" fill={true} minimal={true}>
         {levels.map(level =>
           <Button
             key={level}
@@ -33,7 +33,7 @@ const SMHFullList = ({activeItem, filteredItems, levels, renderItem}) => {
         )}
       </ButtonGroup>
       <Menu
-        className="sm-section--hielist-content sm-section--show-all"
+        className="sh-hie--hielist-content sh-hie--show-all"
         ulRef={viewPortRef}
       >
         <List
@@ -47,7 +47,7 @@ const SMHFullList = ({activeItem, filteredItems, levels, renderItem}) => {
             const item = finalList[index];
             return (
               <li
-                className={`sm-section--list-item sm-section--level-${levels.indexOf(item.type)}`}
+                className={`sh-hie--list-item sh-hie--level-${levels.indexOf(item.type)}`}
                 key={item.id}
                 ref={innerRef}
                 style={style}

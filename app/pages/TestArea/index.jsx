@@ -1,11 +1,9 @@
 // @ts-check
 import axios from "axios";
 import React, {useEffect, useState} from "react";
-import SelectMultiHierarchy from "../../components/SelectMultiHierarchy";
-import colors from "../../helpers/colors";
+import SelectMultiHierarchy from "components/SelectMultiHierarchy";
+import colors from "helpers/colors";
 
-const SECTION_DATA_URL =
-  "/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false";
 const URL_PRODUCTS =
   "/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false";
 const URL_TECHNOLOGY =
@@ -45,7 +43,7 @@ const TestArea = () => {
           items={prodsData}
           selectedItems={selectedProds}
           getColor={d => colors.Section[d["Section ID"]]}
-          getIcon={d => `/images/icons/hs/hs_${d["Section ID"]}.png`}
+          getIcon={d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
           onItemSelect={item => {
             const nextItems = selectedProds.concat(item);
             setSelectedProds(nextItems);
