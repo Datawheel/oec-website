@@ -12,13 +12,23 @@ class RankingsBuilder extends Component {
 			country,
 			subnational,
 			productDepth,
-			countryExpThreshold,
-			productExpThreshold,
 			productRevision,
+			singleyear,
 			initialYear,
-			yearValue
+			yearValue,
+			yearRangeInitial,
+			yearRangeFinal,
+			countryExpThreshold,
+			productExpThreshold
 		} = this.props.variables;
-		const { handleValueChange, renderExportThresholdLabel, getChangeHandler, recalculateData } = this.props;
+		const {
+			handleValueChange,
+			resetValueChange,
+			handleYearRangeChange,
+			renderExportThresholdLabel,
+			getChangeHandler,
+			recalculateData
+		} = this.props;
 		const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
 		const REVISION_OPTIONS_SITC = [ 'Tier 1 Product', 'Tier 2 Product', 'Tier 3 Product', 'Tier 4 Product' ];
 		const REVISION_OPTIONS_HS = [ 'HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012' ];
@@ -41,6 +51,7 @@ class RankingsBuilder extends Component {
 			'United States',
 			'Uruguay'
 		];
+
 		return (
 			<div className="builder">
 				<div className="section is-quarter">
@@ -70,11 +81,11 @@ class RankingsBuilder extends Component {
 					</div>
 					<div className="setting product-depth last">
 						<h3>Product Depth and Revision</h3>
-						<ButtonGroup>
+						<ButtonGroup fill={true}>
 							{PROD_DEPTH_OPTIONS.map((d, k) => (
 								<Button
 									key={k}
-									onClick={() => handleValueChange('productDepth', d)}
+									onClick={() => resetValueChange('productDepth', d)}
 									className={productDepth === d && 'active'}
 								>
 									{d}
@@ -82,11 +93,13 @@ class RankingsBuilder extends Component {
 							))}
 						</ButtonGroup>
 						<HTMLSelect
-							options={productDepth === "SITC" ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS}
+							options={productDepth === 'SITC' ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS}
 							onChange={(event) =>
 								handleValueChange(
 									'productRevision',
-									productDepth === "SITC" ? event.currentTarget.selectedOptions[0].label : event.currentTarget.selectedOptions[0].label.split(' ')[0]
+									productDepth === 'SITC'
+										? event.currentTarget.selectedOptions[0].label
+										: event.currentTarget.selectedOptions[0].label.split(' ')[0]
 								)}
 						/>
 					</div>
@@ -94,12 +107,36 @@ class RankingsBuilder extends Component {
 				<div className="section is-quarter">
 					<div className="setting">
 						<h3 className="first">Period</h3>
-						<div className="switch">
+						<div className="switch period">
 							<span>Single-year</span>
 							<Switch
 								onChange={(event) => handleValueChange('singleyear', !event.currentTarget.checked)}
 							/>
-							<span>Multi-year</span>
+							<span className="multi">
+								Multi-year <span>(Máx 5 Years)</span>
+							</span>
+						</div>
+						<div className="year-selector">
+							{
+								<ButtonGroup fill={true}>
+									{range(initialYear[productRevision], 2017).map((d, k) => (
+										<Button
+											key={k}
+											onClick={() =>
+												singleyear ? resetValueChange('yearValue', d) : handleYearRangeChange(d)}
+											className={
+												singleyear ? (
+													yearValue === d && 'active'
+												) : (
+													range(yearRangeInitial, yearRangeFinal).map(j => j === d && 'range')
+												)
+											}
+										>
+											{d}
+										</Button>
+									))}
+								</ButtonGroup>
+							}
 						</div>
 					</div>
 				</div>
@@ -129,7 +166,9 @@ class RankingsBuilder extends Component {
 						/>
 					</div>
 					<div className="setting last">
-						<Button onClick={() => recalculateData()}>Build Table</Button>
+						<div className="build-button">
+							<Button onClick={() => recalculateData()}>Build Table</Button>
+						</div>
 					</div>
 				</div>
 			</div>
