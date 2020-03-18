@@ -25,6 +25,32 @@ import subnat from "helpers/subnatVizbuilder";
 
 const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
 
+const getHierarchyList = (items, levels) => {
+  const output = items.reduce((obj, d) => {
+    for (const level of levels) {
+      const id = d[`${level} ID`].toString();
+      if (!obj[id]) {
+        const item = {
+          id,
+          name: d[level],
+          type: level
+        };
+        obj[id] = item;
+      }
+    }
+    return obj;
+  }, {});
+  return Object.values(output);
+};
+
+const selectedItems = (items, value, key) => {
+  const output = items.filter(d => value.split(".").includes(d.id || d.value));
+  return {
+    [key]: output,
+    [`${key}Temp`]: output
+  };
+};
+
 const datasets = [
   {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2017), productLevel: "HS6"},
   {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2017), productLevel: "HS6"},
@@ -123,6 +149,7 @@ class Vizbuilder extends React.Component {
       _selectedItemsTechnologyTitle: [],
       _selectedItemsYearTitle: [],
 
+      // Scatter plot config
       wdiIndicators: [],
       _yAxis: {},
       _xAxis: {},
@@ -131,27 +158,50 @@ class Vizbuilder extends React.Component {
       _xAxisScale: "Log",
       _yAxisScale: "Log",
 
-      // Subnational
+      // Subnational config
       subnatGeography: [],
+      subnatGeographyItems: [],
       subnatProduct: [],
-      subnatTime: []
+      subnatTime: [],
+      selectedSubnatGeoTemp: [],
+      selectedSubnatGeo: [],
+      selectedSubnatProductTemp: [],
+      selectedSubnatProduct: []
     };
   }
 
   fetchSubnationalData = async cubeName => {
     const subnatItem = subnat.subnat_fra;
-    const {geoLevels} = subnatItem;
+    const {geoLevels, productLevels} = subnatItem;
+    const {routeParams} = this.props;
+    const {country, viztype} = routeParams;
 
     const params = {
       cube: cubeName,
-      drilldowns: geoLevels[geoLevels.length - 1],
       measures: "Trade Value",
       parents: true
     };
-    const queryString = queryParser(params);
-    const data = await axios.get(`/olap-proxy/data?${queryString}`)
+
+    const queryStringA = queryParser({...params, drilldowns: geoLevels[geoLevels.length - 1]});
+    const dataGeo = await axios.get(`/olap-proxy/data?${queryStringA}`)
       .then(resp => resp.data);
-    console.log(data);
+
+    const queryStringB = queryParser({...params, drilldowns: productLevels[productLevels.length - 1]});
+    const dataProduct = await axios.get(`/olap-proxy/data?${queryStringB}`)
+      .then(resp => resp.data);
+
+    const itemsGeo = getHierarchyList(dataGeo.data, geoLevels);
+    const itemsProduct = getHierarchyList(dataProduct.data, productLevels);
+
+    const selectedGeo = selectedItems(itemsGeo, country, "selectedSubnatGeo");
+    const selectedProduct = selectedItems(itemsProduct, viztype, "selectedSubnatProduct");
+
+    this.setState({
+      subnatGeography: dataGeo.data,
+      subnatGeographyItems: itemsGeo,
+      ...selectedGeo,
+      ...selectedProduct
+    });
   }
 
 
@@ -452,6 +502,11 @@ class Vizbuilder extends React.Component {
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
+    ["selectedSubnatGeo", "selectedSubnatProduct"].reduce((obj, d) => {
+      if (!obj[d]) obj[d] = this.state[`${d}Temp`];
+      return obj;
+    }, {});
+
     this.setState({
       ...prevState,
       _selectedItemsCountry,
@@ -500,13 +555,16 @@ class Vizbuilder extends React.Component {
     const nextTime = !isTimeSeriesChart ? years[timeIndex - 1] : undefined;
 
     const {vbTitle, vbParams} = getVbTitle(
-      routeParams,
-      this.state._selectedItemsCountryTitle,
-      this.state._selectedItemsPartnerTitle,
-      this.state._selectedItemsProductTitle,
-      this.state._selectedItemsTechnologyTitle,
-      this.state._xAxisTitle,
-      this.state._yAxisTitle
+      {
+        geo: this.state.selectedSubnatGeo || this.state._selectedItemsCountryTitle,
+        geoPartner: this.state._selectedItemsPartnerTitle,
+        product: this.state.selectedSubnatProduct || this.state._selectedItemsProductTitle,
+        technology: this.state._selectedItemsTechnologyTitle},
+      {
+        x: this.state._xAxisTitle,
+        y: this.state._yAxisTitle
+      },
+      routeParams
     );
 
     return <div id="vizbuilder">
@@ -537,6 +595,64 @@ class Vizbuilder extends React.Component {
                 callback={d => this.handleTabOption(d)}
                 permalinkIds={this.getPermalinkIds()}
               />
+
+              <div className="columns">
+                <div className="column-1">
+                  <div className="select-multi-section-wrapper">
+                    <h4 className="title">{t("Subnat Geography")}</h4>
+                    <SelectMultiHierarchy
+                      getColor={d => "blue"}
+                      getIcon={d => "/images/icons/hs/hs_22.svg"}
+                      items={this.state.subnatProduct}
+                      levels={["Product"]}
+                      onItemSelect={item => {
+                        const nextItems = this.state.selectedSubnatProductTemp.concat(item);
+                        this.setState({selectedSubnatProductTemp: nextItems});
+                      }}
+                      onItemRemove={(evt, item) => {
+                        // evt: MouseEvent<HTMLButtonElement>
+                        // item: SelectedItem
+                        evt.stopPropagation();
+                        const nextItems = this.state.selectedSubnatProductTemp.filter(i => i !== item);
+                        this.setState({selectedSubnatProductTemp: nextItems});
+                      }}
+                      onClear={() => {
+                        this.setState({selectedSubnatProductTemp: []});
+                      }}
+                      selectedItems={this.state.selectedSubnatProductTemp}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="columns">
+                <div className="column-1">
+                  <div className="select-multi-section-wrapper">
+                    <h4 className="title">{t("Subnat Geography")}</h4>
+                    <SelectMultiHierarchy
+                      getColor={d => "blue"}
+                      getIcon={d => "/images/icons/hs/hs_22.svg"}
+                      items={this.state.subnatGeography}
+                      levels={["Region", "Subnat Geography"]}
+                      onItemSelect={item => {
+                        const nextItems = this.state.selectedSubnatGeoTemp.concat(item);
+                        this.setState({selectedSubnatGeoTemp: nextItems});
+                      }}
+                      onItemRemove={(evt, item) => {
+                        // evt: MouseEvent<HTMLButtonElement>
+                        // item: SelectedItem
+                        evt.stopPropagation();
+                        const nextItems = this.state.selectedSubnatGeoTemp.filter(i => i !== item);
+                        this.setState({selectedSubnatGeoTemp: nextItems});
+                      }}
+                      onClear={() => {
+                        this.setState({selectedSubnatGeoTemp: []});
+                      }}
+                      selectedItems={this.state.selectedSubnatGeoTemp}
+                    />
+                  </div>
+                </div>
+              </div>
 
               {productSelector && <div className="columns">
                 <div className="column-1">
