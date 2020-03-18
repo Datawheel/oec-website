@@ -70,7 +70,7 @@ class OECNavbar extends Component {
     const {auth, locale, title, scrolled} = this.props;
     const {navVisible, searchVisible} = this.state;
     const {basename, pathname, search} = this.context.router.location;
-    const currentURL = encodeURIComponent(`${basename}${pathname}${search}`);
+    const currentURL = encodeURIComponent(`${basename}${pathname}${search}`.replace("//", "/"));
 
     return (
       <div className="navbar">
