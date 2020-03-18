@@ -9,7 +9,7 @@ import queryString from "query-string";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import SearchMultiSelect from "components/SearchMultiSelect";
-import SelectMultiSection from "components/SelectMultiSection";
+import SelectMultiHierarchy from "components/SelectMultiHierarchy";
 import TariffTable from "pages/Tariffs/TariffTable";
 import {TARIFF_DATASETS} from "helpers/consts";
 import {Alignment, AnchorButton, Button, ButtonGroup, Navbar} from "@blueprintjs/core";
@@ -229,7 +229,7 @@ class Tariffs extends React.Component {
             <div className="prediction-control">
               <h3>Product</h3>
               {selectionType === "product"
-                ? <SelectMultiSection
+                ? <SelectMultiHierarchy
                   items={dataset.selections[2].data}
                   onItemSelect={item => {
                     // item: SelectedItem
