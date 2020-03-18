@@ -4,10 +4,13 @@ import classNames from "classnames";
 import React, {Fragment, useMemo, useRef, useState} from "react";
 import List from "react-viewport-list";
 
-const levels = ["Section", "HS2", "HS4"];
+/**
+ * @typedef OwnProps
+ * @property {string[]} levels
+ */
 
-/** @type {React.FC<import("@blueprintjs/select").IItemListRendererProps<import("./SelectMultiSection").SelectedItem>>} */
-const HierarchyList = ({activeItem, renderItem, items}) => {
+/** @type {React.FC<import("@blueprintjs/select").IItemListRendererProps<import("./SelectMultiHierarchy").SelectedItem> & OwnProps>} */
+const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
   const viewPortRef = useRef(null);
 
   const [showAll, setShowAll] = useState(false);
@@ -32,9 +35,7 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
   const finalList = useMemo(() => {
     if (showAll) return items;
     return stack.reduce(
-      (list, token) => list.filter(item =>
-        !token || token.startsWith("All") || item.searchIndex.indexOf(token) > -1
-      ),
+      (list, token) => list.filter(item => !token || item.searchIndex.indexOf(token) > -1),
       items.filter(item => item.type === currentLevel)
     );
   }, [items, showAll, stackIndex]);
@@ -48,7 +49,7 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
 
   return (
     <Fragment>
-      <ButtonGroup className="sm-section--level" fill={true} minimal={true}>
+      <ButtonGroup className="sh-hie--level" fill={true} minimal={true}>
         <Button
           active={showAll}
           onClick={() => {
@@ -75,12 +76,12 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
         )}
       </ButtonGroup>
       {stackIndex > 0 &&
-        <div className="sm-section--hielist-header">
+        <div className="sh-hie--hielist-header">
           <Button icon="arrow-left" onClick={popCategory} minimal={true} />
-          <div className="sm-section--hielist-htokens">
+          <div className="sh-hie--hielist-htokens">
             {headerTokens.map((token, index) =>
               <Text
-                className={`sm-section--hielist-htoken level-${index}`}
+                className={`sh-hie--hielist-htoken level-${index}`}
                 ellipsize={true}
                 key={`${index}-${token}`}
               >
@@ -92,8 +93,8 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
       }
       <Menu
         className={classNames({
-          "sm-section--hielist-content": true,
-          "sm-section--show-all": showAll
+          "sh-hie--hielist-content": true,
+          "sh-hie--show-all": showAll
         })}
         ulRef={viewPortRef}
       >
@@ -108,7 +109,7 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
             const item = finalList[index];
             return (
               <li
-                className={`sm-section--list-item sm-section--type-${item.type}`}
+                className={`sh-hie--list-item sh-hie--level-${levels.indexOf(item.type)}`}
                 key={item.id}
                 ref={innerRef}
                 style={style}
@@ -117,7 +118,7 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
                 {!showAll && item.type !== levels[levels.length - 1] &&
                   <button
                     className={classNames(
-                      "sm-section--descendants",
+                      "sh-hie--descendants",
                       Classes.MENU_ITEM,
                       Classes.iconClass("caret-right")
                     )}
@@ -134,4 +135,4 @@ const HierarchyList = ({activeItem, renderItem, items}) => {
   );
 };
 
-export default HierarchyList;
+export default SMHNaviList;

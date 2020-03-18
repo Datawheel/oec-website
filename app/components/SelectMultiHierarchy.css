@@ -1,4 +1,4 @@
-.sm-section--popover {
+.sh-hie--popover {
   & .bp3-popover-content {
     background: var(--dark-4) !important;
     color: var(--white) !important;
@@ -13,7 +13,7 @@
   }
 }
 
-.sm-section--level {
+.sh-hie--level {
   & .bp3-button {
     margin: 1px;
     color: var(--white) !important;
@@ -26,53 +26,66 @@
   width: 250px;
 }
 
-.sm-section--hielist-header {
+.sh-hie--hielist-header {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
 }
-.sm-section--hielist-htoken {
+.sh-hie--hielist-htoken {
   margin-left: 0.5rem;
   max-width: 260px;
 }
-.sm-section--hielist-content {
+.sh-hie--hielist-content {
   will-change: transform;
 }
 
-.sm-section--list-item {
+.sh-hie--list-item {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
 }
 
-.sm-section--option {
+.sh-hie--option {
   flex: 1 0 0;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  min-width: 270px;
 
   & > div {
     width: 250px;
   }
 }
-.sm-section--descendants {
+.sh-hie--descendants {
   flex: 0 0;
 }
-.sm-section--hs-icon {
-  width: 24px;
+.sh-hie--hs-icon {
+  max-height: 24px;
+  max-width: 36px;
   margin: -2px;
   margin-right: 0.5rem;
-
-  .bp3-tag & {
-    width: 16px;
-  }
+  white-space: nowrap;
+  line-height: 24px;
+  overflow: hidden;
+}
+.bp3-tag .sh-hie--hs-icon {
+  width: 20px;
 }
 
-.sm-section--show-all {
-  & .sm-section--type-HS2 {
+.sh-hie--show-all {
+  & .sh-hie--level-1 {
     padding-left: 0.5rem;
   }
-  & .sm-section--type-HS4 {
+  & .sh-hie--level-2 {
     padding-left: 1rem;
+  }
+  & .sh-hie--level-3 {
+    padding-left: 1.5rem;
+  }
+  & .sh-hie--level-4 {
+    padding-left: 2rem;
+  }
+  & .sh-hie--level-5 {
+    padding-left: 2.5rem;
   }
 }
