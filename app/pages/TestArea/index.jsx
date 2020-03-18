@@ -1,9 +1,13 @@
+// @ts-check
 import axios from "axios";
 import React, {useEffect, useState} from "react";
-import SelectMultiSection from "components/SelectMultiSection";
+import SelectMultiHierarchy from "components/SelectMultiHierarchy";
+import colors from "helpers/colors";
 
-const SECTION_DATA_URL =
+const URL_PRODUCTS =
   "/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false";
+const URL_TECHNOLOGY =
+  "/olap-proxy/data.jsonrecords?cube=patents_i_uspto_w_cpc&drilldowns=Subclass&measures=Patent+Share&parents=true&sparse=false";
 
 /** @type {React.FC<import("react-router").RouteComponentProps>} */
 const TestArea = () => {
@@ -16,37 +20,66 @@ const TestArea = () => {
   //   color: string;
   //   icon: string;
   // }
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedProds, setSelectedProds] = useState([]);
+  const [selectedTechs, setSelectedTechs] = useState([]);
 
   // here I'm storing the values obtained from the ajax request
-  const [sectionData, setSectionData] = useState([]);
+  const [prodsData, setProdsData] = useState([]);
+  const [techsData, setTechsData] = useState([]);
   useEffect(() => {
-    axios.get(SECTION_DATA_URL).then(resp => {
-      setSectionData(resp.data.data);
+    axios.get(URL_PRODUCTS).then(resp => {
+      setProdsData(resp.data.data);
+    });
+    axios.get(URL_TECHNOLOGY).then(resp => {
+      setTechsData(resp.data.data);
     });
   }, []);
 
   return (
     <div className="test-area">
-      <SelectMultiSection
-        items={sectionData}
-        onItemSelect={item => {
-          // item: SelectedItem
-          const nextItems = selectedItems.concat(item);
-          setSelectedItems(nextItems);
-        }}
-        onItemRemove={(evt, item) => {
-          // evt: MouseEvent<HTMLButtonElement>
-          // item: SelectedItem
-          evt.stopPropagation();
-          const nextItems = selectedItems.filter(i => i !== item);
-          setSelectedItems(nextItems);
-        }}
-        onClear={() => {
-          setSelectedItems([]);
-        }}
-        selectedItems={selectedItems}
-      />
+      <div className="products" style={{margin: "2rem", width: "320px"}}>
+        <SelectMultiHierarchy
+          levels={["Section", "HS2", "HS4"]}
+          items={prodsData}
+          selectedItems={selectedProds}
+          getColor={d => colors.Section[d["Section ID"]]}
+          getIcon={d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
+          onItemSelect={item => {
+            const nextItems = selectedProds.concat(item);
+            setSelectedProds(nextItems);
+          }}
+          onItemRemove={(evt, item) => {
+            evt.stopPropagation();
+            const nextItems = selectedProds.filter(i => i !== item);
+            setSelectedProds(nextItems);
+          }}
+          onClear={() => {
+            setSelectedProds([]);
+          }}
+        />
+      </div>
+
+      <div className="tech" style={{margin: "2rem", width: "320px"}}>
+        <SelectMultiHierarchy
+          levels={["Section", "Superclass", "Class", "Subclass"]}
+          items={techsData}
+          selectedItems={selectedTechs}
+          getColor={d => colors["CPC Section"][d["Section ID"]]}
+          getIcon={d => `/images/icons/cpc/${d["Section ID"]}.png`}
+          onItemSelect={item => {
+            const nextItems = selectedTechs.concat(item);
+            setSelectedTechs(nextItems);
+          }}
+          onItemRemove={(evt, item) => {
+            evt.stopPropagation();
+            const nextItems = selectedTechs.filter(i => i !== item);
+            setSelectedTechs(nextItems);
+          }}
+          onClear={() => {
+            setSelectedTechs([]);
+          }}
+        />
+      </div>
     </div>
   );
 };

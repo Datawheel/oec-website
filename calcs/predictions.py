@@ -1,5 +1,6 @@
 import os, sys, json, logging, warnings
 import pandas as pd
+from numpy import timedelta64
 from numpy.random import seed
 logging.getLogger('fbprophet').setLevel(logging.CRITICAL)
 from fbprophet import Prophet
@@ -7,9 +8,11 @@ import requests
 
 # test with:
 # python -W ignore calcs/predictions.py '{"cube":"services_i_comtrade_a_eb02","Reporter Country":"sapry","drilldowns":"Year","measures":"Service Value"}'
+# python -W ignore calcs/predictions.py '{"cube":"trade_i_baci_a_92","Reporter Country":"sachl","drilldowns":"Year","measures":"Trade Value"}'
+# python -W ignore calcs/predictions.py '{"cube":"trade_i_comtrade_m_hs","Reporter Country":"sachl","drilldowns":"Time","measures":"Trade Value"}'
 
-DEBUG = False
-# DEBUG = True
+# DEBUG = False
+DEBUG = True
 
 class suppress_stdout_stderr(object):
   '''
@@ -62,6 +65,8 @@ class PredictClass(object):
     self.forecast_df = None
     self.merged_df = None
     self.params = params
+    self.datadf_all = pd.DataFrame()
+    self.datadf_all_moes = pd.DataFrame()
 
   def _filter(df, dds):
     for dd in dds:
@@ -71,7 +76,7 @@ class PredictClass(object):
       return df
 
   def load_data(self):
-    api_token = params.pop("apiToken")
+    api_token = params.pop("apiToken", "")
     req = requests.Request("GET", API, headers={'x-tesseract-jwt-token': api_token}, params=params)
     prep = req.prepare()
     # print(json.dumps({"url": prep.url}))
@@ -129,6 +134,40 @@ class PredictClass(object):
       print("\nFuture DataFrame (last row):\n________________\n")
       print(self.forecast_df.iloc[-1])
 
+  def stats(self):
+    time_drilldown = params.get("drilldowns", "Year")
+    last_observed = self.raw_df.y_orig.iloc[-1]
+    last_observed_date = self.raw_df.index[-1]
+    last_observed_year = int(last_observed_date.strftime("%Y"))
+    if DEBUG:
+      print("last_observed", last_observed)
+      print("last_observed_date", last_observed_date)
+      print("last_observed_year", last_observed_year)
+    self.merged_df["pct_change"] = self.merged_df["y_orig"].fillna(self.merged_df["yhat"])
+    self.merged_df["pct_change"] = self.merged_df["pct_change"].pct_change()
+
+    self.merged_df["abs_change"] = self.merged_df["y_orig"].fillna(self.merged_df["yhat"])
+    self.merged_df["abs_change"] = self.merged_df["abs_change"].diff()
+    if time_drilldown == "Year":
+      self.merged_df["dt"] = self.merged_df.index
+      self.merged_df["dt"] = self.merged_df["dt"].dt.strftime("%Y")
+      self.merged_df["dt"] = self.merged_df["dt"].astype("int32")
+      self.merged_df["dt"] = self.merged_df["dt"] - last_observed_year
+    else:
+      self.merged_df["dt"] = self.merged_df.index
+      self.merged_df["dt"] = (self.merged_df["dt"] - last_observed_date) / timedelta64(1, 'M')
+      self.merged_df["dt"] = self.merged_df["dt"].round()
+
+    self.merged_df["cagr"] = self.merged_df["yhat"]
+    self.merged_df["cagr"] = self.merged_df["cagr"] / last_observed
+    self.merged_df["cagr"] = self.merged_df["cagr"].pow(1. / self.merged_df["dt"])
+    self.merged_df["cagr"] = self.merged_df["cagr"] - 1
+
+    self.merged_df = self.merged_df.drop(['dt'], axis=1)
+
+    if DEBUG:
+      print(self.merged_df.tail(11))
+
   def print_json(self):
     # cast date back to string (for JS processing)
     self.merged_df = self.merged_df.reset_index()
@@ -146,6 +185,7 @@ def main():
   my_prediction = PredictClass(params)
   my_prediction.load_data()
   my_prediction.predict()
+  my_prediction.stats()
   my_prediction.print_json()
   # print(json.dumps({"params": params}))
 

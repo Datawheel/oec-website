@@ -12,7 +12,7 @@ import VirtualSelector from "components/VirtualSelector";
 import OECMultiSelect from "components/OECMultiSelect";
 import VbTitle from "components/VbTitle";
 import colors from "helpers/colors";
-import SelectMultiSection from "components/SelectMultiSection";
+import SelectMultiHierarchy from "components/SelectMultiHierarchy";
 import SimpleSelect from "components/SimpleSelect";
 
 import {Button, Switch} from "@blueprintjs/core";
@@ -542,8 +542,11 @@ class Vizbuilder extends React.Component {
                 <div className="column-1">
                   <div className="select-multi-section-wrapper">
                     <h4 className="title">{t("Product")}</h4>
-                    <SelectMultiSection
+                    <SelectMultiHierarchy
+                      getColor={d => colors.Section[d["Section ID"]]}
+                      getIcon={d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
                       items={this.state.product}
+                      levels={["Section", "HS2", "HS4", "HS6"]}
                       onItemSelect={item => {
                         const nextItems = this.state._selectedItemsProduct.concat(item);
                         this.setState({_selectedItemsProduct: nextItems});
@@ -556,7 +559,7 @@ class Vizbuilder extends React.Component {
                         this.setState({_selectedItemsProduct: nextItems});
                       }}
                       onClear={() => {
-                        // setSelectedItems([]);
+                        this.setState({_selectedItemsProduct: []});
                       }}
                       selectedItems={this.state._selectedItemsProduct}
                     />
