@@ -10,3 +10,6 @@ export const hsId = prevId => {
   const newId = text.substr(-digit);
   return newId;
 };
+
+export const queryParser = params => Object.entries(params).map(d => `${d[0]}=${d[1]}`).join("&")
+;

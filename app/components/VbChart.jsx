@@ -12,6 +12,7 @@ import {
 } from "d3plus-react";
 import {range} from "helpers/utils";
 import colors from "helpers/colors";
+import subnat from "helpers/subnatVizbuilder";
 import {formatAbbreviate} from "d3plus-format";
 
 import "./VbChart.css";
@@ -27,6 +28,8 @@ const measures = ["Trade Value", "Growth", "Growth (%)"];
 
 const CANON_STATS_API = "/api/stats/";
 const OLAP_API = "/olap-proxy/data";
+
+const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
 
 class VbChart extends React.Component {
   constructor(props) {
@@ -68,16 +71,76 @@ class VbChart extends React.Component {
     }
   };
 
+  fetchSubnatData = () => {
+    const {routeParams} = this.props;
+    const {cube, chart, flow, country, partner, viztype, time} = routeParams;
+    const flowItems = {
+      export: 2,
+      import: 1
+    };
+    const subnatData = subnat[cube];
+    const partnerId = !["show", "all"].includes(partner)
+      ? countryMembers.filter(d => geoFilter(d, partner))
+      : undefined;
+
+    const isFilter = !["show", "all"].includes(viztype);
+
+    const drilldowns = [];
+    const timeOptions = {
+      4: "Year",
+      5: "Quarter",
+      6: "Month"
+    };
+    const timeLevel = timeOptions[time.toString().length] || "Year";
+    const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
+
+    if (!geoId) drilldowns.push("Subnat Geography");
+    else if (geoId && viztype === "show") drilldowns.push("Product");
+    else if (geoId && viztype === "all" || geoId && isFilter) drilldowns.push("Country");
+
+    if (isFilter) drilldowns.push(timeLevel);
+
+    const params = {
+      cube: subnatData.cube,
+      drilldowns: drilldowns.join(),
+      measures: "Trade Value",
+      parents: true
+    };
+
+    params.Time = time;
+
+    if (flowItems[flow]) params["Trade Flow"] = flowItems[flow];
+    if (partnerId) params.Country = partnerId.map(d => d.value).join();
+    if (isFilter) params.Product = viztype;
+
+
+    return axios
+      .get(OLAP_API, {params})
+      .then(resp => {
+        const data = resp.data.data;
+        // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
+        this.setState({
+          data,
+          loading: false,
+          routeParams
+        });
+      }).catch(error => {
+        this.setState({data: [], loading: false, routeParams});
+      });
+  }
+
   fetchData = () => {
     const {routeParams} = this.props;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
+
+    // Uses subnat cubes
+    if (subnat[cube]) return this.fetchSubnatData();
 
     const prevState = {data: [], loading: true};
     if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
     this.setState(prevState);
 
     // Gets countries and partners
-    const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
     const countryId = countryMembers.filter(d => geoFilter(d, country));
     const partnerId = !["show", "all"].includes(partner)
       ? countryMembers.filter(d => geoFilter(d, partner))
@@ -97,7 +160,7 @@ class VbChart extends React.Component {
       : range(timeInterval[0], timeInterval[timeInterval.length - 1]).join();
     if (timeInterval.length === 1) timeInterval.push(timeInterval[0]);
 
-    const cubeName = !isTechnology
+    const cubeName = this.props.cubeName || !isTechnology
       ? `trade_i_baci_a_${cube.replace("hs", "")}`
       : "patents_i_uspto_w_cpc";
     const measureName = isTechnology ? "Patent Share" : "Trade Value";
@@ -306,6 +369,8 @@ class VbChart extends React.Component {
           loading: false,
           routeParams
         });
+      }).catch(error => {
+        this.setState({data: [], loading: false, routeParams});
       });
   };
 
@@ -438,9 +503,18 @@ class VbChart extends React.Component {
       }
     };
 
+    const isSubnat =  subnat[cube];
+    if (isSubnat) {
+      const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
+
+      if (!geoId) baseConfig.groupBy = isSubnat.geoLevels;
+      else if (geoId && viztype === "show") baseConfig.groupBy = ["Product"];
+      else if (geoId && viztype === "all" || geoId && isFilter) baseConfig.groupBy = ["Continent", "Country"];
+
+    }
+
     if (chart === "tree_map" && data && data.length > 0) {
       const isContinentGroupBy = baseConfig.groupBy[0] === "Continent";
-      console.log(isContinentGroupBy, baseConfig.groupBy[0]);
       return (
         <div>
           <div className="vb-chart">
@@ -640,7 +714,12 @@ class VbChart extends React.Component {
         </div>
       );
     }
-    else if (chart === "geomap" && data && data.length > 0) {
+    else if (chart === "geomap" && data && !loading) {
+      const topojson = isSubnat
+        ? subnat[cube].topojson[subnat[cube].topojson.length - 1]
+        : "/topojson/world-50m.json";
+      console.log(topojson);
+
       return (
         <div>
           <div className="vb-chart">
@@ -650,16 +729,18 @@ class VbChart extends React.Component {
                 ...onClickConfig,
                 colorScale: measure,
                 colorScaleConfig: {
-                  scale: "log"
+                  scale: isSubnat ? "jenks" : "log"
                 },
-                groupBy: "ISO 3",
+                groupBy: isSubnat ? "Subnat Geography ID" : "ISO 3",
                 legend: false,
                 ocean: false,
                 tiles: false,
-                topojson: "/topojson/world-50m.json",
-                topojsonFilter: d => d.id !== "ata",
-                topojsonId: "id",
-                topojsonKey: "id",
+                topojson,
+                // topojsonFilter: d => d.id !== "ata",
+                // topojsonId: "id",
+                topojsonId: d => d.properties.id,
+                topojsonKey: isSubnat ? "objects" : "id",
+                // topojsonKey: "id",
                 total: false
               }}
             />

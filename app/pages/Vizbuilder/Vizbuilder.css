@@ -14,7 +14,10 @@
         transition: margin 0.7s ease 0s;
         & .controls {
           width: 100%;
-          height: 30px;
+          height: auto;
+          & label {
+            font-size: var(--font-lg);
+          }
         }
       }
     }

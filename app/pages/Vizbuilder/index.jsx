@@ -20,14 +20,16 @@ import {range} from "helpers/utils";
 
 import "./Vizbuilder.css";
 import {getVbTitle} from "../../helpers/vbTitle";
+import {queryParser} from "helpers/formatters";
+import subnat from "helpers/subnatVizbuilder";
 
 const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
 
 const datasets = [
-  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2017)},
-  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2017)},
-  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", data: cubeData(2003, 2017)},
-  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2017)}
+  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2017), productLevel: "HS6"},
+  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2017), productLevel: "HS6"},
+  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", data: cubeData(2003, 2017), productLevel: "HS6"},
+  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2017), productLevel: "HS6"}
   // {value: "sitc", title: "SITC", data: cubeData(1964, 2017)}
   // {value: "cpc", title: "Technology"}
 ];
@@ -78,20 +80,27 @@ class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
     const {location, params} = this.props;
+    const {cube, chart} = params;
+
+    const cubeSelected = datasets.find(d => d.value === cube) || datasets[0];
+
+    // location.query.controls
+    // ? location.query.controls === "true" :
     this.state = {
       activeTab: params ? params.chart : "tree_map",
-      controls: location.query.controls
-        ? location.query.controls === "true" : true,
+      controls: false,
       country: [],
       product: [],
       productLevel: "HS6",
       technology: [],
       permalink: undefined,
 
+      cubeSelected,
+
       _product: undefined,
       _country: undefined,
       _countryId: "all",
-      _dataset: datasets[0],
+      _dataset: cubeSelected,
       _flow: flowItems[0],
       _partner: undefined,
       _partnerId: "all",
@@ -120,11 +129,33 @@ class Vizbuilder extends React.Component {
       _xAxisTitle: {},
       _yAxisTitle: {},
       _xAxisScale: "Log",
-      _yAxisScale: "Log"
+      _yAxisScale: "Log",
+
+      // Subnational
+      subnatGeography: [],
+      subnatProduct: [],
+      subnatTime: []
     };
   }
 
-  fetchProductNames = async(cubeName, levelName) => {
+  fetchSubnationalData = async cubeName => {
+    const subnatItem = subnat.subnat_fra;
+    const {geoLevels} = subnatItem;
+
+    const params = {
+      cube: cubeName,
+      drilldowns: geoLevels[geoLevels.length - 1],
+      measures: "Trade Value",
+      parents: true
+    };
+    const queryString = queryParser(params);
+    const data = await axios.get(`/olap-proxy/data?${queryString}`)
+      .then(resp => resp.data);
+    console.log(data);
+  }
+
+
+  fetchProductNames = async(cubeName, levelName = "HS6", levels = ["Section", "HS2", "HS4", "HS6"]) => {
     const params = {
       cube: cubeName,
       drilldowns: levelName,
@@ -132,20 +163,29 @@ class Vizbuilder extends React.Component {
       parents: true,
       sparse: false
     };
+    const {routeParams} = this.props;
+    const {viztype} = routeParams;
 
-    const queryString = Object.entries(params).map(d => `${d[0]}=${d[1]}`).join("&");
+    const queryString = queryParser(params);
 
     const data = await axios.get(`/olap-proxy/data?${queryString}`)
       .then(resp => resp.data);
 
     const productData = data.data;
-    const productKeys = createItems(productData, [levelName], "/images/icons/hs/hs_");
-    // const _selectedItemsProduct = isFinite(viztype.split(".")[0])
-    //   ? viztype.split(".").map(d => productKeys[d]) : [];
-    console.log(productKeys);
+    const productKeys = createItems(productData, levels, "/images/icons/hs/hs_");
+    const _selectedItemsProduct = isFinite(viztype.split(".")[0])
+      ? viztype.split(".").map(d => productKeys[d]) : [];
+
+    this.setState({
+      product: productData,
+      productKeys,
+      _selectedItemsProduct,
+      _selectedItemsProductTitle: _selectedItemsProduct
+    });
   }
 
   componentDidMount = () => {
+    this.fetchSubnationalData("trade_s_fra_q_cpf");
     const {productLevel, _dataset} = this.state;
     const cubeName = _dataset.cubeName;
     window.addEventListener("scroll", this.handleScroll);
@@ -185,6 +225,14 @@ class Vizbuilder extends React.Component {
     }));
 
 
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    // Updates product list
+    if (this.state.cubeSelected.cubeName !== prevState.cubeSelected.cubeName) {
+      const {cubeName} = this.state.cubeSelected;
+      this.fetchProductNames(cubeName);
+    }
   }
 
   // componentDidUpdate = (prevProps, prevState) => {
@@ -260,7 +308,7 @@ class Vizbuilder extends React.Component {
       timeIds
     ];
     const permalink = `/${permalinkItems.join("/")}/`;
-    this.updateFilterSelected({permalink});
+    this.updateFilterSelected({permalink, cubeSelected: _dataset});
     router.push(permalink);
   };
 
@@ -393,7 +441,7 @@ class Vizbuilder extends React.Component {
     const _selectedItemsYear = years
       .filter(d => time.split(".").includes(d.value.toString()));
     const _selectedItemsProduct = isFinite(viztype.split(".")[0])
-      ? viztype.split(".").map(d => productKeys[d]) : [];
+      ? viztype.split(".").map(d => productKeys[d]).filter(d => d) : [];
 
     const _selectedItemsTechnology = ["cpc"].includes(cube) ? technologyData
       .filter(d => viztype.split(".").includes(d.value)) : [];
@@ -461,8 +509,6 @@ class Vizbuilder extends React.Component {
       this.state._yAxisTitle
     );
 
-    // console.log(this.fetchProductNames("trade_i_baci_a_96", "HS6"));
-
     return <div id="vizbuilder">
       <OECNavbar
         className={scrolled ? "background" : ""}
@@ -472,15 +518,19 @@ class Vizbuilder extends React.Component {
 
       <div className="vb-profile">
         <div className="vb-columns">
-          <div className="vb-column aside" style={!this.state.controls ? {marginLeft: -250} : {}}>
+          <div
+            className="vb-column aside"
+            // style={!this.state.controls ? {marginLeft: -250} : {}}
+          >
             <div className="controls">
               <Switch
-                checked={this.state.controls}
+                checked={(console.log(this.state.controls), this.state.controls)}
                 onChange={this.handleControls}
                 alignIndicator="right"
+                label="VizBuilder PRO"
               />
             </div>
-            {this.state.controls && <div className="content">
+            {<div className="content">
               <VbTabs
                 activeOption={this.props.location.pathname}
                 activeTab={activeTab}
@@ -668,6 +718,7 @@ class Vizbuilder extends React.Component {
             </div>
             <VbChart
               countryData={this.state.country}
+              cubeName={this.state.cubeSelected.cubeName}
               permalink={this.state.permalink}
               routeParams={routeParams}
               router={this.props.router}

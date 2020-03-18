@@ -19,7 +19,8 @@ export const getVbTitle = (routeParams,
   const {chart, flow, country, partner, viztype, time} = routeParams;
   const _countryNames = getList(selectedItemsCountry.map(d => d.title));
   const _partnerNames = getList(selectedItemsPartner.map(d => d.title));
-  const _productNames = getList(selectedItemsProduct.map(d => d.name));
+  console.log(selectedItemsProduct);
+  const _productNames = getList(selectedItemsProduct ? selectedItemsProduct.map(d => d.name) : []);
   const _technologyNames = getList(selectedItemsTechnology.map(d => d.title));
 
   const isTrade = new RegExp(/(export|import)/).test(flow);

@@ -128,7 +128,8 @@ class VbShare extends React.Component {
 
   render() {
     const {separator} = this.state;
-    const columnKeys = Object.keys(this.props.data[0]);
+    const {data} = this.props;
+    const columnKeys = data[0] ? Object.keys(data[0]) : [];
     const columns = columnKeys.map(d => ({Header: d, accessor: d}));
 
     return <div>
