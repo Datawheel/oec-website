@@ -19,8 +19,8 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Countries", url: `/${locale}/rankings/country/eci/`},
-      {title: "Products",  url: `/${locale}/rankings/product/hs92/`}
+      {title: "Country rankings", url: `/${locale}/rankings`},
+      {title: "Product rankings", url: `/${locale}/rankings`}
     ]},
     // tools
     {title: "Tools", items: [
