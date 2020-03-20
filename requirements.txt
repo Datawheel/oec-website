@@ -6,4 +6,5 @@ requests
 statsmodels
 scikit-learn
 fbprophet
+simplejson
 

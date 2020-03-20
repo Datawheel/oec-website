@@ -102,7 +102,7 @@ class Rankings extends Component {
 											0,
 											props.original[`${productDepth} ID`].toString().length * 1 -
 												productDepth.substr(2) * 1
-										)}.png`
+										)}.svg`
 								)
 							}
 							alt="icon"
