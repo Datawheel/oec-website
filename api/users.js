@@ -4,7 +4,8 @@ const {
   CANON_STRIPE_SECRET
 } = process.env;
 
-const stripe = require("stripe")(CANON_STRIPE_SECRET);
+const bcrypt = require("bcrypt-nodejs"),
+      stripe = require("stripe")(CANON_STRIPE_SECRET);
 
 const isRole = role => (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -21,6 +22,32 @@ const isRole = role => (req, res, next) => {
 module.exports = function(app) {
 
   const {db} = app.settings;
+
+  app.post("/auth/password/change", isRole(0), async(req, res) => {
+
+    const {oldPassword, newPassword} = req.body;
+    const {id, password, salt} = req.user;
+
+    const hashedPassword = bcrypt.hashSync(oldPassword, salt);
+
+    if (password === hashedPassword) {
+
+      const newSalt = bcrypt.genSaltSync(10);
+      const newHashedPassword = bcrypt.hashSync(newPassword, newSalt);
+
+      await db.users.update({
+        salt: newSalt,
+        password: newHashedPassword
+      }, {where: {id}});
+
+      return res.json({msg: "Password updated successfully!"});
+
+    }
+    else {
+      return res.json({error: "The current password you entered is not correct."});
+    }
+
+  });
 
   const stripeUser = async(req, res, next) => {
     const {id, email, name, socialEmail} = req.user;

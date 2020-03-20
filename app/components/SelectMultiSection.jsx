@@ -106,8 +106,8 @@ const SelectMultiSection = ({
       items={extendedItems}
       onItemSelect={onItemSelect}
       popoverProps={{
-        boundary: "viewport",
-        captureDismiss: true,
+        // boundary: "viewport",
+        // captureDismiss: true,
         fill: true,
         minimal: true,
         popoverClassName: "sm-section--popover"

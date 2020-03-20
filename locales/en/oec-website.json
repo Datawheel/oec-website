@@ -26,8 +26,15 @@
   "Contributor": "Contributor",
   "Countries by Technology": "Countries by Technology",
   "Country": "Country",
+  "CMS": {
+    "SourceGroup": {
+      "Data provided by": "Data from"
+    }
+  },
+  "Dataset": "Dataset",
   "ECI Rankings": "ECI Rankings",
   "Economic Complexity": "Economic Complexity",
+  "End Year": "End Year",
   "Export Destinations": "Export Destinations",
   "Exporters": "Exporters",
   "Exports": "Exports",
@@ -59,7 +66,9 @@
   "No results": {
     "": "No results."
   },
+  "Opportunity Gain Space": "Opportunity Gain Space",
   "PGI Product Space": "PGI Product Space",
+  "Partner": "Partner",
   "Patenters": "Patenters",
   "Patents by Category": "Patents by Category",
   "Product": "Product",
@@ -84,6 +93,15 @@
     }
   },
   "Role": "Role",
+  "Select": "Select",
+  "Select a partner": {
+    "": {
+      "": {
+        "": "Select a partner..."
+      }
+    }
+  },
+  "Show options": "Show options",
   "SignUp": {
     "Confirm Password": "Confirm Password",
     "E-mail": "E-mail",
@@ -102,12 +120,29 @@
     "success": "Successfully Signed Up"
   },
   "Specific Country": "Specific Country",
+  "Start Year": "Start Year",
   "Technologies by Country": "Technologies by Country",
   "Technology": "Technology",
   "Trade Balance": "Trade Balance",
+  "Trade Flow": "Trade Flow",
   "User": "User",
   "Username": "Username",
-  "vb_title_network_pgi": "What are the PGI values of the products exported by {{country}}? ({{time}})",
+  "X Axis": "X Axis",
+  "Y Axis": "Y Axis",
+  "Year": "Year",
+  "rankings_active_country": "Country",
+  "rankings_active_product": "Product",
+  "rankings_download_1": "Download",
+  "rankings_download_2": "Download All Years",
+  "rankings_settings_product_classification": "Product Classification",
+  "rankings_settings_showing": "Showing",
+  "rankings_settings_year_range": "Year Range",
+  "rankings_text_1": "The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product. ECI measures the knowledge intensity of an economy by considering the knowledge intensity of the products it exports. PCI measures the knowledge intensity of a product by considering the knowledge intensity of its exporters. This circular argument is mathematically tractable and can be used to construct relative measures of the knowledge intensity of economies and products (see <a href='/en/resources/methodology/' class='link' target='_blank'>methodology section</a> for more details).",
+  "rankings_text_2": "ECI has been validated as a relevant economic measure by showing its ability to predict future economic growth (see <a href='http://www.pnas.org/content/106/26/10570.short' class='link' target='_blank'>Hidalgo and Hausmann 2009</a>), and explain international variations in income inequality (see <a href='/pdf/LinkingEconomicComplexityInstitutionsAndIncomeInequality.pdf' class='link' target='_blank'>Hartmann et al. 2017</a>).",
+  "rankings_text_3": "This page includes rankings using the Economic Complexity Index (ECI).",
+  "rankings_title_country": "Economic Complexity Rankings (ECI)",
+  "rankings_title_product": "Product Complexity Rankings (PCI)",
+  "vb_title_network_pgi": "What are the Opportunity Gain values of the products exported by {{country}}? ({{time}})",
   "vb_title_network_rca": "What are the most specialized products of {{country}}? ({{time}})",
   "vb_title_network_relatedness": "What are the export opportunities of {{country}}? ({{time}})",
   "vb_title_rings": "What does {{country}} export that is similar to {{product}}? ({{time}})",

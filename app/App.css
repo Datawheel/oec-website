@@ -137,3 +137,35 @@ p > a,
     }
   }
 }
+
+/* --------------------------
+// paywall section formatting
+-------------------------- */
+.profile-paywall {
+  min-height: 350px;
+  & .profile-paywall-image {
+    @mixin absolute-expand;
+    background-size: 100% 100%;
+    filter: blur(2px);
+    opacity: 0.25;
+  }
+  & .profile-paywall-content {
+    @mixin absolute-expand;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  & .profile-paywall-button {
+    @mixin font-lg;
+    background-color: var(--accent-dark);
+    color: var(--white) !important;
+    display: block;
+    margin: var(--gutter-sm);
+    padding: var(--gutter-sm) var(--gutter-md);
+    &:hover, &:focus {
+      background-color: var(--accent);
+      text-decoration: none !important;
+    }
+  }
+}

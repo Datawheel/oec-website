@@ -24,7 +24,7 @@ class PredictionViz extends React.Component {
     const actualPoints = showObserved ? data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `${d.Drilldown.name} (Observed)`, color: d.Drilldown.color, shape: "Circle"})) : [];
     const trendLine = showTrend ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Trend)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.trend, "yhat_upper": d.trend, "yhat_lower": d.trend})) : [];
     // const actualLine = data.map(d => ({...d, Title: "Actual Line", shape: "Line"}));
-    const predictionLine = showPrediction ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Prediction)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat})) : [];
+    const predictionLine = showPrediction ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Predicted)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat})) : [];
 
     const combinedData = actualPoints.concat(predictionLine).concat(trendLine);
     // console.log("combinedData!", combinedData);
@@ -32,94 +32,98 @@ class PredictionViz extends React.Component {
     return <div className="prediction-viz">
       {loading ? <div className="prediction-overlay prediction-loading">Loading...</div> : null}
       {error ? <div className="prediction-overlay prediction-error">Error... Please try another selection.</div> : null}
-      <Plot config={{
-        confidence: [
-          d => d.yhat_lower || parseFloat(d["Trade Value"]),
-          d => d.yhat_upper || parseFloat(d["Trade Value"])
-        ],
-        confidenceConfig: {
-          fill: d => d.color,
-          fillOpacity: d => d.shape === "Line" ? 0.25 : 1,
-          strokeWidth: 0
-        },
-        data: combinedData,
-        dataKey: updateKey,
-        discrete: "x",
-        groupBy: "Title",
-        legend: false,
-        height: 700,
-        shape: d => d.shape,
-        shapeConfig: {
-          Circle: {
+      {!loading && combinedData.length
+        ? <Plot config={{
+          confidence: [
+            d => d.yhat_lower || parseFloat(d["Trade Value"]),
+            d => d.yhat_upper || parseFloat(d["Trade Value"])
+          ],
+          confidenceConfig: {
             fill: d => d.color,
-            fillOpacity: 1
+            fillOpacity: d => d.shape === "Line" ? 0.25 : 1,
+            strokeWidth: 0
           },
-          Line: {
-            stroke: d => d.color
-          }
-        },
-        tooltipConfig: {
-          title: d => d.Title,
-          tbody: [
-            [d => d.Time ? "Month" : "Year", d => d.Time ? timeFormat("%b %Y")(timeParse("%Y%m")(d.Time)) : d.Year],
-            [d => d["Service Value"] ? "Service Value" : "Trade Value", d => d["Service Value"] ? `$${formatAbbreviate(d["Service Value"])}` : `$${formatAbbreviate(d["Trade Value"])}`]
-          ]
-        },
-        total: null,
-        y: d => parseFloat(d["Trade Value"]),
-        yConfig: {
-          barConfig: {
-            stroke: "#15191F"
-          },
-          gridConfig: {
-            stroke: d => d.id === 0 ? "#919ca4" : "#15191F",
-            strokeWidth: 1
-          },
+          data: combinedData,
+          dataKey: updateKey,
+          discrete: "x",
+          groupBy: "Title",
+          legend: false,
+          height: 700,
+          shape: d => d.shape,
           shapeConfig: {
-            labelConfig: {
-              fontSize: () => 17
+            Circle: {
+              fill: d => d.color,
+              fillOpacity: 1
+            },
+            Line: {
+              stroke: d => d.color
             }
           },
-          tickFormat: currencyFormat
-        },
-        x: "ds",
-        time: "ds",
-        timeline: false,
-        xConfig: {
-          barConfig: {
-            stroke: "#15191F"
+          tooltipConfig: {
+            title: d => d.Title,
+            tbody: [
+              [d => d.Time ? "Month" : "Year", d => d.Time ? timeFormat("%b %Y")(timeParse("%Y%m")(d.Time)) : d.Year],
+              [d => d["Service Value"] ? "Service Value" : "Trade Value", d => d["Service Value"] ? `$${formatAbbreviate(d["Service Value"])}` : `$${formatAbbreviate(d["Trade Value"])}`]
+            ]
           },
-          gridConfig: {
-            stroke: "#15191F",
-            strokeWidth: 1
+          total: null,
+          y: d => parseFloat(d["Trade Value"]),
+          yConfig: {
+            barConfig: {
+              stroke: "#15191F"
+            },
+            gridConfig: {
+              stroke: d => d.id === 0 ? "#919ca4" : "#15191F",
+              strokeWidth: 1
+            },
+            shapeConfig: {
+              labelConfig: {
+                fontSize: () => 17
+              }
+            },
+            tickFormat: currencyFormat
           },
-          shapeConfig: {
-            labelConfig: {
-              fontSize: () => 17
+          x: "ds",
+          time: "ds",
+          timeline: false,
+          xConfig: {
+            barConfig: {
+              stroke: "#15191F"
+            },
+            gridConfig: {
+              stroke: "#15191F",
+              strokeWidth: 1
+            },
+            shapeConfig: {
+              labelConfig: {
+                fontSize: () => 17
+              }
             }
           }
-        }
-      }} />
-      <div className="prediction-viz-key">
-        <Button
-          active={showObserved}
-          className="bp3-minimal"
-          icon="scatter-plot"
-          onClick={this.toggleVizShowOptions("showObserved")}
-          text="Observed Data" />
-        <Button
-          active={showPrediction}
-          className="bp3-minimal"
-          icon="timeline-line-chart"
-          onClick={this.toggleVizShowOptions("showPrediction")}
-          text="Prediction" />
-        <Button
-          active={showTrend}
-          className="bp3-minimal"
-          icon="regression-chart"
-          onClick={this.toggleVizShowOptions("showTrend")}
-          text="Trend" />
-      </div>
+        }} />
+        : null}
+      {!loading && combinedData.length
+        ? <div className="prediction-viz-key">
+          <Button
+            active={showObserved}
+            className="bp3-minimal"
+            icon="scatter-plot"
+            onClick={this.toggleVizShowOptions("showObserved")}
+            text="Observed Data" />
+          <Button
+            active={showPrediction}
+            className="bp3-minimal"
+            icon="timeline-line-chart"
+            onClick={this.toggleVizShowOptions("showPrediction")}
+            text="Prediction" />
+          <Button
+            active={showTrend}
+            className="bp3-minimal"
+            icon="regression-chart"
+            onClick={this.toggleVizShowOptions("showTrend")}
+            text="Trend" />
+        </div>
+        : null}
     </div>;
   }
 }

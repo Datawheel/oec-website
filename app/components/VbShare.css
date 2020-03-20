@@ -1,0 +1,46 @@
+.vb-share-option {
+  & .title {
+    text-transform: uppercase;
+    margin-bottom: var(--gutter-xs);
+    font-size: var(--font-md);
+  }
+  & .bp3-button.vb-chart-button-option {
+    margin-left: 0px;
+    background: var(--accent-dark) !important;
+    border: none !important;
+    color: var(--white) !important;
+    width: 100%;
+    & svg {
+      fill: var(--white);
+    }
+  }
+  & label.bp3-label {
+    display: inline-block !important;
+    margin-right: 20px;
+  }
+}
+
+.vb-share-social {
+  color: var(--white);
+  display: flex;
+  flex: 1;
+  font-size: var(--font-md);
+  margin-bottom: var(--gutter-sm);
+  & .icon {
+    margin-right: var(--gutter-xs);
+  }
+}
+
+.bp3-button.is-copy {
+  background: var(--accent-dark) !important;
+  color: var(--white) !important;
+}
+
+.bp3-button.vb-chart-button-option {
+  background: transparent !important;
+  color: var(--dark-1) !important;
+  font-size: var(--font-sm);
+  border: 1px solid var(--dark-1);
+  border-radius: 0px;
+  margin-left: var(--gutter-sm);
+}

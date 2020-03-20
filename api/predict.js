@@ -1,5 +1,7 @@
 const path = require("path");
 const spawn = require("child_process").spawn;
+const jwt = require("jsonwebtoken");
+const {OLAP_PROXY_SECRET} = process.env;
 
 const API = `${process.env.CANON_CONST_BASE}.jsonrecords`;
 const BASE_URL = "/api/predict";
@@ -7,7 +9,20 @@ const BASE_URL = "/api/predict";
 module.exports = function(app) {
 
   app.get(`${BASE_URL}`, (req, res) => {
+    const {user} = req;
     const pyFilePath = path.join(__dirname, "../calcs/predictions.py");
+
+    // create json web token based on user auth
+    const apiToken = jwt.sign(
+      {
+        auth_level: user ? user.role : 0,
+        sub: user ? user.id : "localhost",
+        status: "valid"
+      },
+      OLAP_PROXY_SECRET,
+      {expiresIn: "30m"}
+    );
+    req.query.apiToken = apiToken;
     // console.log("------");
     // console.log(JSON.stringify(req.query));
     // console.log("------");

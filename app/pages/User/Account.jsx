@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import {connect} from "react-redux";
+import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
 import {timeFormat} from "d3-time-format";
 const formatDate = timeFormat("%B %d, %Y");
@@ -12,6 +13,7 @@ import {Dialog, Intent, NonIdealState, Spinner, Tag} from "@blueprintjs/core";
 
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
+import ChangePassword from "components/ChangePassword";
 import FeatureMatrix from "components/FeatureMatrix";
 
 const roleLookup = {
@@ -97,27 +99,30 @@ class Account extends Component {
           user
             ? <div className="account-content">
               <div className="account-meta">
-                <h1>{user.username}</h1>
-                <Activate location={this.props.router.location} />
-                <table className="account-meta-table">
-                  <tbody>
-                    <tr>
-                      <td>E-mail</td>
-                      <td>{user.email}</td>
-                    </tr>
-                    <tr>
-                      <td>Join Date</td>
-                      <td>{formatDate(new Date(user.createdAt))}</td>
-                    </tr>
-                    <tr>
-                      <td>Subscription</td>
-                      <td><Role {...user} /></td>
-                    </tr>
-                  </tbody>
-                </table>
-                <Button className="logout-button" fill icon="log-out">
-                  <a href="/auth/logout">Click here to log out.</a>
-                </Button>
+                <div className="account-meta-info">
+                  <h1>{user.username}</h1>
+                  <Activate location={this.props.router.location} />
+                  <table className="account-meta-table">
+                    <tbody>
+                      <tr>
+                        <td>E-mail</td>
+                        <td>{user.email}</td>
+                      </tr>
+                      <tr>
+                        <td>Join Date</td>
+                        <td>{formatDate(new Date(user.createdAt))}</td>
+                      </tr>
+                      <tr>
+                        <td>Subscription</td>
+                        <td><Role {...user} /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <Button className="logout-button" fill icon="log-out">
+                    <a href="/auth/logout">Click here to log out.</a>
+                  </Button>
+                </div>
+                <ChangePassword />
               </div>
               <div className="account-panel">
                 { user.role === 0 ? <div className="account-paywall">
@@ -156,7 +161,11 @@ class Account extends Component {
                       Cancel Subscription
                     </Button>
                   </div>
-                    : null}
+                    : <div>
+                      <Button fill icon="build">
+                        <Link  to="/admin">Hello, contributor. Would you like to go to the CMS?</Link>
+                      </Button>
+                    </div>}
               </div>
             </div>
             : <NonIdealState icon={<Spinner />} title="Authenticating" />

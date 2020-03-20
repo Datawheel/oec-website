@@ -87,6 +87,11 @@
   }
 }
 
+.SourceGroup {
+  @mixin font-sm;
+  color: var(--light-3);
+}
+
 .cp-hero-figure {
   background-color: rgba(255, 255, 255, 0.25);
   border: 1px solid var(--light-3);
@@ -95,7 +100,21 @@
 }
 
 .cp-hero-credits {
-  margin-bottom: 0.5rem;
+  position: absolute;
+  right: var(--gutter-sm);
+  top: var(--gutter-md);
+  z-index: 2;
+  &.is-closed {
+    width: 200px;
+  }
+  & .cp-hero-credits-button {
+    bottom: 0;
+    top: 0;
+    &.is-active {
+      bottom: -2.25rem;
+      top: auto;
+    }
+  }
 }
 
 /* hero */
@@ -211,16 +230,23 @@
 .cp-select-label {
   font-size: 14px;
   font-weight: 800;
+  & .cp-select-text {
+    min-width: 40px;
+  }
 }
 .cp-button-group {
   font-weight: 800;
   margin-bottom: var(--gutter-sm);
 }
 .cp-button-group > .cp-label {
+  align-self: center;
   font-size: 14px;
+  min-width: 40px;
 }
 .cp-button-group > .cp-button {
+  align-self: stretch;
   font-size: 14px;
+  padding: 0.5em;
   /* remove border from adjacent buttons */
   &:not(:first-of-type) {
     border-left: none;
@@ -273,8 +299,8 @@
     width: calc(100% - var(--sidebar-width) - var(--gutter-md));
   }
 
-  .cp-subnav.is-static {
-    background-color: color(var(--dark-4) a(0.75));
+  .cp-subnav {
+    background-color: var(--dark-4) !important;
   }
   .cp-subnav.is-fixed {
     top: var(--nav-height);
@@ -367,6 +393,16 @@
       &:hover, &:focus {
         border-color: var(--field-icon-color) !important;
       }
+    }
+  }
+}
+
+/* subnav overrides */
+@mixin min-sm {
+  .cp-subnav {
+    /* stuck state */
+    &.is-fixed {
+      top: calc(var(--nav-height) + var(--subnav-height));
     }
   }
 }

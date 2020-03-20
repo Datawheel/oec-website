@@ -1,13 +1,13 @@
 .panel {
   color: var(--white);
   opacity: 1;
-  margin-bottom: 0px!important;
+  margin-bottom: 0px !important;
   & .text {
-    font-size: var(--font-xs);
+    font-size: var(--font-sm);
     text-transform: uppercase;
   }
   & .panel-option {
-    font-size: var(--font-xs);
+    font-size: var(--font-sm);
     line-height: 20px;
     display: block;
     color: var(--white);
@@ -19,7 +19,7 @@
     & .panel-option:hover {
       cursor: pointer;
       opacity: 0.9;
-      list-style-image: url(/images/icons/app/arrow-fill.png);
+      margin-top: 0px;
       text-decoration: none;
     }
   }
@@ -29,9 +29,19 @@
   & .is-selected {
     font-weight: bold;
     opacity: 1;
-    list-style-image: url(/images/icons/app/arrow-fill.png);
     color: var(--white);
   }
+}
+
+.bp3-tab.is-selected[data-tab-id='scatter'] {
+  width: 100% !important;
+}
+
+a.panel-option.is-selected:before {
+  content: url(/images/icons/app/arrow.png);
+  position: absolute;
+  margin-top: 0px;
+  margin-left: -10px;
 }
 
 .is-margin-bottom {

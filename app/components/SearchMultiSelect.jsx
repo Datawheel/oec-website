@@ -94,9 +94,9 @@ class SearchMultiSelect extends React.Component {
   };
 
   render() {
-    const {isDrilldown, items, itemType, toggleDrilldown} = this.props;
+    const {disabled, isDrilldown, items, itemType, toggleDrilldown} = this.props;
     return <div className="prediction-control">
-      <h3>Select a {itemType}...</h3>
+      <h3>{itemType}</h3>
       <MultiSelect
         fill={true}
         initialContent={undefined}
@@ -110,8 +110,9 @@ class SearchMultiSelect extends React.Component {
         resetOnSelect={true}
         resetOnQuery={false}
         tagInputProps={{
+          disabled,
           onRemove: this.handleTagRemove,
-          rightElement: this.state.selectedItems.length ? <Button icon="cross" minimal={true} onClick={this.handleClear} /> : null,
+          rightElement: this.state.selectedItems.length ? <Button disabled={disabled} icon="cross" minimal={true} onClick={this.handleClear} /> : null,
           tagProps: d => {
             const thisItem = items.find(dd => dd.name === d);
             return {
@@ -127,15 +128,17 @@ class SearchMultiSelect extends React.Component {
         tagRenderer={this.renderTag}
         selectedItems={this.state.selectedItems}
       />
-      <Label className={Classes.INLINE}>
-        Aggregate&nbsp;
-        <Switch
-          alignIndicator={Alignment.LEFT}
-          checked={isDrilldown}
-          labelElement={"Drilldown"}
-          inline={true}
-          onChange={toggleDrilldown} />
-      </Label>
+      {isDrilldown === true || isDrilldown === false
+        ? <Label className={Classes.INLINE}>
+          Aggregate&nbsp;
+          <Switch
+            alignIndicator={Alignment.LEFT}
+            checked={isDrilldown}
+            labelElement={"Drilldown"}
+            inline={true}
+            onChange={toggleDrilldown} />
+        </Label>
+        : null}
     </div>;
   }
 }

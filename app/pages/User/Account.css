@@ -18,11 +18,17 @@
     padding: 0 var(--gutter-xl);
     width: 100%;
     & .account-meta {
-      background: var(--dark-4);
-      border-radius: 1em;
       box-sizing: border-box;
       min-width: 300px;
-      padding: var(--gutter-md);
+      padding-bottom: var(--gutter-xl);
+      & .account-meta-info {
+        background: var(--dark-4);
+        border-radius: 1em;
+        padding: var(--gutter-md);
+      }
+      & h1 {
+        margin-top: 0;
+      }
       & .account-meta-table {
         border-collapse: collapse;
         margin-bottom: var(--gutter-sm);
