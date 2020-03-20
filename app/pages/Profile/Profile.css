@@ -41,6 +41,57 @@
 }
 
 /* stats */
+.cp-hero-stat-group-wrapper {
+  align-items: stretch;
+  & .cp-hero-stat {
+    display: flex;
+    flex-direction: column-reverse;
+    padding-right: var(--gutter-sm) !important;
+    text-align: center;
+    & .cp-stat-label-text {
+      @mixin font-xs;
+      font-weight: 800 !important;
+    }
+    & .cp-stat-value {
+      display: flex;
+      flex: 1 0 auto;
+      flex-direction: column;
+      & .cp-stat-value-text {
+        align-items: center;
+        display: flex;
+        flex: 1 0 auto;
+        font-weight: 100;
+        justify-content: center;
+        margin-bottom: 5px;
+        &.length-sm {
+          @mixin font-xxl;
+        }
+        &.length-md {
+          @mixin font-xl;
+        }
+        &.length-lg {
+          @mixin font-lg;
+        }
+        &.length-xl {
+          @mixin font-md;
+        }
+        &.length-xxl {
+          @mixin font-sm;
+        }
+        & a {
+          font-weight: 300;
+          text-decoration: underline !important;
+        }
+      }
+      & .cp-stat-subtitle {
+        @mixin font-xs;
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
 .cp-stat-value-text {
   font-weight: var(--base-font-weight);
   & a {
@@ -95,8 +146,26 @@
 .cp-hero-figure {
   background-color: rgba(255, 255, 255, 0.25);
   border: 1px solid var(--light-3);
+  flex: none;
+  flex-basis: auto !important;
+  height: 250px;
+  margin-right: var(--gutter-lg);
+  min-width: auto !important;
   padding-bottom: 0;
   padding-top: 0;
+  width: 250px !important;
+  & .cp-viz-figure {
+    height: 250px;
+    margin: 0 !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    width: 250px;
+  }
+}
+
+.cp-hero-caption {
+  flex: 1 1 auto;
+  margin-bottom: var(--gutter-xl);
 }
 
 .cp-hero-credits {
@@ -129,9 +198,10 @@
   }
 
   & .cp-hero-inner {
+    align-items: flex-start;
     flex-direction: row-reverse; /* reversed layout */
     padding: 0; /* allow smaller vertical height */
-    margin-top: var(--gutter-sm);
+    margin-top: var(--gutter-md);
     margin-bottom: var(--gutter-sm);
 
     @mixin min-sm {
@@ -145,8 +215,22 @@
 
   /* make flag/icon smaller */
   & .cp-hero-heading img {
-    width: 50px;
+    margin-bottom: 7px;
+    width: 60px;
     vertical-align: middle;
+  }
+
+  & .cp-hero-heading {
+    font-size: 50px;
+    font-weight: 100;
+    margin: 0 var(--gutter-xl) 0 0 !important;
+  }
+
+  & .cp-hero-heading-dimension {
+    border-color: rgba(255, 255, 255, 0.5);
+    &:hover, &:focus {
+      border-color: white;
+    }
   }
 
   /* temporary background image */
@@ -232,6 +316,7 @@
   font-weight: 800;
   & .cp-select-text {
     min-width: 40px;
+    flex: 1 0 auto;
   }
 }
 .cp-button-group {
@@ -261,6 +346,21 @@
     border-color: inherit;
   }
 }
+.cp-select option {
+  color: var(--dark-4);
+}
+
+.cp-button.internal-link {
+  background: var(--accent-dark);
+  border: 0;
+  color: var(--white);
+  width: 100%;
+  &:hover, &:focus {
+    background: var(--accent);
+    color: var(--white);
+    text-decoration: none;
+  }
+}
 
 /* adjust viz options style */
 .cp-viz-container .cp-button-group > .cp-button {
@@ -272,6 +372,45 @@
   /* as if `icon-hidden` prop were set */
   & > .cp-button-icon { margin: 0; }
   & > .cp-button-text { @mixin visually-hidden; }
+}
+
+.cp-viz-container .cp-viz-title ~ .Options {
+  position: absolute;
+  right: 0;
+  top: -40px;
+  & .options-button-group {
+    margin-bottom: 0;
+  }
+}
+
+.bp3-dialog.options-dialog {
+  background: var(--dark-3) !important;
+  & .clipboard-input {
+    background: var(--light-3);
+  }
+}
+
+.bp3-dialog.cp-hero-search {
+  background: var(--dark-4) !important;
+  padding: var(--gutter-md);
+  & .cms-profilesearch {
+    height: 85vh;
+    max-height: 300px;
+    & .cms-profilesearch-container {
+      background-color: var(--dark-3);
+      border: 1px solid var(--dark-2);
+      margin-top: var(--gutter-sm);
+    }
+    & .cms-profilesearch-list-item-link {
+      @mixin font-md;
+      background-color: var(--dark-3);
+      color: var(--white);
+      text-align: left;
+      &:hover, &:focus {
+        background-color: var(--dark-2);
+      }
+    }
+  }
 }
 
 /* TODO: delete when these lines are added to canon */
@@ -286,11 +425,7 @@
 }
 
 .cp-section {
-  padding: var(--gutter-sm);
-}
-
-.cp-section-content {
-  /*width: 18rem;*/
+  padding: var(--gutter-sm) var(--gutter-lg);
 }
 
 /* subnav tweaks */

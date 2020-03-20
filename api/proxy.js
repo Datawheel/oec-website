@@ -7,6 +7,18 @@ const {
   OLAP_PROXY_SECRET
 } = process.env;
 
+const isRole = role => (req, res, next) => {
+  if (req.isAuthenticated()) {
+    if (req.user.role >= role) return next();
+    else {
+      res.status(401).send("user does not have sufficient privileges").end();
+      return;
+    }
+  }
+  res.status(401).send("not logged in").end();
+  return;
+};
+
 module.exports = function(app) {
 
   app.get("/olap-proxy/*", async(req, res) => {
@@ -46,6 +58,30 @@ module.exports = function(app) {
       });
 
     res.send(data).end();
+
+  });
+
+  app.get("/auth/token", isRole(10), (req, res) => {
+
+    const token = jwt.sign(
+      {
+        auth_level: 10,
+        sub: "server",
+        status: "valid"
+      },
+      OLAP_PROXY_SECRET,
+      {expiresIn: "5y"}
+    );
+
+    const origin = `${ req.protocol }://${ req.headers.host }`;
+    const baseURL = `${origin}/olap-proxy/`;
+
+    const config = {
+      url: baseURL,
+      headers: {"x-tesseract-jwt-token": token}
+    };
+
+    res.json(config);
 
   });
 

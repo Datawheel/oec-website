@@ -10,6 +10,7 @@ import {formatAbbreviate} from "d3plus-format";
 import colors from "../helpers/colors";
 
 import "./VbDrawer.css";
+import {timeTitleFormat, hsId} from "../helpers/formatters";
 
 /** */
 function VbDrawerStat(props) {
@@ -75,7 +76,6 @@ class VbDrawer extends React.Component {
     const titleKey = drilldowns.find(d => d in relatedItems);
     const titleName = relatedItems[titleKey];
     const titleId = relatedItems[`${titleKey} ID`];
-
     const isProductSelected = ["HS6", "HS4", "HS2", "Section"].some(d => relatedItems[d]) && relatedItems["Trade Value"];
 
     // Sets time dimension
@@ -90,20 +90,24 @@ class VbDrawer extends React.Component {
     const isProductPermalink = new RegExp(/^(?!(all|show)).*$/).test(viztype);
     const isTradeBalance = flow === "show";
     const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
-    console.log(isProductPermalink);
 
     const isGeoSelected = relatedItems["Continent ID"];
     const profileId = isGeoSelected ? titleId.slice(2, 5) : titleId;
     const countryIdSelected = relatedItems["Country ID"] ? relatedItems["Country ID"].slice(2, 5) : undefined;
 
     const icon = !["Continent", "Country"].includes(titleKey)
-      ? `/images/icons/hs/hs_${parentId}.png`
+      ? `/images/icons/hs/hs_${parentId}.svg`
       : `/images/icons/country/country_${titleId.slice(2, 5)}.png`;
 
     const color = colors.Section[parentId] || colors.Continent[parentId];
 
     const countryNames = isCountry ? countryData.reduce((all, d) => {
       if (country.split(".").includes(d.label)) all.push(d.title);
+      return all;
+    }, []).join(", ") : "";
+
+    const partnerNames = isPartner ? countryData.reduce((all, d) => {
+      if (partner.split(".").includes(d.label)) all.push(d.title);
       return all;
     }, []).join(", ") : "";
 
@@ -115,6 +119,8 @@ class VbDrawer extends React.Component {
     const countries = [];
     if (isCountryPermalink) countries.push({id: country, name: countryNames});
     if (countryIdSelected) countries.push({id: countryIdSelected, name: countryNameSelected});
+
+    const timeTitle = timeTitleFormat(time);
 
     return <div>
       <Drawer
@@ -132,7 +138,7 @@ class VbDrawer extends React.Component {
         <div className="bp3-drawer-body">
           <VbDrawerStat
             title={`${titleKey} ID`}
-            value={titleId}
+            value={isProductSelected ? hsId(titleId) : titleId}
           />
           <VbDrawerStat
             title="Trade Value"
@@ -142,8 +148,44 @@ class VbDrawer extends React.Component {
             title={timeId}
             value={timeName}
           />
-          <h3>RELATED VISUALIZATIONS</h3>
+          <h3>{t("RELATED VISUALIZATIONS")}</h3>
           {["export", "import"].reduce((all, d) => {
+
+            // Checks isPartner in permalink
+            if (isPartner) {
+              const permalinkPartner = `/hs92/${d}/${partner}/${country}/show/${time}/`;
+              const permalinkWhere = `/hs92/${d}/${partner}/show/${titleId}/${time}/`;
+
+              all.push(<VbRelatedVizTitle
+                permalink={permalinkPartner}
+                router={this.props.router}
+                titleConfig={{country: partnerNames, partner: countryNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
+                titleName="vb_title_what_country_flow_partner"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+
+              all.push(<VbRelatedVizTitle
+                permalink={permalinkWhere}
+                router={this.props.router}
+                titleConfig={{country: partnerNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
+                titleName="vb_title_where_country_flow_product"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+
+              const permalinkWhat = `/hs92/${d}/${partner}/all/show/${time}/`;
+
+              all.push(<VbRelatedVizTitle
+                permalink={permalinkWhat}
+                router={this.props.router}
+                titleConfig={{country: partnerNames, flow: d, time: timeTitle, prep: preps[d]}}
+                titleName="vb_title_what_country_flow"
+                callback={d => this.props.run(d)}
+                t={t}
+              />);
+            }
+
             // Checks bilateral permalink
             if (countryIdSelected !== country && countryIdSelected && isCountryPermalink) {
               const permalinkBilateralA = `/hs92/${d}/${countryIdSelected}/${country}/show/${time}/`;
@@ -152,7 +194,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalinkBilateralA}
                 router={this.props.router}
-                titleConfig={{country: countryNameSelected, product: titleName, partner: countryNames, flow: d, time, prep: preps[d]}}
+                titleConfig={{country: countryNameSelected, product: titleName, partner: countryNames, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_what_country_flow_partner"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -160,7 +202,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalinkBilateralB}
                 router={this.props.router}
-                titleConfig={{country: countryNames, product: titleName, partner: countryNameSelected, flow: d, time, prep: preps[d]}}
+                titleConfig={{country: countryNames, product: titleName, partner: countryNameSelected, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_what_country_flow_partner"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -173,7 +215,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
                 router={this.props.router}
-                titleConfig={{country: countryNames, product: titleName, flow: d, time, prep: preps[d]}}
+                titleConfig={{country: countryNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_which_countries_flow_product"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -185,7 +227,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
                 router={this.props.router}
-                titleConfig={{product: this.props.selectedProducts.map(d => d.name), flow: d, time, prep: preps[d]}}
+                titleConfig={{product: this.props.selectedProducts.map(d => d.name), flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_which_countries_flow_product"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -196,7 +238,7 @@ class VbDrawer extends React.Component {
                 all.push(<VbRelatedVizTitle
                   permalink={bilateralPermalink}
                   router={this.props.router}
-                  titleConfig={{product: this.props.selectedProducts.map(d => d.name), country: countryNameSelected, flow: d, time, prep: preps[d]}}
+                  titleConfig={{product: this.props.selectedProducts.map(d => d.name), country: countryNameSelected, flow: d, time: timeTitle, prep: preps[d]}}
                   titleName="vb_title_where_country_flow_product"
                   callback={d => this.props.run(d)}
                   t={t}
@@ -211,7 +253,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalinkWhat}
                 router={this.props.router}
-                titleConfig={{country: h.name, flow: d, time, prep: preps[d]}}
+                titleConfig={{country: h.name, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_what_country_flow"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -219,7 +261,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalinkWhere}
                 router={this.props.router}
-                titleConfig={{country: h.name, flow: d, time, prep: preps[d]}}
+                titleConfig={{country: h.name, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_where_country_flow_product"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -229,7 +271,7 @@ class VbDrawer extends React.Component {
                 all.push(<VbRelatedVizTitle
                   permalink={permalinkProduct}
                   router={this.props.router}
-                  titleConfig={{country: h.name, flow: d, product: titleName, prep: preps[d]}}
+                  titleConfig={{country: h.name, flow: d, product: titleName, time: timeTitle, prep: preps[d]}}
                   titleName="vb_title_where_country_flow_product"
                   callback={d => this.props.run(d)}
                   t={t}

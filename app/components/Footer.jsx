@@ -21,7 +21,7 @@ class Footer extends React.Component {
         {NAV.map((group, i) => {
           const {items, title} = group;
           return items
-            ? <ul key={i}>
+            ? <ul key={i} className="footer-nav-group u-hide-below-sm">
               <p className={`footer-group display${group.pro ? " is-pro" : ""}`}>{title}</p>
               {items.map((item, ii) => {
                 const {items, title} = item;

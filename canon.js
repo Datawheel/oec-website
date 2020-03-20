@@ -1,8 +1,6 @@
-/**
-    The object that this file exports is used to set configurations for canon
-    and it's sub-modules.
-*/
-module.exports = {
+import {olapMiddleware, permalinkMiddleware} from "@datawheel/tesseract-explorer";
+
+export default {
   express: {
     bodyParser: {
       json: {
@@ -14,5 +12,8 @@ module.exports = {
         }
       }
     }
+  },
+  reduxMiddleware(applyMiddleware, middleware) {
+    return applyMiddleware(...middleware, olapMiddleware, permalinkMiddleware);
   }
 };

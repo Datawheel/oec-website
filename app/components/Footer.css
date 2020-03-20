@@ -18,6 +18,7 @@
   & .container {
     max-width: var(--container-width);
     display: flex;
+    justify-content: space-between;
     text-align: left;
     margin-left: auto;
     margin-right: auto;
@@ -25,6 +26,9 @@
     & ul {
       list-style-type: none;
       padding-left: 0;
+      &.footer-nav-group {
+        max-width: 200px;
+      }
       & .footer-group {
         @mixin font-md;
         font-weight: var(--label-font-weight);
@@ -44,8 +48,8 @@
 
         /* adjust padding & font size on bigger screens */
         @mixin min-sm {
-          padding-top: var(--gutter-xs);
-          padding-bottom: var(--gutter-xs);
+          padding-top: 0.25em;
+          padding-bottom: 0.25em;
         }
         @mixin min-md {
           @mixin font-sm;
@@ -83,6 +87,16 @@
     }
     & .footer-contact {
       flex: 2;
+      text-align: right;
+    }
+
+    @mixin max-md {
+      flex-wrap: wrap;
+      & .footer-contact {
+        flex: none;
+        text-align: center;
+        width: 100%;
+      }
     }
   }
   & a {
@@ -110,7 +124,7 @@
       display: inline-block;
       & .footer-sponsor-link {
         display: block;
-        padding: 1rem 1.5rem 1rem 0;
+        padding: 1rem 0 1rem 1.5rem;
         /* transitions */
         opacity: 0.75;
         transition:
@@ -123,6 +137,10 @@
         }
         & .footer-sponsor-img {
           max-height: 1.875rem;
+        }
+
+        @mixin max-md {
+          padding: 1rem 0.5rem;
         }
       }
     }

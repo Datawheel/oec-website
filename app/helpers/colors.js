@@ -1,27 +1,39 @@
 module.exports = {
   "Section": {
-    1: "#e5d597",
-    2: "#e0b546",
-    3: "#c38842",
-    4: "#c7e64e",
-    5: "#2d0707",
-    6: "#c375af",
-    7: "#d8aac1",
-    8: "#9aca89",
-    9: "#942118",
-    10: "#d7d3c9",
-    11: "#29541f",
-    12: "#589f39",
-    13: "#b7602c",
-    14: "#642a6c",
-    15: "#522411",
-    16: "#51abd7",
-    17: "#9cc6d1",
-    18: "#902d5b",
-    19: "#9bad91",
-    20: "#757677",
-    21: "#847290",
+    1: "#F2AA86", // Animal Products
+    2: "#F4CE0F", // Vegetable Products
+    3: "#EDB73E", // Animal and Vegetable Bi-Products
+    4: "#A0D447", // Foodstuffs
+    5: "#A53200", // Mineral Products
+    6: "#ED40F2", // Chemical Products
+    7: "#FF73FF", // Plastics and Rubbers
+    8: "#6DF2B0", // Animal Hides
+    9: "#DD0E31", // Wood Products
+    10: "#EFDC81", // Paper Goods
+    11: "#02A347", // Textiles
+    12: "#2CBA0F", // Footwear and Headwear
+    13: "#F46D2A", // Stone And Glass
+    14: "#892EFF", // Precious Metals
+    15: "#AA7329", // Metals
+    16: "#2E97FF", // Machines
+    17: "#69C8ED", // Transportation
+    18: "#9E0071", // Instruments
+    19: "#9CF2CF", // Weapons
+    20: "#9C9FB2", // Miscellaneous
+    21: "#847290", // Arts and Antiques
     22: "red"
+  },
+
+  "EGW1": {
+    1: "#e5d597", // HS 01
+    2: "#c38842", // HS 03
+    3: "#e0b546", // HS 02
+    4: "#c7e64e", // HS 04
+    5: "#2d0707", // HS 05
+    6: "#522411", // HS 15
+    7: "#c375af", // HS 06
+    8: "#51abd7", // HS 16
+    9: "#847290" // HS 20
   },
 
   "Flow": {
@@ -35,29 +47,29 @@ module.exports = {
   },
 
   "Continent": {
-    eu: "#642a6c", // Europe (purple)
-    as: "#a92c20", // Asia (red)
-    sa: "#3d8446", // South America (green)
-    af: "#e0b546", // Africa (yellow)
-    oc: "#c6732e", // Oceania (orange)
-    na: "#0c1b87", // North America (blue)
+    eu: "#BA12CC", // Europe (purple)
+    as: "#C8140A", // Asia (red)
+    sa: "#1AB558", // South America (green)
+    af: "#FFDA00", // Africa (yellow)
+    oc: "#FF9100", // Oceania (orange)
+    na: "#0068FF", // North America (blue)
     ac: "#1e040a", // Antarctic (black)
     xx: "#878384" // no continent (gray)
   },
 
   "Parent Service": {
-    1: "#82065c", // Transportation
-    2: "#e2ad60", // Travel
-    3: "#842f26", // Communications services
-    4: "#8c8341", // Construction services
-    5: "#3a5a77", // Insurance services
-    6: "#59457f", // Financial services
-    7: "#51753a", // Computer and information services
-    8: "#4badaf", // Royalties and license fees
-    9: "#b74f77", // Other business services
-    10: "#916a3c", // Personal, cultural, and recreational services
-    11: "#267175", // Government services, n.i.e.
-    12: "#939e9e" // other
+    1: "#A31188", // Transportation
+    2: "#D19707", // Travel
+    3: "#BC2115", // Communications services
+    4: "#A5AF25", // Construction services
+    5: "#2C67CE", // Insurance services
+    6: "#6448BC", // Financial services
+    7: "#59893A", // Computer and information services
+    8: "#43B4BA", // Royalties and license fees
+    9: "#C95383", // Other business services
+    10: "#C46A10", // Personal, cultural, and recreational services
+    11: "#099386", // Government services, n.i.e.
+    12: "#94AAA9" // other
   },
 
   "CPC Section": {

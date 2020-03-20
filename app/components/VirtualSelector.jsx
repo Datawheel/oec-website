@@ -86,7 +86,7 @@ class VirtualSelector extends React.Component {
       >
         <div className="item">
           {this.props.icon && <div className="box" style={{backgroundColor: "gray"}}>
-            <img src={`/images/icons/hs/hs_${d}.png`} />
+            <img src={`/images/icons/hs/hs_${d}.svg`} />
           </div>}
           <span className="text">{d.title} <span className="product-id"></span></span>
         </div>
@@ -141,7 +141,7 @@ class VirtualSelector extends React.Component {
         <Button text={<div className="option">
           <div className="product">
             {this.props.icon && <div className="box" style={{backgroundColor: "gray"}}>
-              <img src={`/images/icons/hs/hs_${selected}.png`} /></div>}
+              <img src={`/images/icons/hs/hs_${selected}.svg`} /></div>}
             <span className="text">{selected && selected.title}</span></div></div>} rightIcon="chevron-down" />
       </Popover>
       {scale && <OECButtonGroup

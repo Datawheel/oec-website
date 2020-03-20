@@ -39,7 +39,7 @@
   padding: 0;
 }
 .navbar-logo-img {
-  width: 100px;
+  width: 90px;
 }
 
 /* main nav list */
@@ -49,7 +49,7 @@
   top: -2px;
 
   /* position below main navbar on small screens */
-  @mixin max-lg {
+  @mixin max-md {
     position: absolute;
     width: 100%;
     min-height: var(--nav-height);
@@ -86,7 +86,7 @@
   }
 
   /* space out evenly on medium screens */
-  @mixin max-lg {
+  @mixin max-md {
     justify-content: space-between;
   }
 }
@@ -106,7 +106,7 @@
 }
 .navbar-nav-toggle-button {
   /* move menu toggle button to the left on small screens */
-  @mixin max-lg {
+  @mixin max-md {
     order: -1;
   }
 
@@ -155,7 +155,7 @@
   }
   & .navbar-search-toggle-button {
     position: relative;
-    z-index: 1; /* in front of open search */
+    z-index: 3; /* in front of open search */
     transition: transform 0.1s ease-out;
 
     &:hover, &:focus {
@@ -176,6 +176,7 @@
   transition:
     opacity 0.2s ease-out,
     transform 0.2s ease-out;
+  z-index: 2;
 
   &.is-hidden {
     /* transitions */
@@ -191,6 +192,14 @@
   & .cms-profilesearch {
     height: 100vh;
     padding: var(--gutter-xl) var(--gutter-lg) 0;
+    & .cp-input {
+      &::placeholder {
+        color: var(--dark-1);
+      }
+    }
+    & .cms-profilecolumn {
+      flex: 1 0 calc(20% - var(--gutter-lg));
+    }
     & .cms-profilecolumn-title {
       background: var(--dark-4);
       margin-top: var(--gutter-sm);
@@ -211,7 +220,7 @@
   top: var(--nav-height);
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 0;
   /* sizing */
   width: 100%;
   height: var(--subnav-height);

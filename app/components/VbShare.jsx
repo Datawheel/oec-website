@@ -50,7 +50,6 @@ class VbShare extends React.Component {
   };
 
   handleCopyClipboard = (key, text) => {
-    console.log("Mr blue sky");
     this.setState({[key]: true});
     navigator.clipboard.writeText(text);
   }

@@ -9,7 +9,7 @@ import queryString from "query-string";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import SearchMultiSelect from "components/SearchMultiSelect";
-import SelectMultiSection from "components/SelectMultiSection";
+import SelectMultiHierarchy from "components/SelectMultiHierarchy";
 import TariffTable from "pages/Tariffs/TariffTable";
 import {TARIFF_DATASETS} from "helpers/consts";
 import {Alignment, AnchorButton, Button, ButtonGroup, Navbar} from "@blueprintjs/core";
@@ -67,7 +67,7 @@ class Tariffs extends React.Component {
             if (thisSelectionQParams && thisSelectionQParams.includes(`${d.id}`)) {
               if (selectionId === "products") {
                 const enrichedProduct = {...d,
-                  icon: `/images/icons/hs/hs_${d["Section ID"]}.png`,
+                  icon: `/images/icons/hs/hs_${d["Section ID"]}.svg`,
                   type: ["HS6", "HS4", "HS2", "Section"].find(dd => dd in d),
                   searchIndex: `${d.id}|${d.name}`
                 };
@@ -118,7 +118,7 @@ class Tariffs extends React.Component {
     this.setState({error: false, loading: true});
     const {dataset, drilldown, selectionType} = this.state;
     let apiUrls = [];
-    const apiUrlRoot = "https://api.oec.world/tesseract/data.jsonrecords?cube=tariffs_i_wits_a_hs&measures=Ad+Valorem&parents=false&sparse=false";
+    const apiUrlRoot = "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&measures=Ad+Valorem&parents=false&sparse=false";
     const selections = dataset.selections.filter(selection => selection.selected.length);
     const productSelection = selections.find(selection => selection.name === "Product");
     const nonProductSelections = selections.filter(selection => selection.name !== "Product");
@@ -229,7 +229,7 @@ class Tariffs extends React.Component {
             <div className="prediction-control">
               <h3>Product</h3>
               {selectionType === "product"
-                ? <SelectMultiSection
+                ? <SelectMultiHierarchy
                   items={dataset.selections[2].data}
                   onItemSelect={item => {
                     // item: SelectedItem

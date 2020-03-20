@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {hot} from "react-hot-loader/root";
 import {Link} from "react-router";
@@ -59,13 +60,17 @@ class OECNavbar extends Component {
 
     // focus the search input
     if (!searchVisible) {
-      document.querySelector(".navbar-search .cp-input").focus();
+      setTimeout(() => {
+        document.querySelector(".navbar-search .cp-input").focus();
+      }, 300);
     }
   }
 
   render() {
     const {auth, locale, title, scrolled} = this.props;
     const {navVisible, searchVisible} = this.state;
+    const {basename, pathname, search} = this.context.router.location;
+    const currentURL = encodeURIComponent(`${basename}${pathname}${search}`.replace("//", "/"));
 
     return (
       <div className="navbar">
@@ -73,8 +78,7 @@ class OECNavbar extends Component {
         <Link className="navbar-logo-link" to="/">
           <img
             className="navbar-logo-img"
-            src="/images/oec-logo.png"
-            srcSet="/images/oec-logo.svg"
+            src="/images/oec-logo.svg"
             alt="Observatory of Economic Complexity"
             draggable="false"
           />
@@ -88,7 +92,7 @@ class OECNavbar extends Component {
 
         {/* nav */}
         <button
-          className={`navbar-toggle-button navbar-nav-toggle-button display u-font-md u-hide-above-lg ${navVisible ? "is-active" : "is-inactive"}`}
+          className={`navbar-toggle-button navbar-nav-toggle-button display u-font-md u-hide-above-md ${navVisible ? "is-active" : "is-inactive"}`}
           onClick={() => this.setState({navVisible: !navVisible})}
         >
           <span className="u-visually-hidden">Menu</span>
@@ -115,7 +119,7 @@ class OECNavbar extends Component {
             </Button>
             : <React.Fragment>
               <Button className="navbar-user-login" rebuilding={auth.loading} disable={auth.loading}>
-                <Link to={`${locale}/login`}>Login</Link>
+                <Link to={`${locale}/login?redirect=${currentURL}`}>Login</Link>
               </Button>
               <Button className="navbar-user-signup" rebuilding={auth.loading} disable={auth.loading}>
                 <Link to={`${locale}/signup`}>Sign Up</Link>
@@ -146,6 +150,10 @@ class OECNavbar extends Component {
     );
   }
 }
+
+OECNavbar.contextTypes = {
+  router: PropTypes.object
+};
 
 export default connect(state => ({
   auth: state.auth,

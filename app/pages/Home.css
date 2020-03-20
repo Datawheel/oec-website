@@ -49,6 +49,9 @@
         max-width: 500px;
         & .cp-input {
           background: var(--dark-4);
+          &::placeholder {
+            color: var(--dark-1);
+          }
         }
         & .cms-profilesearch-container {
           margin: 0 var(--gutter-md) 0;
@@ -190,6 +193,7 @@
     }
 
     & .home-grid-tile {
+      height: 150px;
       margin: 0;
       & .cms-profilesearch-tile-link {
         background-color: rgba(21, 25, 31, 0.45);
@@ -198,6 +202,7 @@
           background-color: rgba(21, 25, 31, 0.25);
         }
         & .cms-profilesearch-tile-link-sub {
+          @mixin font-md;
           font-weight: 400;
           margin-top: 0.25rem !important;
         }
@@ -206,6 +211,11 @@
         @mixin min-sm {
           grid-column: auto / span 2;
           grid-row: auto / span 2;
+          height: calc(300px + var(--gutter-md));
+          & .cms-profilesearch-tile-link,
+          & .cms-profilesearch-tile-image-container {
+            height: calc(300px + var(--gutter-md));
+          }
         }
       }
       &.home-grid-tile-new:after {

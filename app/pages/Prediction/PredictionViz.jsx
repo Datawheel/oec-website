@@ -21,13 +21,18 @@ class PredictionViz extends React.Component {
   render() {
     const {data, currencyFormat, error, loading, updateKey} = this.props;
     const {showObserved, showPrediction, showTrend} = this.state;
-    const actualPoints = showObserved ? data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `${d.Drilldown.name} (Observed)`, color: d.Drilldown.color, shape: "Circle"})) : [];
-    const trendLine = showTrend ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Trend)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.trend, "yhat_upper": d.trend, "yhat_lower": d.trend})) : [];
-    // const actualLine = data.map(d => ({...d, Title: "Actual Line", shape: "Line"}));
-    const predictionLine = showPrediction ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Predicted)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat})) : [];
+
+    const actualPoints = showObserved
+      ? data.filter(d => d["Trade Value"]).map(d => ({...d, Title: `${d.Drilldown.name} (Observed)`, color: d.Drilldown.color, shape: "Circle"}))
+      : [];
+    const trendLine = showTrend
+      ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Trend)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.trend, "yhat_upper": d.trend, "yhat_lower": d.trend}))
+      : [];
+    const predictionLine = showPrediction
+      ? data.map(d => ({...d, "Title": `${d.Drilldown.name} (Predicted)`, "color": d.Drilldown.color, "shape": "Line", "Trade Value": d.yhat}))
+      : [];
 
     const combinedData = actualPoints.concat(predictionLine).concat(trendLine);
-    // console.log("combinedData!", combinedData);
 
     return <div className="prediction-viz">
       {loading ? <div className="prediction-overlay prediction-loading">Loading...</div> : null}
@@ -47,7 +52,23 @@ class PredictionViz extends React.Component {
           dataKey: updateKey,
           discrete: "x",
           groupBy: "Title",
-          legend: false,
+          legend: true,
+          legendConfig: {
+            shapeConfig: {
+              backgroundImage: false,
+              labelConfig: {
+                fontSize: () => 16,
+                fontColor: () => "#CFDAE2"
+              },
+              fontColor: () => "#CFDAE2"
+            },
+            label: d => d.Drilldown.name
+          },
+          legendSort: (a, b) => {
+            const aItem = a.Drilldown ? `${a.Drilldown.id}` : "";
+            const bItem = b.Drilldown ? `${b.Drilldown.id}` : "";
+            return aItem.localeCompare(bItem, "en", {sensitivity: "base"});
+          },
           height: 700,
           shape: d => d.shape,
           shapeConfig: {

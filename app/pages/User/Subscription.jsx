@@ -4,33 +4,22 @@ import {connect} from "react-redux";
 import {hot} from "react-hot-loader/root";
 import "./Subscription.css";
 
-import {NonIdealState, Spinner} from "@blueprintjs/core";
-
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import FeatureMatrix from "components/FeatureMatrix";
+import DataMatrix from "components/DataMatrix";
 
 
-class Account extends Component {
-
-  componentDidUpdate(prevProps) {
-    const {loading, user} = this.props.auth;
-    if (prevProps.auth.loading !== loading) {
-      const {locale, router} = this.props;
-      if (!user) router.push(`/${locale}/login?redirect=/${locale}/account`);
-      else if (user.role > 0) router.push(`/${locale}/account`);
-    }
-  }
+class Subscription extends Component {
 
   render() {
-
-    const {user} = this.props.auth;
 
     return (
       <div className="subscription">
         <OECNavbar />
         <div className="subscription-content">
-          { user ? <FeatureMatrix /> : <NonIdealState icon={<Spinner />} title="Authenticating" /> }
+          <FeatureMatrix />
+          <DataMatrix />
         </div>
         <Footer />
       </div>
@@ -39,11 +28,15 @@ class Account extends Component {
 
 }
 
-Account.contextTypes = {
+Subscription.contextTypes = {
   router: PropTypes.object
 };
+
+Subscription.need = [
+  DataMatrix
+];
 
 export default connect(state => ({
   auth: state.auth,
   locale: state.i18n.locale
-}))(hot(Account));
+}))(hot(Subscription));

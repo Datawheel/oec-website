@@ -4,6 +4,7 @@
 
 .vb-drawer-icon {
   width: var(--gutter-lg);
+  min-width: var(--gutter-lg);
   height: var(--gutter-lg);
   margin-right: var(--gutter-sm);
 }

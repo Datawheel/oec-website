@@ -1,3 +1,86 @@
+.prediction-about-outer {
+  background-color: var(--dark-4);
+  color: var(--light-3);
+  margin: calc(var(--gutter-lg)*2) var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
+  padding: var(--gutter-sm);
+  position: relative;
+  display: flex;
+  & .prediction-about-l {
+    margin: 0 35px;
+    max-width: 350px;
+    width: calc(100% - 70px);
+    & p {
+      font-size: 16px;
+      line-height: 23px;
+    }
+  }
+  & .prediction-about-r {
+    & ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      & li {
+        display: inline-block;
+        margin: 10px;
+        border: 1px solid var(--dark-1);
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+        width: 150px;
+        z-index: 1;
+
+        & a {
+          color: var(--light-2);
+          display: flex;
+          flex-wrap: wrap;
+          height: 100%;
+          padding: 5px;
+          text-align: center;
+          width: 100%;
+          &:hover {
+            text-decoration: none;
+          }
+
+          & .prediction-title {
+            align-self: flex-end;
+            display: block;
+            flex: 1 0 100%;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 2px 0;
+          }
+          & .prediction-subtitle {
+            display: block;
+            flex: 1 0 100%;
+            font-size: 13px;
+          }
+        }
+        & .prediction-bg {
+          background-image: url('/images/predictions/prediction-placeholder.png');
+          background-size: cover;
+          background-position: 50% 50%;
+          background-repeat: no-repeat;
+          height: 100%;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          position: absolute;
+          opacity: .4;
+          transition: all .5s;
+          width: 100%;
+          z-index: -1;
+        }
+        &:hover {
+          & .prediction-bg {
+            transform: scale(1.2);
+          }
+        }
+      }
+    }
+  }
+}
+
 .prediction-container-outer {
   background-color: var(--dark-4);
   color: var(--light-3);
@@ -40,6 +123,7 @@
       background-color: rgba(115, 134, 148, 0.3);
       color: #CFDAE2;
       flex: 0 0 8rem;
+      margin: 54px 0 0 0;
       padding: 20px 0;
 
       &:hover {
@@ -82,6 +166,17 @@
   z-index: 9 !important;
 }
 
+/* ---------------------------
+Multi select
+--------------------------- */
+input.bp3-input-ghost.bp3-multi-select-tag-input-input{
+  color:white
+}
+.bp3-menu-item.bp3-disabled {
+  & .bp3-text-overflow-ellipsis {
+    color:white
+  }
+}
 
 /* ---------------------------
 tabs
@@ -190,7 +285,7 @@ button:focus {outline:0;}
 Under viz options (key)
 --------------------------- */
 .prediction-viz-key {
-  margin: 0 0 10px 0;
+  margin: 10px 0;
   text-align: center;
   & button {
     margin: 0 10px;
@@ -207,7 +302,7 @@ Under viz options (key)
 
 
 /* ---------------------------
-Datatable styles
+Data table styles
 --------------------------- */
 .prediction-datatable-container {
   & .rt-td {

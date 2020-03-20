@@ -488,6 +488,7 @@ class Rankings extends Component {
 			</div>
 		);
 	}
+
 }
 
 export default withNamespaces()(connect()(Rankings));

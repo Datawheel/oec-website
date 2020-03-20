@@ -1,12 +1,14 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
+import {isAuthenticated} from "@datawheel/canon-core";
 import axios from "axios";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 import queryString from "query-string";
 
 import OECNavbar from "components/OECNavbar";
+import OECPaywall from "components/OECPaywall";
 import Footer from "components/Footer";
 import SearchMultiSelect from "components/SearchMultiSelect";
 import ToggleSelect from "components/ToggleSelect";
@@ -14,14 +16,25 @@ import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
 import {DEFAULT_PREDICTION_COLOR, PREDICTION_DATASETS} from "helpers/consts";
+import {Alignment, AnchorButton, Button, Collapse, Icon, Navbar, Tabs, Tab} from "@blueprintjs/core";
+import {colorLighter} from "d3plus-color";
 import "./Prediction.css";
-import {Alignment, AnchorButton, Button, Collapse, Icon, IconNames, Navbar, Tabs, Tab} from "@blueprintjs/core";
+
+const getUniqColor = (color, id, colorsLookup) => {
+  if (Object.values(colorsLookup).includes(color)) {
+    color = colorLighter(color, 0.2);
+    color = getUniqColor(color, id, colorsLookup);
+  }
+  else {
+    colorsLookup[id] = color;
+  }
+};
 
 class Prediction extends React.Component {
 
   constructor(props) {
     super();
-    const parsedQueryString = queryString.parse(props.router.location.search, {arrayFormat: "comma"});
+    // const parsedQueryString = queryString.parse(props.router.location.search, {arrayFormat: "comma"});
     this.state = {
       activeTabId: null,
       advParams: [{
@@ -30,8 +43,8 @@ class Prediction extends React.Component {
         seasonalityMode: "multiplicative"
       }],
       currentDrilldown: null,
-      dataset: parsedQueryString.dataset
-        ? PREDICTION_DATASETS.find(d => d.slug === parsedQueryString.dataset) || PREDICTION_DATASETS[0]
+      dataset: props.params.dataset
+        ? PREDICTION_DATASETS.find(d => d.slug === props.params.dataset) || PREDICTION_DATASETS[0]
         : PREDICTION_DATASETS[0],
       datasetSelections: [],
       datatableOpen: false,
@@ -45,6 +58,18 @@ class Prediction extends React.Component {
       scrolled: false,
       updateKey: null
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const newDatasetSlug = this.props.params.dataset;
+    if (prevState.dataset.slug !== newDatasetSlug) {
+      const newDataset = PREDICTION_DATASETS.find(d => d.slug === newDataset) || PREDICTION_DATASETS[0];
+      this.setState({dataset: newDataset});
+    }
+  }
+
+  componentWillMount() {
+    this.props.isAuthenticated();
   }
 
   componentDidMount() {
@@ -147,7 +172,7 @@ class Prediction extends React.Component {
     const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
     queryArgs[selectionId] = newItems.map(d => d.id);
     const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
-    router.replace(`/en/prediction/?${stringifiedQueryArgs}`);
+    router.replace(`/en/prediction/${dataset.slug}?${stringifiedQueryArgs}`);
     this.setState({advParams, currentDrilldown, dataset});
   };
 
@@ -214,7 +239,7 @@ class Prediction extends React.Component {
     }
     // console.log("apiUrls!", apiUrls);
     // Step 2: make XHR requests:
-    axios.all(apiUrls.map(url => axios.get(url)))
+    axios.all(apiUrls.map(url => axios.get(url)).slice(0, 5))
       .then(axios.spread((...responses) => {
         let allResults = [];
         const errors = [];
@@ -237,7 +262,18 @@ class Prediction extends React.Component {
           this.setState({activeTabId: drilldowns[0].id, drilldowns, loading: false, error: true});
         }
         else {
-          this.setState({activeTabId: drilldowns[0].id, advParams: newAdvParams, drilldowns, loading: false, error: false, predictionData: allResults || [], updateKey: updateKey.join(",")});
+          // need to figure out if there are color overlaps!
+          const colorsLookup = {};
+          if (drillSelection) {
+            drillSelection.selected.forEach(d => {
+              getUniqColor(d.color, d.id, colorsLookup);
+            });
+          }
+          const predictionData = allResults.map(d => {
+            d.Drilldown.color = colorsLookup[d.Drilldown.id] || d.Drilldown.color;
+            return d;
+          });
+          this.setState({activeTabId: drilldowns[0].id, advParams: newAdvParams, drilldowns, loading: false, error: false, predictionData, updateKey: updateKey.join(",")});
         }
       }));
   }
@@ -261,7 +297,7 @@ class Prediction extends React.Component {
     queryArgs.drilldown = newDrilldown;
     if (newDrilldown === null) delete queryArgs.drilldown;
     const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
-    router.replace(`/en/prediction/?${stringifiedQueryArgs}`);
+    router.replace(`/en/prediction/${dataset.slug}?${stringifiedQueryArgs}`);
   };
 
   handleControlTabChange = newTabId => this.setState({activeTabId: newTabId})
@@ -277,6 +313,7 @@ class Prediction extends React.Component {
   render() {
     const {activeTabId, currentDrilldown, dataset, datatableOpen,
       drilldowns, error, loading, predictionData, scrolled, updateKey} = this.state;
+    const auth = this.props.auth;
 
     return <div className="prediction" onScroll={this.handleScroll}>
       <OECNavbar
@@ -284,10 +321,12 @@ class Prediction extends React.Component {
         title={scrolled ? "Predictions" : ""}
       />
 
+      <OECPaywall auth={auth} />
+
       <div className="welcome">
         {/* spinning orb thing */}
         <div className="welcome-bg">
-          <img className="welcome-bg-img" src="/images/stars.png" alt="" draggable="false" />
+          <img className="welcome-bg-img" src="/images/home/stars.png" alt="" draggable="false" />
         </div>
 
         {/* entity selection form */}
@@ -301,7 +340,7 @@ class Prediction extends React.Component {
               <Navbar.Divider />
               {PREDICTION_DATASETS.map(dset =>
                 <AnchorButton
-                  href={`?dataset=${dset.slug}`}
+                  href={`${dset.slug}`}
                   key={dset.slug}
                   active={dataset.slug === dset.slug}
                   className="bp3-minimal"
@@ -366,6 +405,7 @@ class Prediction extends React.Component {
             <Collapse isOpen={datatableOpen}>
               <PredictionTable
                 data={predictionData}
+                dateDrilldown={dataset.dateDrilldown}
                 error={error}
                 loading={loading}
                 currencyFormat={dataset.currencyFormat}
@@ -429,11 +469,16 @@ Prediction.contextTypes = {
   router: PropTypes.object
 };
 
-
 export default hot(withNamespaces()(
   connect(state => ({
+    auth: state.auth,
     formatters: state.data.formatters,
     locale: state.i18n.locale,
     env: state.env
+  }),
+  dispatch => ({
+    isAuthenticated: () => {
+      dispatch(isAuthenticated());
+    }
   }))(Prediction)
 ));
