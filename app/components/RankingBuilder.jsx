@@ -16,6 +16,7 @@ class RankingsBuilder extends Component {
 			singleyear,
 			initialYear,
 			yearValue,
+			rangeChangeInitial,
 			yearRangeInitial,
 			yearRangeFinal,
 			countryExpThreshold,
@@ -76,7 +77,8 @@ class RankingsBuilder extends Component {
 							options={FILTER_OPTIONS}
 							onChange={(event) =>
 								handleValueChange('subnationalValue', event.currentTarget.selectedOptions[0].label)}
-							disabled={subnational === false ? true : false}
+							// disabled={subnational === false ? true : false}
+							disabled={true}
 						/>
 					</div>
 					<div className="setting product-depth last">
@@ -107,15 +109,22 @@ class RankingsBuilder extends Component {
 				<div className="section is-quarter">
 					<div className="setting">
 						<h3 className="first">Period</h3>
-						<div className="switch period">
+						<div className="switch">
 							<span>Single-year</span>
 							<Switch
 								onChange={(event) => handleValueChange('singleyear', !event.currentTarget.checked)}
 							/>
-							<span className="multi">
-								Multi-year <span>(Máx 5 Years)</span>
-							</span>
+							<span>Multi-year</span>
 						</div>
+						{!singleyear && (
+							<div className="switch last">
+							<span>Initial Year</span>
+							<Switch
+								onChange={(event) => handleValueChange('rangeChangeInitial', !event.currentTarget.checked)}
+							/>
+							<span>Final Year</span>
+						</div>
+						)}
 						<div className="year-selector">
 							{
 								<ButtonGroup fill={true}>
@@ -123,12 +132,16 @@ class RankingsBuilder extends Component {
 										<Button
 											key={k}
 											onClick={() =>
-												singleyear ? resetValueChange('yearValue', d) : handleYearRangeChange(d)}
+												singleyear
+													? resetValueChange('yearValue', d)
+													: handleYearRangeChange(d)}
 											className={
 												singleyear ? (
 													yearValue === d && 'active'
 												) : (
-													range(yearRangeInitial, yearRangeFinal).map(j => j === d && 'range')
+													range(yearRangeInitial, yearRangeFinal).map(
+														(j) => j === d && 'range'
+													)
 												)
 											}
 										>

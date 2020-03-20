@@ -43,20 +43,6 @@
 				font-size: var(--font-sm);
 				margin-right: var(--gutter-sm);
       }
-
-      & .multi {
-        display: flex;
-        flex-direction: column;
-
-        & span {
-          font-size: var(--font-xs);
-          font-weight: 100;
-        }
-      }
-    }
-
-    & .switch.period {
-      align-items: baseline;
     }
 
 		& .year-selector {
@@ -65,6 +51,10 @@
 
 			& .bp3-button-group {
 				flex-wrap: wrap;
+
+				& .bp3-button {
+					border-radius: 0;
+				}
 			}
 		}
 

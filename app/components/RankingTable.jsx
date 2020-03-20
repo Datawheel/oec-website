@@ -19,7 +19,7 @@ class RankingTable extends React.Component {
             defaultPageSize={50}
             minRows={1}
             resizable={false}
-            // defaultSorted={[{id: `${sortBy}`, desc: true}]}
+            defaultSorted={[{id: `lastyear`, desc: true}]}
           />
         }
       </div>
