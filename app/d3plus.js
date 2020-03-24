@@ -272,7 +272,6 @@ export default {
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
       let itemBgImg = Array.isArray(parent[1]) ? "WildCard" : parentId;
-      console.log(Object.keys(d));
       if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h))) itemBgImg = "SITC Section";
 
       const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
