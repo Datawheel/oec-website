@@ -271,9 +271,13 @@ export default {
         parentId = parentId.slice(0, -3);
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
+      let itemBgImg = Array.isArray(parent[1]) ? "WildCard" : parentId;
+      console.log(Object.keys(d));
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h))) itemBgImg = "SITC Section";
+
       const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
-      const bgColor = findColorV2(parentId, d);
-      const imgUrl = backgroundImageV2(Array.isArray(parent[1]) ? "WildCard" : parentId, d);
+      const bgColor = findColorV2(itemBgImg, d);
+      const imgUrl = backgroundImageV2(itemBgImg, d);
 
       return tooltipTitle(bgColor, imgUrl, title);
     }
