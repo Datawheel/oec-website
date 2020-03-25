@@ -17,6 +17,7 @@ function findColor(d) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
 
+  if ("Section" in d && !["HS2", "HS4", "HS6"].includes(d)) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
   if ("Section" in d && !Array.isArray(d.Section)) {
     return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
   }
@@ -49,6 +50,8 @@ function backgroundImageV2(key, d) {
       return "/images/icons/patent.png";
     case "Section":
       return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
+    case "SITC Section":
+      return `/images/icons/sitc/${d["Section ID"]}.svg`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Service":
@@ -62,7 +65,8 @@ function backgroundImageV2(key, d) {
 /** */
 function findColorV2(key, d) {
   if (key === "Country" || key === "ISO 3") return "transparent";
-  return colors[key][d[`${key} ID`]] || colors[key][d[key]] || colors.colorGrey;
+  const id = key === "SITC Section" ? d["Section ID"] : d[`${key} ID`];
+  return colors[key][id] || colors[key][d[key]] || colors.colorGrey;
 }
 
 /**
@@ -74,6 +78,9 @@ function backgroundImage(d, ascending) {
   const options = {2: "export", 1: "import"};
 
   if (!ascending) {
+    if ("Section ID" in d && !["HS2", "HS4", "HS6"].includes(d)) {
+      return `/images/icons/sitc/${d["Section ID"]}.svg`;
+    }
     if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
     }
@@ -132,6 +139,9 @@ function backgroundImage(d, ascending) {
     }
     else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    }
+    else if ("Section ID" in d && !["HS2", "HS4", "HS6"].includes(d)) {
+      return `/images/icons/sitc/${d["Section ID"]}.svg`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
@@ -261,9 +271,12 @@ export default {
         parentId = parentId.slice(0, -3);
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
+      let itemBgImg = Array.isArray(parent[1]) ? "WildCard" : parentId;
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h))) itemBgImg = "SITC Section";
+
       const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
-      const bgColor = findColorV2(parentId, d);
-      const imgUrl = backgroundImageV2(Array.isArray(parent[1]) ? "WildCard" : parentId, d);
+      const bgColor = findColorV2(itemBgImg, d);
+      const imgUrl = backgroundImageV2(itemBgImg, d);
 
       return tooltipTitle(bgColor, imgUrl, title);
     }
@@ -302,9 +315,10 @@ export default {
         itemId = "HS4";
         item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
       }
-      const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
-      const itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
 
+      const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
+      let itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId)) itemBgImg = "SITC Section";
       const imgUrl = backgroundImageV2(itemBgImg, d);
       const bgColor = findColorV2(itemBgImg, d);
 
