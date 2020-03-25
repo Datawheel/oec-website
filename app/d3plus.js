@@ -200,7 +200,6 @@ export default {
   colorScaleConfig: {
     axisConfig: {
       labelOffset: true,
-      labelRotation: false,
       shapeConfig: {
         labelConfig: labelStyle,
         stroke: style["dark-1"]
@@ -230,6 +229,7 @@ export default {
       stroke: style["dark-1"]
     }
   },
+  colorScaleMaxSize: 800,
   xConfig: axisStyles,
   yConfig: {...axisStyles, scale: "auto"},
   y2Config: {...axisStyles, scale: "auto"},
