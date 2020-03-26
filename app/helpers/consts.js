@@ -168,13 +168,15 @@ module.exports = {
           name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous",
           extraMapConfig: {
             projection: d3_composite.geoConicConformalSpain()
-          }
+          },
+          ignoreIdsList: ["100"]
         },
         {
           name: "Provinces", level: "Subnat Geography", slug: "provinces",
           extraMapConfig: {
             projection: d3_composite.geoConicConformalSpain()
-          }
+          },
+          ignoreIdsList: ["0"]
         }
       ]
     },
