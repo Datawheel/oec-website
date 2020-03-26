@@ -25,17 +25,17 @@ module.exports = {
   },
 
   "SITC Section": {
-    0: "#A0D447",
-    1: "#D10D59",
-    2: "#6DF2B0",
-    3: "#A53200",
-    4: "#EDB73E",
-    5: "#ED40F2",
-    6: "#F4E5A6",
-    7: "#2E97FF",
-    8: "#2CBA0F",
-    9: "#630FE8",
-    X: "#9C9FB2"
+    0: "#A0D447", // (light green) Food and live animals
+    1: "#D10D59", // (pink) Beverages and tobacco
+    2: "#6DF2B0", // (seafoam green) Crude materials
+    3: "#A53200", // (brown) Mineral fuels
+    4: "#EDB73E", // (yellow) Animal and vegetable oils, fats and waxes
+    5: "#ED40F2", // (purple) Chemicals and related products
+    6: "#F4E5A6", // (pale yellow) Manufactured goods classified chiefly by material
+    7: "#2E97FF", // (blue) Machinery and transport equipment
+    8: "#2CBA0F", // (green) Miscellaneous manufactured articles
+    9: "#630FE8", // (deep purple) Commodities and transactions not classified elsewhere
+    X: "#9C9FB2" // (gray) Undefined
   },
 
   "EGW1": {
