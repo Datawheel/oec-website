@@ -37,7 +37,6 @@
     }
 
     & .build-prediction-btn {
-      align-self: center;
       background-color: rgba(115, 134, 148, 0.3);
       color: #CFDAE2;
       flex: 0 0 8rem;

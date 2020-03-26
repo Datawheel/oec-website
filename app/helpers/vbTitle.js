@@ -1,3 +1,5 @@
+import {timeTitleFormat} from "./formatters";
+
 export const getList = n => n.reduce((str, item, i) => {
   if (!i) str += item;
   else if (i === n.length - 1 && i === 1) str += ` and ${item}`;
@@ -40,7 +42,7 @@ export const getVbTitle = (routeParams,
     flow,
     prep: preps[flow],
     product: _productNames,
-    time: isTimeSeriesChart ? time.replace(".", "-") : time.split(".").sort((a, b) => a > b ? 1 : -1).join(", ")
+    time: timeTitleFormat(time, isTimeSeriesChart)
   };
 
   let title = "vb_title_what_country_flow";

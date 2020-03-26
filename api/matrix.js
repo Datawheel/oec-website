@@ -109,6 +109,10 @@ module.exports = function(app) {
           const newGroup = [];
           for (const meta of thisGroup) {
             const thisCube = cubeData.cubes.find(cube => cube.name === meta.cubeName);
+            if (!thisCube) {
+              console.error(`Data Matrix unable to find cube: ${meta.cubeName}`);
+              continue;
+            }
             const {name, dimensions, measures} = thisCube;
             let drilldown, measure, timeResolution;
             if (measures[0]) measure = measures[0].name;

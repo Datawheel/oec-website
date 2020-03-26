@@ -1,5 +1,6 @@
 import React from "react";
 import {withNamespaces} from "react-i18next";
+import classNames from "classnames";
 import {Tab, Tabs} from "@blueprintjs/core";
 
 import VbTab from "./VbTab";
@@ -24,9 +25,14 @@ class VbTabs extends React.Component {
     this.props.callback({activeTab});
   };
 
+  shouldComponentUpdate = prevProps =>
+    JSON.stringify(prevProps.permalinkIds) !== JSON.stringify(this.props.permalinkIds) ||
+    prevProps.activeTab !== this.props.activeTab ||
+    prevProps.activeOption !== this.props.activeOption;
+
   render() {
     const {activeOption, activeTab, permalinkIds, t} = this.props;
-    const {cube, flow, country, partner, viztype, time, timePlot} = permalinkIds;
+    const {cube, flow, country, partner, viztype, time, timePlot, scatterFlow, scatterCountry} = permalinkIds;
 
     return <div>
       <div className="columns is-tabs">
@@ -38,7 +44,7 @@ class VbTabs extends React.Component {
           >
             <Tab
               id="tree_map"
-              className={activeTab === "tree_map" ? "is-selected" : ""}
+              className={classNames({"is-selected": activeTab === "tree_map"})}
               title={<TabTitle icon="tree_map" title="Tree Map" />}
               panel={
                 <VbTab
@@ -133,7 +139,7 @@ class VbTabs extends React.Component {
             />
             <Tab
               id="stacked"
-              className={activeTab === "stacked" ? "is-selected" : ""}
+              className={classNames({"is-selected": activeTab === "stacked"})}
               title={<TabTitle icon="stacked" title="Stacked" />}
               panel={
                 <VbTab
@@ -233,7 +239,7 @@ class VbTabs extends React.Component {
           >
             <Tab
               id="network"
-              className={activeTab === "network" ? "is-selected" : ""}
+              className={classNames({"is-selected": activeTab === "network"})}
               title={<TabTitle icon="network" title="Network" />}
               panel={
                 <VbTab
@@ -267,7 +273,7 @@ class VbTabs extends React.Component {
             <Tab
               id="rings"
 
-              className={activeTab === "rings" ? "is-selected" : ""}
+              className={classNames({"is-selected": activeTab === "rings"})}
               title={<TabTitle icon="rings" title="Rings" />}
               panel={
                 <VbTab
@@ -301,7 +307,7 @@ class VbTabs extends React.Component {
           >
             <Tab
               id="geomap"
-              className={activeTab === "geomap" ? "is-selected" : ""}
+              className={classNames({"is-selected": activeTab === "geomap"})}
               title={<TabTitle icon="geo_map" title="Geo Map" />}
               panel={
                 <VbTab
@@ -338,7 +344,7 @@ class VbTabs extends React.Component {
             />
             <Tab
               id="line"
-              className={activeTab === "line" ? "is-selected" : ""}
+              className={classNames({"is-selected": activeTab === "line"})}
               title={<TabTitle icon="line" title="Line" />}
               panel={
                 <VbTab
@@ -440,7 +446,7 @@ class VbTabs extends React.Component {
           >
             <Tab
               id="scatter"
-              className={activeTab === "scatter" ? "is-fullwidth is-selected" : ""}
+              className={classNames({"is-selected is-fullwidth": activeTab === "scatter"})}
               title={<TabTitle icon="scatter" title="Scatter" />}
               panel={
                 <VbTab
@@ -452,7 +458,7 @@ class VbTabs extends React.Component {
                       name: t("Select"), nest: [
                         {
                           name: t("Show options"),
-                          permalink: "hs92/OEC.ECI/NY.GDP.MKTP.CD/all/all/2012/",
+                          permalink: `hs92/${scatterFlow}/${scatterCountry}/all/all/${time}/`,
                           // `${cube}/${flow}/${country}/all/all/${time}/`
                           regexp: new RegExp(/scatter/)
                         }

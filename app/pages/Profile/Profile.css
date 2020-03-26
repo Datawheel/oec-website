@@ -42,19 +42,46 @@
 
 /* stats */
 .cp-hero-stat-group-wrapper {
-  align-items: flex-start;
+  align-items: stretch;
   & .cp-hero-stat {
     display: flex;
     flex-direction: column-reverse;
     padding-right: var(--gutter-sm) !important;
+    text-align: center;
     & .cp-stat-label-text {
       @mixin font-xs;
       font-weight: 800 !important;
     }
     & .cp-stat-value {
+      display: flex;
+      flex: 1 0 auto;
+      flex-direction: column;
       & .cp-stat-value-text {
-        @mixin font-xxl;
+        align-items: center;
+        display: flex;
+        flex: 1 0 auto;
         font-weight: 100;
+        justify-content: center;
+        margin-bottom: 5px;
+        &.length-sm {
+          @mixin font-xxl;
+        }
+        &.length-md {
+          @mixin font-xl;
+        }
+        &.length-lg {
+          @mixin font-lg;
+        }
+        &.length-xl {
+          @mixin font-md;
+        }
+        &.length-xxl {
+          @mixin font-sm;
+        }
+        & a {
+          font-weight: 300;
+          text-decoration: underline !important;
+        }
       }
       & .cp-stat-subtitle {
         @mixin font-xs;

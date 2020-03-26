@@ -24,6 +24,20 @@ module.exports = {
     22: "red"
   },
 
+  "SITC Section": {
+    0: "#A0D447",
+    1: "#D10D59",
+    2: "#6DF2B0",
+    3: "#A53200",
+    4: "#EDB73E",
+    5: "#ED40F2",
+    6: "#F4E5A6",
+    7: "#2E97FF",
+    8: "#2CBA0F",
+    9: "#630FE8",
+    X: "#9C9FB2"
+  },
+
   "EGW1": {
     1: "#e5d597", // HS 01
     2: "#c38842", // HS 03
@@ -58,18 +72,18 @@ module.exports = {
   },
 
   "Parent Service": {
-    1: "#82065c", // Transportation
-    2: "#e2ad60", // Travel
-    3: "#842f26", // Communications services
-    4: "#8c8341", // Construction services
-    5: "#3a5a77", // Insurance services
-    6: "#59457f", // Financial services
-    7: "#51753a", // Computer and information services
-    8: "#4badaf", // Royalties and license fees
-    9: "#b74f77", // Other business services
-    10: "#916a3c", // Personal, cultural, and recreational services
-    11: "#267175", // Government services, n.i.e.
-    12: "#939e9e" // other
+    1: "#A31188", // Transportation
+    2: "#D19707", // Travel
+    3: "#BC2115", // Communications services
+    4: "#A5AF25", // Construction services
+    5: "#2C67CE", // Insurance services
+    6: "#6448BC", // Financial services
+    7: "#59893A", // Computer and information services
+    8: "#43B4BA", // Royalties and license fees
+    9: "#C95383", // Other business services
+    10: "#C46A10", // Personal, cultural, and recreational services
+    11: "#099386", // Government services, n.i.e.
+    12: "#94AAA9" // other
   },
 
   "CPC Section": {

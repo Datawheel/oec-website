@@ -1,9 +1,11 @@
 .rankingtable-component {
   margin-top: var(--gutter-sm);
+  padding: 0 var(--gutter-sm);
 
   & .rt-table {
     border: 1px solid var(--dark-1);
     border-bottom: none;
+
     & .rt-thead {
       box-shadow: none;
       & .rt-tr {

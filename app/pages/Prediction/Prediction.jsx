@@ -1,12 +1,14 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
+import {isAuthenticated} from "@datawheel/canon-core";
 import axios from "axios";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 import queryString from "query-string";
 
 import OECNavbar from "components/OECNavbar";
+import OECPaywall from "components/OECPaywall";
 import Footer from "components/Footer";
 import SearchMultiSelect from "components/SearchMultiSelect";
 import ToggleSelect from "components/ToggleSelect";
@@ -14,7 +16,7 @@ import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
 import {DEFAULT_PREDICTION_COLOR, PREDICTION_DATASETS} from "helpers/consts";
-import {Alignment, AnchorButton, Button, Collapse, Icon, IconNames, Navbar, Tabs, Tab} from "@blueprintjs/core";
+import {Alignment, AnchorButton, Button, Collapse, Icon, Navbar, Tabs, Tab} from "@blueprintjs/core";
 import {colorLighter} from "d3plus-color";
 import "./Prediction.css";
 
@@ -64,6 +66,10 @@ class Prediction extends React.Component {
       const newDataset = PREDICTION_DATASETS.find(d => d.slug === newDataset) || PREDICTION_DATASETS[0];
       this.setState({dataset: newDataset});
     }
+  }
+
+  componentWillMount() {
+    this.props.isAuthenticated();
   }
 
   componentDidMount() {
@@ -307,12 +313,15 @@ class Prediction extends React.Component {
   render() {
     const {activeTabId, currentDrilldown, dataset, datatableOpen,
       drilldowns, error, loading, predictionData, scrolled, updateKey} = this.state;
+    const auth = this.props.auth;
 
     return <div className="prediction" onScroll={this.handleScroll}>
       <OECNavbar
         className={scrolled ? "background" : ""}
         title={scrolled ? "Predictions" : ""}
       />
+
+      <OECPaywall auth={auth} />
 
       <div className="welcome">
         {/* spinning orb thing */}
@@ -396,6 +405,7 @@ class Prediction extends React.Component {
             <Collapse isOpen={datatableOpen}>
               <PredictionTable
                 data={predictionData}
+                dateDrilldown={dataset.dateDrilldown}
                 error={error}
                 loading={loading}
                 currencyFormat={dataset.currencyFormat}
@@ -459,11 +469,16 @@ Prediction.contextTypes = {
   router: PropTypes.object
 };
 
-
 export default hot(withNamespaces()(
   connect(state => ({
+    auth: state.auth,
     formatters: state.data.formatters,
     locale: state.i18n.locale,
     env: state.env
+  }),
+  dispatch => ({
+    isAuthenticated: () => {
+      dispatch(isAuthenticated());
+    }
   }))(Prediction)
 ));

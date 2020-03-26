@@ -1,0 +1,24 @@
+/* postive / negative text */
+.u-positive-text {
+  color: var(--turquoise-dark) !important;
+}
+.u-negative-text {
+  color: var(--red-dark) !important;
+}
+/* :before icons */
+.u-positive-arrow:before {
+  /* bring your own content */
+  position: relative; /* makes positining work */
+  top: -0.125em; /* offset baseline */
+  display: inline-block;
+  padding-right: 0.25em;
+  content: '↑';
+}
+.u-negative-arrow:before {
+  /* bring your own content */
+  position: relative; /* makes positining work */
+  top: -0.125em; /* offset baseline */
+  display: inline-block;
+  padding-right: 0.25em;
+  content: '↓';
+}

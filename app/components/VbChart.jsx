@@ -222,11 +222,11 @@ class VbChart extends React.Component {
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
     if (isProduct) {
       const productTemp = viztype.split(".")[0];
-      const productLevels = ["Section", "HS2", "HS4", "HS6"];
-      const n = Math.ceil(
-        (productTemp.length - (productTemp.length / 2 >> 0)) / 2
-      );
-      params[productLevels[n]] = viztype.replace(".", ",");
+      const len = productTemp.length;
+      const digit = len + len % 2 - 2;
+      const productLevelsV2 = {1: "Section", 2: "HS2", 4: "HS4", 6: "HS6"};
+
+      params[productLevelsV2[digit]] = viztype.replace(".", ",");
     }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
@@ -431,24 +431,30 @@ class VbChart extends React.Component {
       };
     }
 
+    const onClickConfig = {
+      on: {
+        click: d =>
+          this.setState({isOpenDrawer: true, relatedItems: d})
+      }
+    };
+
     if (chart === "tree_map" && data && data.length > 0) {
+      const isContinentGroupBy = baseConfig.groupBy[0] === "Continent";
+      console.log(isContinentGroupBy, baseConfig.groupBy[0]);
       return (
         <div>
           <div className="vb-chart">
             <Treemap
               config={{
                 ...baseConfig,
+                ...onClickConfig,
                 sum: measure,
-                total: measure,
-                on: {
-                  click: d =>
-                    this.setState({isOpenDrawer: true, relatedItems: d})
-                }
+                total: measure
               }}
             />
           </div>
           <div className="vb-chart-options">
-            {!isTechnology &&
+            {!isTechnology && !isContinentGroupBy &&
               <OECButtonGroup
                 items={["HS2", "HS4", "HS6"]}
                 selected={this.state.depth}
@@ -457,7 +463,7 @@ class VbChart extends React.Component {
                   this.setState({depth}, () => this.fetchData())
                 }
               />}
-            {isTechnology &&
+            {isTechnology && !isContinentGroupBy &&
               <OECButtonGroup
                 items={ddTech.slice(1)}
                 selected={this.state.techDepth}
@@ -508,11 +514,8 @@ class VbChart extends React.Component {
             <StackedArea
               config={{
                 ...baseConfig,
+                ...onClickConfig,
                 colorScale: undefined,
-                on: {
-                  click: d =>
-                    this.setState({isOpenDrawer: true, relatedItems: d})
-                },
                 shapeConfig: {
                   Area: {
                     strokeWidth: 1
@@ -587,6 +590,7 @@ class VbChart extends React.Component {
             <LinePlot
               config={{
                 ...baseConfig,
+                ...onClickConfig,
                 colorScale: undefined,
                 discrete: "x",
                 groupBy:
@@ -595,10 +599,6 @@ class VbChart extends React.Component {
                   : viztype === "all" || isFinite(viztype)
                     ? ["Continent", "Country"]
                     : ["Section"],
-                on: {
-                  click: d =>
-                    this.setState({isOpenDrawer: true, relatedItems: d})
-                },
                 time: "Year",
                 timeline: false,
                 total: undefined,
@@ -647,16 +647,13 @@ class VbChart extends React.Component {
             <Geomap
               config={{
                 ...baseConfig,
+                ...onClickConfig,
                 colorScale: measure,
                 colorScaleConfig: {
                   scale: "log"
                 },
                 groupBy: "ISO 3",
                 legend: false,
-                on: {
-                  click: d =>
-                    this.setState({isOpenDrawer: true, relatedItems: d})
-                },
                 ocean: false,
                 tiles: false,
                 topojson: "/topojson/world-50m.json",
@@ -787,12 +784,12 @@ class VbChart extends React.Component {
           <div className="vb-chart">
             <Rings
               config={{
-                links: data,
                 center: viztype,
-                total: undefined,
                 label: "",
+                links: data,
+                total: undefined,
                 tooltipConfig: {
-                  title: d => ""
+                  title: (d, x, i) => console.log(d, x, i)
                 },
                 shapeConfig: {
                   Circle: {

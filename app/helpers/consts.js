@@ -19,8 +19,8 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Countries", url: `/${locale}/rankings/country/eci/`},
-      {title: "Products",  url: `/${locale}/rankings/product/hs92/`}
+      {title: "Country", url: `/${locale}/rankings/`},
+      {title: "Product", url: `/${locale}/rankings/`}
     ]},
     // tools
     {title: "Tools", items: [
@@ -501,7 +501,7 @@ module.exports = {
           dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
           dimName: "Subnat Geography",
           id: "subnats",
-          name: "City",
+          name: "Autonomous Community",
           selected: []
         },
         {
