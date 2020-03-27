@@ -15,6 +15,7 @@ class RankingsBuilder extends Component {
 			productRevision,
 			singleyear,
 			initialYear,
+			finalYear,
 			yearValue,
 			rangeChangeInitial,
 			yearRangeInitial,
@@ -128,7 +129,7 @@ class RankingsBuilder extends Component {
 						<div className="year-selector">
 							{
 								<ButtonGroup fill={true}>
-									{range(initialYear[productRevision], 2017).map((d, k) => (
+									{range(initialYear[productRevision], finalYear[productRevision],).map((d, k) => (
 										<Button
 											key={k}
 											onClick={() =>
