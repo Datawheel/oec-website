@@ -39,10 +39,21 @@ class Rankings extends Component {
 				HS07: 2008,
 				HS12: 2012
 			},
-			yearValue: 2017,
+			finalYear: {
+				'Tier 1 Product': 2018,
+				'Tier 2 Product': 2018,
+				'Tier 3 Product': 2018,
+				'Tier 4 Product': 2018,
+				HS92: 2018,
+				HS96: 2018,
+				HS02: 2018,
+				HS07: 2018,
+				HS12: 2018
+			},
+			yearValue: 2018,
 			rangeChangeInitial: true,
-			yearRangeInitial: 2016,
-			yearRangeFinal: 2017,
+			yearRangeInitial: 2017,
+			yearRangeFinal: 2018,
 			countryExpThreshold: 100000000,
 			productExpThreshold: 100000000,
 			data: null,
@@ -73,7 +84,8 @@ class Rankings extends Component {
 			},
 			{
 				id: 'category',
-				accessor: (d) => (country ? d.Country : productDepth === 'SITC' ? d[`${productRevision}`] : d[`${productDepth}`]),
+				accessor: (d) =>
+					country ? d.Country : productDepth === 'SITC' ? d[`${productRevision}`] : d[`${productDepth}`],
 				width: 400,
 				Header: () => (
 					<div className="header">
@@ -164,28 +176,54 @@ class Rankings extends Component {
 	}
 
 	handleValueChange(key, value) {
-		if (key === "productRevision") {
-			this.setState({ [key]: value, yearValue: 2017, yearRangeInitial: 2016, yearRangeFinal: 2017  });
+		const { finalYear, productRevision } = this.state;
+		if (key === 'productRevision') {
+			this.setState({
+				[key]: value,
+				yearValue: finalYear[productRevision],
+				yearRangeInitial: finalYear[productRevision] - 1,
+				yearRangeFinal: finalYear[productRevision]
+			});
 		} else {
 			this.setState({ [key]: value });
 		}
 	}
 
 	resetValueChange(key, value) {
+		const { finalYear, productRevision } = this.state;
 		if (this.state[key] !== 'SITC' && value === 'SITC') {
-			this.setState({ [key]: value, productRevision: 'Tier 1 Product', yearValue: 2017, yearRangeInitial: 2016, yearRangeFinal: 2017 });
+			this.setState({
+				[key]: value,
+				productRevision: 'Tier 1 Product',
+				yearValue: finalYear[productRevision],
+				yearRangeInitial: finalYear[productRevision] - 1,
+				yearRangeFinal: finalYear[productRevision]
+			});
 		} else if (this.state[key] === 'SITC' && value !== 'SITC') {
-			this.setState({ [key]: value, productRevision: 'HS92', yearValue: 2017, yearRangeInitial: 2016, yearRangeFinal: 2017 });
+			this.setState({
+				[key]: value,
+				productRevision: 'HS92',
+				yearValue: finalYear[productRevision],
+				yearRangeInitial: finalYear[productRevision] - 1,
+				yearRangeFinal: finalYear[productRevision]
+			});
 		} else {
 			this.setState({ [key]: value });
 		}
 	}
 
 	handleYearRangeChange(value) {
-		const { initialYear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal } = this.state;
+		const {
+			initialYear,
+			finalYear,
+			productRevision,
+			rangeChangeInitial,
+			yearRangeInitial,
+			yearRangeFinal
+		} = this.state;
 
 		if (rangeChangeInitial) {
-			if (value === 2017) {
+			if (value === finalYear[productRevision]) {
 				this.setState({ yearRangeInitial: value - 1, yearRangeFinal: value });
 			} else if (value < yearRangeInitial) {
 				this.setState({ yearRangeInitial: value });
@@ -249,7 +287,9 @@ class Rankings extends Component {
 
 		rangeData = rangeData.flat();
 
-		const selector = country ? "Country ID" : productDepth === 'SITC' ? `${productRevision} ID` : `${productDepth} ID`;
+		const selector = country
+			? 'Country ID'
+			: productDepth === 'SITC' ? `${productRevision} ID` : `${productDepth} ID`;
 
 		const reduceData = rangeData.reduce((obj, d) => {
 			if (!obj[d[selector]]) obj[d[selector]] = [ d ];
@@ -276,11 +316,11 @@ class Rankings extends Component {
 		});
 
 		finalData.map((d) => {
-			range(yearRangeInitial, yearRangeFinal).map(f => {
+			range(yearRangeInitial, yearRangeFinal).map((f) => {
 				if (d[`${f}`] === undefined) {
 					d[`${f}`] = -1000;
 				}
-			})
+			});
 		});
 		finalData = finalData.sort((a, b) => b[`${yearRangeFinal}`] - a[`${yearRangeFinal}`]);
 
@@ -380,6 +420,7 @@ class Rankings extends Component {
 			productRevision,
 			singleyear,
 			initialYear,
+			finalYear,
 			yearValue,
 			rangeChangeInitial,
 			yearRangeInitial,
@@ -467,6 +508,7 @@ class Rankings extends Component {
 							productRevision,
 							singleyear,
 							initialYear,
+							finalYear,
 							yearValue,
 							rangeChangeInitial,
 							yearRangeInitial,
@@ -488,7 +530,6 @@ class Rankings extends Component {
 			</div>
 		);
 	}
-
 }
 
 export default withNamespaces()(connect()(Rankings));
