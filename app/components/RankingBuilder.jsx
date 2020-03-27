@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import { Button, ButtonGroup, HTMLSelect, Slider, Switch } from '@blueprintjs/core';
 import { Select } from '@blueprintjs/select';
 import { range } from 'helpers/utils';
@@ -15,6 +14,7 @@ class RankingsBuilder extends Component {
 			productRevision,
 			singleyear,
 			initialYear,
+			finalYear,
 			yearValue,
 			rangeChangeInitial,
 			yearRangeInitial,
@@ -31,7 +31,7 @@ class RankingsBuilder extends Component {
 			recalculateData
 		} = this.props;
 		const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
-		const REVISION_OPTIONS_SITC = [ 'Tier 1 Product', 'Tier 2 Product', 'Tier 3 Product', 'Tier 4 Product' ];
+		const REVISION_OPTIONS_SITC = [ 'Category', 'Section', 'Division', 'Group', 'Subgroup' ];
 		const REVISION_OPTIONS_HS = [ 'HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012' ];
 		const FILTER_OPTIONS = [
 			'Brazil',
@@ -118,17 +118,18 @@ class RankingsBuilder extends Component {
 						</div>
 						{!singleyear && (
 							<div className="switch last">
-							<span>Initial Year</span>
-							<Switch
-								onChange={(event) => handleValueChange('rangeChangeInitial', !event.currentTarget.checked)}
-							/>
-							<span>Final Year</span>
-						</div>
+								<span>Initial Year</span>
+								<Switch
+									onChange={(event) =>
+										handleValueChange('rangeChangeInitial', !event.currentTarget.checked)}
+								/>
+								<span>Final Year</span>
+							</div>
 						)}
 						<div className="year-selector">
 							{
 								<ButtonGroup fill={true}>
-									{range(initialYear[productRevision], 2017).map((d, k) => (
+									{range(initialYear[productRevision], finalYear[productRevision]).map((d, k) => (
 										<Button
 											key={k}
 											onClick={() =>
@@ -158,9 +159,9 @@ class RankingsBuilder extends Component {
 						<h3 className="first">Country Export Value Threshold </h3>
 						<Slider
 							min={0}
-							max={1000000000}
-							stepSize={50000000}
-							labelStepSize={100000000}
+							max={10000000000}
+							stepSize={500000000}
+							labelStepSize={1000000000}
 							onChange={getChangeHandler('countryExpThreshold')}
 							labelRenderer={renderExportThresholdLabel}
 							value={countryExpThreshold}
@@ -170,9 +171,9 @@ class RankingsBuilder extends Component {
 						<h3>Product Export Value Threshold </h3>
 						<Slider
 							min={0}
-							max={1000000000}
-							stepSize={50000000}
-							labelStepSize={100000000}
+							max={2000000000}
+							stepSize={250000000}
+							labelStepSize={500000000}
 							onChange={getChangeHandler('productExpThreshold')}
 							labelRenderer={renderExportThresholdLabel}
 							value={productExpThreshold}

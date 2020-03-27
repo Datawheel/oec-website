@@ -29,26 +29,38 @@ class Rankings extends Component {
 			productRevision: 'HS92',
 			singleyear: true,
 			initialYear: {
-				'Tier 1 Product': 2000,
-				'Tier 2 Product': 2000,
-				'Tier 3 Product': 2000,
-				'Tier 4 Product': 2000,
+				Category: 2000,
+				Section: 2000,
+				Division: 2000,
+				Group: 2000,
+				Subgroup: 2000,
 				HS92: 1995,
 				HS96: 1998,
 				HS02: 2003,
 				HS07: 2008,
 				HS12: 2012
 			},
-			yearValue: 2017,
+			finalYear: {
+				Category: 2018,
+				Section: 2018,
+				Division: 2018,
+				Group: 2018,
+				Subgroup: 2018,
+				HS92: 2018,
+				HS96: 2018,
+				HS02: 2018,
+				HS07: 2018,
+				HS12: 2018
+			},
+			yearValue: 2018,
 			rangeChangeInitial: true,
-			yearRangeInitial: 2016,
-			yearRangeFinal: 2017,
-			countryExpThreshold: 100000000,
-			productExpThreshold: 100000000,
+			yearRangeInitial: 2017,
+			yearRangeFinal: 2018,
+			countryExpThreshold: 10000000000,
+			productExpThreshold: 2000000000,
 			data: null,
 			columns: null,
-			_loading: false,
-			_yearSelection: 'single'
+			_loading: false
 		};
 		this.handleValueChange = this.handleValueChange.bind(this);
 		this.getChangeHandler = this.getChangeHandler.bind(this);
@@ -73,7 +85,8 @@ class Rankings extends Component {
 			},
 			{
 				id: 'category',
-				accessor: (d) => (country ? d.Country : productDepth === 'SITC' ? d[`${productRevision}`] : d[`${productDepth}`]),
+				accessor: (d) =>
+					country ? d.Country : productDepth === 'SITC' ? d[`${productRevision}`] : d[`${productDepth}`],
 				width: 400,
 				Header: () => (
 					<div className="header">
@@ -118,7 +131,7 @@ class Rankings extends Component {
 									''
 								) : (
 									`/en/profile/${productRevision.toLowerCase()}/${props.original[
-										`${productDepth} ID`
+										`${productRevision} ID`
 									]}`
 								)
 							}
@@ -164,28 +177,54 @@ class Rankings extends Component {
 	}
 
 	handleValueChange(key, value) {
-		if (key === "productRevision") {
-			this.setState({ [key]: value, yearValue: 2017, yearRangeInitial: 2016, yearRangeFinal: 2017  });
+		const { finalYear, productRevision } = this.state;
+		if (key === 'productRevision') {
+			this.setState({
+				[key]: value,
+				yearValue: finalYear[productRevision],
+				yearRangeInitial: finalYear[productRevision] - 1,
+				yearRangeFinal: finalYear[productRevision]
+			});
 		} else {
 			this.setState({ [key]: value });
 		}
 	}
 
 	resetValueChange(key, value) {
+		const { finalYear, productRevision } = this.state;
 		if (this.state[key] !== 'SITC' && value === 'SITC') {
-			this.setState({ [key]: value, productRevision: 'Tier 1 Product', yearValue: 2017, yearRangeInitial: 2016, yearRangeFinal: 2017 });
+			this.setState({
+				[key]: value,
+				productRevision: 'Category',
+				yearValue: finalYear[productRevision],
+				yearRangeInitial: finalYear[productRevision] - 1,
+				yearRangeFinal: finalYear[productRevision]
+			});
 		} else if (this.state[key] === 'SITC' && value !== 'SITC') {
-			this.setState({ [key]: value, productRevision: 'HS92', yearValue: 2017, yearRangeInitial: 2016, yearRangeFinal: 2017 });
+			this.setState({
+				[key]: value,
+				productRevision: 'HS92',
+				yearValue: finalYear[productRevision],
+				yearRangeInitial: finalYear[productRevision] - 1,
+				yearRangeFinal: finalYear[productRevision]
+			});
 		} else {
 			this.setState({ [key]: value });
 		}
 	}
 
 	handleYearRangeChange(value) {
-		const { initialYear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal } = this.state;
+		const {
+			initialYear,
+			finalYear,
+			productRevision,
+			rangeChangeInitial,
+			yearRangeInitial,
+			yearRangeFinal
+		} = this.state;
 
 		if (rangeChangeInitial) {
-			if (value === 2017) {
+			if (value === finalYear[productRevision]) {
 				this.setState({ yearRangeInitial: value - 1, yearRangeFinal: value });
 			} else if (value < yearRangeInitial) {
 				this.setState({ yearRangeInitial: value });
@@ -209,16 +248,6 @@ class Rankings extends Component {
 				this.setState({ yearRangeFinal: value });
 			}
 		}
-
-		/*
-		if (yearRangeInitial < value && value < yearRangeFinal) {
-			this.setState({ yearRangeFinal: value });
-		} else if (value < yearRangeInitial) {
-			this.setState({ yearRangeInitial: value });
-		} else if (value > yearRangeFinal) {
-			this.setState({ yearRangeFinal: value });
-		}
-		*/
 	}
 
 	getChangeHandler(key) {
@@ -242,14 +271,17 @@ class Rankings extends Component {
 		let rangeData = [];
 
 		for (const d of paths) {
+			const varName = country ? 'Trade Value ECI' : 'Trade Value PCI';
 			const data = await axios.get(d.path).then((resp) => resp.data.data);
-			data.map((f) => ((f[`${d.year}`] = f['Trade Value ECI']), delete f['Trade Value ECI']));
+			data.map((f) => ((f[`${d.year}`] = f[varName]), delete f[varName]));
 			rangeData.push(data);
 		}
 
 		rangeData = rangeData.flat();
 
-		const selector = country ? "Country ID" : productDepth === 'SITC' ? `${productRevision} ID` : `${productDepth} ID`;
+		const selector = country
+			? 'Country ID'
+			: productDepth === 'SITC' ? `${productRevision} ID` : `${productDepth} ID`;
 
 		const reduceData = rangeData.reduce((obj, d) => {
 			if (!obj[d[selector]]) obj[d[selector]] = [ d ];
@@ -276,11 +308,11 @@ class Rankings extends Component {
 		});
 
 		finalData.map((d) => {
-			range(yearRangeInitial, yearRangeFinal).map(f => {
+			range(yearRangeInitial, yearRangeFinal).map((f) => {
 				if (d[`${f}`] === undefined) {
 					d[`${f}`] = -1000;
 				}
-			})
+			});
 		});
 		finalData = finalData.sort((a, b) => b[`${yearRangeFinal}`] - a[`${yearRangeFinal}`]);
 
@@ -305,13 +337,12 @@ class Rankings extends Component {
 			productExpThreshold,
 			initialYear,
 			yearRangeInitial,
-			yearRangeFinal,
-			_yearSelection
+			yearRangeFinal
 		} = this.state;
 		this.setState({ _loading: true });
 
 		if (singleyear) {
-			let pathYear =
+			const pathYear =
 				yearValue === initialYear[productRevision]
 					? [ yearValue, yearValue, yearValue ]
 					: yearValue === initialYear[productRevision] + 1
@@ -320,20 +351,21 @@ class Rankings extends Component {
 
 			let path = country
 				? productDepth === 'SITC'
-					? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+					? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
 					: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
 							2
-						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
+						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
 				: productDepth === 'SITC'
-					? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=${productRevision},Reporter+Country,Trade+Value&alias=${productRevision},Country&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}&iterations=21`)
-					: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
+					? (path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+					: (path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(
 							2
-						)}&rca=${productDepth},Exporter+Country,Trade+Value&alias=${productDepth},Country&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}&iterations=21`);
+						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`);
 
 			axios.all([ axios.get(path) ]).then(
 				axios.spread((resp) => {
-					const data = resp.data.data.sort((a, b) => b['Trade Value ECI'] - a['Trade Value ECI']);
-					data.map((d) => ((d[`${yearValue}`] = d['Trade Value ECI']), delete d['Trade Value ECI']));
+					const varName = country ? 'Trade Value ECI' : 'Trade Value PCI';
+					const data = resp.data.data.sort((a, b) => b[varName] - a[varName]);
+					data.map((d) => ((d[`${yearValue}`] = d[varName]), delete d[varName]));
 					console.log(data);
 					const columns = this.createColumns(singleyear, yearValue);
 					this.setState({
@@ -344,27 +376,27 @@ class Rankings extends Component {
 				})
 			);
 		} else {
-			let urlPath = [];
+			const urlPath = [];
 
 			range(yearRangeInitial, yearRangeFinal).map((d) => {
-				let pathYear =
+				const pathYear =
 					d === initialYear[productRevision]
 						? [ d, d, d ]
 						: d === initialYear[productRevision] + 1 ? [ d - 1, d, d ] : [ d - 2, d - 1, d ];
 
 				let path = country
 					? productDepth === 'SITC'
-						? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+						? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
 						: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
 								2
-							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
+							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
 					: productDepth === 'SITC'
-						? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=${productRevision},Reporter+Country,Trade+Value&alias=${productRevision},Country&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}&iterations=21`)
-						: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
+						? (path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+						: (path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(
 								2
-							)}&rca=${productDepth},Exporter+Country,Trade+Value&alias=${productDepth},Country&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}&iterations=21`);
+							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`);
 
-				urlPath.push({ year: d, path: path });
+				urlPath.push({ year: d, path });
 			});
 
 			this.fetchRangeData(urlPath);
@@ -380,6 +412,7 @@ class Rankings extends Component {
 			productRevision,
 			singleyear,
 			initialYear,
+			finalYear,
 			yearValue,
 			rangeChangeInitial,
 			yearRangeInitial,
@@ -388,8 +421,7 @@ class Rankings extends Component {
 			productExpThreshold,
 			data,
 			columns,
-			_loading,
-			_yearSelection
+			_loading
 		} = this.state;
 
 		console.log(
@@ -467,6 +499,7 @@ class Rankings extends Component {
 							productRevision,
 							singleyear,
 							initialYear,
+							finalYear,
 							yearValue,
 							rangeChangeInitial,
 							yearRangeInitial,
@@ -482,13 +515,12 @@ class Rankings extends Component {
 						recalculateData={this.recalculateData}
 					/>
 
-					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} />}
+					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={country} />}
 				</div>
 				<Footer />
 			</div>
 		);
 	}
-
 }
 
 export default withNamespaces()(connect()(Rankings));

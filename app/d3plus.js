@@ -17,7 +17,7 @@ function findColor(d) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
 
-  if ("Section" in d && !["HS2", "HS4", "HS6"].includes(d)) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
+  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
   if ("Section" in d && !Array.isArray(d.Section)) {
     return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
   }
@@ -78,7 +78,7 @@ function backgroundImage(d, ascending) {
   const options = {2: "export", 1: "import"};
 
   if (!ascending) {
-    if ("Section ID" in d && !["HS2", "HS4", "HS6"].includes(d)) {
+    if ("Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
       return `/images/icons/sitc/${d["Section ID"]}.svg`;
     }
     if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
@@ -210,7 +210,6 @@ export default {
   colorScaleConfig: {
     axisConfig: {
       labelOffset: true,
-      labelRotation: false,
       shapeConfig: {
         labelConfig: labelStyle,
         stroke: style["dark-1"]
@@ -240,6 +239,7 @@ export default {
       stroke: style["dark-1"]
     }
   },
+  colorScaleMaxSize: 800,
   xConfig: axisStyles,
   yConfig: {...axisStyles, scale: "auto"},
   y2Config: {...axisStyles, scale: "auto"},
