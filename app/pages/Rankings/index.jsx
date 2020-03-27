@@ -87,81 +87,76 @@ class Rankings extends Component {
           country ? d.Country : productDepth === "SITC" ? d[`${productRevision}`] : d[`${productDepth}`],
         width: 400,
         Header: () =>
-					<div className="header">
-						<span className="year">{country ? 'Country' : 'Product'}</span>
-						<div className="icons">
-							<Icon icon={'caret-up'} iconSize={16} />
-							<Icon icon={'caret-down'} iconSize={16} />
-						</div>
-					</div>
-				,
+          <div className="header">
+            <span className="year">{country ? "Country" : "Product"}</span>
+            <div className="icons">
+              <Icon icon={"caret-up"} iconSize={16} />
+              <Icon icon={"caret-down"} iconSize={16} />
+            </div>
+          </div>,
         style: {whiteSpace: "unset"},
         Cell: props =>
-					<div className="category">
-						<img
-							src={
-								country ? (
-									`/images/icons/country/country_${props.original['Country ID'].substr(
-										props.original['Country ID'].length - 3
-									)}.png`
-								) : productDepth === 'SITC' ? (
-									''
-								) : (
-									`/images/icons/hs/hs_${props.original[`${productDepth} ID`]
-										.toString()
-										.substr(
-											0,
-											props.original[`${productDepth} ID`].toString().length * 1 -
+          <div className="category">
+            <img
+              src={
+                country
+                  ? `/images/icons/country/country_${props.original["Country ID"].substr(
+                    props.original["Country ID"].length - 3
+                  )}.png`
+								 : productDepth === "SITC"
+                    ? ""
+								 : 									`/images/icons/hs/hs_${props.original[`${productDepth} ID`]
+                      .toString()
+                      .substr(
+                        0,
+                        props.original[`${productDepth} ID`].toString().length * 1 -
 												productDepth.substr(2) * 1
-										)}.svg`
-								)
-							}
-							alt="icon"
-							className="icon"
-						/>
-						<a
-							href={
-								country ? (
-									`/en/profile/country/${props.original['Country ID'].substr(
-										props.original['Country ID'].length - 3
-									)}`
-								) : productDepth === 'SITC' ? (
-									''
-								) : (
-									`/en/profile/${productRevision.toLowerCase()}/${props.original[
-										`${productRevision} ID`
-									]}`
-								)
-							}
-							className="link"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<div className="name">
-								{country ? (
-									props.original.Country
-								) : productDepth === 'SITC' ? (
-									props.original[`${productRevision}`]
-								) : (
-									props.original[`${productDepth}`]
-								)}
-							</div>
-							<Icon icon={'chevron-right'} iconSize={14} />
-						</a>
-					</div>
+                      )}.svg`
+
+              }
+              alt="icon"
+              className="icon"
+            />
+            <a
+              href={
+                country
+                  ? `/en/profile/country/${props.original["Country ID"].substr(
+                    props.original["Country ID"].length - 3
+                  )}`
+								 : productDepth === "SITC"
+                    ? ""
+								 : 									`/en/profile/${productRevision.toLowerCase()}/${props.original[
+                      `${productRevision} ID`
+                    ]}`
+
+              }
+              className="link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="name">
+                {country
+                  ? props.original.Country
+								 : productDepth === "SITC"
+                    ? props.original[`${productRevision}`]
+								 : 									props.original[`${productDepth}`]
+                }
+              </div>
+              <Icon icon={"chevron-right"} iconSize={14} />
+            </a>
+          </div>
 
       },
       ...range(years[0], years[1]).map((year, index, {length}) => ({
         id: length === index + 1 ? "lastyear" : `${year}`,
         Header: () =>
-					<div className="header">
-						<span className="year">{year}</span>
-						<div className="icons">
-							<Icon icon={'caret-up'} iconSize={16} />
-							<Icon icon={'caret-down'} iconSize={16} />
-						</div>
-					</div>
-				,
+          <div className="header">
+            <span className="year">{year}</span>
+            <div className="icons">
+              <Icon icon={"caret-up"} iconSize={16} />
+              <Icon icon={"caret-down"} iconSize={16} />
+            </div>
+          </div>,
         accessor: d => d[`${year}`],
         Cell: props =>
           numeral(props.original[`${year}`]).format("0.00000") * 1 !== -1000
@@ -184,7 +179,7 @@ class Rankings extends Component {
         yearRangeFinal: finalYear[productRevision]
       });
     }
- else {
+    else {
       this.setState({[key]: value});
     }
   }
@@ -200,7 +195,7 @@ class Rankings extends Component {
         yearRangeFinal: finalYear[productRevision]
       });
     }
- else if (this.state[key] === "SITC" && value !== "SITC") {
+    else if (this.state[key] === "SITC" && value !== "SITC") {
       this.setState({
         [key]: value,
         productRevision: "HS92",
@@ -209,7 +204,7 @@ class Rankings extends Component {
         yearRangeFinal: finalYear[productRevision]
       });
     }
- else {
+    else {
       this.setState({[key]: value});
     }
   }
@@ -228,31 +223,31 @@ class Rankings extends Component {
       if (value === finalYear[productRevision]) {
         this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
       }
- else if (value < yearRangeInitial) {
+      else if (value < yearRangeInitial) {
         this.setState({yearRangeInitial: value});
       }
- else if (yearRangeInitial < value && value < yearRangeFinal) {
+      else if (yearRangeInitial < value && value < yearRangeFinal) {
         if (range(value, yearRangeFinal).length >= 2) {
           this.setState({yearRangeInitial: value});
         }
       }
- else if (yearRangeFinal < value) {
+      else if (yearRangeFinal < value) {
         this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
       }
     }
- else {
+    else {
       if (value === initialYear[productRevision]) {
         this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
       }
- else if (value < yearRangeInitial) {
+      else if (value < yearRangeInitial) {
         this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
       }
- else if (yearRangeInitial < value && value < yearRangeFinal) {
+      else if (yearRangeInitial < value && value < yearRangeFinal) {
         if (range(yearRangeInitial, value).length >= 2) {
           this.setState({yearRangeFinal: value});
         }
       }
- else if (yearRangeFinal < value) {
+      else if (yearRangeFinal < value) {
         this.setState({yearRangeFinal: value});
       }
     }
@@ -274,7 +269,7 @@ class Rankings extends Component {
     return `$${formatAbbreviate(val)}`;
   }
 
-	fetchRangeData = asyncpaths => {
+	fetchRangeData = async paths => {
 	  const {country, productDepth, productRevision, singleyear, yearRangeInitial, yearRangeFinal} = this.state;
 	  let rangeData = [];
 
@@ -308,7 +303,7 @@ class Rankings extends Component {
 	        flag.push(data);
 	        tempData = flag[0];
 	      }
- else {
+	      else {
 	        tempData[`${range(yearRangeInitial, yearRangeFinal)[j]}`] =
 						data[`${range(yearRangeInitial, yearRangeFinal)[j]}`];
 	      }
@@ -362,11 +357,13 @@ class Rankings extends Component {
 	      ? productDepth === "SITC"
 	        ? path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`
 	        : path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
-							2
-						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`
+	          2
+	        )}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`
 	      : productDepth === "SITC"
 	        ? path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`
-	        : path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`;
+	        : path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(
+	          2
+	        )}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`;
 
 	    axios.all([axios.get(path)]).then(
 	      axios.spread(resp => {
@@ -383,7 +380,7 @@ class Rankings extends Component {
 	      })
 	    );
 	  }
- else {
+	  else {
 	    const urlPath = [];
 
 	    range(yearRangeInitial, yearRangeFinal).map(d => {
@@ -396,11 +393,13 @@ class Rankings extends Component {
 	        ? productDepth === "SITC"
 	          ? path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`
 	          : path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
-								2
-							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`
+	            2
+	          )}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`
 	        : productDepth === "SITC"
 	          ? path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`
-	          : path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`;
+	          : path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(
+	            2
+	          )}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&parents=true&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`;
 
 	      urlPath.push({year: d, path});
 	    });
