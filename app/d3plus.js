@@ -51,7 +51,7 @@ function backgroundImageV2(key, d) {
     case "Section":
       return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
     case "SITC Section":
-      return `/images/icons/sitc/${d["Section ID"]}.svg`;
+      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Service":
@@ -79,7 +79,7 @@ function backgroundImage(d, ascending) {
 
   if (!ascending) {
     if ("Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
-      return `/images/icons/sitc/${d["Section ID"]}.svg`;
+      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
     }
     if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
@@ -140,8 +140,8 @@ function backgroundImage(d, ascending) {
     else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     }
-    else if ("Section ID" in d && !["HS2", "HS4", "HS6"].includes(d)) {
-      return `/images/icons/sitc/${d["Section ID"]}.svg`;
+    else if ("Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
+      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
