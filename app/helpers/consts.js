@@ -32,6 +32,7 @@ module.exports = {
     ]},
     // academy
     {title: "Academy", items: [
+      {title: "Definitions",  url: `/${locale}/resources/definitions`},
       {title: "Methodology",  url: `/${locale}/resources/methodology`},
       {title: "FAQs",         url: `/${locale}/resources/faq`},
       {title: "Publications", url: `/${locale}/resources/publications`}

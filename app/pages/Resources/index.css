@@ -63,6 +63,17 @@
       }
     }
 
+    & .reference {
+      display: flex;
+      font-size: var(--font-xs);
+      font-weight: 400;
+      margin-bottom: var(--gutter-xs);
+    }
+
+    & .formula {
+      margin-left: var(--gutter-lg);
+    }
+
     & .data {
       & h3 {
         font-size: var(--font-md);
