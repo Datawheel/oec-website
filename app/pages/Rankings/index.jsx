@@ -56,8 +56,8 @@ class Rankings extends Component {
 			rangeChangeInitial: true,
 			yearRangeInitial: 2017,
 			yearRangeFinal: 2018,
-			countryExpThreshold: 10000000000,
-			productExpThreshold: 2000000000,
+			countryExpThreshold: 5000000000,
+			productExpThreshold: 1000000000,
 			data: null,
 			columns: null,
 			_loading: false
