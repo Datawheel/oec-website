@@ -107,7 +107,9 @@ class Rankings extends Component {
 										props.original['Country ID'].length - 3
 									)}.png`
 								) : productDepth === 'SITC' ? (
-									''
+									`/images/icons/sitc/sitc_${props.original[`${productRevision} ID`]
+										.toString()
+										.charAt(0)}.svg`
 								) : (
 									`/images/icons/hs/hs_${props.original[`${productDepth} ID`]
 										.toString()
