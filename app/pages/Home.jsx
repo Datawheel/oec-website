@@ -74,7 +74,7 @@ class Home extends Component {
               position="absolute"
               showExamples={true} />
 
-            <ul key="logos" className="home-hero-sponsor-list">
+            {/* <ul key="logos" className="home-hero-sponsor-list">
               <li className="home-hero-sponsor-item">
                 <a href="https://www.datawheel.us/" className="home-hero-sponsor-link">
                   <img
@@ -95,7 +95,7 @@ class Home extends Component {
                   />
                 </a>
               </li>
-            </ul>
+            </ul> */}
 
           </div>
           {/* <div className="home-hero-video">
