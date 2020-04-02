@@ -353,15 +353,15 @@ class Rankings extends Component {
 
 			let path = country
 				? productDepth === 'SITC'
-					? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+					? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`)
 					: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
 							2
-						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
+						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`)
 				: productDepth === 'SITC'
-					? (path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+					? (path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`)
 					: (path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(
 							2
-						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`);
+						)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`);
 
 			axios.all([ axios.get(path) ]).then(
 				axios.spread((resp) => {
@@ -388,15 +388,15 @@ class Rankings extends Component {
 
 				let path = country
 					? productDepth === 'SITC'
-						? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+						? (path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`)
 						: (path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(
 								2
-							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`)
+							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`)
 					: productDepth === 'SITC'
-						? (path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productRevision}=${productExpThreshold}`)
+						? (path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`)
 						: (path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(
 								2
-							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold}&threshold_${productDepth}=${productExpThreshold}`);
+							)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`);
 
 				urlPath.push({ year: d, path });
 			});
