@@ -45,24 +45,19 @@
   align-items: stretch;
   & .cp-hero-stat {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     padding-right: var(--gutter-sm) !important;
-    text-align: center;
+    text-align: left;
     & .cp-stat-label-text {
-      @mixin font-xs;
+      @mixin font-sm;
       font-weight: 800 !important;
+      margin-bottom: 0 !important;
     }
     & .cp-stat-value {
-      display: flex;
-      flex: 1 0 auto;
-      flex-direction: column;
+      display: block;
       & .cp-stat-value-text {
-        align-items: center;
-        display: flex;
-        flex: 1 0 auto;
         font-weight: 100;
-        justify-content: center;
-        margin-bottom: 5px;
+        margin-bottom: 0;
         &.length-sm {
           @mixin font-xxl;
         }
@@ -165,7 +160,8 @@
 
 .cp-hero-caption {
   flex: 1 1 auto;
-  margin-bottom: var(--gutter-xl);
+  margin-bottom: var(--gutter-lg);
+  text-align: left !important;
 }
 
 .cp-hero-credits {
@@ -226,10 +222,66 @@
     margin: 0 var(--gutter-xl) 0 0 !important;
   }
 
+  & .cp-hero-subhead {
+    margin-top: var(--gutter-xs);
+  }
+
   & .cp-hero-heading-dimension {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: white;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    box-decoration-break: clone; /* wraps border */
+    position: relative;
+    transition:
+      background-color 0.1s ease-out,
+      border-color 0.1s ease-out,
+      border-radius 0.1s ease-out,
+      color 0.1s ease-out,
+      padding-left 0.1s ease-out,
+      margin-left 0.1s ease-out,
+      padding-right 0.1s ease-out,
+      margin-right 0.1s ease-out,
+      transform 0.1s ease-out;
+
+    &:after {
+      background-image: url('/images/icons/nav/search.png');
+      background-repeat: no-repeat;
+      background-position: 50% 55%;
+      background-size: 50%;
+      content: " ";
+      position: absolute;
+      top: auto;
+      bottom: 0;
+      right: 0;
+      /* sizing */
+      width: 1.25em;
+      height: 1.25em;
+      /* transitions */
+      opacity: 0;
+      text-align: center;
+      transform: scale(0);
+      transition:
+        opacity 0.1s ease-out,
+        transform 0.1s ease-out;
+    }
+
     &:hover, &:focus {
-      border-color: white;
+      text-decoration: none;
+      background-color: var(--dark-2);
+      border-color: var(--dark-2);
+      border-radius: 0.25em;
+      color: var(--white);
+      /* add a tiny bit of padding and offset it */
+      padding-left: 0.25em;
+      padding-right: 1.25em;
+      margin-left: -0.25em;
+      margin-right: -1.25em;
+      transform: translateX(-0.125em);
+      z-index: 1;
+      &:after {
+        opacity: 0.5;
+        transform: none;
+      }
     }
   }
 
