@@ -424,7 +424,21 @@
 			}
 
 			& .subtopic {
-				width: 40%;
+				& .selector {
+					margin-bottom: 0;
+
+					& h3 {
+						display: none;
+					}
+
+					& .bp3-popover-wrapper {
+						& .bp3-popover-target {
+							& div {
+								width: 100%;
+							}
+						}
+					}
+				}
 			}
 		}
 	}

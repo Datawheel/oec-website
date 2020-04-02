@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from 'react-table';
-import { Button, ButtonGroup, HTMLSelect, Slider, Switch, TagInput } from '@blueprintjs/core';
+import { HTMLSelect } from '@blueprintjs/core';
+
+import OECMultiSelect from 'components/OECMultiSelect';
 
 import 'react-table/react-table.css';
 
@@ -15,9 +17,7 @@ class Library extends Component {
 			uniqueRegion: null,
 			uniqueSubtopics: null,
 			filterRegion: 'All',
-			filterSubtopic1: null,
-			filterSubtopic2: null,
-			filterSubtopic3: null
+			filterSubtopics: []
 		};
 	}
 
@@ -47,7 +47,14 @@ class Library extends Component {
 			const subtopics3 = [ ...new Set(d.map((m) => m.Subtopic3)) ].filter((f) => f !== null);
 			const subtopics = subtopics1.concat(subtopics2).concat(subtopics3);
 			const sorted = [ ...new Set(subtopics) ].sort((a, b) => a.localeCompare(b));
-			return sorted;
+			const dict = [];
+			sorted.forEach((h) => {
+				const item = {};
+				item['value'] = h;
+				item['title'] = h;
+				dict.push(item);
+			});
+			return dict;
 		} else {
 			return null;
 		}
@@ -97,11 +104,28 @@ class Library extends Component {
 	}
 
 	filterData = () => {
-		const { data, filterRegion, filterSubtopic1, filterSubtopic2, filterSubtopic3 } = this.state;
+		const { data, filterRegion, filterSubtopics } = this.state;
+
 		if (filterRegion !== 'All') {
-			return data.filter((f) => f.Region === filterRegion);
+			const filteredRegion = data.filter((f) => f.Region === filterRegion);
+
+			if (filterSubtopics.length > 0) {
+				const filteredData = [];
+				filterSubtopics.map((d) => {
+					const filteredSubtopic = filteredRegion.filter(f => (f.Subtopic1 === d.value || f.Subtopic2 === d.value || f.Subtopic3 === d.value));
+					filteredData.push(filteredSubtopic);
+				});
+				return filteredData ? filteredData.flat() : [];
+			} else {
+				return filteredRegion;
+			}
 		} else {
-			return data;
+			if (filterSubtopics.length > 0) {
+				filterSubtopics.map((d) => console.log(d));
+				return data;
+			} else {
+				return data;
+			}
 		}
 	};
 
@@ -109,12 +133,17 @@ class Library extends Component {
 		this.setState({ [key]: value });
 	}
 
+	handleItemMultiSelect = (key, d) => {
+		this.setState({ [key]: d });
+	};
+
 	render() {
-		const { data, headers, columns, uniqueRegion, uniqueSubtopics } = this.state;
+		const { data, headers, columns, uniqueRegion, uniqueSubtopics, filterSubtopics } = this.state;
 		console.log('DATA:', data);
 		console.log('HEADERS:', headers);
 		console.log('REGIONS:', uniqueRegion);
 		console.log('SUBTOPICS:', uniqueSubtopics);
+		console.log('Subtopic Filter:', filterSubtopics);
 
 		const filteredData = this.filterData();
 
@@ -137,37 +166,11 @@ class Library extends Component {
 						</div>
 						<div className="subtopic">
 							<h3>Subtopics</h3>
-							<HTMLSelect
-								options={uniqueSubtopics}
-								onChange={(event) =>
-									this.handleValueChange(
-										'filterSubtopic1',
-										event.currentTarget.selectedOptions[0].value
-									)}
+							<OECMultiSelect
+								items={uniqueSubtopics}
+								selectedItems={filterSubtopics}
+								callback={(d) => this.handleItemMultiSelect('filterSubtopics', d)}
 							/>
-							<HTMLSelect
-								options={uniqueSubtopics}
-								onChange={(event) =>
-									this.handleValueChange(
-										'filterSubtopic2',
-										event.currentTarget.selectedOptions[0].value
-									)}
-							/>
-							<HTMLSelect
-								options={uniqueSubtopics}
-								onChange={(event) =>
-									this.handleValueChange(
-										'filterSubtopic3',
-										event.currentTarget.selectedOptions[0].value
-									)}
-							/>
-							{/*
-							<TagInput
-								placeholder="Separate values with commas..."
-								values={[]}
-								fill={true}
-							/>
-							*/}
 						</div>
 					</div>
 				)}
