@@ -25,20 +25,20 @@ function titleSize(title, large = false) {
 
 /** Determines tile subtitles */
 function subtitle(entity) {
-  const {dimension} = entity;
-  let {slug} = entity;
-  if (["country", "technology"].includes(slug)) return titleCase(slug);
-  else if (slug === "hs92") return "Product";
-  else if (slug === "firm") return "Company";
-  else if (dimension.toLowerCase() !== slug.toLowerCase()) {
-    if (slug && slug.match(/[A-z]{1,}/g).join("").length < 4) {
-      slug = slug.toUpperCase();
-    }
-    else slug = titleCase(slug);
-    return `${dimension} (${slug})`;
-  }
-  return dimension;
-
+  return profileSearchConfig.subtitleFormat(entity);
+  // const {dimension} = entity;
+  // let {slug} = entity;
+  // if (["country", "technology"].includes(slug)) return titleCase(slug);
+  // else if (slug === "hs92") return "Product";
+  // else if (slug === "firm") return "Company";
+  // else if (dimension.toLowerCase() !== slug.toLowerCase()) {
+  //   if (slug && slug.match(/[A-z]{1,}/g).join("").length < 4) {
+  //     slug = slug.toUpperCase();
+  //   }
+  //   else slug = titleCase(slug);
+  //   return `${dimension} (${slug})`;
+  // }
+  // return dimension;
 }
 
 class Home extends Component {
