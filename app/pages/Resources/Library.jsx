@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from 'react-table';
 import { HTMLSelect } from '@blueprintjs/core';
+import { Geomap } from 'd3plus-react';
 
 import OECMultiSelect from 'components/OECMultiSelect';
 
@@ -132,12 +133,6 @@ class Library extends Component {
 
 	render() {
 		const { data, headers, columns, uniqueRegion, uniqueSubtopics, filterSubtopics } = this.state;
-		console.log('DATA:', data);
-		console.log('HEADERS:', headers);
-		console.log('REGIONS:', uniqueRegion);
-		console.log('SUBTOPICS:', uniqueSubtopics);
-		console.log('Subtopic Filter:', filterSubtopics);
-
 		const filteredData = this.filterData();
 
 		return (
