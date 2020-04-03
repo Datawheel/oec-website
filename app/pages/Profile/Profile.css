@@ -156,11 +156,14 @@
     padding: 0 !important;
     width: 250px;
   }
+  @mixin max-sm {
+    display: none;
+  }
 }
 
 .cp-hero-caption {
   flex: 1 1 auto;
-  margin-bottom: var(--gutter-lg);
+  margin-bottom: 0;
   text-align: left !important;
 }
 
@@ -183,8 +186,9 @@
 }
 
 /* hero */
-.cp-hero {
+.cp-hero.cp-section {
   min-height: auto;
+  padding: calc(var(--nav-height) + var(--gutter-sm)) var(--gutter-lg) var(--gutter-lg);
   position: relative;
   text-shadow: 0 0 5px var(--black);
   z-index: 1;
@@ -480,14 +484,22 @@
   padding: var(--gutter-sm) var(--gutter-lg);
 }
 
+.cp-subnav {
+  padding: var(--gutter-sm) var(--gutter-lg);
+  top: 0;
+  z-index: 19 !important;
+  & ~ .cp-main {
+    margin-top: 0;
+  }
+}
 /* subnav tweaks */
 @mixin min-sm {
   .cp-default-section-figure {
     width: calc(100% - var(--sidebar-width) - var(--gutter-md));
   }
-
   .cp-subnav {
     background-color: var(--dark-4) !important;
+    padding: 0 0 0 calc(250px + 4.5em);
   }
   .cp-subnav.is-fixed {
     top: var(--nav-height);
@@ -580,16 +592,6 @@
       &:hover, &:focus {
         border-color: var(--field-icon-color) !important;
       }
-    }
-  }
-}
-
-/* subnav overrides */
-@mixin min-sm {
-  .cp-subnav {
-    /* stuck state */
-    &.is-fixed {
-      top: calc(var(--nav-height) + var(--subnav-height));
     }
   }
 }
