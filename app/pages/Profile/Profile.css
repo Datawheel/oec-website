@@ -498,7 +498,8 @@
     width: calc(100% - var(--sidebar-width) - var(--gutter-md));
   }
   .cp-subnav {
-    background-color: var(--dark-4) !important;
+    background-color: var(--dark-2) !important;
+    border-bottom: 2px solid var(--dark-4);
     padding: 0 0 0 calc(250px + 4.5em);
   }
   .cp-subnav.is-fixed {
