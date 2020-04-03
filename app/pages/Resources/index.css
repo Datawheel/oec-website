@@ -404,6 +404,7 @@
 		background: var(--dark-4);
 		margin: var(--gutter-md) var(--gutter-lg);
 		padding: var(--gutter-md) var(--gutter-md);
+		min-height: 60vh;
 
 		& h1 {
 			margin-top: 0;
