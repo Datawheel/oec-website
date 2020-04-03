@@ -66,11 +66,11 @@ class SubnationalCountryBlock extends React.Component {
 
     return <div className="subnational-country-block">
       <a id={`subnational-country-block-${metadata.code}`} className="subnational-country-block-anchor"></a>
-      <div className="subnational-header">
-        <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
-      </div>
       <div className="subnational-block-content">
         <div className="subnational-tabs">
+          <div className="subnational-header">
+            <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
+          </div>
           <Tabs
             animate={true}
             id={`${metadata.code}-geolevels`}
@@ -84,13 +84,14 @@ class SubnationalCountryBlock extends React.Component {
             {metadata.geoLevels.map((gl, ix) =>
               <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList country={metadata.code} options={items && items[gl.level] ? items[gl.level].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
             )}
-            <Tabs.Expander />
             <InputGroup type="text"
               id={`${metadata.code}-search`}
+              fill={true}
               placeholder={`Search ${selectedName}`}
               onChange={this.filterList}
               defaultValue={""}
               value={searchText} />
+            <Tabs.Expander />
           </Tabs>
         </div>
         <div className="subnational-map-container">
