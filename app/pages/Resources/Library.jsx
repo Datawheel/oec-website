@@ -106,26 +106,19 @@ class Library extends Component {
 	filterData = () => {
 		const { data, filterRegion, filterSubtopics } = this.state;
 
-		if (filterRegion !== 'All') {
-			const filteredRegion = data.filter((f) => f.Region === filterRegion);
+		const _filteredRegion = filterRegion !== 'All' ? data.filter((f) => f.Region === filterRegion) : data;
 
-			if (filterSubtopics.length > 0) {
-				const filteredData = [];
-				filterSubtopics.map((d) => {
-					const filteredSubtopic = filteredRegion.filter(f => (f.Subtopic1 === d.value || f.Subtopic2 === d.value || f.Subtopic3 === d.value));
-					filteredData.push(filteredSubtopic);
-				});
-				return filteredData ? filteredData.flat() : [];
-			} else {
-				return filteredRegion;
-			}
+		if (filterSubtopics.length > 0) {
+			const _filteredData = [];
+			filterSubtopics.map((d) => {
+				const _filteredBySubtopic = _filteredRegion.filter(
+					(f) => f.Subtopic1 === d.value || f.Subtopic2 === d.value || f.Subtopic3 === d.value
+				);
+				_filteredData.push(_filteredBySubtopic);
+			});
+			return _filteredData.flat();
 		} else {
-			if (filterSubtopics.length > 0) {
-				filterSubtopics.map((d) => console.log(d));
-				return data;
-			} else {
-				return data;
-			}
+			return _filteredRegion;
 		}
 	};
 
