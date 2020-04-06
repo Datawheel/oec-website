@@ -1,4 +1,5 @@
 import os, sys, json, logging, warnings
+import math
 import pandas as pd
 from numpy import timedelta64
 from numpy.random import seed
@@ -11,8 +12,8 @@ import requests
 # python -W ignore calcs/predictions.py '{"cube":"trade_i_baci_a_92","Reporter Country":"sachl","drilldowns":"Year","measures":"Trade Value"}'
 # python -W ignore calcs/predictions.py '{"cube":"trade_i_comtrade_m_hs","Reporter Country":"sachl","drilldowns":"Time","measures":"Trade Value"}'
 
-# DEBUG = False
-DEBUG = True
+DEBUG = False
+# DEBUG = True
 
 class suppress_stdout_stderr(object):
   '''
@@ -138,15 +139,18 @@ class PredictClass(object):
     time_drilldown = params.get("drilldowns", "Year")
     last_observed = self.raw_df.y_orig.iloc[-1]
     last_observed_date = self.raw_df.index[-1]
+    last_observed_date_loc = self.merged_df.index.get_loc(last_observed_date)
+    first_predicted_date = self.merged_df.index[last_observed_date_loc + 1]
     last_observed_year = int(last_observed_date.strftime("%Y"))
     if DEBUG:
       print("last_observed", last_observed)
       print("last_observed_date", last_observed_date)
       print("last_observed_year", last_observed_year)
-    self.merged_df["pct_change"] = self.merged_df["y_orig"].fillna(self.merged_df["yhat"])
+    # self.merged_df["pct_change"] = self.merged_df["y_orig"].fillna(self.merged_df["yhat"])
+    self.merged_df["pct_change"] = self.merged_df["yhat"]
     self.merged_df["pct_change"] = self.merged_df["pct_change"].pct_change()
 
-    self.merged_df["abs_change"] = self.merged_df["y_orig"].fillna(self.merged_df["yhat"])
+    self.merged_df["abs_change"] = self.merged_df["yhat"]
     self.merged_df["abs_change"] = self.merged_df["abs_change"].diff()
     if time_drilldown == "Year":
       self.merged_df["dt"] = self.merged_df.index
@@ -158,7 +162,8 @@ class PredictClass(object):
       self.merged_df["dt"] = (self.merged_df["dt"] - last_observed_date) / timedelta64(1, 'M')
       self.merged_df["dt"] = self.merged_df["dt"].round()
 
-    self.merged_df["cagr"] = self.merged_df["yhat"]
+    # self.merged_df["cagr"] = self.merged_df["yhat"]
+    self.merged_df["cagr"] = self.merged_df.apply(lambda row: row["yhat"] if row.name > first_predicted_date else math.nan, axis=1)
     self.merged_df["cagr"] = self.merged_df["cagr"] / last_observed
     self.merged_df["cagr"] = self.merged_df["cagr"].pow(1. / self.merged_df["dt"])
     self.merged_df["cagr"] = self.merged_df["cagr"] - 1
@@ -166,7 +171,10 @@ class PredictClass(object):
     self.merged_df = self.merged_df.drop(['dt'], axis=1)
 
     if DEBUG:
-      print(self.merged_df.tail(11))
+      # clipping point for yearly
+      print(self.merged_df.iloc[18:30])
+      # clipping point for monthly
+      # print(self.merged_df.iloc[115:125])
 
   def print_json(self):
     # cast date back to string (for JS processing)

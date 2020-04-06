@@ -1,39 +1,103 @@
+@import "../../helpers/mixins.css";
+
 .subnational-country-block {
-  border-bottom: 1px solid #666;
-  padding: 10px 0px;
-  & .subnational-country-block-anchor{
-    display: inline-block;
+  border-bottom: none;
+  padding: var(--gutter-lg);
+  & .subnational-country-block-anchor {
+    display: block;
+    height: 0;
     margin-top: -60px;
     outline: 0;
     padding-top: 60px;
     position: relative;
   }
-  & .subnational-block-content{
+  & .subnational-block-content {
     display: flex;
+    justify-content: center;
+    @mixin max-sm {
+      flex-direction: column;
+    }
   }
-  & .subnational-tabs{
-    width: 30%;
+  & .subnational-tabs {
+    background: var(--dark-3);
+    border-radius: var(--gutter-sm);
+    padding: var(--gutter-md);
+    width: 350px;
+    @mixin max-sm {
+      width: 100%;
+    }
+    & .bp3-tab {
+      border: 1px solid var(--dark-2);
+      border-radius: 0;
+      font-weight: 600;
+      height: 30px;
+      line-height: 1.75;
+      margin: 0;
+      &[aria-selected=true] {
+        border: 1px solid var(--dark-2);
+      }
+    }
+    & .bp3-input-group {
+      display: block;
+      margin-right: 0;
+      width: 100%;
+      & input {
+        border-radius: 0;
+        &::placeholder {
+          color: var(--light-1);
+        }
+      }
+    }
+    & .bp3-tab-panel {
+      height: 300px;
+      overflow-y: scroll;
+      @mixin max-sm {
+        height: auto;
+        max-height: 200px;
+      }
+    }
+  }
+  & .subnational-map-container {
+    flex: 1 1 auto;
     padding: 10px;
+    border-left: none;
+    max-width: 800px;
+    & .subnational-map-label {
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      margin: 0 0 var(--gutter-sm);
+      opacity: 0.5;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    @mixin max-sm {
+      width: 100%;
+    }
   }
-  & .subnational-map-container{
-    width: 70%;
-    padding: 10px;
-    border-left: 1px solid #666;
-  }
-  & .subnational-header{
+  & .subnational-header {
     & h3 {
+      @mixin font-xxl;
+      align-items: center;
       display: flex;
       flex-direction: row;
-      align-items: center;
-      & span{
-        padding-right:10px;
-        &.icon{
-          min-width:50px;
+      font-weight: 300;
+      margin: 0 0 var(--gutter-sm);
+      & span {
+        padding-right: 10px;
+        &.icon {
+          min-width: 50px;
           & img {
-            width:50px;
+            vertical-align: top;
+            width: 50px;
           }
         }
       }
+    }
+  }
+  &:nth-child(even) {
+    background-color: var(--dark-3);
+    & .subnational-tabs {
+      background-color: var(--dark-4);
     }
   }
 }

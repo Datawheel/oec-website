@@ -89,15 +89,18 @@ module.exports = function(app) {
     }
 
     const queryString = Object.keys(query).map(key => `${key}=${query[key]}`).join("&");
-    const apiToken = jwt.sign(
-      {
-        auth_level: user ? user.role : 0,
-        sub: user ? user.id : "localhost",
-        status: "valid"
-      },
-      OLAP_PROXY_SECRET,
-      {expiresIn: "30m"}
-    );
+    let apiToken = req.headers["x-tesseract-jwt-token"];
+    if (!apiToken) {
+      apiToken = jwt.sign(
+        {
+          auth_level: user ? user.role : 0,
+          sub: user ? user.id : "localhost",
+          status: "valid"
+        },
+        OLAP_PROXY_SECRET,
+        {expiresIn: "30m"}
+      );
+    }
 
     const config = {
       headers: {

@@ -60,17 +60,18 @@ class SubnationalCountryBlock extends React.Component {
     const selectedGeoLevel = metadata.geoLevels[navbarTabIx];
 
     const selectedName = selectedGeoLevel.name;
-    const selectedLevel = selectedGeoLevel.level;
+    const selectedCube = selectedGeoLevel.overrideCube ? selectedGeoLevel.overrideCube : metadata.cube;
+    const selectedLevel = `${selectedCube}_${selectedGeoLevel.level}`;
 
     const imgUrl = `/images/icons/country/country_${metadata.code}.png`;
 
     return <div className="subnational-country-block">
       <a id={`subnational-country-block-${metadata.code}`} className="subnational-country-block-anchor"></a>
-      <div className="subnational-header">
-        <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
-      </div>
       <div className="subnational-block-content">
         <div className="subnational-tabs">
+          <div className="subnational-header">
+            <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
+          </div>
           <Tabs
             animate={true}
             id={`${metadata.code}-geolevels`}
@@ -82,15 +83,16 @@ class SubnationalCountryBlock extends React.Component {
             selectedTabId={navbarTabId}
           >
             {metadata.geoLevels.map((gl, ix) =>
-              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList country={metadata.code} options={items && items[gl.level] ? items[gl.level].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
+              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList slug={gl.profileSlug ? gl.profileSlug : `subnational_${metadata.code}`} options={items && items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`] ? items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
             )}
-            <Tabs.Expander />
             <InputGroup type="text"
               id={`${metadata.code}-search`}
+              fill={true}
               placeholder={`Search ${selectedName}`}
               onChange={this.filterList}
               defaultValue={""}
               value={searchText} />
+            <Tabs.Expander />
           </Tabs>
         </div>
         <div className="subnational-map-container">

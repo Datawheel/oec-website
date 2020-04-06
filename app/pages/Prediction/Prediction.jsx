@@ -405,6 +405,7 @@ class Prediction extends React.Component {
             <Collapse isOpen={datatableOpen}>
               <PredictionTable
                 data={predictionData}
+                dateDrilldown={dataset.dateDrilldown}
                 error={error}
                 loading={loading}
                 currencyFormat={dataset.currencyFormat}

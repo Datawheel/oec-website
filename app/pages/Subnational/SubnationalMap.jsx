@@ -37,16 +37,16 @@ class SubnationalMap extends React.Component {
     const {router} = this.context;
 
     return Object.assign({
-      id: `geomap-${country}`,
       data: items,
-      height: 500,
+      height: 400,
       legend: false,
       ocean: "transparent",
       total: false,
       on: {
         "click.shape": d => {
           if (d) {
-            const url = `/${locale}/profile/subnational_${country}/${d.slug}`;
+            const profileSlug = selectedGeoLevel.profileSlug ? selectedGeoLevel.profileSlug : `subnational_${country}`;
+            const url = `/${locale}/profile/${profileSlug}/${d.slug}`;
             router.push(url);
           }
         }
@@ -67,7 +67,7 @@ class SubnationalMap extends React.Component {
       },
       tiles: false,
       tooltipConfig: {
-        title: (d, a) => {
+        title: d => {
           let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
           const imgUrl = `/images/icons/country/country_${country}.png`;
           tooltip += `<div class="icon"><img src="${imgUrl}" /></div>`;
@@ -75,42 +75,9 @@ class SubnationalMap extends React.Component {
           tooltip += "</div>";
           return tooltip;
         },
-        tbody: d => {
-          const tbodyData = [];
-          tbodyData.push(["Level", `${selectedGeoLevel.name}`]);
-          tbodyData.push(["ID", `${d.id}`]);
-          return tbodyData;
-        },
-        background: "#282f37",
-        border: "1px solid #66737e",
-        footerStyle: {
-          "color": "#666",
-          "fontFamily": () => "'Source Sans Pro', sans-serif",
-          "font-size": "12px",
-          "font-weight": "300",
-          "padding-top": "5px",
-          "text-align": "center"
-        },
-        padding: "0px",
-        titleStyle: {
-          "color": "#FFFFFF",
-          "padding": "5px",
-          "fontFamily": () => "'Source Sans Pro', sans-serif",
-          "font-size": "16px",
-          "font-weight": "600",
-          "max-height": "100px",
-          "overflow": "hidden",
-          "text-overflow": "ellipsis",
-          "display": "-webkit-box",
-          "-webkit-box-orient": "vertical",
-          "-webkit-line-clamp": "3"
-        },
-        tbodyStyle: {
-          color: "#FFFFFF"
-        },
+        footer: "Click to view Report",
         width: "200px"
       },
-      fit: true,
       topojson: `/shapes/subnational_${country}_${selectedGeoLevel.slug}.topojson`,
       topojsonId: d => d.properties.id,
       topojsonFilter: d => {

@@ -19,8 +19,8 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Countries", url: `/${locale}/rankings/country/eci/`},
-      {title: "Products",  url: `/${locale}/rankings/product/hs92/`}
+      {title: "Country", url: `/${locale}/rankings/`},
+      {title: "Product", url: `/${locale}/rankings/`}
     ]},
     // tools
     {title: "Tools", items: [
@@ -32,6 +32,8 @@ module.exports = {
     ]},
     // academy
     {title: "Academy", items: [
+      {title: "Definitions",  url: `/${locale}/resources/definitions`},
+      {title: "Library",  url: `/${locale}/resources/library`},
       {title: "Methodology",  url: `/${locale}/resources/methodology`},
       {title: "FAQs",         url: `/${locale}/resources/faq`},
       {title: "Publications", url: `/${locale}/resources/publications`}
@@ -54,8 +56,8 @@ module.exports = {
       geoLevels: [
 
         /* {name: "Region", level: "Region", slug: "regions"},*/
-        {name: "States", level: "State", slug: "states", ignoreIdsList: ["93", "95"]},
-        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
+        {name: "States", overrideCube: "trade_s_bra_ncm_m_hs", profileSlug: "subnational_bra_state", level: "Subnat Geography", slug: "states", ignoreIdsList: ["93", "95"]},
+        {name: "Municipalities", profileSlug: "subnational_bra_municipality", level: "Subnat Geography", slug: "municipalities"}
       ]
     },
     {
@@ -127,15 +129,17 @@ module.exports = {
       dimension: "Subnat Geography",
       geoLevels: [
         {
+          overrideCube: "trade_s_usa_state_m_hs",
           name: "States",
-          level: "State",
+          level: "Subnat Geography",
           slug: "states",
           ignoreIdsMap: [
             "04000US60", "04000US69", "04000US66"
           ],
           extraMapConfig: {
             projection: d3_composite.geoAlbersUsaTerritories()
-          }
+          },
+          profileSlug: "subnational_usa_state"
         },
         {
           name: "Districts",
@@ -143,7 +147,8 @@ module.exports = {
           slug: "districts",
           extraMapConfig: {
             projection: d3_composite.geoAlbersUsaTerritories()
-          }
+          },
+          profileSlug: "subnational_usa_district"
         }
       ]
     },
@@ -166,13 +171,15 @@ module.exports = {
           name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous",
           extraMapConfig: {
             projection: d3_composite.geoConicConformalSpain()
-          }
+          },
+          ignoreIdsList: ["100"]
         },
         {
           name: "Provinces", level: "Subnat Geography", slug: "provinces",
           extraMapConfig: {
             projection: d3_composite.geoConicConformalSpain()
-          }
+          },
+          ignoreIdsList: ["0"]
         }
       ]
     },
@@ -212,8 +219,26 @@ module.exports = {
       geoLevels: [
         {name: "Departments", level: "Subnat Geography", slug: "departments"}
       ]
+    },
+    {
+      name: "Ecuador",
+      code: "ecu",
+      cube: "trade_s_ecu_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Ports", level: "Subnat Geography", slug: "ports"}
+      ]
+    },
+    {
+      name: "Great Britain",
+      code: "gbr",
+      cube: "trade_s_gbr_m_hs",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Ports", level: "Subnat Geography", slug: "ports"}
+      ]
     }
-    // TODO: CHL, ECU
+    // TODO: CHL
     // TBD: SWE -> no units, ignore it.
   ],
 

@@ -50,6 +50,15 @@ comparison-stat-color: "#FAB613"
 macro-market-color: "#DBB607"
 connect-americas-color: "#1AC4D8"
 
+# growth/decline colors
+turquoise-color: "#18FFC6"
+turquoise-light: "#5DFFD7"
+turquoise-dark: "#10B28A"
+
+red-color: "#FD5555"
+red-light: "#FD8888"
+red-dark: "#B03B3B"
+
 
 ########################################
 # admin panel
@@ -88,7 +97,7 @@ body-font-scale-md:         "112.5%" # 1rem = 18px (min-width: 992px)
 body-font-scale-xl:         "125%"   # 1rem = 20px (min-width: 1400px)
 
 # measurements
-nav-height:                 "3.5rem"
+nav-height:                 "3rem"
 subnav-height:              "2rem"
 container-width:            "100%"
 hero-container-width:       "var(--container-width)"

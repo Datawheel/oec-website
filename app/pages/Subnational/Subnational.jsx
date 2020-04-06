@@ -37,9 +37,9 @@ class Subnational extends React.Component {
 
       <div className="subnational-content">
 
-        <h1>Subnational Countries</h1>
+        <h1 className="subnational-title">States/Provinces</h1>
 
-        <p>Subnational information is available in the following countries. More to come!</p>
+        <p className="subnational-intro">Subnational data is available in the following countries, with more to come!</p>
         <div className="subnational-country-index">
           {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map(country =>
             <AnchorLink key={country.code} to={`subnational-country-block-${country.code}`} className="subnational-country-item">
@@ -48,10 +48,6 @@ class Subnational extends React.Component {
             </AnchorLink>
           )}
         </div>
-
-        <hr/>
-
-        <h2>Explore subnational levels</h2>
 
         {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map((country, ix) =>
           <SubnationalCountryBlock key={`subnational-country-${ix}`} metadata={country} options={subnationalLandingData ? subnationalLandingData[country.code] : false} />
@@ -69,17 +65,24 @@ Subnational.childContextTypes = {
   router: PropTypes.object
 };
 
-
 Subnational.need = [(params, store) => {
 
   // Setup promises
   const promisesList = [];
   const countriesData = {};
   SUBNATIONAL_COUNTRIES.map((country, ix) => {
-    const limit = country.limit ? `${country.limit}` : "1000";
-    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}&ref=${country.code}`;
-    countriesData[country.code] = country;
+    let limit = country.limit ? `${country.limit}` : "1000";
+    let url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}&ref=${country.code}_0`;
+    countriesData[`${country.code}_0`] = country;
     promisesList.push(url);
+    country.geoLevels.map((gl, ix) => {
+      if (gl.overrideCube) {
+        limit = country.limit ? `${country.limit}` : "1000";
+        url = `${store.env.CANON_API}/api/search?cubeName=${gl.overrideCube}&dimension=${country.dimension}&level=${gl.level}&limit=${limit}&ref=${country.code}_1`;
+        countriesData[`${country.code}_${ix + 1}`] = country;
+        promisesList.push(url);
+      }
+    });
   });
 
   // All promises finish
@@ -99,7 +102,7 @@ Subnational.need = [(params, store) => {
           datum.dimension === reponseMetadata.dimension &&
           reponseMetadata.geoLevels.map(gl => gl.level).indexOf(datum.hierarchy) > -1
         );
-        nestResponse = d3Nest().key(d => d.hierarchy).object(records);
+        nestResponse = d3Nest().key(d => `${d.cubeName}_${d.hierarchy}`).object(records);
         if (finalResponse[reponseMetadata.code]) {
           finalResponse[reponseMetadata.code] = {...finalResponse[reponseMetadata.code], ...nestResponse};
         }

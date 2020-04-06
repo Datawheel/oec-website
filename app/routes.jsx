@@ -91,7 +91,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/prediction/:dataset" component={Prediction} />
       <Route exact path="/:lang/resources/:page" component={Resources} />
       <Route exact path="/:lang/tariffs" component={Tariffs} />
-      <Route exact path="/:lang/rankings/:category/:measure/" component={Rankings} />
+      <Route exact path="/:lang/rankings/" component={Rankings} />
     </Route>
   );
 }
