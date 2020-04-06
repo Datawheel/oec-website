@@ -65,17 +65,24 @@ Subnational.childContextTypes = {
   router: PropTypes.object
 };
 
-
 Subnational.need = [(params, store) => {
 
   // Setup promises
   const promisesList = [];
   const countriesData = {};
   SUBNATIONAL_COUNTRIES.map((country, ix) => {
-    const limit = country.limit ? `${country.limit}` : "1000";
-    const url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}&ref=${country.code}`;
-    countriesData[country.code] = country;
+    let limit = country.limit ? `${country.limit}` : "1000";
+    let url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}&ref=${country.code}_0`;
+    countriesData[`${country.code}_0`] = country;
     promisesList.push(url);
+    country.geoLevels.map((gl, ix) => {
+      if (gl.overrideCube) {
+        limit = country.limit ? `${country.limit}` : "1000";
+        url = `${store.env.CANON_API}/api/search?cubeName=${gl.overrideCube}&dimension=${country.dimension}&level=${gl.level}&limit=${limit}&ref=${country.code}_1`;
+        countriesData[`${country.code}_${ix + 1}`] = country;
+        promisesList.push(url);
+      }
+    });
   });
 
   // All promises finish
@@ -95,7 +102,7 @@ Subnational.need = [(params, store) => {
           datum.dimension === reponseMetadata.dimension &&
           reponseMetadata.geoLevels.map(gl => gl.level).indexOf(datum.hierarchy) > -1
         );
-        nestResponse = d3Nest().key(d => d.hierarchy).object(records);
+        nestResponse = d3Nest().key(d => `${d.cubeName}_${d.hierarchy}`).object(records);
         if (finalResponse[reponseMetadata.code]) {
           finalResponse[reponseMetadata.code] = {...finalResponse[reponseMetadata.code], ...nestResponse};
         }
