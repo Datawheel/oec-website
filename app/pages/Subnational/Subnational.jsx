@@ -37,9 +37,9 @@ class Subnational extends React.Component {
 
       <div className="subnational-content">
 
-        <h1>Subnational Countries</h1>
+        <h1 className="subnational-title">States/Provinces</h1>
 
-        <p>Subnational information is available in the following countries. More to come!</p>
+        <p className="subnational-intro">Subnational data is available in the following countries, with more to come!</p>
         <div className="subnational-country-index">
           {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map(country =>
             <AnchorLink key={country.code} to={`subnational-country-block-${country.code}`} className="subnational-country-item">
@@ -48,10 +48,6 @@ class Subnational extends React.Component {
             </AnchorLink>
           )}
         </div>
-
-        <hr/>
-
-        <h2>Explore subnational levels</h2>
 
         {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map((country, ix) =>
           <SubnationalCountryBlock key={`subnational-country-${ix}`} metadata={country} options={subnationalLandingData ? subnationalLandingData[country.code] : false} />

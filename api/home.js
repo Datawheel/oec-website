@@ -9,22 +9,32 @@ const tiles = [
   "/profile/country/chl",
   "/profile/country/usa",
   "/profile/country/fra",
-  "/profile/country/chn",
+  "/profile/subnational_chn/hubei-province",
   "/profile/country/irn",
+  "/profile/subnational_deu/berlin",
+  "/profile/subnational_jpn/tokyo",
   {
-    link: "/profile/firm/disney-enterprises-inc-fa8492d090",
-    image: "https://i.ytimg.com/vi/_iIxfFZW-NE/maxresdefault.jpg"
-  },
-  {
-    link: "/profile/technology/solar-heat-collectors-solar-heat-systems",
+    link: "/profile/bilateral-product/soybeans/reporter/bra",
     large: true
   },
-  {
-    link: "/profile/firm/tesla-inc",
-    large: true
-  },
-  "/profile/firm/samsung-electronics-co-ltd-b8c1acc425",
-  "/profile/firm/apple-inc",
+  // {
+  //   link: "/profile/firm/disney-enterprises-inc-fa8492d090",
+  //   image: "https://i.ytimg.com/vi/_iIxfFZW-NE/maxresdefault.jpg"
+  // },
+  // {
+  //   link: "/profile/technology/solar-heat-collectors-solar-heat-systems",
+  //   large: true
+  // },
+  // {
+  //   link: "/profile/firm/tesla-inc",
+  //   large: true
+  // },
+
+  // "/profile/firm/samsung-electronics-co-ltd-b8c1acc425",
+  // "/profile/firm/apple-inc",
+  "/profile/subnational_usa/los-angeles-ca",
+  "/profile/subnational_esp/barcelona-8",
+  "/profile/subnational_can/quebec",
   {
     link: "/profile/hs92/semiconductor-devices",
     large: true
@@ -36,7 +46,13 @@ const tiles = [
     large: true
   },
   "/profile/bilateral-product/lithium-carbonates/reporter/chl",
-  "/profile/bilateral-country/jpn/partner/kor"
+  "/profile/bilateral-country/jpn/partner/kor",
+  "/profile/subnational_chn/shanghai-province",
+  "/profile/subnational_rus/moscow-the-capital-of-russian-federation",
+  {
+    link: "/en/profile/bilateral-country/ukr/partner/rus",
+    large: true
+  }
 ];
 
 // To add once sub-nat profile IDs are resolved:
@@ -88,12 +104,6 @@ module.exports = function(app) {
         return obj;
       }, {});
 
-    const dimensionToSlug = profileRows
-      .reduce((obj, d) => {
-        obj[d.dimension] = d.slug;
-        return obj;
-      }, {});
-
     const entityIds = tileData
       .map(d => d.entities.map(e => e.id));
     const uniqueIds = Array.from(new Set(merge(entityIds)));
@@ -119,7 +129,7 @@ module.exports = function(app) {
                 dimension: e.dimension,
                 hierarchy: e.hierarchy,
                 id: e.id,
-                slug: dimensionToSlug[e.dimension],
+                slug: entity.slug,
                 title: content.name
               });
             }

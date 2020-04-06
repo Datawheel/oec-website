@@ -9,7 +9,9 @@ import Error from "../../components/Error";
 import About from "./About";
 import Api from "./Api";
 import Data from "./Data";
+import Definitions from "./Definitions";
 import Faq from "./Faq";
+import Library from "./Library";
 import Methodology from "./Methodology";
 import Permissions from "./Permissions";
 import Privacy from "./Privacy";
@@ -30,6 +32,16 @@ class Resources extends Component {
       );
     }
 
+    if (page === "library") {
+      return (
+        <div className="library-content">
+          <OECNavbar />
+          <Library />
+          <Footer />
+        </div>
+      );
+    }
+
     return (
       <div className="resources">
         <OECNavbar />
@@ -42,6 +54,8 @@ class Resources extends Component {
                 return <Api />;
               case "data":
                 return <Data />;
+              case "definitions":
+                return <Definitions />;
               case "faq":
                 return <Faq />;
               case "methodology":
