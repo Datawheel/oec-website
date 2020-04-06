@@ -215,35 +215,30 @@
 /* profile title / top link */
 .navbar-top-link-wrapper {
   /* positioning */
-  position: absolute;
-  text-align: center;
+  position: fixed;
+  text-align: left;
   top: var(--nav-height);
   left: 0;
   right: 0;
-  z-index: 0;
+  z-index: 20;
   /* sizing */
-  width: 100%;
+  width: calc(250px + 5em);
   height: var(--subnav-height);
-  background: var(--dark-4);
+  background: transparent;
   /* transitions */
   transition: 0.333s opacity ease-out;
-
-  /* make room for logo on left */
-  @mixin min-sm {
-    left: 0;
-    right: 0;
-    width: 100%;
-  }
 
   & .navbar-top-link {
     /* sizing */
     @mixin overflow-ellipsis;
+    @mixin font-sm;
     display: inline-block;
     max-width: 100%;
-    padding-left: var(--gutter-sm);
-    padding-right: var(--gutter-sm);
-    line-height: var(--subnav-height);
-    margin-top: calc(var(--subnav-height) * -0.25);
+    padding-left: 1.25rem;
+    padding-right: 0;
+    line-height: 1.75rem;
+    margin-top: 0;
+    position: relative;
     & img {
       /* prevent button size from increasing */
       max-height: 1.5em;
@@ -253,13 +248,24 @@
       margin-top: -0.1em;
       vertical-align: middle;
     }
+    @mixin max-md {
+      padding-left: 3.1rem;
+    }
+  }
+
+  &.long {
+    background: var(--dark-4);
+    text-align: center;
+    width: 100%;
+    & .navbar-top-link {
+      padding-left: 0;
+    }
   }
 
   /* theming */
   &.is-visible .navbar-top-link {
     color: var(--light-2);
     transition:
-      0.15s transform ease-out,
       0.15s color ease-out,
       0.15s filter ease-out;
   }
@@ -271,10 +277,8 @@
 
     & .navbar-top-link {
       color: var(--dark-3);
-      transform: translateY(-33.333%);
       filter: blur(4px);
       transition:
-        0.1s transform ease-out,
         0.1s filter ease-out,
         0.1s color ease-out;
     }

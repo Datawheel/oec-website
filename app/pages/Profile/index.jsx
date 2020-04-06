@@ -2,7 +2,6 @@ import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
 import {Helmet} from "react-helmet";
-import {select} from "d3-selection";
 
 import {fetchData} from "@datawheel/canon-core";
 import throttle from "@datawheel/canon-cms/src/utils/throttle";
@@ -20,9 +19,13 @@ import Footer from "components/Footer";
 import "./Profile.css";
 
 class Profile extends React.Component {
-  state = {
-    scrolled: false
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      scrolled: false
+    };
+  }
 
   getChildContext() {
     const {formatters, locale, profile, router} = this.props;
@@ -51,15 +54,21 @@ class Profile extends React.Component {
 
   handleScroll = () => {
     throttle(() => {
-      const title = select(".cp-hero-heading").node();
-      this.setState({scrolled: title.getBoundingClientRect().top < 0});
+      const navHeight = document.querySelector(".navbar").getBoundingClientRect().height;
+      const elem = document.querySelector(".cp-subnav") || document.querySelector(".cp-hero-heading");
+      const elemHeight = elem.getBoundingClientRect().top;
+      const newScrolled = elemHeight <= navHeight;
+      if (newScrolled !== this.state.scrolled) {
+        const shortTitle = window.innerWidth > 768 && document.querySelector(".cp-subnav") ? true : false;
+        this.setState({scrolled: newScrolled, shortTitle});
+      }
     }, 50);
   };
 
 
   render() {
     const {profile} = this.props;
-    const {scrolled} = this.state;
+    const {scrolled, shortTitle} = this.state;
 
     let title = null;
     if (profile.sections.length) {
@@ -78,6 +87,7 @@ class Profile extends React.Component {
           className={scrolled ? "background" : ""}
           title={title}
           scrolled={scrolled}
+          shortTitle={shortTitle}
         />
         <CMSProfile searchProps={profileSearchConfig} {...this.props} />
 

@@ -104,12 +104,6 @@ module.exports = function(app) {
         return obj;
       }, {});
 
-    const dimensionToSlug = profileRows
-      .reduce((obj, d) => {
-        obj[d.dimension] = d.slug;
-        return obj;
-      }, {});
-
     const entityIds = tileData
       .map(d => d.entities.map(e => e.id));
     const uniqueIds = Array.from(new Set(merge(entityIds)));
@@ -135,7 +129,7 @@ module.exports = function(app) {
                 dimension: e.dimension,
                 hierarchy: e.hierarchy,
                 id: e.id,
-                slug: dimensionToSlug[e.dimension],
+                slug: entity.slug,
                 title: content.name
               });
             }

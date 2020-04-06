@@ -32,6 +32,16 @@ class Resources extends Component {
       );
     }
 
+    if (page === "library") {
+      return (
+        <div className="library-content">
+          <OECNavbar />
+          <Library />
+          <Footer />
+        </div>
+      );
+    }
+
     return (
       <div className="resources">
         <OECNavbar />
@@ -48,8 +58,6 @@ class Resources extends Component {
                 return <Definitions />;
               case "faq":
                 return <Faq />;
-              case "library":
-                return <Library />;
               case "methodology":
                 return <Methodology />;
               case "permissions":
