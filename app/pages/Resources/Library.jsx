@@ -6,6 +6,8 @@ import { Geomap } from 'd3plus-react';
 
 import OECMultiSelect from 'components/OECMultiSelect';
 
+import { geodict } from 'helpers/librarygeomap';
+
 import 'react-table/react-table.css';
 
 class Library extends Component {
@@ -13,10 +15,10 @@ class Library extends Component {
 		super(props);
 		this.state = {
 			data: null,
-			headers: null,
 			columns: null,
 			uniqueRegion: null,
 			uniqueSubtopics: null,
+			geomapData: null,
 			filterRegion: 'All',
 			filterSubtopics: []
 		};
@@ -26,7 +28,8 @@ class Library extends Component {
 		axios.get('/api/library').then((resp) => {
 			const uniqueRegion = this.getUniqueRegions(resp.data.data);
 			const uniqueSubtopics = this.getUniqueSubtopics(resp.data.data);
-			this.setState({ data: resp.data.data, headers: resp.data.headers, uniqueRegion, uniqueSubtopics });
+			const geomapData = this.getGeomapData(resp.data.data, uniqueRegion);
+			this.setState({ data: resp.data.data, uniqueRegion, uniqueSubtopics, geomapData });
 		});
 	};
 
@@ -56,6 +59,32 @@ class Library extends Component {
 				dict.push(item);
 			});
 			return dict;
+		} else {
+			return null;
+		}
+	};
+
+	getGeomapData = (d, regions) => {
+		if (d) {
+			const filters = regions.slice(0);
+			filters.shift();
+			let data = [];
+			for (const index in filters) {
+				const value = d.filter((f) => f.Region === filters[index]);
+				const subtopics1 = [ ...new Set(value.map((m) => m.Subtopic1)) ].filter((f) => f !== null);
+				const subtopics2 = [ ...new Set(value.map((m) => m.Subtopic2)) ].filter((f) => f !== null);
+				const subtopics3 = [ ...new Set(value.map((m) => m.Subtopic3)) ].filter((f) => f !== null);
+				const subtopics_array = subtopics1.concat(subtopics2).concat(subtopics3);
+				const subtopics = [ ...new Set(subtopics_array) ].sort((a, b) => a.localeCompare(b));
+				const row = {
+					id: geodict[filters[index]],
+					name: filters[index],
+					count: value.length,
+					subtopics: subtopics
+				};
+				data = data.concat(row);
+			}
+			return data.filter((f) => f.id !== '');
 		} else {
 			return null;
 		}
@@ -131,19 +160,78 @@ class Library extends Component {
 		this.setState({ [key]: d });
 	};
 
+	changeGeomapFilter(d) {
+		document.getElementById('select').value = d;
+		this.setState({
+			filterRegion: d
+		});
+	}
+
 	render() {
-		const { data, headers, columns, uniqueRegion, uniqueSubtopics, filterSubtopics } = this.state;
+		const { data, columns, uniqueRegion, uniqueSubtopics, geomapData, filterSubtopics } = this.state;
 		const filteredData = this.filterData();
+		console.log(geomapData);
 
 		return (
 			<div className="library">
 				<h1>Library</h1>
+
+				{geomapData && (
+					<div className="geomap">
+						<Geomap
+							config={{
+								data: geomapData,
+								groupBy: 'id',
+								height: 500,
+								legend: false,
+								total: false,
+								colorScale: 'count',
+								tooltipConfig: {
+									title: (d) => {
+										return d.name;
+									},
+									body: (d) => {
+										let tooltip = "<div class='d3plus-tooltip-body-wrapper'>";
+										tooltip += `<span>Papers: ${d.count}</span>`;
+										{
+											/*
+											if (d.subtopics.length === 1) {
+												tooltip += `<span>Subtopics: ${d.subtopics}</span>`;
+											} else if (d.subtopics.length > 1) {
+												tooltip += `<span>Subtopics: ${d.subtopics.map((m) => {
+													return m;
+												})}</span>`;
+											}
+											*/
+										}
+										tooltip += '</div>';
+										return tooltip;
+									},
+									footer: 'Click to filter table',
+									width: '200px'
+								},
+								on: {
+									'click.shape': (d) => {
+										if (!d.type) {
+											this.changeGeomapFilter(d.name);
+										}
+									}
+								},
+								ocean: 'transparent',
+								topojson: `/topojson/world-50m.json`,
+								topojsonId: (d) => d.id,
+								zoom: false
+							}}
+						/>
+					</div>
+				)}
 
 				{data && (
 					<div className="filters">
 						<div className="region">
 							<h3>Region</h3>
 							<HTMLSelect
+								id={'select'}
 								options={uniqueRegion}
 								onChange={(event) =>
 									this.handleValueChange(

@@ -410,6 +410,10 @@
 			margin-top: 0;
 		}
 
+		& .d3plus-tooltip-body-wrapper {
+			color: white;
+		}
+
 		& .filters {
 			display: flex;
 			align-items: center;
