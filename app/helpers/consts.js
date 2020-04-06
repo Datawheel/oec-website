@@ -56,8 +56,8 @@ module.exports = {
       geoLevels: [
 
         /* {name: "Region", level: "Region", slug: "regions"},*/
-        {name: "States", level: "State", slug: "states", ignoreIdsList: ["93", "95"]},
-        {name: "Municipalities", level: "Subnat Geography", slug: "municipalities"}
+        {name: "States", overrideCube: "trade_s_bra_ncm_m_hs", profileSlug: "subnational_bra_state", level: "Subnat Geography", slug: "states", ignoreIdsList: ["93", "95"]},
+        {name: "Municipalities", profileSlug: "subnational_bra_municipality", level: "Subnat Geography", slug: "municipalities"}
       ]
     },
     {
@@ -129,8 +129,9 @@ module.exports = {
       dimension: "Subnat Geography",
       geoLevels: [
         {
+          overrideCube: "trade_s_usa_state_m_hs",
           name: "States",
-          level: "State",
+          level: "Subnat Geography",
           slug: "states",
           ignoreIdsMap: [
             "04000US60", "04000US69", "04000US66"
@@ -237,7 +238,7 @@ module.exports = {
         {name: "Ports", level: "Subnat Geography", slug: "ports"}
       ]
     }
-    // TODO: CHL, ECU
+    // TODO: CHL
     // TBD: SWE -> no units, ignore it.
   ],
 

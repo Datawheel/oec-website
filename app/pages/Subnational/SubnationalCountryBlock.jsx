@@ -60,7 +60,8 @@ class SubnationalCountryBlock extends React.Component {
     const selectedGeoLevel = metadata.geoLevels[navbarTabIx];
 
     const selectedName = selectedGeoLevel.name;
-    const selectedLevel = selectedGeoLevel.level;
+    const selectedCube = selectedGeoLevel.overrideCube ? selectedGeoLevel.overrideCube : metadata.cube;
+    const selectedLevel = `${selectedCube}_${selectedGeoLevel.level}`;
 
     const imgUrl = `/images/icons/country/country_${metadata.code}.png`;
 
@@ -82,7 +83,7 @@ class SubnationalCountryBlock extends React.Component {
             selectedTabId={navbarTabId}
           >
             {metadata.geoLevels.map((gl, ix) =>
-              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList slug={gl.profileSlug ? gl.profileSlug : `subnational_${metadata.code}`} options={items && items[gl.level] ? items[gl.level].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
+              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList slug={gl.profileSlug ? gl.profileSlug : `subnational_${metadata.code}`} options={items && items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`] ? items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
             )}
             <InputGroup type="text"
               id={`${metadata.code}-search`}
