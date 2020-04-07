@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, HTMLSelect, Slider, Switch } from '@blueprintjs/core';
-import { Select } from '@blueprintjs/select';
 import { range } from 'helpers/utils';
+
+import { initialYearsNational, finalYearsNational, countriesSubnational, initialYearsSubnational, finalYearsSubnational, productDepthSubnational } from 'helpers/rankingsyears';
 
 import './RankingBuilder.css';
 
@@ -10,11 +11,10 @@ class RankingsBuilder extends Component {
 		const {
 			country,
 			subnational,
+			subnationalValue,
 			productDepth,
 			productRevision,
 			singleyear,
-			initialYear,
-			finalYear,
 			yearValue,
 			rangeChangeInitial,
 			yearRangeInitial,
@@ -23,35 +23,23 @@ class RankingsBuilder extends Component {
 			productExpThreshold
 		} = this.props.variables;
 		const {
-			handleValueChange,
-			resetValueChange,
-			handleYearRangeChange,
-			renderExportThresholdLabel,
-			getChangeHandler,
+			handleCategorySwitch,
+			handleCountrySwitch,
+			handleCountrySelect,
+			handleProductButtons,
+			handleProductSelect,
+			handlePeriodYearSwitch,
+			handlePeriodYearButtons,
+			handlePeriodRangeSwitch,
+			handleThresholdSlider,
+			renderThresholdSlider,
 			recalculateData
 		} = this.props;
 		const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
 		const REVISION_OPTIONS_SITC = [ 'Category', 'Section', 'Division', 'Group', 'Subgroup' ];
 		const REVISION_OPTIONS_HS = [ 'HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012' ];
-		const FILTER_OPTIONS = [
-			'Brazil',
-			'Bolivia',
-			'Canada',
-			'Chile',
-			'China',
-			'Colombia',
-			'France',
-			'Germany',
-			'India',
-			'Japan',
-			'Russia',
-			'South Africa',
-			'Spain',
-			'Turkey',
-			'United Kingdom',
-			'United States',
-			'Uruguay'
-		];
+		const initialYear = subnational ? initialYearsSubnational[subnationalValue] : initialYearsNational[productRevision];
+		const finalYear = subnational ? finalYearsSubnational[subnationalValue] : finalYearsNational[productRevision];
 
 		return (
 			<div className="builder">
@@ -60,7 +48,7 @@ class RankingsBuilder extends Component {
 						<h3 className="first">Category</h3>
 						<div className="switch">
 							<span>Country</span>
-							<Switch onChange={(event) => handleValueChange('country', !event.currentTarget.checked)} />
+							<Switch onChange={(event) => handleCategorySwitch('country', !event.currentTarget.checked)} />
 							<span>Product</span>
 						</div>
 					</div>
@@ -69,42 +57,59 @@ class RankingsBuilder extends Component {
 						<div className="switch">
 							<span>National</span>
 							<Switch
-								onChange={(event) => handleValueChange('subnational', event.currentTarget.checked)}
+								onChange={(event) => handleCountrySwitch('subnational', event.currentTarget.checked)}
 							/>
 							<span>Subnational</span>
 						</div>
 						<HTMLSelect
-							options={FILTER_OPTIONS}
+							options={countriesSubnational}
 							onChange={(event) =>
-								handleValueChange('subnationalValue', event.currentTarget.selectedOptions[0].label)}
-							// disabled={subnational === false ? true : false}
-							disabled={true}
+								handleCountrySelect('subnationalValue', event.currentTarget.selectedOptions[0].label)}
+							disabled={subnational === false ? true : false}
 						/>
 					</div>
-					<div className="setting product-depth last">
-						<h3>Product Depth and Revision</h3>
-						<ButtonGroup fill={true}>
-							{PROD_DEPTH_OPTIONS.map((d, k) => (
-								<Button
-									key={k}
-									onClick={() => resetValueChange('productDepth', d)}
-									className={productDepth === d && 'active'}
-								>
-									{d}
-								</Button>
-							))}
-						</ButtonGroup>
-						<HTMLSelect
-							options={productDepth === 'SITC' ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS}
-							onChange={(event) =>
-								handleValueChange(
-									'productRevision',
-									productDepth === 'SITC'
-										? event.currentTarget.selectedOptions[0].label
-										: event.currentTarget.selectedOptions[0].label.split(' ')[0]
-								)}
-						/>
-					</div>
+					{!subnational && (
+						<div className="setting product-depth last">
+							<h3>Product Depth and Revision</h3>
+							<ButtonGroup fill={true}>
+								{PROD_DEPTH_OPTIONS.map((d, k) => (
+									<Button
+										key={k}
+										onClick={() => handleProductButtons('productDepth', d)}
+										className={productDepth === d && 'active'}
+									>
+										{d}
+									</Button>
+								))}
+							</ButtonGroup>
+							<HTMLSelect
+								options={productDepth === 'SITC' ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS}
+								onChange={(event) =>
+									handleProductSelect(
+										'productRevision',
+										productDepth === 'SITC'
+											? event.currentTarget.selectedOptions[0].label
+											: event.currentTarget.selectedOptions[0].label.split(' ')[0]
+									)}
+							/>
+						</div>
+					)}
+					{subnational && (
+						<div className="setting product-depth last">
+							<h3>Product Depth</h3>
+							<ButtonGroup fill={true}>
+								{productDepthSubnational[subnationalValue].map((d, k) => (
+									<Button
+										key={k}
+										onClick={() => handleProductButtons('productDepth', d)}
+										className={productDepth === d && 'active'}
+									>
+										{d}
+									</Button>
+								))}
+							</ButtonGroup>
+						</div>
+					)}
 				</div>
 				<div className="section is-quarter">
 					<div className="setting">
@@ -112,7 +117,7 @@ class RankingsBuilder extends Component {
 						<div className="switch">
 							<span>Single-year</span>
 							<Switch
-								onChange={(event) => handleValueChange('singleyear', !event.currentTarget.checked)}
+								onChange={(event) => handlePeriodYearSwitch('singleyear', !event.currentTarget.checked)}
 							/>
 							<span>Multi-year</span>
 						</div>
@@ -121,7 +126,7 @@ class RankingsBuilder extends Component {
 								<span>Initial Year</span>
 								<Switch
 									onChange={(event) =>
-										handleValueChange('rangeChangeInitial', !event.currentTarget.checked)}
+										handlePeriodRangeSwitch('rangeChangeInitial', !event.currentTarget.checked)}
 								/>
 								<span>Final Year</span>
 							</div>
@@ -129,21 +134,13 @@ class RankingsBuilder extends Component {
 						<div className="year-selector">
 							{
 								<ButtonGroup fill={true}>
-									{range(initialYear[productRevision], finalYear[productRevision]).map((d, k) => (
+									{range(initialYear, finalYear).map((d, k) => (
 										<Button
 											key={k}
-											onClick={() =>
-												singleyear
-													? resetValueChange('yearValue', d)
-													: handleYearRangeChange(d)}
-											className={
-												singleyear ? (
-													yearValue === d && 'active'
-												) : (
-													range(yearRangeInitial, yearRangeFinal).map(
-														(j) => j === d && 'range'
-													)
-												)
+											onClick={() => handlePeriodYearButtons('yearValue', d)}
+											className={singleyear
+												? yearValue === d && 'active'
+												: range(yearRangeInitial, yearRangeFinal).map( (j) => j === d && 'range')
 											}
 										>
 											{d}
@@ -162,8 +159,8 @@ class RankingsBuilder extends Component {
 							max={10000000000}
 							stepSize={500000000}
 							labelStepSize={1000000000}
-							onChange={getChangeHandler('countryExpThreshold')}
-							labelRenderer={renderExportThresholdLabel}
+							onChange={handleThresholdSlider('countryExpThreshold')}
+							labelRenderer={renderThresholdSlider}
 							value={countryExpThreshold}
 						/>
 					</div>
@@ -174,8 +171,8 @@ class RankingsBuilder extends Component {
 							max={2000000000}
 							stepSize={250000000}
 							labelStepSize={500000000}
-							onChange={getChangeHandler('productExpThreshold')}
-							labelRenderer={renderExportThresholdLabel}
+							onChange={handleThresholdSlider('productExpThreshold')}
+							labelRenderer={renderThresholdSlider}
 							value={productExpThreshold}
 						/>
 					</div>
