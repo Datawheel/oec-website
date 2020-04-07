@@ -49,8 +49,19 @@ class VbChart extends React.Component {
   }
 
   componentDidMount = () => {
-    this.setState({location: window.location});
-    this.fetchData();
+    const {routeParams} = this.props;
+    const {cube} = routeParams;
+
+    const nextState = {
+      location: window.location
+    };
+    if (subnat[cube]) {
+      const levels = subnat[cube].productLevels;
+      const n = levels.length;
+      const depth = n > 3 ? levels[2] : levels[n - 1];
+      nextState.depth = depth;
+    }
+    this.setState(nextState, () => this.fetchData());
   };
 
   shouldComponentUpdate = (prevProps, prevState) =>
@@ -72,8 +83,11 @@ class VbChart extends React.Component {
   };
 
   fetchSubnatData = () => {
+    const {depth} = this.state;
     const {routeParams} = this.props;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
+    const {productLevels} = subnat[cube];
+
     const flowItems = {
       export: 2,
       import: 1
@@ -95,7 +109,7 @@ class VbChart extends React.Component {
     const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
 
     if (!geoId) drilldowns.push("Subnat Geography");
-    else if (geoId && viztype === "show") drilldowns.push("Product");
+    else if (geoId && viztype === "show") drilldowns.push(depth);
     else if (geoId && viztype === "all" || geoId && isFilter) drilldowns.push("Country");
 
     if (isFilter) drilldowns.push(timeLevel);
@@ -503,12 +517,17 @@ class VbChart extends React.Component {
       }
     };
 
+    let productDepthItems = ["HS2", "HS4", "HS6"];
+
     const isSubnat =  subnat[cube];
     if (isSubnat) {
       const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
-
+      const {productLevels} = isSubnat;
+      const n = productLevels.length;
+      const productDrilldown = n > 3 ? [productLevels[0], this.state.depth] : productLevels;
+      productDepthItems = productLevels.slice(1);
       if (!geoId) baseConfig.groupBy = isSubnat.geoLevels;
-      else if (geoId && viztype === "show") baseConfig.groupBy = ["Product"];
+      else if (geoId && viztype === "show") baseConfig.groupBy = productDrilldown;
       else if (geoId && viztype === "all" || geoId && isFilter) baseConfig.groupBy = ["Continent", "Country"];
 
     }
@@ -530,7 +549,7 @@ class VbChart extends React.Component {
           <div className="vb-chart-options">
             {!isTechnology && !isContinentGroupBy &&
               <OECButtonGroup
-                items={["HS2", "HS4", "HS6"]}
+                items={productDepthItems}
                 selected={this.state.depth}
                 title={"Depth"}
                 callback={depth =>

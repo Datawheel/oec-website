@@ -1,7 +1,7 @@
 .vb-profile {
   background-color: var(--dark-4);
   color: var(--white);
-  margin-top: 3.5rem;
+  margin-top: var(--nav-height);
   & .vb-columns {
     display: flex;
     flex-wrap: wrap;
