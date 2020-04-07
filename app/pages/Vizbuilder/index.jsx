@@ -165,6 +165,8 @@ class Vizbuilder extends React.Component {
       subnatProductItems: [],
       subnatProduct: [],
       subnatTime: [],
+      subnatGeoLevels: [],
+      subnatProductLevels: [],
       selectedSubnatGeoTemp: [],
       selectedSubnatGeo: [],
       selectedSubnatProductTemp: [],
@@ -201,6 +203,8 @@ class Vizbuilder extends React.Component {
     this.setState({
       subnatGeography: dataGeo.data,
       subnatGeographyItems: itemsGeo,
+      subnatGeoLevels: geoLevels,
+      subnatProductLevels: productLevels,
       subnatProductItems: itemsProduct,
       ...selectedGeo,
       ...selectedProduct
@@ -243,9 +247,9 @@ class Vizbuilder extends React.Component {
     const isSubnat = cube.includes("subnat");
     window.addEventListener("scroll", this.handleScroll);
 
-    if (isSubnat) {
-      this.fetchSubnationalData(this.state.subnatCubeSelected.cube);
-    }
+    // if (isSubnat) {
+    this.fetchSubnationalData(this.state.subnatCubeSelected.cube);
+    // }
     const {productLevel, _dataset} = this.state;
     const cubeName = _dataset.cubeName;
 
@@ -577,11 +581,16 @@ class Vizbuilder extends React.Component {
     const prevTime = !isTimeSeriesChart ? years[timeIndex + 1] : undefined;
     const nextTime = !isTimeSeriesChart ? years[timeIndex - 1] : undefined;
 
+    const subnatItem = subnat[cube] || {};
+    const {geoLevels, productLevels} = subnatItem;
+    const isSubnatPanel = this.state.controls;
+    const isSubnatTitle = subnat[cube];
+
     const {vbTitle, vbParams} = getVbTitle(
       {
-        geo: this.state.selectedSubnatGeo || this.state._selectedItemsCountryTitle,
+        geo: isSubnatTitle ? this.state.selectedSubnatGeo : this.state._selectedItemsCountryTitle,
         geoPartner: this.state._selectedItemsPartnerTitle,
-        product: this.state.selectedSubnatProduct || this.state._selectedItemsProductTitle,
+        product: isSubnatTitle ? this.state.selectedSubnatProduct : this.state._selectedItemsProductTitle,
         technology: this.state._selectedItemsTechnologyTitle},
       {
         x: this.state._xAxisTitle,
@@ -589,9 +598,6 @@ class Vizbuilder extends React.Component {
       },
       routeParams
     );
-
-    const subnatItem = subnat[cube] || {};
-    const {geoLevels, productLevels} = subnatItem;
 
     return <div id="vizbuilder">
       <OECNavbar
@@ -611,7 +617,7 @@ class Vizbuilder extends React.Component {
                 checked={this.state.controls}
                 onChange={this.handleControls}
                 alignIndicator="right"
-                label="VizBuilder PRO"
+                label="States/Provinces"
               />
             </div>
             {<div className="content">
@@ -662,15 +668,15 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {isSubnat && countrySelector && <div className="columns">
+              {isSubnatPanel && countrySelector && <div className="columns">
                 <div className="column-1">
                   <div className="select-multi-section-wrapper">
-                    <h4 className="title">{t("Subnat Geography")}</h4>
+                    <h4 className="title">{t("State/Province")}</h4>
                     <SelectMultiHierarchy
                       getColor={d => "blue"}
                       getIcon={d => "/images/icons/hs/hs_22.svg"}
                       items={this.state.subnatGeography}
-                      levels={geoLevels}
+                      levels={this.state.subnatGeoLevels || []}
                       onItemSelect={item => {
                         const nextItems = this.state.selectedSubnatGeoTemp.concat(item);
                         this.setState({selectedSubnatGeoTemp: nextItems});
@@ -731,7 +737,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>} */}
 
-              {countrySelector && !isSubnat && <div className="columns">
+              {countrySelector && !isSubnatPanel && <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
                     items={this.state.country}
@@ -781,7 +787,7 @@ class Vizbuilder extends React.Component {
               </div>}
 
               <div className="columns">
-                {!isScatterChart && !isSubnat && <div className="column-1-2">
+                {!isScatterChart && !isSubnatPanel && <div className="column-1-2">
                   <SimpleSelect
                     items={datasets}
                     title={t("Dataset")}
