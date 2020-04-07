@@ -396,12 +396,13 @@ class Vizbuilder extends React.Component {
       _yAxis,
       _startYearTitle,
       _endYearTitle,
-      _selectedItemsYearTitle
+      _selectedItemsYearTitle,
+      selectedSubnatGeo
     } = this.state;
     const {routeParams} = this.props;
-    const {chart} = routeParams;
+    const {cube, chart} = routeParams;
 
-    const countryIds = _selectedItemsCountryTitle && _selectedItemsCountryTitle.length > 0
+    let countryIds = _selectedItemsCountryTitle && _selectedItemsCountryTitle.length > 0
       ? parseIdsToURL(_selectedItemsCountryTitle, "label")
       : "deu";
     const partnerIds = _selectedItemsPartnerTitle && _selectedItemsPartnerTitle.length > 0
@@ -416,7 +417,7 @@ class Vizbuilder extends React.Component {
         ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
         : parseIdsToURL(_selectedItemsProductTitle)
       : "10101";
-    const dataset = isTechnologyFilter ? "cpc" : _dataset.value;
+    let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
     const flow = isTechnologyFilter ? "uspto" : _flow.value;
 
     const timeIds = _selectedItemsYearTitle
@@ -436,6 +437,11 @@ class Vizbuilder extends React.Component {
       scatterPartner,
       scatterViztype
     };
+
+    if (cube.includes("subnat")) {
+      countryIds = selectedSubnatGeo && selectedSubnatGeo.length > 0 ? parseIdsToURL(selectedSubnatGeo, "id") : "all";
+      dataset = cube;
+    }
 
 
     const output = {
