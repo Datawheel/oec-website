@@ -608,7 +608,7 @@ class Vizbuilder extends React.Component {
           >
             <div className="controls">
               <Switch
-                checked={(console.log(this.state.controls), this.state.controls)}
+                checked={this.state.controls}
                 onChange={this.handleControls}
                 alignIndicator="right"
                 label="VizBuilder PRO"
@@ -781,7 +781,7 @@ class Vizbuilder extends React.Component {
               </div>}
 
               <div className="columns">
-                {!isScatterChart && <div className="column-1-2">
+                {!isScatterChart && !isSubnat && <div className="column-1-2">
                   <SimpleSelect
                     items={datasets}
                     title={t("Dataset")}

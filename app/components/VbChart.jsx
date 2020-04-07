@@ -125,8 +125,8 @@ class VbChart extends React.Component {
 
     if (flowItems[flow]) params["Trade Flow"] = flowItems[flow];
     if (partnerId) params.Country = partnerId.map(d => d.value).join();
+    if (geoId) params["Subnat Geography"] = geoId;
     if (isFilter) params.Product = viztype;
-
 
     return axios
       .get(OLAP_API, {params})
@@ -146,13 +146,12 @@ class VbChart extends React.Component {
   fetchData = () => {
     const {routeParams} = this.props;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
-
     // Uses subnat cubes
-    if (subnat[cube]) return this.fetchSubnatData();
-
     const prevState = {data: [], loading: true};
     if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
     this.setState(prevState);
+
+    if (subnat[cube]) return this.fetchSubnatData();
 
     // Gets countries and partners
     const countryId = countryMembers.filter(d => geoFilter(d, country));
