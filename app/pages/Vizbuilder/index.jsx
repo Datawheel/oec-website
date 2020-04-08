@@ -22,6 +22,7 @@ import "./Vizbuilder.css";
 import {getVbTitle} from "../../helpers/vbTitle";
 import {queryParser} from "helpers/formatters";
 import subnat from "helpers/subnatVizbuilder";
+import OECButtonGroup from "../../components/OECButtonGroup";
 
 const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
 
@@ -165,18 +166,24 @@ class Vizbuilder extends React.Component {
       subnatProductItems: [],
       subnatProduct: [],
       subnatTime: [],
+      // Levels Geo/Product/Time in Subnational
+      subnatTimeLevels: [],
+      subnatTimeLevelSelected: "",
+      subnatTimeItems: [],
       subnatGeoLevels: [],
       subnatProductLevels: [],
       selectedSubnatGeoTemp: [],
       selectedSubnatGeo: [],
       selectedSubnatProductTemp: [],
-      selectedSubnatProduct: []
+      selectedSubnatProduct: [],
+      selectedSubnatTimeTemp: [],
+      selectedSubnatTime: []
     };
   }
 
   fetchSubnationalData = async cubeName => {
     const subnatItem = subnat.cubeSelector.find(d => d.cube === cubeName);
-    const {geoLevels, productLevels} = subnatItem;
+    const {geoLevels, productLevels, timeLevels} = subnatItem;
     const {routeParams} = this.props;
     const {country, viztype} = routeParams;
 
@@ -194,18 +201,41 @@ class Vizbuilder extends React.Component {
     const dataProduct = await axios.get(`/olap-proxy/data?${queryStringB}`)
       .then(resp => resp.data);
 
+    const queryStringC = queryParser({...params, drilldowns: timeLevels[timeLevels.length - 1]});
+    const dataTime = await axios.get(`/olap-proxy/data?${queryStringC}`)
+      .then(resp => resp.data);
+    const dataTimeTemp = dataTime.data.map(d => {
+      const year = d.Year;
+      const item = {
+        "Year ID": year,
+        "Year": year,
+        "Quarter ID": year * 10 + d["Quarter ID"],
+        "Quarter": `${year} ${d.Quarter}`,
+        "Month ID": year * 100 + d["Month ID"],
+        "Month": `${year} ${d.Month}`
+      };
+      return item;
+    });
+
     const itemsGeo = getHierarchyList(dataGeo.data, geoLevels);
     const itemsProduct = getHierarchyList(dataProduct.data, productLevels);
+    const itemsTime = getHierarchyList(dataTimeTemp, timeLevels);
 
     const selectedGeo = selectedItems(itemsGeo, country, "selectedSubnatGeo");
     const selectedProduct = selectedItems(itemsProduct, viztype, "selectedSubnatProduct");
-
+    const subnatTimeItems = itemsTime
+      .map(d => ({value: d.id, title: d.name, type: d.type}))
+      .sort((a, b) => b.value - a.value);
     this.setState({
       subnatGeography: dataGeo.data,
       subnatGeographyItems: itemsGeo,
+      subnatTimeItems,
       subnatGeoLevels: geoLevels,
       subnatProductLevels: productLevels,
+      subnatTimeLevels: timeLevels,
+      subnatTimeLevelSelected: timeLevels[timeLevels.length - 1],
       subnatProductItems: itemsProduct,
+      selectedSubnatTimeTemp: subnatTimeItems[0] ? [subnatTimeItems[0]] : [],
       ...selectedGeo,
       ...selectedProduct
     });
@@ -365,7 +395,7 @@ class Vizbuilder extends React.Component {
       countryIds = this.state.selectedSubnatGeoTemp && this.state.selectedSubnatGeoTemp.length > 0
         ? parseIdsToURL(this.state.selectedSubnatGeoTemp, "id")
         : "show";
-      timeIds = 2018;
+      timeIds = parseIdsToURL(this.state.selectedSubnatTimeTemp, "value");
     }
 
     const permalinkItems = [
@@ -605,6 +635,9 @@ class Vizbuilder extends React.Component {
       routeParams
     );
 
+    const subnatTimeItems = this.state.subnatTimeItems
+      .filter(d => d.type === this.state.subnatTimeLevelSelected);
+
     return <div id="vizbuilder">
       <OECNavbar
         className={scrolled ? "background" : ""}
@@ -815,7 +848,36 @@ class Vizbuilder extends React.Component {
 
               </div>
 
-              {!["line", "stacked"].includes(chart) ? <div className="columns">
+              {isSubnatPanel && <div className="columns">
+                <div className="column-1">
+                  <div className="select-multi-section-wrapper">
+                    <h4 className="title">{t("Time Dimension")}</h4>
+                    <OECButtonGroup
+                      items={this.state.subnatTimeLevels}
+                      selected={this.state.subnatTimeLevelSelected}
+                      title={undefined}
+                      callback={depth => {
+                        const itemSelected = this.state.subnatTimeItems
+                          .filter(d => d.type === depth);
+                        this.setState({
+                          subnatTimeLevelSelected: depth,
+                          selectedSubnatTimeTemp: itemSelected[0] ? [itemSelected[0]] : []
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="column-1">
+                  <OECMultiSelect
+                    items={subnatTimeItems}
+                    selectedItems={this.state.selectedSubnatTimeTemp}
+                    title={t(this.state.subnatTimeLevelSelected)}
+                    callback={d => this.handleItemMultiSelect("selectedSubnatTimeTemp", d)}
+                  />
+                </div>
+              </div>}
+
+              {!["line", "stacked"].includes(chart) && !isSubnatPanel && <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
                     items={years}
@@ -824,7 +886,9 @@ class Vizbuilder extends React.Component {
                     callback={d => this.handleItemMultiSelect("_selectedItemsYear", d)}
                   />
                 </div>
-              </div> : <div className="columns">
+              </div>}
+
+              {["line", "stacked"].includes(chart) && !isSubnatPanel && <div className="columns">
                 <div className="column-1-2">
                   <SimpleSelect
                     items={years}

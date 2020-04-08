@@ -19,6 +19,11 @@
             font-size: var(--font-lg);
           }
         }
+        & .oec-button-group-items {
+          & .cp-button {
+            flex: 1;
+          }
+        }
       }
     }
   }
