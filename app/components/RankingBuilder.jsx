@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup, HTMLSelect, Slider, Switch } from '@blueprintjs/core';
 import { range } from 'helpers/utils';
 
-import { initialYearsNational, finalYearsNational, countriesSubnational, initialYearsSubnational, finalYearsSubnational, productDepthSubnational } from 'helpers/rankingsyears';
+import { subnationalCountries, subnationalData, yearsNational } from 'helpers/rankingsyears';
 
 import './RankingBuilder.css';
 
@@ -20,7 +20,8 @@ class RankingsBuilder extends Component {
 			yearRangeInitial,
 			yearRangeFinal,
 			countryExpThreshold,
-			productExpThreshold
+			productExpThreshold,
+			_authUser
 		} = this.props.variables;
 		const {
 			handleCategorySwitch,
@@ -33,13 +34,34 @@ class RankingsBuilder extends Component {
 			handlePeriodRangeSwitch,
 			handleThresholdSlider,
 			renderThresholdSlider,
-			recalculateData
+			apiGetData
 		} = this.props;
 		const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
 		const REVISION_OPTIONS_SITC = [ 'Category', 'Section', 'Division', 'Group', 'Subgroup' ];
 		const REVISION_OPTIONS_HS = [ 'HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012' ];
-		const initialYear = subnational ? initialYearsSubnational[subnationalValue] : initialYearsNational[productRevision];
-		const finalYear = subnational ? finalYearsSubnational[subnationalValue] : finalYearsNational[productRevision];
+		const initialYear = subnational
+			? subnationalData[subnationalValue].initial
+			: yearsNational[productRevision].initial;
+		const finalYear = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
+
+		console.log(
+			'Country Profile:',
+			country,
+			'National Profile:',
+			!subnational,
+			'Subnational Country:',
+			subnationalValue,
+			'Product Depth',
+			productDepth,
+			'Product Revision',
+			productRevision,
+			'Singleyear',
+			singleyear,
+			'Country Threshold',
+			countryExpThreshold,
+			'Product Threshold',
+			productExpThreshold
+		);
 
 		return (
 			<div className="builder">
@@ -48,26 +70,34 @@ class RankingsBuilder extends Component {
 						<h3 className="first">Category</h3>
 						<div className="switch">
 							<span>Country</span>
-							<Switch onChange={(event) => handleCategorySwitch('country', !event.currentTarget.checked)} />
+							<Switch
+								onChange={(event) => handleCategorySwitch('country', !event.currentTarget.checked)}
+							/>
 							<span>Product</span>
 						</div>
 					</div>
-					<div className="setting country-depth">
-						<h3>Country Depth</h3>
-						<div className="switch">
-							<span>National</span>
-							<Switch
-								onChange={(event) => handleCountrySwitch('subnational', event.currentTarget.checked)}
+					{_authUser && (
+						<div className="setting country-depth">
+							<h3>Country Depth</h3>
+							<div className="switch">
+								<span>National</span>
+								<Switch
+									onChange={(event) =>
+										handleCountrySwitch('subnational', event.currentTarget.checked)}
+								/>
+								<span>Subnational</span>
+							</div>
+							<HTMLSelect
+								options={subnationalCountries}
+								onChange={(event) =>
+									handleCountrySelect(
+										'subnationalValue',
+										event.currentTarget.selectedOptions[0].label
+									)}
+								disabled={subnational === false ? true : false}
 							/>
-							<span>Subnational</span>
 						</div>
-						<HTMLSelect
-							options={countriesSubnational}
-							onChange={(event) =>
-								handleCountrySelect('subnationalValue', event.currentTarget.selectedOptions[0].label)}
-							disabled={subnational === false ? true : false}
-						/>
-					</div>
+					)}
 					{!subnational && (
 						<div className="setting product-depth last">
 							<h3>Product Depth and Revision</h3>
@@ -98,7 +128,7 @@ class RankingsBuilder extends Component {
 						<div className="setting product-depth last">
 							<h3>Product Depth</h3>
 							<ButtonGroup fill={true}>
-								{productDepthSubnational[subnationalValue].map((d, k) => (
+								{subnationalData[subnationalValue].productDepth.map((d, k) => (
 									<Button
 										key={k}
 										onClick={() => handleProductButtons('productDepth', d)}
@@ -112,12 +142,13 @@ class RankingsBuilder extends Component {
 					)}
 				</div>
 				<div className="section is-quarter">
-					<div className="setting">
+					<div className="setting last">
 						<h3 className="first">Period</h3>
 						<div className="switch">
 							<span>Single-year</span>
 							<Switch
 								onChange={(event) => handlePeriodYearSwitch('singleyear', !event.currentTarget.checked)}
+								// checked={range(initialYear, finalYear).length === 1 ? false : null}
 							/>
 							<span>Multi-year</span>
 						</div>
@@ -138,9 +169,14 @@ class RankingsBuilder extends Component {
 										<Button
 											key={k}
 											onClick={() => handlePeriodYearButtons('yearValue', d)}
-											className={singleyear
-												? yearValue === d && 'active'
-												: range(yearRangeInitial, yearRangeFinal).map( (j) => j === d && 'range')
+											className={
+												singleyear ? (
+													yearValue === d && 'active'
+												) : (
+													range(yearRangeInitial, yearRangeFinal).map(
+														(j) => j === d && 'range'
+													)
+												)
 											}
 										>
 											{d}
@@ -153,7 +189,13 @@ class RankingsBuilder extends Component {
 				</div>
 				<div className="section is-half">
 					<div className="setting">
-						<h3 className="first">Country Export Value Threshold </h3>
+						<h3 className="first">
+							{!subnational ? (
+								'Country Export Value Threshold'
+							) : (
+								'Subnational Geography Export Value Threshold'
+							)}
+						</h3>
 						<Slider
 							min={0}
 							max={10000000000}
@@ -178,7 +220,7 @@ class RankingsBuilder extends Component {
 					</div>
 					<div className="setting last">
 						<div className="build-button">
-							<Button onClick={() => recalculateData()}>Build Table</Button>
+							<Button onClick={() => apiGetData()}>Build Table</Button>
 						</div>
 					</div>
 				</div>

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import numeral from 'numeral';
+import {hot} from "react-hot-loader/root";
+import {isAuthenticated} from "@datawheel/canon-core";
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { formatAbbreviate } from 'd3plus-format';
@@ -11,11 +13,12 @@ import './Rankings.css';
 import OECNavbar from 'components/OECNavbar';
 import Footer from 'components/Footer';
 import Loading from 'components/Loading';
+import RankingText from 'components/RankingText';
 import RankingBuilder from 'components/RankingBuilder';
 import RankingTable from 'components/RankingTable';
 
 import { range } from 'helpers/utils';
-import { initialYearsNational, finalYearsNational, finalYearsSubnational } from 'helpers/rankingsyears';
+import { subnationalCountries, subnationalData, yearsNational } from 'helpers/rankingsyears';
 
 class Rankings extends Component {
 	constructor(props) {
@@ -23,18 +26,19 @@ class Rankings extends Component {
 		this.state = {
 			country: true,
 			subnational: false,
-			subnationalValue: 'Brazil',
-			productDepth: 'HS4',
-			productRevision: 'HS92',
+			subnationalValue: null,
+			productDepth: null,
+			productRevision: null,
 			singleyear: true,
-			yearValue: 2018,
+			yearValue: null,
 			rangeChangeInitial: true,
-			yearRangeInitial: 2017,
-			yearRangeFinal: 2018,
-			countryExpThreshold: 5000000000,
-			productExpThreshold: 1000000000,
+			yearRangeInitial: null,
+			yearRangeFinal: null,
+			countryExpThreshold: null,
+			productExpThreshold: null,
 			data: null,
 			columns: null,
+			_ready: false,
 			_loading: false
 		};
 		this.handleCategorySwitch = this.handleCategorySwitch.bind(this);
@@ -47,8 +51,31 @@ class Rankings extends Component {
 		this.handlePeriodRangeSwitch = this.handlePeriodRangeSwitch.bind(this);
 		this.handleThresholdSlider = this.handleThresholdSlider.bind(this);
 		this.renderThresholdSlider = this.renderThresholdSlider.bind(this);
-		this.recalculateData = this.recalculateData.bind(this);
+		this.apiGetData = this.apiGetData.bind(this);
 	}
+
+	componentDidMount() {
+		const defaultDepth = 'HS4';
+		const defaultRevision = 'HS92';
+		const defaultCountryThreshold = 5000000000;
+		const defaultProductThreshold = 1000000000;
+
+		this.setState({
+			subnationalValue: subnationalCountries[0],
+			productDepth: defaultDepth,
+			productRevision: defaultRevision,
+			yearValue: yearsNational[defaultRevision].final,
+			yearRangeInitial: yearsNational[defaultRevision].final-1,
+			yearRangeFinal: yearsNational[defaultRevision].final,
+			countryExpThreshold: defaultCountryThreshold,
+			productExpThreshold: defaultProductThreshold,
+			_ready: true
+		})
+	}
+
+	componentWillMount() {
+		this.props.isAuthenticated();
+  }
 
 	/* BUILDER ORIENTED FUNCTIONS */
 
@@ -62,17 +89,19 @@ class Rankings extends Component {
 			this.setState({
 				[key]: value,
 				productDepth: 'HS4',
-				yearValue: finalYearsNational[productRevision],
-				yearRangeInitial: finalYearsNational[productRevision] - 1,
-				yearRangeFinal: finalYearsNational[productRevision]
+				productRevision: 'HS92',
+				yearValue: yearsNational[productRevision].final,
+				yearRangeInitial: yearsNational[productRevision].final - 1,
+				yearRangeFinal: yearsNational[productRevision].final
 			 });
 		} else {
 			this.setState({
 				[key]: value,
-				productDepth: 'HS4',
-				yearValue: finalYearsSubnational[subnationalValue],
-				yearRangeInitial: finalYearsSubnational[subnationalValue] - 1,
-				yearRangeFinal: finalYearsSubnational[subnationalValue]
+				productDepth: 'Section',
+				productRevision: 'HS92',
+				yearValue: subnationalData[subnationalValue].final,
+				yearRangeInitial: subnationalData[subnationalValue].final - 1,
+				yearRangeFinal: subnationalData[subnationalValue].final
 			});
 		}
 	}
@@ -80,9 +109,10 @@ class Rankings extends Component {
 	handleCountrySelect(key, value) {
 		this.setState({
 			[key]: value,
-			yearValue: finalYearsSubnational[value],
-			yearRangeInitial: finalYearsSubnational[value] - 1,
-			yearRangeFinal: finalYearsSubnational[value]
+			productDepth: 'Section',
+			yearValue: subnationalData[value].final,
+			yearRangeInitial: subnationalData[value].final - 1,
+			yearRangeFinal: subnationalData[value].final
 		});
 	}
 
@@ -92,17 +122,17 @@ class Rankings extends Component {
 			this.setState({
 				[key]: value,
 				productRevision: 'Category',
-				yearValue: finalYearsNational[productRevision],
-				yearRangeInitial: finalYearsNational[productRevision] - 1,
-				yearRangeFinal: finalYearsNational[productRevision]
+				yearValue: yearsNational[productRevision].final,
+				yearRangeInitial: yearsNational[productRevision].final - 1,
+				yearRangeFinal: yearsNational[productRevision].final
 			});
 		} else if (this.state[key] === 'SITC' && value !== 'SITC') {
 			this.setState({
 				[key]: value,
 				productRevision: 'HS92',
-				yearValue: finalYearsNational[productRevision],
-				yearRangeInitial: finalYearsNational[productRevision] - 1,
-				yearRangeFinal: finalYearsNational[productRevision]
+				yearValue: yearsNational[productRevision].final,
+				yearRangeInitial: yearsNational[productRevision].final - 1,
+				yearRangeFinal: yearsNational[productRevision].final
 			});
 		} else {
 			this.setState({ [key]: value });
@@ -113,9 +143,9 @@ class Rankings extends Component {
 		const { productRevision } = this.state;
 		this.setState({
 			[key]: value,
-			yearValue: finalYearsNational[productRevision],
-			yearRangeInitial: finalYearsNational[productRevision] - 1,
-			yearRangeFinal: finalYearsNational[productRevision]
+			yearValue: yearsNational[productRevision].final,
+			yearRangeInitial: yearsNational[productRevision].final - 1,
+			yearRangeFinal: yearsNational[productRevision].final
 		});
 	}
 
@@ -129,7 +159,7 @@ class Rankings extends Component {
 			this.setState({ [key]: value });
 		} else {
 			if (rangeChangeInitial) {
-				if (value === finalYearsNational[productRevision]) {
+				if (value === yearsNational[productRevision].final) {
 					this.setState({ yearRangeInitial: value - 1, yearRangeFinal: value });
 				} else if (value < yearRangeInitial) {
 					this.setState({ yearRangeInitial: value });
@@ -141,7 +171,7 @@ class Rankings extends Component {
 					this.setState({ yearRangeInitial: value, yearRangeFinal: value + 1 });
 				}
 			} else {
-				if (value === initialYearsNational[productRevision]) {
+				if (value === yearsNational[productRevision].initial) {
 					this.setState({ yearRangeInitial: value, yearRangeFinal: value + 1 });
 				} else if (value < yearRangeInitial) {
 					this.setState({ yearRangeInitial: value - 1, yearRangeFinal: value });
@@ -170,60 +200,56 @@ class Rankings extends Component {
 
 	/* TABLE ORIENTED FUNCTIONS*/
 
-	recalculateData() {
+	yearAggregation(year, initial) {
+		if (year === initial) {
+			return [year, year, year];
+		} else if (year === initial + 1) {
+			return [year - 1, year, year];
+		} else {
+			return [year - 2, year - 1, year];
+		}
+	}
+
+	pathCreator(years) {
+		const {country, subnational, subnationalValue, productDepth, productRevision, countryExpThreshold, productExpThreshold} = this.state;
+		const index = country ? "eci" : "pci";
+
+		if (!subnational) {
+			if (productDepth === 'SITC') {
+				return `/api/stats/${index}?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`;
+			} else {
+				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`;
+			}
+		} else {
+			const testPath = `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue].cube}&rca=${subnationalData[subnationalValue].geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=2017&aliasRight=Country,${productDepth}`;
+			console.log(testPath);
+			return testPath
+		}
+	}
+
+	apiGetData() {
+		this.setState({ _loading: true });
 		const {
-			country,
-			productDepth,
-			productRevision,
 			singleyear,
+			productRevision,
 			yearValue,
 			yearRangeInitial,
 			yearRangeFinal,
-			countryExpThreshold,
-			productExpThreshold
 		} = this.state;
-		this.setState({ _loading: true });
 
 		if (singleyear) {
-			const pathYear =
-				yearValue === initialYearsNational[productRevision]
-					? [ yearValue, yearValue, yearValue ]
-					: yearValue === initialYearsNational[productRevision] + 1
-						? [ yearValue - 1, yearValue, yearValue ]
-						: [ yearValue - 2, yearValue - 1, yearValue ];
-
-			let urlPath = country
-				? productDepth === 'SITC'
-					? urlPath = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`
-					: urlPath = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`
-				: productDepth === 'SITC'
-					? urlPath = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`
-					: urlPath = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`;
-
-			this.fetchSingleyearData(urlPath);
-
+			const aggregatedYears = this.yearAggregation(yearValue, yearsNational[productRevision].initial);
+			const path = this.pathCreator(aggregatedYears);
+			this.fetchSingleyearData(path);
 		} else {
-			const urlPath = [];
+			const pathArray = [];
 			range(yearRangeInitial, yearRangeFinal).map((d) => {
-				const pathYear =
-					d === initialYearsNational[productRevision]
-						? [ d, d, d ]
-						: d === initialYearsNational[productRevision] + 1
-							? [ d - 1, d, d ]
-							: [ d - 2, d - 1, d ];
-
-				let path = country
-					? productDepth === 'SITC'
-						? path = `/api/stats/eci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`
-						: path = `/api/stats/eci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`
-					: productDepth === 'SITC'
-						? path = `/api/stats/pci?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`
-						: path = `/api/stats/pci?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYear[0]},${pathYear[1]},${pathYear[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`;
-
-				urlPath.push({ year: d, path });
+				const aggregatedYears = this.yearAggregation(d, yearsNational[productRevision].initial);
+				const path = this.pathCreator(aggregatedYears);
+				pathArray.push({ year: d, path });
 			});
 
-			this.fetchRangeData(urlPath);
+			this.fetchMultiyearData(pathArray);
 		}
 	}
 
@@ -231,10 +257,11 @@ class Rankings extends Component {
 		const {country, singleyear, yearValue} = this.state;
 		axios.all([ axios.get(path) ]).then(
 			axios.spread((resp) => {
-				const varName = country ? 'Trade Value ECI' : 'Trade Value PCI';
-				const data = resp.data.data.sort((a, b) => b[varName] - a[varName]);
-				data.map((d) => ((d[`${yearValue}`] = d[varName]), delete d[varName]));
+				const index = country ? 'Trade Value ECI' : 'Trade Value PCI';
+				const data = resp.data.data.sort((a, b) => b[index] - a[index]);
+				data.map((d) => ((d[`${yearValue}`] = d[index]), delete d[index]));
 				const columns = this.createColumns(singleyear, yearValue);
+				console.log("DATA HERE:", data);
 				this.setState({
 					data,
 					columns,
@@ -244,17 +271,16 @@ class Rankings extends Component {
 		);
 	}
 
-	fetchRangeData = async (paths) => {
+	fetchMultiyearData = async (paths) => {
 		const { country, productDepth, productRevision, singleyear, yearRangeInitial, yearRangeFinal } = this.state;
 		let rangeData = [];
 
 		for (const d of paths) {
-			const varName = country ? 'Trade Value ECI' : 'Trade Value PCI';
+			const index = country ? 'Trade Value ECI' : 'Trade Value PCI';
 			const data = await axios.get(d.path).then((resp) => resp.data.data);
-			data.map((f) => ((f[`${d.year}`] = f[varName]), delete f[varName]));
+			data.map((f) => ((f[`${d.year}`] = f[index]), delete f[index]));
 			rangeData.push(data);
 		}
-
 		rangeData = rangeData.flat();
 
 		const selector = country
@@ -268,10 +294,8 @@ class Rankings extends Component {
 		}, {});
 
 		let finalData = [];
-		let tempData = null;
-
 		Object.values(reduceData).map((d) => {
-			tempData = [];
+			let tempData = [];
 			d.map((data, j) => {
 				if (j === 0) {
 					const flag = [];
@@ -412,75 +436,32 @@ class Rankings extends Component {
 			productExpThreshold,
 			data,
 			columns,
+			_ready,
 			_loading
 		} = this.state;
 
-		console.log(
-			'Country Profile:',
-			country,
-			'National Profile:',
-			!subnational,
-			'Subnational Country:',
-			subnationalValue,
-			'Product Depth',
-			productDepth,
-			'Product Revision',
-			productRevision,
-			'Singleyear',
-			singleyear,
-			'Country Threshold',
-			countryExpThreshold,
-			'Product Threshold',
-			productExpThreshold
-		);
+		const _authUser = this.props.auth.msg === 'LOGIN_SUCCESS' ? true : false;
+
+		if (!_ready) {
+      return (
+        <div className="rankings-page">
+          <OECNavbar />
+					<div className="rankings-content">
+						<RankingText />
+
+						<Loading />
+					</div>
+          <Footer />
+        </div>
+      );
+    }
 
 		return (
 			<div className="rankings-page">
 				<OECNavbar />
 
 				<div className="rankings-content">
-					<h1 className="title">Dynamic Rankings</h1>
-					<div className="about">
-						<p>
-							The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are,
-							respectively, measures of the relative knowledge intensity of an economy or a product. ECI
-							measures the knowledge intensity of an economy by considering the knowledge intensity of the
-							products it exports. PCI measures the knowledge intensity of a product by considering the
-							knowledge intensity of its exporters. This circular argument is mathematically tractable and
-							can be used to construct relative measures of the knowledge intensity of economies and
-							products (see {' '}
-							<a
-								href="/en/resources/methodology/"
-								className="link"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								methodology section
-							</a>{' '}
-							for more details).
-						</p>
-						<p>
-							ECI has been validated as a relevant economic measure by showing its ability to predict
-							future economic growth (see {' '}
-							<a
-								href="http://www.pnas.org/content/106/26/10570.short"
-								className="link"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Hidalgo and Hausmann 2009
-							</a>), and explain international variations in income inequality (see {' '}
-							<a
-								href="/pdf/LinkingEconomicComplexityInstitutionsAndIncomeInequality.pdf"
-								className="link"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								Hartmann et al. 2017
-							</a>).
-						</p>
-						<p>This page includes rankings using the Economic Complexity Index (ECI).</p>
-					</div>
+					<RankingText />
 
 					<RankingBuilder
 						variables={{
@@ -490,14 +471,13 @@ class Rankings extends Component {
 							productDepth,
 							productRevision,
 							singleyear,
-							initialYearsNational,
-							finalYearsNational,
 							yearValue,
 							rangeChangeInitial,
 							yearRangeInitial,
 							yearRangeFinal,
 							countryExpThreshold,
-							productExpThreshold
+							productExpThreshold,
+							_authUser
 						}}
 						handleCategorySwitch={this.handleCategorySwitch}
 						handleCountrySwitch={this.handleCountrySwitch}
@@ -509,7 +489,7 @@ class Rankings extends Component {
 						handlePeriodRangeSwitch={this.handlePeriodRangeSwitch}
 						handleThresholdSlider={this.handleThresholdSlider}
 						renderThresholdSlider={this.renderThresholdSlider}
-						recalculateData={this.recalculateData}
+						apiGetData={this.apiGetData}
 					/>
 
 					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={country} />}
@@ -520,4 +500,16 @@ class Rankings extends Component {
 	}
 }
 
-export default withNamespaces()(connect()(Rankings));
+export default hot(withNamespaces()(
+  connect(state => ({
+    auth: state.auth,
+    formatters: state.data.formatters,
+    locale: state.i18n.locale,
+    env: state.env
+  }),
+  dispatch => ({
+    isAuthenticated: () => {
+      dispatch(isAuthenticated());
+    }
+  }))(Rankings)
+));
