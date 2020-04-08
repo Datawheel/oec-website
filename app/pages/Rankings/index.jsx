@@ -231,6 +231,8 @@ class Rankings extends Component {
 		this.setState({ _loading: true });
 		const {
 			singleyear,
+			subnational,
+			subnationalValue,
 			productRevision,
 			yearValue,
 			yearRangeInitial,
@@ -238,13 +240,13 @@ class Rankings extends Component {
 		} = this.state;
 
 		if (singleyear) {
-			const aggregatedYears = this.yearAggregation(yearValue, yearsNational[productRevision].initial);
+			const aggregatedYears = subnational ? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial) : this.yearAggregation(yearValue, yearsNational[productRevision].initial);
 			const path = this.pathCreator(aggregatedYears);
 			this.fetchSingleyearData(path);
 		} else {
 			const pathArray = [];
 			range(yearRangeInitial, yearRangeFinal).map((d) => {
-				const aggregatedYears = this.yearAggregation(d, yearsNational[productRevision].initial);
+				const aggregatedYears = subnational ? this.yearAggregation(d, subnationalData[subnationalValue].initial) : this.yearAggregation(d, yearsNational[productRevision].initial);
 				const path = this.pathCreator(aggregatedYears);
 				pathArray.push({ year: d, path });
 			});
