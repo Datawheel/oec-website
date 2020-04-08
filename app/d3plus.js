@@ -65,7 +65,6 @@ function backgroundImageV2(key, d) {
 
 /** */
 function findColorV2(key, d) {
-  console.log(key, d);
   if (key === "Country" || key === "ISO 3") return "transparent";
   const id = key === "SITC Section" ? d["Section ID"] : d[`${key} ID`];
   return colors[key][id] || colors[key][d[key]] || colors.colorGrey;
