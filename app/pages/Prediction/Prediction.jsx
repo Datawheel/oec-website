@@ -12,6 +12,7 @@ import OECPaywall from "components/OECPaywall";
 import Footer from "components/Footer";
 import SearchMultiSelect from "components/SearchMultiSelect";
 import ToggleSelect from "components/ToggleSelect";
+import PredictionDateSelect from "pages/Prediction/PredictionDateSelect";
 import PredictionViz from "pages/Prediction/PredictionViz";
 import AdvParamPanel from "pages/Prediction/AdvParamPanel";
 import PredictionTable from "pages/Prediction/PredictionTable";
@@ -46,6 +47,8 @@ class Prediction extends React.Component {
       dataset: props.params.dataset
         ? PREDICTION_DATASETS.find(d => d.slug === props.params.dataset) || PREDICTION_DATASETS[0]
         : PREDICTION_DATASETS[0],
+      timeAvailable: [],
+      timeSelection: [],
       datasetSelections: [],
       datatableOpen: false,
       destinations: [],
@@ -76,54 +79,62 @@ class Prediction extends React.Component {
     const {BASE} = this.props.env;
     // window.addEventListener("scroll", this.handleScroll);
     const {dataset} = this.state;
+    const dateRangeApiUrl = `${BASE}.jsonrecords?cube=${dataset.cube}&drilldowns=${dataset.dateDrilldown}&measures=Trade+Value`;
     const selectionApiUrls = dataset.selections.map(d => axios.get(`${BASE}.jsonrecords${d.dataUrl}`));
     const parsedQueryString = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
     let drillDownFound = false;
-    axios.all(selectionApiUrls)
-      .then(axios.spread((...responses) => {
-
-        // populate dropdowns
-        responses.forEach((resp, i) => {
-          const {data} = resp.data;
-          const selectionId = dataset.selections[i].id;
-          drillDownFound = parsedQueryString.drilldown === selectionId || drillDownFound;
-          const thisSelectionQParams = parsedQueryString[selectionId];
-          dataset.selections[i].data = data
-            .map(dataset.selections[i].dataMap)
-            .sort((a, b) => a.name.localeCompare(b.name));
-          dataset.selections[i].data.forEach(d => {
-            if (thisSelectionQParams && thisSelectionQParams.includes(`${d.id}`)) {
-              dataset.selections[i].selected.push(d);
+    axios.get(dateRangeApiUrl)
+      .then(resp => {
+        const timeAvailable = resp.data.data.map(d => d[dataset.dateDrilldown]);
+        let timeSelection = [timeAvailable[0], timeAvailable[timeAvailable.length - 1]];
+        let timeQParams = parsedQueryString.time;
+        if (Array.isArray(timeQParams)) {
+          timeQParams = timeQParams.map(t => parseInt(t, 10));
+          if (timeQParams.length === 2) {
+            if (timeAvailable.includes(timeQParams[0]) && timeAvailable.includes(timeQParams[1])) {
+              timeSelection = timeQParams;
             }
-          });
-        });
-        dataset.selectionsLoaded = true;
-
-        // populate toggles from dropdown
-        if (dataset.toggles) {
-          dataset.toggles.forEach(toggle => {
-            drillDownFound = parsedQueryString.drilldown === toggle.id || drillDownFound;
-            toggle.data.forEach(d => {
-              const thisToggleQParams = parsedQueryString[toggle.id];
-              if (thisToggleQParams && thisToggleQParams.includes(`${d.id}`)) {
-                toggle.selected = toggle.selected.find(ts => `${ts.id}` === `${d.id}`)
-                  ? toggle.selected
-                  : toggle.selected.concat([d]);
-              }
-            });
-          });
+          }
         }
-        // qSelections.forEach(qs => {
-        //   const selectionSlug = qs[0];
-        //   const selectionDataId = qs[1];
-        //   const thisSelection = dataset.selections.find(s => s.id === selectionSlug);
-        //   const x = thisSelection.data.find(d => d.id === selectionDataId);
-        //   thisSelection.selected.push(x);
-        // });
+        axios.all(selectionApiUrls)
+          .then(axios.spread((...responses) => {
 
-        const currentDrilldown = drillDownFound ? parsedQueryString.drilldown : null;
-        this.setState({dataset, currentDrilldown}, this.buildPrediction);
-      }));
+            // populate dropdowns
+            responses.forEach((resp, i) => {
+              const {data} = resp.data;
+              const selectionId = dataset.selections[i].id;
+              drillDownFound = parsedQueryString.drilldown === selectionId || drillDownFound;
+              const thisSelectionQParams = parsedQueryString[selectionId];
+              dataset.selections[i].data = data
+                .map(dataset.selections[i].dataMap)
+                .sort((a, b) => a.name.localeCompare(b.name));
+              dataset.selections[i].data.forEach(d => {
+                if (thisSelectionQParams && thisSelectionQParams.includes(`${d.id}`)) {
+                  dataset.selections[i].selected.push(d);
+                }
+              });
+            });
+            dataset.selectionsLoaded = true;
+
+            // populate toggles from dropdown
+            if (dataset.toggles) {
+              dataset.toggles.forEach(toggle => {
+                drillDownFound = parsedQueryString.drilldown === toggle.id || drillDownFound;
+                toggle.data.forEach(d => {
+                  const thisToggleQParams = parsedQueryString[toggle.id];
+                  if (thisToggleQParams && thisToggleQParams.includes(`${d.id}`)) {
+                    toggle.selected = toggle.selected.find(ts => `${ts.id}` === `${d.id}`)
+                      ? toggle.selected
+                      : toggle.selected.concat([d]);
+                  }
+                });
+              });
+            }
+
+            const currentDrilldown = drillDownFound ? parsedQueryString.drilldown : null;
+            this.setState({dataset, currentDrilldown, timeAvailable, timeSelection}, this.buildPrediction);
+          }));
+      });
   }
 
   componentWillUnmount() {
@@ -176,11 +187,22 @@ class Prediction extends React.Component {
     this.setState({advParams, currentDrilldown, dataset});
   };
 
+  updateTimeSelection = newTimeRange => {
+    const {dataset} = this.state;
+    const {router} = this.context;
+    this.setState({timeSelection: newTimeRange});
+    // set query params for this selection
+    const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
+    queryArgs.time = newTimeRange;
+    const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
+    router.replace(`/en/prediction/${dataset.slug}?${stringifiedQueryArgs}`);
+  }
+
   grabIds = item => item.id;
 
   buildPrediction = () => {
     this.setState({error: false, loading: true});
-    const {currentDrilldown, dataset} = this.state;
+    const {currentDrilldown, dataset, timeSelection} = this.state;
     let myAdvParamStrings = [];
     const advParams = this.state.advParams && this.state.advParams.length
       ? this.state.advParams
@@ -192,7 +214,7 @@ class Prediction extends React.Component {
     const advParamStrings = advParams.map(advParam => `&seasonality_mode=${advParam.seasonalityMode}&changepoint_prior_scale=${advParam.changepointPriorScale}&changepoint_range=${advParam.changepointRange}`);
     const updateKey = advParams.map(advParam => `sm-${advParam.seasonalityMode}-cps-${advParam.changepointPriorScale}-cr-${advParam.changepointRange}`);
     // step 1: build api URLs
-    const apiUrlRoot = `/api/predict?cube=${dataset.cube}&drilldowns=${dataset.dateDrilldown}&measures=Trade+Value`;
+    const apiUrlRoot = `/api/predict?cube=${dataset.cube}&drilldowns=${dataset.dateDrilldown}&measures=Trade+Value&start_time=${timeSelection[0]}&end_time=${timeSelection[1]}`;
     let apiUrls = [apiUrlRoot];
     let drilldowns = [{name: "Aggregate", color: DEFAULT_PREDICTION_COLOR, id: "xx"}];
     // Are there any drilldowns?
@@ -311,8 +333,8 @@ class Prediction extends React.Component {
   }
 
   render() {
-    const {activeTabId, currentDrilldown, dataset, datatableOpen,
-      drilldowns, error, loading, predictionData, scrolled, updateKey} = this.state;
+    const {activeTabId, currentDrilldown, dataset, datatableOpen, drilldowns,
+      error, loading, predictionData, scrolled, timeAvailable, timeSelection, updateKey} = this.state;
     const auth = this.props.auth;
 
     return <div className="prediction" onScroll={this.handleScroll}>
@@ -376,6 +398,18 @@ class Prediction extends React.Component {
               <Button className="build-prediction-btn" rightIcon="arrow-right" text="Build" minimal={true} onClick={this.buildPrediction} />
             </div>
             : null}
+
+          {/* prediction selection dropdowns */}
+          {dataset.selectionsLoaded
+            ? <div className="prediction-controls">
+              <PredictionDateSelect
+                timeAvailable={timeAvailable}
+                timeSelection={timeSelection}
+                updateTimeSelection={this.updateTimeSelection}
+              />
+            </div>
+            : null}
+
 
           {/* prediction viz line chart */}
           <div className="prediction-viz-container">

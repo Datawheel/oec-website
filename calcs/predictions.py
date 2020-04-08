@@ -8,9 +8,9 @@ from fbprophet import Prophet
 import requests
 
 # test with:
-# python -W ignore calcs/predictions.py '{"cube":"services_i_comtrade_a_eb02","Reporter Country":"sapry","drilldowns":"Year","measures":"Service Value"}'
-# python -W ignore calcs/predictions.py '{"cube":"trade_i_baci_a_92","Reporter Country":"sachl","drilldowns":"Year","measures":"Trade Value"}'
-# python -W ignore calcs/predictions.py '{"cube":"trade_i_comtrade_m_hs","Reporter Country":"sachl","drilldowns":"Time","measures":"Trade Value"}'
+# python -W ignore calcs/predictions.py '{"cube":"services_i_comtrade_a_eb02","Reporter Country":"sapry","drilldowns":"Year","measures":"Service Value","start_time":"2001","end_time":"2018"}'
+# python -W ignore calcs/predictions.py '{"cube":"trade_i_baci_a_92","Reporter Country":"sachl","drilldowns":"Year","measures":"Trade Value","start_time":"1998","end_time":"2018"}'
+# python -W ignore calcs/predictions.py '{"cube":"trade_i_comtrade_m_hs","Reporter Country":"sachl","drilldowns":"Time","measures":"Trade Value","start_time":"201101","end_time":"202001"}'
 
 DEBUG = False
 # DEBUG = True
@@ -54,7 +54,9 @@ default_params = {
   "measures": "Trade Value",
   "seasonality_mode": "multiplicative",
   "changepoint_prior_scale": 0.05,
-  "changepoint_range": 0.80
+  "changepoint_range": 0.80,
+  "start_time": 1995,
+  "end_time": 2018
 }
 params = json.loads(sys.argv[1]) if len(sys.argv) > 1 else default_params
 
@@ -75,6 +77,12 @@ class PredictClass(object):
       if filter_var in params and "{} ID".format(dd) in list(df):
         df = df[df["{} ID".format(dd)].astype(str) == str(params[filter_var])]
       return df
+
+  def filter_by_time(self):
+    time_drilldown = params.get("drilldowns", "Year")
+    start_time = params.get("start_time")
+    end_time = params.get("end_time")
+    self.raw_df = self.raw_df.loc[(self.raw_df[time_drilldown] >= int(start_time)) & (self.raw_df[time_drilldown] <= int(end_time))]
 
   def load_data(self):
     api_token = params.pop("apiToken", "")
@@ -192,6 +200,7 @@ def main():
   # Now since you have self as parameter you need to create an object and then call the method for that object.
   my_prediction = PredictClass(params)
   my_prediction.load_data()
+  my_prediction.filter_by_time()
   my_prediction.predict()
   my_prediction.stats()
   my_prediction.print_json()
