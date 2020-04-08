@@ -11,32 +11,6 @@ export const yearsNational = {
 	HS12: {initial: 2012, final: 2018}
 };
 
-export const initialYearsNational = {
-	Category: 2000,
-	Section: 2000,
-	Division: 2000,
-	Group: 2000,
-	Subgroup: 2000,
-	HS92: 1995,
-	HS96: 1998,
-	HS02: 2003,
-	HS07: 2008,
-	HS12: 2012
-};
-
-export const finalYearsNational = {
-	Category: 2018,
-	Section: 2018,
-	Division: 2018,
-	Group: 2018,
-	Subgroup: 2018,
-	HS92: 2018,
-	HS96: 2018,
-	HS02: 2018,
-	HS07: 2018,
-	HS12: 2018
-};
-
 export const subnationalCountries = [
 	'Brazil (State)',
 	'Brazil (Municipality)',
