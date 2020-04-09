@@ -17,7 +17,7 @@ import RankingText from 'components/RankingText';
 import RankingBuilder from 'components/RankingBuilder';
 import RankingTable from 'components/RankingTable';
 
-import { range } from 'helpers/utils';
+import { range, normalizeString } from 'helpers/utils';
 import { subnationalCountries, subnationalData, yearsNational } from 'helpers/rankingsyears';
 
 class Rankings extends Component {
@@ -250,14 +250,23 @@ class Rankings extends Component {
 			const path = this.pathCreator(aggregatedYears);
 			this.fetchSingleyearData(path);
 		} else {
-			const pathArray = [];
-			range(yearRangeInitial, yearRangeFinal).map((d) => {
-				const aggregatedYears = subnational ? this.yearAggregation(d, subnationalData[subnationalValue].initial) : this.yearAggregation(d, yearsNational[productRevision].initial);
+			const dataInitial = subnational ? subnationalData[subnationalValue].initial : yearsNational[productRevision].initial;
+			const dataFinal = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
+			const dataLength = range(dataInitial, dataFinal).length;
+			if (dataLength === 1) {
+				const aggregatedYears = subnational ? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial) : this.yearAggregation(yearValue, yearsNational[productRevision].initial);
 				const path = this.pathCreator(aggregatedYears);
-				pathArray.push({ year: d, path });
-			});
+				this.fetchSingleyearData(path);
+			} else {
+				const pathArray = [];
+				range(yearRangeInitial, yearRangeFinal).map((d) => {
+					const aggregatedYears = subnational ? this.yearAggregation(d, subnationalData[subnationalValue].initial) : this.yearAggregation(d, yearsNational[productRevision].initial);
+					const path = this.pathCreator(aggregatedYears);
+					pathArray.push({ year: d, path });
+				});
 
-			this.fetchMultiyearData(pathArray);
+				this.fetchMultiyearData(pathArray);
+			}
 		}
 	}
 
@@ -280,7 +289,7 @@ class Rankings extends Component {
 	}
 
 	fetchMultiyearData = async (paths) => {
-		const { country, productDepth, productRevision, singleyear, yearRangeInitial, yearRangeFinal } = this.state;
+		const { country, subnational, subnationalValue, productDepth, productRevision, singleyear, yearRangeInitial, yearRangeFinal } = this.state;
 		let rangeData = [];
 
 		for (const d of paths) {
@@ -291,9 +300,30 @@ class Rankings extends Component {
 		}
 		rangeData = rangeData.flat();
 
-		const selector = country
-			? 'Country ID'
-			: productDepth === 'SITC' ? `${productRevision} ID` : `${productDepth} ID`;
+		let selector = null;
+
+		if (!subnational) {
+			if (country) {
+				selector = 'Country ID'
+			} else {
+				if (productDepth !== 'SITC') {
+					selector = `${productDepth} ID`
+				} else {
+					selector = `${productRevision} ID`
+				}
+			}
+		} else {
+			if (country) {
+				selector = 'Subnat Geography ID'
+			} else {
+				const basecube = subnationalData[subnationalValue].basecube;
+				if (basecube === 'HS') {
+					selector = `${productDepth} ID`;
+				} else if (basecube === 'SITC') {
+					selector = `${productDepth} ID`;
+				}
+			}
+		}
 
 		const reduceData = rangeData.reduce((obj, d) => {
 			if (!obj[d[selector]]) obj[d[selector]] = [ d ];
@@ -337,7 +367,15 @@ class Rankings extends Component {
 
 	createColumns(type, array) {
 		const { country, subnational, subnationalValue, productDepth, productRevision } = this.state;
-		const years = type ? [ array, array ] : array;
+		let years = null;
+		const dataInitial = subnational ? subnationalData[subnationalValue].initial : yearsNational[productRevision].initial;
+		const dataFinal = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
+		const dataLength = range(dataInitial, dataFinal).length;
+		if (dataLength === 1) {
+			years = [array, array];
+		} else {
+			years = type ? [ array, array ] : array;
+		}
 
 		const columnID = {
 			id: 'id',
@@ -487,7 +525,7 @@ class Rankings extends Component {
 								className="icon"
 							/>
 							<a
-								href={``}
+								href={`/en/profile/subnational_${subnationalData[subnationalValue].profile}/${normalizeString(props.original['Subnat Geography'].replace(/ /g, "-").toLowerCase())}`}
 								className="link"
 								target="_blank"
 								rel="noopener noreferrer"

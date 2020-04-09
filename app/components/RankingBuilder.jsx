@@ -76,28 +76,23 @@ class RankingsBuilder extends Component {
 							<span>Product</span>
 						</div>
 					</div>
-					{_authUser && (
-						<div className="setting country-depth">
-							<h3 className="is-pro">Country Depth</h3>
-							<div className="switch">
-								<span>National</span>
-								<Switch
-									onChange={(event) =>
-										handleCountrySwitch('subnational', event.currentTarget.checked)}
-								/>
-								<span>Subnational</span>
-							</div>
-							<HTMLSelect
-								options={subnationalCountries}
-								onChange={(event) =>
-									handleCountrySelect(
-										'subnationalValue',
-										event.currentTarget.selectedOptions[0].label
-									)}
-								disabled={subnational === false ? true : false}
+					<div className="setting country-depth">
+						<h3 className="is-pro">Country Depth</h3>
+						<div className="switch">
+							<span>National</span>
+							<Switch
+								onChange={(event) => handleCountrySwitch('subnational', event.currentTarget.checked)}
+								disabled={!_authUser}
 							/>
+							<span>Subnational</span>
 						</div>
-					)}
+						<HTMLSelect
+							options={subnationalCountries}
+							onChange={(event) =>
+								handleCountrySelect('subnationalValue', event.currentTarget.selectedOptions[0].label)}
+							disabled={subnational === false ? true : false}
+						/>
+					</div>
 					{!subnational && (
 						<div className="setting product-depth last">
 							<h3>Product Depth and Revision</h3>

@@ -13,8 +13,8 @@ class RankingText extends Component {
 						exports. PCI measures the knowledge intensity of a product by considering the knowledge
 						intensity of its exporters. This circular argument is mathematically tractable and can be used
 						to construct relative measures of the knowledge intensity of economies and products (see {' '}
-						<a href="/en/resources/methodology/" className="link" target="_blank" rel="noopener noreferrer">
-							methodology section
+						<a href="/en/resources/definitions" className="link" target="_blank" rel="noopener noreferrer">
+							definitions section
 						</a>{' '}
 						for more details).
 					</p>

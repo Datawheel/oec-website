@@ -33,6 +33,7 @@ export const subnationalData = {
 	'Brazil (State)': {
 		cube: 'bra_ncm_m_hs',
 		basecube: 'HS',
+		profile: 'bra_state',
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
@@ -42,6 +43,7 @@ export const subnationalData = {
 	'Brazil (Municipality)': {
 		cube: 'bra_mun_m_hs',
 		basecube: 'HS',
+		profile: 'bra_municipality',
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
@@ -51,6 +53,7 @@ export const subnationalData = {
 	Bolivia: {
 		cube: 'bol_m_sitc3',
 		basecube: 'SITC',
+		profile: '',
 		geo: 'Subnat Geography',
 		initial: 2006,
 		final: 2019,
@@ -60,6 +63,7 @@ export const subnationalData = {
 	Canada: {
 		cube: 'can_m_hs',
 		basecube: 'HS',
+		profile: 'can',
 		geo: 'Subnat Geography',
 		initial: 1988,
 		final: 2019,
@@ -69,6 +73,7 @@ export const subnationalData = {
 	China: {
 		cube: 'chn_m_hs',
 		basecube: 'HS',
+		profile: 'chn',
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
@@ -78,6 +83,7 @@ export const subnationalData = {
 	Ecuador: {
 		cube: 'ecu_m_hs',
 		basecube: 'HS',
+		profile: 'ecu',
 		geo: 'Subnat Geography',
 		initial: 2013,
 		final: 2019,
@@ -87,6 +93,7 @@ export const subnationalData = {
 	Japan: {
 		cube: 'jpn_m_hs',
 		basecube: 'HS',
+		profile: 'jpn',
 		geo: 'Subnat Geography',
 		initial: 2009,
 		final: 2019,
@@ -96,6 +103,7 @@ export const subnationalData = {
 	Russia: {
 		cube: 'rus_m_hs',
 		basecube: 'HS',
+		profile: 'rus',
 		geo: 'Subnat Geography',
 		initial: 2015,
 		final: 2019,
@@ -105,6 +113,7 @@ export const subnationalData = {
 	'South Africa': {
 		cube: 'zaf_m_hs',
 		basecube: 'HS',
+		profile: 'zaf',
 		geo: 'Subnat Geography',
 		initial: 2018,
 		final: 2019,
@@ -114,6 +123,7 @@ export const subnationalData = {
 	Spain: {
 		cube: 'esp_m_hs',
 		basecube: 'HS',
+		profile: 'esp',
 		geo: 'Subnat Geography',
 		initial: 2010,
 		final: 2019,
@@ -123,6 +133,7 @@ export const subnationalData = {
 	Turkey: {
 		cube: 'tur_m_hs',
 		basecube: 'HS',
+		profile: 'tur',
 		geo: 'Subnat Geography',
 		initial: 2002,
 		final: 2019,
@@ -132,6 +143,7 @@ export const subnationalData = {
 	'United Kingdom': {
 		cube: 'gbr_m_hs',
 		basecube: 'HS',
+		profile: 'gbr',
 		geo: 'Subnat Geography',
 		initial: 2011,
 		final: 2019,
@@ -141,6 +153,7 @@ export const subnationalData = {
 	'United States (State)': {
 		cube: 'usa_state_m_hs',
 		basecube: 'HS',
+		profile: 'usa_state',
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
@@ -150,6 +163,7 @@ export const subnationalData = {
 	'United States (District)': {
 		cube: 'usa_district_m_hs',
 		basecube: 'HS',
+		profile: 'usa_district',
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
@@ -159,6 +173,7 @@ export const subnationalData = {
 	Uruguay: {
 		cube: 'ury_a_hs',
 		basecube: 'HS',
+		profile: 'ury',
 		geo: 'Subnat Geography',
 		initial: 2010,
 		final: 2018,
