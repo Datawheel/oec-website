@@ -55,6 +55,8 @@ function backgroundImageV2(key, d) {
       return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    case "Level 1":
+      return `/images/icons/cpf/cpf_${d["Level 1 ID"]}.svg`;
     case "Service":
     case "Parent Service":
       return `/images/icons/service/service_${[d[`${key} ID`]]}.png`;
@@ -90,6 +92,9 @@ function backgroundImage(d, ascending) {
     }
     else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    }
+    else if ("Level 1 ID" in d && !Array.isArray(d["Level 1"])) {
+      return `/images/icons/cpf/cpf_${d["Level 1 ID"]}.svg`;
     }
     else if ("Continent ID" in d && !Array.isArray(d.Continent)) {
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
@@ -140,6 +145,9 @@ function backgroundImage(d, ascending) {
     }
     else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    }
+    else if ("Level 1 ID" in d && !Array.isArray(d["Level 1"])) {
+      return `/images/icons/cpf/cpf_${d["Level 1 ID"]}.svg`;
     }
     else if ("Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
       return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
