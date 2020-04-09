@@ -67,7 +67,8 @@ function backgroundImageV2(key, d) {
 function findColorV2(key, d) {
   if (key === "Country" || key === "ISO 3") return "transparent";
   const id = key === "SITC Section" ? d["Section ID"] : d[`${key} ID`];
-  return colors[key][id] || colors[key][d[key]] || colors.colorGrey;
+  const palette = colors[key];
+  return palette ? colors[key][id] || colors[key][d[key]] || colors.colorGrey : colors.colorGrey;
 }
 
 /**
@@ -273,7 +274,7 @@ export default {
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
       let itemBgImg = Array.isArray(parent[1]) ? "WildCard" : parentId;
-      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h)) && !sections["hsSections"].includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h)) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
 
       const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
       const bgColor = findColorV2(itemBgImg, d);
@@ -319,7 +320,7 @@ export default {
 
       const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
       let itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
-      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections["hsSections"].includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
       const imgUrl = backgroundImageV2(itemBgImg, d);
       const bgColor = findColorV2(itemBgImg, d);
 
