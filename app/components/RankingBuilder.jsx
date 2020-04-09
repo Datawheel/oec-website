@@ -78,7 +78,7 @@ class RankingsBuilder extends Component {
 					</div>
 					{_authUser && (
 						<div className="setting country-depth">
-							<h3>Country Depth</h3>
+							<h3 className="is-pro">Country Depth</h3>
 							<div className="switch">
 								<span>National</span>
 								<Switch

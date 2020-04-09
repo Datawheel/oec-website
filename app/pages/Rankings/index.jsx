@@ -215,15 +215,21 @@ class Rankings extends Component {
 		const index = country ? "eci" : "pci";
 
 		if (!subnational) {
-			if (productDepth === 'SITC') {
-				return `/api/stats/${index}?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`;
-			} else {
+			if (productDepth !== 'SITC') {
 				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`;
+			} else {
+				return `/api/stats/${index}?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`;
 			}
 		} else {
-			const testPath = `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue].cube}&rca=${subnationalData[subnationalValue].geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=2017&aliasRight=Country,${productDepth}`;
-			console.log(testPath);
-			return testPath
+			const basecube = subnationalData[subnationalValue].basecube;
+			const yearRight = years[2] > 2018 ? 2018 : years[2];
+			if (basecube === 'HS') {
+				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue].cube}&rca=${subnationalData[subnationalValue].geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
+			} else if (basecube === 'SITC') {
+				const testPath = `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue].cube}&rca=${subnationalData[subnationalValue].geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
+				console.log(testPath);
+				return testPath
+			}
 		}
 	}
 
@@ -330,93 +336,237 @@ class Rankings extends Component {
 	}
 
 	createColumns(type, array) {
-		const { country, productDepth, productRevision } = this.state;
+		const { country, subnational, subnationalValue, productDepth, productRevision } = this.state;
 		const years = type ? [ array, array ] : array;
 
-		const columns = [
-			{
-				id: 'id',
-				Header: '',
-				className: 'col-id',
-				Cell: (props) => props.index + 1,
-				width: 40,
-				sortable: false
-			},
-			{
-				id: 'category',
-				accessor: (d) =>
-					country
-					? d.Country
-					: productDepth === 'SITC'
-						? d[`${productRevision}`]
-						: d[`${productDepth}`],
-				width: 400,
-				Header: () => (
-					<div className="header">
-						<span className="year">{country ? 'Country' : 'Product'}</span>
-						<div className="icons">
-							<Icon icon={'caret-up'} iconSize={16} />
-							<Icon icon={'caret-down'} iconSize={16} />
-						</div>
-					</div>
-				),
-				style: { whiteSpace: 'unset' },
-				Cell: (props) => (
-					<div className="category">
-						<img
-							src={
-								country
-									? `/images/icons/country/country_${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}.png`
-									: productDepth === 'SITC'
-										? `/images/icons/sitc/sitc_${props.original[`${productRevision} ID`].toString().charAt(0)}.svg`
-								 		: `/images/icons/hs/hs_${props.original[`${productDepth} ID`].toString().substr(0,props.original[`${productDepth} ID`].toString().length * 1 - productDepth.substr(2) * 1)}.svg`
-							}
-							alt="icon"
-							className="icon"
-						/>
-						<a
-							href={
-								country
-									? `/en/profile/country/${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}`
-									: productDepth === 'SITC'
-										? ''
-										: `/en/profile/${productRevision.toLowerCase()}/${props.original[`${productRevision} ID`]}`
-							}
-							className="link"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<div className="name">
-								{country
-									? props.original.Country
-									: productDepth === 'SITC'
-										? props.original[`${productRevision}`]
-										: props.original[`${productDepth}`]
-								}
+		const columnID = {
+			id: 'id',
+			Header: '',
+			className: 'col-id',
+			Cell: (props) => props.index + 1,
+			width: 40,
+			sortable: false
+		};
+
+		let columnNAME = {};
+		if (!subnational) {
+			// National Columns
+			if (country) {
+				columnNAME = {
+					id: 'category',
+					accessor: (d) => d.Country,
+					width: 400,
+					Header: () => (
+						<div className="header">
+							<span className="year">{'Country'}</span>
+							<div className="icons">
+								<Icon icon={'caret-up'} iconSize={16} />
+								<Icon icon={'caret-down'} iconSize={16} />
 							</div>
-							<Icon icon={'chevron-right'} iconSize={14} />
-						</a>
-					</div>
-				)
-			},
-			...range(years[0], years[1]).map((year, index, { length }) => ({
-				id: length === index + 1 ? 'lastyear' : `${year}`,
-				Header: () => (
-					<div className="header">
-						<span className="year">{year}</span>
-						<div className="icons">
-							<Icon icon={'caret-up'} iconSize={16} />
-							<Icon icon={'caret-down'} iconSize={16} />
 						</div>
+					),
+					style: { whiteSpace: 'unset' },
+					Cell: (props) => (
+						<div className="category">
+							<img
+								src={`/images/icons/country/country_${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}.png`}
+								alt="icon"
+								className="icon"
+							/>
+							<a
+								href={`/en/profile/country/${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}`}
+								className="link"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<div className="name">
+									{props.original.Country}
+								</div>
+								<Icon icon={'chevron-right'} iconSize={14} />
+							</a>
+						</div>
+					)
+				};
+			} else {
+				if (productDepth !== 'SITC') {
+					columnNAME = {
+						id: 'category',
+						accessor: (d) => d[`${productDepth}`],
+						width: 400,
+						Header: () => (
+							<div className="header">
+								<span className="year">{'Product'}</span>
+								<div className="icons">
+									<Icon icon={'caret-up'} iconSize={16} />
+									<Icon icon={'caret-down'} iconSize={16} />
+								</div>
+							</div>
+						),
+						style: { whiteSpace: 'unset' },
+						Cell: (props) => (
+							<div className="category">
+								<img
+									src={`/images/icons/hs/hs_${props.original[`${productDepth} ID`].toString().substr(0,props.original[`${productDepth} ID`].toString().length * 1 - productDepth.substr(2) * 1)}.svg`}
+									alt="icon"
+									className="icon"
+								/>
+								<a
+									href={`/en/profile/${productRevision.toLowerCase()}/${props.original[`${productRevision} ID`]}`}
+									className="link"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<div className="name">
+										{props.original[`${productDepth}`]}
+									</div>
+									<Icon icon={'chevron-right'} iconSize={14} />
+								</a>
+							</div>
+						)
+					};
+				} else {
+					columnNAME = {
+						id: 'category',
+						accessor: (d) => d[`${productRevision}`],
+						width: 400,
+						Header: () => (
+							<div className="header">
+								<span className="year">{'Product'}</span>
+								<div className="icons">
+									<Icon icon={'caret-up'} iconSize={16} />
+									<Icon icon={'caret-down'} iconSize={16} />
+								</div>
+							</div>
+						),
+						style: { whiteSpace: 'unset' },
+						Cell: (props) => (
+							<div className="category">
+								<img
+									src={`/images/icons/sitc/sitc_${props.original[`${productRevision} ID`].toString().charAt(0)}.svg`}
+									alt="icon"
+									className="icon"
+								/>
+								<a
+									href={''}
+									className="link"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<div className="name">
+										{props.original[`${productRevision}`]}
+									</div>
+									<Icon icon={'chevron-right'} iconSize={14} />
+								</a>
+							</div>
+						)
+					};
+				}
+			}
+		} else {
+			// Subnational Columns
+			if (country) {
+				columnNAME = {
+					id: 'category',
+					accessor: (d) => d['Subnat Geography'],
+					width: 400,
+					Header: () => (
+						<div className="header">
+							<span className="year">{'Subnat Geography'}</span>
+							<div className="icons">
+								<Icon icon={'caret-up'} iconSize={16} />
+								<Icon icon={'caret-down'} iconSize={16} />
+							</div>
+						</div>
+					),
+					style: { whiteSpace: 'unset' },
+					Cell: (props) => (
+						<div className="category">
+							<img
+								src={`/images/icons/country/country_${subnationalData[subnationalValue].flag}.png`}
+								alt="icon"
+								className="icon"
+							/>
+							<a
+								href={``}
+								className="link"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<div className="name">
+									{props.original['Subnat Geography']}
+								</div>
+								<Icon icon={'chevron-right'} iconSize={14} />
+							</a>
+						</div>
+					)
+				};
+			} else {
+				const basecube = subnationalData[subnationalValue].basecube;
+				if (basecube === 'HS') {
+					columnNAME = {
+						id: 'category',
+						accessor: (d) => d[`${productDepth}`],
+						width: 400,
+						Header: () => (
+							<div className="header">
+								<span className="year">{'Product'}</span>
+								<div className="icons">
+									<Icon icon={'caret-up'} iconSize={16} />
+									<Icon icon={'caret-down'} iconSize={16} />
+								</div>
+							</div>
+						),
+						style: { whiteSpace: 'unset' },
+						Cell: (props) => (
+							<div className="category">
+								<img
+									src={`/images/icons/hs/hs_${productDepth === 'Section' ? props.original[`${productDepth} ID`] : props.original[`${productDepth} ID`].toString().substr(0,props.original[`${productDepth} ID`].toString().length * 1 - productDepth.substr(2) * 1)}.svg`}
+									alt="icon"
+									className="icon"
+								/>
+								<a
+									href={``}
+									className="link"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<div className="name">
+										{props.original[`${productDepth}`]}
+									</div>
+									<Icon icon={'chevron-right'} iconSize={14} />
+								</a>
+							</div>
+						)
+					};
+				} else if (basecube === 'SITC') {
+
+				}
+			}
+		}
+
+		const columnYEARS = range(years[0], years[1]).map((year, index, { length }) => ({
+			id: length === index + 1 ? 'lastyear' : `${year}`,
+			Header: () => (
+				<div className="header">
+					<span className="year">{year}</span>
+					<div className="icons">
+						<Icon icon={'caret-up'} iconSize={16} />
+						<Icon icon={'caret-down'} iconSize={16} />
 					</div>
-				),
-				accessor: (d) => d[`${year}`],
-				Cell: (props) =>
-					numeral(props.original[`${year}`]).format('0.00000') * 1 !== -1000
-						? numeral(props.original[`${year}`]).format('0.00000')
-						: '',
-				className: 'year'
-			}))
+				</div>
+			),
+			accessor: (d) => d[`${year}`],
+			Cell: (props) =>
+				numeral(props.original[`${year}`]).format('0.00000') * 1 !== -1000
+					? numeral(props.original[`${year}`]).format('0.00000')
+					: '',
+			className: 'year'
+		}));
+
+		const columns = [
+			columnID,
+			columnNAME,
+			...columnYEARS
 		];
 
 		return columns.filter((f) => f !== null);
