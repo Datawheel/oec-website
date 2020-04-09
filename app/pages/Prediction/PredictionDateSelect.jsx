@@ -83,6 +83,7 @@ class PredictionDateSelect extends React.Component {
           value={timeSelection[0]}
         >
           <Button
+            className="prediction-date-dropdown prediction-date-start"
             rightIcon="caret-down"
             text={`${timeSelection[0]}`.length > 4 ? moment(`${timeSelection[0]}`, "YYYYMM").format("MMM YYYY") : timeSelection[0]}
           />
@@ -97,6 +98,7 @@ class PredictionDateSelect extends React.Component {
           value={timeSelection[1]}
         >
           <Button
+            className="prediction-date-dropdown prediction-date-end"
             rightIcon="caret-down"
             text={`${timeSelection[1]}`.length > 4 ? moment(`${timeSelection[1]}`, "YYYYMM").format("MMM YYYY") : timeSelection[1]}
           />
