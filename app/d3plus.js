@@ -1,8 +1,8 @@
 import colors from "./helpers/colors";
 import style from "style.yml";
-import {formatAbbreviate} from "d3plus-format";
-import {mean} from "d3-array";
-import {hsId} from "./helpers/formatters";
+import { formatAbbreviate } from "d3plus-format";
+import { mean } from "d3-array";
+import { hsId } from "./helpers/formatters";
 import sections from "./helpers/sections";
 
 const bad = "#cf5555";
@@ -13,20 +13,20 @@ const good = "#3182bd";
  * @param {Object} d
  */
 function findColor(d) {
-  let detectedColors = [];
-  if (this && this._filteredData) {
-    detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
-  }
+    let detectedColors = [];
+    if (this && this._filteredData) {
+        detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
+    }
 
-  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
-  if ("Section" in d && !Array.isArray(d.Section)) {
-    return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
-  }
+    if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
+    if ("Section" in d && !Array.isArray(d.Section)) {
+        return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
+    }
 
-  if (detectedColors.length !== 1) {
-    for (const key in colors) {
-      if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
+    if (detectedColors.length !== 1) {
+        for (const key in colors) {
+            if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
+                return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
       }
     }
   }
@@ -273,7 +273,7 @@ export default {
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
       let itemBgImg = Array.isArray(parent[1]) ? "WildCard" : parentId;
-      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h)) && !sections["hsSections"].includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h)) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
 
       const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
       const bgColor = findColorV2(itemBgImg, d);
@@ -319,7 +319,7 @@ export default {
 
       const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
       let itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
-      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections["hsSections"].includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
       const imgUrl = backgroundImageV2(itemBgImg, d);
       const bgColor = findColorV2(itemBgImg, d);
 

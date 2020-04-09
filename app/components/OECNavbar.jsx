@@ -117,7 +117,7 @@ class OECNavbar extends Component {
                   <Link to={`${locale}/login?redirect=${currentURL}`}>Login</Link>
                 </Button>
                 <Button className="navbar-user-signup" rebuilding={auth.loading} disable={auth.loading}>
-                  <Link to={`${locale}/signup`}>Sign Up</Link>
+                  <Link to={`${locale}/signup`}>Register</Link>
                 </Button>
               </React.Fragment>
             }

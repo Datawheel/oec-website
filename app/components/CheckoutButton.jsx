@@ -17,25 +17,29 @@ class CheckoutButton extends Component {
 
   onClick() {
     this.setState({loading: true});
-    axios.get("/auth/checkout")
-      .then(resp => resp.data)
-      .then(session => {
-        const {error, id} = session;
-        if (error) {
-          console.error(error);
-          this.setState({error, loading: false});
-        }
-        else {
-          const {STRIPE} = this.props;
-          const stripe = new window.Stripe(STRIPE);
-          stripe
-            .redirectToCheckout({sessionId: id})
-            .catch(error => {
-              console.error(error);
-              this.setState({error, loading: false});
-            });
-        }
-      });
+    window.location.reload();
+
+    // Stripe Checkout Code
+    // axios.get("/auth/checkout")
+    //   .then(resp => resp.data)
+    //   .then(session => {
+    //     const {error, id} = session;
+    //     if (error) {
+    //       console.error(error);
+    //       this.setState({error, loading: false});
+    //     }
+    //     else {
+    //       const {STRIPE} = this.props;
+    //       const stripe = new window.Stripe(STRIPE);
+    //       stripe
+    //         .redirectToCheckout({sessionId: id})
+    //         .catch(error => {
+    //           console.error(error);
+    //           this.setState({error, loading: false});
+    //         });
+    //     }
+    //   });
+
   }
 
   render() {
@@ -44,7 +48,7 @@ class CheckoutButton extends Component {
     const {className, link, onClick, text} = this.props;
     const {user} = this.props.auth;
 
-    return <Tooltip fill={true} content={!link && user && !user.activated ? "Please verify your e-mail before upgrading." : false}>
+    return <Tooltip fill={true} content={!link && user && !user.activated ? "Please verify your e-mail to upgrade." : false}>
       <Button
         className={`checkout-button ${className}`}
         disabled={!link && (loading || !user || !user.activated)}

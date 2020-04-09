@@ -395,12 +395,19 @@ class Prediction extends React.Component {
                     items={toggle.data}
                     toggleDrilldown={this.toggleDrilldown(toggle.id)} />)
                 : null}
-              <Button className="build-prediction-btn" rightIcon="arrow-right" text="Build" minimal={true} onClick={this.buildPrediction} />
+              <div className="prediction-controls">
+                <PredictionDateSelect
+                  timeAvailable={timeAvailable}
+                  timeSelection={timeSelection}
+                  updateTimeSelection={this.updateTimeSelection}
+                />
+              </div>
+              <Button className="build-prediction-btn" rightIcon="arrow-right" text="Build" onClick={this.buildPrediction} />
             </div>
             : null}
 
-          {/* prediction selection dropdowns */}
-          {dataset.selectionsLoaded
+          {/* prediction date selection dropdowns */}
+          {/* {dataset.selectionsLoaded
             ? <div className="prediction-controls">
               <PredictionDateSelect
                 timeAvailable={timeAvailable}
@@ -408,8 +415,7 @@ class Prediction extends React.Component {
                 updateTimeSelection={this.updateTimeSelection}
               />
             </div>
-            : null}
-
+            : null} */}
 
           {/* prediction viz line chart */}
           <div className="prediction-viz-container">

@@ -43,7 +43,7 @@ class OECPaywall extends React.Component {
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <AnchorButton href="/en/login?redirect=/en/prediction/trade-annual">Login</AnchorButton>
               <AnchorButton intent={Intent.SUCCESS} href="/en/signup">
-                Sign Up!
+                Register
               </AnchorButton>
             </div>
           </div>
