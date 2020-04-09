@@ -76,23 +76,29 @@ class RankingsBuilder extends Component {
 							<span>Product</span>
 						</div>
 					</div>
-					<div className="setting country-depth">
-						<h3 className="is-pro">Country Depth</h3>
-						<div className="switch">
-							<span>National</span>
-							<Switch
-								onChange={(event) => handleCountrySwitch('subnational', event.currentTarget.checked)}
-								disabled={!_authUser}
+					{_authUser && (
+						<div className="setting country-depth">
+							<h3 className="is-pro">Country Depth</h3>
+							<div className="switch">
+								<span>National</span>
+								<Switch
+									onChange={(event) =>
+										handleCountrySwitch('subnational', event.currentTarget.checked)}
+									disabled={!_authUser}
+								/>
+								<span>Subnational</span>
+							</div>
+							<HTMLSelect
+								options={subnationalCountries}
+								onChange={(event) =>
+									handleCountrySelect(
+										'subnationalValue',
+										event.currentTarget.selectedOptions[0].label
+									)}
+								disabled={subnational === false ? true : false}
 							/>
-							<span>Subnational</span>
 						</div>
-						<HTMLSelect
-							options={subnationalCountries}
-							onChange={(event) =>
-								handleCountrySelect('subnationalValue', event.currentTarget.selectedOptions[0].label)}
-							disabled={subnational === false ? true : false}
-						/>
-					</div>
+					)}
 					{!subnational && (
 						<div className="setting product-depth last">
 							<h3>Product Depth and Revision</h3>
@@ -199,6 +205,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('countryExpThreshold')}
 							labelRenderer={renderThresholdSlider}
 							value={countryExpThreshold}
+							disabled={subnational}
 						/>
 					</div>
 					<div className="setting">
@@ -211,6 +218,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('productExpThreshold')}
 							labelRenderer={renderThresholdSlider}
 							value={productExpThreshold}
+							disabled={subnational}
 						/>
 					</div>
 					<div className="setting last">

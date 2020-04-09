@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import numeral from 'numeral';
-import {hot} from "react-hot-loader/root";
-import {isAuthenticated} from "@datawheel/canon-core";
+import { hot } from 'react-hot-loader/root';
+import { isAuthenticated } from '@datawheel/canon-core';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { formatAbbreviate } from 'd3plus-format';
@@ -65,17 +65,17 @@ class Rankings extends Component {
 			productDepth: defaultDepth,
 			productRevision: defaultRevision,
 			yearValue: yearsNational[defaultRevision].final,
-			yearRangeInitial: yearsNational[defaultRevision].final-1,
+			yearRangeInitial: yearsNational[defaultRevision].final - 1,
 			yearRangeFinal: yearsNational[defaultRevision].final,
 			countryExpThreshold: defaultCountryThreshold,
 			productExpThreshold: defaultProductThreshold,
 			_ready: true
-		})
+		});
 	}
 
 	componentWillMount() {
 		this.props.isAuthenticated();
-  }
+	}
 
 	/* BUILDER ORIENTED FUNCTIONS */
 
@@ -84,7 +84,7 @@ class Rankings extends Component {
 	}
 
 	handleCountrySwitch(key, value) {
-		const {subnational, subnationalValue, productRevision} = this.state;
+		const { subnational, subnationalValue, productRevision } = this.state;
 		if (subnational) {
 			this.setState({
 				[key]: value,
@@ -92,8 +92,10 @@ class Rankings extends Component {
 				productRevision: 'HS92',
 				yearValue: yearsNational[productRevision].final,
 				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
-			 });
+				yearRangeFinal: yearsNational[productRevision].final,
+				countryExpThreshold: 5000000000,
+				productExpThreshold: 1000000000
+			});
 		} else {
 			this.setState({
 				[key]: value,
@@ -101,7 +103,9 @@ class Rankings extends Component {
 				productRevision: 'HS92',
 				yearValue: subnationalData[subnationalValue].final,
 				yearRangeInitial: subnationalData[subnationalValue].final - 1,
-				yearRangeFinal: subnationalData[subnationalValue].final
+				yearRangeFinal: subnationalData[subnationalValue].final,
+				countryExpThreshold: 0,
+				productExpThreshold: 0
 			});
 		}
 	}
@@ -154,7 +158,7 @@ class Rankings extends Component {
 	}
 
 	handlePeriodYearButtons(key, value) {
-		const {singleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal} = this.state;
+		const { singleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal } = this.state;
 		if (singleyear) {
 			this.setState({ [key]: value });
 		} else {
@@ -202,33 +206,49 @@ class Rankings extends Component {
 
 	yearAggregation(year, initial) {
 		if (year === initial) {
-			return [year, year, year];
+			return [ year, year, year ];
 		} else if (year === initial + 1) {
-			return [year - 1, year, year];
+			return [ year - 1, year, year ];
 		} else {
-			return [year - 2, year - 1, year];
+			return [ year - 2, year - 1, year ];
 		}
 	}
 
 	pathCreator(years) {
-		const {country, subnational, subnationalValue, productDepth, productRevision, countryExpThreshold, productExpThreshold} = this.state;
-		const index = country ? "eci" : "pci";
+		const {
+			country,
+			subnational,
+			subnationalValue,
+			productDepth,
+			productRevision,
+			countryExpThreshold,
+			productExpThreshold
+		} = this.state;
+		const index = country ? 'eci' : 'pci';
 
 		if (!subnational) {
 			if (productDepth !== 'SITC') {
-				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(2)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productDepth}=${productExpThreshold*3}`;
+				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(
+					2
+				)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
+					3}&threshold_${productDepth}=${productExpThreshold * 3}`;
 			} else {
-				return `/api/stats/${index}?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold*3}&threshold_${productRevision}=${productExpThreshold*3}`;
+				return `/api/stats/${index}?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
+					3}&threshold_${productRevision}=${productExpThreshold * 3}`;
 			}
 		} else {
 			const basecube = subnationalData[subnationalValue].basecube;
 			const yearRight = years[2] > 2018 ? 2018 : years[2];
 			if (basecube === 'HS') {
-				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue].cube}&rca=${subnationalData[subnationalValue].geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
+				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
+					.cube}&rca=${subnationalData[subnationalValue]
+					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
 			} else if (basecube === 'SITC') {
-				const testPath = `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue].cube}&rca=${subnationalData[subnationalValue].geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
+				const testPath = `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
+					.cube}&rca=${subnationalData[subnationalValue]
+					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
 				console.log(testPath);
-				return testPath
+				return testPath;
 			}
 		}
 	}
@@ -242,25 +262,35 @@ class Rankings extends Component {
 			productRevision,
 			yearValue,
 			yearRangeInitial,
-			yearRangeFinal,
+			yearRangeFinal
 		} = this.state;
 
 		if (singleyear) {
-			const aggregatedYears = subnational ? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial) : this.yearAggregation(yearValue, yearsNational[productRevision].initial);
+			const aggregatedYears = subnational
+				? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial)
+				: this.yearAggregation(yearValue, yearsNational[productRevision].initial);
 			const path = this.pathCreator(aggregatedYears);
 			this.fetchSingleyearData(path);
 		} else {
-			const dataInitial = subnational ? subnationalData[subnationalValue].initial : yearsNational[productRevision].initial;
-			const dataFinal = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
+			const dataInitial = subnational
+				? subnationalData[subnationalValue].initial
+				: yearsNational[productRevision].initial;
+			const dataFinal = subnational
+				? subnationalData[subnationalValue].final
+				: yearsNational[productRevision].final;
 			const dataLength = range(dataInitial, dataFinal).length;
 			if (dataLength === 1) {
-				const aggregatedYears = subnational ? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial) : this.yearAggregation(yearValue, yearsNational[productRevision].initial);
+				const aggregatedYears = subnational
+					? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial)
+					: this.yearAggregation(yearValue, yearsNational[productRevision].initial);
 				const path = this.pathCreator(aggregatedYears);
 				this.fetchSingleyearData(path);
 			} else {
 				const pathArray = [];
 				range(yearRangeInitial, yearRangeFinal).map((d) => {
-					const aggregatedYears = subnational ? this.yearAggregation(d, subnationalData[subnationalValue].initial) : this.yearAggregation(d, yearsNational[productRevision].initial);
+					const aggregatedYears = subnational
+						? this.yearAggregation(d, subnationalData[subnationalValue].initial)
+						: this.yearAggregation(d, yearsNational[productRevision].initial);
 					const path = this.pathCreator(aggregatedYears);
 					pathArray.push({ year: d, path });
 				});
@@ -271,14 +301,14 @@ class Rankings extends Component {
 	}
 
 	fetchSingleyearData = (path) => {
-		const {country, singleyear, yearValue} = this.state;
+		const { country, singleyear, yearValue } = this.state;
 		axios.all([ axios.get(path) ]).then(
 			axios.spread((resp) => {
 				const index = country ? 'Trade Value ECI' : 'Trade Value PCI';
 				const data = resp.data.data.sort((a, b) => b[index] - a[index]);
 				data.map((d) => ((d[`${yearValue}`] = d[index]), delete d[index]));
 				const columns = this.createColumns(singleyear, yearValue);
-				console.log("DATA HERE:", data);
+				console.log('DATA HERE:', data);
 				this.setState({
 					data,
 					columns,
@@ -286,10 +316,19 @@ class Rankings extends Component {
 				});
 			})
 		);
-	}
+	};
 
 	fetchMultiyearData = async (paths) => {
-		const { country, subnational, subnationalValue, productDepth, productRevision, singleyear, yearRangeInitial, yearRangeFinal } = this.state;
+		const {
+			country,
+			subnational,
+			subnationalValue,
+			productDepth,
+			productRevision,
+			singleyear,
+			yearRangeInitial,
+			yearRangeFinal
+		} = this.state;
 		let rangeData = [];
 
 		for (const d of paths) {
@@ -304,17 +343,17 @@ class Rankings extends Component {
 
 		if (!subnational) {
 			if (country) {
-				selector = 'Country ID'
+				selector = 'Country ID';
 			} else {
 				if (productDepth !== 'SITC') {
-					selector = `${productDepth} ID`
+					selector = `${productDepth} ID`;
 				} else {
-					selector = `${productRevision} ID`
+					selector = `${productRevision} ID`;
 				}
 			}
 		} else {
 			if (country) {
-				selector = 'Subnat Geography ID'
+				selector = 'Subnat Geography ID';
 			} else {
 				const basecube = subnationalData[subnationalValue].basecube;
 				if (basecube === 'HS') {
@@ -363,16 +402,18 @@ class Rankings extends Component {
 			columns,
 			_loading: false
 		});
-	}
+	};
 
 	createColumns(type, array) {
 		const { country, subnational, subnationalValue, productDepth, productRevision } = this.state;
 		let years = null;
-		const dataInitial = subnational ? subnationalData[subnationalValue].initial : yearsNational[productRevision].initial;
+		const dataInitial = subnational
+			? subnationalData[subnationalValue].initial
+			: yearsNational[productRevision].initial;
 		const dataFinal = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
 		const dataLength = range(dataInitial, dataFinal).length;
 		if (dataLength === 1) {
-			years = [array, array];
+			years = [ array, array ];
 		} else {
 			years = type ? [ array, array ] : array;
 		}
@@ -407,19 +448,21 @@ class Rankings extends Component {
 					Cell: (props) => (
 						<div className="category">
 							<img
-								src={`/images/icons/country/country_${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}.png`}
+								src={`/images/icons/country/country_${props.original['Country ID'].substr(
+									props.original['Country ID'].length - 3
+								)}.png`}
 								alt="icon"
 								className="icon"
 							/>
 							<a
-								href={`/en/profile/country/${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}`}
+								href={`/en/profile/country/${props.original['Country ID'].substr(
+									props.original['Country ID'].length - 3
+								)}`}
 								className="link"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								<div className="name">
-									{props.original.Country}
-								</div>
+								<div className="name">{props.original.Country}</div>
 								<Icon icon={'chevron-right'} iconSize={14} />
 							</a>
 						</div>
@@ -444,21 +487,33 @@ class Rankings extends Component {
 						Cell: (props) => (
 							<div className="category">
 								<img
-									src={`/images/icons/hs/hs_${props.original[`${productDepth} ID`].toString().substr(0,props.original[`${productDepth} ID`].toString().length * 1 - productDepth.substr(2) * 1)}.svg`}
+									src={`/images/icons/hs/hs_${props.original[`${productDepth} ID`]
+										.toString()
+										.substr(
+											0,
+											props.original[`${productDepth} ID`].toString().length * 1 -
+												productDepth.substr(2) * 1
+										)}.svg`}
 									alt="icon"
 									className="icon"
 								/>
-								<a
-									href={`/en/profile/${productRevision.toLowerCase()}/${props.original[`${productRevision} ID`]}`}
-									className="link"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									<div className="name">
-										{props.original[`${productDepth}`]}
+								{productRevision === 'HS92' ? (
+									<a
+										href={`/en/profile/${productRevision.toLowerCase()}/${props.original[
+											`${productDepth} ID`
+										]}`}
+										className="link"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<div className="name">{props.original[`${productDepth}`]}</div>
+										<Icon icon={'chevron-right'} iconSize={14} />
+									</a>
+								) : (
+									<div className="link">
+										<div className="name">{props.original[`${productDepth}`]}</div>
 									</div>
-									<Icon icon={'chevron-right'} iconSize={14} />
-								</a>
+								)}
 							</div>
 						)
 					};
@@ -480,21 +535,15 @@ class Rankings extends Component {
 						Cell: (props) => (
 							<div className="category">
 								<img
-									src={`/images/icons/sitc/sitc_${props.original[`${productRevision} ID`].toString().charAt(0)}.svg`}
+									src={`/images/icons/sitc/sitc_${props.original[`${productRevision} ID`]
+										.toString()
+										.charAt(0)}.svg`}
 									alt="icon"
 									className="icon"
 								/>
-								<a
-									href={''}
-									className="link"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									<div className="name">
-										{props.original[`${productRevision}`]}
-									</div>
-									<Icon icon={'chevron-right'} iconSize={14} />
-								</a>
+								<div className="link">
+									<div className="name">{props.original[`${productRevision}`]}</div>
+								</div>
 							</div>
 						)
 					};
@@ -525,14 +574,15 @@ class Rankings extends Component {
 								className="icon"
 							/>
 							<a
-								href={`/en/profile/subnational_${subnationalData[subnationalValue].profile}/${normalizeString(props.original['Subnat Geography'].replace(/ /g, "-").toLowerCase())}`}
+								href={`/en/profile/subnational_${subnationalData[subnationalValue]
+									.profile}/${normalizeString(
+									props.original['Subnat Geography'].replace(/ /g, '-').toLowerCase()
+								)}`}
 								className="link"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								<div className="name">
-									{props.original['Subnat Geography']}
-								</div>
+								<div className="name">{props.original['Subnat Geography']}</div>
 								<Icon icon={'chevron-right'} iconSize={14} />
 							</a>
 						</div>
@@ -558,26 +608,25 @@ class Rankings extends Component {
 						Cell: (props) => (
 							<div className="category">
 								<img
-									src={`/images/icons/hs/hs_${productDepth === 'Section' ? props.original[`${productDepth} ID`] : props.original[`${productDepth} ID`].toString().substr(0,props.original[`${productDepth} ID`].toString().length * 1 - productDepth.substr(2) * 1)}.svg`}
+									src={`/images/icons/hs/hs_${productDepth === 'Section'
+										? props.original[`${productDepth} ID`]
+										: props.original[`${productDepth} ID`]
+												.toString()
+												.substr(
+													0,
+													props.original[`${productDepth} ID`].toString().length * 1 -
+														productDepth.substr(2) * 1
+												)}.svg`}
 									alt="icon"
 									className="icon"
 								/>
-								<a
-									href={``}
-									className="link"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									<div className="name">
-										{props.original[`${productDepth}`]}
-									</div>
-									<Icon icon={'chevron-right'} iconSize={14} />
-								</a>
+								<div className="link">
+									<div className="name">{props.original[`${productDepth}`]}</div>
+								</div>
 							</div>
 						)
 					};
 				} else if (basecube === 'SITC') {
-
 				}
 			}
 		}
@@ -601,11 +650,7 @@ class Rankings extends Component {
 			className: 'year'
 		}));
 
-		const columns = [
-			columnID,
-			columnNAME,
-			...columnYEARS
-		];
+		const columns = [ columnID, columnNAME, ...columnYEARS ];
 
 		return columns.filter((f) => f !== null);
 	}
@@ -633,18 +678,18 @@ class Rankings extends Component {
 		const _authUser = this.props.auth.msg === 'LOGIN_SUCCESS' ? true : false;
 
 		if (!_ready) {
-      return (
-        <div className="rankings-page">
-          <OECNavbar />
+			return (
+				<div className="rankings-page">
+					<OECNavbar />
 					<div className="rankings-content">
 						<RankingText />
 
 						<Loading />
 					</div>
-          <Footer />
-        </div>
-      );
-    }
+					<Footer />
+				</div>
+			);
+		}
 
 		return (
 			<div className="rankings-page">
@@ -690,16 +735,20 @@ class Rankings extends Component {
 	}
 }
 
-export default hot(withNamespaces()(
-  connect(state => ({
-    auth: state.auth,
-    formatters: state.data.formatters,
-    locale: state.i18n.locale,
-    env: state.env
-  }),
-  dispatch => ({
-    isAuthenticated: () => {
-      dispatch(isAuthenticated());
-    }
-  }))(Rankings)
-));
+export default hot(
+	withNamespaces()(
+		connect(
+			(state) => ({
+				auth: state.auth,
+				formatters: state.data.formatters,
+				locale: state.i18n.locale,
+				env: state.env
+			}),
+			(dispatch) => ({
+				isAuthenticated: () => {
+					dispatch(isAuthenticated());
+				}
+			})
+		)(Rankings)
+	)
+);
