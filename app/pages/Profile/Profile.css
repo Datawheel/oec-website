@@ -209,9 +209,6 @@
       margin-bottom: 0;
     }
   }
-  & .cp-viz-figure {
-    min-height: calc(25vh);
-  }
 
   /* make flag/icon smaller */
   & .cp-hero-heading img {
@@ -359,13 +356,6 @@
   }
 }
 
-
-/* viz height overrides */
-.cp-single-column-section-grouping .cp-viz-container {
-  min-height: 30vh;
-}
-
-
 /* form field overrides */
 .cp-select-label {
   font-size: 14px;
@@ -478,6 +468,11 @@
   display: block;
   flex: 1;
   font-size: 18px;
+}
+
+.cp-viz-container > .cp-viz-figure {
+  max-height: 800px;
+  min-height: 400px;
 }
 
 .cp-section {
