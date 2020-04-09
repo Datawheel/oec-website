@@ -244,9 +244,14 @@
       max-height: 1.5em;
       /* positioning */
       display: inline-block;
-      margin-right: 0.5em;
       margin-top: -0.1em;
       vertical-align: middle;
+      &:first-child {
+        margin-right: 0.5em;
+      }
+      &:last-child {
+        margin-left: 0.5em;
+      }
     }
     @mixin max-md {
       padding-left: 3.1rem;
