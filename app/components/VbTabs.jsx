@@ -31,7 +31,7 @@ class VbTabs extends React.Component {
     prevProps.activeOption !== this.props.activeOption;
 
   render() {
-    const {activeOption, activeTab, permalinkIds, t} = this.props;
+    const {activeOption, activeTab, isSubnat, permalinkIds, t} = this.props;
     const {cube, flow, country, partner, viztype, time, timePlot, scatterFlow, scatterCountry} = permalinkIds;
 
     return <div>
@@ -230,7 +230,7 @@ class VbTabs extends React.Component {
         </div>
       </div>
 
-      <div className="columns is-tabs">
+      {!isSubnat && <div className="columns is-tabs">
         <div className="column-1 tab">
           <Tabs
             key="tabs_network_rings_map"
@@ -296,7 +296,7 @@ class VbTabs extends React.Component {
             />
           </Tabs>
         </div>
-      </div>
+      </div>}
 
       <div className="columns is-tabs">
         <div className="column-1 tab">
@@ -437,7 +437,7 @@ class VbTabs extends React.Component {
           </Tabs>
         </div>
       </div>
-      <div className="columns is-tabs">
+      {!isSubnat && <div className="columns is-tabs">
         <div className="column-1 tab">
           <Tabs
             key="tabs_scatter_map"
@@ -471,7 +471,7 @@ class VbTabs extends React.Component {
 
           </Tabs>
         </div>
-      </div>
+      </div>}
     </div>;
   }
 }

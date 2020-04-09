@@ -91,6 +91,7 @@ const SelectMultiHierarchy = ({
   onClear,
   onItemRemove,
   onItemSelect,
+  placeholder = undefined,
   selectedItems
 }) => {
   const memoLevels = useMemo(() => levels, levels);
@@ -169,6 +170,7 @@ const SelectMultiHierarchy = ({
       items={extendedItems}
       // inputProps={{inputRef}}
       onItemSelect={onItemSelect}
+      placeholder={placeholder}
       popoverProps={{
         // boundary: "viewport",
         // captureDismiss: true,

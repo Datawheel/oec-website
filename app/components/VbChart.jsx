@@ -42,6 +42,7 @@ class VbChart extends React.Component {
       routeParams: this.props.routeParams,
       scale: "Log",
       stackLayout: "Value",
+      subnatGeoDepth: undefined,
       selected: measures[0],
       depth: "HS4",
       techDepth: ddTech[ddTech.length - 1]
@@ -74,7 +75,8 @@ class VbChart extends React.Component {
     prevState.scale !== this.state.scale ||
     prevState.isOpenDrawer !== this.state.isOpenDrawer ||
     prevState.selected !== this.state.selected ||
-    prevState.stackLayout !== this.state.stackLayout;
+    prevState.stackLayout !== this.state.stackLayout ||
+    prevState.subnatGeoDepth !== this.state.subnatGeoDepth;
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
@@ -83,15 +85,16 @@ class VbChart extends React.Component {
   };
 
   fetchSubnatData = () => {
-    const {depth} = this.state;
+    const {depth, subnatGeoDepth} = this.state;
     const {routeParams} = this.props;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
-    const {productLevels} = subnat[cube];
+    const {productLevels, geoLevels} = subnat[cube];
 
     const flowItems = {
       export: 2,
       import: 1
     };
+    const isTimeSeries = ["stacked", "line"].includes(chart);
     const subnatData = subnat[cube];
     const partnerId = !["show", "all"].includes(partner)
       ? countryMembers.filter(d => geoFilter(d, partner))
@@ -100,19 +103,20 @@ class VbChart extends React.Component {
     const isFilter = !["show", "all"].includes(viztype);
 
     const drilldowns = [];
+    const timeTemp = time.split(".")[0];
     const timeOptions = {
       4: "Year",
-      5: "Quarter",
-      6: "Month"
+      5: "Time",
+      6: "Time"
     };
-    const timeLevel = timeOptions[time.toString().length] || "Year";
+    const timeLevel = timeOptions[timeTemp.toString().length] || "Year";
     const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
-
-    if (!geoId) drilldowns.push("Subnat Geography");
+    const timeSeriesChart = ["line", "stacked"].includes(chart);
+    if (!geoId) drilldowns.push(subnatGeoDepth || geoLevels[geoLevels.length - 1]);
     else if (geoId && viztype === "show") drilldowns.push(depth);
     else if (geoId && viztype === "all" || geoId && isFilter) drilldowns.push("Country");
 
-    if (isFilter) drilldowns.push(timeLevel);
+    if (isFilter || timeSeriesChart) drilldowns.push(timeLevel);
 
     const params = {
       cube: subnatData.cube,
@@ -121,7 +125,16 @@ class VbChart extends React.Component {
       parents: true
     };
 
-    params.Time = time;
+
+    let timeFilter = time.replace(".", ",");
+    if (isTimeSeries) {
+      const {subnatTimeItems} = this.props;
+      const interval = time.split(".");
+      const j = subnatTimeItems.findIndex(d => d.value === interval[0]);
+      const i = subnatTimeItems.findIndex(d => d.value === interval[1]);
+      timeFilter = subnatTimeItems.slice(i, j + 1).map(d => d.value).join();
+    }
+    params.Time = timeFilter;
 
     if (flowItems[flow]) params["Trade Flow"] = flowItems[flow];
     if (partnerId) params.Country = partnerId.map(d => d.value).join();
@@ -133,11 +146,13 @@ class VbChart extends React.Component {
       .then(resp => {
         const data = resp.data.data;
         // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
-        this.setState({
+        const nextState = {
           data,
           loading: false,
           routeParams
-        });
+        };
+        if (!subnatGeoDepth) nextState.subnatGeoDepth = geoLevels[geoLevels.length - 1];
+        this.setState(nextState);
       }).catch(error => {
         this.setState({data: [], loading: false, routeParams});
       });
@@ -470,6 +485,7 @@ class VbChart extends React.Component {
 
     const tickFormatter = value =>
       !isTechnology ? `$${formatAbbreviate(value)}` : formatAbbreviate(value);
+    const isSubnat =  subnat[cube];
 
     const baseConfig = {
       data: data || [],
@@ -518,7 +534,6 @@ class VbChart extends React.Component {
 
     let productDepthItems = ["HS2", "HS4", "HS6"];
 
-    const isSubnat =  subnat[cube];
     if (isSubnat) {
       const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
       const {productLevels} = isSubnat;
@@ -614,9 +629,9 @@ class VbChart extends React.Component {
                   }
                 },
                 total: undefined,
-                x: "Year",
+                x: isSubnat ? "Time" : "Year",
                 xConfig: {
-                  title: t("Year")
+                  title: isSubnat ? t("Time") : t("Year")
                 },
                 y: measure,
                 yConfig: {
@@ -628,7 +643,7 @@ class VbChart extends React.Component {
           <div className="vb-chart-options">
             {!isTechnology &&
               <OECButtonGroup
-                items={["HS2", "HS4", "HS6"]}
+                items={productDepthItems}
                 selected={this.state.depth}
                 title={"Depth"}
                 callback={depth =>
@@ -691,7 +706,7 @@ class VbChart extends React.Component {
                   : viztype === "all" || isFinite(viztype)
                     ? ["Continent", "Country"]
                     : ["Section"],
-                time: "Year",
+                time: isSubnat ? "Time" : "Year",
                 timeline: false,
                 total: undefined,
                 x: "Year",
@@ -733,23 +748,24 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "geomap" && data && !loading) {
+      const i = isSubnat.geoLevels.indexOf(this.state.subnatGeoDepth);
       const topojson = isSubnat
-        ? subnat[cube].topojson[subnat[cube].topojson.length - 1]
+        ? subnat[cube].topojson[i === -1 ? subnat[cube].topojson.length - 1 : i]
         : "/topojson/world-50m.json";
-      console.log(topojson);
 
       return (
         <div>
           <div className="vb-chart">
             <Geomap
+              forceUpdate={true}
               config={{
                 ...baseConfig,
                 ...onClickConfig,
                 colorScale: measure,
                 colorScaleConfig: {
-                  scale: isSubnat ? "jenks" : "log"
+                  scale: isSubnat ? "quantile" : "log"
                 },
-                groupBy: isSubnat ? "Subnat Geography ID" : "ISO 3",
+                groupBy: isSubnat ? `${this.state.subnatGeoDepth} ID` : "ISO 3",
                 legend: false,
                 ocean: false,
                 tiles: false,
@@ -764,6 +780,12 @@ class VbChart extends React.Component {
             />
           </div>
           <div className="vb-chart-options">
+            {isSubnat && isSubnat.geoLevels.length > 1 && <OECButtonGroup
+              items={isSubnat.geoLevels}
+              selected={this.state.subnatGeoDepth}
+              title={"Depth"}
+              callback={subnatGeoDepth => this.setState({subnatGeoDepth}, () => this.fetchData())}
+            />}
             <div className="vb-share-download-options">
               <VbShare />
               <VbDownload

@@ -20,6 +20,7 @@
           }
         }
         & .oec-button-group-items {
+          margin-bottom: 0 !important;
           & .cp-button {
             flex: 1;
           }

@@ -7,7 +7,7 @@ const cubes = {
       "/shapes/subnational_fra_regions.topojson",
       "/shapes/subnational_fra_departments.topojson"
     ],
-    productLevels: ["Product"],
+    productLevels: ["Level 1", "Level 2", "Level 3", "Product"],
     geoLevels: ["Region", "Subnat Geography"],
     timeLevels: ["Year", "Quarter"]
   },
@@ -16,8 +16,8 @@ const cubes = {
     name: "Spain",
     id: "esp",
     topojson: [
-      "/shapes/subnational_esp_regions.topojson",
-      "/shapes/subnational_esp_departments.topojson"
+      "/shapes/subnational_esp_autonomous.topojson",
+      "/shapes/subnational_esp_provinces.topojson"
     ],
     productLevels: ["Section", "HS2", "HS4", "Product"],
     geoLevels: ["Autonomous Communities", "Subnat Geography"],
@@ -28,8 +28,7 @@ const cubes = {
     name: "China",
     id: "chn",
     topojson: [
-      "/shapes/subnational_esp_regions.topojson",
-      "/shapes/subnational_esp_departments.topojson"
+      "/shapes/subnational_chn_provinces.topojson"
     ],
     productLevels: ["Section", "HS2", "HS4", "Product"],
     geoLevels: ["Subnat Geography"],

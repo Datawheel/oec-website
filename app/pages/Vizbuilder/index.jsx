@@ -450,7 +450,7 @@ class Vizbuilder extends React.Component {
     let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
     const flow = isTechnologyFilter ? "uspto" : _flow.value;
 
-    const timeIds = _selectedItemsYearTitle
+    let timeIds = _selectedItemsYearTitle
       .map(d => d.value)
       .sort((a, b) => a > b ? 1 : -1)
       .join(".");
@@ -471,6 +471,10 @@ class Vizbuilder extends React.Component {
     if (cube.includes("subnat")) {
       countryIds = selectedSubnatGeo && selectedSubnatGeo.length > 0 ? parseIdsToURL(selectedSubnatGeo, "id") : "all";
       dataset = cube;
+      timeIds = this.state.selectedSubnatTimeTemp
+        .map(d => d.value)
+        .sort((a, b) => a > b ? 1 : -1)
+        .join(".");
     }
 
 
@@ -564,8 +568,9 @@ class Vizbuilder extends React.Component {
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
-    ["selectedSubnatGeo", "selectedSubnatProduct"].reduce((obj, d) => {
-      if (!obj[d]) obj[d] = this.state[`${d}Temp`];
+    ["Geo", "Product", "Time"].reduce((obj, d) => {
+      const base = `selectedSubnat${d}`;
+      if (!obj[base]) obj[base] = this.state[`${base}Temp`];
       return obj;
     }, {});
 
@@ -675,6 +680,7 @@ class Vizbuilder extends React.Component {
                 activeOption={this.props.location.pathname}
                 activeTab={activeTab}
                 callback={d => this.handleTabOption(d)}
+                isSubnat={isSubnatPanel}
                 permalinkIds={this.getPermalinkIds()}
               />
 
@@ -730,6 +736,7 @@ class Vizbuilder extends React.Component {
                       onClear={() => {
                         this.setState({selectedSubnatGeoTemp: []});
                       }}
+                      placeholder={t("Select a State/Province...")}
                       selectedItems={this.state.selectedSubnatGeoTemp}
                     />
                   </div>
@@ -955,9 +962,10 @@ class Vizbuilder extends React.Component {
               routeParams={routeParams}
               router={this.props.router}
               selectedProducts={this.state._selectedItemsProductTitle}
+              subnatTimeItems={this.state.subnatTimeItems}
               xAxis={this.state._xAxisTitle}
-              yAxis={this.state._yAxisTitle}
               xScale={this.state._xAxisScale}
+              yAxis={this.state._yAxisTitle}
               yScale={this.state._yAxisScale}
               callback={d => {
                 const query = permalinkDecode(d);
