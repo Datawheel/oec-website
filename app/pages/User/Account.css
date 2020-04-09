@@ -78,6 +78,19 @@
         margin-top: var(--gutter-md);
       }
     }
+    &.role-1 {
+      justify-content: center;
+      & .account-meta {
+        display: flex;
+        & > * {
+          margin: var(--gutter-sm);
+          min-width: 300px;
+        }
+      }
+      & .account-panel {
+        display: none;
+      }
+    }
   }
 }
 

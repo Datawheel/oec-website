@@ -75,11 +75,12 @@ module.exports = function(app) {
     const user = await db.users.findOne({where: {id}});
     if (customer) user.stripe = customer.id;
     if (customer && !user.status) user.status = "intrigued";
+    if (user.activated && user.role === 0) user.role = 1;
     await user.save();
     next();
   };
 
-  app.get("/auth/checkout", isRole(0), stripeUser, async(req, res) => {
+  app.get("/auth/checkout", isRole(1), stripeUser, async(req, res) => {
 
     const {connection, headers, i18n, stripeUser} = req;
     const origin = `http${connection.encrypted ? "s" : ""}://${headers.host}/${i18n.language}`;
@@ -102,7 +103,7 @@ module.exports = function(app) {
 
   });
 
-  app.get("/auth/stripe/user", isRole(1), stripeUser, async(req, res) => {
+  app.get("/auth/stripe/user", isRole(0), stripeUser, async(req, res) => {
 
     const user = req.stripeUser;
 
@@ -114,7 +115,7 @@ module.exports = function(app) {
 
   });
 
-  app.get("/auth/stripe/cancel", isRole(1), stripeUser, async(req, res) => {
+  app.get("/auth/stripe/cancel", isRole(2), stripeUser, async(req, res) => {
 
     const {id} = req.stripeUser.subscriptions.data[0];
 
@@ -143,7 +144,7 @@ module.exports = function(app) {
     /** Changes user role to 0 */
     async function demoteUser(status) {
       user.status = status;
-      user.role = user.role === 1 ? 0 : user.role;
+      user.role = user.role === 2 ? 1 : user.role;
       await user.save();
     }
 
@@ -155,7 +156,7 @@ module.exports = function(app) {
           switch (status) {
             case "active":
               user.status = "subscribed";
-              user.role = user.role < 1 ? 1 : user.role;
+              user.role = user.role < 2 ? 2 : user.role;
               await user.save();
               break;
             case "past_due":
