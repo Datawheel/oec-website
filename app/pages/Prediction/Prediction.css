@@ -117,6 +117,9 @@
       &.slider-control {
         padding: 5px 15px;
       }
+      & .prediction-date-selections {
+        display: flex;
+      }
     }
 
     & .build-prediction-btn {

@@ -3,6 +3,7 @@ import style from "style.yml";
 import {formatAbbreviate} from "d3plus-format";
 import {mean} from "d3-array";
 import {hsId} from "./helpers/formatters";
+import sections from "./helpers/sections";
 
 const bad = "#cf5555";
 const good = "#3182bd";
@@ -272,7 +273,7 @@ export default {
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
       let itemBgImg = Array.isArray(parent[1]) ? "WildCard" : parentId;
-      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h))) itemBgImg = "SITC Section";
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h)) && !sections["hsSections"].includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
 
       const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
       const bgColor = findColorV2(itemBgImg, d);
@@ -318,7 +319,7 @@ export default {
 
       const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
       let itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
-      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId)) itemBgImg = "SITC Section";
+      if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections["hsSections"].includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
       const imgUrl = backgroundImageV2(itemBgImg, d);
       const bgColor = findColorV2(itemBgImg, d);
 
