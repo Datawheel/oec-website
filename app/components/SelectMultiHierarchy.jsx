@@ -1,7 +1,7 @@
 /* eslint-disable eqeqeq */
 // @ts-check
-import {Button, Classes, Tag, Text} from "@blueprintjs/core";
-import {Select} from "@blueprintjs/select";
+import {Button, Classes, Icon, Tag, Text} from "@blueprintjs/core";
+import {Classes as SelectClasses, Select} from "@blueprintjs/select";
 import classNames from "classnames";
 import {nest} from "d3-collection";
 import React, {useCallback, useMemo} from "react";
@@ -9,14 +9,13 @@ import "./SelectMultiHierarchy.css";
 import SMHFullList from "./SelectMultiHierarchyList";
 import SMHNaviList from "./SelectMultiHierarchyNavi";
 
-
 /**
  * @typedef SelectedItem
  * This is the internally-handled standard structure of selected items.
  * Events will send these structures as references to the groups and items selected.
  * @property {string} color
  * @property {string} icon
- * @property {number} id
+ * @property {number | string} id
  * @property {string} name
  * @property {string} searchIndex
  * @property {string} type
@@ -30,11 +29,15 @@ import SMHNaviList from "./SelectMultiHierarchyNavi";
  * The list of base data items that will be hierarchified.
  * @property {SelectedItem[]} selectedItems
  * Here we handle the selected items, can be empty at start.
- * @property {(d: any) => string} [getColor]
+ * @property {((d: any) => string) | Array<(d: any) => string>} [getColor]
  * This function must provide a color for each item of the array provided on `items`.
- * @property {(d: any) => string} [getIcon]
+ * @property {((d: any) => string) | Array<(d: any) => string>} [getIcon]
  * This function must provide an url to an icon for each item of the array provided on `items`.
- * @property {(event?: React.MouseEvent<HTMLButtonElement>) => void} [onClear]
+ * @property {import("@blueprintjs/core").IconName | import("@blueprintjs/core").MaybeElement} [inputRightIcon]
+ * The name of a icon to show on the right side of the input.
+ * @property {string} [placeholder]
+ * Renders some faded text in the input field if the selection is empty.
+ * @property {(event: React.MouseEvent<HTMLButtonElement>) => void} [onClear]
  * This function will be called when the used presses the cross button next to the selected item tags in the target.
  * @property {(item: SelectedItem, event?: React.SyntheticEvent<HTMLElement>) => void} [onItemSelect]
  * This function will be called when the user selects an option in the list. The first parameter is the selected item.
@@ -82,8 +85,9 @@ import SMHNaviList from "./SelectMultiHierarchyNavi";
  * ```
  */
 const SelectMultiHierarchy = ({
-  getColor = () => undefined,
-  getIcon = () => undefined,
+  getColor,
+  getIcon,
+  inputRightIcon,
   itemListPredicate,
   itemRenderer,
   items,
@@ -91,74 +95,33 @@ const SelectMultiHierarchy = ({
   onClear,
   onItemRemove,
   onItemSelect,
+  placeholder,
   selectedItems
 }) => {
   const memoLevels = useMemo(() => levels, levels);
 
-  const extendedItems = useMemo(() => {
-    const keys = levels.slice();
-    const lastKey = `${keys.pop()}`;
-
-    const extendedItems = [];
-
-    const headerKeys = [];
-    const nestedItems = nest()
-      .rollup(values => {
-        const firstItem = values[0];
-
-        const color = getColor(firstItem) || "#999";
-        const icon = getIcon(firstItem);
-        const keyIds = keys.map(key => firstItem[`${key} ID`]);
-        const keyNames = keys.map(key => firstItem[key]);
-
-        const keyItems = keys.map((key, i) => {
-          if (headerKeys[i] !== keyNames[i]) {
-            headerKeys[i] = keyNames[i];
-            return {
-              color,
-              icon,
-              id: keyIds[i],
-              name: keyNames[i],
-              type: key,
-              searchIndex: keyNames.slice(0, i + 1).concat(keyIds[i]).join("|")
-            };
-          }
-          return false;
-        }).filter(Boolean);
-        const valueItems = values.map(item => ({
-          color,
-          icon,
-          id: item[`${lastKey} ID`],
-          name: item[lastKey],
-          type: lastKey,
-          searchIndex: keyNames.concat(item[lastKey], item[`${lastKey} ID`]).join("|")
-        }));
-
-        extendedItems.push(...keyItems.concat(valueItems));
-      });
-
-    keys.forEach(key => {
-      nestedItems.key(d => `${d[`${key} ID`]}|${d[key]}`);
-    });
-
-    nestedItems.entries(items);
-    return extendedItems;
-  }, [memoLevels, items]);
+  const extendedItems = useMemo(
+    () => extendItems(items, levels, {getColor, getIcon}),
+    [memoLevels, items]
+  );
 
   /** @type {import("@blueprintjs/select").ItemListRenderer<SelectedItem>} */
-  const itemListRenderer = useCallback(itemListProps => {
-    if (itemListProps.filteredItems.length === 0) {
-      return (
-        <div className="sm--section--no-results">
-          <em>No results found</em>
-        </div>
-      );
-    }
+  const itemListRenderer = useCallback(
+    itemListProps => {
+      if (itemListProps.filteredItems.length === 0) {
+        return (
+          <div className="sm--section--no-results">
+            <em>No results found</em>
+          </div>
+        );
+      }
 
-    return itemListProps.query
-      ? React.createElement(SMHFullList, {...itemListProps, levels})
-      : React.createElement(SMHNaviList, {...itemListProps, levels});
-  }, [memoLevels]);
+      return itemListProps.query
+        ? React.createElement(SMHFullList, {...itemListProps, levels})
+        : React.createElement(SMHNaviList, {...itemListProps, levels});
+    },
+    [memoLevels]
+  );
 
   return (
     <Select
@@ -171,15 +134,18 @@ const SelectMultiHierarchy = ({
       onItemSelect={onItemSelect}
       popoverProps={{
         // boundary: "viewport",
-        // captureDismiss: true,
+        captureDismiss: true,
         fill: true,
         minimal: true,
         // onInteraction: popoverInteractionHandler,
         popoverClassName: "sh-hie--popover"
       }}
     >
-      <div className="bp3-input bp3-tag-input bp3-fill">
-        <div className="bp3-tag-input-values">
+      <div className={classNames(Classes.INPUT, Classes.TAG_INPUT, Classes.FILL, SelectClasses.MULTISELECT)}>
+        <div className={Classes.TAG_INPUT_VALUES}>
+          {selectedItems.length === 0 && placeholder &&
+            <span className="sh-hie--placeholder">{placeholder}</span>
+          }
           {selectedItems.map(item =>
             <Tag
               icon={item.icon
@@ -197,6 +163,7 @@ const SelectMultiHierarchy = ({
             </Tag>
           )}
         </div>
+        <Icon icon={inputRightIcon} />
         {onClear && selectedItems.length > 0 &&
           <Button icon="cross" minimal={true} onClick={onClear} />
         }
@@ -223,7 +190,7 @@ SelectMultiHierarchy.defaultProps = {
 
   itemRenderer(item, {handleClick, modifiers}) {
     return (
-      <button
+      <a
         className={classNames({
           "sh-hie--option": true,
           [Classes.ACTIVE]: modifiers.active,
@@ -235,19 +202,83 @@ SelectMultiHierarchy.defaultProps = {
         key={item.id}
         onClick={handleClick}
       >
-        {item.icon != null && <img
-          alt={`[Icon for ${item.type} "${item.name}"]`}
-          className="sh-hie--hs-icon"
-          src={item.icon}
-          style={{backgroundColor: item.color}}
-        />}
+        {item.icon != null &&
+          <img
+            alt={`[Icon for ${item.type} "${item.name}"]`}
+            className="sh-hie--hs-icon"
+            src={item.icon}
+            style={{backgroundColor: item.color}}
+          />
+        }
         <Text className={Classes.FILL} ellipsize={true}>
           {item.name}
         </Text>
         <span className={Classes.MENU_ITEM_LABEL}>{item.id}</span>
-      </button>
+      </a>
     );
   }
 };
+
+/**
+ * @param {any[]} items
+ * @param {string[]} levels
+ * @param {Pick<OwnProps, "getColor" | "getIcon">} param2
+ * @returns {SelectedItem[]}
+ */
+export function extendItems(items, levels, {getColor = () => "", getIcon = () => ""}) {
+  const keys = levels.slice();
+  const lastKey = `${keys.pop()}`;
+
+  const extendedItems = [];
+
+  const headerKeys = [];
+  const nestedItems = nest().rollup(values => {
+    const firstItem = values[0];
+
+    const keyIds = keys.map(key => firstItem[`${key} ID`]);
+    const keyNames = keys.map(key => firstItem[key]);
+    const keyItems = keys
+      .map((key, i) => {
+        if (headerKeys[i] !== keyNames[i]) {
+          headerKeys[i] = keyNames[i];
+          const colorGetter = getColor[i] || getColor[getColor.length - 1] || getColor;
+          const iconGetter = getIcon[i] || getIcon[getIcon.length - 1] || getIcon;
+          return {
+            color: colorGetter(firstItem) || undefined,
+            icon: iconGetter(firstItem) || undefined,
+            id: keyIds[i],
+            name: keyNames[i],
+            type: key,
+            searchIndex: keyNames
+              .slice(0, i + 1)
+              .concat(keyIds[i])
+              .join("|")
+          };
+        }
+        return false;
+      })
+      .filter(Boolean);
+
+    const colorGetter = getColor[getColor.length - 1] || getColor;
+    const iconGetter = getIcon[getIcon.length - 1] || getIcon;
+    const valueItems = values.map(item => ({
+      color: colorGetter(item) || undefined,
+      icon: iconGetter(item) || undefined,
+      id: item[`${lastKey} ID`],
+      name: item[lastKey],
+      type: lastKey,
+      searchIndex: keyNames.concat(item[lastKey], item[`${lastKey} ID`]).join("|")
+    }));
+
+    extendedItems.push(...keyItems.concat(valueItems));
+  });
+
+  keys.forEach(key => {
+    nestedItems.key(d => `${d[`${key} ID`]}|${d[key]}`);
+  });
+
+  nestedItems.entries(items);
+  return extendedItems;
+}
 
 export default SelectMultiHierarchy;

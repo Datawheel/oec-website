@@ -85,7 +85,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/signup" component={SignUp} />
       <Route exact path="/:lang/reset" component={Reset} />
       <Route exact path="/:lang/account" component={Account} />
-      <Route exact path="/:lang/subscription" component={Subscription} />
+      {/* <Route exact path="/:lang/subscription" component={Subscription} /> */}
       <Route exact path="/:lang/subnational" component={Subnational} />
       <Route exact path="/:lang/prediction" component={PredictionLanding} />
       <Route exact path="/:lang/prediction/:dataset" component={Prediction} />

@@ -1,8 +1,8 @@
 import colors from "./helpers/colors";
 import style from "style.yml";
-import {formatAbbreviate} from "d3plus-format";
-import {mean} from "d3-array";
-import {hsId} from "./helpers/formatters";
+import { formatAbbreviate } from "d3plus-format";
+import { mean } from "d3-array";
+import { hsId } from "./helpers/formatters";
 import sections from "./helpers/sections";
 
 const bad = "#cf5555";
@@ -13,20 +13,20 @@ const good = "#3182bd";
  * @param {Object} d
  */
 function findColor(d) {
-  let detectedColors = [];
-  if (this && this._filteredData) {
-    detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
-  }
+    let detectedColors = [];
+    if (this && this._filteredData) {
+        detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
+    }
 
-  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
-  if ("Section" in d && !Array.isArray(d.Section)) {
-    return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
-  }
+    if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
+    if ("Section" in d && !Array.isArray(d.Section)) {
+        return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
+    }
 
-  if (detectedColors.length !== 1) {
-    for (const key in colors) {
-      if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
+    if (detectedColors.length !== 1) {
+        for (const key in colors) {
+            if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
+                return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
       }
     }
   }

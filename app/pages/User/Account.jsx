@@ -97,7 +97,7 @@ class Account extends Component {
         <OECNavbar />
         {
           user
-            ? <div className="account-content">
+            ? <div className={`account-content role-${user.role}`}>
               <div className="account-meta">
                 <div className="account-meta-info">
                   <h1>{user.username}</h1>
@@ -125,10 +125,10 @@ class Account extends Component {
                 <ChangePassword />
               </div>
               <div className="account-panel">
-                { user.role === 0 ? <div className="account-paywall">
+                { user.role < 1 ? <div className="account-paywall">
                   <FeatureMatrix />
                 </div>
-                  : user.role === 1 ? <div>
+                  : user.role === 2 ? <div>
                     <h2>Recent Invoices</h2>
                     <div className="account-invoices">
                       { stripe
@@ -161,14 +161,15 @@ class Account extends Component {
                       Cancel Subscription
                     </Button>
                   </div>
-                    : <div>
+                    : user.role === 10 ? <div>
                       <Button fill icon="build">
                         <Link  to="/admin">Hello, contributor. Would you like to go to the CMS?</Link>
                       </Button>
                       <Button fill icon="database">
                         <Link  to="/explorer">Or... how about the Data Explorer?</Link>
                       </Button>
-                    </div>}
+                    </div>
+                      : null }
               </div>
             </div>
             : <NonIdealState icon={<Spinner />} title="Authenticating" />
