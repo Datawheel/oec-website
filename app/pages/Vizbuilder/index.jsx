@@ -24,6 +24,8 @@ import {queryParser} from "helpers/formatters";
 import subnat from "helpers/subnatVizbuilder";
 import OECButtonGroup from "../../components/OECButtonGroup";
 
+const notEmpty = items => items && items.length;
+
 const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
 
 const getHierarchyList = (items, levels) => {
@@ -65,6 +67,8 @@ const flowItems = [
   {value: "export", title: "Exports"},
   {value: "import", title: "Imports"}
 ];
+
+const permalinkEncode = items => `/${items.join("/")}/`;
 
 const permalinkDecode = permalink => {
   const [
@@ -111,11 +115,9 @@ class Vizbuilder extends React.Component {
 
     const cubeSelected = datasets.find(d => d.value === cube) || datasets[0];
 
-    // location.query.controls
-    // ? location.query.controls === "true" :
     this.state = {
       activeTab: params ? params.chart : "tree_map",
-      controls: true,
+      controls: params ? params.cube.includes("subnat") : true,
       country: [],
       product: [],
       productLevel: "HS6",
@@ -344,6 +346,7 @@ class Vizbuilder extends React.Component {
     const {router, routeParams} = this.props;
     const {chart} = routeParams;
     const {
+      controls,
       _dataset,
       _endYear,
       _flow,
@@ -357,15 +360,15 @@ class Vizbuilder extends React.Component {
       _yAxis
     } = this.state;
 
-    let countryIds = _selectedItemsCountry && _selectedItemsCountry.length > 0
+    let countryIds = notEmpty(_selectedItemsCountry)
       ? parseIdsToURL(_selectedItemsCountry, "label")
       : "show";
-    let partnerIds = _selectedItemsPartner && _selectedItemsPartner.length > 0
+    let partnerIds = notEmpty(_selectedItemsPartner)
       ? parseIdsToURL(_selectedItemsPartner, "label")
       : "all";
 
-    const isTechnologyFilter = _selectedItemsTechnology.length > 0;
-    const isTradeFilter = _selectedItemsProduct.length > 0;
+    const isTechnologyFilter = notEmpty(_selectedItemsTechnology);
+    const isTradeFilter = notEmpty(_selectedItemsProduct);
 
     let filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
@@ -389,13 +392,14 @@ class Vizbuilder extends React.Component {
       ? `${_startYear.value}.${_endYear.value}`
       : _selectedItemsYear.map(d => d.value).sort((a, b) => a > b ? 1 : -1).join(".");
 
-    // Subnational logic
-    if (this.state.controls) {
-      dataset = `subnat_${this.state.subnatCubeSelected.id}`;
-      countryIds = this.state.selectedSubnatGeoTemp && this.state.selectedSubnatGeoTemp.length > 0
-        ? parseIdsToURL(this.state.selectedSubnatGeoTemp, "id")
-        : "show";
-      timeIds = parseIdsToURL(this.state.selectedSubnatTimeTemp, "value");
+    /** Creates permalink config for subnational plot */
+    if (controls) {
+      const {selectedSubnatGeoTemp, selectedSubnatTimeTemp, subnatCubeSelected} = this.state;
+      dataset = `subnat_${subnatCubeSelected.id}`;
+      countryIds = notEmpty(selectedSubnatGeoTemp)
+        ? parseIdsToURL(selectedSubnatGeoTemp, "id")
+        : "all";
+      timeIds = parseIdsToURL(selectedSubnatTimeTemp, "value");
     }
 
     const permalinkItems = [
@@ -409,7 +413,7 @@ class Vizbuilder extends React.Component {
       filterIds,
       timeIds
     ];
-    const permalink = `/${permalinkItems.join("/")}/`;
+    const permalink = permalinkEncode(permalinkItems);
     this.updateFilterSelected({permalink, cubeSelected: _dataset});
     router.push(permalink);
   };
@@ -432,15 +436,15 @@ class Vizbuilder extends React.Component {
     const {routeParams} = this.props;
     const {cube, chart} = routeParams;
 
-    let countryIds = _selectedItemsCountryTitle && _selectedItemsCountryTitle.length > 0
+    let countryIds = notEmpty(_selectedItemsCountryTitle)
       ? parseIdsToURL(_selectedItemsCountryTitle, "label")
       : "deu";
-    const partnerIds = _selectedItemsPartnerTitle && _selectedItemsPartnerTitle.length > 0
+    const partnerIds = notEmpty(_selectedItemsPartnerTitle)
       ? parseIdsToURL(_selectedItemsPartnerTitle, "label")
       : "usa";
 
-    const isTechnologyFilter = _selectedItemsTechnologyTitle.length > 0;
-    const isTradeFilter = _selectedItemsProductTitle.length > 0;
+    const isTechnologyFilter = notEmpty(_selectedItemsTechnologyTitle);
+    const isTradeFilter = notEmpty(_selectedItemsProductTitle);
 
     const filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
@@ -469,7 +473,7 @@ class Vizbuilder extends React.Component {
     };
 
     if (cube.includes("subnat")) {
-      countryIds = selectedSubnatGeo && selectedSubnatGeo.length > 0 ? parseIdsToURL(selectedSubnatGeo, "id") : "all";
+      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : "all";
       dataset = cube;
       timeIds = this.state.selectedSubnatTimeTemp
         .map(d => d.value)
@@ -551,16 +555,16 @@ class Vizbuilder extends React.Component {
 
     // Get selected countries
     const filterCountry = type => countryData.filter(d => type.split(".").includes(d.label));
-    const _selectedItemsCountry = filterCountry(country);
-    const _selectedItemsPartner = filterCountry(partner);
 
-    const _selectedItemsYear = years
-      .filter(d => time.split(".").includes(d.value.toString()));
-    const _selectedItemsProduct = isFinite(viztype.split(".")[0])
-      ? viztype.split(".").map(d => productKeys[d]).filter(d => d) : [];
-
-    const _selectedItemsTechnology = ["cpc"].includes(cube) ? technologyData
-      .filter(d => viztype.split(".").includes(d.value)) : [];
+    const selectedItems = {
+      Country: filterCountry(country),
+      Partner: filterCountry(partner),
+      Product: isFinite(viztype.split(".")[0])
+        ? viztype.split(".").map(d => productKeys[d]).filter(d => d) : [],
+      Technology: ["cpc"].includes(cube)
+        ? technologyData.filter(d => viztype.split(".").includes(d.value)) : [],
+      Year: years.filter(d => time.split(".").includes(d.value.toString()))
+    };
 
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
     const _startYear = isTimeSeriesChart ? timeIds[0] : this.state._startYear;
@@ -574,18 +578,19 @@ class Vizbuilder extends React.Component {
       return obj;
     }, {});
 
+    const countryKeys = Object.keys(selectedItems).reduce((obj, d) => {
+      const base = `_selectedItems${d}`;
+      if (!obj[base]) {
+        const data = selectedItems[d];
+        obj[base] = data;
+        obj[`${base}Title`] = data;
+      }
+      return obj;
+    }, {});
+
     this.setState({
       ...prevState,
-      _selectedItemsCountry,
-      _selectedItemsPartner,
-      _selectedItemsProduct,
-      _selectedItemsTechnology,
-      _selectedItemsYear,
-      _selectedItemsCountryTitle: _selectedItemsCountry,
-      _selectedItemsPartnerTitle: _selectedItemsPartner,
-      _selectedItemsProductTitle: _selectedItemsProduct,
-      _selectedItemsTechnologyTitle: _selectedItemsTechnology,
-      _selectedItemsYearTitle: _selectedItemsYear,
+      ...countryKeys,
       _xAxis,
       _yAxis,
       _xAxisTitle: _xAxis,
@@ -610,12 +615,12 @@ class Vizbuilder extends React.Component {
     const isScatterChart = ["scatter"].includes(chart);
     const isNetworkChart = ["network"].includes(chart);
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
-    const isTrade = cube.includes("hs");
-    const isTechnology = !isTrade;
+    // const isTrade = cube.includes("hs");
+    // const isTechnology = !isTrade;
     const isSubnat = cube.includes("subnat");
 
     const productSelector = isProduct && !isScatterChart;
-    const countrySelector = isCountry && !isScatterChart;
+    const countrySelector = isCountry && !isScatterChart || isSubnat;
     const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
 
     const timeIndex = years.findIndex(d => d.value === time * 1);

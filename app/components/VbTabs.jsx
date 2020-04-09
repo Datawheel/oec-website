@@ -28,7 +28,8 @@ class VbTabs extends React.Component {
   shouldComponentUpdate = prevProps =>
     JSON.stringify(prevProps.permalinkIds) !== JSON.stringify(this.props.permalinkIds) ||
     prevProps.activeTab !== this.props.activeTab ||
-    prevProps.activeOption !== this.props.activeOption;
+    prevProps.activeOption !== this.props.activeOption ||
+    prevProps.isSubnat !== this.props.isSubnat;
 
   render() {
     const {activeOption, activeTab, isSubnat, permalinkIds, t} = this.props;
