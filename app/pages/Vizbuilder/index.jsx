@@ -164,7 +164,7 @@ class Vizbuilder extends React.Component {
       // Subnational config
       subnatCubeSelected: subnat[cube] || subnat.cubeSelector[0],
       subnatGeography: [],
-      subnatGeographyItems: [],
+      subnatGeoItems: [],
       subnatProductItems: [],
       subnatProduct: [],
       subnatTime: [],
@@ -230,7 +230,7 @@ class Vizbuilder extends React.Component {
       .sort((a, b) => b.value - a.value);
     this.setState({
       subnatGeography: dataGeo.data,
-      subnatGeographyItems: itemsGeo,
+      subnatGeoItems: itemsGeo,
       subnatTimeItems,
       subnatGeoLevels: geoLevels,
       subnatProductLevels: productLevels,
@@ -439,7 +439,7 @@ class Vizbuilder extends React.Component {
     let countryIds = notEmpty(_selectedItemsCountryTitle)
       ? parseIdsToURL(_selectedItemsCountryTitle, "label")
       : "deu";
-    const partnerIds = notEmpty(_selectedItemsPartnerTitle)
+    let partnerIds = notEmpty(_selectedItemsPartnerTitle)
       ? parseIdsToURL(_selectedItemsPartnerTitle, "label")
       : "usa";
 
@@ -473,12 +473,14 @@ class Vizbuilder extends React.Component {
     };
 
     if (cube.includes("subnat")) {
-      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : "all";
+      const id = this.state.subnatGeoItems.map(d => d.id)[0];
+      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : id;
       dataset = cube;
       timeIds = this.state.selectedSubnatTimeTemp
         .map(d => d.value)
         .sort((a, b) => a > b ? 1 : -1)
         .join(".");
+      if (notEmpty(_selectedItemsPartnerTitle)) partnerIds = "deu";
     }
 
 
@@ -741,7 +743,7 @@ class Vizbuilder extends React.Component {
                       onClear={() => {
                         this.setState({selectedSubnatGeoTemp: []});
                       }}
-                      placeholder={t("Select a State/Province...")}
+                      placeholder={t("Select a state/province...")}
                       selectedItems={this.state.selectedSubnatGeoTemp}
                     />
                   </div>
