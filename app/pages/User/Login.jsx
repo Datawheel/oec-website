@@ -33,7 +33,7 @@ class Login extends Component {
           <div className="login-page-form">
             <CanonLogin redirect={redirect} />
             <div className="login-page-signup">
-              Not a member yet? <Link to={`/${locale}/signup`}>Sign Up</Link>
+              Not a member yet? <Link to={`/${locale}/signup`}>Register</Link>
             </div>
           </div>
         </div>
