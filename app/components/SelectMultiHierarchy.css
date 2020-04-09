@@ -1,3 +1,15 @@
+.sh-hie--placeholder {
+  box-sizing: border-box;
+  color: #fff;
+  flex: 1 1 auto;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 20px;
+  margin-bottom: 5px;
+  padding-left: 5px;
+}
+
 .sh-hie--popover {
   & .bp3-popover-content {
     background: var(--dark-4) !important;
