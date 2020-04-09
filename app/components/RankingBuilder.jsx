@@ -44,25 +44,6 @@ class RankingsBuilder extends Component {
 			: yearsNational[productRevision].initial;
 		const finalYear = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
 
-		console.log(
-			'Country Profile:',
-			country,
-			'National Profile:',
-			!subnational,
-			'Subnational Country:',
-			subnationalValue,
-			'Product Depth',
-			productDepth,
-			'Product Revision',
-			productRevision,
-			'Singleyear',
-			singleyear,
-			'Country Threshold',
-			countryExpThreshold,
-			'Product Threshold',
-			productExpThreshold
-		);
-
 		return (
 			<div className="builder">
 				<div className="section is-quarter">

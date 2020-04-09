@@ -247,7 +247,6 @@ class Rankings extends Component {
 				const testPath = `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
 					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
-				console.log(testPath);
 				return testPath;
 			}
 		}
@@ -308,7 +307,6 @@ class Rankings extends Component {
 				const data = resp.data.data.sort((a, b) => b[index] - a[index]);
 				data.map((d) => ((d[`${yearValue}`] = d[index]), delete d[index]));
 				const columns = this.createColumns(singleyear, yearValue);
-				console.log('DATA HERE:', data);
 				this.setState({
 					data,
 					columns,
@@ -576,7 +574,7 @@ class Rankings extends Component {
 							<a
 								href={`/en/profile/subnational_${subnationalData[subnationalValue]
 									.profile}/${normalizeString(
-									props.original['Subnat Geography'].replace(/ /g, '-').toLowerCase()
+									props.original['Subnat Geography'].replace(/ /g, '-').replace(',', '').toLowerCase()
 								)}`}
 								className="link"
 								target="_blank"
@@ -620,9 +618,17 @@ class Rankings extends Component {
 									alt="icon"
 									className="icon"
 								/>
-								<div className="link">
-									<div className="name">{props.original[`${productDepth}`]}</div>
-								</div>
+								<a
+										href={`/en/profile/hs92/${props.original[
+											`${productDepth} ID`
+										]}`}
+										className="link"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<div className="name">{props.original[`${productDepth}`]}</div>
+										<Icon icon={'chevron-right'} iconSize={14} />
+									</a>
 							</div>
 						)
 					};
