@@ -6,7 +6,8 @@ import "./VbTab.css";
 class VbTab extends React.Component {
 
   render() {
-    const {activeOption, chart, items, lng} = this.props;
+    const {activeOption, chart, lng} = this.props;
+    const items = this.props.items.filter(d => d);
 
     return (
       <div>
