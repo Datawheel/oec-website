@@ -43,7 +43,11 @@ function backgroundImageV2(key, d) {
     case "Continent":
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
     case "Country":
-      return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
+      if (Array.isArray(d["Country ID"])) {
+        return `/images/icons/country/country_${d["Continent ID"]}.png`;
+      } else {
+        return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
+      }
     case "Flow":
     case "Trade Flow":
       return `/images/icons/balance/${options[d[`${key} ID`]]}_val.png`;
@@ -67,10 +71,13 @@ function backgroundImageV2(key, d) {
 
 /** */
 function findColorV2(key, d) {
-  if (key === "Country" || key === "ISO 3") return "transparent";
+  if (key === "Country" || key === "ISO 3") {
+    if (!Array.isArray(d["Country ID"])) return "transparent";
+    else return colors["Continent"][d["Continent ID"]];
+  };
   const id = key === "SITC Section" ? d["Section ID"] : d[`${key} ID`];
   return colors[key][id] || colors[key][d[key]] || colors.colorGrey;
-}
+};
 
 /**
  * Finds a icon for legend.
@@ -162,7 +169,7 @@ function backgroundImage(d, ascending) {
       return "/images/icons/hs/hs_22.svg";
     }
   }
-}
+};
 
 export const tooltipTitle = (bgColor, imgUrl, title) => {
   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
@@ -327,6 +334,7 @@ export default {
 
       const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
       let itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
+
       if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
       const imgUrl = backgroundImageV2(itemBgImg, d);
       const bgColor = findColorV2(itemBgImg, d);
