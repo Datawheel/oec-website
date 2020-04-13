@@ -233,7 +233,7 @@ class Rankings extends Component {
 				)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
 					3}&threshold_${productDepth}=${productExpThreshold * 3}`;
 			} else {
-				return `/api/stats/${index}?cube=trade_i_comtrade_a_sitc2_new&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
+				return `/api/stats/${index}?cube=trade_i_oec_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
 					3}&threshold_${productRevision}=${productExpThreshold * 3}`;
 			}
 		} else {
@@ -417,7 +417,7 @@ class Rankings extends Component {
 		}
 
 		const columnID = {
-			id: 'id',
+			id: 'ranking',
 			Header: '',
 			className: 'col-id',
 			Cell: (props) => props.index + 1,
