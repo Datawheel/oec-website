@@ -5,7 +5,6 @@ import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import {connect} from "react-redux";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
-import {fetchData} from "@datawheel/canon-core";
 
 import VbTabs from "components/VbTabs";
 import VbChart from "components/VbChart";
@@ -112,14 +111,15 @@ class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
     const {location, params} = this.props;
-    const {cube, chart} = params;
+    const {cube, country, chart} = params;
 
     const cubeSelected = datasets.find(d => d.value === cube) || datasets[0];
+
+    console.log(subnat.cubeSelector.find(d => d.id === country));
 
     this.state = {
       activeTab: params ? params.chart : "tree_map",
       controls: params ? params.cube.includes("subnat") : true,
-      country: [],
       product: [],
       productLevel: "HS6",
       technology: [],
@@ -162,7 +162,7 @@ class Vizbuilder extends React.Component {
       _yAxisScale: "Log",
 
       // Subnational config
-      subnatCubeSelected: subnat[cube] || subnat.cubeSelector[0],
+      subnatCubeSelected: subnat[cube] || subnat.cubeSelector.find(d => d.id === country) || subnat.cubeSelector[0],
       subnatGeography: [],
       subnatGeoItems: [],
       subnatProductItems: [],
@@ -390,7 +390,7 @@ class Vizbuilder extends React.Component {
       : _selectedItemsYear.map(d => d.value).sort((a, b) => a > b ? 1 : -1).join(".");
 
     /** Creates permalink config for subnational plot */
-    if (controls) {
+    if (notEmpty(this.state.selectedSubnatGeoTemp)) {
       const {selectedSubnatGeoTemp, selectedSubnatTimeTemp, subnatCubeSelected} = this.state;
       dataset = `subnat_${subnatCubeSelected.id}`;
       countryIds = notEmpty(selectedSubnatGeoTemp)
@@ -680,14 +680,14 @@ class Vizbuilder extends React.Component {
             className="vb-column aside"
             // style={!this.state.controls ? {marginLeft: -250} : {}}
           >
-            <div className="controls">
+            {/* <div className="controls">
               <Switch
                 checked={this.state.controls}
                 onChange={this.handleControls}
                 alignIndicator="right"
                 label="States/Provinces"
               />
-            </div>
+            </div> */}
             {<div className="content">
               {this.state.controls && <div className="columns">
                 <div className="column-1">
@@ -737,35 +737,6 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {isSubnatPanel && countrySelector && <div className="columns">
-                <div className="column-1">
-                  <div className="select-multi-section-wrapper">
-                    <h4 className="title">{t("State/Province")}</h4>
-                    <SelectMultiHierarchy
-                      getColor={d => "blue"}
-                      getIcon={d => "/images/icons/hs/hs_22.svg"}
-                      items={this.state.subnatGeography}
-                      levels={this.state.subnatGeoLevels || []}
-                      onItemSelect={item => {
-                        const nextItems = this.state.selectedSubnatGeoTemp.concat(item);
-                        this.setState({selectedSubnatGeoTemp: nextItems});
-                      }}
-                      onItemRemove={(evt, item) => {
-                        // evt: MouseEvent<HTMLButtonElement>
-                        // item: SelectedItem
-                        evt.stopPropagation();
-                        const nextItems = this.state.selectedSubnatGeoTemp.filter(i => i !== item);
-                        this.setState({selectedSubnatGeoTemp: nextItems});
-                      }}
-                      onClear={() => {
-                        this.setState({selectedSubnatGeoTemp: []});
-                      }}
-                      placeholder={t("Select a state/province...")}
-                      selectedItems={this.state.selectedSubnatGeoTemp}
-                    />
-                  </div>
-                </div>
-              </div>}
 
               {!isSubnat && productSelector && <div className="columns">
                 <div className="column-1">
@@ -816,6 +787,36 @@ class Vizbuilder extends React.Component {
                     title={t("Country")}
                     callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
                   />
+                </div>
+              </div>}
+
+              {countrySelector && <div className="columns">
+                <div className="column-1">
+                  <div className="select-multi-section-wrapper">
+                    <h4 className="title">{t("State/Province")}</h4>
+                    <SelectMultiHierarchy
+                      getColor={d => "blue"}
+                      getIcon={d => "/images/icons/hs/hs_22.svg"}
+                      items={this.state.subnatGeography}
+                      levels={this.state.subnatGeoLevels || []}
+                      onItemSelect={item => {
+                        const nextItems = this.state.selectedSubnatGeoTemp.concat(item);
+                        this.setState({selectedSubnatGeoTemp: nextItems});
+                      }}
+                      onItemRemove={(evt, item) => {
+                        // evt: MouseEvent<HTMLButtonElement>
+                        // item: SelectedItem
+                        evt.stopPropagation();
+                        const nextItems = this.state.selectedSubnatGeoTemp.filter(i => i !== item);
+                        this.setState({selectedSubnatGeoTemp: nextItems});
+                      }}
+                      onClear={() => {
+                        this.setState({selectedSubnatGeoTemp: []});
+                      }}
+                      placeholder={t("Select a state/province...")}
+                      selectedItems={this.state.selectedSubnatGeoTemp}
+                    />
+                  </div>
                 </div>
               </div>}
 
