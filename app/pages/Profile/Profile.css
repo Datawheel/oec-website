@@ -469,6 +469,9 @@
     & .cms-profilesearch {
         height: 85vh;
         max-height: 300px;
+        & .cp-input::placeholder {
+            color: var(--dark-1);
+        }
         & .cms-profilesearch-container {
             background-color: var(--dark-3);
             border: 1px solid var(--dark-2);
