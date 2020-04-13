@@ -80,6 +80,14 @@ class Profile extends React.Component {
         .replace(/[\s]{1,}/g, " ");
     }
 
+    const slug = profile.meta.map(d => d.slug).join("_");
+    let placeholder = "Explore Other Reports";
+    if (slug === "country") placeholder = "Explore Other Countries";
+    else if (slug === "hs92") placeholder = "Explore Other Products";
+    else if (slug === "bilateral-country_partner") placeholder = "Explore Other Bilateral Trade Partners";
+    else if (slug === "bilateral-product_reporter") placeholder = "Explore Other Product Trade";
+    else if (slug.includes("subnational")) placeholder = "Explore Other States/Provinces";
+
     return (
       <div className="profile" id="top">
         <Helmet title={stripHTML(title)} />
@@ -89,7 +97,7 @@ class Profile extends React.Component {
           scrolled={scrolled}
           shortTitle={shortTitle}
         />
-        <CMSProfile searchProps={profileSearchConfig} {...this.props} />
+        <CMSProfile searchProps={{...profileSearchConfig, placeholder}} {...this.props} />
 
         <Footer />
       </div>
