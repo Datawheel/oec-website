@@ -5,6 +5,7 @@ import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import {connect} from "react-redux";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
+import {fetchData} from "@datawheel/canon-core";
 
 import VbTabs from "components/VbTabs";
 import VbChart from "components/VbChart";
@@ -134,9 +135,9 @@ class Vizbuilder extends React.Component {
       _partner: undefined,
       _partnerId: "all",
       _year: undefined,
-      _yearId: "2017",
-      _endYear: {title: 2017, value: 2017},
-      _endYearTitle: {title: 2017, value: 2017},
+      _yearId: "2018",
+      _endYear: {title: 2018, value: 2018},
+      _endYearTitle: {title: 2018, value: 2018},
       _startYear: {title: 2014, value: 2014},
       _startYearTitle: {title: 2014, value: 2014},
       scrolled: false,
@@ -153,7 +154,6 @@ class Vizbuilder extends React.Component {
       _selectedItemsYearTitle: [],
 
       // Scatter plot config
-      wdiIndicators: [],
       _yAxis: {},
       _xAxis: {},
       _xAxisTitle: {},
@@ -228,6 +228,7 @@ class Vizbuilder extends React.Component {
     const subnatTimeItems = itemsTime
       .map(d => ({value: d.id, title: d.name, type: d.type}))
       .sort((a, b) => b.value - a.value);
+
     this.setState({
       subnatGeography: dataGeo.data,
       subnatGeoItems: itemsGeo,
@@ -242,7 +243,6 @@ class Vizbuilder extends React.Component {
       ...selectedProduct
     });
   }
-
 
   fetchProductNames = async(cubeName, levelName = "HS6", levels = ["Section", "HS2", "HS4", "HS6"]) => {
     const params = {
@@ -290,32 +290,29 @@ class Vizbuilder extends React.Component {
       axios.get(`/olap-proxy/data?cube=${cubeName}&drilldowns=${productLevel}&measures=Trade+Value&parents=true&sparse=false`),
       axios.get("/members/country.json"),
       axios.get("/olap-proxy/data?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false")
-      // axios.get("/members/technology.json")
     ]).then(axios.spread((resp1, resp2, resp3) => {
       const productData = resp1.data.data;
       const productKeys = createItems(productData, ["Section", "HS2", "HS4", "HS6"], "/images/icons/hs/hs_");
+      const countryMembers = resp2.data
+        .map(d => ({...d, color: colors.Continent[d.parent_id]}))
+        .sort((a, b) => a.title > b.title ? 1 : -1);
 
-      const countryData = resp2.data.map(d => ({
-        ...d, color: colors.Continent[d.parent_id]}));
-      // const technologyData = resp4.data.map(d => ({
-      //   ...d, color: colors["CPC Section"][d.parent_id]}));
       const technologyData = [];
-
-      // Sorts alphabetically country names
-      countryData.sort((a, b) => a.title > b.title ? 1 : -1);
 
       const wdi = resp3.data.data
         .map(d => ({value: d["Indicator ID"], title: d.Indicator}))
         .sort((a, b) => a.title > b.title ? 1 : -1);
-      const data = [{value: "OEC.ECI", title: "Economic Complexity Index (ECI)", scale: "Linear"}]
+      const wdiIndicators = [{value: "OEC.ECI", title: "Economic Complexity Index (ECI)", scale: "Linear"}]
         .concat(wdi);
 
+      // Updates redux state
+      this.props.addCountryMembers(countryMembers);
+      this.props.addWdiIndicators(wdiIndicators);
+
       this.updateFilterSelected({
-        country: countryData,
         product: productData,
         productKeys,
-        technology: technologyData,
-        wdiIndicators: data
+        technology: technologyData
       }, true);
     }));
 
@@ -416,7 +413,7 @@ class Vizbuilder extends React.Component {
     const permalink = permalinkEncode(permalinkItems);
     this.updateFilterSelected({permalink, cubeSelected: _dataset});
     router.push(permalink);
-  };
+  }
 
   getPermalinkIds = () => {
     const {
@@ -536,11 +533,10 @@ class Vizbuilder extends React.Component {
    * Updates selected options (countries, technologies, products) for Selector section
    */
   updateFilterSelected = (prevState, usePrevState = false) => {
-    const countryData = usePrevState ? prevState.country : this.state.country;
     const technologyData = usePrevState ? prevState.technology : this.state.technology;
     const productKeys = usePrevState ? prevState.productKeys : this.state.productKeys;
-    const wdiIndicators = usePrevState ? prevState.wdiIndicators : this.state.wdiIndicators;
-    const {routeParams} = this.props;
+    const {countryMembers, wdiIndicators, routeParams} = this.props;
+    console.log(this.props);
 
     const years = this.state._dataset.data;
 
@@ -556,7 +552,7 @@ class Vizbuilder extends React.Component {
     const _yAxis = wdiIndicators.find(d => d.value === country) || wdiIndicators.find(d => d.value === "NY.GDP.MKTP.CD");
 
     // Get selected countries
-    const filterCountry = type => countryData.filter(d => type.split(".").includes(d.label));
+    const filterCountry = type => countryMembers.filter(d => type.split(".").includes(d.label));
 
     const selectedItems = {
       Country: filterCountry(country),
@@ -574,9 +570,20 @@ class Vizbuilder extends React.Component {
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
-    ["Geo", "Product", "Time"].reduce((obj, d) => {
+    const filterSubnat = (items, type, key = "id") => items.filter(d => type.split(".").includes(d[key]));
+
+    const selectedSubnatItems = {
+      Geo: filterSubnat(this.state.subnatGeoItems, country),
+      Product: filterSubnat(this.state.subnatProductItems, viztype),
+      Time: filterSubnat(this.state.subnatTimeItems, viztype, "value")
+    };
+    const subnatKeys = ["Geo", "Product", "Time"].reduce((obj, d) => {
       const base = `selectedSubnat${d}`;
-      if (!obj[base]) obj[base] = this.state[`${base}Temp`];
+      if (!obj[base]) {
+        const data = selectedSubnatItems[d];
+        obj[base] = data;
+        obj[`${base}Temp`] = data;
+      }
       return obj;
     }, {});
 
@@ -590,9 +597,16 @@ class Vizbuilder extends React.Component {
       return obj;
     }, {});
 
-    this.setState({
+    const timeOptions = {
+      4: "Year",
+      5: "Quarter",
+      6: "Month"
+    };
+
+    const nextState = {
       ...prevState,
       ...countryKeys,
+      ...subnatKeys,
       _xAxis,
       _yAxis,
       _xAxisTitle: _xAxis,
@@ -602,8 +616,11 @@ class Vizbuilder extends React.Component {
       _endYear,
       _startYear,
       _endYearTitle: _endYear,
-      _startYearTitle: _startYear
-    });
+      _startYearTitle: _startYear,
+      subnatTimeLevelSelected: timeOptions[time.split(".")[0].length]
+    };
+
+    this.setState(nextState);
   }
 
   render() {
@@ -793,7 +810,7 @@ class Vizbuilder extends React.Component {
               {countrySelector && !isSubnatPanel && <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
-                    items={this.state.country}
+                    items={this.props.countryMembers}
                     itemType={"country"}
                     selectedItems={this.state._selectedItemsCountry}
                     title={t("Country")}
@@ -805,7 +822,7 @@ class Vizbuilder extends React.Component {
               {partnerSelector && <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
-                    items={this.state.country}
+                    items={this.props.countryMembers}
                     itemType="country"
                     placeholder={t("Select a partner...")}
                     selectedItems={this.state._selectedItemsPartner}
@@ -817,7 +834,7 @@ class Vizbuilder extends React.Component {
 
               {isScatterChart && <div className="column-1-2">
                 <VirtualSelector
-                  items={this.state.wdiIndicators}
+                  items={this.props.wdiIndicators}
                   run={this.updateFilter}
                   scale
                   selectedItem={this.state._xAxis}
@@ -829,7 +846,7 @@ class Vizbuilder extends React.Component {
 
               {isScatterChart && <div className="column-1-2">
                 <VirtualSelector
-                  items={this.state.wdiIndicators}
+                  items={this.props.wdiIndicators}
                   run={this.updateFilter}
                   scale
                   selectedItem={this.state._yAxis}
@@ -963,7 +980,6 @@ class Vizbuilder extends React.Component {
               </div>
             </div>
             <VbChart
-              countryData={this.state.country}
               cubeName={this.state.cubeSelected.cubeName}
               permalink={this.state.permalink}
               routeParams={routeParams}
@@ -991,4 +1007,21 @@ class Vizbuilder extends React.Component {
   }
 }
 
-export default withNamespaces()(connect()(Vizbuilder));
+
+const mapDispatchToProps = dispatch => ({
+  // dispatching plain actions
+  addCountryMembers: payload => dispatch({type: "VB_UPDATE_COUNTRY_MEMBERS", payload}),
+  addWdiIndicators: payload => dispatch({type: "VB_UPDATE_WDI", payload})
+});
+
+/** */
+function mapStateToProps(state) {
+  const {countryMembers, wdiIndicators} = state.vizbuilder;
+
+  return {
+    countryMembers,
+    wdiIndicators
+  };
+}
+
+export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(Vizbuilder));

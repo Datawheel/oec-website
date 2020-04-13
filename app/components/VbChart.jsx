@@ -1,6 +1,7 @@
 import React from "react";
 import {withNamespaces} from "react-i18next";
 import axios from "axios";
+import {connect} from "react-redux";
 import {
   Treemap,
   StackedArea,
@@ -67,7 +68,7 @@ class VbChart extends React.Component {
 
   shouldComponentUpdate = (prevProps, prevState) =>
     prevProps.permalink !== this.props.permalink ||
-    prevProps.countryData !== this.props.countryData ||
+    prevProps.countryMembers !== this.props.countryMembers ||
     prevProps.xScale !== this.props.xScale ||
     prevProps.yScale !== this.props.yScale ||
     prevState.loading !== this.state.loading ||
@@ -604,7 +605,7 @@ class VbChart extends React.Component {
             </div>
 
             <VbDrawer
-              countryData={this.props.countryData}
+              countryData={this.props.countryMembers}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
               selectedProducts={this.props.selectedProducts}
@@ -1006,10 +1007,14 @@ class VbChart extends React.Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-//   isAuthenticated: () => {
-//     dispatch(isAuthenticated());
-//   }
-// });
+/** */
+function mapStateToProps(state) {
+  const {countryMembers, wdiIndicators} = state.vizbuilder;
 
-export default withNamespaces()(VbChart);
+  return {
+    countryMembers,
+    wdiIndicators
+  };
+}
+
+export default withNamespaces()(connect(mapStateToProps)(VbChart));
