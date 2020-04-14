@@ -18,9 +18,11 @@ import Login from "./pages/User/Login";
 import SignUp from "./pages/User/SignUp";
 import Reset from "./pages/User/Reset";
 import Account from "./pages/User/Account";
-import Subscription from "./pages/User/Subscription";
+// import Subscription from "./pages/User/Subscription";
 import Rankings from "./pages/Rankings";
 import Resources from "./pages/Resources";
+
+import ErrorPage from "./pages/ErrorPage";
 
 /** */
 export default function RouteCreate() {
@@ -92,6 +94,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/resources/:page" component={Resources} />
       <Route exact path="/:lang/tariffs" component={Tariffs} />
       <Route exact path="/:lang/rankings/" component={Rankings} />
+      <Route path="*" component={ErrorPage} />
     </Route>
   );
 }
