@@ -1,8 +1,8 @@
 import colors from "./helpers/colors";
 import style from "style.yml";
-import { formatAbbreviate } from "d3plus-format";
-import { mean } from "d3-array";
-import { hsId } from "./helpers/formatters";
+import {formatAbbreviate} from "d3plus-format";
+import {mean} from "d3-array";
+import {hsId} from "./helpers/formatters";
 import sections from "./helpers/sections";
 
 const bad = "#cf5555";
@@ -13,20 +13,20 @@ const good = "#3182bd";
  * @param {Object} d
  */
 function findColor(d) {
-    let detectedColors = [];
-    if (this && this._filteredData) {
-        detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
-    }
+  let detectedColors = [];
+  if (this && this._filteredData) {
+    detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
+  }
 
-    if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
-    if ("Section" in d && !Array.isArray(d.Section)) {
-        return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
-    }
+  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
+  if ("Section" in d && !Array.isArray(d.Section)) {
+    return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
+  }
 
-    if (detectedColors.length !== 1) {
-        for (const key in colors) {
-            if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-                return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
+  if (detectedColors.length !== 1) {
+    for (const key in colors) {
+      if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
+        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
       }
     }
   }
@@ -45,7 +45,8 @@ function backgroundImageV2(key, d) {
     case "Country":
       if (Array.isArray(d["Country ID"])) {
         return `/images/icons/country/country_${d["Continent ID"]}.png`;
-      } else {
+      }
+      else {
         return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
       }
     case "Flow":
@@ -73,11 +74,12 @@ function backgroundImageV2(key, d) {
 function findColorV2(key, d) {
   if (key === "Country" || key === "ISO 3") {
     if (!Array.isArray(d["Country ID"])) return "transparent";
-    else return colors["Continent"][d["Continent ID"]];
-  };
+    else return colors.Continent[d["Continent ID"]];
+  }
   const id = key === "SITC Section" ? d["Section ID"] : d[`${key} ID`];
-  return colors[key][id] || colors[key][d[key]] || colors.colorGrey;
-};
+  const palette = colors[key];
+  return palette ? colors[key][id] || colors[key][d[key]] || colors.colorGrey : colors.colorGrey;
+}
 
 /**
  * Finds a icon for legend.
@@ -169,7 +171,7 @@ function backgroundImage(d, ascending) {
       return "/images/icons/hs/hs_22.svg";
     }
   }
-};
+}
 
 export const tooltipTitle = (bgColor, imgUrl, title) => {
   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";

@@ -28,10 +28,11 @@ class VbTabs extends React.Component {
   shouldComponentUpdate = prevProps =>
     JSON.stringify(prevProps.permalinkIds) !== JSON.stringify(this.props.permalinkIds) ||
     prevProps.activeTab !== this.props.activeTab ||
-    prevProps.activeOption !== this.props.activeOption;
+    prevProps.activeOption !== this.props.activeOption ||
+    prevProps.isSubnat !== this.props.isSubnat;
 
   render() {
-    const {activeOption, activeTab, permalinkIds, t} = this.props;
+    const {activeOption, activeTab, isSubnat, permalinkIds, t} = this.props;
     const {cube, flow, country, partner, viztype, time, timePlot, scatterFlow, scatterCountry} = permalinkIds;
 
     return <div>
@@ -52,27 +53,41 @@ class VbTabs extends React.Component {
                   chart="tree_map"
                   callback={d => this.props.callback(d)}
                   items={[
+                    isSubnat ? {
+                      name: t("State/Province"), nest: [
+                        {
+                          name: t("Exports"),
+                          permalink: `${cube}/export/all/all/show/${time}/`,
+                          regexp: new RegExp(/tree_map\/\w+\/export\/all\/all\/show\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("Imports"),
+                          permalink: `${cube}/import/all/all/show/${time}/`,
+                          regexp: new RegExp(/tree_map\/\w+\/import\/all\/all\/show\/[0-9.-]+\//)
+                        }
+                      ]
+                    } : undefined,
                     {
                       name: t("Country"), nest: [
                         {
                           name: t("Exports"),
                           permalink: `${cube}/export/${country}/all/show/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports"),
                           permalink: `${cube}/import/${country}/all/show/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Export Destinations"),
                           permalink: `${cube}/export/${country}/show/all/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z.-]+\/show\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("Import Origins"),
                           permalink: `${cube}/import/${country}/show/all/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z.-]+\/show\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
                         }
                         // {
                         //   name: t("Technology"),
@@ -230,7 +245,7 @@ class VbTabs extends React.Component {
         </div>
       </div>
 
-      <div className="columns is-tabs">
+      {!isSubnat && <div className="columns is-tabs">
         <div className="column-1 tab">
           <Tabs
             key="tabs_network_rings_map"
@@ -296,7 +311,7 @@ class VbTabs extends React.Component {
             />
           </Tabs>
         </div>
-      </div>
+      </div>}
 
       <div className="columns is-tabs">
         <div className="column-1 tab">
@@ -437,7 +452,7 @@ class VbTabs extends React.Component {
           </Tabs>
         </div>
       </div>
-      <div className="columns is-tabs">
+      {!isSubnat && <div className="columns is-tabs">
         <div className="column-1 tab">
           <Tabs
             key="tabs_scatter_map"
@@ -471,7 +486,7 @@ class VbTabs extends React.Component {
 
           </Tabs>
         </div>
-      </div>
+      </div>}
     </div>;
   }
 }

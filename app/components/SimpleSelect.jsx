@@ -16,11 +16,11 @@ export default class SimpleSelect extends React.Component {
 
     return <MenuItem
       active={modifiers.active}
-      key={`${item.value}-${item.title}`}
+      key={`${item.value || item.id}-${item.title || item.name}`}
       label={item.label || ""}
       onClick={handleClick}
       shouldDismissPopover={false}
-      text={<div className="menu-item-text">{item.title}</div>}
+      text={<div className="menu-item-text">{item.title || item.name}</div>}
     />;
 
   };
@@ -42,7 +42,7 @@ export default class SimpleSelect extends React.Component {
       >
         <Button
           className="button-virtual-selector"
-          text={selectedItem.title}
+          text={selectedItem.title || selectedItem.name}
           rightIcon="chevron-down"
         />
       </Select>

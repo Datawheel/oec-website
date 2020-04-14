@@ -1,6 +1,6 @@
 import {timeTitleFormat} from "./formatters";
 
-export const getList = n => n.reduce((str, item, i) => {
+export const getList = n => getNames(n).reduce((str, item, i) => {
   if (!i) str += item;
   else if (i === n.length - 1 && i === 1) str += ` and ${item}`;
   else if (i === n.length - 1) str += `, and ${item}`;
@@ -8,19 +8,17 @@ export const getList = n => n.reduce((str, item, i) => {
   return str;
 }, "");
 
-export const getVbTitle = (routeParams,
-  selectedItemsCountry,
-  selectedItemsPartner,
-  selectedItemsProduct,
-  selectedItemsTechnology,
-  xScale,
-  yScale) => {
+const getNames = items => items.map(d => d.name || d.title);
+
+export const getVbTitle = (items, axis, routeParams) => {
+  const {geo, geoPartner, product, technology} = items;
+  const {x, y} = axis;
 
   const {chart, flow, country, partner, viztype, time} = routeParams;
-  const _countryNames = getList(selectedItemsCountry.map(d => d.title));
-  const _partnerNames = getList(selectedItemsPartner.map(d => d.title));
-  const _productNames = getList(selectedItemsProduct.map(d => d.name));
-  const _technologyNames = getList(selectedItemsTechnology.map(d => d.title));
+  const _countryNames = getList(geo);
+  const _partnerNames = getList(geoPartner);
+  const _productNames = getList(product ? product : []);
+  const _technologyNames = getList(technology);
 
   const isTrade = new RegExp(/(export|import)/).test(flow);
   const isTimeSeriesChart = new RegExp(/(stacked|line)/).test(chart);
@@ -65,7 +63,7 @@ export const getVbTitle = (routeParams,
   }
   else if (chart === "scatter") {
     title = "vb_title_scatter";
-    params = {measure: xScale.title, compare: yScale.title, time};
+    params = {measure: x.title, compare: y.title, time};
   }
   else if (isTradeBalance) {
     title = isPartner

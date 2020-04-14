@@ -1,7 +1,21 @@
+@import "../../helpers/mixins.css";
+
 .vb-profile {
   background-color: var(--dark-4);
   color: var(--white);
-  margin-top: 3.5rem;
+  margin-top: var(--nav-height);
+  & .is-pro:after {
+    @mixin font-xxs;
+    background-color: var(--accent-dark);
+    border-radius: 4px;
+    content: "PRO";
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 4px;
+    margin-top: -2px;
+    padding: 1px 4px;
+    vertical-align: top;
+  }
   & .vb-columns {
     display: flex;
     flex-wrap: wrap;
@@ -14,7 +28,16 @@
         transition: margin 0.7s ease 0s;
         & .controls {
           width: 100%;
-          height: 30px;
+          height: auto;
+          & label {
+            font-size: var(--font-lg);
+          }
+        }
+        & .oec-button-group-items {
+          margin-bottom: 0 !important;
+          & .cp-button {
+            flex: 1;
+          }
         }
       }
     }

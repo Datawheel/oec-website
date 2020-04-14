@@ -4,10 +4,15 @@ import {Button, Classes, Icon, Tag, Text} from "@blueprintjs/core";
 import {Classes as SelectClasses, Select} from "@blueprintjs/select";
 import classNames from "classnames";
 import {nest} from "d3-collection";
-import React, {useCallback, useMemo} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import "./SelectMultiHierarchy.css";
 import SMHFullList from "./SelectMultiHierarchyList";
 import SMHNaviList from "./SelectMultiHierarchyNavi";
+import OECPaywall from "components/OECPaywall";
+
+const initialState = {
+  paywall: false
+};
 
 /**
  * @typedef SelectedItem
@@ -88,6 +93,8 @@ const SelectMultiHierarchy = ({
   getColor,
   getIcon,
   inputRightIcon,
+  isPro,
+  isProProps,
   itemListPredicate,
   itemRenderer,
   items,
@@ -123,6 +130,8 @@ const SelectMultiHierarchy = ({
     [memoLevels]
   );
 
+  const [state, setState] = useState(initialState);
+
   return (
     <Select
       // filterable={true}
@@ -141,8 +150,10 @@ const SelectMultiHierarchy = ({
         popoverClassName: "sh-hie--popover"
       }}
     >
-      <div className={classNames(Classes.INPUT, Classes.TAG_INPUT, Classes.FILL, SelectClasses.MULTISELECT)}>
-        <div className={Classes.TAG_INPUT_VALUES}>
+      <div
+        className={classNames(Classes.INPUT, Classes.TAG_INPUT, Classes.FILL, SelectClasses.MULTISELECT)}
+      >
+        <div className={Classes.TAG_INPUT_VALUES} onClick={() => setState({paywall: true})}>
           {selectedItems.length === 0 && placeholder &&
             <span className="sh-hie--placeholder">{placeholder}</span>
           }
@@ -167,6 +178,11 @@ const SelectMultiHierarchy = ({
         {onClear && selectedItems.length > 0 &&
           <Button icon="cross" minimal={true} onClick={onClear} />
         }
+        {isPro && state.paywall && <OECPaywall
+          {...isProProps}
+          paywall={state.paywall}
+          callback={paywall => setState({paywall})}
+        />}
       </div>
     </Select>
   );

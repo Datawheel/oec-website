@@ -2,7 +2,7 @@
   box-sizing: border-box;
   color: #fff;
   flex: 1 1 auto;
-  font-size: 16px;
+  font-size: var(--gutter-sm);
   font-weight: 400;
   letter-spacing: normal;
   line-height: 20px;

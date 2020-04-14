@@ -3,18 +3,18 @@ import {AnchorButton, Classes, Dialog, Intent} from "@blueprintjs/core";
 
 class OECPaywall extends React.Component {
   state = {
-    isOpen: null
+    isOpen: false
+  };
+
+  handleClose = () => {
+    this.setState({isOpen: false});
+    this.props.callback(false);
   };
 
   render() {
-    const {isOpen} = this.state;
-    const {auth} = this.props;
+    const {auth, paywall, redirect} = this.props;
 
-    const show = auth.loading
-      ? false
-      : isOpen === true || isOpen === false
-        ? isOpen
-        : !auth.user;
+    const show = paywall && !auth.user;
 
     return (
       <div className="paywall-component">
@@ -41,7 +41,7 @@ class OECPaywall extends React.Component {
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <AnchorButton href="/en/login?redirect=/en/prediction/trade-annual">Login</AnchorButton>
+              <AnchorButton href={`/en/login?redirect=${redirect}`}>Login</AnchorButton>
               <AnchorButton intent={Intent.SUCCESS} href="/en/signup">
                 Register
               </AnchorButton>
@@ -52,5 +52,11 @@ class OECPaywall extends React.Component {
     );
   }
 }
+
+OECPaywall.defaultProps = {
+  callback: undefined,
+  paywall: false,
+  redirect: "/en/prediction/trade-annual"
+};
 
 export default OECPaywall;

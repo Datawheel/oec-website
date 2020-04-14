@@ -1,6 +1,7 @@
 import React from "react";
 import {withNamespaces} from "react-i18next";
 import axios from "axios";
+import {connect} from "react-redux";
 import {
   Treemap,
   StackedArea,
@@ -12,6 +13,7 @@ import {
 } from "d3plus-react";
 import {range} from "helpers/utils";
 import colors from "helpers/colors";
+import subnat from "helpers/subnatVizbuilder";
 import {formatAbbreviate} from "d3plus-format";
 
 import "./VbChart.css";
@@ -21,12 +23,15 @@ import OECButtonGroup from "./OECButtonGroup";
 import VbDrawer from "./VbDrawer";
 import VbShare from "./VbShare";
 import VbDownload from "./VbDownload";
+import PaywallChart from "./PaywallChart";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 const measures = ["Trade Value", "Growth", "Growth (%)"];
 
 const CANON_STATS_API = "/api/stats/";
 const OLAP_API = "/olap-proxy/data";
+
+const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
 
 class VbChart extends React.Component {
   constructor(props) {
@@ -39,20 +44,33 @@ class VbChart extends React.Component {
       routeParams: this.props.routeParams,
       scale: "Log",
       stackLayout: "Value",
+      subnatGeoDepth: undefined,
       selected: measures[0],
+      auth: true,
       depth: "HS4",
       techDepth: ddTech[ddTech.length - 1]
     };
   }
 
   componentDidMount = () => {
-    this.setState({location: window.location});
-    this.fetchData();
+    const {routeParams} = this.props;
+    const {cube} = routeParams;
+
+    const nextState = {
+      location: window.location
+    };
+    if (subnat[cube]) {
+      const levels = subnat[cube].productLevels;
+      const n = levels.length;
+      const depth = n > 3 ? levels[2] : levels[n - 1];
+      nextState.depth = depth;
+    }
+    this.setState(nextState, () => this.fetchData());
   };
 
   shouldComponentUpdate = (prevProps, prevState) =>
     prevProps.permalink !== this.props.permalink ||
-    prevProps.countryData !== this.props.countryData ||
+    prevProps.countryMembers !== this.props.countryMembers ||
     prevProps.xScale !== this.props.xScale ||
     prevProps.yScale !== this.props.yScale ||
     prevState.loading !== this.state.loading ||
@@ -60,7 +78,8 @@ class VbChart extends React.Component {
     prevState.scale !== this.state.scale ||
     prevState.isOpenDrawer !== this.state.isOpenDrawer ||
     prevState.selected !== this.state.selected ||
-    prevState.stackLayout !== this.state.stackLayout;
+    prevState.stackLayout !== this.state.stackLayout ||
+    prevState.subnatGeoDepth !== this.state.subnatGeoDepth;
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
@@ -68,16 +87,92 @@ class VbChart extends React.Component {
     }
   };
 
+  fetchSubnatData = () => {
+    const {depth, subnatGeoDepth} = this.state;
+    const {routeParams} = this.props;
+    const {cube, chart, flow, country, partner, viztype, time} = routeParams;
+    const {productLevels, geoLevels} = subnat[cube];
+
+    const flowItems = {
+      export: 2,
+      import: 1
+    };
+    const isTimeSeries = ["stacked", "line"].includes(chart);
+    const subnatData = subnat[cube];
+    const partnerId = !["show", "all"].includes(partner)
+      ? countryMembers.filter(d => geoFilter(d, partner))
+      : undefined;
+
+    const isFilter = !["show", "all"].includes(viztype);
+
+    const drilldowns = [];
+    const timeTemp = time.split(".")[0];
+    const timeOptions = {
+      4: "Year",
+      5: "Time",
+      6: "Time"
+    };
+    const timeLevel = timeOptions[timeTemp.toString().length] || "Year";
+    const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
+    const timeSeriesChart = ["line", "stacked"].includes(chart);
+    if (!geoId) drilldowns.push(subnatGeoDepth || geoLevels[geoLevels.length - 1]);
+    else if (geoId && viztype === "show") drilldowns.push(depth);
+    else if (geoId && viztype === "all" || geoId && isFilter) drilldowns.push("Country");
+
+    if (isFilter || timeSeriesChart) drilldowns.push(timeLevel);
+
+    const params = {
+      cube: subnatData.cube,
+      drilldowns: drilldowns.join(),
+      measures: "Trade Value",
+      parents: true
+    };
+
+
+    let timeFilter = time.replace(".", ",");
+    if (isTimeSeries) {
+      const {subnatTimeItems} = this.props;
+      const interval = time.split(".");
+      const j = subnatTimeItems.findIndex(d => d.value === interval[0]);
+      const i = subnatTimeItems.findIndex(d => d.value === interval[1]);
+      timeFilter = subnatTimeItems.slice(i, j + 1).map(d => d.value).join();
+    }
+    params.Time = timeFilter;
+
+    if (flowItems[flow]) params["Trade Flow"] = flowItems[flow];
+    if (partnerId) params.Country = partnerId.map(d => d.value).join();
+    if (geoId) params["Subnat Geography"] = geoId;
+    if (isFilter) params.Product = viztype;
+
+    return axios
+      .get(OLAP_API, {params})
+      .then(resp => {
+        const data = resp.data.data;
+        // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
+        const nextState = {
+          data,
+          auth: true,
+          loading: false,
+          routeParams
+        };
+        if (!subnatGeoDepth) nextState.subnatGeoDepth = geoLevels[geoLevels.length - 1];
+        this.setState(nextState);
+      }).catch(error => {
+        this.setState({data: [], loading: false, routeParams, auth: false});
+      });
+  }
+
   fetchData = () => {
     const {routeParams} = this.props;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
-
+    // Uses subnat cubes
     const prevState = {data: [], loading: true};
     if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
     this.setState(prevState);
 
+    if (subnat[cube]) return this.fetchSubnatData();
+
     // Gets countries and partners
-    const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
     const countryId = countryMembers.filter(d => geoFilter(d, country));
     const partnerId = !["show", "all"].includes(partner)
       ? countryMembers.filter(d => geoFilter(d, partner))
@@ -97,7 +192,7 @@ class VbChart extends React.Component {
       : range(timeInterval[0], timeInterval[timeInterval.length - 1]).join();
     if (timeInterval.length === 1) timeInterval.push(timeInterval[0]);
 
-    const cubeName = !isTechnology
+    const cubeName = this.props.cubeName || !isTechnology
       ? `trade_i_baci_a_${cube.replace("hs", "")}`
       : "patents_i_uspto_w_cpc";
     const measureName = isTechnology ? "Patent Share" : "Trade Value";
@@ -149,6 +244,7 @@ class VbChart extends React.Component {
             this.setState({
               data: [...exportData, ...importData],
               loading: false,
+              auth: true,
               scale: "Linear",
               routeParams
             });
@@ -259,6 +355,7 @@ class VbChart extends React.Component {
           const data = resp.data.data;
           this.setState({
             data,
+            auth: true,
             loading: false,
             routeParams
           });
@@ -275,6 +372,7 @@ class VbChart extends React.Component {
           const data = resp.data;
           this.setState({
             data,
+            auth: true,
             loading: false,
             routeParams
           });
@@ -303,9 +401,12 @@ class VbChart extends React.Component {
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         this.setState({
           data,
+          auth: true,
           loading: false,
           routeParams
         });
+      }).catch(error => {
+        this.setState({data: [], loading: false, routeParams});
       });
   };
 
@@ -320,7 +421,7 @@ class VbChart extends React.Component {
   };
 
   render() {
-    const {data, loading, routeParams} = this.state;
+    const {auth, data, loading, routeParams} = this.state;
     const {t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
@@ -387,11 +488,16 @@ class VbChart extends React.Component {
       );
     }
 
+    if (!auth) {
+      return <PaywallChart />;
+    }
+
     const isTechnology = cube.includes("cpc");
     const isFilter = !["show", "all"].includes(viztype);
 
     const tickFormatter = value =>
       !isTechnology ? `$${formatAbbreviate(value)}` : formatAbbreviate(value);
+    const isSubnat =  subnat[cube];
 
     const baseConfig = {
       data: data || [],
@@ -438,9 +544,26 @@ class VbChart extends React.Component {
       }
     };
 
+    let productDepthItems = ["HS2", "HS4", "HS6"];
+    let isGeoSubnatGroupBy = false;
+
+    if (isSubnat) {
+      const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
+      const {productLevels} = isSubnat;
+      const n = productLevels.length;
+      const productDrilldown = n > 3 ? [productLevels[0], this.state.depth] : productLevels;
+      productDepthItems = productLevels.slice(1);
+      if (!geoId) {
+        baseConfig.groupBy = isSubnat.geoLevels;
+        isGeoSubnatGroupBy = true;
+      }
+      else if (geoId && viztype === "show") baseConfig.groupBy = productDrilldown;
+      else if (geoId && viztype === "all" || geoId && isFilter) baseConfig.groupBy = ["Continent", "Country"];
+
+    }
+
     if (chart === "tree_map" && data && data.length > 0) {
       const isContinentGroupBy = baseConfig.groupBy[0] === "Continent";
-      console.log(isContinentGroupBy, baseConfig.groupBy[0]);
       return (
         <div>
           <div className="vb-chart">
@@ -454,16 +577,16 @@ class VbChart extends React.Component {
             />
           </div>
           <div className="vb-chart-options">
-            {!isTechnology && !isContinentGroupBy &&
+            {!isTechnology && !isContinentGroupBy && !isGeoSubnatGroupBy &&
               <OECButtonGroup
-                items={["HS2", "HS4", "HS6"]}
+                items={productDepthItems}
                 selected={this.state.depth}
                 title={"Depth"}
                 callback={depth =>
                   this.setState({depth}, () => this.fetchData())
                 }
               />}
-            {isTechnology && !isContinentGroupBy &&
+            {isTechnology && !isContinentGroupBy && !isGeoSubnatGroupBy &&
               <OECButtonGroup
                 items={ddTech.slice(1)}
                 selected={this.state.techDepth}
@@ -493,7 +616,7 @@ class VbChart extends React.Component {
             </div>
 
             <VbDrawer
-              countryData={this.props.countryData}
+              countryData={this.props.countryMembers}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
               selectedProducts={this.props.selectedProducts}
@@ -522,9 +645,9 @@ class VbChart extends React.Component {
                   }
                 },
                 total: undefined,
-                x: "Year",
+                x: isSubnat ? "Time" : "Year",
                 xConfig: {
-                  title: t("Year")
+                  title: isSubnat ? t("Time") : t("Year")
                 },
                 y: measure,
                 yConfig: {
@@ -536,7 +659,7 @@ class VbChart extends React.Component {
           <div className="vb-chart-options">
             {!isTechnology &&
               <OECButtonGroup
-                items={["HS2", "HS4", "HS6"]}
+                items={productDepthItems}
                 selected={this.state.depth}
                 title={"Depth"}
                 callback={depth =>
@@ -599,7 +722,7 @@ class VbChart extends React.Component {
                   : viztype === "all" || isFinite(viztype)
                     ? ["Continent", "Country"]
                     : ["Section"],
-                time: "Year",
+                time: isSubnat ? "Time" : "Year",
                 timeline: false,
                 total: undefined,
                 x: "Year",
@@ -640,31 +763,45 @@ class VbChart extends React.Component {
         </div>
       );
     }
-    else if (chart === "geomap" && data && data.length > 0) {
+    else if (chart === "geomap" && data && !loading) {
+      const i = isSubnat.geoLevels.indexOf(this.state.subnatGeoDepth);
+      const topojson = isSubnat
+        ? subnat[cube].topojson[i === -1 ? subnat[cube].topojson.length - 1 : i]
+        : "/topojson/world-50m.json";
+
       return (
         <div>
           <div className="vb-chart">
             <Geomap
+              forceUpdate={true}
               config={{
                 ...baseConfig,
                 ...onClickConfig,
                 colorScale: measure,
                 colorScaleConfig: {
-                  scale: "log"
+                  scale: isSubnat ? "quantile" : "log"
                 },
-                groupBy: "ISO 3",
+                groupBy: isSubnat ? `${this.state.subnatGeoDepth} ID` : "ISO 3",
                 legend: false,
                 ocean: false,
                 tiles: false,
-                topojson: "/topojson/world-50m.json",
-                topojsonFilter: d => d.id !== "ata",
-                topojsonId: "id",
-                topojsonKey: "id",
+                topojson,
+                // topojsonFilter: d => d.id !== "ata",
+                // topojsonId: "id",
+                topojsonId: d => d.properties.id,
+                topojsonKey: isSubnat ? "objects" : "id",
+                // topojsonKey: "id",
                 total: false
               }}
             />
           </div>
           <div className="vb-chart-options">
+            {isSubnat && isSubnat.geoLevels.length > 1 && <OECButtonGroup
+              items={isSubnat.geoLevels}
+              selected={this.state.subnatGeoDepth}
+              title={"Depth"}
+              callback={subnatGeoDepth => this.setState({subnatGeoDepth}, () => this.fetchData())}
+            />}
             <div className="vb-share-download-options">
               <VbShare />
               <VbDownload
@@ -881,10 +1018,14 @@ class VbChart extends React.Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => ({
-//   isAuthenticated: () => {
-//     dispatch(isAuthenticated());
-//   }
-// });
+/** */
+function mapStateToProps(state) {
+  const {countryMembers, wdiIndicators} = state.vizbuilder;
 
-export default withNamespaces()(VbChart);
+  return {
+    countryMembers,
+    wdiIndicators
+  };
+}
+
+export default withNamespaces()(connect(mapStateToProps)(VbChart));
