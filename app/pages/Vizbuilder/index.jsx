@@ -640,8 +640,9 @@ class Vizbuilder extends React.Component {
   render() {
     const years = this.state._dataset.data.sort((a, b) => b.value - a.value);
     const {activeTab, scrolled} = this.state;
-    const {routeParams, t} = this.props;
+    const {auth, location, routeParams, t} = this.props;
     const {chart, cube, country, viztype, time} = routeParams;
+    const redirect = `${location.basename}${location.pathname}`;
 
     const isCountry = !["show", "all"].includes(country);
     const isProduct = isFinite(viztype.split(".")[0]);
@@ -788,10 +789,14 @@ class Vizbuilder extends React.Component {
               {subnatSelector && <div className="columns">
                 <div className="column-1">
                   <div className="select-multi-section-wrapper">
-                    <h4 className="title">{t("State/Province")}</h4>
+                    <h4 className="title is-pro">{t("State/Province")}</h4>
                     <SelectMultiHierarchy
                       getColor={d => "blue"}
                       getIcon={d => "/images/icons/hs/hs_22.svg"}
+                      isPro={true}
+                      isProProps={{
+                        auth, redirect
+                      }}
                       items={this.state.subnatGeography}
                       levels={this.state.subnatGeoLevels || []}
                       onItemSelect={item => {
