@@ -132,8 +132,8 @@ class OECMultiSelect extends React.Component {
             const thisItem = items.find(dd => dd.title === d);
             return {
               style: {
-                backgroundColor: thisItem.color || style["dark-4"],
-                color: thisItem.color ? colorContrast(thisItem.color) : "white"
+                backgroundColor: thisItem ? thisItem.color : style["dark-4"],
+                color: thisItem ? colorContrast(thisItem.color) : "white"
               }
             };
           }

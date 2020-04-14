@@ -470,6 +470,7 @@ class Vizbuilder extends React.Component {
     };
 
     if (cube.includes("subnat")) {
+      console.log(this.state.selectedSubnatTimeTemp);
       const id = this.state.subnatGeoItems.map(d => d.id)[0];
       countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : id;
       dataset = cube;
@@ -541,7 +542,6 @@ class Vizbuilder extends React.Component {
     const technologyData = usePrevState ? prevState.technology : this.state.technology;
     const productKeys = usePrevState ? prevState.productKeys : this.state.productKeys;
     const {countryMembers, wdiIndicators, routeParams} = this.props;
-    console.log(this.props);
 
     const years = this.state._dataset.data;
 
@@ -558,15 +558,19 @@ class Vizbuilder extends React.Component {
 
     // Get selected countries
     const filterCountry = type => countryMembers.filter(d => type.split(".").includes(d.label));
+    const countryItems = filterCountry(country);
+    const timeItems = years.filter(d => time.split(".").includes(d.value.toString()));
 
     const selectedItems = {
-      Country: filterCountry(country),
+      Country: countryItems.length
+        ? countryItems
+        : countryMembers.filter(d => d.label === this.state.subnatCubeSelected.id),
       Partner: filterCountry(partner),
       Product: isFinite(viztype.split(".")[0])
         ? viztype.split(".").map(d => productKeys[d]).filter(d => d) : [],
       Technology: ["cpc"].includes(cube)
         ? technologyData.filter(d => viztype.split(".").includes(d.value)) : [],
-      Year: years.filter(d => time.split(".").includes(d.value.toString()))
+      Year: timeItems.length ? timeItems : [years[0]]
     };
 
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
@@ -575,13 +579,18 @@ class Vizbuilder extends React.Component {
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
-    const filterSubnat = (items, type, key = "id") => items.filter(d => type.split(".").includes(d[key]));
+    const filterSubnat = (items, type, key = "id", time = false) => {
+      const output = items.filter(d => type.split(".").includes(d[key]));
+      if (!time) return output;
+      return output.length > 0 ? output : items[0] ? [items[0]] : [];
+    };
 
     const selectedSubnatItems = {
       Geo: filterSubnat(this.state.subnatGeoItems, country),
       Product: filterSubnat(this.state.subnatProductItems, viztype),
-      Time: filterSubnat(this.state.subnatTimeItems, viztype, "value")
+      Time: filterSubnat(this.state.subnatTimeItems, viztype, "value", true)
     };
+    console.log(selectedSubnatItems);
     const subnatKeys = ["Geo", "Product", "Time"].reduce((obj, d) => {
       const base = `selectedSubnat${d}`;
       if (!obj[base]) {
@@ -656,7 +665,7 @@ class Vizbuilder extends React.Component {
 
     const subnatItem = subnat[cube] || {};
     const {geoLevels, productLevels} = subnatItem;
-    const isSubnatPanel = this.state.controls;
+    const isSubnatPanel = notEmpty(this.state.selectedSubnatGeoTemp);
     const isSubnatTitle = subnat[cube];
 
     const {vbTitle, vbParams} = getVbTitle(
@@ -764,18 +773,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {/* {!isNetworkChart && !isScatterChart && isTechnology && <div className="columns">
-                <div className="column-1">
-                  <OECMultiSelect
-                    items={this.state.technology}
-                    selectedItems={this.state._selectedItemsTechnology}
-                    title={t("Technology")}
-                    callback={d => this.handleItemMultiSelect("_selectedItemsTechnology", d)}
-                  />
-                </div>
-              </div>} */}
-
-              {countrySelector && !isSubnatPanel && <div className="columns">
+              {countrySelector && <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
                     items={this.props.countryMembers}
@@ -877,7 +875,7 @@ class Vizbuilder extends React.Component {
 
               </div>
 
-              {isSubnatPanel && <div className="columns">
+              {isSubnatPanel ? <div className="columns">
                 <div className="column-1">
                   <div className="select-multi-section-wrapper">
                     <h4 className="title">{t("Time Dimension")}</h4>
@@ -904,7 +902,7 @@ class Vizbuilder extends React.Component {
                     callback={d => this.handleItemMultiSelect("selectedSubnatTimeTemp", d)}
                   />
                 </div>
-              </div>}
+              </div> : null}
 
               {!["line", "stacked"].includes(chart) && !isSubnatPanel && <div className="columns">
                 <div className="column-1">

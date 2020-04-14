@@ -72,22 +72,22 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports"),
                           permalink: `${cube}/export/${country}/all/show/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports"),
                           permalink: `${cube}/import/${country}/all/show/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Export Destinations"),
                           permalink: `${cube}/export/${country}/show/all/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z.-]+\/show\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
                         },
                         {
                           name: t("Import Origins"),
                           permalink: `${cube}/import/${country}/show/all/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z.-]+\/show\/all\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
                         }
                         // {
                         //   name: t("Technology"),
