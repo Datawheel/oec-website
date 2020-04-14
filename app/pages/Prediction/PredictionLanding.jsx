@@ -7,18 +7,18 @@ const locale = "en";
 const predictionTiles = [
   // profiles
   {title: "🌐 World Trade (Annual)", slug: "trade-annual", items: [
-    {title: "USA vs China World Trade", url: "?"},
-    {title: "Brazil Exports", url: "?"},
-    {title: "United Kingdom Exports of Jet Engines", url: "?"},
-    {title: "Chilean Wine Exports to USA", url: "?"},
-    {title: "Car Exports", url: "?"}
+    {title: "USA vs China World Trade", url: "?drilldown=origins&origins=nausa,aschn"},
+    {title: "Brazil Exports", url: "?drilldown=origins&origins=sabra"},
+    {title: "United Kingdom Exports of Jet Engines", url: "?drilldown=products&origins=eugbr&products=168409"},
+    {title: "Chilean Wine Exports to USA", url: "?destinations=nausa&drilldown=products&origins=sachl&products=42204"},
+    {title: "Car Exports", url: "?drilldown=products&products=178703"}
   ]},
   {title: "🌐 World Trade (Monthly)", slug: "trade-monthly", items: [
-    {title: "Chilean Wine Exports to USA", url: "?"},
-    {title: "Car Exports", url: "?"},
-    {title: "Brazil Exports", url: "?"},
-    {title: "United Kingdom Exports of Jet Engines", url: "?"},
-    {title: "USA vs China World Trade", url: "?"}
+    {title: "Japanese Car Exports", url: "?drilldown=products&origins=asjpn&products=178703"},
+    {title: "Chilean and Argentinian Exports of Apples", url: "?drilldown=origins&origins=sachl,saarg&products=20808"},
+    {title: "Italian and Spanish Exports of Olive Oil", url: "?drilldown=origins&origins=euita,euesp&products=31510"},
+    {title: "South African Exports of Aluminum to Thailand and Japan", url: "?destinations=astha,asjpn&drilldown=destinations&origins=afzaf&products=157601"},
+    {title: "USA Monthly Trade", url: "?drilldown=origins&origins=nausa"}
   ]},
   {title: "🇨🇦 Canada Subnational", slug: "subnat-can", items: [
     {title: "Ontario vs Quebec", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=24,35&trade_flow=2"},

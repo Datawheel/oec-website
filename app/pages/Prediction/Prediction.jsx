@@ -267,7 +267,7 @@ class Prediction extends React.Component {
         const errors = [];
         const newAdvParams = [];
         responses.forEach((resp, i) => {
-          console.log("resp.data", resp.data);
+          // console.log("resp.data", resp.data);
           if (resp.data.error) {
             errors.push(resp.data);
           }
