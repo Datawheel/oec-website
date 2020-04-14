@@ -6,7 +6,7 @@ export default class Error extends Component {
   render() {
     return <NonIdealState
       className="app-error"
-      title="404 Page Not Found"
+      title="Page Not Found"
       icon="error" />;
   }
 }

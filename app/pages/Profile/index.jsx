@@ -71,7 +71,7 @@ class Profile extends React.Component {
     const {scrolled, shortTitle} = this.state;
 
     let title = null;
-    if (profile.sections.length) {
+    if (profile.sections && profile.sections.length) {
       title = stripP(profile.sections[0].title)
         .replace(/\<br\>/g, "")
         .replace(/\&nbsp\;/, "")
@@ -80,17 +80,19 @@ class Profile extends React.Component {
         .replace(/[\s]{1,}/g, " ");
     }
 
-    const slug = profile.meta.map(d => d.slug).join("_");
     let placeholder = "Explore Other Reports";
-    if (slug === "country") placeholder = "Explore Other Countries";
-    else if (slug === "hs92") placeholder = "Explore Other Products";
-    else if (slug === "bilateral-country_partner") placeholder = "Explore Other Bilateral Trade Partners";
-    else if (slug === "bilateral-product_reporter") placeholder = "Explore Other Product Trade";
-    else if (slug.includes("subnational")) placeholder = "Explore Other States/Provinces";
+    if (profile.meta) {
+      const slug = profile.meta.map(d => d.slug).join("_");
+      if (slug === "country") placeholder = "Explore Other Countries";
+      else if (slug === "hs92") placeholder = "Explore Other Products";
+      else if (slug === "bilateral-country_partner") placeholder = "Explore Other Bilateral Trade Partners";
+      else if (slug === "bilateral-product_reporter") placeholder = "Explore Other Product Trade";
+      else if (slug.includes("subnational")) placeholder = "Explore Other States/Provinces";
+    }
 
     return (
       <div className="profile" id="top">
-        <Helmet title={stripHTML(title)} />
+        { title && <Helmet title={stripHTML(title)} /> }
         <OECNavbar
           className={scrolled ? "background" : ""}
           title={title}
