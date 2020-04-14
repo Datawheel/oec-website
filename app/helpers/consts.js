@@ -46,19 +46,19 @@ module.exports = {
     ]}
   ],
   SUBNATIONAL_COUNTRIES: [
-    {
-      name: "Brazil",
-      code: "bra",
-      cube: "trade_s_bra_mun_m_hs",
-      dimension: "Subnat Geography",
-      limit: 7000,
-      geoLevels: [
+    // {
+    //   name: "Brazil",
+    //   code: "bra",
+    //   cube: "trade_s_bra_mun_m_hs",
+    //   dimension: "Subnat Geography",
+    //   limit: 7000,
+    //   geoLevels: [
 
-        /* {name: "Region", level: "Region", slug: "regions"},*/
-        {name: "States", overrideCube: "trade_s_bra_ncm_m_hs", profileSlug: "subnational_bra_state", level: "Subnat Geography", slug: "states", ignoreIdsList: ["93", "95"]},
-        {name: "Municipalities", profileSlug: "subnational_bra_municipality", level: "Subnat Geography", slug: "municipalities"}
-      ]
-    },
+    //     /* {name: "Region", level: "Region", slug: "regions"},*/
+    //     {name: "States", overrideCube: "trade_s_bra_ncm_m_hs", profileSlug: "subnational_bra_state", level: "Subnat Geography", slug: "states", ignoreIdsList: ["93", "95"]},
+    //     {name: "Municipalities", profileSlug: "subnational_bra_municipality", level: "Subnat Geography", slug: "municipalities"}
+    //   ]
+    // },
     {
       name: "Japan",
       code: "jpn",
@@ -69,30 +69,30 @@ module.exports = {
         {name: "Prefectures", level: "Subnat Geography", slug: "prefectures"}
       ]
     },
-    {
-      name: "Russia",
-      code: "rus",
-      cube: "trade_s_rus_m_hs",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {
-          name: "Districts",
-          level: "District",
-          slug: "districts",
-          extraMapConfig: {
-            projectionRotate: [-70, 0]
-          }
-        },
-        {
-          name: "Regions",
-          level: "Subnat Geography",
-          slug: "regions",
-          extraMapConfig: {
-            projectionRotate: [-90, 0]
-          }
-        }
-      ]
-    },
+    // {
+    //   name: "Russia",
+    //   code: "rus",
+    //   cube: "trade_s_rus_m_hs",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {
+    //       name: "Districts",
+    //       level: "District",
+    //       slug: "districts",
+    //       extraMapConfig: {
+    //         projectionRotate: [-70, 0]
+    //       }
+    //     },
+    //     {
+    //       name: "Regions",
+    //       level: "Subnat Geography",
+    //       slug: "regions",
+    //       extraMapConfig: {
+    //         projectionRotate: [-90, 0]
+    //       }
+    //     }
+    //   ]
+    // },
     {
       name: "Canada",
       code: "can",
@@ -102,16 +102,16 @@ module.exports = {
         {name: "Provinces", level: "Subnat Geography", slug: "provinces", ignoreIdsList: ["1"]}
       ]
     },
-    {
-      name: "Uruguay",
-      code: "ury",
-      cube: "trade_s_ury_a_hs",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {name: "Corridor", level: "Corridor", slug: "corridors", ignoreIdsList: ["na"]},
-        {name: "Departments", level: "Subnat Geography", slug: "departments", ignoreIdsList: ["5"]}
-      ]
-    },
+    // {
+    //   name: "Uruguay",
+    //   code: "ury",
+    //   cube: "trade_s_ury_a_hs",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {name: "Corridor", level: "Corridor", slug: "corridors", ignoreIdsList: ["na"]},
+    //     {name: "Departments", level: "Subnat Geography", slug: "departments", ignoreIdsList: ["5"]}
+    //   ]
+    // },
     {
       name: "Germany",
       code: "deu",
@@ -121,76 +121,76 @@ module.exports = {
         {name: "Regions", level: "Subnat Geography", slug: "regions"}
       ]
     },
-    {
-      name: "USA",
-      code: "usa",
-      cube: "trade_s_usa_district_m_hs",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {
-          overrideCube: "trade_s_usa_state_m_hs",
-          name: "States",
-          level: "Subnat Geography",
-          slug: "states",
-          ignoreIdsMap: [
-            "04000US60", "04000US69", "04000US66"
-          ],
-          extraMapConfig: {
-            projection: d3_composite.geoAlbersUsaTerritories()
-          },
-          profileSlug: "subnational_usa_state"
-        },
-        {
-          name: "Districts",
-          level: "Subnat Geography",
-          slug: "districts",
-          extraMapConfig: {
-            projection: d3_composite.geoAlbersUsaTerritories()
-          },
-          profileSlug: "subnational_usa_district"
-        }
-      ]
-    },
-    {
-      name: "Turkey",
-      code: "tur",
-      cube: "trade_s_tur_m_countries",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
-      ]
-    },
-    {
-      name: "Spain",
-      code: "esp",
-      cube: "trade_s_esp_m_hs",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {
-          name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous",
-          extraMapConfig: {
-            projection: d3_composite.geoConicConformalSpain()
-          },
-          ignoreIdsList: ["100"]
-        },
-        {
-          name: "Provinces", level: "Subnat Geography", slug: "provinces",
-          extraMapConfig: {
-            projection: d3_composite.geoConicConformalSpain()
-          },
-          ignoreIdsList: ["0"]
-        }
-      ]
-    },
-    {
-      name: "South Africa",
-      code: "zaf",
-      cube: "trade_s_zaf_m_hs",
-      dimension: "Port of Entry",
-      geoLevels: [
-        {name: "Ports", level: "Port of Entry", slug: "ports"}
-      ]
-    },
+    // {
+    //   name: "USA",
+    //   code: "usa",
+    //   cube: "trade_s_usa_district_m_hs",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {
+    //       overrideCube: "trade_s_usa_state_m_hs",
+    //       name: "States",
+    //       level: "Subnat Geography",
+    //       slug: "states",
+    //       ignoreIdsMap: [
+    //         "04000US60", "04000US69", "04000US66"
+    //       ],
+    //       extraMapConfig: {
+    //         projection: d3_composite.geoAlbersUsaTerritories()
+    //       },
+    //       profileSlug: "subnational_usa_state"
+    //     },
+    //     {
+    //       name: "Districts",
+    //       level: "Subnat Geography",
+    //       slug: "districts",
+    //       extraMapConfig: {
+    //         projection: d3_composite.geoAlbersUsaTerritories()
+    //       },
+    //       profileSlug: "subnational_usa_district"
+    //     }
+    //   ]
+    // },
+    // {
+    //   name: "Turkey",
+    //   code: "tur",
+    //   cube: "trade_s_tur_m_countries",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
+    //   ]
+    // },
+    // {
+    //   name: "Spain",
+    //   code: "esp",
+    //   cube: "trade_s_esp_m_hs",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {
+    //       name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous",
+    //       extraMapConfig: {
+    //         projection: d3_composite.geoConicConformalSpain()
+    //       },
+    //       ignoreIdsList: ["100"]
+    //     },
+    //     {
+    //       name: "Provinces", level: "Subnat Geography", slug: "provinces",
+    //       extraMapConfig: {
+    //         projection: d3_composite.geoConicConformalSpain()
+    //       },
+    //       ignoreIdsList: ["0"]
+    //     }
+    //   ]
+    // },
+    // {
+    //   name: "South Africa",
+    //   code: "zaf",
+    //   cube: "trade_s_zaf_m_hs",
+    //   dimension: "Port of Entry",
+    //   geoLevels: [
+    //     {name: "Ports", level: "Port of Entry", slug: "ports"}
+    //   ]
+    // },
     {
       name: "China",
       code: "chn",
@@ -199,44 +199,44 @@ module.exports = {
       geoLevels: [
         {name: "Provinces", level: "Subnat Geography", slug: "provinces"}
       ]
-    },
-    {
-      name: "France",
-      code: "fra",
-      cube: "trade_s_fra_q_cpf",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {name: "Regions", level: "Region", slug: "regions", ignoreIdsList: ["24"]},
-        {name: "Departments", level: "Subnat Geography", slug: "departments"}
-      ]
-    },
-    {
-      name: "Bolivia",
-      code: "bol",
-      cube: "trade_s_bol_m_sitc3",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {name: "Departments", level: "Subnat Geography", slug: "departments"}
-      ]
-    },
-    {
-      name: "Ecuador",
-      code: "ecu",
-      cube: "trade_s_ecu_m_hs",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {name: "Ports", level: "Subnat Geography", slug: "ports"}
-      ]
-    },
-    {
-      name: "Great Britain",
-      code: "gbr",
-      cube: "trade_s_gbr_m_hs",
-      dimension: "Subnat Geography",
-      geoLevels: [
-        {name: "Ports", level: "Subnat Geography", slug: "ports"}
-      ]
     }
+    // {
+    //   name: "France",
+    //   code: "fra",
+    //   cube: "trade_s_fra_q_cpf",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {name: "Regions", level: "Region", slug: "regions", ignoreIdsList: ["24"]},
+    //     {name: "Departments", level: "Subnat Geography", slug: "departments"}
+    //   ]
+    // },
+    // {
+    //   name: "Bolivia",
+    //   code: "bol",
+    //   cube: "trade_s_bol_m_sitc3",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {name: "Departments", level: "Subnat Geography", slug: "departments"}
+    //   ]
+    // },
+    // {
+    //   name: "Ecuador",
+    //   code: "ecu",
+    //   cube: "trade_s_ecu_m_hs",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {name: "Ports", level: "Subnat Geography", slug: "ports"}
+    //   ]
+    // },
+    // {
+    //   name: "Great Britain",
+    //   code: "gbr",
+    //   cube: "trade_s_gbr_m_hs",
+    //   dimension: "Subnat Geography",
+    //   geoLevels: [
+    //     {name: "Ports", level: "Subnat Geography", slug: "ports"}
+    //   ]
+    // }
     // TODO: CHL
     // TBD: SWE -> no units, ignore it.
   ],
@@ -462,99 +462,99 @@ module.exports = {
           selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
         }
       ]
-    },
-    {
-      name: "🇷🇺 Russia Subnational",
-      slug: "subnat-rus",
-      cube: "trade_s_rus_m_hs",
-      selectionsLoaded: false,
-      dateDrilldown: "Time",
-      currencyFormat: d => `${d3plus_format.formatAbbreviate(d)} ₽`,
-      selections: [
-        {
-          dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
-          data: [],
-          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
-          dimName: "Subnat Geography",
-          id: "subnats",
-          name: "Russian Region",
-          selected: []
-        },
-        {
-          dataUrl: "?cube=trade_s_rus_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
-          data: [],
-          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
-          dimName: "HS4",
-          id: "products",
-          name: "Product",
-          selected: []
-        },
-        {
-          dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
-          data: [],
-          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Country",
-          id: "destinations",
-          name: "Partner Country",
-          selected: []
-        }
-      ],
-      toggles: [
-        {
-          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
-          dimName: "Trade Flow",
-          id: "trade_flow",
-          name: "Trade Flow",
-          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
-        }
-      ]
-    },
-    {
-      name: "🇪🇸 Spain Subnational",
-      slug: "subnat-esp",
-      cube: "trade_s_esp_m_hs",
-      selectionsLoaded: false,
-      dateDrilldown: "Time",
-      currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
-      selections: [
-        {
-          dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
-          data: [],
-          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
-          dimName: "Subnat Geography",
-          id: "subnats",
-          name: "Autonomous Community",
-          selected: []
-        },
-        {
-          dataUrl: "?cube=trade_s_esp_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
-          data: [],
-          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
-          dimName: "HS4",
-          id: "products",
-          name: "Product",
-          selected: []
-        },
-        {
-          dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
-          data: [],
-          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-          dimName: "Country",
-          id: "destinations",
-          name: "Partner Country",
-          selected: []
-        }
-      ],
-      toggles: [
-        {
-          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
-          dimName: "Trade Flow",
-          id: "trade_flow",
-          name: "Trade Flow",
-          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
-        }
-      ]
     }
+    // {
+    //   name: "🇷🇺 Russia Subnational",
+    //   slug: "subnat-rus",
+    //   cube: "trade_s_rus_m_hs",
+    //   selectionsLoaded: false,
+    //   dateDrilldown: "Time",
+    //   currencyFormat: d => `${d3plus_format.formatAbbreviate(d)} ₽`,
+    //   selections: [
+    //     {
+    //       dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+    //       data: [],
+    //       dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+    //       dimName: "Subnat Geography",
+    //       id: "subnats",
+    //       name: "Russian Region",
+    //       selected: []
+    //     },
+    //     {
+    //       dataUrl: "?cube=trade_s_rus_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+    //       data: [],
+    //       dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+    //       dimName: "HS4",
+    //       id: "products",
+    //       name: "Product",
+    //       selected: []
+    //     },
+    //     {
+    //       dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+    //       data: [],
+    //       dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+    //       dimName: "Country",
+    //       id: "destinations",
+    //       name: "Partner Country",
+    //       selected: []
+    //     }
+    //   ],
+    //   toggles: [
+    //     {
+    //       data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+    //       dimName: "Trade Flow",
+    //       id: "trade_flow",
+    //       name: "Trade Flow",
+    //       selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
+    //     }
+    //   ]
+    // },
+    // {
+    //   name: "🇪🇸 Spain Subnational",
+    //   slug: "subnat-esp",
+    //   cube: "trade_s_esp_m_hs",
+    //   selectionsLoaded: false,
+    //   dateDrilldown: "Time",
+    //   currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
+    //   selections: [
+    //     {
+    //       dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+    //       data: [],
+    //       dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+    //       dimName: "Subnat Geography",
+    //       id: "subnats",
+    //       name: "Autonomous Community",
+    //       selected: []
+    //     },
+    //     {
+    //       dataUrl: "?cube=trade_s_esp_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+    //       data: [],
+    //       dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+    //       dimName: "HS4",
+    //       id: "products",
+    //       name: "Product",
+    //       selected: []
+    //     },
+    //     {
+    //       dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+    //       data: [],
+    //       dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+    //       dimName: "Country",
+    //       id: "destinations",
+    //       name: "Partner Country",
+    //       selected: []
+    //     }
+    //   ],
+    //   toggles: [
+    //     {
+    //       data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+    //       dimName: "Trade Flow",
+    //       id: "trade_flow",
+    //       name: "Trade Flow",
+    //       selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
+    //     }
+    //   ]
+    // }
   ],
 
   TARIFF_DATASETS: [

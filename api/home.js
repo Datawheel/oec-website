@@ -32,8 +32,8 @@ const tiles = [
 
   // "/profile/firm/samsung-electronics-co-ltd-b8c1acc425",
   // "/profile/firm/apple-inc",
-  "/profile/subnational_usa/los-angeles-ca",
-  "/profile/subnational_esp/barcelona-8",
+  // "/profile/subnational_usa/los-angeles-ca",
+  // "/profile/subnational_esp/barcelona-8",
   "/profile/subnational_can/quebec",
   {
     link: "/profile/hs92/semiconductor-devices",
@@ -48,7 +48,7 @@ const tiles = [
   "/profile/bilateral-product/lithium-carbonates/reporter/chl",
   "/profile/bilateral-country/jpn/partner/kor",
   "/profile/subnational_chn/shanghai-province",
-  "/profile/subnational_rus/moscow-the-capital-of-russian-federation",
+  // "/profile/subnational_rus/moscow-the-capital-of-russian-federation",
   {
     link: "/en/profile/bilateral-country/ukr/partner/rus",
     large: true

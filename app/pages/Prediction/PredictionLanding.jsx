@@ -14,11 +14,11 @@ const predictionTiles = [
     {title: "Car Exports", url: "?drilldown=products&products=178703"}
   ]},
   {title: "🌐 World Trade (Monthly)", slug: "trade-monthly", items: [
-    {title: "Japanese Car Exports", url: "?drilldown=products&origins=asjpn&products=178703"},
-    {title: "Chilean and Argentinian Exports of Apples", url: "?drilldown=origins&origins=sachl,saarg&products=20808"},
-    {title: "Italian and Spanish Exports of Olive Oil", url: "?drilldown=origins&origins=euita,euesp&products=31510"},
-    {title: "South African Exports of Aluminum to Thailand and Japan", url: "?destinations=astha,asjpn&drilldown=destinations&origins=afzaf&products=157601"},
-    {title: "USA Monthly Trade", url: "?drilldown=origins&origins=nausa"}
+    {title: "Japanese Car Exports", url: "?drilldown=products&origins=asjpn&products=178703&trade_flow=1"},
+    {title: "Chilean and Argentinian Exports of Apples", url: "?drilldown=origins&origins=sachl,saarg&products=20808&trade_flow=1"},
+    {title: "Italian and Spanish Exports of Olive Oil", url: "?drilldown=origins&origins=euita,euesp&products=31510&trade_flow=1"},
+    {title: "South African Exports of Aluminum to Thailand and Japan", url: "?destinations=astha,asjpn&drilldown=destinations&origins=afzaf&products=157601&trade_flow=1"},
+    {title: "USA Monthly Trade", url: "?drilldown=trade_flow&origins=nausa&trade_flow=1,2"}
   ]},
   {title: "🇨🇦 Canada Subnational", slug: "subnat-can", items: [
     {title: "Ontario vs Quebec", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=24,35&trade_flow=2"},
@@ -40,21 +40,21 @@ const predictionTiles = [
     {title: "USA vs China", subtitle: "Export Destinations", url: "?destinations=aschn,nausa&drilldown=destinations&trade_flow=2"},
     {title: "Kanagawa vs Tokyo", subtitle: "Photo Lab Equipment Exports", url: "?drilldown=subnats&products=189010&subnats=14,13&trade_flow=2"},
     {title: "Italy vs Chile", subtitle: "Wine Imports to Tokyo", url: "?destinations=euita,sachl&drilldown=destinations&products=42204&subnats=13&trade_flow=1"}
-  ]},
-  {title: "🇷🇺 Russia Subnational", slug: "subnat-rus", items: [
-    {title: "Moscow (Capital Region) vs St. Petersburg", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=40000,45000&trade_flow=2"},
-    {title: "Japan vs S. Korea", subtitle: "Destinations of Petrolem Gas from Sakhalin Region", url: "destinations=asjpn,askor&drilldown=destinations&products=52711&subnats=64000&trade_flow=2"},
-    {title: "China vs Netherlands", subtitle: "Export Destinations", url: "?destinations=aschn,eunld&drilldown=destinations&trade_flow=2"},
-    {title: "Samara vs Kaluga", subtitle: "Car Exports", url: "?drilldown=subnats&products=178703&subnats=36000,29000&trade_flow=2"},
-    {title: "Germany vs Japan", subtitle: "Car Imports to Moscow (Capital Region)",  url: "?destinations=eudeu,asjpn&drilldown=destinations&products=178703&subnats=45000&trade_flow=1"}
-  ]},
-  {title: "🇪🇸 Spain Subnational", slug: "subnat-esp", items: [
-    {title: "Barcelona vs Madrid", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=8,28&trade_flow=2"},
-    {title: "USA vs UK", subtitle: "Destinations of Wine from La Rioja", url: "?destinations=nausa,eugbr&drilldown=destinations&products=42204&subnats=26&trade_flow=2"},
-    {title: "France vs Germany", subtitle: "Export Destinations", url: "?destinations=eufra,eudeu&drilldown=destinations&trade_flow=2"},
-    {title: "Barcelona vs Burgos", subtitle: "Packaged Medicament Exports", url: "?drilldown=subnats&products=63004&subnats=9,8&trade_flow=2"},
-    {title: "Cuba vs Ireland", subtitle: "Hard Liquor Imports to Málaga", url: "?destinations=nacub,euirl&drilldown=destinations&products=42208&subnats=29&trade_flow=1"}
   ]}
+  // {title: "🇷🇺 Russia Subnational", slug: "subnat-rus", items: [
+  //   {title: "Moscow (Capital Region) vs St. Petersburg", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=40000,45000&trade_flow=2"},
+  //   {title: "Japan vs S. Korea", subtitle: "Destinations of Petrolem Gas from Sakhalin Region", url: "destinations=asjpn,askor&drilldown=destinations&products=52711&subnats=64000&trade_flow=2"},
+  //   {title: "China vs Netherlands", subtitle: "Export Destinations", url: "?destinations=aschn,eunld&drilldown=destinations&trade_flow=2"},
+  //   {title: "Samara vs Kaluga", subtitle: "Car Exports", url: "?drilldown=subnats&products=178703&subnats=36000,29000&trade_flow=2"},
+  //   {title: "Germany vs Japan", subtitle: "Car Imports to Moscow (Capital Region)",  url: "?destinations=eudeu,asjpn&drilldown=destinations&products=178703&subnats=45000&trade_flow=1"}
+  // ]},
+  // {title: "🇪🇸 Spain Subnational", slug: "subnat-esp", items: [
+  //   {title: "Barcelona vs Madrid", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=8,28&trade_flow=2"},
+  //   {title: "USA vs UK", subtitle: "Destinations of Wine from La Rioja", url: "?destinations=nausa,eugbr&drilldown=destinations&products=42204&subnats=26&trade_flow=2"},
+  //   {title: "France vs Germany", subtitle: "Export Destinations", url: "?destinations=eufra,eudeu&drilldown=destinations&trade_flow=2"},
+  //   {title: "Barcelona vs Burgos", subtitle: "Packaged Medicament Exports", url: "?drilldown=subnats&products=63004&subnats=9,8&trade_flow=2"},
+  //   {title: "Cuba vs Ireland", subtitle: "Hard Liquor Imports to Málaga", url: "?destinations=nacub,euirl&drilldown=destinations&products=42208&subnats=29&trade_flow=1"}
+  // ]}
 ];
 
 class PredictionLanding extends React.Component {

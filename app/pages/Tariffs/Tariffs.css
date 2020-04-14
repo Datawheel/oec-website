@@ -41,6 +41,7 @@
       color: #CFDAE2;
       flex: 0 0 8rem;
       padding: 20px 0;
+      align-self: center;
 
       &:hover {
         color: #CFDAE2;
