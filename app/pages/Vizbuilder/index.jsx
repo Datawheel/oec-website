@@ -498,6 +498,11 @@ class Vizbuilder extends React.Component {
 
   handleItemMultiSelect = (key, d) => {
     this.setState({[key]: d});
+    console.log(d);
+    if (key === "_selectedItemsCountry" && subnat.cubeSelector.some(h => d[d.length - 1].label === h.id)) {
+      const cube = subnat.cubeSelector.find(h => d[d.length - 1].label === h.id);
+      this.setState({subnatCubeSelected: cube}, () => this.fetchSubnationalData(cube.cube));
+    }
   }
 
   handleScroll = () => {
@@ -634,10 +639,13 @@ class Vizbuilder extends React.Component {
     const isScatterChart = ["scatter"].includes(chart);
     const isNetworkChart = ["network"].includes(chart);
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
-    // const isTrade = cube.includes("hs");
-    // const isTechnology = !isTrade;
     const isSubnat = cube.includes("subnat");
 
+    /** Panel Selector */
+    const subnatSelector =
+      subnat.cubeSelector.some(d => country.split(".").includes(d.id)) ||
+      subnat.cubeSelector.some(d => this.state._selectedItemsCountry.map(d => d.label).includes(d.id)) ||
+      isSubnat;
     const productSelector = isProduct && !isScatterChart;
     const countrySelector = isCountry && !isScatterChart || isSubnat;
     const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
@@ -689,17 +697,6 @@ class Vizbuilder extends React.Component {
               />
             </div> */}
             {<div className="content">
-              {this.state.controls && <div className="columns">
-                <div className="column-1">
-                  <SimpleSelect
-                    items={subnat.cubeSelector}
-                    title={t("Country")}
-                    state="subnatCubeSelected"
-                    selectedItem={this.state.subnatCubeSelected}
-                    callback={this.updateFilter}
-                  />
-                </div>
-              </div>}
               <VbTabs
                 activeOption={this.props.location.pathname}
                 activeTab={activeTab}
@@ -790,7 +787,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {countrySelector && <div className="columns">
+              {subnatSelector && <div className="columns">
                 <div className="column-1">
                   <div className="select-multi-section-wrapper">
                     <h4 className="title">{t("State/Province")}</h4>
