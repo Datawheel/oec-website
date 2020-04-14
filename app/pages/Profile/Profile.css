@@ -288,16 +288,8 @@
             }
         }
     }
-    /* temporary background image */
-    /* TODO: remove/refactor once hero images are in canon */
-    &:before {
-        @mixin absolute-expand;
-        content: "";
-        display: block;
-        background: linear-gradient( color( var(--dark-4) a(0.875)) 0%, color( var(--dark-4) a(0.666)) 100%), url(/images/headers/country/usa.jpg);
-        background-size: cover;
-        background-repeat: no-repeat;
-        z-index: -1;
+    & .cp-hero-img-overlay {
+        opacity: 0.8;
     }
 }
 
@@ -477,6 +469,9 @@
     & .cms-profilesearch {
         height: 85vh;
         max-height: 300px;
+        & .cp-input::placeholder {
+            color: var(--dark-1);
+        }
         & .cms-profilesearch-container {
             background-color: var(--dark-3);
             border: 1px solid var(--dark-2);

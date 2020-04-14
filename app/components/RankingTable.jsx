@@ -19,7 +19,7 @@ class RankingTable extends React.Component {
 						defaultPageSize={data.length}
 						minRows={1}
 						resizable={false}
-						defaultSorted={[ { id: `lastyear`, desc: true } ]}
+						defaultSorted={[ { id: `ranking`, desc: false }, { id: `lastyear`, desc: true } ]}
 					/>
 				) : (
 					<ReactTable
@@ -29,7 +29,7 @@ class RankingTable extends React.Component {
 						defaultPageSize={100}
 						minRows={1}
 						resizable={false}
-						defaultSorted={[ { id: `lastyear`, desc: true } ]}
+						defaultSorted={[ { id: `ranking`, desc: false }, { id: `lastyear`, desc: true } ]}
 					/>
 				)}
 			</div>

@@ -1,8 +1,8 @@
 import colors from "./helpers/colors";
 import style from "style.yml";
-import { formatAbbreviate } from "d3plus-format";
-import { mean } from "d3-array";
-import { hsId } from "./helpers/formatters";
+import {formatAbbreviate} from "d3plus-format";
+import {mean} from "d3-array";
+import {hsId} from "./helpers/formatters";
 import sections from "./helpers/sections";
 
 const bad = "#cf5555";
@@ -13,20 +13,20 @@ const good = "#3182bd";
  * @param {Object} d
  */
 function findColor(d) {
-    let detectedColors = [];
-    if (this && this._filteredData) {
-        detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
-    }
+  let detectedColors = [];
+  if (this && this._filteredData) {
+    detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
+  }
 
-    if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
-    if ("Section" in d && !Array.isArray(d.Section)) {
-        return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
-    }
+  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
+  if ("Section" in d && !Array.isArray(d.Section)) {
+    return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
+  }
 
-    if (detectedColors.length !== 1) {
-        for (const key in colors) {
-            if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-                return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
+  if (detectedColors.length !== 1) {
+    for (const key in colors) {
+      if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
+        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
       }
     }
   }
@@ -43,7 +43,12 @@ function backgroundImageV2(key, d) {
     case "Continent":
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
     case "Country":
-      return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
+      if (Array.isArray(d["Country ID"])) {
+        return `/images/icons/country/country_${d["Continent ID"]}.png`;
+      }
+      else {
+        return `/images/icons/country/country_${d["ISO 3"] || d["Country ID"].slice(2, 5)}.png`;
+      }
     case "Flow":
     case "Trade Flow":
       return `/images/icons/balance/${options[d[`${key} ID`]]}_val.png`;
@@ -55,6 +60,8 @@ function backgroundImageV2(key, d) {
       return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    case "Level 1":
+      return `/images/icons/cpf/cpf_${d["Level 1 ID"]}.svg`;
     case "Service":
     case "Parent Service":
       return `/images/icons/service/service_${[d[`${key} ID`]]}.png`;
@@ -65,7 +72,10 @@ function backgroundImageV2(key, d) {
 
 /** */
 function findColorV2(key, d) {
-  if (key === "Country" || key === "ISO 3") return "transparent";
+  if (key === "Country" || key === "ISO 3") {
+    if (!Array.isArray(d["Country ID"])) return "transparent";
+    else return colors.Continent[d["Continent ID"]];
+  }
   const id = key === "SITC Section" ? d["Section ID"] : d[`${key} ID`];
   const palette = colors[key];
   return palette ? colors[key][id] || colors[key][d[key]] || colors.colorGrey : colors.colorGrey;
@@ -91,6 +101,9 @@ function backgroundImage(d, ascending) {
     }
     else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    }
+    else if ("Level 1 ID" in d && !Array.isArray(d["Level 1"])) {
+      return `/images/icons/cpf/cpf_${d["Level 1 ID"]}.svg`;
     }
     else if ("Continent ID" in d && !Array.isArray(d.Continent)) {
       return `/images/icons/country/country_${d["Continent ID"]}.png`;
@@ -141,6 +154,9 @@ function backgroundImage(d, ascending) {
     }
     else if ("EGW1 ID" in d && !Array.isArray(d.EGW1)) {
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
+    }
+    else if ("Level 1 ID" in d && !Array.isArray(d["Level 1"])) {
+      return `/images/icons/cpf/cpf_${d["Level 1 ID"]}.svg`;
     }
     else if ("Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
       return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
@@ -320,6 +336,7 @@ export default {
 
       const title = Array.isArray(item[1]) ? `Other ${parent[1] || "Values"}` : item[1];
       let itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
+
       if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
       const imgUrl = backgroundImageV2(itemBgImg, d);
       const bgColor = findColorV2(itemBgImg, d);

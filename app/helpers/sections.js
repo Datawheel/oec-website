@@ -20,7 +20,8 @@ module.exports = {
     "Instruments",
     "Weapons",
     "Miscellaneous",
-    "Arts and Antiques"
+    "Arts and Antiques",
+    "Unspecified"
   ],
   sitcSections: [
     "Food and live animals",
