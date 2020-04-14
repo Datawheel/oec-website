@@ -23,6 +23,7 @@ import OECButtonGroup from "./OECButtonGroup";
 import VbDrawer from "./VbDrawer";
 import VbShare from "./VbShare";
 import VbDownload from "./VbDownload";
+import PaywallChart from "./PaywallChart";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 const measures = ["Trade Value", "Growth", "Growth (%)"];
@@ -45,6 +46,7 @@ class VbChart extends React.Component {
       stackLayout: "Value",
       subnatGeoDepth: undefined,
       selected: measures[0],
+      auth: true,
       depth: "HS4",
       techDepth: ddTech[ddTech.length - 1]
     };
@@ -149,13 +151,14 @@ class VbChart extends React.Component {
         // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         const nextState = {
           data,
+          auth: true,
           loading: false,
           routeParams
         };
         if (!subnatGeoDepth) nextState.subnatGeoDepth = geoLevels[geoLevels.length - 1];
         this.setState(nextState);
       }).catch(error => {
-        this.setState({data: [], loading: false, routeParams});
+        this.setState({data: [], loading: false, routeParams, auth: false});
       });
   }
 
@@ -241,6 +244,7 @@ class VbChart extends React.Component {
             this.setState({
               data: [...exportData, ...importData],
               loading: false,
+              auth: true,
               scale: "Linear",
               routeParams
             });
@@ -351,6 +355,7 @@ class VbChart extends React.Component {
           const data = resp.data.data;
           this.setState({
             data,
+            auth: true,
             loading: false,
             routeParams
           });
@@ -367,6 +372,7 @@ class VbChart extends React.Component {
           const data = resp.data;
           this.setState({
             data,
+            auth: true,
             loading: false,
             routeParams
           });
@@ -395,6 +401,7 @@ class VbChart extends React.Component {
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         this.setState({
           data,
+          auth: true,
           loading: false,
           routeParams
         });
@@ -414,7 +421,7 @@ class VbChart extends React.Component {
   };
 
   render() {
-    const {data, loading, routeParams} = this.state;
+    const {auth, data, loading, routeParams} = this.state;
     const {t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
 
@@ -479,6 +486,10 @@ class VbChart extends React.Component {
           </div>
         </div>
       );
+    }
+
+    if (!auth) {
+      return <PaywallChart />;
     }
 
     const isTechnology = cube.includes("cpc");
