@@ -1020,6 +1020,7 @@ function mapStateToProps(state) {
   const {countryMembers, wdiIndicators} = state.vizbuilder;
 
   return {
+    auth: state.auth,
     countryMembers,
     wdiIndicators
   };

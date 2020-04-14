@@ -12,11 +12,9 @@ class OECPaywall extends React.Component {
   };
 
   render() {
-    const {isOpen} = this.state;
     const {auth, paywall, redirect} = this.props;
-    console.log(this.props);
 
-    const show = !(auth && auth.loading) || paywall;
+    const show = paywall && !auth.user;
 
     return (
       <div className="paywall-component">
