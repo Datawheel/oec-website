@@ -5,7 +5,7 @@ import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import {connect} from "react-redux";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
-
+import LoadingChart from "components/LoadingChart";
 import VbTabs from "components/VbTabs";
 import VbChart from "components/VbChart";
 import VirtualSelector from "components/VirtualSelector";
@@ -996,7 +996,9 @@ class Vizbuilder extends React.Component {
                 );
               }}
             />
-          </div> : <div className="vb-column">Loading...</div>}
+          </div> : <div className="vb-column">
+            <LoadingChart />
+          </div>}
         </div>
       </div>
       <Footer />
