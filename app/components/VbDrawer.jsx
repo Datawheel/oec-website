@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 import {Link} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {
@@ -51,7 +52,7 @@ class VbDrawer extends React.Component {
 
   shouldComponentUpdate = (prevProps, prevState) =>
     this.props.isOpen !== prevProps.isOpen ||
-    this.props.countryData !== prevProps.countryData ||
+    this.props.countryMembers !== prevProps.countryMembers ||
     this.state.isOpen !== prevState.isOpen;
 
   componentDidUpdate = () => {
@@ -66,7 +67,7 @@ class VbDrawer extends React.Component {
 
   render() {
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
-    const {countryData, relatedItems, routeParams, t} = this.props;
+    const {countryMembers, relatedItems, routeParams, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
     const preps = {
       export: "to",
@@ -101,17 +102,17 @@ class VbDrawer extends React.Component {
 
     const color = colors.Section[parentId] || colors.Continent[parentId];
 
-    const countryNames = isCountry ? countryData.reduce((all, d) => {
+    const countryNames = isCountry ? countryMembers.reduce((all, d) => {
       if (country.split(".").includes(d.label)) all.push(d.title);
       return all;
     }, []).join(", ") : "";
 
-    const partnerNames = isPartner ? countryData.reduce((all, d) => {
+    const partnerNames = isPartner ? countryMembers.reduce((all, d) => {
       if (partner.split(".").includes(d.label)) all.push(d.title);
       return all;
     }, []).join(", ") : "";
 
-    const countryNameSelected = countryIdSelected ? countryData.reduce((all, d) => {
+    const countryNameSelected = countryIdSelected ? countryMembers.reduce((all, d) => {
       if (countryIdSelected === d.label) all.push(d.title);
       return all;
     }, []).join(", ") : "";
@@ -286,4 +287,13 @@ class VbDrawer extends React.Component {
   }
 }
 
-export default withNamespaces()(VbDrawer);
+/** */
+function mapStateToProps(state) {
+  const {countryMembers} = state.vizbuilder;
+
+  return {
+    countryMembers
+  };
+}
+
+export default withNamespaces()(connect(mapStateToProps)(VbDrawer));
