@@ -1,43 +1,38 @@
-const profiles = [
+let profiles = [
   "country",
   "hs92",
-  "subnational_bra",
-  "subnational_bra_municipality",
-  "subnational_can",
-  "subnational_chn",
-  "subnational_col",
-  "subnational_deu",
-  "subnational_ecu",
-  "subnational_esp",
-  "subnational_fra",
-  "subnational_ind",
-  "subnational_jpn",
-  "subnational_rus",
-  "subnational_tur",
-  "subnational_usa",
+
   "bilateral-country/partner",
   "bilateral-country",
   "partner",
+
   "bilateral-product/reporter",
   "bilateral-product",
   "reporter"
 ];
 
 const subtitles = {
-  subnational_bra: "Brazil",
-  subnational_can: "Canada",
   subnational_chn: "China",
-  subnational_col: "Colombia",
   subnational_deu: "Germany",
-  subnational_ecu: "Ecuador",
   subnational_esp: "Spain",
   subnational_fra: "France",
-  subnational_ind: "India",
   subnational_jpn: "Japan",
   subnational_rus: "Russia",
+  subnational_usa_state: "United States",
+  subnational_usa_district: "United States",
+  subnational_gbr: "United Kingdom",
+  subnational_can: "Canada",
+  subnational_bra_municipality: "Brazil",
   subnational_tur: "Turkey",
-  subnational_usa: "United States"
+  subnational_bol: "Bolivia",
+  subnational_zaf: "South Africa",
+  subnational_ecu: "Ecuador",
+  subnational_bra_state: "Brazil",
+  subnational_col: "Colombia",
+  subnational_ind: "India"
 };
+
+profiles = profiles.concat(Object.keys(subtitles));
 
 export const profileSearchConfig = {
   availableProfiles: profiles,
