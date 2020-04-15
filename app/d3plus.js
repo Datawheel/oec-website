@@ -20,13 +20,15 @@ function findColor(d) {
 
   if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
   if ("Section" in d && !Array.isArray(d.Section)) {
-    return "Patent Share" in d ? colors["CPC Section"][`${d["Section ID"]}`] : colors.Section[`${d["Section ID"]}`];
+    return "Patent Share" in d
+      ? colors["CPC Section"][`${d["Section ID"]}`]
+      : colors.Section[`${d["Section ID"]}`];
   }
 
   if (detectedColors.length !== 1) {
     for (const key in colors) {
-      if (`${key} ID` in d || key === "Continent" && "Continent" in d) {
-        return colors[key][`${d[`${key} ID`]}`] || colors[key][`${d[key]}`] || colors.colorGrey;
+      if (`${key} ID` in d || key in d || key === "Continent" && "Continent" in d) {
+        return colors[key][d[`${key} ID`]] || colors[key][d[key]] || colors.colorGrey;
       }
     }
   }
@@ -214,6 +216,7 @@ export default {
   aggs: {
     "Trade Value Growth": d => d.length > 1 ? 0 : d[0],
     "Section ID": mean,
+    "EGW1 ID": mean,
     "Flow ID": mean
   },
   backConfig: {
