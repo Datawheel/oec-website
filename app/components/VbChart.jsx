@@ -141,6 +141,7 @@ class VbChart extends React.Component {
     params.Time = timeFilter;
 
     if (flowItems[flow]) params["Trade Flow"] = flowItems[flow];
+    else params.drilldowns = `Trade Flow,${timeLevel}`;
     if (partnerId) params.Country = partnerId.map(d => d.value).join();
     if (geoId) params["Subnat Geography"] = geoId;
     if (isFilter) params.Product = viztype;
@@ -716,14 +717,19 @@ class VbChart extends React.Component {
       const {geoLevels, productLevels} = isSubnat;
       const isGeoGroupBy = viztype === "all" || isFinite(viztype);
       let lineGroupBy = ["Trade Flow ID"];
-      if (isGeoGroupBy) {
-        lineGroupBy = ["Continent", "Country"];
+      const isTradeBalanceChart = flow === "show";
+      if (!isTradeBalanceChart) {
+        if (isGeoGroupBy) {
+          lineGroupBy = ["Continent", "Country"];
+        }
+        else {
+          lineGroupBy = isSubnat ? [productLevels[0]] : ["Section"];
+        }
+        const findItem = item => ["all", "show"].includes(item);
+        if (findItem(country) && findItem(partner) && isSubnat) lineGroupBy = [geoLevels[geoLevels.length - 1]];
       }
-      else {
-        lineGroupBy = isSubnat ? [productLevels[0]] : ["Section"];
-      }
-      const findItem = item => ["all", "show"].includes(item);
-      if (findItem(country) && findItem(partner) && isSubnat) lineGroupBy = [geoLevels[geoLevels.length - 1]];
+
+      console.log(lineGroupBy);
 
       return (
         <div>
