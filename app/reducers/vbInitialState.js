@@ -4,6 +4,12 @@
 export default function initialStateFactory() {
   return {
     countryMembers: [],
-    wdiIndicators: []
+    wdiIndicators: [],
+    cubeSelected: {
+      name: "",
+      geoLevels: [],
+      timeLevels: [],
+      productLevels: []
+    }
   };
 }

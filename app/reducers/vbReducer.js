@@ -4,6 +4,12 @@ import vbInitialState from "./vbInitialState";
 export default function vizbuilderReducer(state = vbInitialState(), action) {
   let newState;
   switch (action.type) {
+    case "VB_UPDATE_CUBE_SELECTED": {
+      newState = state;
+      newState.cubeSelected = action.payload;
+      return newState;
+    }
+
     case "VB_UPDATE_COUNTRY_MEMBERS": {
       newState = state;
       newState.countryMembers = action.payload;
