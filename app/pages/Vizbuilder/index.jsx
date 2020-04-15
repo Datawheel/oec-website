@@ -648,13 +648,14 @@ class Vizbuilder extends React.Component {
     const isSubnat = cube.includes("subnat");
 
     /** Panel Selector */
-    const subnatSelector =
+    let subnatSelector =
       subnat.cubeSelector.some(d => country.split(".").includes(d.id)) ||
       subnat.cubeSelector.some(d => this.state._selectedItemsCountry.map(d => d.label).includes(d.id)) ||
       isSubnat;
     const productSelector = isProduct && !isScatterChart;
     const countrySelector = isCountry && !isScatterChart || isSubnat;
     const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
+    if (productSelector) subnatSelector = false;
 
     const timeIndex = years.findIndex(d => d.value === time * 1);
     const prevTime = !isTimeSeriesChart ? years[timeIndex + 1] : undefined;
