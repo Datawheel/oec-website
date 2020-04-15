@@ -322,11 +322,6 @@
     }
 }
 
-/* Firefox Fix for Columns (can be removed after CMS is updated to v0.12.30) */
-.cp-multi-column-section-caption {
-    column-fill: balance;
-}
-
 
 /* about section */
 
