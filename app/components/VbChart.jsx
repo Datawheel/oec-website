@@ -155,7 +155,7 @@ class VbChart extends React.Component {
           const year = time.slice(0, 4);
           const month = time.slice(4, 6);
           const day = "01";
-          d.Time = new Date(`${year}/${month}/${day}`);
+          d["Time ID"] = new Date(`${year}/${month}/${day}`);
         });
         // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         const nextState = {
@@ -653,7 +653,9 @@ class VbChart extends React.Component {
                   }
                 },
                 total: undefined,
-                x: isSubnat ? "Time" : "Year",
+                timeline: false,
+                x: isSubnat ? "Time ID" : "Year",
+                time: isSubnat ? "Time ID" : "Year",
                 xConfig: {
                   title: isSubnat ? t("Time") : t("Year")
                 },
@@ -729,8 +731,6 @@ class VbChart extends React.Component {
         if (findItem(country) && findItem(partner) && isSubnat) lineGroupBy = [geoLevels[geoLevels.length - 1]];
       }
 
-      console.log(lineGroupBy);
-
       return (
         <div>
           <div className="vb-chart">
@@ -741,10 +741,10 @@ class VbChart extends React.Component {
                 colorScale: undefined,
                 discrete: "x",
                 groupBy: lineGroupBy,
-                time: isSubnat ? "Time" : "Year",
+                time: isSubnat ? "Time ID" : "Year",
                 timeline: false,
                 total: undefined,
-                x: isSubnat ? "Time" : "Year",
+                x: isSubnat ? "Time ID" : "Year",
                 y: measure,
                 yConfig: {
                   scale: this.state.scale.toLowerCase(),

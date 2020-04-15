@@ -115,8 +115,6 @@ class Vizbuilder extends React.Component {
 
     const cubeSelected = datasets.find(d => d.value === cube) || datasets[0];
 
-    console.log(subnat.cubeSelector.find(d => d.id === country));
-
     this.state = {
       activeTab: params ? params.chart : "tree_map",
       controls: params ? params.cube.includes("subnat") : true,
@@ -470,7 +468,6 @@ class Vizbuilder extends React.Component {
     };
 
     if (cube.includes("subnat")) {
-      console.log(this.state.selectedSubnatTimeTemp);
       const id = this.state.subnatGeoItems.map(d => d.id)[0];
       countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : id;
       dataset = cube;
@@ -499,7 +496,6 @@ class Vizbuilder extends React.Component {
 
   handleItemMultiSelect = (key, d) => {
     this.setState({[key]: d});
-    console.log(d);
     if (key === "_selectedItemsCountry" && subnat.cubeSelector.some(h => d[d.length - 1].label === h.id)) {
       const cube = subnat.cubeSelector.find(h => d[d.length - 1].label === h.id);
       this.setState({subnatCubeSelected: cube}, () => this.fetchSubnationalData(cube.cube));
@@ -590,7 +586,6 @@ class Vizbuilder extends React.Component {
       Product: filterSubnat(this.state.subnatProductItems, viztype),
       Time: filterSubnat(this.state.subnatTimeItems, viztype, "value", true)
     };
-    console.log(selectedSubnatItems);
     const subnatKeys = ["Geo", "Product", "Time"].reduce((obj, d) => {
       const base = `selectedSubnat${d}`;
       if (!obj[base]) {
