@@ -73,6 +73,7 @@ class VbChart extends React.Component {
     prevProps.countryMembers !== this.props.countryMembers ||
     prevProps.xScale !== this.props.xScale ||
     prevProps.yScale !== this.props.yScale ||
+    JSON.stringify(prevProps.subnatTimeItems) !== JSON.stringify(this.props.subnatTimeItems) ||
     prevState.loading !== this.state.loading ||
     prevState.depth !== this.state.depth ||
     prevState.scale !== this.state.scale ||
@@ -116,7 +117,7 @@ class VbChart extends React.Component {
     const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
     const timeSeriesChart = ["line", "stacked"].includes(chart);
     if (!geoId) drilldowns.push(subnatGeoDepth || geoLevels[geoLevels.length - 1]);
-    else if (geoId && viztype === "show") drilldowns.push(depth);
+    else if (geoId && viztype === "show") drilldowns.push(["line"].includes(chart) ? productLevels[0] : depth);
     else if (geoId && viztype === "all" || geoId && isFilter) drilldowns.push("Country");
 
     if (isFilter || timeSeriesChart) drilldowns.push(timeLevel);
@@ -148,6 +149,13 @@ class VbChart extends React.Component {
       .get(OLAP_API, {params})
       .then(resp => {
         const data = resp.data.data;
+        data.forEach(d => {
+          const time = d.Time.toString();
+          const year = time.slice(0, 4);
+          const month = time.slice(4, 6);
+          const day = "01";
+          d.Time = new Date(`${year}/${month}/${day}`);
+        });
         // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         const nextState = {
           data,
@@ -705,6 +713,18 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "line" && data && data.length > 0) {
+      const {geoLevels, productLevels} = isSubnat;
+      const isGeoGroupBy = viztype === "all" || isFinite(viztype);
+      let lineGroupBy = ["Trade Flow ID"];
+      if (isGeoGroupBy) {
+        lineGroupBy = ["Continent", "Country"];
+      }
+      else {
+        lineGroupBy = isSubnat ? [productLevels[0]] : ["Section"];
+      }
+      const findItem = item => ["all", "show"].includes(item);
+      if (findItem(country) && findItem(partner) && isSubnat) lineGroupBy = [geoLevels[geoLevels.length - 1]];
+
       return (
         <div>
           <div className="vb-chart">
@@ -714,16 +734,11 @@ class VbChart extends React.Component {
                 ...onClickConfig,
                 colorScale: undefined,
                 discrete: "x",
-                groupBy:
-                flow === "show"
-                  ? ["Trade Flow ID"]
-                  : viztype === "all" || isFinite(viztype)
-                    ? ["Continent", "Country"]
-                    : ["Section"],
+                groupBy: lineGroupBy,
                 time: isSubnat ? "Time" : "Year",
                 timeline: false,
                 total: undefined,
-                x: "Year",
+                x: isSubnat ? "Time" : "Year",
                 y: measure,
                 yConfig: {
                   scale: this.state.scale.toLowerCase(),
