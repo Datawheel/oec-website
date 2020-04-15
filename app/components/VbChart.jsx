@@ -616,7 +616,6 @@ class VbChart extends React.Component {
             </div>
 
             <VbDrawer
-              countryData={this.props.countryMembers}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
               selectedProducts={this.props.selectedProducts}
@@ -693,7 +692,6 @@ class VbChart extends React.Component {
               />
             </div>
             <VbDrawer
-              countryData={this.props.countryData}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
               selectedProducts={this.props.selectedProducts}
@@ -750,7 +748,6 @@ class VbChart extends React.Component {
               />
             </div>
             <VbDrawer
-              countryData={this.props.countryData}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
               selectedProducts={this.props.selectedProducts}
@@ -811,7 +808,6 @@ class VbChart extends React.Component {
               />
             </div>
             <VbDrawer
-              countryData={this.props.countryData}
               isOpen={this.state.isOpenDrawer}
               relatedItems={this.state.relatedItems}
               selectedProducts={this.props.selectedProducts}
@@ -1001,7 +997,6 @@ class VbChart extends React.Component {
             </div>
           </div>
           <VbDrawer
-            countryData={this.props.countryData}
             isOpen={this.state.isOpenDrawer}
             relatedItems={this.state.relatedItems}
             selectedProducts={this.props.selectedProducts}
