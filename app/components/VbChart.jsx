@@ -782,9 +782,9 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "geomap" && data && !loading) {
-      const i = isSubnat.geoLevels.indexOf(this.state.subnatGeoDepth);
+      const i = isSubnat ? isSubnat.geoLevels.indexOf(this.state.subnatGeoDepth) : -1;
       const topojson = isSubnat
-        ? subnat[cube].topojson[i === -1 ? subnat[cube].topojson.length - 1 : i]
+        ? isSubnat.topojson[i === -1 ? isSubnat.topojson.length - 1 : i]
         : "/topojson/world-50m.json";
 
       return (
@@ -806,7 +806,7 @@ class VbChart extends React.Component {
                 topojson,
                 // topojsonFilter: d => d.id !== "ata",
                 // topojsonId: "id",
-                topojsonId: d => d.properties.id,
+                topojsonId: isSubnat ? d => d.properties.id : "id",
                 topojsonKey: isSubnat ? "objects" : "id",
                 // topojsonKey: "id",
                 total: false
