@@ -59,7 +59,7 @@
     "Login": "Login",
     "Password": "Password",
     "Twitter": "Twitter",
-    "error": "Wrong Username or Password",
+    "error": "Wrong E-Mail or Password",
     "success": "Successfully Logged In"
   },
   "No results": {
@@ -107,11 +107,11 @@
     "Password": "Password",
     "PrivacyTermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a> and <a href='{{privacy}}'>Privacy Policy</a>",
     "PrivacyText": "By checking this box, you agree to our <a href='{{privacy}}'>Privacy Policy</a>",
-    "Sign Up": "Sign Up",
+    "Sign Up": "Register",
     "TermsText": "By checking this box, you agree to our <a href='{{terms}}'>Terms of Service</a>",
-    "Username": "Username",
+    "Username": "Name",
     "error": {
-      "Exists": "E-mail or Username already in use",
+      "Exists": "E-mail already in use",
       "IncompleteFields": "Please set all fields",
       "PasswordMatch": "Passwords don't match",
       "TermsAgree": "Must agree to terms to continue"
@@ -125,7 +125,7 @@
   "Trade Balance": "Trade Balance",
   "Trade Flow": "Trade Flow",
   "User": "User",
-  "Username": "Username",
+  "Username": "Name",
   "X Axis": "X Axis",
   "Y Axis": "Y Axis",
   "Year": "Year",

@@ -4,9 +4,9 @@ import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
 import "./SignUp.css";
 
-import {SignUp as CanonSignUp} from "@datawheel/canon-core";
-import OECNavbar from "../../components/OECNavbar";
-import Footer from "../../components/Footer";
+import SignUpForm from "components/SignUpForm";
+import OECNavbar from "components/OECNavbar";
+import Footer from "components/Footer";
 
 class SignUp extends Component {
 
@@ -21,7 +21,7 @@ class SignUp extends Component {
           <h1 className="signup-page-title">Welcome to the OEC</h1>
           <h3 className="signup-page-subtitle">Please create an account</h3>
           <div className="signup-page-form">
-            <CanonSignUp redirect={`/${locale}/account`} />
+            <SignUpForm redirect={`/${locale}/account`} />
             <div className="signup-page-signup">
               Already have an account? <Link to={`/${locale}/login`}>Login</Link>
             </div>

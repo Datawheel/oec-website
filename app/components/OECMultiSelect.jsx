@@ -105,11 +105,11 @@ class OECMultiSelect extends React.Component {
   };
 
   render() {
-    const {items, itemType, placeholder, selectedItems, title} = this.props;
+    const {disabled, icon, items, itemType, placeholder, selectedItems, tabIndex, title} = this.props;
     selectedItems.sort((a, b) => a.title > b.title ? 1 : -1);
 
     return <div className="selector">
-      <h3 className="title">{title}</h3>
+      {title ? <h3 className="title">{title}</h3> : null}
       <MultiSelect
         fill={true}
         // initialContent={undefined}
@@ -121,10 +121,15 @@ class OECMultiSelect extends React.Component {
         onItemSelect={this.handleItemSelect}
         placeholder={placeholder}
         popoverProps={{minimal: true}}
-        resetOnSelect={false}
+        resetOnSelect={true}
         resetOnQuery={false}
         selectedItems={this.props.selectedItems}
         tagInputProps={{
+          disabled,
+          inputProps: {
+            tabIndex
+          },
+          leftIcon: icon,
           onRemove: this.handleTagRemove,
           placeholder,
           rightElement: this.props.selectedItems.length ? <Button icon="cross" minimal={true} onClick={this.handleClear} /> : null,

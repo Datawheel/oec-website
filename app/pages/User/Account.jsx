@@ -100,7 +100,7 @@ class Account extends Component {
             ? <div className={`account-content role-${user.role}`}>
               <div className="account-meta">
                 <div className="account-meta-info">
-                  <h1>{user.username}</h1>
+                  <h1>{user.name || user.username}</h1>
                   <Activate location={this.props.router.location} />
                   <table className="account-meta-table">
                     <tbody>

@@ -15,6 +15,7 @@ module.exports = function(sequelize, db) {
       email: {
         type: db.STRING
       },
+      newsletter: {type: db.BOOLEAN, allowNull: false, defaultValue: false},
       socialEmail: {type: db.STRING},
       name: {type: db.STRING},
       password: {type: db.STRING},
@@ -26,7 +27,12 @@ module.exports = function(sequelize, db) {
       github: {type: db.STRING},
       google: {type: db.STRING},
       stripe: {type: db.STRING},
+      phone: {type: db.STRING},
+      company: {type: db.STRING},
       status: {type: db.STRING},
+      sector: {type: db.STRING},
+      usage: {type: db.STRING},
+      country: {type: db.STRING},
       activated: {type: db.BOOLEAN, allowNull: false, defaultValue: false},
       activateToken: {type: db.STRING},
       activateTokenExpiry: {type: db.DATE},

@@ -23,6 +23,18 @@ module.exports = function(app) {
 
   const {db} = app.settings;
 
+  app.post("/auth/settings/change", isRole(0), async(req, res) => {
+
+    const userData = {...req.body};
+    delete userData.password;
+    delete userData.redirect;
+
+    const {id} = req.user;
+    await db.users.update(userData, {where: {id}});
+    return res.json({msg: "Password updated successfully!"});
+
+  });
+
   app.post("/auth/password/change", isRole(0), async(req, res) => {
 
     const {oldPassword, newPassword} = req.body;
