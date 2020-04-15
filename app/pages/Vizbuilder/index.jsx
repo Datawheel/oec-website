@@ -16,7 +16,6 @@ import SelectMultiHierarchy from "components/SelectMultiHierarchy";
 import SimpleSelect from "components/SimpleSelect";
 
 import {Button, Switch} from "@blueprintjs/core";
-import {range} from "helpers/utils";
 
 import "./Vizbuilder.css";
 import {getVbTitle} from "../../helpers/vbTitle";
@@ -25,8 +24,6 @@ import subnat from "helpers/subnatVizbuilder";
 import OECButtonGroup from "../../components/OECButtonGroup";
 
 const notEmpty = items => items && items.length;
-
-const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
 
 const getHierarchyList = (items, levels) => {
   const output = items.reduce((obj, d) => {
@@ -53,15 +50,6 @@ const selectedItems = (items, value, key) => {
     [`${key}Temp`]: output
   };
 };
-
-const datasets = [
-  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2018), productLevel: "HS6"},
-  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2018), productLevel: "HS6"},
-  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", data: cubeData(2003, 2018), productLevel: "HS6"},
-  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2018), productLevel: "HS6"},
-  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", data: cubeData(1964, 2018), productLevel: "Subgroup"}
-  // {value: "cpc", title: "Technology"}
-];
 
 const flowItems = [
   {value: "export", title: "Exports"},
@@ -106,6 +94,7 @@ export function createItems(data, levels, iconUrl) {
 }
 
 const parseIdsToURL = (data, key = "id") => data.map(d => d[key]).join(".");
+const datasets = subnat.datasets;
 
 class Vizbuilder extends React.Component {
   constructor(props) {
@@ -119,11 +108,12 @@ class Vizbuilder extends React.Component {
       activeTab: params ? params.chart : "tree_map",
       controls: params ? params.cube.includes("subnat") : true,
       product: [],
-      productLevel: "HS6",
+      productLevel: cubeSelected.productLevel,
       technology: [],
       permalink: undefined,
 
       cubeSelected,
+      loading: true,
 
       _product: undefined,
       _country: undefined,
@@ -274,6 +264,7 @@ class Vizbuilder extends React.Component {
   componentDidMount = () => {
     const {routeParams} = this.props;
     const {cube} = routeParams;
+    const {cubeSelected} = this.state;
     const isSubnat = cube.includes("subnat");
     window.addEventListener("scroll", this.handleScroll);
 
@@ -310,7 +301,8 @@ class Vizbuilder extends React.Component {
       this.updateFilterSelected({
         product: productData,
         productKeys,
-        technology: technologyData
+        technology: technologyData,
+        loading: false
       }, true);
     }));
 
@@ -546,6 +538,15 @@ class Vizbuilder extends React.Component {
     if (prevState && prevState.permalink) {
       [chart, cube, flow, country, partner, viztype, time] = prevState.permalink.slice(1).split("/").slice(2);
     }
+
+    const cubeSelected = this.state._dataset;
+
+    this.props.updateCubeSelected({
+      name: cubeSelected.cubeName,
+      geoLevels: cubeSelected.geoLevels,
+      productLevels: cubeSelected.productLevels,
+      timeLevels: cubeSelected.timeLevels
+    });
 
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
 
@@ -948,7 +949,7 @@ class Vizbuilder extends React.Component {
               </div>
             </div>}
           </div>
-          <div className="vb-column">
+          {!this.state.loading ? <div className="vb-column">
             <div className="vb-title-wrapper">
               <div className="vb-title-button">
                 {prevTime && <Button
@@ -995,7 +996,7 @@ class Vizbuilder extends React.Component {
                 );
               }}
             />
-          </div>
+          </div> : <div className="vb-column">Loading...</div>}
         </div>
       </div>
       <Footer />
@@ -1007,7 +1008,8 @@ class Vizbuilder extends React.Component {
 const mapDispatchToProps = dispatch => ({
   // dispatching plain actions
   addCountryMembers: payload => dispatch({type: "VB_UPDATE_COUNTRY_MEMBERS", payload}),
-  addWdiIndicators: payload => dispatch({type: "VB_UPDATE_WDI", payload})
+  addWdiIndicators: payload => dispatch({type: "VB_UPDATE_WDI", payload}),
+  updateCubeSelected: payload => dispatch({type: "VB_UPDATE_CUBE_SELECTED", payload})
 });
 
 /** */

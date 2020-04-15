@@ -1,3 +1,5 @@
+const {range} = require("helpers/utils.js");
+
 const cubes = {
   // subnat_fra: {
   //   cube: "trade_s_fra_q_cpf",
@@ -72,7 +74,34 @@ const cubes = {
 
 const cubeSelector = Object.keys(cubes).map(d => cubes[d]);
 
+const sitcLevels = ["Category", "Section", "Division", "Group", "Subgroup"];
+const hsLevels = ["Section", "HS2", "HS4", "HS6"];
+const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
+
+const hsCubes = {
+  geoLevels: ["Exporter Country", "Importer Country"],
+  productLevels: hsLevels,
+  timeLevels: ["Year"]
+};
+
+const sitcCubes = {
+  geoLevels: ["Reporter Country", "Partner Country"],
+  productLevels: sitcLevels,
+  timeLevels: ["Year"]
+};
+
+const datasets = [
+  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", data: cubeData(2003, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", data: cubeData(2012, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", data: cubeData(2018, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", data: cubeData(1964, 2018), productLevel: "Subgroup", ...sitcCubes}
+];
+
 module.exports = {
   ...cubes,
-  cubeSelector
+  cubeSelector,
+  datasets
 };

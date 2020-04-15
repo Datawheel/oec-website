@@ -53,8 +53,10 @@ class VbChart extends React.Component {
   }
 
   componentDidMount = () => {
-    const {routeParams} = this.props;
+    const {cubeSelected, routeParams} = this.props;
     const {cube} = routeParams;
+
+    console.log(cubeSelected);
 
     const nextState = {
       location: window.location
@@ -65,12 +67,17 @@ class VbChart extends React.Component {
       const depth = n > 3 ? levels[2] : levels[n - 1];
       nextState.depth = depth;
     }
+    else {
+      const levels = cubeSelected.productLevels;
+      nextState.depth = levels.includes("HS4") ? "HS4" : levels[levels.length - 1];
+    }
     this.setState(nextState, () => this.fetchData());
   };
 
   shouldComponentUpdate = (prevProps, prevState) =>
     prevProps.permalink !== this.props.permalink ||
     prevProps.countryMembers !== this.props.countryMembers ||
+    JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected) ||
     prevProps.xScale !== this.props.xScale ||
     prevProps.yScale !== this.props.yScale ||
     JSON.stringify(prevProps.subnatTimeItems) !== JSON.stringify(this.props.subnatTimeItems) ||
@@ -85,6 +92,11 @@ class VbChart extends React.Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.permalink !== this.props.permalink) {
       this.fetchData();
+    }
+    if (JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected)) {
+      const levels = this.props.cubeSelected.productLevels;
+      const depth = levels.includes("HS4") ? "HS4" : levels[levels.length - 1];
+      this.setState({depth}, () => this.fetchData());
     }
   };
 
@@ -113,7 +125,8 @@ class VbChart extends React.Component {
       5: "Time",
       6: "Time"
     };
-    const timeLevel = timeOptions[timeTemp.toString().length] || "Year";
+    const timeLength = timeTemp.toString().length;
+    const timeLevel = timeOptions[timeLength] || "Year";
     const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
     const timeSeriesChart = ["line", "stacked"].includes(chart);
     if (!geoId) drilldowns.push(subnatGeoDepth || geoLevels[geoLevels.length - 1]);
@@ -150,13 +163,18 @@ class VbChart extends React.Component {
       .get(OLAP_API, {params})
       .then(resp => {
         const data = resp.data.data;
-        data.forEach(d => {
-          const time = d.Time.toString();
-          const year = time.slice(0, 4);
-          const month = time.slice(4, 6);
-          const day = "01";
-          d["Time ID"] = new Date(`${year}/${month}/${day}`);
-        });
+        if (data[0] && data[0].Time) {
+          data.forEach(d => {
+            const time = d.Time.toString();
+            const year = time.slice(0, 4);
+            let month = time.slice(4, timeLength);
+            if (timeLength === 5) {
+              month = month * 3 - 2;
+            }
+            const day = "01";
+            d["Time ID"] = new Date(`${year}/${month}/${day}`);
+          });
+        }
         // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         const nextState = {
           data,
@@ -172,7 +190,8 @@ class VbChart extends React.Component {
   }
 
   fetchData = () => {
-    const {routeParams} = this.props;
+    const {cubeSelected, routeParams} = this.props;
+    const {geoLevels} = cubeSelected;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
     // Uses subnat cubes
     const prevState = {data: [], loading: true};
@@ -201,11 +220,13 @@ class VbChart extends React.Component {
       : range(timeInterval[0], timeInterval[timeInterval.length - 1]).join();
     if (timeInterval.length === 1) timeInterval.push(timeInterval[0]);
 
-    const cubeName = this.props.cubeName || !isTechnology
-      ? `trade_i_baci_a_${cube.replace("hs", "")}`
-      : "patents_i_uspto_w_cpc";
+    const cubeName = cubeSelected.name;
     const measureName = isTechnology ? "Patent Share" : "Trade Value";
     const growth = `Year,${measureName}`;
+
+
+    const reporterCountry = geoLevels[0];
+    const partnerCountry = geoLevels[1];
 
     if (isTradeBalance) {
       const balanceParams = {
@@ -216,17 +237,17 @@ class VbChart extends React.Component {
         Year: timeFilter
       };
       const exportsBalanceParams = Object.assign(
-        balanceParams, {"Exporter Country": countryIds}
+        balanceParams, {[reporterCountry]: countryIds}
       );
       const importsBalanceParams = Object.assign(
-        balanceParams, {"Importer Country": countryIds}
+        balanceParams, {[partnerCountry]: countryIds}
       );
 
       if (partnerId) {
-        exportsBalanceParams["Importer Country"] = partnerId
+        exportsBalanceParams[partnerCountry] = partnerId
           .map(d => d.value)
           .join();
-        importsBalanceParams["Exporter Country"] = partnerId
+        importsBalanceParams[reporterCountry] = partnerId
           .map(d => d.value)
           .join();
       }
@@ -264,20 +285,20 @@ class VbChart extends React.Component {
     const countryType = isTechnology
       ? "Organization Country"
       : flow === "export"
-        ? "Exporter Country"
-        : "Importer Country";
+        ? reporterCountry
+        : partnerCountry;
 
     const countryTypeBalance = isTechnology
       ? "Organization Country"
       : flow === "export"
-        ? "Importer Country"
-        : "Exporter Country";
+        ? partnerCountry
+        : reporterCountry;
 
     const partnerType = isTechnology
       ? "Organization Country"
       : flow === "export"
-        ? "Importer Country"
-        : "Exporter Country";
+        ? partnerCountry
+        : reporterCountry;
 
     const dd = {
       show: isTechnology
@@ -508,6 +529,8 @@ class VbChart extends React.Component {
       !isTechnology ? `$${formatAbbreviate(value)}` : formatAbbreviate(value);
     const isSubnat =  subnat[cube];
 
+    const groupByProductLevel1 = this.props.cubeSelected.productLevels[0];
+
     const baseConfig = {
       data: data || [],
       groupBy:
@@ -519,7 +542,7 @@ class VbChart extends React.Component {
             ? ["Continent", "Country"]
             : isTechnology
               ? ["Section", this.state.techDepth]
-              : ["Section", this.state.depth],
+              : [groupByProductLevel1, this.state.depth],
       totalFormat: d => `Total: ${tickFormatter(d)}`
     };
     const measure = isTechnology ? "Patent Share" : "Trade Value";
@@ -553,7 +576,7 @@ class VbChart extends React.Component {
       }
     };
 
-    let productDepthItems = ["HS2", "HS4", "HS6"];
+    let productDepthItems = this.props.cubeSelected.productLevels.slice(1);
     let isGeoSubnatGroupBy = false;
 
     if (isSubnat) {
@@ -1036,10 +1059,11 @@ class VbChart extends React.Component {
 
 /** */
 function mapStateToProps(state) {
-  const {countryMembers, wdiIndicators} = state.vizbuilder;
+  const {countryMembers, cubeSelected, wdiIndicators} = state.vizbuilder;
 
   return {
     countryMembers,
+    cubeSelected,
     wdiIndicators
   };
 }
