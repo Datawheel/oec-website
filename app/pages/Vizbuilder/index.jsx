@@ -58,8 +58,8 @@ const datasets = [
   {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2018), productLevel: "HS6"},
   {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2018), productLevel: "HS6"},
   {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", data: cubeData(2003, 2018), productLevel: "HS6"},
-  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2018), productLevel: "HS6"}
-  // {value: "sitc", title: "SITC", data: cubeData(1964, 2017)}
+  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2018), productLevel: "HS6"},
+  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", data: cubeData(1964, 2018), productLevel: "Subgroup"}
   // {value: "cpc", title: "Technology"}
 ];
 
