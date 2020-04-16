@@ -6,10 +6,22 @@ export default function initialStateFactory() {
     countryMembers: [],
     wdiIndicators: [],
     cubeSelected: {
-      name: "",
+      currency: undefined,
       geoLevels: [],
-      timeLevels: [],
-      productLevels: []
+      name: "",
+      productLevels: [],
+      timeItems: [],
+      timeLevels: []
+    },
+    xConfig: {
+      id: "",
+      name: "",
+      scale: ""
+    },
+    yConfig: {
+      id: "",
+      name: "",
+      scale: ""
     }
   };
 }

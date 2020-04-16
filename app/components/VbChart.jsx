@@ -57,8 +57,6 @@ class VbChart extends React.Component {
     const {cubeSelected, routeParams} = this.props;
     const {cube} = routeParams;
 
-    console.log(cubeSelected);
-
     const nextState = {
       location: window.location
     };
@@ -81,7 +79,6 @@ class VbChart extends React.Component {
     JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected) ||
     prevProps.xScale !== this.props.xScale ||
     prevProps.yScale !== this.props.yScale ||
-    JSON.stringify(prevProps.subnatTimeItems) !== JSON.stringify(this.props.subnatTimeItems) ||
     prevState.loading !== this.state.loading ||
     prevState.depth !== this.state.depth ||
     prevState.scale !== this.state.scale ||
@@ -104,7 +101,8 @@ class VbChart extends React.Component {
 
   fetchSubnatData = () => {
     const {depth, subnatGeoDepth} = this.state;
-    const {routeParams} = this.props;
+    const {cubeSelected, routeParams} = this.props;
+    const {timeItems} = cubeSelected;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
     const {productLevels, geoLevels} = subnat[cube];
 
@@ -147,11 +145,10 @@ class VbChart extends React.Component {
 
     let timeFilter = time.replace(".", ",");
     if (isTimeSeries) {
-      const {subnatTimeItems} = this.props;
       const interval = time.split(".");
-      const j = subnatTimeItems.findIndex(d => d.value === interval[0]);
-      const i = subnatTimeItems.findIndex(d => d.value === interval[1]);
-      timeFilter = subnatTimeItems.slice(i, j + 1).map(d => d.value).join();
+      const j = timeItems.findIndex(d => d.value === interval[0]);
+      const i = timeItems.findIndex(d => d.value === interval[1]);
+      timeFilter = timeItems.slice(i, j + 1).map(d => d.value).join();
     }
     params.Time = timeFilter;
 
@@ -161,10 +158,23 @@ class VbChart extends React.Component {
     if (geoId) params["Subnat Geography"] = geoId;
     if (isFilter) params.Product = viztype;
 
+    const measureName = "Trade Value";
+
+    const growth = `${timeLevel},${measureName}`;
+    if (this.state.selected.includes("Growth")) {
+      delete params.Time;
+      const diff = 1;
+      params.growth = growth;
+      params.drilldowns += `,${timeLevel}`;
+      const year = time * 1;
+      params[timeLevel] = `${year - diff},${year}`;
+    }
+
     return axios
       .get(OLAP_API, {params})
       .then(resp => {
-        const data = resp.data.data;
+        let data = resp.data.data;
+        if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         if (data[0] && data[0].Time) {
           data.forEach(d => {
             const time = d.Time.toString();
@@ -177,7 +187,6 @@ class VbChart extends React.Component {
             d["Time ID"] = new Date(`${year}/${month}/${day}`);
           });
         }
-        // if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
         const nextState = {
           data,
           auth: true,
@@ -187,7 +196,8 @@ class VbChart extends React.Component {
         if (!subnatGeoDepth) nextState.subnatGeoDepth = geoLevels[geoLevels.length - 1];
         this.setState(nextState);
       }).catch(error => {
-        this.setState({data: [], loading: false, routeParams, auth: false});
+        // TODO: AUTH
+        this.setState({data: [], loading: false, routeParams});
       });
   }
 
@@ -454,8 +464,11 @@ class VbChart extends React.Component {
 
   render() {
     const {auth, data, loading, routeParams} = this.state;
-    const {t} = this.props;
+    const {cubeSelected, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
+    const {currency} = cubeSelected;
+
+    console.log(cubeSelected);
 
     if (loading) {
       return <LoadingChart title={t("Fetching data...")}/>;
@@ -469,7 +482,7 @@ class VbChart extends React.Component {
     const isFilter = !["show", "all"].includes(viztype);
 
     const tickFormatter = value =>
-      !isTechnology ? `$${formatAbbreviate(value)}` : formatAbbreviate(value);
+      !isTechnology ? `${currency || "$"}${formatAbbreviate(value)}` : formatAbbreviate(value);
     const isSubnat =  subnat[cube];
 
     const groupByProductLevel1 = this.props.cubeSelected.productLevels[0];
@@ -552,7 +565,7 @@ class VbChart extends React.Component {
             />
           </div>
           <div className="vb-chart-options">
-            {!isTechnology && !isContinentGroupBy && !isGeoSubnatGroupBy &&
+            {!isTechnology && !isContinentGroupBy && !isGeoSubnatGroupBy && productDepthItems.length > 1 &&
               <OECButtonGroup
                 items={productDepthItems}
                 selected={this.state.depth}
