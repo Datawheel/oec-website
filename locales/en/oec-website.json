@@ -150,7 +150,7 @@
   "vb_title_trade_balance": "What is the trade balance for {{country}}? ({{time}})",
   "vb_title_trade_balance_partner": "What is the trade balance for {{country}} to {{partner}}? ({{time}})",
   "vb_title_what_country_flow": "What does {{country}} {{flow}}? ({{time}})",
-  "vb_title_what_country_flow_partner": "What does {{country}} {{flow}} to {{partner}}? ({{time}})",
+  "vb_title_what_country_flow_partner": "What does {{country}} {{flow}} {{prep}} {{partner}}? ({{time}})",
   "vb_title_what_country_patent": "What does {{country}} patent? ({{time}})",
   "vb_title_where_country_flow": "Where does {{country}} {{flow}} {{prep}}? ({{time}})",
   "vb_title_where_country_flow_product": "Where does {{country}} {{flow}} {{product}} {{prep}}? (2017)",
