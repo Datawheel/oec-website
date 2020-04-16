@@ -39,7 +39,9 @@ const cubes = {
   subnat_can: {
     cube: "trade_s_can_m_hs",
     name: "Canada",
-    id: "chn",
+    id: "can",
+    geoIcon: d => `/images/icons/subnational/can/flag_${d["Subnat Geography ID"]}.png`,
+    currency: "CAD ",
     topojson: [
       "/shapes/subnational_can_provinces.topojson"
     ],
@@ -51,6 +53,7 @@ const cubes = {
     cube: "trade_s_jpn_m_hs",
     name: "Japan",
     id: "jpn",
+    currency: "¥",
     topojson: [
       "/shapes/subnational_jpn_regions.topojson",
       "/shapes/subnational_jpn_prefectures.topojson"
@@ -63,9 +66,11 @@ const cubes = {
     cube: "trade_s_deu_m_egw",
     name: "Germany",
     id: "deu",
+    currency: "€",
     topojson: [
       "/shapes/subnational_deu_regions.topojson"
     ],
+    geoIcon: d => `/images/icons/subnational/deu/flag_${d["Subnat Geography ID"]}.png`,
     productLevels: ["EGW1", "Product"],
     geoLevels: ["Subnat Geography"],
     timeLevels: ["Year", "Quarter", "Month"]
@@ -76,7 +81,7 @@ const cubeSelector = Object.keys(cubes).map(d => cubes[d]);
 
 const sitcLevels = ["Category", "Section", "Division", "Group", "Subgroup"];
 const hsLevels = ["Section", "HS2", "HS4", "HS6"];
-const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d}));
+const cubeData = (a, b) => range(a, b).map(d => ({value: d, title: d})).reverse();
 
 const hsCubes = {
   geoLevels: ["Exporter Country", "Importer Country"],
@@ -91,13 +96,13 @@ const sitcCubes = {
 };
 
 const datasets = [
-  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", data: cubeData(1995, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", data: cubeData(1998, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", data: cubeData(2003, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", data: cubeData(2008, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", data: cubeData(2012, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", data: cubeData(2018, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", data: cubeData(1964, 2018), productLevel: "Subgroup", ...sitcCubes}
+  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", timeItems: cubeData(1995, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", timeItems: cubeData(1998, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", timeItems: cubeData(2003, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", timeItems: cubeData(2008, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", timeItems: cubeData(2012, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", timeItems: cubeData(2018, 2018), productLevel: "HS6", ...hsCubes},
+  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", timeItems: cubeData(1964, 2018), productLevel: "Subgroup", ...sitcCubes}
 ];
 
 module.exports = {
