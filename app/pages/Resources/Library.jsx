@@ -3,8 +3,6 @@ import axios from 'axios';
 import ReactTable from 'react-table';
 import {HTMLSelect} from '@blueprintjs/core';
 import {Geomap} from 'd3plus-react';
-import {GeoAlbersUk} from "d3-composite-projections";
-
 import OECMultiSelect from 'components/OECMultiSelect';
 
 import 'react-table/react-table.css';
@@ -27,7 +25,7 @@ class Library extends Component {
 
 	fetchData = () => {
 		const dataApi = '/api/library';
-		const dictApi = 'https://dev.oec.world/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
+		const dictApi = '/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
 		axios.all([axios.get(dataApi), axios.get(dictApi)])
 			.then(axios.spread((resp1, resp2) => {
 				const data = resp1.data.data;
