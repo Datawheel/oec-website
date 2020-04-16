@@ -959,7 +959,10 @@ class Vizbuilder extends React.Component {
                   icon="chevron-left"
                   minimal={true}
                   onClick={() => {
-                    this.setState({_selectedItemsYear: [prevTime]}, () => this.buildViz());
+                    const nextState = {};
+                    if (isSubnat) nextState.selectedSubnatTimeTemp = [prevTime];
+                    else nextState._selectedItemsYear = [prevTime];
+                    this.setState(nextState, () => this.buildViz());
                   }}
                   text={prevTime.title}
                 />}
@@ -972,7 +975,10 @@ class Vizbuilder extends React.Component {
                 {nextTime && <Button
                   minimal={true}
                   onClick={() => {
-                    this.setState({_selectedItemsYear: [nextTime]}, () => this.buildViz());
+                    const nextState = {};
+                    if (isSubnat) nextState.selectedSubnatTimeTemp = [nextTime];
+                    else nextState._selectedItemsYear = [nextTime];
+                    this.setState(nextState, () => this.buildViz());
                   }}
                   rightIcon="chevron-right"
                   text={nextTime.title}
