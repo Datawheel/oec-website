@@ -1,5 +1,5 @@
 const {range} = require("helpers/utils.js");
-
+const colors = require("helpers/colors.js");
 const cubes = {
   // subnat_fra: {
   //   cube: "trade_s_fra_q_cpf",
@@ -70,6 +70,8 @@ const cubes = {
     topojson: [
       "/shapes/subnational_deu_regions.topojson"
     ],
+    productColor: d => colors.EGW1[d["EGW1 ID"]],
+    productIcon: d => `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`,
     geoIcon: d => `/images/icons/subnational/deu/flag_${d["Subnat Geography ID"]}.png`,
     productLevels: ["EGW1", "Product"],
     geoLevels: ["Subnat Geography"],

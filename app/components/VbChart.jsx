@@ -162,12 +162,14 @@ class VbChart extends React.Component {
 
     const growth = `${timeLevel},${measureName}`;
     if (this.state.selected.includes("Growth")) {
+      const interval = time.split(".");
+      const i = timeItems.findIndex(d => d.value * 1 === interval[0] * 1);
       delete params.Time;
       const diff = 1;
       params.growth = growth;
       params.drilldowns += `,${timeLevel}`;
       const year = time * 1;
-      params[timeLevel] = `${year - diff},${year}`;
+      params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }
 
     return axios
@@ -371,6 +373,9 @@ class VbChart extends React.Component {
     if (params.drilldowns.includes(countryType)) {
       params.properties = `${countryType} ISO 3`;
     }
+    if (params.drilldowns.includes(countryTypeBalance)) {
+      params.properties = `${countryTypeBalance} ISO 3`;
+    }
 
     if (chart === "network") {
       // eslint-disable-next-line guard-for-in
@@ -467,8 +472,6 @@ class VbChart extends React.Component {
     const {cubeSelected, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
     const {currency} = cubeSelected;
-
-    console.log(cubeSelected);
 
     if (loading) {
       return <LoadingChart title={t("Fetching data...")}/>;
@@ -618,6 +621,7 @@ class VbChart extends React.Component {
     }
     else if (chart === "stacked" && data && data.length > 0) {
       if (this.state.stackLayout === "Share") baseConfig.stackOffset = "expand";
+
       return (
         <div>
           <div className="vb-chart">
@@ -633,8 +637,8 @@ class VbChart extends React.Component {
                 },
                 total: undefined,
                 timeline: false,
-                x: isSubnat ? "Time ID" : "Year",
-                time: isSubnat ? "Time ID" : "Year",
+                x: isSubnat && data[0]["Time ID"] ? "Time ID" : "Year",
+                time: isSubnat && data[0]["Time ID"] ? "Time ID" : "Year",
                 xConfig: {
                   title: isSubnat ? t("Time") : t("Year")
                 },
