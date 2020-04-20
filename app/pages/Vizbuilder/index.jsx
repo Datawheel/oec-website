@@ -716,6 +716,30 @@ class Vizbuilder extends React.Component {
     const subnatTimeItems = this.state.subnatTimeItems
       .filter(d => d.type === this.state.subnatTimeLevelSelected);
 
+    if (this.props.isEmbed) {
+      return <div className="vb-embed">
+        <VbChart
+          cubeName={this.state.cubeSelected.cubeName}
+          permalink={this.state.permalink}
+          routeParams={routeParams}
+          router={this.props.router}
+          selectedProducts={this.state._selectedItemsProductTitle}
+          xAxis={this.state._xAxisTitle}
+          xScale={this.state._xAxisScale}
+          yAxis={this.state._yAxisTitle}
+          yScale={this.state._yAxisScale}
+          callback={d => {
+            const query = permalinkDecode(d);
+            const permalink = {permalink: d, activeTab: query.chart || "tree_map"};
+            this.setState(
+              permalink,
+              () => this.updateFilterSelected(permalink)
+            );
+          }}
+        />
+      </div>;
+    }
+
     return <div id="vizbuilder">
       <OECNavbar
         className={scrolled ? "background" : ""}
