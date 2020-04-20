@@ -37,6 +37,7 @@
 			font-size: var(--font-sm);
 			font-weight: 300;
 			margin-bottom: var(--gutter-sm);
+			line-height: 1.2rem;
 		}
 
 		& .citation {
@@ -77,12 +78,25 @@
 		& .data {
 			& h3 {
 				font-size: var(--font-md);
+				opacity: 1;
 			}
 			& .reference {
 				display: flex;
 				font-size: var(--font-xs);
 				font-weight: 400;
 				margin-bottom: var(--gutter-xs);
+			}
+		}
+
+		& .definitions {
+			& h2 {
+				color: white;
+				opacity: 1;
+			}
+
+			& h3 {
+				color: white;
+				opacity: 1;
 			}
 		}
 	}
