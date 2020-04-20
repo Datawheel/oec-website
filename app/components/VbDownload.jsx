@@ -129,7 +129,9 @@ class VbShare extends React.Component {
   render() {
     const {separator} = this.state;
     const {data} = this.props;
-    const columnKeys = data[0] ? Object.keys(data[0]) : [];
+    const filteredData = data.slice();
+
+    const columnKeys = filteredData[0] ? Object.keys(data[0]) : [];
     const columns = columnKeys.map(d => ({Header: d, accessor: d}));
 
     return <div>
@@ -146,7 +148,7 @@ class VbShare extends React.Component {
             <h5 className="title">Preview data</h5>
             <ReactTable
               columns={columns}
-              data={this.props.data.slice(0, 5)}
+              data={filteredData.slice(0, 5)}
               defaultPageSize={5}
               showPagination={false}
             />
