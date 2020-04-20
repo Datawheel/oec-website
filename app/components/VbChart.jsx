@@ -177,8 +177,9 @@ class VbChart extends React.Component {
       .then(resp => {
         let data = resp.data.data;
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
+
         if (data[0] && data[0].Time) {
-          data.forEach(d => {
+          data = data.map(d => {
             const time = d.Time.toString();
             const year = time.slice(0, 4);
             let month = time.slice(4, timeLength);
@@ -186,9 +187,11 @@ class VbChart extends React.Component {
               month = month * 3 - 2;
             }
             const day = "01";
-            d["Time ID"] = new Date(`${year}/${month}/${day}`);
+            const timeId = new Date(`${year}/${month}/${day}`).getTime();
+            return Object.assign(d, {"Time ID": timeId});
           });
         }
+
         const nextState = {
           data,
           auth: true,
@@ -621,7 +624,6 @@ class VbChart extends React.Component {
     }
     else if (chart === "stacked" && data && data.length > 0) {
       if (this.state.stackLayout === "Share") baseConfig.stackOffset = "expand";
-
       return (
         <div>
           <div className="vb-chart">
@@ -1020,7 +1022,6 @@ class VbChart extends React.Component {
 /** */
 function mapStateToProps(state) {
   const {countryMembers, cubeSelected, wdiIndicators} = state.vizbuilder;
-
   return {
     countryMembers,
     cubeSelected,
