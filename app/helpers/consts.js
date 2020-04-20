@@ -19,8 +19,7 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Country", url: `/${locale}/rankings/`},
-      {title: "Product", url: `/${locale}/rankings/`}
+      {title: "Dynamics", url: `/${locale}/rankings/`}
     ]},
     // tools
     {title: "Tools", items: [
@@ -34,7 +33,6 @@ module.exports = {
     {title: "Academy", items: [
       {title: "Definitions",  url: `/${locale}/resources/definitions`},
       {title: "Library",  url: `/${locale}/resources/library`},
-      {title: "FAQs",         url: `/${locale}/resources/faq`},
       {title: "Publications", url: `/${locale}/resources/publications`}
     ]},
     // about
