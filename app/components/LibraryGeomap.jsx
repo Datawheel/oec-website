@@ -9,7 +9,7 @@ class LibraryGeomap extends Component {
     const {changeGeomapFilter} = this.props;
     return (
       <div className={`geomap ${classname}`}>
-        {width && (
+        {classname === 'continent' && (
           <Geomap
             config={{
               data: data,
@@ -35,7 +35,7 @@ class LibraryGeomap extends Component {
                   ["Topics", d => d.topics]
                 ],
                 footer: 'Click to filter table',
-                width: "400px"
+                width: "200px"
               },
               on: {
                 'click.shape': (d) => {
@@ -61,7 +61,7 @@ class LibraryGeomap extends Component {
             }}
           />
         )}
-        {!width && (
+        {classname === 'countries' && (
           <Geomap
             config={{
               data: data,
@@ -69,9 +69,10 @@ class LibraryGeomap extends Component {
               height: height,
               legend: false,
               total: false,
-              colorScale: 'gap',
+              colorScale: 'count',
               colorScaleConfig: {
-                color: ['#ffffcc', '#c2e699', '#78c679', '#238443']
+                color: ['#ffffcc', '#c2e699', '#78c679', '#238443'],
+                scale: "jenks"
               },
               tooltipConfig: {
                 title: (d) => {
@@ -86,7 +87,7 @@ class LibraryGeomap extends Component {
                   ["Topics", d => d.topics]
                 ],
                 footer: 'Click to filter table',
-                width: "400px"
+                width: "200px"
               },
               on: {
                 'click.shape': (d) => {

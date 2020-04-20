@@ -229,6 +229,7 @@ class Library extends Component {
 			filterSubtopics
 		} = this.state;
 		const filteredData = this.filterData();
+		console.log(geomapCountries);
 		console.log(geomapContinents);
 
 		return (
