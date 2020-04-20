@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from 'react-table';
 import { HTMLSelect } from '@blueprintjs/core';
-import { Geomap } from 'd3plus-react';
 import OECMultiSelect from 'components/OECMultiSelect';
 import LibraryGeomap from 'components/LibraryGeomap';
 
