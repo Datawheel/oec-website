@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from 'react-table';
-import {HTMLSelect} from '@blueprintjs/core';
-import {Geomap} from 'd3plus-react';
+import { HTMLSelect } from '@blueprintjs/core';
+import { Geomap } from 'd3plus-react';
 import OECMultiSelect from 'components/OECMultiSelect';
 import LibraryGeomap from 'components/LibraryGeomap';
 
@@ -27,16 +27,17 @@ class Library extends Component {
 
 	fetchData = () => {
 		const dataApi = '/api/library';
-		const dictApi = '/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
-		axios.all([axios.get(dataApi), axios.get(dictApi)])
-			.then(axios.spread((resp1, resp2) => {
+		const dictApi =
+			'/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
+		axios.all([ axios.get(dataApi), axios.get(dictApi) ]).then(
+			axios.spread((resp1, resp2) => {
 				const data = resp1.data.data;
 				const uniqueRegion = this.getUniqueRegions(data);
 				const uniqueSubtopics = this.getUniqueSubtopics(data);
 
 				const dictarray = resp2.data.data;
 				const dict = {};
-				dictarray.map(d => {
+				dictarray.map((d) => {
 					const object = {};
 					object['Country ID'] = d['Country ID'].slice(2, 5);
 					object['Continent'] = d['Continent'];
@@ -45,13 +46,21 @@ class Library extends Component {
 				});
 
 				const geomapData = this.getGeomapData(data, uniqueRegion, dict);
-				this.setState({data, dict, uniqueRegion, uniqueSubtopics, geomapCountries: geomapData[0], geomapContinents: geomapData[1]});
-			}));
+				this.setState({
+					data,
+					dict,
+					uniqueRegion,
+					uniqueSubtopics,
+					geomapCountries: geomapData[0],
+					geomapContinents: geomapData[1]
+				});
+			})
+		);
 	};
 
 	getUniqueRegions = (d) => {
 		if (d) {
-			const array = [...new Set(d.map((f) => f.Region))];
+			const array = [ ...new Set(d.map((f) => f.Region)) ];
 			array.push(' ');
 			const sorted = array.sort((a, b) => a.localeCompare(b));
 			return sorted;
@@ -62,11 +71,11 @@ class Library extends Component {
 
 	getUniqueSubtopics = (d) => {
 		if (d) {
-			const subtopics1 = [...new Set(d.map((m) => m.Subtopic1))].filter((f) => f !== null);
-			const subtopics2 = [...new Set(d.map((m) => m.Subtopic2))].filter((f) => f !== null);
-			const subtopics3 = [...new Set(d.map((m) => m.Subtopic3))].filter((f) => f !== null);
+			const subtopics1 = [ ...new Set(d.map((m) => m.Subtopic1)) ].filter((f) => f !== null);
+			const subtopics2 = [ ...new Set(d.map((m) => m.Subtopic2)) ].filter((f) => f !== null);
+			const subtopics3 = [ ...new Set(d.map((m) => m.Subtopic3)) ].filter((f) => f !== null);
 			const subtopics = subtopics1.concat(subtopics2).concat(subtopics3);
-			const sorted = [...new Set(subtopics)].sort((a, b) => a.localeCompare(b));
+			const sorted = [ ...new Set(subtopics) ].sort((a, b) => a.localeCompare(b));
 			const dict = [];
 			sorted.forEach((h) => {
 				const item = {};
@@ -84,7 +93,7 @@ class Library extends Component {
 		if (d) {
 			let countries = [];
 			let continents = [];
-			const countryPapers = d.filter(f => f.Region in dict);
+			const countryPapers = d.filter((f) => f.Region in dict);
 			const papersByCountry = countryPapers.reduce((acc, it) => {
 				acc[it.Region] = acc[it.Region] + 1 || 1;
 				return acc;
@@ -96,19 +105,19 @@ class Library extends Component {
 			filters.shift();
 			for (const index in filters) {
 				const value = d.filter((f) => f.Region === filters[index]);
-				const subtopics1 = [...new Set(value.map((m) => m.Subtopic1))].filter((f) => f !== null);
-				const subtopics2 = [...new Set(value.map((m) => m.Subtopic2))].filter((f) => f !== null);
-				const subtopics3 = [...new Set(value.map((m) => m.Subtopic3))].filter((f) => f !== null);
+				const subtopics1 = [ ...new Set(value.map((m) => m.Subtopic1)) ].filter((f) => f !== null);
+				const subtopics2 = [ ...new Set(value.map((m) => m.Subtopic2)) ].filter((f) => f !== null);
+				const subtopics3 = [ ...new Set(value.map((m) => m.Subtopic3)) ].filter((f) => f !== null);
 				const subtopics_array = subtopics1.concat(subtopics2).concat(subtopics3);
-				const subtopics = [...new Set(subtopics_array)].sort((a, b) => a.localeCompare(b));
+				const subtopics = [ ...new Set(subtopics_array) ].sort((a, b) => a.localeCompare(b));
 				const _gap = value.length / maxPapers;
 				let row = {};
 				if (dict[filters[index]]) {
 					row = {
 						country: filters[index],
-						country_id: dict[filters[index]] ? dict[filters[index]]["Country ID"] : filters[index],
-						continent: dict[filters[index]] ? dict[filters[index]]["Continent"] : filters[index],
-						continent_id: dict[filters[index]] ? dict[filters[index]]["Continent ID"] : filters[index],
+						country_id: dict[filters[index]] ? dict[filters[index]]['Country ID'] : filters[index],
+						continent: dict[filters[index]] ? dict[filters[index]]['Continent'] : filters[index],
+						continent_id: dict[filters[index]] ? dict[filters[index]]['Continent ID'] : filters[index],
 						count: value.length,
 						gap: _gap < 0.25 ? 1 : _gap < 0.5 ? 2 : _gap < 0.75 ? 3 : 4,
 						topics: subtopics
@@ -124,7 +133,7 @@ class Library extends Component {
 					continents = continents.concat(row);
 				}
 			}
-			return [countries, continents];
+			return [ countries, continents ];
 		} else {
 			return null;
 		}
@@ -146,9 +155,11 @@ class Library extends Component {
 				Header: 'Reference',
 				accessor: 'Reference',
 				Cell: (props) => (
-					<a href={props.original.Link} target="_blank" rel="noopener noreferrer">
-						{props.original.Reference}
-					</a>
+					<div className="reference">
+						<a className="link" href={props.original.Link} target="_blank" rel="noopener noreferrer">
+							<span className="name">{props.original.Reference}</span>
+						</a>
+					</div>
 				),
 				minWidth: 640
 			},
@@ -165,7 +176,7 @@ class Library extends Component {
 				accessor: 'Subtopic3'
 			}
 		];
-		this.setState({columns});
+		this.setState({ columns });
 	};
 
 	componentDidMount() {
@@ -174,7 +185,7 @@ class Library extends Component {
 	}
 
 	filterData = () => {
-		const {data, filterRegion, filterSubtopics} = this.state;
+		const { data, filterRegion, filterSubtopics } = this.state;
 
 		const _filteredRegion = filterRegion !== ' ' ? data.filter((f) => f.Region === filterRegion) : data;
 
@@ -193,11 +204,11 @@ class Library extends Component {
 	};
 
 	handleValueChange(key, value) {
-		this.setState({[key]: value});
+		this.setState({ [key]: value });
 	}
 
 	handleItemMultiSelect = (key, d) => {
-		this.setState({[key]: d});
+		this.setState({ [key]: d });
 	};
 
 	changeGeomapFilter(d) {
@@ -208,7 +219,15 @@ class Library extends Component {
 	}
 
 	render() {
-		const {data, columns, uniqueRegion, uniqueSubtopics, geomapCountries, geomapContinents, filterSubtopics} = this.state;
+		const {
+			data,
+			columns,
+			uniqueRegion,
+			uniqueSubtopics,
+			geomapCountries,
+			geomapContinents,
+			filterSubtopics
+		} = this.state;
 		const filteredData = this.filterData();
 		console.log(geomapContinents);
 
@@ -220,12 +239,12 @@ class Library extends Component {
 					{geomapContinents && (
 						<LibraryGeomap
 							classname={'continent'}
-							data={geomapContinents.filter(d => d.country === 'Europe')}
+							data={geomapContinents.filter((d) => d.country === 'Europe')}
 							topojson={'/continent_topojson/europe.json'}
 							height={140}
 							width={140}
 							changeGeomapFilter={this.changeGeomapFilter}
-							tooltipImgSource={"/images/icons/country/country_eu.png"}
+							tooltipImgSource={'/images/icons/country/country_eu.png'}
 						/>
 					)}
 				</div>
@@ -237,7 +256,7 @@ class Library extends Component {
 						topojson={'/topojson/world-50m.json'}
 						height={500}
 						changeGeomapFilter={this.changeGeomapFilter}
-						tooltipImgSource={"/images/icons/country/country_${d.country_id}.png"}
+						tooltipImgSource={'/images/icons/country/country_${d.country_id}.png'}
 					/>
 				)}
 
@@ -273,7 +292,7 @@ class Library extends Component {
 						showPagination={false}
 						defaultPageSize={data.length}
 						minRows={1}
-						defaultSorted={[{id: `Year`, desc: true}]}
+						defaultSorted={[ { id: `Year`, desc: true } ]}
 					/>
 				)}
 			</div>
