@@ -442,5 +442,15 @@
 				}
 			}
 		}
+
+		& .continents {
+			display: flex;
+			justify-content: space-evenly;
+			align-items: center;
+
+			& .continent {
+				border: 1px solid var(--dark-1);
+			}
+		}
 	}
 }
