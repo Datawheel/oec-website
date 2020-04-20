@@ -14,7 +14,7 @@ export const getVbTitle = (items, axis, routeParams) => {
   const {geo, geoPartner, product, technology} = items;
   const {x, y} = axis;
 
-  const {chart, flow, country, partner, viztype, time} = routeParams;
+  const {cube, chart, flow, country, partner, viztype, time} = routeParams;
   const _countryNames = getList(geo);
   const _partnerNames = getList(geoPartner);
   const _productNames = getList(product ? product : []);
@@ -27,6 +27,7 @@ export const getVbTitle = (items, axis, routeParams) => {
   const isGeoGrouping = new RegExp(/show/).test(partner);
   const isProduct = new RegExp(/^(?!(all|show)).*$/).test(viztype);
   const isTradeBalance = flow === "show";
+  const isSubnat = cube.includes("subnat");
 
   const preps = {
     export: "to",
@@ -71,7 +72,8 @@ export const getVbTitle = (items, axis, routeParams) => {
   else if (isTrade) {
     // Titles for Trade charts
     if (!isCountry && isProduct) {
-      title = "vb_title_which_countries_flow_product";
+      if (isSubnat) title = "vb_title_which_subnat_flow_product";
+      else title = "vb_title_which_countries_flow_product";
     }
     else if (isCountry && isProduct) {
       title = "vb_title_where_country_flow_product";
