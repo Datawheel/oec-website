@@ -9,6 +9,7 @@ import "./SelectMultiHierarchy.css";
 import SMHFullList from "./SelectMultiHierarchyList";
 import SMHNaviList from "./SelectMultiHierarchyNavi";
 import OECPaywall from "components/OECPaywall";
+import ReactImageFallback from "react-image-fallback";
 
 const initialState = {
   paywall: false
@@ -219,10 +220,12 @@ SelectMultiHierarchy.defaultProps = {
         onClick={handleClick}
       >
         {item.icon != null &&
-          <img
+          <ReactImageFallback
+            src={item.icon}
+            fallbackImage="/images/transparent.png"
+            // initialImage="loader.gif"
             alt={`[Icon for ${item.type} "${item.name}"]`}
             className="sh-hie--hs-icon"
-            src={item.icon}
             style={{backgroundColor: item.color}}
           />
         }
