@@ -144,12 +144,17 @@ class Library extends Component {
 			{
 				Header: 'Region',
 				accessor: 'Region',
+				Cell: (props) => (
+					<div className="reference">
+						<span className="name">{props.original.Region}</span>
+					</div>
+				),
 				minWidth: 80
 			},
 			{
 				Header: 'Year',
 				accessor: 'Year',
-				minWidth: 30
+				minWidth: 40
 			},
 			{
 				Header: 'Reference',
