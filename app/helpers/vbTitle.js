@@ -8,7 +8,7 @@ export const getList = n => getNames(n).reduce((str, item, i) => {
   return str;
 }, "");
 
-const getNames = items => items.map(d => d.name || d.title);
+const getNames = items => items.map(d => typeof d === "string" ? d : d.name || d.title);
 
 export const getVbTitle = (items, axis, routeParams) => {
   const {geo, geoPartner, product, technology} = items;

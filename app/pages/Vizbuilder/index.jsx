@@ -220,6 +220,15 @@ class Vizbuilder extends React.Component {
     const filteredTimeItems = subnatTimeItems
       .filter(d => time.split(".").includes(d.value.toString()));
 
+    this.props.updateCubeSelected({
+      name: cubeName,
+      geoLevels: subnatItem.geoLevels,
+      productLevels: subnatItem.productLevels,
+      timeLevels: subnatItem.timeLevels,
+      timeItems: subnatTimeItems,
+      geoItems: itemsGeo
+    });
+
     this.setState({
       subnatItem,
       subnatGeography: dataGeo.data,
@@ -543,6 +552,7 @@ class Vizbuilder extends React.Component {
         productLevels: cubeSelected.productLevels,
         timeLevels: cubeSelected.timeLevels,
         timeItems: this.state.subnatTimeItems,
+        geoItems: this.state.subnatGeoItems,
         currency: cubeSelected.currency
       });
     }
@@ -553,7 +563,8 @@ class Vizbuilder extends React.Component {
         geoLevels: cubeSelected.geoLevels,
         productLevels: cubeSelected.productLevels,
         timeLevels: cubeSelected.timeLevels,
-        timeItems: cubeSelected.timeItems
+        timeItems: cubeSelected.timeItems,
+        geoItems: this.props.countryMembers
       });
     }
 

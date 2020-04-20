@@ -8,6 +8,7 @@ export default function initialStateFactory() {
     cubeSelected: {
       currency: undefined,
       geoLevels: [],
+      geoItems: [],
       name: "",
       productLevels: [],
       timeItems: [],

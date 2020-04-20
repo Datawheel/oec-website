@@ -39,7 +39,7 @@ function findColor(d) {
  * New function for finding a icon for legend.
  * @param {*} d
  */
-function backgroundImageV2(key, d) {
+export const backgroundImageV2 = (key, d) => {
   const options = {2: "export", 1: "import"};
   switch (key) {
     case "Continent":
@@ -70,10 +70,10 @@ function backgroundImageV2(key, d) {
     default:
       return "/images/icons/hs/hs_22.svg";
   }
-}
+};
 
 /** */
-function findColorV2(key, d) {
+export const findColorV2 = (key, d) => {
   if (key === "Country" || key === "ISO 3") {
     if (!Array.isArray(d["Country ID"])) return "transparent";
     else return colors.Continent[d["Continent ID"]];
@@ -81,7 +81,7 @@ function findColorV2(key, d) {
   const id = key === "SITC Section" ? d["Section ID"] : d[`${key} ID`];
   const palette = colors[key];
   return palette ? colors[key][id] || colors[key][d[key]] || colors.colorGrey : colors.colorGrey;
-}
+};
 
 /**
  * Finds a icon for legend.
