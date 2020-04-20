@@ -240,6 +240,7 @@ class Library extends Component {
 			<div className="library">
 				<h1>Library</h1>
 
+				{/*
 				<div className="continents">
 					{geomapContinents && (
 						<LibraryGeomap
@@ -253,6 +254,7 @@ class Library extends Component {
 						/>
 					)}
 				</div>
+				*/}
 
 				{geomapCountries && (
 					<LibraryGeomap
