@@ -9,6 +9,8 @@ import {
 
 import {formatAbbreviate} from "d3plus-format";
 import colors from "../helpers/colors";
+import {getList} from "../helpers/vbTitle";
+import {findColorV2, backgroundImageV2} from "../d3plus.js";
 
 import "./VbDrawer.css";
 import {timeTitleFormat, hsId} from "../helpers/formatters";
@@ -66,22 +68,26 @@ class VbDrawer extends React.Component {
   };
 
   render() {
+    if (!this.props.isOpen) return null;
+
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
-    const {countryMembers, relatedItems, routeParams, t} = this.props;
+    const {countryMembers, groupBy, relatedItems, routeParams, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
     const preps = {
       export: "to",
       import: "from",
       uspto: ""
     };
-    const titleKey = drilldowns.find(d => d in relatedItems);
+    const titleKey = groupBy ? groupBy[groupBy.length - 1] : drilldowns.find(d => d in relatedItems);
+    const key = groupBy ? groupBy[0] : drilldowns.find(d => d in relatedItems);
     const titleName = relatedItems[titleKey];
     const titleId = relatedItems[`${titleKey} ID`];
     const isProductSelected = ["HS6", "HS4", "HS2", "Section"].some(d => relatedItems[d]) && relatedItems["Trade Value"];
 
     // Sets time dimension
-    const timeId = "Year";
-    const timeName = relatedItems.Year;
+    const timeId = ["Time ID", "Year"].find(d => Object.keys(relatedItems).includes(d)) || "Year";
+    console.log(timeId, relatedItems);
+    const timeName = relatedItems[timeId];
 
     const isTrade = new RegExp(/(export|import)/).test(flow);
     const isCountryPermalink = new RegExp(/^(?!(all|show)).*$/).test(country);
@@ -97,20 +103,19 @@ class VbDrawer extends React.Component {
     const countryIdSelected = relatedItems["Country ID"] ? relatedItems["Country ID"].slice(2, 5) : undefined;
 
     const icon = !["Continent", "Country"].includes(titleKey)
-      ? `/images/icons/hs/hs_${parentId}.svg`
+      ? backgroundImageV2(key, relatedItems)
       : `/images/icons/country/country_${titleId.slice(2, 5)}.png`;
 
-    const color = colors.Section[parentId] || colors.Continent[parentId];
-
-    const countryNames = isCountry ? countryMembers.reduce((all, d) => {
-      if (country.split(".").includes(d.label)) all.push(d.title);
+    const color = findColorV2(key, relatedItems) || colors.Section[parentId] || colors.Continent[parentId];
+    const geoLabels = (key, items) => getList(items.reduce((all, d) => {
+      if (key.split(".").includes(d.label || d.id)) all.push(d.title || d.name);
       return all;
-    }, []).join(", ") : "";
+    }, []));
 
-    const partnerNames = isPartner ? countryMembers.reduce((all, d) => {
-      if (partner.split(".").includes(d.label)) all.push(d.title);
-      return all;
-    }, []).join(", ") : "";
+    const {geoItems} = this.props.cubeSelected;
+    const countryNames = isCountry ? geoLabels(country, geoItems) : "";
+
+    const partnerNames = isPartner ? geoLabels(partner, geoItems) : "";
 
     const countryNameSelected = countryIdSelected ? countryMembers.reduce((all, d) => {
       if (countryIdSelected === d.label) all.push(d.title);
@@ -154,8 +159,8 @@ class VbDrawer extends React.Component {
 
             // Checks isPartner in permalink
             if (isPartner) {
-              const permalinkPartner = `/hs92/${d}/${partner}/${country}/show/${time}/`;
-              const permalinkWhere = `/hs92/${d}/${partner}/show/${titleId}/${time}/`;
+              const permalinkPartner = `/${cube}/${d}/${partner}/${country}/show/${time}/`;
+              const permalinkWhere = `/${cube}/${d}/${partner}/show/${titleId}/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalinkPartner}
@@ -175,7 +180,7 @@ class VbDrawer extends React.Component {
                 t={t}
               />);
 
-              const permalinkWhat = `/hs92/${d}/${partner}/all/show/${time}/`;
+              const permalinkWhat = `/${cube}/${d}/${partner}/all/show/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalinkWhat}
@@ -189,8 +194,8 @@ class VbDrawer extends React.Component {
 
             // Checks bilateral permalink
             if (countryIdSelected !== country && countryIdSelected && isCountryPermalink) {
-              const permalinkBilateralA = `/hs92/${d}/${countryIdSelected}/${country}/show/${time}/`;
-              const permalinkBilateralB = `/hs92/${d}/${country}/${countryIdSelected}/show/${time}/`;
+              const permalinkBilateralA = `/${cube}/${d}/${countryIdSelected}/${country}/show/${time}/`;
+              const permalinkBilateralB = `/${cube}/${d}/${country}/${countryIdSelected}/show/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalinkBilateralA}
@@ -211,7 +216,7 @@ class VbDrawer extends React.Component {
             }
             // Filter by product selected
             if (isProductSelected) {
-              const permalink = `/hs92/${d}/show/all/${titleId}/${time}/`;
+              const permalink = `/${cube}/${d}/show/all/${titleId}/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
@@ -223,7 +228,7 @@ class VbDrawer extends React.Component {
               />);
             }
             if (isProductPermalink) {
-              const permalink = `/hs92/${d}/show/all/${viztype}/${time}/`;
+              const permalink = `/${cube}/${d}/show/all/${viztype}/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
@@ -235,7 +240,7 @@ class VbDrawer extends React.Component {
               />);
 
               if (countryIdSelected) {
-                const bilateralPermalink = `/hs92/${d}/${countryIdSelected}/all/${viztype}/${time}/`;
+                const bilateralPermalink = `/${cube}/${d}/${countryIdSelected}/all/${viztype}/${time}/`;
                 all.push(<VbRelatedVizTitle
                   permalink={bilateralPermalink}
                   router={this.props.router}
@@ -248,8 +253,8 @@ class VbDrawer extends React.Component {
             }
 
             countries.forEach(h => {
-              const permalinkWhat = `/hs92/${d}/${h.id}/all/show/${time}/`;
-              const permalinkWhere = `/hs92/${d}/${h.id}/show/all/${time}/`;
+              const permalinkWhat = `/${cube}/${d}/${h.id}/all/show/${time}/`;
+              const permalinkWhere = `/${cube}/${d}/${h.id}/show/all/${time}/`;
 
               all.push(<VbRelatedVizTitle
                 permalink={permalinkWhat}
@@ -268,7 +273,7 @@ class VbDrawer extends React.Component {
                 t={t}
               />);
               if (isProductSelected) {
-                const permalinkProduct = `/hs92/${d}/${h.id}/show/${titleId}/${time}/`;
+                const permalinkProduct = `/${cube}/${d}/${h.id}/show/${titleId}/${time}/`;
                 all.push(<VbRelatedVizTitle
                   permalink={permalinkProduct}
                   router={this.props.router}
@@ -289,10 +294,11 @@ class VbDrawer extends React.Component {
 
 /** */
 function mapStateToProps(state) {
-  const {countryMembers} = state.vizbuilder;
+  const {countryMembers, cubeSelected} = state.vizbuilder;
 
   return {
-    countryMembers
+    countryMembers,
+    cubeSelected
   };
 }
 

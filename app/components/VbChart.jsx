@@ -611,6 +611,7 @@ class VbChart extends React.Component {
 
             <VbDrawer
               isOpen={this.state.isOpenDrawer}
+              groupBy={baseConfig.groupBy}
               relatedItems={this.state.relatedItems}
               selectedProducts={this.props.selectedProducts}
               routeParams={routeParams}
