@@ -558,6 +558,27 @@ class VbChart extends React.Component {
 
     }
 
+    const vbDrawerComponent = (groupBy = baseConfig.groupBy) => <VbDrawer
+      isOpen={this.state.isOpenDrawer}
+      groupBy={groupBy}
+      relatedItems={this.state.relatedItems}
+      selectedProducts={this.props.selectedProducts}
+      routeParams={routeParams}
+      router={this.props.router}
+      run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
+      callback={d => this.setState({isOpenDrawer: d})}
+    />;
+
+    const vbChartOptions =
+      <div className="vb-share-download-options">
+        <VbShare />
+        <VbDownload
+          data={data}
+          location={this.state.location}
+          title="download"
+        />
+      </div>;
+
     if (chart === "tree_map" && data && data.length > 0) {
       const isContinentGroupBy = baseConfig.groupBy[0] === "Continent";
       return (
@@ -602,25 +623,9 @@ class VbChart extends React.Component {
                 }
               />}
 
-            <div className="vb-share-download-options">
-              <VbShare />
-              <VbDownload
-                data={data}
-                location={this.state.location}
-                title="download"
-              />
-            </div>
+            {vbChartOptions}
 
-            <VbDrawer
-              isOpen={this.state.isOpenDrawer}
-              groupBy={baseConfig.groupBy}
-              relatedItems={this.state.relatedItems}
-              selectedProducts={this.props.selectedProducts}
-              routeParams={routeParams}
-              router={this.props.router}
-              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
-              callback={d => this.setState({isOpenDrawer: d})}
-            />
+            {vbDrawerComponent()}
           </div>
         </div>
       );
@@ -682,23 +687,8 @@ class VbChart extends React.Component {
                 this.setState({stackLayout: depth})
               }
             />
-            <div className="vb-share-download-options">
-              <VbShare />
-              <VbDownload
-                data={data}
-                location={this.state.location}
-                title="download"
-              />
-            </div>
-            <VbDrawer
-              isOpen={this.state.isOpenDrawer}
-              relatedItems={this.state.relatedItems}
-              selectedProducts={this.props.selectedProducts}
-              routeParams={routeParams}
-              router={this.props.router}
-              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
-              callback={d => this.setState({isOpenDrawer: d})}
-            />
+            {vbChartOptions}
+            {vbDrawerComponent()}
           </div>
         </div>
       );
@@ -748,23 +738,8 @@ class VbChart extends React.Component {
               title={"Scale"}
               callback={scale => this.setState({scale})}
             />
-            <div className="vb-share-download-options">
-              <VbShare />
-              <VbDownload
-                data={data}
-                location={this.state.location}
-                title="download"
-              />
-            </div>
-            <VbDrawer
-              isOpen={this.state.isOpenDrawer}
-              relatedItems={this.state.relatedItems}
-              selectedProducts={this.props.selectedProducts}
-              routeParams={routeParams}
-              router={this.props.router}
-              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
-              callback={d => this.setState({isOpenDrawer: d})}
-            />
+            {vbChartOptions}
+            {vbDrawerComponent(lineGroupBy)}
           </div>
         </div>
       );
@@ -774,6 +749,8 @@ class VbChart extends React.Component {
       const topojson = isSubnat
         ? isSubnat.topojson[i === -1 ? isSubnat.topojson.length - 1 : i]
         : "/topojson/world-50m.json";
+
+      const geoGroupBy = isSubnat ? `${this.state.subnatGeoDepth} ID` : "ISO 3";
 
       return (
         <div>
@@ -787,7 +764,7 @@ class VbChart extends React.Component {
                 colorScaleConfig: {
                   scale: isSubnat ? "quantile" : "log"
                 },
-                groupBy: isSubnat ? `${this.state.subnatGeoDepth} ID` : "ISO 3",
+                groupBy: geoGroupBy,
                 legend: false,
                 ocean: false,
                 tiles: false,
@@ -808,23 +785,8 @@ class VbChart extends React.Component {
               title={"Depth"}
               callback={subnatGeoDepth => this.setState({subnatGeoDepth}, () => this.fetchData())}
             />}
-            <div className="vb-share-download-options">
-              <VbShare />
-              <VbDownload
-                data={data}
-                location={this.state.location}
-                title="download"
-              />
-            </div>
-            <VbDrawer
-              isOpen={this.state.isOpenDrawer}
-              relatedItems={this.state.relatedItems}
-              selectedProducts={this.props.selectedProducts}
-              routeParams={routeParams}
-              router={this.props.router}
-              run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
-              callback={d => this.setState({isOpenDrawer: d})}
-            />
+            {vbChartOptions}
+            {vbDrawerComponent(geoGroupBy)}
           </div>
         </div>
       );
@@ -908,14 +870,7 @@ class VbChart extends React.Component {
             />
           </div>
           <div className="vb-chart-options">
-            <div className="vb-share-download-options">
-              <VbShare />
-              <VbDownload
-                data={data}
-                location={this.state.location}
-                title="download"
-              />
-            </div>
+            {vbChartOptions}
           </div>
         </div>
       );
@@ -942,14 +897,7 @@ class VbChart extends React.Component {
             />
           </div>
           <div className="vb-chart-options">
-            <div className="vb-share-download-options">
-              <VbShare />
-              <VbDownload
-                data={data}
-                location={this.state.location}
-                title="download"
-              />
-            </div>
+            {vbChartOptions}
           </div>
         </div>
       );
@@ -996,24 +944,9 @@ class VbChart extends React.Component {
             />
           </div>
           <div className="vb-chart-options">
-            <div className="vb-share-download-options">
-              <VbShare />
-              <VbDownload
-                data={data}
-                location={this.state.location}
-                title="download"
-              />
-            </div>
+            {vbChartOptions}
           </div>
-          <VbDrawer
-            isOpen={this.state.isOpenDrawer}
-            relatedItems={this.state.relatedItems}
-            selectedProducts={this.props.selectedProducts}
-            routeParams={routeParams}
-            router={this.props.router}
-            run={d => (this.setState({isOpenDrawer: false}), this.props.callback(d))}
-            callback={d => this.setState({isOpenDrawer: d})}
-          />
+          {vbDrawerComponent(["Continent", "Country"])}
         </div>
       );
     }

@@ -717,7 +717,6 @@ class Vizbuilder extends React.Component {
       .filter(d => d.type === this.state.subnatTimeLevelSelected);
 
     const vbChartComponent = <VbChart
-      cubeName={this.state.cubeSelected.cubeName}
       permalink={this.state.permalink}
       routeParams={routeParams}
       router={this.props.router}
