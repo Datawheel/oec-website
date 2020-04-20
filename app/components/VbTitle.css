@@ -12,7 +12,7 @@
   }
 
   & .vb-title-button {
-    min-width: var(--gutter-lg);
+    width: calc(2 * var(--gutter-lg));
     & .bp3-icon {
       color: var(--dark-1);
     }
@@ -21,6 +21,7 @@
       box-shadow: none;
       color: var(--dark-1);
       font-size: var(--font-lg);
+      text-align: center;
       &:hover {
         background: inherit;
         box-shadow: inherit;

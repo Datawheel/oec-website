@@ -72,7 +72,7 @@ class VbDrawer extends React.Component {
 
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
     const {countryMembers, groupBy, relatedItems, routeParams, t} = this.props;
-    const {chart, cube, flow, country, partner, viztype, time} = routeParams;
+    const {cube, country, partner, viztype, time} = routeParams;
     const preps = {
       export: "to",
       import: "from",
@@ -89,13 +89,13 @@ class VbDrawer extends React.Component {
     console.log(timeId, relatedItems);
     const timeName = relatedItems[timeId];
 
-    const isTrade = new RegExp(/(export|import)/).test(flow);
-    const isCountryPermalink = new RegExp(/^(?!(all|show)).*$/).test(country);
+    // const isTrade = new RegExp(/(export|import)/).test(flow);
     const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country) || new RegExp(/(Country)/).test(titleKey);
-    const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
+    const isCountryPermalink = new RegExp(/^(?!(all|show)).*$/).test(country);
     const isGeoGrouping = new RegExp(/show/).test(partner);
+    const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
     const isProductPermalink = new RegExp(/^(?!(all|show)).*$/).test(viztype);
-    const isTradeBalance = flow === "show";
+    // const isTradeBalance = flow === "show";
     const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
 
     const isGeoSelected = relatedItems["Continent ID"];
@@ -131,9 +131,12 @@ class VbDrawer extends React.Component {
     return <div>
       <Drawer
         className="vb-drawer"
-        icon={<div className="vb-drawer-icon"
+        icon={<div
+          className="vb-drawer-icon"
           style={{backgroundColor: isGeoSelected ? "transparent" : color}}
-        ><img src={icon} /></div>}
+        >
+          <img src={icon} />
+        </div>}
         onClose={this.handleClose}
         title={<div>
           <div>{titleName}</div>
