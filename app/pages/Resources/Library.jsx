@@ -4,6 +4,7 @@ import ReactTable from 'react-table';
 import {HTMLSelect} from '@blueprintjs/core';
 import {Geomap} from 'd3plus-react';
 import OECMultiSelect from 'components/OECMultiSelect';
+import LibraryGeomap from 'components/LibraryGeomap';
 
 import 'react-table/react-table.css';
 
@@ -21,6 +22,7 @@ class Library extends Component {
 			filterRegion: ' ',
 			filterSubtopics: []
 		};
+		this.changeGeomapFilter = this.changeGeomapFilter.bind(this);
 	}
 
 	fetchData = () => {
@@ -114,10 +116,10 @@ class Library extends Component {
 					countries = countries.concat(row);
 				} else {
 					row = {
-						continent: filters[index],
-						// continent_id: dict[filters[index]] ? dict[filters[index]]["Continent ID"] : filters[index],
+						country: filters[index],
+						// country_id: filters[index],
 						count: value.length,
-						subtopics: subtopics
+						topics: subtopics
 					};
 					continents = continents.concat(row);
 				}
@@ -208,64 +210,35 @@ class Library extends Component {
 	render() {
 		const {data, columns, uniqueRegion, uniqueSubtopics, geomapCountries, geomapContinents, filterSubtopics} = this.state;
 		const filteredData = this.filterData();
-		console.log(geomapCountries);
+		console.log(geomapContinents);
 
 		return (
 			<div className="library">
 				<h1>Library</h1>
 
-				{geomapCountries && (
-					<div className="geomap">
-						<Geomap
-							config={{
-								data: geomapCountries,
-								groupBy: 'country_id',
-								height: 500,
-								legend: false,
-								total: false,
-								colorScale: 'gap',
-								colorScaleConfig: {
-									color: ['#ffffcc', '#c2e699', '#78c679', '#238443']
-								},
-								tooltipConfig: {
-									title: (d) => {
-										let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-										tooltip += `<div class="icon" style="background-color: transparent"><img src="/images/icons/country/country_${d.country_id}.png" /></div>`;
-										tooltip += `<div class="title"><span>${d.country}</span></div>`;
-										tooltip += "</div>";
-										return tooltip;
-									},
-									tbody: [
-										["Papers", d => d.count],
-										["Topics", d => d.topics]
-									],
-									footer: 'Click to filter table',
-									width: "400px"
-								},
-								on: {
-									'click.shape': (d) => {
-										if (!d.type) {
-											this.changeGeomapFilter(d.country);
-										} else {
-											this.changeGeomapFilter(" ");
-										}
-									}
-								},
-								shapeConfig: {
-									Path: {
-										opacity: d => d.country_id ? 1 : 0.15,
-										stroke: "#63737f",
-										strokeWidth: 1
-									}
-								},
-								ocean: 'transparent',
-								topojson: `/topojson/world-50m.json`,
-								topojsonId: d => d.id,
-								topojsonFill: d => !d.country_id && "#ffffff",
-								zoom: false
-							}}
+				<div className="continents">
+					{geomapContinents && (
+						<LibraryGeomap
+							classname={'continent'}
+							data={geomapContinents.filter(d => d.country === 'Europe')}
+							topojson={'/continent_topojson/europe.json'}
+							height={140}
+							width={140}
+							changeGeomapFilter={this.changeGeomapFilter}
+							tooltipImgSource={"/images/icons/country/country_eu.png"}
 						/>
-					</div>
+					)}
+				</div>
+
+				{geomapCountries && (
+					<LibraryGeomap
+						classname={'countries'}
+						data={geomapCountries}
+						topojson={'/topojson/world-50m.json'}
+						height={500}
+						changeGeomapFilter={this.changeGeomapFilter}
+						tooltipImgSource={"/images/icons/country/country_${d.country_id}.png"}
+					/>
 				)}
 
 				{data && (

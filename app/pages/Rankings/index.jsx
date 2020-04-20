@@ -337,6 +337,8 @@ class Rankings extends Component {
 		}
 		rangeData = rangeData.flat();
 
+		console.log("rangedata:", rangeData);
+
 		let selector = null;
 
 		if (!subnational) {
@@ -363,6 +365,7 @@ class Rankings extends Component {
 		}
 
 		const reduceData = rangeData.reduce((obj, d) => {
+			console.log('MIRA AQUI 2:', !obj[d[selector]], obj[d[selector]], "d", [ d ]);
 			if (!obj[d[selector]]) obj[d[selector]] = [ d ];
 			else obj[d[selector]].push(d);
 			return obj;
@@ -385,6 +388,7 @@ class Rankings extends Component {
 		});
 
 		finalData.map((d) => {
+			console.log('VER AQUI:', d);
 			range(yearRangeInitial, yearRangeFinal).map((f) => {
 				if (d[`${f}`] === undefined) {
 					d[`${f}`] = -1000;
@@ -400,6 +404,13 @@ class Rankings extends Component {
 			columns,
 			_loading: false
 		});
+	};
+
+	checkProperties = (obj) => {
+		for (var key in obj) {
+			if (![ 'Country ID', 'Country' ].includes(key) && obj[key] !== null) return false;
+		}
+		return true;
 	};
 
 	createColumns(type, array) {
@@ -619,16 +630,14 @@ class Rankings extends Component {
 									className="icon"
 								/>
 								<a
-										href={`/en/profile/hs92/${props.original[
-											`${productDepth} ID`
-										]}`}
-										className="link"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										<div className="name">{props.original[`${productDepth}`]}</div>
-										<Icon icon={'chevron-right'} iconSize={14} />
-									</a>
+									href={`/en/profile/hs92/${props.original[`${productDepth} ID`]}`}
+									className="link"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									<div className="name">{props.original[`${productDepth}`]}</div>
+									<Icon icon={'chevron-right'} iconSize={14} />
+								</a>
 							</div>
 						)
 					};
