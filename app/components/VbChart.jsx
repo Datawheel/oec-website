@@ -202,7 +202,9 @@ class VbChart extends React.Component {
         this.setState(nextState);
       }).catch(error => {
         // TODO: AUTH
-        this.setState({data: [], loading: false, routeParams});
+        const nextState = {data: [], loading: false, routeParams};
+        if (error.response && error.response.status === 401) nextState.auth = false;
+        this.setState(nextState);
       });
   }
 
