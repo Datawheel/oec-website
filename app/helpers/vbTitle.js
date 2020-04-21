@@ -27,7 +27,7 @@ export const getVbTitle = (items, axis, routeParams) => {
   const isGeoGrouping = new RegExp(/show/).test(partner);
   const isProduct = new RegExp(/^(?!(all|show)).*$/).test(viztype);
   const isTradeBalance = flow === "show";
-  const isSubnat = cube.includes("subnat");
+  const isSubnat = cube.includes("subnational");
 
   const preps = {
     export: "to",

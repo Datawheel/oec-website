@@ -6,11 +6,11 @@ import {
   Drawer,
   Position
 } from "@blueprintjs/core";
-
 import {formatAbbreviate} from "d3plus-format";
 import colors from "../helpers/colors";
 import {getList} from "../helpers/vbTitle";
 import {findColorV2, backgroundImageV2} from "../d3plus.js";
+import moment from "moment";
 
 import "./VbDrawer.css";
 import {timeTitleFormat, hsId} from "../helpers/formatters";
@@ -71,7 +71,7 @@ class VbDrawer extends React.Component {
     if (!this.props.isOpen) return null;
 
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
-    const {countryMembers, groupBy, relatedItems, routeParams, t} = this.props;
+    const {countryMembers, cubeSelected, groupBy, relatedItems, routeParams, t} = this.props;
     const {cube, country, partner, viztype, time} = routeParams;
     const preps = {
       export: "to",
@@ -80,27 +80,35 @@ class VbDrawer extends React.Component {
     };
     const titleKey = groupBy ? groupBy[groupBy.length - 1] : drilldowns.find(d => d in relatedItems);
     const key = groupBy ? groupBy[0] : drilldowns.find(d => d in relatedItems);
-    const titleName = relatedItems[titleKey];
     const titleId = relatedItems[`${titleKey} ID`];
-    const isProductSelected = ["HS6", "HS4", "HS2", "Section"].some(d => relatedItems[d]) && relatedItems["Trade Value"];
+    const titleName = relatedItems[titleKey];
+
+
+    const isProductSelected = (
+      cubeSelected.productLevels || ["HS6", "HS4", "HS2", "Section"]
+    ).some(d => relatedItems[d]) && relatedItems["Trade Value"];
 
     // Sets time dimension
     const timeId = ["Time ID", "Year"].find(d => Object.keys(relatedItems).includes(d)) || "Year";
-    console.log(timeId, relatedItems);
     const timeName = relatedItems[timeId];
 
-    // const isTrade = new RegExp(/(export|import)/).test(flow);
     const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country) || new RegExp(/(Country)/).test(titleKey);
     const isCountryPermalink = new RegExp(/^(?!(all|show)).*$/).test(country);
     const isGeoGrouping = new RegExp(/show/).test(partner);
     const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
     const isProductPermalink = new RegExp(/^(?!(all|show)).*$/).test(viztype);
-    // const isTradeBalance = flow === "show";
-    const parentId = relatedItems["Section ID"] || relatedItems["Continent ID"];
+    const parentId = groupBy
+      ? relatedItems[`${groupBy[0]} ID`]
+      : relatedItems["Section ID"] || relatedItems["Continent ID"];
+
+    const isSubnatProfile = groupBy.includes("Subnat Geography");
+    const isSubnatCube = cube.includes("subnational");
+    const showProfile = !["EGW1"].includes(groupBy[0]);
 
     const isGeoSelected = relatedItems["Continent ID"];
     const profileId = isGeoSelected ? titleId.slice(2, 5) : titleId;
     const countryIdSelected = relatedItems["Country ID"] ? relatedItems["Country ID"].slice(2, 5) : undefined;
+    const isCountrySelected = Object.keys(relatedItems).includes("Country ID");
 
     const icon = !["Continent", "Country"].includes(titleKey)
       ? backgroundImageV2(key, relatedItems)
@@ -113,35 +121,35 @@ class VbDrawer extends React.Component {
     }, []));
 
     const {geoItems} = this.props.cubeSelected;
-    const countryNames = isCountry ? geoLabels(country, geoItems) : "";
-
-    const partnerNames = isPartner ? geoLabels(partner, geoItems) : "";
-
-    const countryNameSelected = countryIdSelected ? countryMembers.reduce((all, d) => {
-      if (countryIdSelected === d.label) all.push(d.title);
-      return all;
-    }, []).join(", ") : "";
+    const customGeoItems = isSubnatCube ? [...geoItems, ...countryMembers] : geoItems;
+    const geoNames = isCountry ? geoLabels(country, customGeoItems) : "";
+    const partnerNames = isPartner ? geoLabels(partner, customGeoItems) : "";
+    const geoNameSelected = countryIdSelected ?  geoLabels(countryIdSelected, customGeoItems) : "";
 
     const countries = [];
-    if (isCountryPermalink) countries.push({id: country, name: countryNames});
-    if (countryIdSelected) countries.push({id: countryIdSelected, name: countryNameSelected});
+    if (isCountryPermalink) countries.push({id: country, name: geoNames});
+    if (countryIdSelected) countries.push({id: countryIdSelected, name: geoNameSelected});
 
     const timeTitle = timeTitleFormat(time);
+    const profileType = isSubnatProfile ? cube : isGeoGrouping ? "country" : cube;
+
+    const drawerIcon = <div
+      className="vb-drawer-icon"
+      style={{backgroundColor: isGeoSelected ? "transparent" : color}}
+    >
+      <img src={icon} />
+    </div>;
+    const drawerTitle = <div>
+      <div>{titleName}</div>
+      {showProfile && <div><a style={{color}} href={`/en/profile/${profileType}/${profileId}`}>{t("View profile")}</a></div>}
+    </div>;
 
     return <div>
       <Drawer
         className="vb-drawer"
-        icon={<div
-          className="vb-drawer-icon"
-          style={{backgroundColor: isGeoSelected ? "transparent" : color}}
-        >
-          <img src={icon} />
-        </div>}
+        icon={drawerIcon}
         onClose={this.handleClose}
-        title={<div>
-          <div>{titleName}</div>
-          <div><a style={{color}} href={`/en/profile/${isGeoGrouping ? "country" : "hs92"}/${profileId}`}>View profile</a></div>
-        </div>}
+        title={drawerTitle}
         {...this.state}
       >
         <div className="bp3-drawer-body">
@@ -150,16 +158,17 @@ class VbDrawer extends React.Component {
             value={isProductSelected ? hsId(titleId) : titleId}
           />
           <VbDrawerStat
-            title="Trade Value"
-            value={`$${formatAbbreviate(relatedItems["Trade Value"])}`}
+            title={t("Trade Value")}
+            value={`${cubeSelected.currency || "$"}${formatAbbreviate(relatedItems["Trade Value"])}`}
           />
           <VbDrawerStat
             title={timeId}
-            value={timeName}
+            value={timeId === "Time ID" ? moment(timeName).format("L") : timeName}
           />
-          <h3>{t("RELATED VISUALIZATIONS")}</h3>
-          {["export", "import"].reduce((all, d) => {
 
+          <h3>{t("Related Visualizations")}</h3>
+
+          {["export", "import"].reduce((all, d) => {
             // Checks isPartner in permalink
             if (isPartner) {
               const permalinkPartner = `/${cube}/${d}/${partner}/${country}/show/${time}/`;
@@ -168,7 +177,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalinkPartner}
                 router={this.props.router}
-                titleConfig={{country: partnerNames, partner: countryNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
+                titleConfig={{country: partnerNames, partner: geoNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_what_country_flow_partner"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -196,22 +205,28 @@ class VbDrawer extends React.Component {
             }
 
             // Checks bilateral permalink
-            if (countryIdSelected !== country && countryIdSelected && isCountryPermalink) {
+            if (
+              countryIdSelected !== country &&
+              countryIdSelected &&
+              isCountryPermalink
+            ) {
               const permalinkBilateralA = `/${cube}/${d}/${countryIdSelected}/${country}/show/${time}/`;
               const permalinkBilateralB = `/${cube}/${d}/${country}/${countryIdSelected}/show/${time}/`;
+              if (isCountrySelected && !isSubnatCube) {
+                all.push(<VbRelatedVizTitle
+                  permalink={permalinkBilateralA}
+                  router={this.props.router}
+                  titleConfig={{country: geoNameSelected, product: titleName, partner: geoNames, flow: d, time: timeTitle, prep: preps[d]}}
+                  titleName="vb_title_what_country_flow_partner"
+                  callback={d => this.props.run(d)}
+                  t={t}
+                />);
+              }
 
-              all.push(<VbRelatedVizTitle
-                permalink={permalinkBilateralA}
-                router={this.props.router}
-                titleConfig={{country: countryNameSelected, product: titleName, partner: countryNames, flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_what_country_flow_partner"
-                callback={d => this.props.run(d)}
-                t={t}
-              />);
               all.push(<VbRelatedVizTitle
                 permalink={permalinkBilateralB}
                 router={this.props.router}
-                titleConfig={{country: countryNames, product: titleName, partner: countryNameSelected, flow: d, time: timeTitle, prep: preps[d]}}
+                titleConfig={{country: geoNames, product: titleName, partner: geoNameSelected, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName="vb_title_what_country_flow_partner"
                 callback={d => this.props.run(d)}
                 t={t}
@@ -224,8 +239,8 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
                 router={this.props.router}
-                titleConfig={{country: countryNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_which_countries_flow_product"
+                titleConfig={{country: geoNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
+                titleName={isSubnatCube ? "vb_title_which_subnat_flow_product" : "vb_title_which_countries_flow_product"}
                 callback={d => this.props.run(d)}
                 t={t}
               />);
@@ -237,17 +252,17 @@ class VbDrawer extends React.Component {
                 permalink={permalink}
                 router={this.props.router}
                 titleConfig={{product: this.props.selectedProducts.map(d => d.name), flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_which_countries_flow_product"
+                titleName={isSubnatCube ? "vb_title_which_subnat_flow_product" : "vb_title_which_countries_flow_product"}
                 callback={d => this.props.run(d)}
                 t={t}
               />);
 
-              if (countryIdSelected) {
+              if (isCountrySelected && !isSubnatCube) {
                 const bilateralPermalink = `/${cube}/${d}/${countryIdSelected}/all/${viztype}/${time}/`;
                 all.push(<VbRelatedVizTitle
                   permalink={bilateralPermalink}
                   router={this.props.router}
-                  titleConfig={{product: this.props.selectedProducts.map(d => d.name), country: countryNameSelected, flow: d, time: timeTitle, prep: preps[d]}}
+                  titleConfig={{product: this.props.selectedProducts.map(d => d.name), country: geoNameSelected, flow: d, time: timeTitle, prep: preps[d]}}
                   titleName="vb_title_where_country_flow_product"
                   callback={d => this.props.run(d)}
                   t={t}
