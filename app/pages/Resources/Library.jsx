@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactTable from 'react-table';
 import { HTMLSelect } from '@blueprintjs/core';
-import { Geomap } from 'd3plus-react';
 import OECMultiSelect from 'components/OECMultiSelect';
 import LibraryGeomap from 'components/LibraryGeomap';
 
@@ -144,12 +143,17 @@ class Library extends Component {
 			{
 				Header: 'Region',
 				accessor: 'Region',
+				Cell: (props) => (
+					<div className="reference">
+						<span className="name">{props.original.Region}</span>
+					</div>
+				),
 				minWidth: 80
 			},
 			{
 				Header: 'Year',
 				accessor: 'Year',
-				minWidth: 30
+				minWidth: 40
 			},
 			{
 				Header: 'Reference',
@@ -229,12 +233,14 @@ class Library extends Component {
 			filterSubtopics
 		} = this.state;
 		const filteredData = this.filterData();
+		console.log(geomapCountries);
 		console.log(geomapContinents);
 
 		return (
 			<div className="library">
 				<h1>Library</h1>
 
+				{/*
 				<div className="continents">
 					{geomapContinents && (
 						<LibraryGeomap
@@ -248,6 +254,7 @@ class Library extends Component {
 						/>
 					)}
 				</div>
+				*/}
 
 				{geomapCountries && (
 					<LibraryGeomap

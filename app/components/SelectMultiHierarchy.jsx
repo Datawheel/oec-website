@@ -1,19 +1,35 @@
 /* eslint-disable eqeqeq */
 // @ts-check
-import {Button, Classes, Icon, Tag, Text} from "@blueprintjs/core";
+import {Button, Classes, Icon, Tag, Text, Utils} from "@blueprintjs/core";
 import {Classes as SelectClasses, Select} from "@blueprintjs/select";
 import classNames from "classnames";
+import OECPaywall from "components/OECPaywall";
 import {nest} from "d3-collection";
 import React, {useCallback, useMemo, useState} from "react";
+import ReactImageFallback from "react-image-fallback";
 import "./SelectMultiHierarchy.css";
 import SMHFullList from "./SelectMultiHierarchyList";
 import SMHNaviList from "./SelectMultiHierarchyNavi";
-import OECPaywall from "components/OECPaywall";
-import ReactImageFallback from "react-image-fallback";
 
 const initialState = {
   paywall: false
 };
+
+/**
+ * @template T
+ * @extends Select<T>
+ */
+class PatchedSelect extends Select {
+
+  /**
+   * @private
+   * @param {T} item
+   * @param {React.SyntheticEvent<HTMLElement>} [event]
+   */
+  handleItemSelect = (item, event) => {
+    Utils.safeInvoke(this.props.onItemSelect, item, event);
+  };
+}
 
 /**
  * @typedef SelectedItem
@@ -134,7 +150,7 @@ const SelectMultiHierarchy = ({
   const [state, setState] = useState(initialState);
 
   return (
-    <Select
+    <PatchedSelect
       // filterable={true}
       itemListPredicate={itemListPredicate}
       itemListRenderer={itemListRenderer}
@@ -185,7 +201,7 @@ const SelectMultiHierarchy = ({
           callback={paywall => setState({paywall})}
         />}
       </div>
-    </Select>
+    </PatchedSelect>
   );
 };
 
