@@ -1,7 +1,7 @@
 const {range} = require("helpers/utils.js");
 const colors = require("helpers/colors.js");
 const cubes = {
-  // subnat_fra: {
+  // subnational_fra: {
   //   cube: "trade_s_fra_q_cpf",
   //   name: "France",
   //   id: "fra",
@@ -13,7 +13,7 @@ const cubes = {
   //   geoLevels: ["Region", "Subnat Geography"],
   //   timeLevels: ["Year", "Quarter"]
   // },
-  // subnat_esp: {
+  // subnational_esp: {
   //   cube: "trade_s_esp_m_hs",
   //   name: "Spain",
   //   id: "esp",
@@ -25,7 +25,7 @@ const cubes = {
   //   geoLevels: ["Autonomous Communities", "Subnat Geography"],
   //   timeLevels: ["Year", "Quarter", "Month"]
   // },
-  subnat_chn: {
+  subnational_chn: {
     cube: "trade_s_chn_m_hs",
     name: "China",
     id: "chn",
@@ -36,7 +36,7 @@ const cubes = {
     geoLevels: ["Subnat Geography"],
     timeLevels: ["Year", "Quarter", "Month"]
   },
-  subnat_can: {
+  subnational_can: {
     cube: "trade_s_can_m_hs",
     name: "Canada",
     id: "can",
@@ -49,7 +49,7 @@ const cubes = {
     geoLevels: ["Subnat Geography"],
     timeLevels: ["Year", "Quarter", "Month"]
   },
-  subnat_jpn: {
+  subnational_jpn: {
     cube: "trade_s_jpn_m_hs",
     name: "Japan",
     id: "jpn",
@@ -62,7 +62,7 @@ const cubes = {
     geoLevels: ["Region", "Subnat Geography"],
     timeLevels: ["Year", "Quarter", "Month"]
   },
-  subnat_deu: {
+  subnational_deu: {
     cube: "trade_s_deu_m_egw",
     name: "Germany",
     id: "deu",

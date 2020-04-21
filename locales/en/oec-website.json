@@ -153,7 +153,7 @@
   "vb_title_what_country_flow_partner": "What does {{country}} {{flow}} {{prep}} {{partner}}? ({{time}})",
   "vb_title_what_country_patent": "What does {{country}} patent? ({{time}})",
   "vb_title_where_country_flow": "Where does {{country}} {{flow}} {{prep}}? ({{time}})",
-  "vb_title_where_country_flow_product": "Where does {{country}} {{flow}} {{product}} {{prep}}? (2017)",
+  "vb_title_where_country_flow_product": "Where does {{country}} {{flow}} {{product}} {{prep}}? ({{time}})",
   "vb_title_which_countries_flow_product": "Which countries {{flow}} {{product}}? ({{time}})",
   "vb_title_which_subnat_flow_product": "Which states/provinces {{flow}} {{product}}? ({{time}})",
   "vb_title_which_countries_patent": "Which countries patent {{names}} on USPTO? ({{time}})",
