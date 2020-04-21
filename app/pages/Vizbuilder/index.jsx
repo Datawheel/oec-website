@@ -96,11 +96,18 @@ export function createItems(data, levels, iconUrl) {
 const parseIdsToURL = (data, key = "id") => data.map(d => d[key]).join(".");
 const datasets = subnat.datasets;
 
+const filterSubnat = (items, type, key = "id", time = false) => {
+  const output = items.filter(d => type.split(".").includes(d[key]));
+  if (!time) return output;
+  return output.length > 0 ? output : time && items[0] ? [items[0]] : [];
+  // items[0] ? [items[0]] :
+};
+
 class Vizbuilder extends React.Component {
   constructor(props) {
     super(props);
-    const {location, params} = this.props;
-    const {cube, country, chart} = params;
+    const {params} = this.props;
+    const {cube, country} = params;
 
     const cubeSelected = datasets.find(d => d.value === cube) || datasets[0];
 
@@ -567,17 +574,12 @@ class Vizbuilder extends React.Component {
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
-    const filterSubnat = (items, type, key = "id", time = false) => {
-      const output = items.filter(d => type.split(".").includes(d[key]));
-      if (!time) return output;
-      return output.length > 0 ? output : items[0] ? [items[0]] : [];
-    };
-
     const selectedSubnatItems = {
       Geo: filterSubnat(this.state.subnatGeoItems, country),
       Product: filterSubnat(this.state.subnatProductItems, viztype),
       Time: filterSubnat(this.state.subnatTimeItems, viztype, "value", true)
     };
+
     const subnatKeys = ["Geo", "Product", "Time"].reduce((obj, d) => {
       const base = `selectedSubnat${d}`;
       if (!obj[base]) {
@@ -735,6 +737,8 @@ class Vizbuilder extends React.Component {
       </div>;
     }
 
+    console.log(this.state.selectedSubnatGeoTemp);
+
     return <div id="vizbuilder">
       <OECNavbar
         className={scrolled ? "background" : ""}
@@ -841,7 +845,14 @@ class Vizbuilder extends React.Component {
                       levels={this.state.subnatGeoLevels || []}
                       onItemSelect={item => {
                         const nextItems = this.state.selectedSubnatGeoTemp.concat(item);
-                        this.setState({selectedSubnatGeoTemp: nextItems});
+                        const nextState = {selectedSubnatGeoTemp: nextItems};
+                        if (this.state.selectedSubnatGeoTemp.length === 0) {
+                          const levels = this.state.subnatTimeLevels;
+                          const items = this.state.subnatTimeItems;
+                          nextState.subnatTimeLevelSelected = levels[levels.length - 1];
+                          nextState.selectedSubnatTimeTemp = [items[0]];
+                        }
+                        this.setState(nextState);
                       }}
                       onItemRemove={(evt, item) => {
                         // evt: MouseEvent<HTMLButtonElement>
@@ -852,8 +863,7 @@ class Vizbuilder extends React.Component {
                       }}
                       onClear={() => {
                         this.setState({
-                          selectedSubnatGeoTemp: [],
-                          selectedSubnatGeo: []
+                          selectedSubnatGeoTemp: []
                         });
                       }}
                       placeholder={t("Select a state/province...")}

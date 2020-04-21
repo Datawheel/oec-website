@@ -473,7 +473,6 @@ class VbChart extends React.Component {
   };
 
   render() {
-    console.log(this.props);
     const {auth, data, loading, routeParams} = this.state;
     const {cubeSelected, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
