@@ -18,14 +18,10 @@ class LibraryGeomap extends Component {
               width: width,
               legend: false,
               total: false,
-              colorScale: 'gap',
-              colorScaleConfig: {
-                color: ['#ffffcc', '#c2e699', '#78c679', '#238443']
-              },
               tooltipConfig: {
                 title: (d) => {
                   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-                  tooltip += `<div class="icon" style="background-color: transparent"><img src=${tooltipImgSource} /></div>`;
+                  tooltip += `<div class="icon" style="background-color: transparent"><img src=${tooltipImgSource ? tooltipImgSource : '/images/icons/country/country_ne.png'} /></div>`;
                   tooltip += `<div class="title"><span>${d.country}</span></div>`;
                   tooltip += "</div>";
                   return tooltip;
@@ -48,7 +44,7 @@ class LibraryGeomap extends Component {
               },
               shapeConfig: {
                 Path: {
-                  opacity: classname === "countries" ? d => d.country_id ? 1 : 0.15 : 1,
+                  opacity: 1,
                   stroke: "#63737f",
                   strokeWidth: 1
                 }
@@ -56,7 +52,7 @@ class LibraryGeomap extends Component {
               ocean: 'transparent',
               topojson: topojson,
               topojsonId: d => d.id,
-              topojsonFill: d => !d.country_id && "#ffffff",
+              topojsonFill: d => d.country && "#ffffff",
               zoom: false
             }}
           />

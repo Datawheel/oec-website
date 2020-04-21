@@ -30,9 +30,7 @@ class Library extends Component {
 			'/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
 		axios.all([ axios.get(dataApi), axios.get(dictApi) ]).then(
 			axios.spread((resp1, resp2) => {
-				const data = resp1.data.data;
-				const uniqueRegion = this.getUniqueRegions(data);
-				const uniqueSubtopics = this.getUniqueSubtopics(data);
+				const data = resp1.data.data.filter(f => f.Region !== null);;
 
 				const dictarray = resp2.data.data;
 				const dict = {};
@@ -44,14 +42,14 @@ class Library extends Component {
 					dict[d['Country']] = object;
 				});
 
-				const geomapData = this.getGeomapData(data, uniqueRegion, dict);
+				const geomapData = this.getGeomapData(data, dict);
 				this.setState({
 					data,
 					dict,
-					uniqueRegion,
-					uniqueSubtopics,
 					geomapCountries: geomapData[0],
-					geomapContinents: geomapData[1]
+					geomapContinents: geomapData[1],
+					uniqueRegion: geomapData[2],
+					uniqueSubtopics: geomapData[3]
 				});
 			})
 		);
@@ -88,22 +86,41 @@ class Library extends Component {
 		}
 	};
 
-	getGeomapData = (d, regions, dict) => {
+	getGeomapData = (d, dict) => {
 		if (d) {
-			let countries = [];
-			let continents = [];
-			const countryPapers = d.filter((f) => f.Region in dict);
+			let cleanData = [];
+			d.map((m) => {
+				if (m.Region.split(',').length === 1) {
+					cleanData = cleanData.concat(m);
+				} else {
+					m.Region.split(',').map((f) => {
+						const row = {};
+						row['Region'] = f.replace(/ /g, '');
+						row['Year'] = m.Year;
+						row['Reference'] = m.Reference;
+						row['Link'] = m.Link;
+						row['Subtopic1'] = m.Subtopic1;
+						row['Subtopic2'] = m.Subtopic2;
+						row['Subtopic3'] = m.Subtopic3;
+						cleanData = cleanData.concat(row);
+					});
+				}
+			});
+			const uniqueRegion = this.getUniqueRegions(cleanData);
+			const uniqueSubtopics = this.getUniqueSubtopics(cleanData);
+			const countryPapers = cleanData.filter((f) => f.Region in dict);
 			const papersByCountry = countryPapers.reduce((acc, it) => {
 				acc[it.Region] = acc[it.Region] + 1 || 1;
 				return acc;
 			}, {});
 			const papersValue = Object.values(papersByCountry);
 			const maxPapers = Math.max(...papersValue);
-			console.log(maxPapers);
-			const filters = regions.slice(0);
+			const filters = uniqueRegion.slice(0);
 			filters.shift();
+			let countries = [];
+			let continents = [];
 			for (const index in filters) {
-				const value = d.filter((f) => f.Region === filters[index]);
+				const value = cleanData.filter((f) => f.Region === filters[index]);
 				const subtopics1 = [ ...new Set(value.map((m) => m.Subtopic1)) ].filter((f) => f !== null);
 				const subtopics2 = [ ...new Set(value.map((m) => m.Subtopic2)) ].filter((f) => f !== null);
 				const subtopics3 = [ ...new Set(value.map((m) => m.Subtopic3)) ].filter((f) => f !== null);
@@ -132,7 +149,7 @@ class Library extends Component {
 					continents = continents.concat(row);
 				}
 			}
-			return [ countries, continents ];
+			return [ countries, continents, uniqueRegion, uniqueSubtopics ];
 		} else {
 			return null;
 		}
@@ -191,7 +208,16 @@ class Library extends Component {
 	filterData = () => {
 		const { data, filterRegion, filterSubtopics } = this.state;
 
-		const _filteredRegion = filterRegion !== ' ' ? data.filter((f) => f.Region === filterRegion) : data;
+		const _filteredRegion =
+			filterRegion !== ' '
+				? data.filter((f) => {
+						if (f.Region.split(',').length === 1) {
+							return f.Region === filterRegion;
+						} else {
+							return f.Region.replace(/ /g, "").split(",").includes(filterRegion);
+						}
+					})
+				: data;
 
 		if (filterSubtopics.length > 0) {
 			const _filteredData = [];
@@ -240,31 +266,83 @@ class Library extends Component {
 			<div className="library">
 				<h1>Library</h1>
 
-				{/*
-				<div className="continents">
-					{geomapContinents && (
-						<LibraryGeomap
-							classname={'continent'}
-							data={geomapContinents.filter((d) => d.country === 'Europe')}
-							topojson={'/continent_topojson/europe.json'}
-							height={140}
-							width={140}
-							changeGeomapFilter={this.changeGeomapFilter}
-							tooltipImgSource={'/images/icons/country/country_eu.png'}
-						/>
-					)}
-				</div>
-				*/}
-
-				{geomapCountries && (
-					<LibraryGeomap
-						classname={'countries'}
-						data={geomapCountries}
-						topojson={'/topojson/world-50m.json'}
-						height={500}
-						changeGeomapFilter={this.changeGeomapFilter}
-						tooltipImgSource={'/images/icons/country/country_${d.country_id}.png'}
-					/>
+				{data && (
+					<div className="geomaps">
+						<div className="continents">
+							<LibraryGeomap
+								classname={'continent'}
+								data={geomapContinents.filter((d) => d.country === 'Africa')}
+								topojson={'/topojson/country_af.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilter}
+								tooltipImgSource={'/images/icons/country/country_af.png'}
+							/>
+							<LibraryGeomap
+								classname={'continent'}
+								data={geomapContinents.filter((d) => d.country === 'Asia')}
+								topojson={'/topojson/country_as.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilter}
+								tooltipImgSource={'/images/icons/country/country_af.png'}
+							/>
+							<LibraryGeomap
+								classname={'continent'}
+								data={geomapContinents.filter((d) => d.country === 'Europe')}
+								topojson={'/topojson/country_af.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilter}
+								tooltipImgSource={'/images/icons/country/country_eu.png'}
+							/>
+							<LibraryGeomap
+								classname={'continent'}
+								data={geomapContinents.filter((d) => d.country === 'Latin America')}
+								topojson={'/topojson/country_sa.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilter}
+								tooltipImgSource={'/images/icons/country/country_sa.png'}
+							/>
+						</div>
+						<div className="countries">
+							<LibraryGeomap
+								classname={'countries'}
+								data={geomapCountries}
+								topojson={'/topojson/world-50m.json'}
+								height={500}
+								changeGeomapFilter={this.changeGeomapFilter}
+								tooltipImgSource={'/images/icons/country/country_${d.country_id}.png'}
+							/>
+						</div>
+						<div className="continents">
+							<LibraryGeomap
+								classname={'continent'}
+								data={geomapContinents.filter((d) => d.country === 'Global')}
+								topojson={'/topojson/continent_wld.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilter}
+							/>
+							<LibraryGeomap
+								classname={'continent'}
+								data={geomapContinents.filter((d) => d.country === 'Southeastern & Central Europe')}
+								topojson={'/topojson/continent_sce.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilter}
+							/>
+							<LibraryGeomap
+								classname={'continent'}
+								data={geomapContinents.filter((d) => d.country === 'MENA')}
+								topojson={'/topojson/continent_mena.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilter}
+							/>
+						</div>
+					</div>
 				)}
 
 				{data && (
