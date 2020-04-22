@@ -183,12 +183,10 @@ export default class Data extends Component {
 				<p>
 					Economic complexity is an approach to understand the development of national and regional economies
 					focused on “all of the above.” Its methods use high resolution data on the activities that are
-					present in locations (e.g. trade, employment, or patent data), to predict the development dynamics
-					of countries, cities, and regions, without making strong assumptions about what factors drive
-					development, or their relative importance. These methods can predict the economic activities that a
-					country, city, or region will enter or exit in the futurem,<sup>12,13</sup> as well as an economy’s
-					expected level of income,<sup>14,15</sup> economic growth,<sup>14,15</sup> income inequality,<sup>16</sup>{' '}
-					and emissions.<sup>17,18</sup>
+					present in locations to predict the development dynamics of countries, cities, and regions. These
+					methods can predict the economic activities that a country, city, or region will enter or exit in
+					the future,<sup>12,13</sup> as well as an economy’s expected level of income,<sup>14,15</sup>{' '}
+					economic growth,<sup>14,15</sup> income inequality,<sup>16</sup> and emissions.<sup>17,18</sup>
 				</p>
 
 				<p>In this section, we explain some of the basic ideas that give shape to this field of study.</p>
@@ -215,12 +213,12 @@ export default class Data extends Component {
 							economic complexity, one can take data on the products that a country exports and predict
 							the products that this country could export in the future.<sup>11,12</sup> This is not
 							because these methods help you identify exactly what each product or industry needs, but
-							because they leverage the idea that similar industries have similar needs to estimate the
-							percentage of capabilities that may be present in a location (without having to identify
-							what these capabilities are). Similarly, Economic Complexity methods have also been shown to
-							predict a country’s expected level of income,<sup>13,14</sup> economic growth,<sup>13,14</sup>{' '}
-							income inequality,<sup>15</sup> emissions,<sup>16,17</sup> and the spatial concentration of
-							economic activities.<sup>18</sup>
+							because they leverage the idea that similar industries require similar capabilities to
+							estimate the percentage of them that may be present in a location (without having to
+							identify what these capabilities are). Similarly, Economic Complexity methods have also been
+							shown to predict a country’s expected level of income,<sup>13,14</sup> economic growth,<sup>13,14</sup>{' '}
+							income inequality,<sup>15</sup> and greenhouse gas emissions,<sup>16,17</sup> as well as the
+							spatial concentration of economic activities.<sup>18</sup>
 						</p>
 
 						<p>
