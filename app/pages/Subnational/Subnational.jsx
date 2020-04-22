@@ -32,7 +32,7 @@ class Subnational extends React.Component {
   }
 
   render() {
-    const {subnationalLandingData} = this.props;
+    const {subnationalLandingData, matrix} = this.props;
 
     return <div className="subnational">
       <OECNavbar />
@@ -129,13 +129,14 @@ Subnational.need = [(params, store) => {
 
   return {
     type: "GET_DATA",
-    promise: allPromise.push()
+    promise: allPromise
   };
-}];
+}, fetchData("datamatrix", "/api/matrix")];
 
 export default hot(withNamespaces()(
   connect(state => ({
     locale: state.i18n.locale,
-    subnationalLandingData: state.data.subnationalLandingData
+    subnationalLandingData: state.data.subnationalLandingData,
+    matrix: state.data.datamatrix
   }))(Subnational)
 ));
