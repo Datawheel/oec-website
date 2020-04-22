@@ -350,7 +350,6 @@ class Vizbuilder extends React.Component {
       this.state.permalinkCube !== prevState.permalinkCube && !this.state.permalinkCube.includes("subnational") ||
       this.state.subnatGeoItems.length !== prevState.subnatGeoItems.length && this.state.permalinkCube.includes("subnational")
     ) {
-      console.log("Or another");
       this.handleCube(this.state.permalinkCube);
     }
 
@@ -625,7 +624,6 @@ class Vizbuilder extends React.Component {
       Product: filterSubnat(this.state.subnatProductItems, viztype),
       Time: filterSubnat(this.state.subnatTimeItems, time, "value", true)
     };
-    console.log(selectedSubnatItems);
 
     const subnatKeys = ["Geo", "Product", "Time"].reduce((obj, d) => {
       const base = `selectedSubnat${d}`;
@@ -1079,7 +1077,7 @@ class Vizbuilder extends React.Component {
 
             </div>}
           </div>
-          {!this.state.loading ? <div className="vb-column">
+          {!this.state.loading || !this.props.loading ? <div className="vb-column">
             <div className="vb-title-wrapper">
               <div className="vb-title-button">
                 {prevTime && <Button
