@@ -273,6 +273,7 @@ class Library extends Component {
 								classname={'continent'}
 								data={geomapContinents.filter((d) => d.country === 'Africa')}
 								topojson={'/topojson/country_af.json'}
+								// projection={'geoMiller'}
 								height={100}
 								width={100}
 								changeGeomapFilter={this.changeGeomapFilter}
@@ -285,12 +286,12 @@ class Library extends Component {
 								height={100}
 								width={100}
 								changeGeomapFilter={this.changeGeomapFilter}
-								tooltipImgSource={'/images/icons/country/country_af.png'}
+								tooltipImgSource={'/images/icons/country/country_as.png'}
 							/>
 							<LibraryGeomap
 								classname={'continent'}
 								data={geomapContinents.filter((d) => d.country === 'Europe')}
-								topojson={'/topojson/country_af.json'}
+								topojson={'/topojson/country_eu.json'}
 								height={100}
 								width={100}
 								changeGeomapFilter={this.changeGeomapFilter}
