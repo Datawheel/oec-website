@@ -98,6 +98,31 @@
 				color: white;
 				opacity: 1;
 			}
+
+			& .table-of-contents {
+				font-size: var(--font-sm);
+				font-weight: 300;
+
+				& .content-table-item {
+					text-decoration: none;
+
+					& .content-name {
+						color: white;
+						opacity: 1;
+					}
+					& .content-name:hover {
+						opacity: 0.7;
+					}
+				}
+			}
+
+			& .definitions-block {
+				& .definitions-title-block-anchor {
+				}
+				& .definitions-content {
+					padding-top: var(--gutter-xs);
+				}
+			}
 		}
 	}
 }
