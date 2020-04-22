@@ -100,6 +100,7 @@ class VbDrawer extends React.Component {
     const parentId = groupBy
       ? relatedItems[`${groupBy[0]} ID`]
       : relatedItems["Section ID"] || relatedItems["Continent ID"];
+    const parentKey = groupBy[0];
 
     const isSubnatProfile = groupBy.includes("Subnat Geography");
     const isSubnatCube = cube.includes("subnational");
@@ -130,8 +131,11 @@ class VbDrawer extends React.Component {
     if (isCountryPermalink) countries.push({id: country, name: geoNames});
     if (countryIdSelected) countries.push({id: countryIdSelected, name: geoNameSelected});
 
+    console.log(this.props.cubeSelected);
+
     const timeTitle = timeTitleFormat(time);
-    const profileType = isSubnatProfile ? cube : isGeoGrouping ? "country" : cube;
+    const profileType =  isSubnatProfile
+      ? cube : isGeoGrouping ? "country" : parentKey === "Section" ? "hs92" : cube;
 
     const drawerIcon = <div
       className="vb-drawer-icon"

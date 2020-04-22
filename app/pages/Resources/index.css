@@ -481,6 +481,11 @@
 
 			& .countries {
 				flex: 1 1 80%;
+				& .viz {
+					position: relative;
+					height: 500px;
+					width: 500px;
+				}
 			}
 		}
 

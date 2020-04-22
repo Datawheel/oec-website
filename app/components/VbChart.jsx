@@ -159,10 +159,10 @@ class VbChart extends React.Component {
     if (isFilter) params.Product = viztype;
 
     const measureName = "Trade Value";
-
+    const interval = time.split(".");
     const growth = `${timeLevel},${measureName}`;
     if (this.state.selected.includes("Growth")) {
-      const interval = time.split(".");
+
       const i = timeItems.findIndex(d => d.value * 1 === interval[0] * 1);
       delete params.Time;
       const diff = 1;
@@ -176,7 +176,8 @@ class VbChart extends React.Component {
       .get(OLAP_API, {params})
       .then(resp => {
         let data = resp.data.data;
-        if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
+
+        if (this.state.selected.includes("Growth")) data = data.filter(d => d[timeLevel] === interval[0] * 1);
 
         if (data[0] && data[0].Time) {
           data = data.map(d => {
