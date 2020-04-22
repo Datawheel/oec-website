@@ -5,7 +5,7 @@ import {Geomap} from 'd3plus-react';
 class LibraryGeomap extends Component {
   state = {}
   render() {
-    const {classname, data, topojson, width, height, tooltipImgSource} = this.props;
+    const {classname, data, topojson, projection, width, height, tooltipImgSource} = this.props;
     const {changeGeomapFilter} = this.props;
     return (
       <div className={`geomap ${classname}`}>
@@ -49,6 +49,7 @@ class LibraryGeomap extends Component {
                   strokeWidth: 1
                 }
               },
+              projection: 'geoMercator',
               ocean: 'transparent',
               topojson: topojson,
               topojsonId: d => d.id,
