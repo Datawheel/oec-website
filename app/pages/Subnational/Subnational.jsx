@@ -15,6 +15,8 @@ import SubnationalCountryBlock from "./SubnationalCountryBlock";
 
 import {nest as d3Nest} from "d3-collection";
 
+import {fetchData} from "@datawheel/canon-core";
+
 import "./Subnational.css";
 
 import {SUBNATIONAL_COUNTRIES} from "helpers/consts";
@@ -42,14 +44,18 @@ class Subnational extends React.Component {
         <p className="subnational-intro">Subnational data is available in the following countries, with more to come!</p>
         <div className="subnational-country-index">
           {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map(country =>
-            <AnchorLink key={country.code} to={`subnational-country-block-${country.code}`} className="subnational-country-item">
-              <span className="subnational-country-item-flag"><img src={`/images/icons/country/country_${country.code}.png`} /></span>
+            <AnchorLink key={country.code} to={`subnational-country-block-${country.code}`} className={`subnational-country-item ${country.available ? "" : "subnational-country-item-soon"}`}>
+              {!country.available && <span className="subnational-country-item-soon-cover"></span>}
+              <span className="subnational-country-item-flag">
+                {!country.available && <span className="subnational-country-item-soon-label">Coming<br/>Soon</span>}
+                <img src={`/images/icons/country/country_${country.code}.png`} />
+              </span>
               <span className="subnational-country-item-name">{country.name}</span>
             </AnchorLink>
           )}
         </div>
 
-        {SUBNATIONAL_COUNTRIES.sort((a, b) => a.name > b.name ? 1 : -1).map((country, ix) =>
+        {SUBNATIONAL_COUNTRIES.filter(sc => sc.available).sort((a, b) => a.name > b.name ? 1 : -1).map((country, ix) =>
           <SubnationalCountryBlock key={`subnational-country-${ix}`} metadata={country} options={subnationalLandingData ? subnationalLandingData[country.code] : false} />
         )}
 
@@ -70,7 +76,7 @@ Subnational.need = [(params, store) => {
   // Setup promises
   const promisesList = [];
   const countriesData = {};
-  SUBNATIONAL_COUNTRIES.map((country, ix) => {
+  SUBNATIONAL_COUNTRIES.filter(sc => sc.available).map((country, ix) => {
     let limit = country.limit ? `${country.limit}` : "1000";
     let url = `${store.env.CANON_API}/api/search?cubeName=${country.cube}&dimension=${country.dimension}&level=${country.geoLevels.map(gl => gl.level).join(",")}&limit=${limit}&ref=${country.code}_0`;
     countriesData[`${country.code}_0`] = country;
@@ -123,7 +129,7 @@ Subnational.need = [(params, store) => {
 
   return {
     type: "GET_DATA",
-    promise: allPromise
+    promise: allPromise.push()
   };
 }];
 
