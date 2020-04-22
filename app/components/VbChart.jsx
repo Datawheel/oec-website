@@ -192,7 +192,7 @@ class VbChart extends React.Component {
             return Object.assign(d, {"Time ID": timeId});
           });
         }
-
+        this.props.updateData({data, loading: false});
         const nextState = {
           data,
           auth: true,
@@ -204,6 +204,7 @@ class VbChart extends React.Component {
       }).catch(error => {
         // TODO: AUTH
         const nextState = {data: [], loading: false, routeParams};
+        this.props.updateData({data: [], loading: false});
         if (error.response && error.response.status === 401) nextState.auth = false;
         this.setState(nextState);
       });
@@ -215,6 +216,7 @@ class VbChart extends React.Component {
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
     // Uses subnat cubes
     const prevState = {data: [], loading: true};
+    this.props.updateData(prevState);
     if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
     this.setState(prevState);
 
@@ -243,7 +245,6 @@ class VbChart extends React.Component {
     const cubeName = cubeSelected.name;
     const measureName = isTechnology ? "Patent Share" : "Trade Value";
     const growth = `Year,${measureName}`;
-
 
     const reporterCountry = geoLevels[0];
     const partnerCountry = geoLevels[1];
@@ -406,6 +407,7 @@ class VbChart extends React.Component {
         })
         .then(resp => {
           const data = resp.data.data;
+          this.props.updateData({data, loading: false});
           this.setState({
             data,
             auth: true,
@@ -423,6 +425,7 @@ class VbChart extends React.Component {
         .get("/api/connections/hs4", {params: ringsParams})
         .then(resp => {
           const data = resp.data;
+          this.props.updateData({data, loading: false});
           this.setState({
             data,
             auth: true,
@@ -439,6 +442,7 @@ class VbChart extends React.Component {
       };
       return axios.get("/api/gdp/eci", {params: scatterParams}).then(resp => {
         const data = resp.data;
+        this.props.updateData({data, loading: false});
         this.setState({
           data,
           loading: false,
@@ -452,6 +456,7 @@ class VbChart extends React.Component {
       .then(resp => {
         let data = resp.data.data;
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
+        this.props.updateData({data, loading: false});
         this.setState({
           data,
           auth: true,
@@ -459,6 +464,7 @@ class VbChart extends React.Component {
           routeParams
         });
       }).catch(error => {
+        this.props.updateData({data: [], loading: false});
         this.setState({data: [], loading: false, routeParams});
       });
   };
@@ -957,6 +963,12 @@ class VbChart extends React.Component {
 }
 
 /** */
+const mapDispatchToProps = dispatch => ({
+  // dispatching plain actions
+  updateData: payload => dispatch({type: "VB_UPDATE_DATA", payload})
+});
+
+/** */
 function mapStateToProps(state) {
   const {countryMembers, cubeSelected, wdiIndicators} = state.vizbuilder;
   return {
@@ -966,4 +978,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default withNamespaces()(connect(mapStateToProps)(VbChart));
+export default withNamespaces()(connect(mapStateToProps, mapDispatchToProps)(VbChart));

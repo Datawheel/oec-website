@@ -10,6 +10,13 @@ export default function vizbuilderReducer(state = vbInitialState(), action) {
       return newState;
     }
 
+    case "VB_UPDATE_DATA": {
+      newState = state;
+      newState.data = action.payload.data;
+      newState.loading = action.payload.loading;
+      return newState;
+    }
+
     case "VB_UPDATE_COUNTRY_MEMBERS": {
       newState = state;
       newState.countryMembers = action.payload;

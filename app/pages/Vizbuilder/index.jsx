@@ -252,7 +252,7 @@ class Vizbuilder extends React.Component {
       subnatGeoLevels: geoLevels,
       subnatProductLevels: productLevels,
       subnatTimeLevels: timeLevels,
-      subnatProductItems: dataProduct.data,
+      subnatProductItems: itemsProduct,
       selectedSubnatTimeTemp: filteredTimeItems,
       ...selectedGeo,
       ...selectedProduct
@@ -338,11 +338,24 @@ class Vizbuilder extends React.Component {
       const {cubeName} = this.state.cubeSelected;
       this.fetchProductNames(cubeName);
     }
+    // Updates loading panel
+    if (prevProps.params.cube !== this.props.params.cube) {
+      this.setState(
+        {permalinkCube: this.props.params.cube},
+        () => this.handleCube(this.state.permalinkCube)
+      );
+    }
+
     if (
       this.state.permalinkCube !== prevState.permalinkCube && !this.state.permalinkCube.includes("subnational") ||
       this.state.subnatGeoItems.length !== prevState.subnatGeoItems.length && this.state.permalinkCube.includes("subnational")
     ) {
+      console.log("Or another");
       this.handleCube(this.state.permalinkCube);
+    }
+
+    if (!this.props.loading && prevProps.loading !== this.props.loading) {
+      this.setState({loading: false});
     }
   }
 
@@ -671,6 +684,7 @@ class Vizbuilder extends React.Component {
       this.props.updateCubeSelected({
         name: cubeSelected.cube,
         geoLevels: cubeSelected.geoLevels,
+        productItems: this.state.subnatProductItems,
         productLevels: cubeSelected.productLevels,
         timeLevels: cubeSelected.timeLevels,
         timeItems: this.state.subnatTimeItems,
@@ -682,6 +696,7 @@ class Vizbuilder extends React.Component {
       this.props.updateCubeSelected({
         name: cubeSelected.cubeName,
         geoLevels: cubeSelected.geoLevels,
+        productItems: this.state.product,
         productLevels: cubeSelected.productLevels,
         timeLevels: cubeSelected.timeLevels,
         timeItems: cubeSelected.timeItems,
@@ -797,7 +812,7 @@ class Vizbuilder extends React.Component {
               {isSubnat && productSelector && <div className="columns">
                 <div className="column-1">
                   <div className="select-multi-section-wrapper">
-                    <h4 className="title">{t("Product")}</h4>
+                    <h4 className="title">{t("Product Subnat")}</h4>
                     <SelectMultiHierarchy
                       getColor={subnatItem.productColor}
                       getIcon={subnatItem.productIcon}
@@ -852,17 +867,19 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {countrySelector && !isGeomap && <div className="columns">
-                <div className="column-1">
-                  <OECMultiSelect
-                    items={this.props.countryMembers}
-                    itemType={"country"}
-                    selectedItems={this.state._selectedItemsCountry}
-                    title={t("Country")}
-                    callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
-                  />
-                </div>
-              </div>}
+              {
+                countrySelector && !isGeomap ||
+                isSubnat && countrySelector && !productSelector ? <div className="columns">
+                    <div className="column-1">
+                      <OECMultiSelect
+                        items={this.props.countryMembers}
+                        itemType={"country"}
+                        selectedItems={this.state._selectedItemsCountry}
+                        title={t("Country")}
+                        callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
+                      />
+                    </div>
+                  </div> : null}
 
               {subnatSelector && <div className="columns">
                 <div className="column-1">
@@ -1116,11 +1133,12 @@ const mapDispatchToProps = dispatch => ({
 
 /** */
 function mapStateToProps(state) {
-  const {countryMembers, wdiIndicators} = state.vizbuilder;
+  const {countryMembers, loading, wdiIndicators} = state.vizbuilder;
 
   return {
     auth: state.auth,
     countryMembers,
+    loading,
     wdiIndicators
   };
 }
