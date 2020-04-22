@@ -337,8 +337,6 @@ class Rankings extends Component {
 		}
 		rangeData = rangeData.flat();
 
-		console.log("rangedata:", rangeData);
-
 		let selector = null;
 
 		if (!subnational) {
@@ -365,7 +363,6 @@ class Rankings extends Component {
 		}
 
 		const reduceData = rangeData.reduce((obj, d) => {
-			console.log('MIRA AQUI 2:', !obj[d[selector]], obj[d[selector]], "d", [ d ]);
 			if (!obj[d[selector]]) obj[d[selector]] = [ d ];
 			else obj[d[selector]].push(d);
 			return obj;
@@ -388,7 +385,6 @@ class Rankings extends Component {
 		});
 
 		finalData.map((d) => {
-			console.log('VER AQUI:', d);
 			range(yearRangeInitial, yearRangeFinal).map((f) => {
 				if (d[`${f}`] === undefined) {
 					d[`${f}`] = -1000;
