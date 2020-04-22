@@ -3,13 +3,17 @@
  */
 export default function initialStateFactory() {
   return {
+    data: [],
+    loading: true,
+    status: 200,
     countryMembers: [],
     wdiIndicators: [],
     cubeSelected: {
       currency: undefined,
-      geoLevels: [],
       geoItems: [],
+      geoLevels: [],
       name: "",
+      productItems: [],
       productLevels: [],
       timeItems: [],
       timeLevels: []
