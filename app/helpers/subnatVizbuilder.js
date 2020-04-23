@@ -13,18 +13,30 @@ const cubes = {
   //   geoLevels: ["Region", "Subnat Geography"],
   //   timeLevels: ["Year", "Quarter"]
   // },
-  // subnational_esp: {
-  //   cube: "trade_s_esp_m_hs",
-  //   name: "Spain",
-  //   id: "esp",
-  //   topojson: [
-  //     "/shapes/subnational_esp_autonomous.topojson",
-  //     "/shapes/subnational_esp_provinces.topojson"
-  //   ],
-  //   productLevels: ["Section", "HS2", "HS4", "Product"],
-  //   geoLevels: ["Autonomous Communities", "Subnat Geography"],
-  //   timeLevels: ["Year", "Quarter", "Month"]
-  // },
+  subnational_esp: {
+    cube: "trade_s_esp_m_hs",
+    name: "Spain",
+    id: "esp",
+    topojson: [
+      "/shapes/subnational_esp_autonomous.topojson",
+      "/shapes/subnational_esp_provinces.topojson"
+    ],
+    productLevels: ["Section", "HS2", "HS4", "Product"],
+    geoLevels: ["Autonomous Communities", "Subnat Geography"],
+    timeLevels: ["Year", "Quarter", "Month"]
+  },
+  subnational_rus: {
+    cube: "trade_s_rus_m_hs",
+    name: "Russia",
+    id: "rus",
+    topojson: [
+      "/shapes/subnational_rus_districts.topojson",
+      "/shapes/subnational_rus_regions.topojson"
+    ],
+    productLevels: ["Section", "HS2", "HS4", "Product"],
+    geoLevels: ["District", "Subnat Geography"],
+    timeLevels: ["Year", "Quarter", "Month"]
+  },
   subnational_chn: {
     cube: "trade_s_chn_m_hs",
     name: "China",
