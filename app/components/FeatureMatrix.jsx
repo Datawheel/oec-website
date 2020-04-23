@@ -24,12 +24,12 @@ const features = [
   {
     title: "Subnational trade data (for selected countries)",
     group: 0,
-    tooltip: "Currently serving China, Germany, and United States subnational data."
+    tooltip: "Currently serving Canada, China, Germany, Japan, Russia and Spain subnational data."
   },
-  {
-    title: "Patent Data (USPTO)",
-    group: 0
-  },
+  // {
+  //   title: "Patent Data (USPTO)",
+  //   group: 0
+  // },
   {
     title: "Economic Complexity Index (ECI) Rankings",
     group: 1
