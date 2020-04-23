@@ -601,6 +601,7 @@ class Vizbuilder extends React.Component {
     }
 
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
+    const isSubnat = cube.includes("subnational");
 
     const _xAxis = wdiIndicators.find(d => d.value === flow) || wdiIndicators.find(d => d.value === "OEC.ECI");
     const _yAxis = wdiIndicators.find(d => d.value === country) || wdiIndicators.find(d => d.value === "NY.GDP.MKTP.CD");
@@ -613,7 +614,7 @@ class Vizbuilder extends React.Component {
     const selectedItems = {
       Country: countryItems.length
         ? countryItems
-        : notEmpty(this.state.selectedSubnatGeoTemp)
+        : notEmpty(this.state.selectedSubnatGeoTemp) || isSubnat
           ? countryMembers.filter(d => d.label === this.state.subnatCubeSelected.id) : [],
       Partner: filterCountry(partner),
       Product: isFinite(viztype.split(".")[0])
