@@ -38,7 +38,7 @@ class Footer extends React.Component {
         <div className="footer-contact">
           <ul key="logos" className="footer-sponsor-list">
             <li className="footer-sponsor-item">
-              <a href="https://www.datawheel.us/" className="footer-sponsor-link">
+              <a href="https://www.datawheel.us/" className="footer-sponsor-link" target="_blank" rel="noopener noreferrer">
                 <img
                   className="footer-sponsor-img"
                   src="/images/logos/datawheel-logo.svg"
@@ -47,12 +47,24 @@ class Footer extends React.Component {
                 />
               </a>
             </li>
+          </ul>
+          <ul key="logos" className="footer-sponsor-list">
             <li className="footer-sponsor-item">
-              <a href="https://www.iadb.org" className="footer-sponsor-link">
+              <a href="https://connectamericas.com" className="footer-sponsor-link" target="_blank" rel="noopener noreferrer">
                 <img
-                  className="footer-sponsor-img"
-                  src="/images/logos/idb-logo.svg"
-                  alt="Inter-American Development Bank"
+                  className="footer-sponsor-img sm"
+                  src="/images/logos/ca-logo.svg"
+                  alt="ConnectAmericas"
+                  draggable="false"
+                />
+              </a>
+            </li>
+            <li className="footer-sponsor-item">
+              <a href="https://www.iadb.org/en/intal/home" className="footer-sponsor-link" target="_blank" rel="noopener noreferrer">
+                <img
+                  className="footer-sponsor-img sm"
+                  src="/images/logos/intal-logo.svg"
+                  alt="INTAL"
                   draggable="false"
                 />
               </a>
