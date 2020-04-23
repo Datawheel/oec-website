@@ -73,6 +73,7 @@ class VbDrawer extends React.Component {
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
     const {countryMembers, cubeSelected, groupBy, relatedItems, routeParams, t} = this.props;
     const {cube, country, partner, viztype, time} = routeParams;
+    const {geoLevels} = cubeSelected;
     const preps = {
       export: "to",
       import: "from",
@@ -106,10 +107,16 @@ class VbDrawer extends React.Component {
     const isSubnatCube = cube.includes("subnational");
     const showProfile = !["EGW1"].includes(groupBy[0]);
 
+    const relatedItemsKeys = Object.keys(relatedItems);
+
     const isGeoSelected = relatedItems["Continent ID"];
     const profileId = isGeoSelected ? titleId.slice(2, 5) : titleId;
-    const countryIdSelected = relatedItems["Country ID"] ? relatedItems["Country ID"].slice(2, 5) : undefined;
-    const isCountrySelected = Object.keys(relatedItems).includes("Country ID");
+    const isCountrySelected = relatedItemsKeys.includes("Country ID");
+    let countryIdSelected = isCountrySelected ? relatedItems["Country ID"].slice(2, 5) : undefined;
+    const isSubnatIdSelected = [].concat(geoLevels).reverse().find(d => relatedItemsKeys.includes(d));
+    const subnatIdSelected = isSubnatIdSelected ? relatedItems[`${isSubnatIdSelected} ID`].toString() : undefined;
+
+    if (!countryIdSelected && isSubnatIdSelected) countryIdSelected = subnatIdSelected;
 
     const icon = !["Continent", "Country"].includes(titleKey)
       ? backgroundImageV2(key, relatedItems)
@@ -123,15 +130,22 @@ class VbDrawer extends React.Component {
 
     const {geoItems} = this.props.cubeSelected;
     const customGeoItems = isSubnatCube ? [...geoItems, ...countryMembers] : geoItems;
+
     const geoNames = isCountry ? geoLabels(country, customGeoItems) : "";
     const partnerNames = isPartner ? geoLabels(partner, customGeoItems) : "";
     const geoNameSelected = countryIdSelected ?  geoLabels(countryIdSelected, customGeoItems) : "";
 
     const countries = [];
     if (isCountryPermalink) countries.push({id: country, name: geoNames});
-    if (countryIdSelected) countries.push({id: countryIdSelected, name: geoNameSelected});
+    if (countryIdSelected) {
+      countries.push({
+        id: countryIdSelected,
+        name: geoNameSelected,
+        type: isCountrySelected ? "Country" : "Subnational"
+      });
+    }
 
-    console.log(this.props.cubeSelected);
+    console.log(countries);
 
     const timeTitle = timeTitleFormat(time);
     const profileType =  isSubnatProfile
@@ -143,6 +157,7 @@ class VbDrawer extends React.Component {
     >
       <img src={icon} />
     </div>;
+
     const drawerTitle = <div>
       <div>{titleName}</div>
       {showProfile && <div><a style={{color}} href={`/en/profile/${profileType}/${profileId}`}>{t("View profile")}</a></div>}
@@ -178,34 +193,36 @@ class VbDrawer extends React.Component {
               const permalinkPartner = `/${cube}/${d}/${partner}/${country}/show/${time}/`;
               const permalinkWhere = `/${cube}/${d}/${partner}/show/${titleId}/${time}/`;
 
-              all.push(<VbRelatedVizTitle
-                permalink={permalinkPartner}
-                router={this.props.router}
-                titleConfig={{country: partnerNames, partner: geoNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_what_country_flow_partner"
-                callback={d => this.props.run(d)}
-                t={t}
-              />);
+              if (!isSubnatCube) {
+                all.push(<VbRelatedVizTitle
+                  permalink={permalinkPartner}
+                  router={this.props.router}
+                  titleConfig={{country: partnerNames, partner: geoNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
+                  titleName="vb_title_what_country_flow_partner"
+                  callback={d => this.props.run(d)}
+                  t={t}
+                />);
 
-              all.push(<VbRelatedVizTitle
-                permalink={permalinkWhere}
-                router={this.props.router}
-                titleConfig={{country: partnerNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_where_country_flow_product"
-                callback={d => this.props.run(d)}
-                t={t}
-              />);
+                all.push(<VbRelatedVizTitle
+                  permalink={permalinkWhere}
+                  router={this.props.router}
+                  titleConfig={{country: partnerNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
+                  titleName="vb_title_where_country_flow_product"
+                  callback={d => this.props.run(d)}
+                  t={t}
+                />);
 
-              const permalinkWhat = `/${cube}/${d}/${partner}/all/show/${time}/`;
+                const permalinkWhat = `/${cube}/${d}/${partner}/all/show/${time}/`;
 
-              all.push(<VbRelatedVizTitle
-                permalink={permalinkWhat}
-                router={this.props.router}
-                titleConfig={{country: partnerNames, flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_what_country_flow"
-                callback={d => this.props.run(d)}
-                t={t}
-              />);
+                all.push(<VbRelatedVizTitle
+                  permalink={permalinkWhat}
+                  router={this.props.router}
+                  titleConfig={{country: partnerNames, flow: d, time: timeTitle, prep: preps[d]}}
+                  titleName="vb_title_what_country_flow"
+                  callback={d => this.props.run(d)}
+                  t={t}
+                />);
+              }
             }
 
             // Checks bilateral permalink
@@ -278,32 +295,37 @@ class VbDrawer extends React.Component {
               const permalinkWhat = `/${cube}/${d}/${h.id}/all/show/${time}/`;
               const permalinkWhere = `/${cube}/${d}/${h.id}/show/all/${time}/`;
 
-              all.push(<VbRelatedVizTitle
-                permalink={permalinkWhat}
-                router={this.props.router}
-                titleConfig={{country: h.name, flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_what_country_flow"
-                callback={d => this.props.run(d)}
-                t={t}
-              />);
-              all.push(<VbRelatedVizTitle
-                permalink={permalinkWhere}
-                router={this.props.router}
-                titleConfig={{country: h.name, flow: d, time: timeTitle, prep: preps[d]}}
-                titleName="vb_title_where_country_flow_product"
-                callback={d => this.props.run(d)}
-                t={t}
-              />);
-              if (isProductSelected) {
-                const permalinkProduct = `/${cube}/${d}/${h.id}/show/${titleId}/${time}/`;
+              let show = true;
+              if (h.type && h.type === "Country" && isSubnatCube) show = false;
+
+              if (show) {
                 all.push(<VbRelatedVizTitle
-                  permalink={permalinkProduct}
+                  permalink={permalinkWhat}
                   router={this.props.router}
-                  titleConfig={{country: h.name, flow: d, product: titleName, time: timeTitle, prep: preps[d]}}
+                  titleConfig={{country: h.name, flow: d, time: timeTitle, prep: preps[d]}}
+                  titleName="vb_title_what_country_flow"
+                  callback={d => this.props.run(d)}
+                  t={t}
+                />);
+                all.push(<VbRelatedVizTitle
+                  permalink={permalinkWhere}
+                  router={this.props.router}
+                  titleConfig={{country: h.name, flow: d, time: timeTitle, prep: preps[d]}}
                   titleName="vb_title_where_country_flow_product"
                   callback={d => this.props.run(d)}
                   t={t}
                 />);
+                if (isProductSelected) {
+                  const permalinkProduct = `/${cube}/${d}/${h.id}/show/${titleId}/${time}/`;
+                  all.push(<VbRelatedVizTitle
+                    permalink={permalinkProduct}
+                    router={this.props.router}
+                    titleConfig={{country: h.name, flow: d, product: titleName, time: timeTitle, prep: preps[d]}}
+                    titleName="vb_title_where_country_flow_product"
+                    callback={d => this.props.run(d)}
+                    t={t}
+                  />);
+                }
               }
             });
             return all;

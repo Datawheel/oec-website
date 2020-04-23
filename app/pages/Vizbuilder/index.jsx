@@ -464,7 +464,8 @@ class Vizbuilder extends React.Component {
       _startYearTitle,
       _endYearTitle,
       _selectedItemsYearTitle,
-      selectedSubnatGeo
+      selectedSubnatGeo,
+      selectedSubnatProduct
     } = this.state;
     const {routeParams} = this.props;
     const {cube} = routeParams;
@@ -479,7 +480,7 @@ class Vizbuilder extends React.Component {
     const isTechnologyFilter = notEmpty(_selectedItemsTechnologyTitle);
     const isTradeFilter = notEmpty(_selectedItemsProductTitle);
 
-    const filterIds = isTechnologyFilter || isTradeFilter
+    let filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
         ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
         : parseIdsToURL(_selectedItemsProductTitle)
@@ -505,14 +506,22 @@ class Vizbuilder extends React.Component {
       scatterViztype
     };
 
+    let timePlot = `${_startYearTitle.value}.${_endYearTitle.value}`;
+
+    // Generates structure of permalinks for subnational
     if (cube.includes("subnational")) {
-      const id = this.state.subnatGeoItems.map(d => d.id)[0];
-      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : id;
+      const {subnatGeoItems, subnatProductItems, selectedSubnatTimeTemp, startTime, endTime} = this.state;
+      const geoId = subnatGeoItems.map(d => d.id)[0];
+      const productId = subnatProductItems.map(d => d.id)[0];
+
+      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : geoId;
       dataset = cube;
-      timeIds = this.state.selectedSubnatTimeTemp
+      timeIds = selectedSubnatTimeTemp
         .map(d => d.value)
         .sort((a, b) => a > b ? 1 : -1)
         .join(".");
+      timePlot = `${startTime.value}.${endTime.value}`;
+      filterIds = notEmpty(selectedSubnatProduct) ? parseIdsToURL(selectedSubnatProduct, "id") : productId;
       if (notEmpty(_selectedItemsPartnerTitle)) partnerIds = "deu";
     }
 
@@ -524,7 +533,7 @@ class Vizbuilder extends React.Component {
       flow,
       viztype: filterIds,
       time: timeIds,
-      timePlot: `${_startYearTitle.value}.${_endYearTitle.value}`
+      timePlot
     };
 
     return Object.assign(output, outputScatter);
@@ -1023,7 +1032,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {isTimeSeriesChart && !isSubnatPanel && <div className="columns">
+              {isTimeSeriesChart && !isSubnatPanel ? <div className="columns">
                 <div className="column-1-2">
                   <SimpleSelect
                     items={timeItems}
@@ -1042,9 +1051,9 @@ class Vizbuilder extends React.Component {
                     callback={this.updateFilter}
                   />
                 </div>
-              </div>}
+              </div> : null}
 
-              {isTimeSeriesChart && isSubnatPanel && <div className="columns">
+              {isTimeSeriesChart && isSubnatPanel ? <div className="columns">
                 <div className="column-1-2">
                   <SimpleSelect
                     items={subnatTimeItems}
@@ -1063,7 +1072,7 @@ class Vizbuilder extends React.Component {
                     callback={this.updateFilter}
                   />
                 </div>
-              </div>}
+              </div> : null}
 
               {/* Build Visualization Button */}
               <div className="columns">
