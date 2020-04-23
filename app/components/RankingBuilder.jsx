@@ -20,6 +20,7 @@ class RankingsBuilder extends Component {
 			yearRangeInitial,
 			yearRangeFinal,
 			countryExpThreshold,
+			populationThreshold,
 			productExpThreshold,
 			_authUser
 		} = this.props.variables;
@@ -34,6 +35,7 @@ class RankingsBuilder extends Component {
 			handlePeriodRangeSwitch,
 			handleThresholdSlider,
 			renderThresholdSlider,
+			renderMoneyThresholdSlider,
 			apiGetData
 		} = this.props;
 		const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
@@ -170,7 +172,7 @@ class RankingsBuilder extends Component {
 					</div>
 				</div>
 				<div className="section is-half">
-					<div className="setting">
+					<div className="setting no-padding">
 						<h3 className="first">
 							{!subnational ? (
 								'Country Export Value Threshold'
@@ -184,12 +186,25 @@ class RankingsBuilder extends Component {
 							stepSize={500000000}
 							labelStepSize={1000000000}
 							onChange={handleThresholdSlider('countryExpThreshold')}
-							labelRenderer={renderThresholdSlider}
+							labelRenderer={renderMoneyThresholdSlider}
 							value={countryExpThreshold}
 							disabled={subnational}
 						/>
 					</div>
-					<div className="setting">
+					<div className="setting no-padding">
+						<h3>Country Population Value Threshold </h3>
+						<Slider
+							min={0}
+							max={100000000}
+							stepSize={10000000}
+							labelStepSize={10000000}
+							onChange={handleThresholdSlider('populationThreshold')}
+							labelRenderer={renderThresholdSlider}
+							value={populationThreshold}
+							disabled={subnational}
+						/>
+					</div>
+					<div className="setting no-padding">
 						<h3>Product Export Value Threshold </h3>
 						<Slider
 							min={0}
@@ -197,7 +212,7 @@ class RankingsBuilder extends Component {
 							stepSize={250000000}
 							labelStepSize={500000000}
 							onChange={handleThresholdSlider('productExpThreshold')}
-							labelRenderer={renderThresholdSlider}
+							labelRenderer={renderMoneyThresholdSlider}
 							value={productExpThreshold}
 							disabled={subnational}
 						/>

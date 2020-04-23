@@ -130,6 +130,10 @@
 		}
 	}
 
+	& .setting.no-padding {
+		padding-bottom: 0;
+	}
+
 	& .setting.last {
 		border-bottom: 0;
 	}

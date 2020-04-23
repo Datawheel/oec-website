@@ -19,7 +19,7 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Dynamics", url: `/${locale}/rankings/`}
+      {title: "Custom", url: `/${locale}/rankings/`}
     ]},
     // tools
     {title: "Tools", items: [

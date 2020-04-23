@@ -35,6 +35,7 @@ class Rankings extends Component {
 			yearRangeInitial: null,
 			yearRangeFinal: null,
 			countryExpThreshold: null,
+			populationThreshold: null,
 			productExpThreshold: null,
 			data: null,
 			columns: null,
@@ -51,6 +52,7 @@ class Rankings extends Component {
 		this.handlePeriodRangeSwitch = this.handlePeriodRangeSwitch.bind(this);
 		this.handleThresholdSlider = this.handleThresholdSlider.bind(this);
 		this.renderThresholdSlider = this.renderThresholdSlider.bind(this);
+		this.renderMoneyThresholdSlider = this.renderMoneyThresholdSlider.bind(this);
 		this.apiGetData = this.apiGetData.bind(this);
 	}
 
@@ -58,6 +60,7 @@ class Rankings extends Component {
 		const defaultDepth = 'HS4';
 		const defaultRevision = 'HS92';
 		const defaultCountryThreshold = 5000000000;
+		const defaultPopulationThreshold = 20000000;
 		const defaultProductThreshold = 1000000000;
 
 		this.setState({
@@ -68,6 +71,7 @@ class Rankings extends Component {
 			yearRangeInitial: yearsNational[defaultRevision].final - 1,
 			yearRangeFinal: yearsNational[defaultRevision].final,
 			countryExpThreshold: defaultCountryThreshold,
+			populationThreshold: defaultPopulationThreshold,
 			productExpThreshold: defaultProductThreshold,
 			_ready: true
 		});
@@ -199,6 +203,10 @@ class Rankings extends Component {
 	}
 
 	renderThresholdSlider(val) {
+		return `${formatAbbreviate(val)}`;
+	}
+
+	renderMoneyThresholdSlider(val) {
 		return `$${formatAbbreviate(val)}`;
 	}
 
@@ -222,6 +230,7 @@ class Rankings extends Component {
 			productDepth,
 			productRevision,
 			countryExpThreshold,
+			populationThreshold,
 			productExpThreshold
 		} = this.state;
 		const index = country ? 'eci' : 'pci';
@@ -231,10 +240,10 @@ class Rankings extends Component {
 				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(
 					2
 				)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
-					3}&threshold_${productDepth}=${productExpThreshold * 3}`;
+					3}&threshold_${productDepth}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017 ? years[2] : 2017}&threshold_Population=${populationThreshold}`;
 			} else {
 				return `/api/stats/${index}?cube=trade_i_oec_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
-					3}&threshold_${productRevision}=${productExpThreshold * 3}`;
+					3}&threshold_${productRevision}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017 ? years[2] : 2017}&threshold_Population=${populationThreshold}`;
 			}
 		} else {
 			const basecube = subnationalData[subnationalValue].basecube;
@@ -679,6 +688,7 @@ class Rankings extends Component {
 			yearRangeInitial,
 			yearRangeFinal,
 			countryExpThreshold,
+			populationThreshold,
 			productExpThreshold,
 			data,
 			columns,
@@ -707,7 +717,7 @@ class Rankings extends Component {
 				<OECNavbar />
 
 				<div className="rankings-content">
-					<RankingText />
+					<RankingText type={"dynamic"}/>
 
 					<RankingBuilder
 						variables={{
@@ -722,6 +732,7 @@ class Rankings extends Component {
 							yearRangeInitial,
 							yearRangeFinal,
 							countryExpThreshold,
+							populationThreshold,
 							productExpThreshold,
 							_authUser
 						}}
@@ -735,6 +746,7 @@ class Rankings extends Component {
 						handlePeriodRangeSwitch={this.handlePeriodRangeSwitch}
 						handleThresholdSlider={this.handleThresholdSlider}
 						renderThresholdSlider={this.renderThresholdSlider}
+						renderMoneyThresholdSlider={this.renderMoneyThresholdSlider}
 						apiGetData={this.apiGetData}
 					/>
 
