@@ -124,7 +124,7 @@
       display: inline-block;
       & .footer-sponsor-link {
         display: block;
-        padding: 1rem 0 1rem 1.5rem;
+        padding: 0.55rem 0 1rem 1.5rem;
         /* transitions */
         opacity: 0.75;
         transition:
@@ -136,7 +136,10 @@
           transform: scale(1.075);
         }
         & .footer-sponsor-img {
-          max-height: 1.875rem;
+          max-height: 2rem;
+        }
+        & .footer-sponsor-img.sm {
+          max-height: 1.675rem;
         }
 
         @mixin max-md {
