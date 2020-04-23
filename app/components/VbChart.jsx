@@ -481,8 +481,8 @@ class VbChart extends React.Component {
   };
 
   render() {
-    const {auth, data, loading, routeParams} = this.state;
-    const {cubeSelected, t} = this.props;
+    const {auth, loading, routeParams} = this.state;
+    const {cubeSelected, data, t} = this.props;
     const {chart, cube, flow, country, partner, viztype, time} = routeParams;
     const {currency} = cubeSelected;
 
@@ -971,10 +971,11 @@ const mapDispatchToProps = dispatch => ({
 
 /** */
 function mapStateToProps(state) {
-  const {countryMembers, cubeSelected, wdiIndicators} = state.vizbuilder;
+  const {countryMembers, cubeSelected, data, wdiIndicators} = state.vizbuilder;
   return {
     countryMembers,
     cubeSelected,
+    data,
     wdiIndicators
   };
 }

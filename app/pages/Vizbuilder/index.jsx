@@ -464,7 +464,8 @@ class Vizbuilder extends React.Component {
       _startYearTitle,
       _endYearTitle,
       _selectedItemsYearTitle,
-      selectedSubnatGeo
+      selectedSubnatGeo,
+      selectedSubnatProduct
     } = this.state;
     const {routeParams} = this.props;
     const {cube} = routeParams;
@@ -479,7 +480,7 @@ class Vizbuilder extends React.Component {
     const isTechnologyFilter = notEmpty(_selectedItemsTechnologyTitle);
     const isTradeFilter = notEmpty(_selectedItemsProductTitle);
 
-    const filterIds = isTechnologyFilter || isTradeFilter
+    let filterIds = isTechnologyFilter || isTradeFilter
       ? isTechnologyFilter
         ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
         : parseIdsToURL(_selectedItemsProductTitle)
@@ -505,14 +506,22 @@ class Vizbuilder extends React.Component {
       scatterViztype
     };
 
+    let timePlot = `${_startYearTitle.value}.${_endYearTitle.value}`;
+
+    // Generates structure of permalinks for subnational
     if (cube.includes("subnational")) {
-      const id = this.state.subnatGeoItems.map(d => d.id)[0];
-      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : id;
+      const {subnatGeoItems, subnatProductItems, selectedSubnatTimeTemp, startTime, endTime} = this.state;
+      const geoId = subnatGeoItems.map(d => d.id)[0];
+      const productId = subnatProductItems.map(d => d.id)[0];
+
+      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : geoId;
       dataset = cube;
-      timeIds = this.state.selectedSubnatTimeTemp
+      timeIds = selectedSubnatTimeTemp
         .map(d => d.value)
         .sort((a, b) => a > b ? 1 : -1)
         .join(".");
+      timePlot = `${startTime.value}.${endTime.value}`;
+      filterIds = notEmpty(selectedSubnatProduct) ? parseIdsToURL(selectedSubnatProduct, "id") : productId;
       if (notEmpty(_selectedItemsPartnerTitle)) partnerIds = "deu";
     }
 
@@ -524,7 +533,7 @@ class Vizbuilder extends React.Component {
       flow,
       viztype: filterIds,
       time: timeIds,
-      timePlot: `${_startYearTitle.value}.${_endYearTitle.value}`
+      timePlot
     };
 
     return Object.assign(output, outputScatter);
@@ -592,6 +601,7 @@ class Vizbuilder extends React.Component {
     }
 
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
+    const isSubnat = cube.includes("subnational");
 
     const _xAxis = wdiIndicators.find(d => d.value === flow) || wdiIndicators.find(d => d.value === "OEC.ECI");
     const _yAxis = wdiIndicators.find(d => d.value === country) || wdiIndicators.find(d => d.value === "NY.GDP.MKTP.CD");
@@ -604,7 +614,8 @@ class Vizbuilder extends React.Component {
     const selectedItems = {
       Country: countryItems.length
         ? countryItems
-        : countryMembers.filter(d => d.label === this.state.subnatCubeSelected.id),
+        : notEmpty(this.state.selectedSubnatGeoTemp) || isSubnat
+          ? countryMembers.filter(d => d.label === this.state.subnatCubeSelected.id) : [],
       Partner: filterCountry(partner),
       Product: isFinite(viztype.split(".")[0])
         ? viztype.split(".").map(d => productKeys[d]).filter(d => d) : [],
@@ -612,6 +623,8 @@ class Vizbuilder extends React.Component {
         ? technologyData.filter(d => viztype.split(".").includes(d.value)) : [],
       Year: timeItems.length ? timeItems : [years[0]]
     };
+
+    console.log(selectedItems);
 
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
     const _startYear = isTimeSeriesChart ? timeIds[0] : this.state._startYear;
@@ -635,12 +648,16 @@ class Vizbuilder extends React.Component {
       return obj;
     }, {});
 
+    console.log("Hello", selectedItems);
     const countryKeys = Object.keys(selectedItems).reduce((obj, d) => {
       const base = `_selectedItems${d}`;
       if (!obj[base]) {
         const data = selectedItems[d];
+
         obj[base] = data;
-        obj[`${base}Title`] = data;
+        if (data.length > 0) {
+          obj[`${base}Title`] = data;
+        }
       }
       return obj;
     }, {});
@@ -729,7 +746,7 @@ class Vizbuilder extends React.Component {
     let countrySelector = isCountry && !isScatterChart || isSubnat;
     const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
     if (productSelector) {
-      countrySelector = false;
+      if (isSubnat) countrySelector = false;
       subnatSelector = false;
     }
 
@@ -1023,7 +1040,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {isTimeSeriesChart && !isSubnatPanel && <div className="columns">
+              {isTimeSeriesChart && !isSubnatPanel ? <div className="columns">
                 <div className="column-1-2">
                   <SimpleSelect
                     items={timeItems}
@@ -1042,9 +1059,9 @@ class Vizbuilder extends React.Component {
                     callback={this.updateFilter}
                   />
                 </div>
-              </div>}
+              </div> : null}
 
-              {isTimeSeriesChart && isSubnatPanel && <div className="columns">
+              {isTimeSeriesChart && isSubnatPanel ? <div className="columns">
                 <div className="column-1-2">
                   <SimpleSelect
                     items={subnatTimeItems}
@@ -1063,7 +1080,7 @@ class Vizbuilder extends React.Component {
                     callback={this.updateFilter}
                   />
                 </div>
-              </div>}
+              </div> : null}
 
               {/* Build Visualization Button */}
               <div className="columns">
