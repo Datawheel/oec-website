@@ -98,6 +98,7 @@ class Rankings extends Component {
 				yearRangeInitial: yearsNational[productRevision].final - 1,
 				yearRangeFinal: yearsNational[productRevision].final,
 				countryExpThreshold: 5000000000,
+				populationThreshold: 20000000,
 				productExpThreshold: 1000000000
 			});
 		} else {
@@ -109,6 +110,7 @@ class Rankings extends Component {
 				yearRangeInitial: subnationalData[subnationalValue].final - 1,
 				yearRangeFinal: subnationalData[subnationalValue].final,
 				countryExpThreshold: 0,
+				populationThreshold: 0,
 				productExpThreshold: 0
 			});
 		}
