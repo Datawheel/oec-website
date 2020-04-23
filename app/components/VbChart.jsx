@@ -133,7 +133,8 @@ class VbChart extends React.Component {
     else if (geoId && viztype === "show") drilldowns.push(["line"].includes(chart) ? productLevels[0] : depth);
     else if (geoId && viztype === "all" || geoId && isFilter) drilldowns.push("Country");
 
-    if (isFilter || timeSeriesChart) drilldowns.push(timeLevel);
+    // if (isFilter || timeSeriesChart)
+    drilldowns.push(timeLevel);
 
     const params = {
       cube: subnatData.cube,
@@ -701,7 +702,7 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "line" && data && data.length > 0) {
-      const {geoLevels, productLevels} = isSubnat;
+      const {geoLevels, productLevels} = this.props.cubeSelected;
       const isGeoGroupBy = viztype === "all" || isFinite(viztype);
       let lineGroupBy = ["Trade Flow ID"];
       const isTradeBalanceChart = flow === "show";
