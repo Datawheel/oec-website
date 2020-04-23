@@ -21,6 +21,7 @@ class SubnationalCountryBlock extends React.Component {
     };
     this.handleNavbarTabChange = this.handleNavbarTabChange.bind(this);
     this.filterList = this.filterList.bind(this);
+    this.getAvailability = this.getAvailability.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +30,17 @@ class SubnationalCountryBlock extends React.Component {
 
   componentWillUnmount() {
 
+  }
+
+  getAvailability(cube) {
+    const {matrix} = this.props;
+    if (!matrix) return "";
+    const item = matrix.subnational.products.find(meta => meta.cubeName === cube);
+    let availabilityText = "";
+    if (item) {
+      availabilityText = `${item.resolutions.time} Data from ${item.start} to ${item.end}`;
+    }
+    return availabilityText;
   }
 
   filterList(event) {
@@ -71,6 +83,7 @@ class SubnationalCountryBlock extends React.Component {
         <div className="subnational-tabs">
           <div className="subnational-header">
             <h3 className=""><span className="icon"><img src={imgUrl} /></span><span>{metadata.name}</span></h3>
+            <p>{this.getAvailability(selectedCube)}</p>
           </div>
           <Tabs
             animate={true}
@@ -110,5 +123,7 @@ class SubnationalCountryBlock extends React.Component {
 SubnationalCountryBlock.need = [];
 
 export default hot(withNamespaces()(
-  connect()(SubnationalCountryBlock)
+  connect(state => ({
+    matrix: state.data.datamatrix
+  }))(SubnationalCountryBlock)
 ));

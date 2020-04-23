@@ -75,13 +75,14 @@
     }
   }
   & .subnational-header {
+    margin: 0 0 var(--gutter-sm);
     & h3 {
       @mixin font-xxl;
+      margin:0;
       align-items: center;
       display: flex;
       flex-direction: row;
       font-weight: 300;
-      margin: 0 0 var(--gutter-sm);
       & span {
         padding-right: 10px;
         &.icon {
@@ -92,6 +93,11 @@
           }
         }
       }
+    }
+    & p {
+      @mixin font-sm;
+      font-weight: 500;
+      margin:0;
     }
   }
   &:nth-child(even) {
