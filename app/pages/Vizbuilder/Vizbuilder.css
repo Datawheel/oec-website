@@ -25,6 +25,7 @@
       padding: var(--gutter-sm);
       &.aside {
         max-width: 300px;
+        min-width: 300px;
         transition: margin 0.7s ease 0s;
         & .controls {
           width: 100%;

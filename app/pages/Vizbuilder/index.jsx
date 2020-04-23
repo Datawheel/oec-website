@@ -613,7 +613,8 @@ class Vizbuilder extends React.Component {
     const selectedItems = {
       Country: countryItems.length
         ? countryItems
-        : countryMembers.filter(d => d.label === this.state.subnatCubeSelected.id),
+        : notEmpty(this.state.selectedSubnatGeoTemp)
+          ? countryMembers.filter(d => d.label === this.state.subnatCubeSelected.id) : [],
       Partner: filterCountry(partner),
       Product: isFinite(viztype.split(".")[0])
         ? viztype.split(".").map(d => productKeys[d]).filter(d => d) : [],
@@ -621,6 +622,8 @@ class Vizbuilder extends React.Component {
         ? technologyData.filter(d => viztype.split(".").includes(d.value)) : [],
       Year: timeItems.length ? timeItems : [years[0]]
     };
+
+    console.log(selectedItems);
 
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
     const _startYear = isTimeSeriesChart ? timeIds[0] : this.state._startYear;
@@ -644,12 +647,16 @@ class Vizbuilder extends React.Component {
       return obj;
     }, {});
 
+    console.log("Hello", selectedItems);
     const countryKeys = Object.keys(selectedItems).reduce((obj, d) => {
       const base = `_selectedItems${d}`;
       if (!obj[base]) {
         const data = selectedItems[d];
+
         obj[base] = data;
-        obj[`${base}Title`] = data;
+        if (data.length > 0) {
+          obj[`${base}Title`] = data;
+        }
       }
       return obj;
     }, {});
@@ -738,7 +745,7 @@ class Vizbuilder extends React.Component {
     let countrySelector = isCountry && !isScatterChart || isSubnat;
     const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
     if (productSelector) {
-      countrySelector = false;
+      if (isSubnat) countrySelector = false;
       subnatSelector = false;
     }
 
