@@ -726,9 +726,12 @@ class Vizbuilder extends React.Component {
       subnat.cubeSelector.some(d => this.state._selectedItemsCountry.map(d => d.label).includes(d.id)) ||
       isSubnat;
     const productSelector = isProduct && !isScatterChart;
-    const countrySelector = isCountry && !isScatterChart || isSubnat;
+    let countrySelector = isCountry && !isScatterChart || isSubnat;
     const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
-    if (productSelector) subnatSelector = false;
+    if (productSelector) {
+      countrySelector = false;
+      subnatSelector = false;
+    }
 
     const timeButtons = isSubnat ? this.state.subnatTimeItems : timeItems;
     const timeIndex = timeButtons.findIndex(d => d.value * 1 === time.split(".")[0] * 1);
@@ -866,18 +869,17 @@ class Vizbuilder extends React.Component {
               </div>}
 
               {
-                countrySelector && !isGeomap ||
-                isSubnat && countrySelector && !productSelector ? <div className="columns">
-                    <div className="column-1">
-                      <OECMultiSelect
-                        items={this.props.countryMembers}
-                        itemType={"country"}
-                        selectedItems={this.state._selectedItemsCountry}
-                        title={t("Country")}
-                        callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
-                      />
-                    </div>
-                  </div> : null}
+                countrySelector && !isGeomap ? <div className="columns">
+                  <div className="column-1">
+                    <OECMultiSelect
+                      items={this.props.countryMembers}
+                      itemType={"country"}
+                      selectedItems={this.state._selectedItemsCountry}
+                      title={t("Country")}
+                      callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
+                    />
+                  </div>
+                </div> : null}
 
               {subnatSelector && <div className="columns">
                 <div className="column-1">
