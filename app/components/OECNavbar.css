@@ -124,6 +124,9 @@
 .navbar-search-toggle-button-wrapper {
   flex: 1 1 0;
   text-align: right;
+}
+.navbar-search-toggle-button-wrapper,
+.call-to-action.section {
   & .cp-button {
     border: 0;
     border-radius: 1rem;

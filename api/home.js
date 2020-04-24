@@ -33,7 +33,7 @@ const tiles = [
   // "/profile/firm/samsung-electronics-co-ltd-b8c1acc425",
   // "/profile/firm/apple-inc",
   // "/profile/subnational_usa/los-angeles-ca",
-  // "/profile/subnational_esp/barcelona-8",
+  "/profile/subnational_esp/barcelona-8",
   "/profile/subnational_can/quebec",
   {
     link: "/profile/hs92/semiconductor-devices",
@@ -47,12 +47,34 @@ const tiles = [
   },
   "/profile/bilateral-product/lithium-carbonates/reporter/chl",
   "/profile/bilateral-country/jpn/partner/kor",
+  "/profile/subnational_jpn/nagasaki",
   "/profile/subnational_chn/shanghai-province",
-  // "/profile/subnational_rus/moscow-the-capital-of-russian-federation",
+  "/profile/subnational_rus/moscow-the-capital-of-russian-federation",
   {
     link: "/en/profile/bilateral-country/ukr/partner/rus",
     large: true
-  }
+  },
+  "/profile/subnational_esp/galicia",
+  "/profile/subnational_deu/hamburg",
+  {
+    link: "/profile/subnational_esp/madrid",
+    large: true
+  },
+  "/en/profile/bilateral-product/packaged-medicaments/reporter/irl",
+  "/profile/bilateral-country/prt/partner/esp",
+  "/profile/hs92/lcds",
+  "/profile/subnational_jpn/chiba",
+  "/profile/hs92/crude-petroleum",
+  "/profile/subnational_can/ontario",
+  {
+    link: "/profile/subnational_rus/st-petersburg",
+    large: true
+  },
+  "/en/profile/bilateral-product/ground-nuts/reporter/gmb",
+  "/profile/bilateral-country/bra/partner/arg",
+  "/profile/country/lao",
+  "/profile/hs92/cars",
+  "/profile/subnational_jpn/hokkaido"
 ];
 
 // To add once sub-nat profile IDs are resolved:

@@ -2,9 +2,8 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
-import "./Home.css";
 import {profileSearchConfig} from "helpers/search";
-
+import Button from "@datawheel/canon-cms/src/components/fields/Button.jsx";
 import OECNavbar from "../components/OECNavbar";
 import Footer from "../components/Footer";
 
@@ -13,6 +12,11 @@ import {fetchData} from "@datawheel/canon-core";
 
 import {titleCase} from "d3plus-text";
 import {max} from "d3-array";
+
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChartLine, faListAlt, faImages} from "@fortawesome/free-solid-svg-icons";
+import "./Home.css";
+import "../components/OECNavbar.css";
 
 /** Determines font-size based on title */
 function titleSize(title, large = false) {
@@ -44,7 +48,7 @@ function subtitle(entity) {
 class Home extends Component {
   render() {
 
-    const {tiles} = this.props;
+    const {locale, tiles} = this.props;
     let notMobile = true;
     if (typeof window !== "undefined") {
       notMobile = window.innerWidth > 768;
@@ -145,6 +149,84 @@ class Home extends Component {
           )}
         </ul>
 
+        <section className="features-tiles section">
+          <div className="features-tiles header">
+            <div className="header-inner">
+              <h2>Great tools for great explorers</h2>
+              <p>When you register for <a href={`/${locale}/signup`}>OEC Premium</a> you&apos;ll have access to new tools like predictions, subnational rankings and an advanced viz builder.</p>
+            </div>
+          </div>
+          <div className="tiles-wrap">
+            <div className="tiles-item reveal-from-bottom is-revealed">
+              <div className="tiles-item-inner">
+                <div className="features-tiles-item-header">
+                  <div className="features-tiles-item-image mb-16">
+                    <FontAwesomeIcon
+                      className="fas fa-chart-line icon"
+                      size="5x"
+                      icon={faChartLine}
+                    />
+                  </div>
+                </div>
+                <div className="features-tiles-item-content">
+                  <h3 className="">Predictions</h3>
+                  <p className="">Create your own custom combination out of millions of possible time series predictions.</p>
+                  <a href={`/${locale}/prediction`}>Get started &raquo;</a>
+                </div>
+              </div>
+            </div>
+
+            <div className="tiles-item reveal-from-bottom is-revealed">
+              <div className="tiles-item-inner">
+                <div className="features-tiles-item-header">
+                  <div className="features-tiles-item-image mb-16">
+                    <FontAwesomeIcon
+                      className="fas fa-list-alt icon"
+                      size="5x"
+                      icon={faListAlt}
+                    />
+                  </div>
+                </div>
+                <div className="features-tiles-item-content">
+                  <h3 className="">Rankings</h3>
+                  <p className="">View the latest rankings of the most complex economies and products in the world.</p>
+                  <a href={`/${locale}/rankings/`}>Get started &raquo;</a>
+                </div>
+              </div>
+            </div>
+
+            <div className="tiles-item reveal-from-bottom is-revealed">
+              <div className="tiles-item-inner">
+                <div className="features-tiles-item-header">
+                  <div className="features-tiles-item-image mb-16">
+                    <FontAwesomeIcon
+                      className="fas fa-images icon"
+                      size="5x"
+                      icon={faImages}
+                    />
+                  </div>
+                </div>
+                <div className="features-tiles-item-content">
+                  <h3 className="">Visualizations</h3>
+                  <p className="">Build your own visualizations by selecting the exact slice of data you&apos;re looking for.</p>
+                  <a href={`/${locale}/visualize/tree_map/hs92/export/usa/all/show/2018/`}>Get started &raquo;</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section> {/* End feature tiles */}
+
+        <section className="call-to-action section">
+          <div className="cta-inner">
+            <h2>Explore without limits, signup for premium</h2>
+            <p>When you sign up for premium you&apos;ll get access to the latest trade data including subnational data from Canada, China, Germany, Japan, Russia and Spain. More coming soon!</p>
+            <Button className="navbar-user-signup">
+              <Link to={`${locale}/signup`}>Register</Link>
+            </Button>
+          </div>
+        </section>
+
         <Footer />
       </div>
     );
@@ -155,4 +237,4 @@ Home.need = [
   fetchData("homeTiles", "/api/home")
 ];
 
-export default connect(state => ({tiles: state.data.homeTiles}))(hot(Home));
+export default connect(state => ({tiles: state.data.homeTiles, locale: state.i18n.locale}))(hot(Home));
