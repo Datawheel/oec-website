@@ -60,7 +60,7 @@ class Rankings extends Component {
 		const defaultDepth = 'HS4';
 		const defaultRevision = 'HS92';
 		const defaultCountryThreshold = 5000000000;
-		const defaultPopulationThreshold = 20000000;
+		const defaultPopulationThreshold = 2000000;
 		const defaultProductThreshold = 1000000000;
 
 		this.setState({
@@ -98,7 +98,7 @@ class Rankings extends Component {
 				yearRangeInitial: yearsNational[productRevision].final - 1,
 				yearRangeFinal: yearsNational[productRevision].final,
 				countryExpThreshold: 5000000000,
-				populationThreshold: 20000000,
+				populationThreshold: 2000000,
 				productExpThreshold: 1000000000
 			});
 		} else {
