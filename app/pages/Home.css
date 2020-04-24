@@ -239,6 +239,7 @@
    *********************************/
   & .features-tiles.section {
     background-color: white;
+    color: var(--dark-2);
 
     & .features-tiles.header {
       & .header-inner {
@@ -248,11 +249,13 @@
           font-size: 44px;
           line-height: 54px;
           margin-bottom: 15px;
+          padding: 0 10px;
         }
         & p {
           font-size: 22px;
           line-height: 29px;
           margin-bottom: 10px;
+          padding: 0 10px;
           & a {
             color: inherit;
             font-weight: normal;
@@ -299,11 +302,13 @@
         font-size: 34px;
         line-height: 44px;
         margin-bottom: 15px;
+        padding: 0 10px;
       }
 
       & p {
         font-size: 16px;
         color: var(--light-2);
+        padding: 0 10px;
       }
 
       & button {
