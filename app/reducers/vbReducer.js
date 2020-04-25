@@ -1,4 +1,5 @@
 import vbInitialState from "./vbInitialState";
+import {assign} from "d3plus-common";
 
 /** */
 export default function vizbuilderReducer(state = vbInitialState(), action) {
@@ -7,6 +8,13 @@ export default function vizbuilderReducer(state = vbInitialState(), action) {
     case "VB_UPDATE_CUBE_SELECTED": {
       newState = state;
       newState.cubeSelected = action.payload;
+      return newState;
+    }
+
+    case "VB_UPDATE_AXIS_CONFIG": {
+      newState = state;
+      const prevState = {...newState.axisConfig};
+      newState.axisConfig = assign(prevState, action.payload);
       return newState;
     }
 

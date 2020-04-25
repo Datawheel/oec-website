@@ -1,3 +1,10 @@
+const axisConfig = {
+  id: "",
+  title: "",
+  scale: "",
+  selected: "Log"
+};
+
 /**
  * Generates a new, empty initial state for the whole Vizbuilder.
  */
@@ -18,15 +25,9 @@ export default function initialStateFactory() {
       timeItems: [],
       timeLevels: []
     },
-    xConfig: {
-      id: "",
-      name: "",
-      scale: ""
-    },
-    yConfig: {
-      id: "",
-      name: "",
-      scale: ""
+    axisConfig: {
+      xConfig: axisConfig,
+      yConfig: axisConfig
     }
   };
 }

@@ -911,9 +911,11 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "scatter" && data && data.length > 0) {
-      const {xAxis, yAxis} = this.props;
-      const xTitle = xAxis.title || "";
-      const yTitle = yAxis.title || "";
+      const {xConfig, yConfig} = this.props;
+      const xTitle = xConfig.title || "";
+      const yTitle = yConfig.title || "";
+      const xSelected = xConfig.selected.toLowerCase();
+      const ySelected = yConfig.selected.toLowerCase();
       return (
         <div>
           <div className="vb-chart">
@@ -941,11 +943,11 @@ class VbChart extends React.Component {
                 },
                 total: undefined,
                 xConfig: {
-                  scale: this.props.xScale.toLowerCase(),
+                  scale: xSelected,
                   title: xTitle
                 },
                 yConfig: {
-                  scale: this.props.yScale.toLowerCase(),
+                  scale: ySelected,
                   title: yTitle
                 }
               }}
@@ -971,12 +973,15 @@ const mapDispatchToProps = dispatch => ({
 
 /** */
 function mapStateToProps(state) {
-  const {countryMembers, cubeSelected, data, wdiIndicators} = state.vizbuilder;
+  const {axisConfig, countryMembers, cubeSelected, data, wdiIndicators} = state.vizbuilder;
+  const {xConfig, yConfig} = axisConfig;
   return {
     countryMembers,
     cubeSelected,
     data,
-    wdiIndicators
+    wdiIndicators,
+    xConfig,
+    yConfig
   };
 }
 

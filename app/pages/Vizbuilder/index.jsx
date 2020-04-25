@@ -605,6 +605,9 @@ class Vizbuilder extends React.Component {
 
     const _xAxis = wdiIndicators.find(d => d.value === flow) || wdiIndicators.find(d => d.value === "OEC.ECI");
     const _yAxis = wdiIndicators.find(d => d.value === country) || wdiIndicators.find(d => d.value === "NY.GDP.MKTP.CD");
+    // Updates config of axis
+    this.props.updateAxisConfig({xConfig: Object.assign(_xAxis, {selected: _xAxis.scale || "Log"})});
+    this.props.updateAxisConfig({yConfig: Object.assign(_yAxis, {selected: _yAxis.scale || "Log"})});
 
     // Get selected countries
     const filterCountry = type => countryMembers.filter(d => type.split(".").includes(d.label));
@@ -785,10 +788,6 @@ class Vizbuilder extends React.Component {
       selectedProducts={isSubnat
         ? this.state.selectedSubnatProduct
         : this.state._selectedItemsProductTitle}
-      xAxis={this.state._xAxisTitle}
-      xScale={this.state._xAxisScale}
-      yAxis={this.state._yAxisTitle}
-      yScale={this.state._yAxisScale}
       callback={d => {
         const query = permalinkDecode(d);
         const permalink = {permalink: d, activeTab: query.chart || "tree_map"};
@@ -961,7 +960,10 @@ class Vizbuilder extends React.Component {
                   selectedItem={this.state._xAxis}
                   state="_xAxis"
                   title={t("X Axis")}
-                  callbackButton={(key, value) => this.setState({[key]: value})}
+                  callbackButton={(key, value) => {
+                    this.props.updateAxisConfig({xConfig: Object.assign({selected: value})});
+                    this.setState({[key]: value});
+                  }}
                 />
               </div>}
 
@@ -973,7 +975,10 @@ class Vizbuilder extends React.Component {
                   selectedItem={this.state._yAxis}
                   state="_yAxis"
                   title={t("Y Axis")}
-                  callbackButton={(key, value) => this.setState({[key]: value})}
+                  callbackButton={(key, value) => {
+                    this.props.updateAxisConfig({yConfig: Object.assign({selected: value})});
+                    this.setState({[key]: value});
+                  }}
                 />
               </div>}
 
@@ -1145,7 +1150,8 @@ const mapDispatchToProps = dispatch => ({
   // dispatching plain actions
   addCountryMembers: payload => dispatch({type: "VB_UPDATE_COUNTRY_MEMBERS", payload}),
   addWdiIndicators: payload => dispatch({type: "VB_UPDATE_WDI", payload}),
-  updateCubeSelected: payload => dispatch({type: "VB_UPDATE_CUBE_SELECTED", payload})
+  updateCubeSelected: payload => dispatch({type: "VB_UPDATE_CUBE_SELECTED", payload}),
+  updateAxisConfig: payload => dispatch({type: "VB_UPDATE_AXIS_CONFIG", payload})
 });
 
 /** */
