@@ -1,6 +1,8 @@
 import React from "react";
 import {AnchorButton, Classes, Dialog, Intent} from "@blueprintjs/core";
 
+import "./OECPaywall.css";
+
 class OECPaywall extends React.Component {
   state = {
     isOpen: false
@@ -41,8 +43,8 @@ class OECPaywall extends React.Component {
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <AnchorButton href={`/en/login?redirect=${redirect}`}>Login</AnchorButton>
-              <AnchorButton intent={Intent.SUCCESS} href="/en/signup">
+              <AnchorButton minimal={true} href={`/en/login?redirect=${redirect}`}>Login</AnchorButton>
+              <AnchorButton minimal={true} intent={Intent.SUCCESS} href="/en/signup">
                 Register
               </AnchorButton>
             </div>
