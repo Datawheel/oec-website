@@ -77,8 +77,8 @@ class VbChart extends React.Component {
     prevProps.permalink !== this.props.permalink ||
     prevProps.countryMembers !== this.props.countryMembers ||
     JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected) ||
-    prevProps.xScale !== this.props.xScale ||
-    prevProps.yScale !== this.props.yScale ||
+    JSON.stringify(prevProps.xConfig) !== JSON.stringify(this.props.xConfig) ||
+    JSON.stringify(prevProps.yConfig) !== JSON.stringify(this.props.yConfig) ||
     prevState.loading !== this.state.loading ||
     prevState.depth !== this.state.depth ||
     prevState.scale !== this.state.scale ||

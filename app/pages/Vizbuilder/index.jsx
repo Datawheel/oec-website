@@ -160,10 +160,6 @@ class Vizbuilder extends React.Component {
       // Scatter plot config
       _yAxis: {},
       _xAxis: {},
-      _xAxisTitle: {},
-      _yAxisTitle: {},
-      _xAxisScale: "Log",
-      _yAxisScale: "Log",
 
       // Subnational config
       subnatItem: {},
@@ -671,10 +667,6 @@ class Vizbuilder extends React.Component {
       ...subnatKeys,
       _xAxis,
       _yAxis,
-      _xAxisTitle: _xAxis,
-      _yAxisTitle: _yAxis,
-      _xAxisScale: _xAxis.scale || "Log",
-      _yAxisScale: _yAxis.scale || "Log",
       _endYear,
       _startYear,
       _endYearTitle: _endYear,
@@ -772,8 +764,8 @@ class Vizbuilder extends React.Component {
         product: isSubnatTitle ? this.state.selectedSubnatProduct : this.state._selectedItemsProductTitle,
         technology: this.state._selectedItemsTechnologyTitle},
       {
-        x: this.state._xAxisTitle,
-        y: this.state._yAxisTitle
+        x: this.props.xConfig,
+        y: this.props.yConfig
       },
       routeParams
     );
@@ -1147,7 +1139,6 @@ class Vizbuilder extends React.Component {
 
 
 const mapDispatchToProps = dispatch => ({
-  // dispatching plain actions
   addCountryMembers: payload => dispatch({type: "VB_UPDATE_COUNTRY_MEMBERS", payload}),
   addWdiIndicators: payload => dispatch({type: "VB_UPDATE_WDI", payload}),
   updateCubeSelected: payload => dispatch({type: "VB_UPDATE_CUBE_SELECTED", payload}),
@@ -1156,10 +1147,12 @@ const mapDispatchToProps = dispatch => ({
 
 /** */
 function mapStateToProps(state) {
-  const {countryMembers, loading, wdiIndicators} = state.vizbuilder;
-
+  const {axisConfig, countryMembers, loading, wdiIndicators} = state.vizbuilder;
+  const {xConfig, yConfig} = axisConfig;
   return {
     auth: state.auth,
+    xConfig,
+    yConfig,
     countryMembers,
     loading,
     wdiIndicators

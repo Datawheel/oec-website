@@ -17,6 +17,7 @@ export default function initialStateFactory() {
     wdiIndicators: [],
     cubeSelected: {
       currency: undefined,
+      measure: undefined,
       geoItems: [],
       geoLevels: [],
       name: "",
