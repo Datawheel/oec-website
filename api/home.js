@@ -6,17 +6,88 @@ const tiles = [
     link: "/profile/bilateral-country/usa/partner/chn",
     large: true
   },
+  "/en/profile/hs92/rubber-surgical-gloves",
   "/profile/country/chl",
-  "/profile/country/usa",
-  "/profile/country/fra",
-  "/profile/subnational_chn/hubei-province",
-  "/profile/country/irn",
-  "/profile/subnational_deu/berlin",
-  "/profile/subnational_jpn/tokyo",
+  "/profile/subnational_esp/valencia",
+  "/profile/hs92/crude-petroleum",
   {
-    link: "/profile/bilateral-product/soybeans/reporter/bra",
+    link: "/profile/bilateral-product/therapeutic-respiration-apparatus/reporter/aus",
+    larg: true
+  },
+  "/profile/subnational_rus/omsk-region",
+  "/en/profile/bilateral-product/rubber-surgical-gloves/reporter/mys",
+  "/profile/subnational_can/ontario",
+  "/profile/country/fra",
+  "/profile/subnational_jpn/kanagawa",
+  {
+    link: "/profile/subnational_chn/hubei-province",
     large: true
   },
+  "/profile/hs92/therapeutic-respiration-apparatus",
+  "/profile/country/irn",
+  "/profile/subnational_deu/berlin",
+  "/profile/subnational_esp/sevilla",
+  "/profile/subnational_jpn/tokyo",
+  "/profile/bilateral-product/soybeans/reporter/bra",
+  {
+    link: "/profile/subnational_deu/baden-wurttemberg",
+    large: true
+  },
+  "/profile/subnational_jpn/fukushima",
+  "/profile/subnational_esp/barcelona-8",
+  "/profile/subnational_rus/volgograd-region",
+  "/profile/hs92/semiconductor-devices",
+  "/profile/subnational_can/quebec",
+  {
+    link: "/profile/hs92/medical-surgical-or-laboratory-sterilizers",
+    large: true
+  },
+  "/profile/subnational_jpn/kyoto",
+  "/profile/bilateral-product/cars/reporter/chn",
+  "/profile/subnational_chn/guangdong-province",
+  "/profile/subnational_deu/bavaria",
+  "/profile/bilateral-product/planes-helicopters-andor-spacecraft/reporter/fra",
+  "/profile/subnational_rus/komi-republic",
+  {
+    link: "/profile/bilateral-product/medical-surgical-or-laboratory-sterilizers/reporter/ita",
+    large: true
+  },
+  "/profile/bilateral-product/lithium-carbonates/reporter/chl",
+  "/profile/bilateral-country/jpn/partner/kor",
+  "/profile/subnational_esp/a-coruna",
+  "/profile/bilateral-product/crude-petroleum/reporter/irn",
+  "/profile/subnational_jpn/nagasaki",
+  "/profile/subnational_chn/shanghai-province",
+  "/profile/subnational_rus/moscow-the-capital-of-russian-federation",
+  {
+    link: "/en/profile/bilateral-country/ukr/partner/rus",
+    large: true
+  },
+  "/profile/subnational_esp/galicia",
+  "/profile/subnational_jpn/hiroshima",
+  "/profile/subnational_can/alberta",
+  "/profile/subnational_chn/sichuan-province",
+  "/profile/country/usa",
+  "/profile/subnational_deu/hamburg",
+  {
+    link: "/profile/subnational_esp/madrid",
+    large: true
+  },
+  "/en/profile/bilateral-product/packaged-medicaments/reporter/irl",
+  "/profile/bilateral-country/prt/partner/esp",
+  "/profile/subnational_esp/vizcaya",
+  "/profile/hs92/lcds",
+  "/profile/subnational_jpn/nagano",
+  {
+    link: "/profile/subnational_rus/st-petersburg",
+    large: true
+  },
+  "/en/profile/bilateral-product/ground-nuts/reporter/gmb",
+  "/profile/bilateral-country/bra/partner/arg",
+  "/profile/country/lao",
+  "/profile/hs92/cars",
+  "/profile/subnational_jpn/hokkaido"
+
   // {
   //   link: "/profile/firm/disney-enterprises-inc-fa8492d090",
   //   image: "https://i.ytimg.com/vi/_iIxfFZW-NE/maxresdefault.jpg"
@@ -33,48 +104,6 @@ const tiles = [
   // "/profile/firm/samsung-electronics-co-ltd-b8c1acc425",
   // "/profile/firm/apple-inc",
   // "/profile/subnational_usa/los-angeles-ca",
-  "/profile/subnational_esp/barcelona-8",
-  "/profile/subnational_can/quebec",
-  {
-    link: "/profile/hs92/semiconductor-devices",
-    large: true
-  },
-  "/profile/bilateral-product/cars/reporter/chn",
-  "/profile/bilateral-product/planes-helicopters-andor-spacecraft/reporter/fra",
-  {
-    link: "/profile/bilateral-product/crude-petroleum/reporter/irn",
-    large: true
-  },
-  "/profile/bilateral-product/lithium-carbonates/reporter/chl",
-  "/profile/bilateral-country/jpn/partner/kor",
-  "/profile/subnational_jpn/nagasaki",
-  "/profile/subnational_chn/shanghai-province",
-  "/profile/subnational_rus/moscow-the-capital-of-russian-federation",
-  {
-    link: "/en/profile/bilateral-country/ukr/partner/rus",
-    large: true
-  },
-  "/profile/subnational_esp/galicia",
-  "/profile/subnational_deu/hamburg",
-  {
-    link: "/profile/subnational_esp/madrid",
-    large: true
-  },
-  "/en/profile/bilateral-product/packaged-medicaments/reporter/irl",
-  "/profile/bilateral-country/prt/partner/esp",
-  "/profile/hs92/lcds",
-  "/profile/subnational_jpn/chiba",
-  "/profile/hs92/crude-petroleum",
-  "/profile/subnational_can/ontario",
-  {
-    link: "/profile/subnational_rus/st-petersburg",
-    large: true
-  },
-  "/en/profile/bilateral-product/ground-nuts/reporter/gmb",
-  "/profile/bilateral-country/bra/partner/arg",
-  "/profile/country/lao",
-  "/profile/hs92/cars",
-  "/profile/subnational_jpn/hokkaido"
 ];
 
 // To add once sub-nat profile IDs are resolved:

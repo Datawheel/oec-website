@@ -195,9 +195,9 @@ class RankingsBuilder extends Component {
 						<h3>Country Population Value Threshold </h3>
 						<Slider
 							min={0}
-							max={100000000}
-							stepSize={10000000}
-							labelStepSize={10000000}
+							max={5000000}
+							stepSize={200000}
+							labelStepSize={1000000}
 							onChange={handleThresholdSlider('populationThreshold')}
 							labelRenderer={renderThresholdSlider}
 							value={populationThreshold}
