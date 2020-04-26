@@ -79,18 +79,20 @@
   }
 }
 
-.bp3-menu {
+.selector .bp3-menu {
   background: var(--dark-4) !important;
   color: var(--white) !important;
   border: 1px solid var(--dark-1);
   border-radius: 0px !important;
   padding: 0px !important;
   max-height: 300px;
-  overflow: scroll;
-  min-width: 0px !important;
+  overflow-y: auto;
+  min-width: 100px !important;
 
   & li {
+    list-style: none;
     border-radius: 0px !important;
+    background: var(--dark-4) !important;
   }
 
   & .bp3-menu-item {
@@ -180,12 +182,6 @@
   }
 }
 
-.bp3-popover {
-  & li {
-    list-style: none;
-    background: var(--dark-4) !important;
-  }
-}
 .button-virtual-selector {
   background: transparent !important;
     border: none !important;

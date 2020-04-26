@@ -31,14 +31,15 @@ export default class SimpleSelect extends React.Component {
       <h6 className="title is-6">{title}</h6>
       <Select
         activeItem={selectedItem}
-        className="popover-virtual-selector filter-selector"
+        className="popover-virtual-selector filter-selector oec-selector"
         filterable={false}
         isOpen={isOpen}
         itemRenderer={this.renderItem}
         items={items}
         minimal={true}
+        usePortal={false}
         onItemSelect={d => this.props.callback(this.props.state, d)}
-        popoverProps={{minimal: true, position: popoverPosition}}
+        popoverProps={{minimal: true, position: popoverPosition, popoverClassName: "selector"}}
       >
         <Button
           className="button-virtual-selector"

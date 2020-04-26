@@ -820,7 +820,7 @@ class Vizbuilder extends React.Component {
 
               {isSubnat && productSelector && <div className="columns">
                 <div className="column-1">
-                  <div className="select-multi-section-wrapper">
+                  <div className="selector select-multi-section-wrapper">
                     <h4 className="title">{t("Product Subnat")}</h4>
                     <SelectMultiHierarchy
                       getColor={subnatItem.productColor}
@@ -849,7 +849,7 @@ class Vizbuilder extends React.Component {
 
               {!isSubnat && productSelector && <div className="columns">
                 <div className="column-1">
-                  <div className="select-multi-section-wrapper">
+                  <div className="selector select-multi-section-wrapper">
                     <h4 className="title">{t("Product")}</h4>
                     <SelectMultiHierarchy
                       getColor={d => colors.Section[d["Section ID"]]}
@@ -891,7 +891,7 @@ class Vizbuilder extends React.Component {
 
               {subnatSelector && <div className="columns">
                 <div className="column-1">
-                  <div className="select-multi-section-wrapper">
+                  <div className="selector select-multi-section-wrapper">
                     <h4 className="title is-pro">{t("State/Province")}</h4>
                     <SelectMultiHierarchy
                       getIcon={this.state.subnatItem.geoIcon}
@@ -999,7 +999,7 @@ class Vizbuilder extends React.Component {
 
               {isSubnatPanel ? <div className="columns">
                 <div className="column-1">
-                  <div className="select-multi-section-wrapper">
+                  <div className="selector select-multi-section-wrapper">
                     <h4 className="title">{t("Time Dimension")}</h4>
                     <OECButtonGroup
                       items={this.state.subnatTimeLevels}

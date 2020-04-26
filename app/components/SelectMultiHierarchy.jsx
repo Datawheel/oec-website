@@ -164,7 +164,7 @@ const SelectMultiHierarchy = ({
         fill: true,
         minimal: true,
         // onInteraction: popoverInteractionHandler,
-        popoverClassName: "sh-hie--popover"
+        popoverClassName: "selector sh-hie--popover"
       }}
     >
       <div

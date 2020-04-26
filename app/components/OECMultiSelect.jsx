@@ -120,7 +120,7 @@ class OECMultiSelect extends React.Component {
         noResults={<MenuItem disabled={true} text="No results." />}
         onItemSelect={this.handleItemSelect}
         placeholder={placeholder}
-        popoverProps={{minimal: true}}
+        popoverProps={{minimal: true, popoverClassName: "selector"}}
         resetOnSelect={true}
         resetOnQuery={false}
         selectedItems={this.props.selectedItems}

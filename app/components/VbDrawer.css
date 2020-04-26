@@ -23,7 +23,7 @@
   }
 }
 
-.bp3-drawer {
+.vb-drawer.bp3-drawer {
   background: var(--dark-2) !important;
   color: var(--white);
   & .bp3-drawer-header {
