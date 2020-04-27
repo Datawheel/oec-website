@@ -30,7 +30,7 @@ class Library extends Component {
 			'/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
 		axios.all([ axios.get(dataApi), axios.get(dictApi) ]).then(
 			axios.spread((resp1, resp2) => {
-				const data = resp1.data.data.filter(f => f.Region !== null);;
+				const data = resp1.data.data.filter((f) => f.Region !== null);
 
 				const dictarray = resp2.data.data;
 				const dict = {};
@@ -214,7 +214,7 @@ class Library extends Component {
 						if (f.Region.split(',').length === 1) {
 							return f.Region === filterRegion;
 						} else {
-							return f.Region.replace(/ /g, "").split(",").includes(filterRegion);
+							return f.Region.replace(/ /g, '').split(',').includes(filterRegion);
 						}
 					})
 				: data;
@@ -265,6 +265,12 @@ class Library extends Component {
 		return (
 			<div className="library">
 				<h1>Library</h1>
+
+				<p>
+					The OEC Library gathers a selection of papers related to the ideas of economic complexity. The
+					purpose of the library is to help visibilize papers related to economic complexity focused on
+					specific geographies and topics. The collection of papers is curated by the OEC team.
+				</p>
 
 				{data && (
 					<div className="geomaps">
