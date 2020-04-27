@@ -241,11 +241,15 @@ class Rankings extends Component {
 			if (productDepth !== 'SITC') {
 				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(
 					2
-				)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
-					3}&threshold_${productDepth}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017 ? years[2] : 2017}&threshold_Population=${populationThreshold}`;
+				)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&ranking=true&threshold_Country=${countryExpThreshold *
+					3}&threshold_${productDepth}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017
+					? years[2]
+					: 2017}&threshold_Population=${populationThreshold}`;
 			} else {
-				return `/api/stats/${index}?cube=trade_i_oec_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&threshold_Country=${countryExpThreshold *
-					3}&threshold_${productRevision}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017 ? years[2] : 2017}&threshold_Population=${populationThreshold}`;
+				return `/api/stats/${index}?cube=trade_i_oec_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&ranking=true&threshold_Country=${countryExpThreshold *
+					3}&threshold_${productRevision}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017
+					? years[2]
+					: 2017}&threshold_Population=${populationThreshold}`;
 			}
 		} else {
 			const basecube = subnationalData[subnationalValue].basecube;
@@ -253,12 +257,11 @@ class Rankings extends Component {
 			if (basecube === 'HS') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
-					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
+					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
 			} else if (basecube === 'SITC') {
-				const testPath = `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
+				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
-					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
-				return testPath;
+					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
 			}
 		}
 	}
@@ -327,6 +330,36 @@ class Rankings extends Component {
 		);
 	};
 
+	// Functions for grouping data
+	// Transform data into one array
+	groupData = async (eci, array) => {
+		let data = {};
+		let testdata = [];
+
+		const index = eci ? 'Trade Value ECI' : 'Trade Value PCI';
+
+		for (const path of array) {
+			const pathData = await axios.get(path.path).then((resp) => resp.data.data);
+			pathData.forEach((row) => {
+				row[path.year] = row[index];
+				row[`${path.year} Ranking`] = row[index + ' Ranking'];
+				delete row[index];
+				delete row[index + ' Ranking'];
+				console.log("aqui:", row);
+				if (!data[row["Country ID"]]) {
+					data[row["Country ID"]] = [ row ];
+				} else {
+					data[row["Country ID"]].push(row);
+				}
+				console.log(data);
+			});
+			testdata.push(pathData);
+		}
+
+		console.log(data);
+		return testdata.flat();
+	};
+
 	fetchMultiyearData = async (paths) => {
 		const {
 			country,
@@ -338,15 +371,8 @@ class Rankings extends Component {
 			yearRangeInitial,
 			yearRangeFinal
 		} = this.state;
-		let rangeData = [];
 
-		for (const d of paths) {
-			const index = country ? 'Trade Value ECI' : 'Trade Value PCI';
-			const data = await axios.get(d.path).then((resp) => resp.data.data);
-			data.map((f) => ((f[`${d.year}`] = f[index]), delete f[index]));
-			rangeData.push(data);
-		}
-		rangeData = rangeData.flat();
+		const rangeData = await this.groupData(country, paths);
 
 		let selector = null;
 
@@ -382,7 +408,7 @@ class Rankings extends Component {
 		let finalData = [];
 		Object.values(reduceData).map((d) => {
 			let tempData = [];
-			d.map((data, j) => {
+			d.forEach((data, j) => {
 				if (j === 0) {
 					const flag = [];
 					flag.push(data);
@@ -719,7 +745,7 @@ class Rankings extends Component {
 				<OECNavbar />
 
 				<div className="rankings-content">
-					<RankingText type={"dynamic"}/>
+					<RankingText type={'dynamic'} />
 
 					<RankingBuilder
 						variables={{
