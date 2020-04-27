@@ -19,7 +19,18 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "Custom", url: `/${locale}/rankings/`}
+      {title: "ECI", items: [
+        {title: "2018", url: `/${locale}/rankings/`},
+        {title: "1995-2018", url: `/${locale}/rankings/`}
+      ]},
+      {title: "PCI", items: [
+        {title: "2018", url: `/${locale}/rankings/`},
+        {title: "1995-2018", url: `/${locale}/rankings/`}
+      ]},
+      {title: "Custom Rankings", url: `/${locale}/rankings/`},
+      {title: "Methodology", url: `/${locale}/resources/definitions`},
+      {title: "Legacy Rankings", url: `/${locale}/rankings/`}
+
     ]},
     // tools
     {title: "Tools", items: [

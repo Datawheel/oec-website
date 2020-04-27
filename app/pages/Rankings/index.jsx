@@ -666,8 +666,8 @@ class Rankings extends Component {
 			),
 			accessor: (d) => d[`${year}`],
 			Cell: (props) =>
-				numeral(props.original[`${year}`]).format('0.00000') * 1 !== -1000
-					? numeral(props.original[`${year}`]).format('0.00000')
+				numeral(props.original[`${year}`]).format('0.000') * 1 !== -1000
+					? numeral(props.original[`${year}`]).format('0.000')
 					: '',
 			className: 'year'
 		}));
