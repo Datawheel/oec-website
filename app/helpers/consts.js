@@ -68,7 +68,6 @@ module.exports = {
     // about
     {title: "About", items: [
       {title: "About the OEC",  url: `/${locale}/resources/about`},
-      {title: "Permissions",    url: `/${locale}/resources/permissions`},
       {title: "Privacy Policy", url: `/${locale}/resources/privacy`},
       {title: "Terms",          url: `/${locale}/resources/terms`}
     ]}

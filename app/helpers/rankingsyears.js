@@ -29,6 +29,8 @@ export const subnationalCountries = [
 	'Uruguay'
 ];
 
+//productDepth: [ 'Section', 'HS2', 'HS4']
+
 export const subnationalData = {
 	'Brazil (State)': {
 		cube: 'bra_ncm_m_hs',
@@ -37,7 +39,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'bra'
 	},
 	'Brazil (Municipality)': {
@@ -47,7 +49,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'bra'
 	},
 	Bolivia: {
@@ -67,7 +69,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1988,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'can'
 	},
 	China: {
@@ -77,7 +79,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'chn'
 	},
 	Ecuador: {
@@ -87,7 +89,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2013,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'ecu'
 	},
 	Japan: {
@@ -97,7 +99,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2009,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'jpn'
 	},
 	Russia: {
@@ -107,7 +109,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2015,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'rus'
 	},
 	'South Africa': {
@@ -117,7 +119,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2018,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'zaf'
 	},
 	Spain: {
@@ -127,7 +129,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2010,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'esp'
 	},
 	Turkey: {
@@ -147,7 +149,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2011,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'gbr'
 	},
 	'United States (State)': {
@@ -157,7 +159,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'usa'
 	},
 	'United States (District)': {
@@ -167,7 +169,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'usa'
 	},
 	Uruguay: {
