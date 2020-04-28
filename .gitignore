@@ -16,6 +16,7 @@ packages/*/static/reports
 /index.js
 /packages/*/index.js
 /venv
+*.pyc
 
 # environment variable files for autoenv and direnv
 .env
