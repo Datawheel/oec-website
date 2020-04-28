@@ -16,16 +16,19 @@ const tiles = [
   },
   "/profile/subnational_rus/omsk-region",
   "/en/profile/bilateral-product/rubber-surgical-gloves/reporter/mys",
-  "/profile/subnational_can/ontario",
   "/profile/country/fra",
   "/profile/subnational_jpn/kanagawa",
   {
     link: "/profile/subnational_chn/hubei-province",
     large: true
   },
-  "/profile/hs92/therapeutic-respiration-apparatus",
+  "/profile/subnational_can/ontario",
   "/profile/country/irn",
   "/profile/subnational_deu/berlin",
+  {
+    link: "/profile/hs92/therapeutic-respiration-apparatus",
+    large: true
+  },
   "/profile/subnational_esp/sevilla",
   "/profile/subnational_jpn/tokyo",
   "/profile/bilateral-product/soybeans/reporter/bra",
