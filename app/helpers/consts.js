@@ -20,16 +20,16 @@ module.exports = {
     // rankings
     {title: "Rankings", items: [
       {title: "ECI", items: [
-        {title: "2018", url: `/${locale}/rankings/`},
-        {title: "1995-2018", url: `/${locale}/rankings/`}
+        {title: "2018", url: `/${locale}/rankings/eci`},
+        {title: "1995-2018", url: `/${locale}/rankings/heci`}
       ]},
       {title: "PCI", items: [
-        {title: "2018", url: `/${locale}/rankings/`},
-        {title: "1995-2018", url: `/${locale}/rankings/`}
+        {title: "2018", url: `/${locale}/rankings/pci`},
+        {title: "1995-2018", url: `/${locale}/rankings/hpci`}
       ]},
-      {title: "Custom Rankings", url: `/${locale}/rankings/`},
+      {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
       {title: "Methodology", url: `/${locale}/resources/definitions`},
-      {title: "Legacy Rankings", url: `/${locale}/rankings/`}
+      {title: "Legacy Rankings", url: `/${locale}/rankings/legacy`}
 
     ]},
     // tools
