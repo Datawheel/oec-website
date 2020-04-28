@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Helmet from "react-helmet";
 import axios from 'axios';
 import numeral from 'numeral';
 import {hot} from 'react-hot-loader/root';
@@ -7,8 +8,6 @@ import {connect} from 'react-redux';
 import {withNamespaces} from 'react-i18next';
 import {formatAbbreviate} from 'd3plus-format';
 import {Icon} from '@blueprintjs/core';
-
-import './Custom.css';
 
 import OECNavbar from 'components/OECNavbar';
 import Footer from 'components/Footer';
@@ -402,10 +401,6 @@ class Custom extends Component {
 	groupData = async (array) => {
 		const {
 			country,
-			subnational,
-			subnationalValue,
-			productDepth,
-			productRevision,
 			yearRangeInitial,
 			yearRangeFinal
 		} = this.state;
@@ -715,7 +710,6 @@ class Custom extends Component {
 			accessor: (d) => d[`${year}`][`${year} ${measure}`],
 			Cell: (props) => {
 				if (type) {
-					console.log(props.original);
 					return <div className="value">
 						<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.000')}`}</span>
 					</div>
@@ -776,6 +770,8 @@ class Custom extends Component {
 		return (
 			<div className="rankings-page">
 				<div className="rankings-content">
+					<Helmet title="Custom Rankings" />
+
 					<RankingText type={'dynamic'} />
 
 					<RankingBuilder
