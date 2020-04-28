@@ -258,10 +258,11 @@ class VbChart extends React.Component {
         parents: true,
         Year: timeFilter
       };
-      const exportsBalanceParams = Object.assign(
+
+      const exportsBalanceParams = Object.assign({},
         balanceParams, {[reporterCountry]: countryIds}
       );
-      const importsBalanceParams = Object.assign(
+      const importsBalanceParams = Object.assign({},
         balanceParams, {[partnerCountry]: countryIds}
       );
 
@@ -280,9 +281,9 @@ class VbChart extends React.Component {
           axios.get(OLAP_API, {params: importsBalanceParams})
         ])
         .then(
-          axios.spread((resp1, resp2) => {
-            const exportData = resp1.data.data;
-            const importData = resp2.data.data;
+          axios.spread((...resp) => {
+            const exportData = resp[0].data.data;
+            const importData = resp[1].data.data;
             exportData.forEach(d => {
               d["Trade Flow ID"] = 1;
               d["Trade Flow"] = "Exports";
@@ -293,8 +294,11 @@ class VbChart extends React.Component {
               d["Trade Flow"] = "Imports";
             });
 
+            const data = [...exportData, ...importData];
+
+            this.props.updateData({data, loading: false});
             this.setState({
-              data: [...exportData, ...importData],
+              data,
               loading: false,
               auth: true,
               scale: "Linear",
@@ -770,6 +774,9 @@ class VbChart extends React.Component {
                 ...onClickConfig,
                 colorScale: measure,
                 colorScaleConfig: {
+                  axisConfig: {
+                    tickFormat: d => tickFormatter(d)
+                  },
                   scale: isSubnat ? "quantile" : "log"
                 },
                 groupBy: geoGroupBy,

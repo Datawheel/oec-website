@@ -361,10 +361,10 @@ class Vizbuilder extends React.Component {
   /**
    * @description Creates a visualization after to click "Build Visualization" button
    */
-  buildViz = () => {
+  buildViz = (isTimeButton = false) => {
     this.setState({loading: true});
     const {lng, router, routeParams} = this.props;
-    const {chart, cube} = routeParams;
+    const {chart, cube, flow, country, partner, viztype} = routeParams;
     const {
       _dataset,
       _endYear,
@@ -396,11 +396,11 @@ class Vizbuilder extends React.Component {
       : "show";
 
     let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
-    let flow = isTechnologyFilter ? "uspto" : _flow.value;
+    let flowSelected = isTechnologyFilter ? "uspto" : _flow.value;
 
     /** Creates permalink config for scatter plot */
     if (chart === "scatter") {
-      flow = _xAxis.value;
+      flowSelected = _xAxis.value;
       countryIds = _yAxis.value;
       partnerIds = "all";
       filterIds = "all";
@@ -431,17 +431,28 @@ class Vizbuilder extends React.Component {
       }
     }
 
-    const permalinkItems = [
-      lng,
-      "visualize",
-      chart,
-      dataset,
-      flow,
-      countryIds,
-      partnerIds,
-      filterIds,
-      timeIds
-    ];
+    const permalinkItems = isTimeButton
+      ? [
+        lng,
+        "visualize",
+        chart,
+        cube,
+        flow,
+        country,
+        partner,
+        viztype,
+        timeIds
+      ] : [
+        lng,
+        "visualize",
+        chart,
+        dataset,
+        flowSelected,
+        countryIds,
+        partnerIds,
+        filterIds,
+        timeIds
+      ];
     const permalink = permalinkEncode(permalinkItems);
     this.updateFilterSelected({permalink, cubeSelected: _dataset});
     router.push(permalink);
@@ -623,8 +634,6 @@ class Vizbuilder extends React.Component {
       Year: timeItems.length ? timeItems : [years[0]]
     };
 
-    console.log(selectedItems);
-
     const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
     const _startYear = isTimeSeriesChart ? timeIds[0] : this.state._startYear;
     const _endYear = isTimeSeriesChart ? timeIds[1] : this.state._endYear;
@@ -647,7 +656,6 @@ class Vizbuilder extends React.Component {
       return obj;
     }, {});
 
-    console.log("Hello", selectedItems);
     const countryKeys = Object.keys(selectedItems).reduce((obj, d) => {
       const base = `_selectedItems${d}`;
       if (!obj[base]) {
@@ -1084,7 +1092,7 @@ class Vizbuilder extends React.Component {
                 <div className="column-1 tab">
                   <button
                     className="button build click"
-                    onClick={this.buildViz}
+                    onClick={() => this.buildViz()}
                   >
                     {t("Build Visualization")}
                   </button>
@@ -1103,7 +1111,7 @@ class Vizbuilder extends React.Component {
                     const nextState = {};
                     if (isSubnat) nextState.selectedSubnatTimeTemp = [prevTime];
                     else nextState._selectedItemsYear = [prevTime];
-                    this.setState(nextState, () => this.buildViz());
+                    this.setState(nextState, () => this.buildViz(true));
                   }}
                   text={prevTime.title}
                 />}
@@ -1119,7 +1127,7 @@ class Vizbuilder extends React.Component {
                     const nextState = {};
                     if (isSubnat) nextState.selectedSubnatTimeTemp = [nextTime];
                     else nextState._selectedItemsYear = [nextTime];
-                    this.setState(nextState, () => this.buildViz());
+                    this.setState(nextState, () => this.buildViz(true));
                   }}
                   rightIcon="chevron-right"
                   text={nextTime.title}
