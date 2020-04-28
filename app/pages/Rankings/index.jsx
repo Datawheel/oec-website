@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import numeral from 'numeral';
-import { hot } from 'react-hot-loader/root';
-import { isAuthenticated } from '@datawheel/canon-core';
-import { connect } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
-import { formatAbbreviate } from 'd3plus-format';
-import { Icon } from '@blueprintjs/core';
+import {hot} from 'react-hot-loader/root';
+import {isAuthenticated} from '@datawheel/canon-core';
+import {connect} from 'react-redux';
+import {withNamespaces} from 'react-i18next';
+import {formatAbbreviate} from 'd3plus-format';
+import {Icon} from '@blueprintjs/core';
 
 import './Rankings.css';
 
@@ -17,8 +17,8 @@ import RankingText from 'components/RankingText';
 import RankingBuilder from 'components/RankingBuilder';
 import RankingTable from 'components/RankingTable';
 
-import { range, normalizeString } from 'helpers/utils';
-import { subnationalCountries, subnationalData, yearsNational } from 'helpers/rankingsyears';
+import {range, normalizeString} from 'helpers/utils';
+import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
 
 class Rankings extends Component {
 	constructor(props) {
@@ -84,11 +84,11 @@ class Rankings extends Component {
 	/* BUILDER ORIENTED FUNCTIONS */
 
 	handleCategorySwitch(key, value) {
-		this.setState({ [key]: value });
+		this.setState({[key]: value});
 	}
 
 	handleCountrySwitch(key, value) {
-		const { subnational, subnationalValue, productRevision } = this.state;
+		const {subnational, subnationalValue, productRevision} = this.state;
 		if (subnational) {
 			this.setState({
 				[key]: value,
@@ -127,7 +127,7 @@ class Rankings extends Component {
 	}
 
 	handleProductButtons(key, value) {
-		const { productRevision } = this.state;
+		const {productRevision} = this.state;
 		if (this.state[key] !== 'SITC' && value === 'SITC') {
 			this.setState({
 				[key]: value,
@@ -145,12 +145,12 @@ class Rankings extends Component {
 				yearRangeFinal: yearsNational[productRevision].final
 			});
 		} else {
-			this.setState({ [key]: value });
+			this.setState({[key]: value});
 		}
 	}
 
 	handleProductSelect(key, value) {
-		const { productRevision } = this.state;
+		const {productRevision} = this.state;
 		this.setState({
 			[key]: value,
 			yearValue: yearsNational[productRevision].final,
@@ -160,48 +160,48 @@ class Rankings extends Component {
 	}
 
 	handlePeriodYearSwitch(key, value) {
-		this.setState({ [key]: value });
+		this.setState({[key]: value});
 	}
 
 	handlePeriodYearButtons(key, value) {
-		const { singleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal } = this.state;
+		const {singleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal} = this.state;
 		if (singleyear) {
-			this.setState({ [key]: value });
+			this.setState({[key]: value});
 		} else {
 			if (rangeChangeInitial) {
 				if (value === yearsNational[productRevision].final) {
-					this.setState({ yearRangeInitial: value - 1, yearRangeFinal: value });
+					this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
 				} else if (value < yearRangeInitial) {
-					this.setState({ yearRangeInitial: value });
+					this.setState({yearRangeInitial: value});
 				} else if (yearRangeInitial < value && value < yearRangeFinal) {
 					if (range(value, yearRangeFinal).length >= 2) {
-						this.setState({ yearRangeInitial: value });
+						this.setState({yearRangeInitial: value});
 					}
 				} else if (yearRangeFinal < value) {
-					this.setState({ yearRangeInitial: value, yearRangeFinal: value + 1 });
+					this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
 				}
 			} else {
 				if (value === yearsNational[productRevision].initial) {
-					this.setState({ yearRangeInitial: value, yearRangeFinal: value + 1 });
+					this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
 				} else if (value < yearRangeInitial) {
-					this.setState({ yearRangeInitial: value - 1, yearRangeFinal: value });
+					this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
 				} else if (yearRangeInitial < value && value < yearRangeFinal) {
 					if (range(yearRangeInitial, value).length >= 2) {
-						this.setState({ yearRangeFinal: value });
+						this.setState({yearRangeFinal: value});
 					}
 				} else if (yearRangeFinal < value) {
-					this.setState({ yearRangeFinal: value });
+					this.setState({yearRangeFinal: value});
 				}
 			}
 		}
 	}
 
 	handlePeriodRangeSwitch(key, value) {
-		this.setState({ [key]: value });
+		this.setState({[key]: value});
 	}
 
 	handleThresholdSlider(key) {
-		return (value) => this.setState({ [key]: value });
+		return (value) => this.setState({[key]: value});
 	}
 
 	renderThresholdSlider(val) {
@@ -216,11 +216,11 @@ class Rankings extends Component {
 
 	yearAggregation(year, initial) {
 		if (year === initial) {
-			return [ year, year, year ];
+			return [year, year, year];
 		} else if (year === initial + 1) {
-			return [ year - 1, year, year ];
+			return [year - 1, year, year];
 		} else {
-			return [ year - 2, year - 1, year ];
+			return [year - 2, year - 1, year];
 		}
 	}
 
@@ -236,20 +236,17 @@ class Rankings extends Component {
 			productExpThreshold
 		} = this.state;
 		const index = country ? 'eci' : 'pci';
+		const populationYear = years[2] < 2018 ? years[2] : 2018;
 
 		if (!subnational) {
 			if (productDepth !== 'SITC') {
 				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(
 					2
 				)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${years[0]},${years[1]},${years[2]}&ranking=true&threshold_Country=${countryExpThreshold *
-					3}&threshold_${productDepth}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017
-					? years[2]
-					: 2017}&threshold_Population=${populationThreshold}`;
+				3}&threshold_${productDepth}=${productExpThreshold * 3}&YearPopulation=${populationYear}&threshold_Population=${populationThreshold}`;
 			} else {
 				return `/api/stats/${index}?cube=trade_i_oec_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${years[0]},${years[1]},${years[2]}&ranking=true&threshold_Country=${countryExpThreshold *
-					3}&threshold_${productRevision}=${productExpThreshold * 3}&YearPopulation=${years[2] < 2017
-					? years[2]
-					: 2017}&threshold_Population=${populationThreshold}`;
+					3}&threshold_${productRevision}=${productExpThreshold * 3}&YearPopulation=${populationYear}&threshold_Population=${populationThreshold}`;
 			}
 		} else {
 			const basecube = subnationalData[subnationalValue].basecube;
@@ -257,17 +254,17 @@ class Rankings extends Component {
 			if (basecube === 'HS') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
-					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
+						.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
 			} else if (basecube === 'SITC') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
-					.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
+						.geo},${productDepth},Trade+Value&Year=${years[0]},${years[1]},${years[2]}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}`;
 			}
 		}
 	}
 
 	apiGetData() {
-		this.setState({ _loading: true });
+		this.setState({_loading: true});
 		const {
 			singleyear,
 			subnational,
@@ -305,7 +302,7 @@ class Rankings extends Component {
 						? this.yearAggregation(d, subnationalData[subnationalValue].initial)
 						: this.yearAggregation(d, yearsNational[productRevision].initial);
 					const path = this.pathCreator(aggregatedYears);
-					pathArray.push({ year: d, path });
+					pathArray.push({year: d, path});
 				});
 
 				this.fetchMultiyearData(pathArray);
@@ -313,16 +310,68 @@ class Rankings extends Component {
 		}
 	}
 
+	getSelector = (country) => {
+		const {
+			subnational,
+			subnationalValue,
+			productDepth,
+			productRevision
+		} = this.state;
+
+		let selector = null;
+
+		if (!subnational) {
+			if (country) {
+				selector = 'Country';
+			} else {
+				if (productDepth !== 'SITC') {
+					selector = `${productDepth}`;
+				} else {
+					selector = `${productRevision}`;
+				}
+			}
+		} else {
+			if (country) {
+				selector = 'Subnat Geography';
+			} else {
+				const basecube = subnationalData[subnationalValue].basecube;
+				if (basecube === 'HS') {
+					selector = `${productDepth}`;
+				} else if (basecube === 'SITC') {
+					selector = `${productDepth}`;
+				}
+			}
+		}
+
+		return selector;
+	}
+
 	fetchSingleyearData = (path) => {
-		const { country, singleyear, yearValue } = this.state;
-		axios.all([ axios.get(path) ]).then(
+		const {country, singleyear, yearValue} = this.state;
+		axios.all([axios.get(path)]).then(
 			axios.spread((resp) => {
-				const index = country ? 'Trade Value ECI' : 'Trade Value PCI';
-				const data = resp.data.data.sort((a, b) => b[index] - a[index]);
-				data.map((d) => ((d[`${yearValue}`] = d[index]), delete d[index]));
+				const array = resp.data.data;
+				const measure = country ? 'ECI' : 'PCI';
+				const selector = this.getSelector(country);
+
+				let data = {};
+				for (const index in array) {
+					let row = {};
+					row[selector] = array[index][selector];
+					row[selector + ' ID'] = array[index][selector + ' ID'];
+					let values = {};
+					values[yearValue + ' ' + measure] = array[index]['Trade Value ' + measure];
+					values[yearValue + ' Ranking'] = array[index]['Trade Value ' + measure + ' Ranking'];
+					data[row[selector + ' ID']] = row;
+					data[row[selector + ' ID']][yearValue] = values;
+				}
+				const finalData = Object.values(data);
+				finalData.sort((a, b) => a[yearValue][`${yearValue} Ranking`] - b[`${yearValue}`][`${yearValue} Ranking`]);
+
 				const columns = this.createColumns(singleyear, yearValue);
+
 				this.setState({
-					data,
+					data: finalData,
 					columns,
 					_loading: false
 				});
@@ -330,107 +379,16 @@ class Rankings extends Component {
 		);
 	};
 
-	// Functions for grouping data
-	// Transform data into one array
-	groupData = async (eci, array) => {
-		let data = {};
-		let testdata = [];
-
-		const index = eci ? 'Trade Value ECI' : 'Trade Value PCI';
-
-		for (const path of array) {
-			const pathData = await axios.get(path.path).then((resp) => resp.data.data);
-			pathData.forEach((row) => {
-				row[path.year] = row[index];
-				row[`${path.year} Ranking`] = row[index + ' Ranking'];
-				delete row[index];
-				delete row[index + ' Ranking'];
-				console.log("aqui:", row);
-				if (!data[row["Country ID"]]) {
-					data[row["Country ID"]] = [ row ];
-				} else {
-					data[row["Country ID"]].push(row);
-				}
-				console.log(data);
-			});
-			testdata.push(pathData);
-		}
-
-		console.log(data);
-		return testdata.flat();
-	};
-
 	fetchMultiyearData = async (paths) => {
 		const {
-			country,
-			subnational,
-			subnationalValue,
-			productDepth,
-			productRevision,
 			singleyear,
 			yearRangeInitial,
 			yearRangeFinal
 		} = this.state;
 
-		const rangeData = await this.groupData(country, paths);
+		const finalData = await this.groupData(paths);
 
-		let selector = null;
-
-		if (!subnational) {
-			if (country) {
-				selector = 'Country ID';
-			} else {
-				if (productDepth !== 'SITC') {
-					selector = `${productDepth} ID`;
-				} else {
-					selector = `${productRevision} ID`;
-				}
-			}
-		} else {
-			if (country) {
-				selector = 'Subnat Geography ID';
-			} else {
-				const basecube = subnationalData[subnationalValue].basecube;
-				if (basecube === 'HS') {
-					selector = `${productDepth} ID`;
-				} else if (basecube === 'SITC') {
-					selector = `${productDepth} ID`;
-				}
-			}
-		}
-
-		const reduceData = rangeData.reduce((obj, d) => {
-			if (!obj[d[selector]]) obj[d[selector]] = [ d ];
-			else obj[d[selector]].push(d);
-			return obj;
-		}, {});
-
-		let finalData = [];
-		Object.values(reduceData).map((d) => {
-			let tempData = [];
-			d.forEach((data, j) => {
-				if (j === 0) {
-					const flag = [];
-					flag.push(data);
-					tempData = flag[0];
-				} else {
-					tempData[`${range(yearRangeInitial, yearRangeFinal)[j]}`] =
-						data[`${range(yearRangeInitial, yearRangeFinal)[j]}`];
-				}
-			});
-			finalData.push(tempData);
-		});
-
-		finalData.map((d) => {
-			range(yearRangeInitial, yearRangeFinal).map((f) => {
-				if (d[`${f}`] === undefined) {
-					d[`${f}`] = -1000;
-				}
-			});
-		});
-		finalData = finalData.sort((a, b) => b[`${yearRangeFinal}`] - a[`${yearRangeFinal}`]);
-
-		const columns = await this.createColumns(singleyear, [ yearRangeInitial, yearRangeFinal ]);
+		const columns = await this.createColumns(singleyear, [yearRangeInitial, yearRangeFinal]);
 
 		this.setState({
 			data: finalData,
@@ -439,15 +397,78 @@ class Rankings extends Component {
 		});
 	};
 
-	checkProperties = (obj) => {
-		for (var key in obj) {
-			if (![ 'Country ID', 'Country' ].includes(key) && obj[key] !== null) return false;
+	// Functions for grouping data
+	// Transform data into one array
+	groupData = async (array) => {
+		const {
+			country,
+			subnational,
+			subnationalValue,
+			productDepth,
+			productRevision,
+			yearRangeInitial,
+			yearRangeFinal
+		} = this.state;
+
+		const measure = country ? 'ECI' : 'PCI';
+
+		const selector = this.getSelector(country);
+
+		let data = {};
+		let dataLength = {};
+
+		for (const path of array) {
+			const pathData = await axios.get(path.path).then((resp) => resp.data.data);
+
+			// Appends the data in "data"
+			for (const index in pathData) {
+				let row = {};
+				row[selector] = pathData[index][selector];
+				row[selector + ' ID'] = pathData[index][selector + ' ID'];
+				let values = {};
+				values[path.year + ' ' + measure] = pathData[index]['Trade Value ' + measure];
+				values[path.year + ' Ranking'] = pathData[index]['Trade Value ' + measure + ' Ranking'];
+
+				if (!data[pathData[index][selector + ' ID']]) {
+					data[row[selector + ' ID']] = row;
+					data[row[selector + ' ID']][path.year] = values;
+				} else {
+					data[row[selector + ' ID']][path.year] = values;
+				}
+			}
+
+			if (path.year === yearRangeFinal) {
+				dataLength = pathData.length
+			}
 		}
-		return true;
+
+		let flag = 1;
+		const finalData = Object.values(data).map(m => {
+			range(yearRangeInitial, yearRangeFinal).map(year => {
+				if (year === yearRangeFinal) {
+					if (!Object.keys(m).includes(year.toString())) {
+						m[year] = {};
+						m[year][`${year} ${measure}`] = -1000;
+						m[year][`${year} Ranking`] = dataLength + flag;
+						flag = flag + 1;
+					}
+				} else {
+					if (!Object.keys(m).includes(year.toString())) {
+						m[year] = {};
+						m[year][`${year} ${measure}`] = -1000;
+					}
+				}
+			});
+			return m;
+		});
+
+		finalData.sort((a, b) => a[yearRangeFinal][`${yearRangeFinal} Ranking`] - b[`${yearRangeFinal}`][`${yearRangeFinal} Ranking`]);
+
+		return finalData;
 	};
 
 	createColumns(type, array) {
-		const { country, subnational, subnationalValue, productDepth, productRevision } = this.state;
+		const {country, subnational, subnationalValue, productDepth, productRevision} = this.state;
 		let years = null;
 		const dataInitial = subnational
 			? subnationalData[subnationalValue].initial
@@ -455,9 +476,9 @@ class Rankings extends Component {
 		const dataFinal = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
 		const dataLength = range(dataInitial, dataFinal).length;
 		if (dataLength === 1) {
-			years = [ array, array ];
+			years = [array, array];
 		} else {
-			years = type ? [ array, array ] : array;
+			years = type ? [array, array] : array;
 		}
 
 		const columnID = {
@@ -486,7 +507,7 @@ class Rankings extends Component {
 							</div>
 						</div>
 					),
-					style: { whiteSpace: 'unset' },
+					style: {whiteSpace: 'unset'},
 					Cell: (props) => (
 						<div className="category">
 							<img
@@ -525,7 +546,7 @@ class Rankings extends Component {
 								</div>
 							</div>
 						),
-						style: { whiteSpace: 'unset' },
+						style: {whiteSpace: 'unset'},
 						Cell: (props) => (
 							<div className="category">
 								<img
@@ -534,7 +555,7 @@ class Rankings extends Component {
 										.substr(
 											0,
 											props.original[`${productDepth} ID`].toString().length * 1 -
-												productDepth.substr(2) * 1
+											productDepth.substr(2) * 1
 										)}.svg`}
 									alt="icon"
 									className="icon"
@@ -552,10 +573,10 @@ class Rankings extends Component {
 										<Icon icon={'chevron-right'} iconSize={14} />
 									</a>
 								) : (
-									<div className="link">
-										<div className="name">{props.original[`${productDepth}`]}</div>
-									</div>
-								)}
+										<div className="link">
+											<div className="name">{props.original[`${productDepth}`]}</div>
+										</div>
+									)}
 							</div>
 						)
 					};
@@ -573,7 +594,7 @@ class Rankings extends Component {
 								</div>
 							</div>
 						),
-						style: { whiteSpace: 'unset' },
+						style: {whiteSpace: 'unset'},
 						Cell: (props) => (
 							<div className="category">
 								<img
@@ -607,7 +628,7 @@ class Rankings extends Component {
 							</div>
 						</div>
 					),
-					style: { whiteSpace: 'unset' },
+					style: {whiteSpace: 'unset'},
 					Cell: (props) => (
 						<div className="category">
 							<img
@@ -618,8 +639,8 @@ class Rankings extends Component {
 							<a
 								href={`/en/profile/subnational_${subnationalData[subnationalValue]
 									.profile}/${normalizeString(
-									props.original['Subnat Geography'].replace(/ /g, '-').replace(',', '').toLowerCase()
-								)}`}
+										props.original['Subnat Geography'].replace(/ /g, '-').replace(',', '').toLowerCase()
+									)}`}
 								className="link"
 								target="_blank"
 								rel="noopener noreferrer"
@@ -646,19 +667,19 @@ class Rankings extends Component {
 								</div>
 							</div>
 						),
-						style: { whiteSpace: 'unset' },
+						style: {whiteSpace: 'unset'},
 						Cell: (props) => (
 							<div className="category">
 								<img
 									src={`/images/icons/hs/hs_${productDepth === 'Section'
 										? props.original[`${productDepth} ID`]
 										: props.original[`${productDepth} ID`]
-												.toString()
-												.substr(
-													0,
-													props.original[`${productDepth} ID`].toString().length * 1 -
-														productDepth.substr(2) * 1
-												)}.svg`}
+											.toString()
+											.substr(
+												0,
+												props.original[`${productDepth} ID`].toString().length * 1 -
+												productDepth.substr(2) * 1
+											)}.svg`}
 									alt="icon"
 									className="icon"
 								/>
@@ -679,7 +700,8 @@ class Rankings extends Component {
 			}
 		}
 
-		const columnYEARS = range(years[0], years[1]).map((year, index, { length }) => ({
+		const measure = country ? 'ECI' : 'PCI';
+		const columnYEARS = range(years[0], years[1]).map((year, index, {length}) => ({
 			id: length === index + 1 ? 'lastyear' : `${year}`,
 			Header: () => (
 				<div className="header">
@@ -690,15 +712,26 @@ class Rankings extends Component {
 					</div>
 				</div>
 			),
-			accessor: (d) => d[`${year}`],
-			Cell: (props) =>
-				numeral(props.original[`${year}`]).format('0.000') * 1 !== -1000
-					? numeral(props.original[`${year}`]).format('0.000')
-					: '',
+			accessor: (d) => d[`${year}`][`${year} ${measure}`],
+			Cell: (props) => {
+				if (type) {
+					console.log(props.original);
+					return <div className="value">
+						<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.000')}`}</span>
+					</div>
+				} else {
+					if (props.original[`${year}`][`${year} ${measure}`] !== -1000) {
+						return <div className="value">
+							<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.000')} `}</span>
+							<span>({numeral(props.original[`${year}`][`${year} Ranking`]).format('0o')})</span>
+						</div>
+					}
+				}
+			},
 			className: 'year'
 		}));
 
-		const columns = [ columnID, columnNAME, ...columnYEARS ];
+		const columns = [columnID, columnNAME, ...columnYEARS];
 
 		return columns.filter((f) => f !== null);
 	}
