@@ -364,7 +364,7 @@ class Vizbuilder extends React.Component {
   buildViz = (isTimeButton = false) => {
     this.setState({loading: true});
     const {lng, router, routeParams} = this.props;
-    const {chart, cube, country, partner, viztype} = routeParams;
+    const {chart, cube, flow, country, partner, viztype} = routeParams;
     const {
       _dataset,
       _endYear,
@@ -396,11 +396,11 @@ class Vizbuilder extends React.Component {
       : "show";
 
     let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
-    let flow = isTechnologyFilter ? "uspto" : _flow.value;
+    let flowSelected = isTechnologyFilter ? "uspto" : _flow.value;
 
     /** Creates permalink config for scatter plot */
     if (chart === "scatter") {
-      flow = _xAxis.value;
+      flowSelected = _xAxis.value;
       countryIds = _yAxis.value;
       partnerIds = "all";
       filterIds = "all";
@@ -436,7 +436,7 @@ class Vizbuilder extends React.Component {
         lng,
         "visualize",
         chart,
-        dataset,
+        cube,
         flow,
         country,
         partner,
@@ -447,7 +447,7 @@ class Vizbuilder extends React.Component {
         "visualize",
         chart,
         dataset,
-        flow,
+        flowSelected,
         countryIds,
         partnerIds,
         filterIds,
