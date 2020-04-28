@@ -398,6 +398,16 @@ class Custom extends Component {
 
 		const finalData = await this.groupData(paths);
 
+		// Export paths for etl
+		const {country, productDepth, productRevision} = this.state;
+		console.log(country, productDepth, productRevision, paths);
+		const consolePath = {};
+		consolePath["indicator"] = country ? "ECI" : "PCI";
+		consolePath["product_depth"] = productDepth;
+		consolePath["product_revision"] = productRevision;
+		consolePath["paths"] = paths;
+		console.log(consolePath);
+
 		const columns = await this.createColumns(singleyear, [ yearRangeInitial, yearRangeFinal ]);
 
 		this.setState({
