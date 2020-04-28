@@ -67,7 +67,7 @@ export default class Publications extends Component {
         pdf: "role-of-ind-occ-geo-specific-knowledge-in-new-firm-survival-pnas.pdf"
       },
       {
-        name: "From useless to keystone",
+        name: "Economic Complexity: From Useless to Keystone",
         link: "https://www.nature.com/articles/nphys4337",
         year: "2018",
         author: "César A. Hidalgo",
