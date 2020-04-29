@@ -38,7 +38,8 @@ class RankingsBuilder extends Component {
 			renderMoneyThresholdSlider,
 			apiGetData
 		} = this.props;
-		const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
+		// const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
+		const PROD_DEPTH_OPTIONS = [ 'HS4', 'HS6' ];
 		const REVISION_OPTIONS_SITC = [ 'Category', 'Section', 'Division', 'Group', 'Subgroup' ];
 		const REVISION_OPTIONS_HS = [ 'HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012' ];
 		const initialYear = subnational
@@ -188,7 +189,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('countryExpThreshold')}
 							labelRenderer={renderMoneyThresholdSlider}
 							value={countryExpThreshold}
-							disabled={subnational}
+							// disabled={subnational}
 						/>
 					</div>
 					<div className="setting no-padding">
@@ -201,7 +202,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('populationThreshold')}
 							labelRenderer={renderThresholdSlider}
 							value={populationThreshold}
-							disabled={subnational}
+							// disabled={subnational}
 						/>
 					</div>
 					<div className="setting no-padding">
@@ -214,7 +215,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('productExpThreshold')}
 							labelRenderer={renderMoneyThresholdSlider}
 							value={productExpThreshold}
-							disabled={subnational}
+							// disabled={subnational}
 						/>
 					</div>
 					<div className="setting last">

@@ -19,17 +19,33 @@ module.exports = {
     ]},
     // rankings
     {title: "Rankings", items: [
-      {title: "ECI", items: [
-        {title: "2018", url: `/${locale}/rankings/eci`},
-        {title: "1995-2018", url: `/${locale}/rankings/heci`}
+      {title: "Economic Complexity (ECI)", items: [
+        {title: "HS92 Rev. (4 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS92 Rev. (6 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS96 Rev. (4 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS96 Rev. (6 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS02 Rev. (4 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS02 Rev. (6 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS07 Rev. (4 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS07 Rev. (6 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS12 Rev. (4 Digits)", url: `/${locale}/rankings/eci`},
+        {title: "HS12 Rev. (6 Digits)", url: `/${locale}/rankings/eci`},
       ]},
-      {title: "PCI", items: [
-        {title: "2018", url: `/${locale}/rankings/pci`},
-        {title: "1995-2018", url: `/${locale}/rankings/hpci`}
+      {title: "Product Complexity (PCI)", items: [
+        {title: "HS92 Rev. (4 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS92 Rev. (6 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS96 Rev. (4 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS96 Rev. (6 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS02 Rev. (4 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS02 Rev. (6 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS07 Rev. (4 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS07 Rev. (6 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS12 Rev. (4 Digits)", url: `/${locale}/rankings/pci`},
+        {title: "HS12 Rev. (6 Digits)", url: `/${locale}/rankings/pci`},
       ]},
       {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
-      {title: "Methodology", url: `/${locale}/resources/definitions`},
-      {title: "Legacy Rankings", url: `/${locale}/rankings/legacy`}
+      {title: "Legacy Rankings", url: `/${locale}/rankings/legacy`},
+      {title: "Methodology", url: `/${locale}/resources/definitions`}
 
     ]},
     // tools
@@ -52,7 +68,6 @@ module.exports = {
     // about
     {title: "About", items: [
       {title: "About the OEC",  url: `/${locale}/resources/about`},
-      {title: "Permissions",    url: `/${locale}/resources/permissions`},
       {title: "Privacy Policy", url: `/${locale}/resources/privacy`},
       {title: "Terms",          url: `/${locale}/resources/terms`}
     ]}

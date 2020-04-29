@@ -11,7 +11,6 @@ import Api from "./Api";
 import Data from "./Data";
 import Definitions from "./Definitions";
 import Library from "./Library";
-import Permissions from "./Permissions";
 import Privacy from "./Privacy";
 import Publications from "./Publications";
 import Terms from "./Terms";
@@ -54,8 +53,6 @@ class Resources extends Component {
                 return <Data />;
               case "definitions":
                 return <Definitions />;
-              case "permissions":
-                return <Permissions />;
               case "privacy":
                 return <Privacy />;
               case "terms":

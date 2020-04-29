@@ -12,24 +12,98 @@ export const yearsNational = {
 };
 
 export const subnationalCountries = [
-	'Brazil (State)',
-	'Brazil (Municipality)',
+	// 'Brazil (State)',
+	// 'Brazil (Municipality)',
 	// 'Bolivia',
 	'Canada',
 	'China',
-	'Ecuador',
-	'Japan',
+	// 'Ecuador',
+	// 'Germany',
+	'Japan (Regions)',
+	'Japan (Prefactures)',
 	'Russia',
-	'South Africa',
-	'Spain',
-	'Turkey',
-	'United Kingdom',
-	'United States (State)',
-	'United States (District)',
-	'Uruguay'
+	// 'South Africa',
+	'Spain'
+	// 'Turkey',
+	// 'United Kingdom',
+	// 'United States (State)',
+	// 'United States (District)',
+	// 'Uruguay'
 ];
 
+//productDepth: [ 'Section', 'HS2', 'HS4']
+
 export const subnationalData = {
+	Canada: {
+		cube: 'can_m_hs',
+		basecube: 'HS',
+		profile: 'can',
+		geo: 'Subnat Geography',
+		initial: 1988,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'can'
+	},
+	China: {
+		cube: 'chn_m_hs',
+		basecube: 'HS',
+		profile: 'chn',
+		geo: 'Subnat Geography',
+		initial: 2019,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'chn'
+	},
+	Germany: {
+		cube: 'deu_m_egw',
+		basecube: 'EGW',
+		profile: 'deu',
+		geo: 'Subnat Geography',
+		initial: 1980,
+		final: 2019,
+		productDepth: [ 'EGW1', 'Product' ],
+		flag: 'deu'
+	},
+	'Japan (Regions)': {
+		cube: 'jpn_m_hs',
+		basecube: 'HS',
+		profile: 'jpn',
+		geo: 'Region',
+		initial: 2009,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'jpn'
+	},
+	'Japan (Prefactures)': {
+		cube: 'jpn_m_hs',
+		basecube: 'HS',
+		profile: 'jpn',
+		geo: 'Subnat Geography',
+		initial: 2009,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'jpn'
+	},
+	Russia: {
+		cube: 'rus_m_hs',
+		basecube: 'HS',
+		profile: 'rus',
+		geo: 'Subnat Geography',
+		initial: 2015,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'rus'
+	},
+	Spain: {
+		cube: 'esp_m_hs',
+		basecube: 'HS',
+		profile: 'esp',
+		geo: 'Subnat Geography',
+		initial: 2010,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'esp'
+	},
 	'Brazil (State)': {
 		cube: 'bra_ncm_m_hs',
 		basecube: 'HS',
@@ -37,7 +111,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'bra'
 	},
 	'Brazil (Municipality)': {
@@ -47,7 +121,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'bra'
 	},
 	Bolivia: {
@@ -60,26 +134,6 @@ export const subnationalData = {
 		productDepth: [ 'Section', 'Division', 'Group' ],
 		flag: 'bol'
 	},
-	Canada: {
-		cube: 'can_m_hs',
-		basecube: 'HS',
-		profile: 'can',
-		geo: 'Subnat Geography',
-		initial: 1988,
-		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
-		flag: 'can'
-	},
-	China: {
-		cube: 'chn_m_hs',
-		basecube: 'HS',
-		profile: 'chn',
-		geo: 'Subnat Geography',
-		initial: 2019,
-		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
-		flag: 'chn'
-	},
 	Ecuador: {
 		cube: 'ecu_m_hs',
 		basecube: 'HS',
@@ -87,28 +141,8 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2013,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'ecu'
-	},
-	Japan: {
-		cube: 'jpn_m_hs',
-		basecube: 'HS',
-		profile: 'jpn',
-		geo: 'Subnat Geography',
-		initial: 2009,
-		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
-		flag: 'jpn'
-	},
-	Russia: {
-		cube: 'rus_m_hs',
-		basecube: 'HS',
-		profile: 'rus',
-		geo: 'Subnat Geography',
-		initial: 2015,
-		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
-		flag: 'rus'
 	},
 	'South Africa': {
 		cube: 'zaf_m_hs',
@@ -117,18 +151,8 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2018,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'zaf'
-	},
-	Spain: {
-		cube: 'esp_m_hs',
-		basecube: 'HS',
-		profile: 'esp',
-		geo: 'Subnat Geography',
-		initial: 2010,
-		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
-		flag: 'esp'
 	},
 	Turkey: {
 		cube: 'tur_m_hs',
@@ -147,7 +171,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2011,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'gbr'
 	},
 	'United States (State)': {
@@ -157,7 +181,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'usa'
 	},
 	'United States (District)': {
@@ -167,7 +191,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'Section', 'HS2', 'HS4' ],
+		productDepth: [ 'HS4' ],
 		flag: 'usa'
 	},
 	Uruguay: {
