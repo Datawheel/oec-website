@@ -189,7 +189,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('countryExpThreshold')}
 							labelRenderer={renderMoneyThresholdSlider}
 							value={countryExpThreshold}
-							disabled={subnational}
+							// disabled={subnational}
 						/>
 					</div>
 					<div className="setting no-padding">
@@ -202,7 +202,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('populationThreshold')}
 							labelRenderer={renderThresholdSlider}
 							value={populationThreshold}
-							disabled={subnational}
+							// disabled={subnational}
 						/>
 					</div>
 					<div className="setting no-padding">
@@ -215,7 +215,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('productExpThreshold')}
 							labelRenderer={renderMoneyThresholdSlider}
 							value={productExpThreshold}
-							disabled={subnational}
+							// disabled={subnational}
 						/>
 					</div>
 					<div className="setting last">
