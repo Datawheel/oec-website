@@ -287,15 +287,6 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'Asia')}
-								topojson={'/topojson/country_as.json'}
-								height={100}
-								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
-								tooltipImgSource={'/images/icons/country/country_as.png'}
-							/>
-							<LibraryGeomap
-								classname={'continent'}
 								data={geomapContinents.filter((d) => d.country === 'Europe')}
 								topojson={'/topojson/country_eu.json'}
 								height={100}
@@ -318,7 +309,7 @@ class Library extends Component {
 								classname={'countries'}
 								data={geomapCountries}
 								topojson={'/topojson/world-50m.json'}
-								height={500}
+								height={400}
 								changeGeomapFilter={this.changeGeomapFilter}
 								tooltipImgSource={'/images/icons/country/country_${d.country_id}.png'}
 							/>
@@ -334,11 +325,12 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'Southeastern & Central Europe')}
-								topojson={'/topojson/continent_sce.json'}
+								data={geomapContinents.filter((d) => d.country === 'Asia')}
+								topojson={'/topojson/country_as.json'}
 								height={100}
 								width={100}
 								changeGeomapFilter={this.changeGeomapFilter}
+								tooltipImgSource={'/images/icons/country/country_as.png'}
 							/>
 							<LibraryGeomap
 								classname={'continent'}
