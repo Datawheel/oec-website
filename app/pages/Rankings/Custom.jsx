@@ -116,7 +116,7 @@ class Custom extends Component {
 		} else {
 			this.setState({
 				[key]: value,
-				productDepth: 'Section',
+				productDepth: 'HS4',
 				productRevision: 'HS92',
 				yearValue: subnationalData[subnationalValue].final,
 				yearRangeInitial: subnationalData[subnationalValue].final - 1,
@@ -134,7 +134,7 @@ class Custom extends Component {
 	handleCountrySelect(key, value) {
 		this.setState({
 			[key]: value,
-			productDepth: 'Section',
+			productDepth: 'HS4',
 			yearValue: subnationalData[value].final,
 			yearRangeInitial: subnationalData[value].final - 1,
 			yearRangeFinal: subnationalData[value].final
@@ -344,7 +344,7 @@ class Custom extends Component {
 			}
 		} else {
 			if (country) {
-				selector = 'Subnat Geography';
+				selector = subnationalData[subnationalValue].geo;
 			} else {
 				const basecube = subnationalData[subnationalValue].basecube;
 				if (basecube === 'HS') {
@@ -399,13 +399,13 @@ class Custom extends Component {
 		const finalData = await this.groupData(paths);
 
 		// Export paths for etl
-		const {country, productDepth, productRevision} = this.state;
+		const { country, productDepth, productRevision } = this.state;
 		console.log(country, productDepth, productRevision, paths);
 		const consolePath = {};
-		consolePath["indicator"] = country ? "ECI" : "PCI";
-		consolePath["product_depth"] = productDepth;
-		consolePath["product_revision"] = productRevision;
-		consolePath["paths"] = paths;
+		consolePath['indicator'] = country ? 'ECI' : 'PCI';
+		consolePath['product_depth'] = productDepth;
+		consolePath['product_revision'] = productRevision;
+		consolePath['paths'] = paths;
 		console.log(consolePath);
 
 		const columns = await this.createColumns(singleyear, [ yearRangeInitial, yearRangeFinal ]);
@@ -632,11 +632,11 @@ class Custom extends Component {
 			if (country) {
 				columnNAME = {
 					id: 'category',
-					accessor: (d) => d['Subnat Geography'],
+					accessor: (d) => d[subnationalData[subnationalValue].geo],
 					width: 400,
 					Header: () => (
 						<div className="header">
-							<span className="year">{'Subnat Geography'}</span>
+							<span className="year">{subnationalData[subnationalValue].geo}</span>
 							<div className="icons">
 								<Icon icon={'caret-up'} iconSize={16} />
 								<Icon icon={'caret-down'} iconSize={16} />
@@ -654,13 +654,16 @@ class Custom extends Component {
 							<a
 								href={`/en/profile/subnational_${subnationalData[subnationalValue]
 									.profile}/${normalizeString(
-									props.original['Subnat Geography'].replace(/ /g, '-').replace(',', '').toLowerCase()
+									props.original[subnationalData[subnationalValue].geo]
+										.replace(/ /g, '-')
+										.replace(',', '')
+										.toLowerCase()
 								)}`}
 								className="link"
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								<div className="name">{props.original['Subnat Geography']}</div>
+								<div className="name">{props.original[subnationalData[subnationalValue].geo]}</div>
 								<Icon icon={'chevron-right'} iconSize={14} />
 							</a>
 						</div>
