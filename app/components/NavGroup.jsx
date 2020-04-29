@@ -42,6 +42,15 @@ class NavGroup extends Component {
     </a>;
   }
 
+  renderHorizontalLinks(title, items) {
+    return <span className="nav-group-link nav-group-hlinks">
+      {title}
+      {items.map(item =>
+        <a className="nav-group-hlink" key={item.title} href={item.url} onFocus={() => this.setState({isOpen: true})}>{item.title}</a>
+      )}
+    </span>;
+  }
+
   render() {
     const {pro, title, items} = this.props;
     const {isOpen} = this.state;
@@ -71,9 +80,13 @@ class NavGroup extends Component {
                     <p className="nav-group-subtitle display">{item.title}</p>
                     <ul className="nav-group-list nav-group-nested-list">
                       {item.items.map(nestedItem =>
-                        <li className="nav-group-item nav-group-nested-item" key={`${item.title}-${nestedItem.title}-nav-group-nested-item`}>
-                          {this.renderLink(nestedItem)}
-                        </li>
+                        nestedItem.items && nestedItem.items.length
+                          ? <li className="nav-group-item nav-group-nested-item" key={`${item.title}-${nestedItem.title}-nav-group-nested-item`}>
+                            {this.renderHorizontalLinks(nestedItem.title, nestedItem.items)}
+                          </li>
+                          : <li className="nav-group-item nav-group-nested-item" key={`${item.title}-${nestedItem.title}-nav-group-nested-item`}>
+                            {this.renderLink(nestedItem)}
+                          </li>
                       )}
                     </ul>
                   </Fragment>
