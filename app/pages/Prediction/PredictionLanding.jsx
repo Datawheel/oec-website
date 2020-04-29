@@ -2,6 +2,7 @@ import React from "react";
 import {hot} from "react-hot-loader/root";
 import {withNamespaces} from "react-i18next";
 import OECNavbar from "components/OECNavbar";
+import Footer from "components/Footer";
 
 const locale = "en";
 const predictionTiles = [
@@ -40,21 +41,21 @@ const predictionTiles = [
     {title: "USA vs China", subtitle: "Export Destinations", url: "?destinations=aschn,nausa&drilldown=destinations&trade_flow=2"},
     {title: "Kanagawa vs Tokyo", subtitle: "Photo Lab Equipment Exports", url: "?drilldown=subnats&products=189010&subnats=14,13&trade_flow=2"},
     {title: "Italy vs Chile", subtitle: "Wine Imports to Tokyo", url: "?destinations=euita,sachl&drilldown=destinations&products=42204&subnats=13&trade_flow=1"}
+  ]},
+  {title: "🇷🇺 Russia Subnational", slug: "subnat-rus", items: [
+    {title: "Moscow (Capital Region) vs St. Petersburg", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=40000,45000&trade_flow=2"},
+    {title: "Japan vs S. Korea", subtitle: "Destinations of Petrolem Gas from Sakhalin Region", url: "?destinations=asjpn,askor&drilldown=destinations&products=52711&subnats=64000&trade_flow=2"},
+    {title: "China vs Netherlands", subtitle: "Export Destinations", url: "?destinations=aschn,eunld&drilldown=destinations&trade_flow=2"},
+    {title: "Samara vs Kaluga", subtitle: "Car Exports", url: "?drilldown=subnats&products=178703&subnats=36000,29000&trade_flow=2"},
+    {title: "Germany vs Japan", subtitle: "Car Imports to Moscow (Capital Region)",  url: "?destinations=eudeu,asjpn&drilldown=destinations&products=178703&subnats=45000&trade_flow=1"}
+  ]},
+  {title: "🇪🇸 Spain Subnational", slug: "subnat-esp", items: [
+    {title: "Barcelona vs Madrid", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=8,28&trade_flow=2"},
+    {title: "USA vs UK", subtitle: "Destinations of Wine from La Rioja", url: "?destinations=nausa,eugbr&drilldown=destinations&products=42204&subnats=26&trade_flow=2"},
+    {title: "France vs Germany", subtitle: "Export Destinations", url: "?destinations=eufra,eudeu&drilldown=destinations&trade_flow=2"},
+    {title: "Barcelona vs Burgos", subtitle: "Packaged Medicament Exports", url: "?drilldown=subnats&products=63004&subnats=9,8&trade_flow=2"},
+    {title: "Cuba vs Ireland", subtitle: "Hard Liquor Imports to Málaga", url: "?destinations=nacub,euirl&drilldown=destinations&products=42208&subnats=29&trade_flow=1"}
   ]}
-  // {title: "🇷🇺 Russia Subnational", slug: "subnat-rus", items: [
-  //   {title: "Moscow (Capital Region) vs St. Petersburg", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=40000,45000&trade_flow=2"},
-  //   {title: "Japan vs S. Korea", subtitle: "Destinations of Petrolem Gas from Sakhalin Region", url: "destinations=asjpn,askor&drilldown=destinations&products=52711&subnats=64000&trade_flow=2"},
-  //   {title: "China vs Netherlands", subtitle: "Export Destinations", url: "?destinations=aschn,eunld&drilldown=destinations&trade_flow=2"},
-  //   {title: "Samara vs Kaluga", subtitle: "Car Exports", url: "?drilldown=subnats&products=178703&subnats=36000,29000&trade_flow=2"},
-  //   {title: "Germany vs Japan", subtitle: "Car Imports to Moscow (Capital Region)",  url: "?destinations=eudeu,asjpn&drilldown=destinations&products=178703&subnats=45000&trade_flow=1"}
-  // ]},
-  // {title: "🇪🇸 Spain Subnational", slug: "subnat-esp", items: [
-  //   {title: "Barcelona vs Madrid", subtitle: "Total Exports", url: "?drilldown=subnats&subnats=8,28&trade_flow=2"},
-  //   {title: "USA vs UK", subtitle: "Destinations of Wine from La Rioja", url: "?destinations=nausa,eugbr&drilldown=destinations&products=42204&subnats=26&trade_flow=2"},
-  //   {title: "France vs Germany", subtitle: "Export Destinations", url: "?destinations=eufra,eudeu&drilldown=destinations&trade_flow=2"},
-  //   {title: "Barcelona vs Burgos", subtitle: "Packaged Medicament Exports", url: "?drilldown=subnats&products=63004&subnats=9,8&trade_flow=2"},
-  //   {title: "Cuba vs Ireland", subtitle: "Hard Liquor Imports to Málaga", url: "?destinations=nacub,euirl&drilldown=destinations&products=42208&subnats=29&trade_flow=1"}
-  // ]}
 ];
 
 class PredictionLanding extends React.Component {
@@ -75,6 +76,10 @@ class PredictionLanding extends React.Component {
             <h1>OEC Trade Predictions</h1>
             <p>
             The predictions shown in this tool use a long short-term memory model or LSTM. The LSTM approach is a form of machine learning which utilizes a recurrent neural network. In the case of the predictions shown on this page we are using a data time series (based on the user selected dataset) as input for the model. The model is then able to learn order dependence and produce a sequence prediction.
+            </p>
+            <h2 className="ispro">PRO</h2>
+            <p>
+              OEC trade predictions are a pro feature. But don&apos;t let that stop you! <a href="/en/login?redirect=en%2Fprediction%2F">Sign in</a> to your account or <a href="/en/signup">sign up</a> today.
             </p>
           </div>
           <div className="prediction-about-r">
@@ -100,6 +105,8 @@ class PredictionLanding extends React.Component {
         </div>
 
       </div>
+
+      <Footer />
     </div>;
   }
 }

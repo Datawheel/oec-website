@@ -22,7 +22,7 @@ class Footer extends React.Component {
       <br />
       <span className="footer-hlinks">
         {items.map((item, i) =>
-          <Link key={item.title} to={item.url} className="footer-hlink" onFocus={() => this.setState({isOpen: true})}>{item.title}</Link>
+          <Link key={`${title}-${item.title}`} to={item.url} className="footer-hlink" onFocus={() => this.setState({isOpen: true})}>{item.title}</Link>
         )}
       </span>
     </span>;
