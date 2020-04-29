@@ -36,6 +36,7 @@ class Custom extends Component {
 			countryExpThreshold: null,
 			populationThreshold: null,
 			productExpThreshold: null,
+			cachedPopulationThreshold: null,
 			data: null,
 			columns: null,
 			_ready: false,
@@ -95,7 +96,8 @@ class Custom extends Component {
 				productRevision: 'HS92',
 				yearValue: yearsNational[productRevision].final,
 				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
+				yearRangeFinal: yearsNational[productRevision].final,
+				populationThreshold: this.state.cachedPopulationThreshold
 			});
 		} else {
 			this.setState({
@@ -104,7 +106,9 @@ class Custom extends Component {
 				productRevision: 'HS92',
 				yearValue: subnationalData[subnationalValue].final,
 				yearRangeInitial: subnationalData[subnationalValue].final - 1,
-				yearRangeFinal: subnationalData[subnationalValue].final
+				yearRangeFinal: subnationalData[subnationalValue].final,
+				cachedPopulationThreshold: this.state.populationThreshold,
+				populationThreshold: 0
 			});
 		}
 	}
@@ -259,19 +263,28 @@ class Custom extends Component {
 			}
 		} else {
 			const basecube = subnationalData[subnationalValue].basecube;
-			const yearRight = years[2] > 2018 ? 2018 : years[2];
+			let yearRight = null;
+
+			if (years.length === 1) {
+				yearRight = years[0] > 2018 ? '2018' : `${years[0]}`;
+			} else if (years.length === 2) {
+				yearRight = years[1] > 2018 ? '2017,2018' : `${years[0]},${years[1]}`;
+			} else {
+				yearRight = years[2] > 2018 ? `2016,2017,2018` : `${years[0]},${years[1]},${years[2]}`;
+			}
+
 			if (basecube === 'HS') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
 					.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&threshold_Country=${countryExpThreshold *
 					pathMultiplicatorThreshold}&threshold_${productDepth}=${productExpThreshold *
-					pathMultiplicatorThreshold}&YearPopulation=${populationYear}&threshold_Population=${populationThreshold}`;
+					pathMultiplicatorThreshold}`;
 			} else if (basecube === 'SITC') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
 					.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&threshold_Country=${countryExpThreshold *
 					pathMultiplicatorThreshold}&threshold_${productDepth}=${productExpThreshold *
-					pathMultiplicatorThreshold}&YearPopulation=${populationYear}&threshold_Population=${populationThreshold}`;
+					pathMultiplicatorThreshold}`;
 			}
 		}
 	}

@@ -202,7 +202,7 @@ class RankingsBuilder extends Component {
 							onChange={handleThresholdSlider('populationThreshold')}
 							labelRenderer={renderThresholdSlider}
 							value={populationThreshold}
-							// disabled={subnational}
+							disabled={subnational}
 						/>
 					</div>
 					<div className="setting no-padding">

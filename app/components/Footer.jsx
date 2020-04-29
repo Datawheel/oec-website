@@ -15,6 +15,19 @@ class Footer extends React.Component {
     </Link>;
   }
 
+  /** for the cases when we want 2 links side by side */
+  renderHorizontalLinks(title, items) {
+    return <span className="footer-link">
+      {title}
+      <br />
+      <span className="footer-hlinks">
+        {items.map((item, i) =>
+          <Link key={item.title} to={item.url} className="footer-hlink" onFocus={() => this.setState({isOpen: true})}>{item.title}</Link>
+        )}
+      </span>
+    </span>;
+  }
+
   render() {
     return <div className="footer">
       <div className="container">
@@ -28,7 +41,14 @@ class Footer extends React.Component {
                 return items
                   ? <ul key={ii}>
                     <p className="footer-subgroup display">{title}</p>
-                    {items.map((item, ii) => <li key={ii}>{this.renderLink(item)}</li>)}
+                    {items.map((item, ii) =>
+                      item.items && item.items.length
+                        ? <li className="nav-group-item nav-group-nested-item" key={`${item.title}-${item.title}-nav-group-nested-item`}>
+                          {this.renderHorizontalLinks(item.title, item.items)}
+                        </li>
+                        : <li key={ii}>{this.renderLink(item)}</li>)
+                    }
+
                   </ul>
                   : <li key={ii}>{this.renderLink(item)}</li>;
               })}
