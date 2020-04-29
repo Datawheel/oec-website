@@ -14,7 +14,6 @@ import Legacy from './Legacy';
 class Rankings extends Component {
 	render() {
 		const { page, depth, rev } = this.props.router.params;
-		console.log(depth, rev);
 
 		return (
 			<div>
@@ -22,9 +21,9 @@ class Rankings extends Component {
 				{(function() {
 					switch (page) {
 						case 'eci':
-							return <ECI />;
+							return <ECI depth={depth} rev={rev} />;
 						case 'pci':
-							return <PCI />;
+							return <PCI depth={depth} rev={rev} />;
 						case 'custom':
 							return <Custom />;
 						case 'legacy':
