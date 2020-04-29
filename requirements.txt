@@ -3,6 +3,7 @@ numpy
 pandas
 networkx
 requests
+requests_cache
 statsmodels
 scikit-learn
 fbprophet
