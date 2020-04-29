@@ -65,6 +65,8 @@
     transition:
       opacity 0.2s ease-out,
       transform 0.2s ease-out;
+    max-height: 90vh;
+    overflow-y: scroll;
 
     /* pull menu up when revealed */
     &.is-hidden {

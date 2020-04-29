@@ -42,6 +42,7 @@ class NavGroup extends Component {
     </a>;
   }
 
+  /** for the cases when we want 2 links side by side */
   renderHorizontalLinks(title, items) {
     return <span className="nav-group-link nav-group-hlinks">
       {title}
