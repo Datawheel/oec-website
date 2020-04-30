@@ -21,8 +21,8 @@
 	}
 
 	& .setting {
-		padding-bottom: var(--gutter-md);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+		padding-bottom: var(--gutter-sm);
+		border-bottom: 1px solid var(--dark-1);
 
 		& h3 {
 			margin: 0;
@@ -76,8 +76,8 @@
 		}
 
 		& .bp3-slider {
-			margin-top: var(--gutter-lg);
-			margin-bottom: var(--gutter-md);
+			margin-top: var(--gutter-md);
+			margin-bottom: var(--gutter-sm);
 		}
 
 		& .bp3-button-group {
@@ -161,7 +161,10 @@
 @media (max-width: 400px) {
   .builder.columns {
     & div[class^="column"] {
-      min-width: 200px;
+			min-width: 200px;
+			& .section {
+				margin-right: 0px;
+			}
     }
   }
 }

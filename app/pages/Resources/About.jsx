@@ -8,7 +8,7 @@ export default class About extends Component {
       <div className="about">
         <Helmet title="About the Site" />
 
-        <h2>ABOUT THE OEC</h2>
+        <h1>ABOUT THE OEC</h1>
 
         <p>The Observatory of Economic Complexity (OEC) is an online data visualization and distribution platform focused on the geography and dynamics of economic activities. The OEC integrates and distributes data from a variety of sources to empower analysts in the private sector, public sector, and academia.</p>
 
@@ -16,28 +16,28 @@ export default class About extends Component {
 
         <p>In 2012 the OEC was spun out of MIT as an open source project. The OEC was refined throughout the years, expanding its technical and analytical capacities.</p>
 
-        <h3>OEC 1.0 (2011-2013)</h3>
+        <h2>OEC 1.0 (2011-2013)</h2>
 
         <p>The first version of the OEC focused primarily on creating single visualizations of trade data. A primitive version of what you find today under the tool/visualizations menu. At that time, it was a pioneering effort in data visualization and distribution.</p>
 
-        <img src="static\images\about\OEC_1.0_1.png" alt="" />
+        <img src="/images/about/OEC_1.0_1.png" alt="as" />
 
-        <h3>OEC 2.0 (2013-2015)</h3>
+        <h2>OEC 2.0 (2013-2015)</h2>
 
         <p>The second version of the OEC introduced the idea of profiles. These profiles were designed primarily for search engine optimization, but quickly grew into the most popular section of the site. The visualization builder (Explore in OEC 2.0) was still the main feature.</p>
 
-        <img src="static\images\about\OEC_2.0_1.png" alt="" />
-        <img src="static\images\about\OEC_2.0_2.png" alt="" />
+        <img className="middle" src="/images/about/OEC_2.0_1.png" alt="" />
+        <img src="/images/about/OEC_2.0_2.png" alt="" />
 
-        <h3>OEC 3.0 (2015-2020)</h3>
+        <h2>OEC 3.0 (2015-2020)</h2>
 
         <p>The 3.0 version of the OEC was designed around the idea of profiles. The visualization builder became a secondary feature, given the tool a more narrative flavor.</p>
 
-        <img src="static\images\about\OEC_3.0_1.png" alt="" />
+        <img className="middle" src="/images/about/OEC_3.0_1.png" alt="" />
 
-        <iframe src="https://player.vimeo.com/video/351708375" width="680" height="385" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <iframe src="https://player.vimeo.com/video/351708375" width="680" height="385" webkitallowfullscreen="true" mozallowfullscreen="true" allowFullScreen></iframe>
 
-        <h3>OEC 4.0 (2020-Today)</h3>
+        <h2>OEC 4.0 (2020-Today)</h2>
 
         <p>The 4.0 version of the OEC is the largest and most ambitious version of the OEC ever created. It includes subnational level data for dozens of countries, sourced directly from their public customs records. This makes the OEC much more recent, relevant, and higher resolution.</p>
 

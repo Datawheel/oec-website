@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, HTMLSelect, Slider, Switch } from '@blueprintjs/core';
 import { range } from 'helpers/utils';
-
+import SimpleSelect from "components/SimpleSelect";
 import { subnationalCountries, subnationalData, yearsNational } from 'helpers/rankingsyears';
 
 import './RankingBuilder.css';
@@ -49,7 +49,9 @@ class RankingsBuilder extends Component {
 			? subnationalData[subnationalValue].initial
 			: yearsNational[productRevision].initial;
 		const finalYear = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
-
+		let revisionItems = productDepth === 'SITC' ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS;
+		revisionItems = revisionItems.map(d => ({value: d.split(" ")[0], title: d}));
+		const subnationalItems = subnationalCountries.map(d => ({title: d, value: d}));
 		return (
 			<div className="builder columns">
 				<div className="column-1-4">
@@ -76,14 +78,13 @@ class RankingsBuilder extends Component {
 									/>
 									<span>Subnational</span>
 								</div>
-								<HTMLSelect
-									options={subnationalCountries}
-									onChange={event =>
-										handleCountrySelect(
-											'subnationalValue',
-											event.currentTarget.selectedOptions[0].label
-										)}
-									disabled={subnational === false ? true : false}
+								<SimpleSelect
+									items={subnationalItems}
+									title={undefined}
+									state={"subnationalValue"}
+									selectedItem={subnationalItems.find(d => d.value === subnationalValue) || {}}
+									callback={(key, value) => handleProductSelect(key, value.value)}
+									disabled={!subnational}
 								/>
 							</div>
 						}
@@ -101,15 +102,12 @@ class RankingsBuilder extends Component {
 										</Button>
 									)}
 								</ButtonGroup>
-								<HTMLSelect
-									options={productDepth === 'SITC' ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS}
-									onChange={event =>
-										handleProductSelect(
-											'productRevision',
-											productDepth === 'SITC'
-												? event.currentTarget.selectedOptions[0].label
-												: event.currentTarget.selectedOptions[0].label.split(' ')[0]
-										)}
+								<SimpleSelect
+									items={revisionItems}
+									title={undefined}
+									state={"productRevision"}
+									selectedItem={revisionItems.find(d => d.value === productRevision) || {}}
+									callback={(key, value) => handleProductSelect(key, value.value)}
 								/>
 							</div>
 						}
