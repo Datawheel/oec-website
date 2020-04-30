@@ -132,6 +132,7 @@
     display: flex;
     align-items: center;
     align-content: flex-start;
+    flex-wrap: wrap;
 
     &.advanced-params {
       border: solid 1px var(--light-1);
@@ -141,6 +142,8 @@
     & .prediction-control {
       flex: 1;
       padding: 5px 10px;
+      max-width: 250px;
+      min-width: 200px;
       &.slider-control {
         padding: 5px 15px;
       }

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const {OLAP_PROXY_SECRET} = process.env;
 
 const API = `${process.env.CANON_CONST_BASE}.jsonrecords`;
+const python = process.env.CANON_STATS_PYTHON_ENGINE || "python3";
 const BASE_URL = "/api/predict";
 
 module.exports = function(app) {
@@ -27,7 +28,7 @@ module.exports = function(app) {
     // console.log(JSON.stringify(req.query));
     // console.log("------");
     const py = spawn(
-      "python3",
+      python,
       ["-W", "ignore", pyFilePath, JSON.stringify(req.query), API]
     );
     let respString = "";
