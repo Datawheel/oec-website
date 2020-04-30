@@ -35,6 +35,7 @@
       margin: 0;
       padding: 0;
       display: flex;
+      flex-wrap: wrap;
       & li {
         display: inline-block;
         margin: 10px;
@@ -42,7 +43,9 @@
         height: 150px;
         overflow: hidden;
         position: relative;
-        width: 150px;
+        min-width: 150px;
+        min-width: 150px;
+        flex: 1;
         z-index: 1;
 
         & a {
@@ -106,6 +109,7 @@
 
   & .bp3-navbar {
     background: var(--dark-4);
+    min-height: 60px;
     & h1 {
       margin: 0;
     }
@@ -117,6 +121,10 @@
     }
     & .bp3-navbar-divider {
       border-color: var(--dark-1);
+    }
+    & .bp3-navbar-group {
+      display: flex;
+      flex-wrap: wrap;
     }
   }
 
@@ -186,20 +194,20 @@
   --------------------------- */
   & .bp3-button:not([class*="bp3-minimal"]) {
     background: rgb(99, 115, 127) !important;
-    color: #FFFFFF !important;
+    color: var(--white) !important;
     opacity: 0.7;
     box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.6), inset 0 -1px 0 rgba(16, 22, 26, 0.4);
     &.bp3-active {
       background: rgb(56, 65, 72) !important;
-      color: #FFFFFF !important;
+      color: var(--white) !important;
     }
     &:hover {
       background: rgb(81, 94, 104) !important;
-      color: #FFFFFF !important;
+      color: var(--white) !important;
     }
 
     & .bp3-icon {
-      color: white;
+      color: var(--white);
     }
   }
 
@@ -213,11 +221,11 @@
 Multi select
 --------------------------- */
 input.bp3-input-ghost.bp3-multi-select-tag-input-input{
-  color:white
+  color: var(--white)
 }
 .bp3-menu-item.bp3-disabled {
   & .bp3-text-overflow-ellipsis {
-    color:white
+    color: var(--white)
   }
 }
 
@@ -371,7 +379,7 @@ Data table styles
 About text styles
 --------------------------- */
 .prediction-about-container {
-  width: 800px;
+  max-width: 800px;
   margin: 40px auto;
 
   & .info-card {
