@@ -41,6 +41,19 @@
 			line-height: 1.2rem;
 		}
 
+		& img {
+			display: flex;
+		}
+
+		& img.middle {
+			margin-bottom: var(--gutter-md);
+		}
+
+		& iframe {
+			width: 100%;
+			border-width: 0;
+		}
+
 		& .citation {
 			color: var(--white);
 			font-style: italic;
