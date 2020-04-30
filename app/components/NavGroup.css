@@ -94,6 +94,8 @@
 }
 .nav-group-list {
   @mixin list-reset;
+  max-height: 90vh;
+  overflow-y: scroll;
 
   /* absolutely position & size dropdowns */
   &:not(.nav-group-nested-list) {
@@ -120,6 +122,14 @@
       clip: rect(1px, 1px, 1px, 1px);
       overflow: hidden;
       pointer-events: none;
+    }
+  }
+
+  & .nav-group-hlinks {
+    display: inline-block;
+    & .nav-group-hlink {
+      margin: 0 0 0 5px;
+      color: var(--light-1);
     }
   }
 }

@@ -27,6 +27,10 @@
     }
   }
   & .prediction-about-r {
+    overflow-x: scroll;
+    & h2 a {
+      color: var(--light-3);
+    }
     & ul {
       margin: 0;
       padding: 0;

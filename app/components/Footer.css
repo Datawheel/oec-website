@@ -79,7 +79,15 @@
             transform: scale(1.25);
           }
         }
+        & .footer-hlinks {
+          & .footer-hlink {
+            color: var(--light-3);
+            padding-top: 0.625em;
+            padding-bottom: 0.625em;
 
+            margin: 0 8px 0 0;
+          }
+        }
       }
     }
     & > ul {

@@ -8,6 +8,9 @@ scripts/.ipynb_checkpoints
 # node modules should never be synced with git
 node_modules
 
+# cache control for canon-stats
+canon_stats_cache.sqlite
+
 # these static files will be generated on build
 /static/assets
 /packages/*/static/assets
