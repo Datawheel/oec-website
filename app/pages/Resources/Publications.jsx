@@ -370,6 +370,9 @@ export default class Publications extends Component {
                   <h4 className="authors">{d.author}</h4>
                   <p className="abstract">{d.abstract}</p>
                 </div>
+                <div className="reference">
+                  <p className="chicago">{d.chicago}</p>
+                </div>
                 <div className="links">
                   {d.pdf &&
                     <a href={`/pdf/${d.pdf}`} target="_blank" rel="noopener noreferrer" title="Download PDF" className="link">
@@ -381,9 +384,6 @@ export default class Publications extends Component {
                       <img src="/images/icons/file/icon_link.png" alt="Download PDF" />
                     </a>
                   }
-                </div>
-                <div className="reference">
-                  <p className="chicago">{d.chicago}</p>
                 </div>
               </div>
             </div>
