@@ -1,6 +1,7 @@
 import React from "react";
 import {Select} from "@blueprintjs/select";
 import {Button, MenuItem} from "@blueprintjs/core";
+import classnames from "classnames";
 
 import "./SimpleSelect.css";
 
@@ -25,13 +26,19 @@ export default class SimpleSelect extends React.Component {
 
   };
   render() {
-    const {items, popoverPosition, selectedItem, title} = this.props;
+    const {disabled, items, popoverPosition, selectedItem, title} = this.props;
     const {isOpen} = this.state;
     return <div className="selector">
       <h6 className="title is-6">{title}</h6>
       <Select
         activeItem={selectedItem}
-        className="popover-virtual-selector filter-selector oec-selector"
+        className={classnames(
+          "popover-virtual-selector",
+          "filter-selector",
+          "oec-selector",
+          {"is-disabled": disabled}
+        )}
+        disabled={disabled}
         filterable={false}
         isOpen={isOpen}
         itemRenderer={this.renderItem}
@@ -52,5 +59,6 @@ export default class SimpleSelect extends React.Component {
 }
 
 SimpleSelect.defaultProps = {
+  disabled: false,
   popoverPosition: "bottom-left"
 };
