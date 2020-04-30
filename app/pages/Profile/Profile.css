@@ -641,6 +641,16 @@
   padding-top: var(--nav-height);
 }
 @media (max-width: 768px) {
+  .cp-var-reset-button {
+    position: absolute;
+    bottom: 20px;
+    right: var(--gutter-lg);
+    top: auto;
+    left: var(--gutter-lg);
+    width: calc(100% - var(--gutter-lg) * 2);
+    justify-content: center;
+    display: flex;
+  }
   .cp-section {
     & .cp-viz-container {
       & .cp-viz-header {
