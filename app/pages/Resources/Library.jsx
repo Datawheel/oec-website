@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import ReactTable from 'react-table';
-import { HTMLSelect } from '@blueprintjs/core';
+import {HTMLSelect} from '@blueprintjs/core';
 import OECMultiSelect from 'components/OECMultiSelect';
 import LibraryGeomap from 'components/LibraryGeomap';
 
@@ -28,7 +28,7 @@ class Library extends Component {
 		const dataApi = '/api/library';
 		const dictApi =
 			'/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
-		axios.all([ axios.get(dataApi), axios.get(dictApi) ]).then(
+		axios.all([axios.get(dataApi), axios.get(dictApi)]).then(
 			axios.spread((resp1, resp2) => {
 				const data = resp1.data.data.filter((f) => f.Region !== null);
 
@@ -57,7 +57,7 @@ class Library extends Component {
 
 	getUniqueRegions = (d) => {
 		if (d) {
-			const array = [ ...new Set(d.map((f) => f.Region)) ];
+			const array = [...new Set(d.map((f) => f.Region))];
 			array.push(' ');
 			const sorted = array.sort((a, b) => a.localeCompare(b));
 			return sorted;
@@ -68,11 +68,11 @@ class Library extends Component {
 
 	getUniqueSubtopics = (d) => {
 		if (d) {
-			const subtopics1 = [ ...new Set(d.map((m) => m.Subtopic1)) ].filter((f) => f !== null);
-			const subtopics2 = [ ...new Set(d.map((m) => m.Subtopic2)) ].filter((f) => f !== null);
-			const subtopics3 = [ ...new Set(d.map((m) => m.Subtopic3)) ].filter((f) => f !== null);
+			const subtopics1 = [...new Set(d.map((m) => m.Subtopic1))].filter((f) => f !== null);
+			const subtopics2 = [...new Set(d.map((m) => m.Subtopic2))].filter((f) => f !== null);
+			const subtopics3 = [...new Set(d.map((m) => m.Subtopic3))].filter((f) => f !== null);
 			const subtopics = subtopics1.concat(subtopics2).concat(subtopics3);
-			const sorted = [ ...new Set(subtopics) ].sort((a, b) => a.localeCompare(b));
+			const sorted = [...new Set(subtopics)].sort((a, b) => a.localeCompare(b));
 			const dict = [];
 			sorted.forEach((h) => {
 				const item = {};
@@ -121,11 +121,11 @@ class Library extends Component {
 			let continents = [];
 			for (const index in filters) {
 				const value = cleanData.filter((f) => f.Region === filters[index]);
-				const subtopics1 = [ ...new Set(value.map((m) => m.Subtopic1)) ].filter((f) => f !== null);
-				const subtopics2 = [ ...new Set(value.map((m) => m.Subtopic2)) ].filter((f) => f !== null);
-				const subtopics3 = [ ...new Set(value.map((m) => m.Subtopic3)) ].filter((f) => f !== null);
+				const subtopics1 = [...new Set(value.map((m) => m.Subtopic1))].filter((f) => f !== null);
+				const subtopics2 = [...new Set(value.map((m) => m.Subtopic2))].filter((f) => f !== null);
+				const subtopics3 = [...new Set(value.map((m) => m.Subtopic3))].filter((f) => f !== null);
 				const subtopics_array = subtopics1.concat(subtopics2).concat(subtopics3);
-				const subtopics = [ ...new Set(subtopics_array) ].sort((a, b) => a.localeCompare(b));
+				const subtopics = [...new Set(subtopics_array)].sort((a, b) => a.localeCompare(b));
 				const _gap = value.length / maxPapers;
 				let row = {};
 				if (dict[filters[index]]) {
@@ -149,7 +149,7 @@ class Library extends Component {
 					continents = continents.concat(row);
 				}
 			}
-			return [ countries, continents, uniqueRegion, uniqueSubtopics ];
+			return [countries, continents, uniqueRegion, uniqueSubtopics];
 		} else {
 			return null;
 		}
@@ -197,7 +197,7 @@ class Library extends Component {
 				accessor: 'Subtopic3'
 			}
 		];
-		this.setState({ columns });
+		this.setState({columns});
 	};
 
 	componentDidMount() {
@@ -206,17 +206,17 @@ class Library extends Component {
 	}
 
 	filterData = () => {
-		const { data, filterRegion, filterSubtopics } = this.state;
+		const {data, filterRegion, filterSubtopics} = this.state;
 
 		const _filteredRegion =
 			filterRegion !== ' '
 				? data.filter((f) => {
-						if (f.Region.split(',').length === 1) {
-							return f.Region === filterRegion;
-						} else {
-							return f.Region.replace(/ /g, '').split(',').includes(filterRegion);
-						}
-					})
+					if (f.Region.split(',').length === 1) {
+						return f.Region === filterRegion;
+					} else {
+						return f.Region.replace(/ /g, '').split(',').includes(filterRegion);
+					}
+				})
 				: data;
 
 		if (filterSubtopics.length > 0) {
@@ -234,11 +234,11 @@ class Library extends Component {
 	};
 
 	handleValueChange(key, value) {
-		this.setState({ [key]: value });
+		this.setState({[key]: value});
 	}
 
 	handleItemMultiSelect = (key, d) => {
-		this.setState({ [key]: d });
+		this.setState({[key]: d});
 	};
 
 	changeGeomapFilter(d) {
@@ -376,7 +376,7 @@ class Library extends Component {
 						showPagination={false}
 						defaultPageSize={data.length}
 						minRows={1}
-						defaultSorted={[ { id: `Year`, desc: true } ]}
+						defaultSorted={[{id: `Year`, desc: true}]}
 					/>
 				)}
 			</div>
