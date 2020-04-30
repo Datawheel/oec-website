@@ -7,15 +7,13 @@ import Footer from '../../components/Footer';
 import Error from '../../components/Error';
 
 import ECI from './ECI';
-import HECI from './HECI';
 import PCI from './PCI';
-import HPCI from './HPCI';
 import Custom from './Custom';
 import Legacy from './Legacy';
 
 class Rankings extends Component {
 	render() {
-		const { page } = this.props.router.params;
+		const { page, depth, rev } = this.props.router.params;
 
 		return (
 			<div>
@@ -23,13 +21,9 @@ class Rankings extends Component {
 				{(function() {
 					switch (page) {
 						case 'eci':
-							return <ECI />;
-						case 'heci':
-							return <HECI />;
+							return <ECI depth={depth} rev={rev} />;
 						case 'pci':
-							return <PCI />;
-						case 'hpci':
-							return <HPCI />;
+							return <PCI depth={depth} rev={rev} />;
 						case 'custom':
 							return <Custom />;
 						case 'legacy':

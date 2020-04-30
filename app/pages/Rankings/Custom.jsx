@@ -276,13 +276,13 @@ class Custom extends Component {
 			if (basecube === 'HS') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
-					.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&threshold_Country=${countryExpThreshold *
+					.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2&threshold_Country=${countryExpThreshold *
 					pathMultiplicatorThreshold}&threshold_${productDepth}=${productExpThreshold *
 					pathMultiplicatorThreshold}`;
 			} else if (basecube === 'SITC') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
-					.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&threshold_Country=${countryExpThreshold *
+					.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2&threshold_Country=${countryExpThreshold *
 					pathMultiplicatorThreshold}&threshold_${productDepth}=${productExpThreshold *
 					pathMultiplicatorThreshold}`;
 			}
