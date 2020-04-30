@@ -43,6 +43,7 @@ accent:       "#6297CB" # links & toggles
 accent-light: "#99BCD1" # social media buttons
 accent-dark:  "#3C71A6"
 accent-black: "#164B7F"
+accent-green: "#3b9343"
 
 # additional colors
 label-color:  "#91A9BA"

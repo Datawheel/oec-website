@@ -6,6 +6,7 @@
 		margin: var(--gutter-sm) auto;
 		max-width: 700px;
 		width: 100%;
+		padding: var(--gutter-xs) var(--gutter-md);
 
 		& h1 {
 			font-size: var(--font-xxl);
@@ -41,7 +42,7 @@
 		}
 
 		& .citation {
-			color: white;
+			color: var(--white);
 			font-style: italic;
 			font-weight: 600;
 			margin-left: var(--gutter-md);
@@ -69,6 +70,11 @@
 			font-size: var(--font-xs);
 			font-weight: 400;
 			margin-bottom: var(--gutter-xs);
+
+			& .chicago {
+				overflow-x: hidden;
+				color: var(--accent-dark);
+			}
 		}
 
 		& .formula {
@@ -85,6 +91,11 @@
 				font-size: var(--font-xs);
 				font-weight: 400;
 				margin-bottom: var(--gutter-xs);
+
+				& .chicago {
+					overflow-x: hidden;
+					color: var(--accent-dark);
+				}
 			}
 		}
 
@@ -133,18 +144,19 @@
 	padding-top: var(--nav-height);
 
 	& .information {
-		background: #3b9343 url('/images/background/information-bg.png') repeat 50% 0% fixed;
-		padding: 70px 5% 70px 5%;
+		background: var(--accent-green) url('/images/background/information-bg.png') repeat 50% 0% fixed;
+		padding: var(--gutter-xl) var(--gutter-sm);
 		& .card {
 			background: var(--white);
-			width: 55rem;
 			margin: 0 auto;
+			max-width: 55rem;
 			padding: var(--gutter-md) var(--gutter-md);
 
 			& .header {
-				display: flex;
 				align-items: baseline;
-				color: #3b9343;
+				color: var(--accent-green);
+				display: flex;
+				flex-wrap: wrap;
 				margin-bottom: var(--gutter-sm);
 
 				& a {
@@ -152,7 +164,7 @@
 				}
 
 				& h2 {
-					color: #3b9343;
+					color: var(--accent-green);
 					text-transform: uppercase;
 					font-size: 2.4rem;
 					font-weight: 900;
@@ -181,7 +193,7 @@
 					padding-right: var(--gutter-lg);
 
 					& .subtitle {
-						color: #3b9343;
+						color: var(--accent-green);
 						font-size: var(--font-xl);
 						font-weight: 300;
 					}
@@ -193,7 +205,7 @@
 						padding-left: var(--gutter-md);
 
 						& a {
-							color: #3b9343;
+							color: var(--accent-green);
 							text-decoration: none;
 						}
 
@@ -212,11 +224,11 @@
 
 	& .atlas {
 		background: #212831 url('/images/background/atlas-bg.png') repeat 50% 50%;
-		padding: 70px 5% 70px 5%;
+		padding: var(--gutter-xl) var(--gutter-sm);
 		& .card {
 			background: rgba(255, 255, 255, 0.9);
-			width: 55rem;
 			margin: 0 auto;
+			max-width: 55rem;
 			padding: var(--gutter-md) var(--gutter-md);
 
 			& .header {
@@ -348,14 +360,16 @@
 	}
 
 	& .papers {
-		background: #d1d2d4;
+		background: var(--light-2);
 
 		& h2 {
 			color: var(--dark-3);
 			font-size: var(--font-xxl);
-			font-weight: 300;
-			margin: 0;
-			padding: var(--gutter-lg) 5rem;
+			font-weight: 400;
+			margin: 0 auto;
+			padding: var(--gutter-xl) var(--gutter-md);
+			max-width: 1054px;
+			width: 100%;
 		}
 
 		& .paper {
@@ -378,6 +392,7 @@
 				flex-direction: column;
 				flex: 1 0;
 				padding: 0 var(--gutter-md);
+				width: 100%;
 
 				& h3 {
 					margin: 0;
@@ -390,23 +405,21 @@
 					text-transform: uppercase;
 					color: var(--dark-2);
 					opacity: 0.7;
-				}
-
-				& .name:hover {
-					text-decoration: none;
-					opacity: 0.55;
+					&:hover {
+						text-decoration: none;
+						opacity: 0.55;
+					}
 				}
 
 				& .info {
 					& .authors {
 						font-size: var(--font-lg);
-						font-weight: 200;
-						color: var(--dark-3);
+						color: var(--accent-dark);
 						margin: 0;
-						margin-bottom: 0.2rem;
+						margin-bottom: var(--gutter-sm);
 					}
 					& .abstract {
-						font-size: var(--font-sm);
+						font-size: var(--font-md);
 						font-weight: var(--label-font-weight);
 						color: var(--dark-3);
 						margin: 0;
@@ -428,6 +441,11 @@
 					& .link:hover {
 						opacity: 0.55;
 					}
+				}
+
+				& .chicago {
+					overflow-x: hidden;
+					color: var(--dark-4);
 				}
 			}
 		}
@@ -630,6 +648,11 @@
 			align-items: center;
 			white-space: normal;
 
+			& .chicago {
+				overflow-x: hidden;
+				color: var(--accent-dark);
+			}
+
 			& .link {
 				display: flex;
 				align-items: center;
@@ -647,5 +670,11 @@
 				opacity: 0.5;
 			}
 		}
+	}
+}
+
+@media (max-width: 768px) {
+	.publications-content .papers .paper .preview {
+		display: none;
 	}
 }
