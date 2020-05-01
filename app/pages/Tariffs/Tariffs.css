@@ -18,37 +18,6 @@
     }
   }
 
-  & .prediction-controls {
-    display: flex;
-    align-items: flex-start;
-    align-content: flex-start;
-
-    &.advanced-params {
-      border: solid 1px var(--light-1);
-      margin: 0 0 20px 0;
-    }
-
-    & .prediction-control {
-      flex: 1;
-      padding: 5px 10px;
-      &.slider-control {
-        padding: 5px 15px;
-      }
-    }
-
-    & .build-prediction-btn {
-      background-color: rgba(115, 134, 148, 0.3);
-      color: #CFDAE2;
-      flex: 0 0 8rem;
-      padding: 20px 0;
-      align-self: center;
-
-      &:hover {
-        color: #CFDAE2;
-      }
-    }
-  }
-
   & .tariffs-datatable-container {
     min-height: 400px;
     margin: 20px 0 0 0;
