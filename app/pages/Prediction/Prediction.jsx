@@ -66,6 +66,7 @@ class Prediction extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const newDatasetSlug = this.props.params.dataset;
     if (prevState.dataset.slug !== newDatasetSlug) {
+      this.props.isAuthenticated();
       const newDataset = PREDICTION_DATASETS.find(d => d.slug === newDataset) || PREDICTION_DATASETS[0];
       this.setState({dataset: newDataset});
     }
@@ -201,6 +202,10 @@ class Prediction extends React.Component {
   grabIds = item => item.id;
 
   buildPrediction = () => {
+    const auth = this.props.auth;
+    if (!auth.user) {
+      return;
+    }
     this.setState({error: false, loading: true});
     const {currentDrilldown, dataset, timeSelection} = this.state;
     let myAdvParamStrings = [];
@@ -335,7 +340,7 @@ class Prediction extends React.Component {
   render() {
     const {activeTabId, currentDrilldown, dataset, datatableOpen, drilldowns,
       error, loading, predictionData, scrolled, timeAvailable, timeSelection, updateKey} = this.state;
-    const auth = this.props.auth;
+    const {auth, router} = this.props;
 
     return <div className="prediction" onScroll={this.handleScroll}>
       <OECNavbar
@@ -343,7 +348,7 @@ class Prediction extends React.Component {
         title={scrolled ? "Predictions" : ""}
       />
 
-      <OECPaywall auth={auth} />
+      <OECPaywall auth={auth} paywall={true} redirect={`/${router.location.pathname}${encodeURIComponent(router.location.search)}`} />
 
       <div className="welcome">
         {/* spinning orb thing */}

@@ -388,7 +388,7 @@ module.exports = {
       ]
     },
     {
-      name: "🇨🇦 Canada Subnational",
+      name: "🇨🇦 Canada",
       slug: "subnat-can",
       cube: "trade_s_can_m_hs",
       selectionsLoaded: false,
@@ -434,7 +434,7 @@ module.exports = {
       ]
     },
     {
-      name: "🇩🇪 Germany Subnational",
+      name: "🇩🇪 Germany",
       slug: "subnat-deu",
       cube: "trade_s_deu_m_egw",
       selectionsLoaded: false,
@@ -480,7 +480,7 @@ module.exports = {
       ]
     },
     {
-      name: "🇯🇵 Japan Subnational",
+      name: "🇯🇵 Japan",
       slug: "subnat-jpn",
       cube: "trade_s_jpn_m_hs",
       selectionsLoaded: false,
@@ -524,99 +524,99 @@ module.exports = {
           selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
         }
       ]
+    },
+    {
+      name: "🇷🇺 Russia",
+      slug: "subnat-rus",
+      cube: "trade_s_rus_m_hs",
+      selectionsLoaded: false,
+      dateDrilldown: "Time",
+      currencyFormat: d => `${d3plus_format.formatAbbreviate(d)} ₽`,
+      selections: [
+        {
+          dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "Subnat Geography",
+          id: "subnats",
+          name: "Russian Region",
+          selected: []
+        },
+        {
+          dataUrl: "?cube=trade_s_rus_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+          dimName: "HS4",
+          id: "products",
+          name: "Product",
+          selected: []
+        },
+        {
+          dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          data: [],
+          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+          dimName: "Country",
+          id: "destinations",
+          name: "Partner Country",
+          selected: []
+        }
+      ],
+      toggles: [
+        {
+          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+          dimName: "Trade Flow",
+          id: "trade_flow",
+          name: "Trade Flow",
+          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
+        }
+      ]
+    },
+    {
+      name: "🇪🇸 Spain",
+      slug: "subnat-esp",
+      cube: "trade_s_esp_m_hs",
+      selectionsLoaded: false,
+      dateDrilldown: "Time",
+      currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
+      selections: [
+        {
+          dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
+          dimName: "Subnat Geography",
+          id: "subnats",
+          name: "Autonomous Community",
+          selected: []
+        },
+        {
+          dataUrl: "?cube=trade_s_esp_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
+          data: [],
+          dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
+          dimName: "HS4",
+          id: "products",
+          name: "Product",
+          selected: []
+        },
+        {
+          dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
+          data: [],
+          dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
+          dimName: "Country",
+          id: "destinations",
+          name: "Partner Country",
+          selected: []
+        }
+      ],
+      toggles: [
+        {
+          data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
+          dimName: "Trade Flow",
+          id: "trade_flow",
+          name: "Trade Flow",
+          selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
+        }
+      ]
     }
-    // {
-    //   name: "🇷🇺 Russia Subnational",
-    //   slug: "subnat-rus",
-    //   cube: "trade_s_rus_m_hs",
-    //   selectionsLoaded: false,
-    //   dateDrilldown: "Time",
-    //   currencyFormat: d => `${d3plus_format.formatAbbreviate(d)} ₽`,
-    //   selections: [
-    //     {
-    //       dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
-    //       data: [],
-    //       dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
-    //       dimName: "Subnat Geography",
-    //       id: "subnats",
-    //       name: "Russian Region",
-    //       selected: []
-    //     },
-    //     {
-    //       dataUrl: "?cube=trade_s_rus_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
-    //       data: [],
-    //       dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
-    //       dimName: "HS4",
-    //       id: "products",
-    //       name: "Product",
-    //       selected: []
-    //     },
-    //     {
-    //       dataUrl: "?cube=trade_s_rus_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
-    //       data: [],
-    //       dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-    //       dimName: "Country",
-    //       id: "destinations",
-    //       name: "Partner Country",
-    //       selected: []
-    //     }
-    //   ],
-    //   toggles: [
-    //     {
-    //       data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
-    //       dimName: "Trade Flow",
-    //       id: "trade_flow",
-    //       name: "Trade Flow",
-    //       selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
-    //     }
-    //   ]
-    // },
-    // {
-    //   name: "🇪🇸 Spain Subnational",
-    //   slug: "subnat-esp",
-    //   cube: "trade_s_esp_m_hs",
-    //   selectionsLoaded: false,
-    //   dateDrilldown: "Time",
-    //   currencyFormat: d => `€${d3plus_format.formatAbbreviate(d)}`,
-    //   selections: [
-    //     {
-    //       dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Subnat+Geography&measures=Trade+Value&parents=false&sparse=false",
-    //       data: [],
-    //       dataMap: d => ({id: d["Subnat Geography ID"], displayId: d["Subnat Geography ID"], name: d["Subnat Geography"], color: DEFAULT_PREDICTION_COLOR}),
-    //       dimName: "Subnat Geography",
-    //       id: "subnats",
-    //       name: "Autonomous Community",
-    //       selected: []
-    //     },
-    //     {
-    //       dataUrl: "?cube=trade_s_esp_m_hs&Year=2017&drilldowns=HS4&measures=Trade+Value&parents=true&sparse=false",
-    //       data: [],
-    //       dataMap: d => ({id: d["HS4 ID"], displayId: toHS(d["HS4 ID"]), name: d.HS4, color: colors.Section[d["Section ID"]]}),
-    //       dimName: "HS4",
-    //       id: "products",
-    //       name: "Product",
-    //       selected: []
-    //     },
-    //     {
-    //       dataUrl: "?cube=trade_s_esp_m_hs&drilldowns=Country&measures=Trade+Value&parents=true&sparse=false&properties=ISO+3",
-    //       data: [],
-    //       dataMap: d => ({id: d["Country ID"], displayId: d["ISO 3"], name: d.Country, color: colors.Continent[d["Continent ID"]]}),
-    //       dimName: "Country",
-    //       id: "destinations",
-    //       name: "Partner Country",
-    //       selected: []
-    //     }
-    //   ],
-    //   toggles: [
-    //     {
-    //       data: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}, {id: 1, displayId: "imports", name: "Imports", color: colors["Trade Flow"][1]}],
-    //       dimName: "Trade Flow",
-    //       id: "trade_flow",
-    //       name: "Trade Flow",
-    //       selected: [{id: 2, displayId: "exports", name: "Exports", color: colors["Trade Flow"][2]}]
-    //     }
-    //   ]
-    // }
   ],
 
   TARIFF_DATASETS: [

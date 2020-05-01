@@ -25,6 +25,14 @@
       font-size: 16px;
       line-height: 23px;
     }
+
+    & h2.ispro {
+      background-color: #3C71A6;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: bold;
+      padding: 5px;
+    }
   }
   & .prediction-about-r {
     overflow-x: scroll;

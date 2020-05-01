@@ -482,6 +482,9 @@ export default {
       strokeLinecap: "round"
     },
     Path: {
+      activeStyle: {
+        stroke: () => "#ccc"
+      },
       fillOpacity: 1,
       strokeOpacity: 1,
       stroke: () => "#56636e"
