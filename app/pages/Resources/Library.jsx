@@ -14,11 +14,10 @@ class Library extends Component {
 			data: null,
 			columns: null,
 			dict: null,
+			geomap: null,
 			uniqueRegion: null,
 			uniqueCountries: null,
 			uniqueSubtopics: null,
-			geomapRegions: null,
-			geomapCountries: null,
 			filterRegion: ' ',
 			filterCountry: ' ',
 			filterSubtopics: []
@@ -79,11 +78,10 @@ class Library extends Component {
 				this.setState({
 					data,
 					dict,
-					geomapRegions: geomapData[0],
-					geomapCountries: geomapData[1],
-					uniqueRegion: geomapData[2],
-					uniqueCountries: geomapData[3],
-					uniqueSubtopics: geomapData[4]
+					geomap: geomapData[0],
+					uniqueRegion: geomapData[1],
+					uniqueCountries: geomapData[2],
+					uniqueSubtopics: geomapData[3]
 				});
 			})
 		);
@@ -187,6 +185,9 @@ class Library extends Component {
 			row["Topics"] = subtopics;
 			if (key === "Country") {
 				row["country_id"] = dict[filters[index]]["Country ID"];
+				row["Continent"] = dict[filters[index]]["Continent"];
+			} else {
+				row["country_id"] = filters[index];
 			}
 			dreturn = dreturn.concat(row);
 		}
@@ -215,7 +216,9 @@ class Library extends Component {
 			const regions = this.groupData(cleanDatabyRegion, uniqueRegions, "Region", dict);
 			const countries = this.groupData(cleanDatabyCountry, uniqueCountries, "Country", dict);
 
-			return [regions, countries, uniqueRegions, uniqueCountries, uniqueSubtopics];
+			const geomap = regions.concat(countries);
+
+			return [geomap, uniqueRegions, uniqueCountries, uniqueSubtopics];
 		} else {
 			return null;
 		}
@@ -338,8 +341,10 @@ class Library extends Component {
 				filterCountry: d
 			});
 		} else {
+			document.getElementById('select-region').value = this.state.dict[d]["Continent"];
 			document.getElementById('select-country').value = d;
 			this.setState({
+				filterRegion: this.state.dict[d]["Continent"],
 				filterCountry: d
 			});
 		}
@@ -349,14 +354,14 @@ class Library extends Component {
 		const {
 			data,
 			columns,
+			geomap,
 			uniqueRegion,
 			uniqueCountries,
 			uniqueSubtopics,
-			geomapRegions,
-			geomapCountries,
 			filterSubtopics
 		} = this.state;
 		const filteredData = this.filterData();
+		console.log(geomap);
 
 		return (
 			<div className="library">
@@ -373,7 +378,7 @@ class Library extends Component {
 						<div className="regions left">
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'Global')}
+								data={geomap}
 								topojson={'/topojson/continent_wld.json'}
 								height={100}
 								width={100}
@@ -382,7 +387,7 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'Europe')}
+								data={geomap}
 								topojson={'/topojson/country_eu.json'}
 								height={100}
 								width={100}
@@ -391,7 +396,7 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'North America')}
+								data={geomap}
 								topojson={'/topojson/country_na.json'}
 								height={100}
 								width={100}
@@ -400,7 +405,7 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'South America')}
+								data={geomap}
 								topojson={'/topojson/country_sa.json'}
 								height={100}
 								width={100}
@@ -411,7 +416,7 @@ class Library extends Component {
 						<div className="countries">
 							<LibraryGeomap
 								classname={'countries'}
-								data={geomapCountries}
+								data={geomap}
 								topojson={'/topojson/world-50m.json'}
 								height={500}
 								changeGeomapFilter={this.changeGeomapFilterCountry}
@@ -421,7 +426,7 @@ class Library extends Component {
 						<div className="regions right">
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'Africa')}
+								data={geomap}
 								topojson={'/topojson/country_af.json'}
 								height={100}
 								width={100}
@@ -430,7 +435,7 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'Asia')}
+								data={geomap}
 								topojson={'/topojson/country_as.json'}
 								height={100}
 								width={100}
@@ -439,7 +444,7 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'Oceania')}
+								data={geomap}
 								topojson={'/topojson/country_oc.json'}
 								height={100}
 								width={100}
@@ -448,7 +453,7 @@ class Library extends Component {
 							/>
 							<LibraryGeomap
 								classname={'region'}
-								data={geomapRegions.filter((d) => d.Region === 'MENA')}
+								data={geomap}
 								topojson={'/topojson/continent_mena.json'}
 								height={100}
 								width={100}
