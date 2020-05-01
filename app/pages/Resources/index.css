@@ -131,7 +131,7 @@
 					text-decoration: none;
 
 					& .content-name {
-						color: white;
+						color: var(--accent-light);
 						opacity: 1;
 					}
 					& .content-name:hover {
