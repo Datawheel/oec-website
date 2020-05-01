@@ -744,7 +744,7 @@ class Custom extends Component {
 				if (type) {
 					return (
 						<div className="value">
-							<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.000')}`}</span>
+							<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.00')}`}</span>
 						</div>
 					);
 				} else {
@@ -752,7 +752,7 @@ class Custom extends Component {
 						return (
 							<div className="value">
 								<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format(
-									'0.000'
+									'0.00'
 								)} `}</span>
 								<span>({numeral(props.original[`${year}`][`${year} Ranking`]).format('0o')})</span>
 							</div>

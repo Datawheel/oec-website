@@ -83,7 +83,7 @@ class RankingsBuilder extends Component {
 									title={undefined}
 									state={"subnationalValue"}
 									selectedItem={subnationalItems.find(d => d.value === subnationalValue) || {}}
-									callback={(key, value) => handleProductSelect(key, value.value)}
+									callback={(key, value) => handleCountrySelect(key, value.value)}
 									disabled={!subnational}
 								/>
 							</div>
