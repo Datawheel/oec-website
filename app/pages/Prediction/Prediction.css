@@ -143,7 +143,7 @@
     flex-wrap: wrap;
 
     &.advanced-params {
-      border: solid 1px var(--light-1);
+      border: solid 1px var(--dark-1);
       margin: 0 0 20px 0;
     }
 
@@ -173,7 +173,7 @@
   }
 
   & .prediction-viz-container {
-    border: solid 1px var(--black);
+    border: solid 1px var(--dark-2);
     min-height: 400px;
 
     & .prediction-viz {
@@ -267,7 +267,7 @@ tabs
     cursor: default;
     /* remove ugly blue halo */
     outline: 0;
-    padding: 2px 5px;
+    padding: 0 var(--gutter-md);
 
     /* button */
     & .bp3-button {
@@ -302,11 +302,12 @@ tabs
     /* active tab */
     &[aria-selected=true] {
       /* background-color: var(--light-1) !important; */
-      background-color: rgba(115, 134, 148, 0.3) !important;
+      background-color: var(--dark-1) !important;
       color: var(--light-1);
-      border-color: var(--light-2);
-      border-bottom-color: var(--light-1);
+      border-color: var(--dark-1);
+      border-bottom-color: var(--dark-1);
       z-index: 1;
+      margin-right: 0 !important;
 
       & button {
         outline: none;
