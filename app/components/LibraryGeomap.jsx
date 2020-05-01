@@ -7,6 +7,7 @@ class LibraryGeomap extends Component {
   render() {
     const {classname, data, topojson, width, height, tooltipImgSource} = this.props;
     const {changeGeomapFilter} = this.props;
+    const colorScaleColors = ['#FDE9CA', '#FCDBA4', '#F5C85D', '#EBCA27', '#D5DB04', '#8AC400', '#42A700', '#0E8700'];
     return (
       <div className={`geomap ${classname}`}>
         {classname === 'region' && (
@@ -18,6 +19,11 @@ class LibraryGeomap extends Component {
               width: width,
               legend: false,
               total: false,
+              colorScale: 'Count',
+              colorScaleConfig: {
+                color: colorScaleColors,
+                scale: "jenks"
+              },
               tooltipConfig: {
                 title: (d) => {
                   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
@@ -44,7 +50,7 @@ class LibraryGeomap extends Component {
               },
               shapeConfig: {
                 Path: {
-                  opacity: 1,
+                  opacity: d => d.country_id ? 1 : 0.15,
                   stroke: "#63737f",
                   strokeWidth: 1
                 }
@@ -52,7 +58,9 @@ class LibraryGeomap extends Component {
               projection: 'geoMercator',
               ocean: 'transparent',
               topojson: topojson,
-              topojsonFill: d => d.Region && "#ffffff",
+              topojsonId: d => d.properties.id,
+              topojsonKey: "objects",
+              topojsonFill: d => !d.country_id && "#ffffff",
               zoom: false
             }}
           />
@@ -67,7 +75,7 @@ class LibraryGeomap extends Component {
               total: false,
               colorScale: 'Count',
               colorScaleConfig: {
-                color: ['#ffffcc', '#c2e699', '#78c679', '#238443'],
+                color: colorScaleColors,
                 scale: "jenks"
               },
               tooltipConfig: {
