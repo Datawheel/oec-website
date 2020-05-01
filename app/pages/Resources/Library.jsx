@@ -361,7 +361,6 @@ class Library extends Component {
 			filterSubtopics
 		} = this.state;
 		const filteredData = this.filterData();
-		console.log(geomap);
 
 		return (
 			<div className="library">
