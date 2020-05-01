@@ -5,11 +5,12 @@ import {Geomap} from 'd3plus-react';
 class LibraryGeomap extends Component {
   state = {}
   render() {
-    const {classname, data, topojson, projection, width, height, tooltipImgSource} = this.props;
+    const {classname, data, topojson, width, height, tooltipImgSource} = this.props;
     const {changeGeomapFilter} = this.props;
     return (
       <div className={`geomap ${classname}`}>
-        {classname === 'continent' && (
+        {classname === 'region' && (
+          console.log("data", data),
           <Geomap
             config={{
               data: data,
@@ -22,13 +23,13 @@ class LibraryGeomap extends Component {
                 title: (d) => {
                   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
                   tooltip += `<div class="icon" style="background-color: transparent"><img src=${tooltipImgSource ? tooltipImgSource : '/images/icons/country/country_ne.png'} /></div>`;
-                  tooltip += `<div class="title"><span>${d.country}</span></div>`;
+                  tooltip += `<div class="title"><span>${d.Region}</span></div>`;
                   tooltip += "</div>";
                   return tooltip;
                 },
                 tbody: [
-                  ["Papers", d => d.count],
-                  ["Topics", d => d.topics]
+                  ["Papers", d => d.Count],
+                  ["Topics", d => d.Topics]
                 ],
                 footer: 'Click to filter table',
                 width: "200px"
@@ -36,7 +37,7 @@ class LibraryGeomap extends Component {
               on: {
                 'click.shape': (d) => {
                   if (!d.type) {
-                    changeGeomapFilter(d.country);
+                    changeGeomapFilter(d.Region);
                   } else {
                     changeGeomapFilter(" ");
                   }
@@ -52,8 +53,7 @@ class LibraryGeomap extends Component {
               projection: 'geoMercator',
               ocean: 'transparent',
               topojson: topojson,
-              topojsonId: d => d.id,
-              topojsonFill: d => d.country && "#ffffff",
+              topojsonFill: d => d.Region && "#ffffff",
               zoom: false
             }}
           />
@@ -66,7 +66,7 @@ class LibraryGeomap extends Component {
               height: height,
               legend: false,
               total: false,
-              colorScale: 'count',
+              colorScale: 'Count',
               colorScaleConfig: {
                 color: ['#ffffcc', '#c2e699', '#78c679', '#238443'],
                 scale: "jenks"
@@ -75,13 +75,13 @@ class LibraryGeomap extends Component {
                 title: (d) => {
                   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
                   tooltip += `<div class="icon" style="background-color: transparent"><img src="/images/icons/country/country_${d.country_id}.png" /></div>`;
-                  tooltip += `<div class="title"><span>${d.country}</span></div>`;
+                  tooltip += `<div class="title"><span>${d.Country}</span></div>`;
                   tooltip += "</div>";
                   return tooltip;
                 },
                 tbody: [
-                  ["Papers", d => d.count],
-                  ["Topics", d => d.topics]
+                  ["Papers", d => d.Count],
+                  ["Topics", d => d.Topics]
                 ],
                 footer: 'Click to filter table',
                 width: "200px"
@@ -89,7 +89,7 @@ class LibraryGeomap extends Component {
               on: {
                 'click.shape': (d) => {
                   if (!d.type) {
-                    changeGeomapFilter(d.country);
+                    changeGeomapFilter(d.Country);
                   } else {
                     changeGeomapFilter(" ");
                   }
