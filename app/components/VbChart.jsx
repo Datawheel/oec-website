@@ -125,10 +125,10 @@ class VbChart extends React.Component {
       5: "Time",
       6: "Time"
     };
+
     const timeLength = timeTemp.toString().length;
     const timeLevel = timeOptions[timeLength] || "Year";
     const geoId = !["show", "all"].includes(country) ? country.replace(".", ",") : undefined;
-    const timeSeriesChart = ["line", "stacked"].includes(chart);
     if (!geoId) drilldowns.push(subnatGeoDepth || geoLevels[geoLevels.length - 1]);
     else if (geoId && viztype === "show") drilldowns.push(["line"].includes(chart) ? productLevels[0] : depth);
     else if (geoId && viztype === "all" || geoId && isFilter) drilldowns.push("Country");
@@ -146,9 +146,11 @@ class VbChart extends React.Component {
 
     let timeFilter = time.replace(".", ",");
     if (isTimeSeries) {
+      // console.log("hi", timeItems);
       const interval = time.split(".");
       const j = timeItems.findIndex(d => d.value === interval[0]);
       const i = timeItems.findIndex(d => d.value === interval[1]);
+      console.log(i, j, interval);
       timeFilter = timeItems.slice(i, j + 1).map(d => d.value).join();
     }
     params.Time = timeFilter;
@@ -172,7 +174,7 @@ class VbChart extends React.Component {
       const year = time * 1;
       params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }
-
+    console.log(params);
     return axios
       .get(OLAP_API, {params})
       .then(resp => {
