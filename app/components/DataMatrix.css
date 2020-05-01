@@ -1,9 +1,14 @@
 @import "helpers/mixins.css";
 
+.data-matrix-title {
+  margin-top: var(--gutter-lg);
+  text-align: center;
+}
+
 .data-matrix {
   & .data-matrix-group-title {
     margin-top: var(--gutter-lg);
-    text-align: center;
+    text-align: left;
   }
   & .data-matrix-table {
     border: 1px solid var(--dark-2);
