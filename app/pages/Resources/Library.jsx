@@ -23,7 +23,8 @@ class Library extends Component {
 			filterCountry: ' ',
 			filterSubtopics: []
 		};
-		this.changeGeomapFilter = this.changeGeomapFilter.bind(this);
+		this.changeGeomapFilterRegion = this.changeGeomapFilterRegion.bind(this);
+		this.changeGeomapFilterCountry = this.changeGeomapFilterCountry.bind(this);
 	}
 
 	componentDidMount() {
@@ -321,11 +322,27 @@ class Library extends Component {
 		this.setState({[key]: d});
 	};
 
-	changeGeomapFilter(d) {
-		document.getElementById('select').value = d;
+	changeGeomapFilterRegion(d, key) {
+		document.getElementById('select-region').value = d;
 		this.setState({
 			filterRegion: d
 		});
+	}
+
+	changeGeomapFilterCountry(d, key) {
+		if (key === "default") {
+			document.getElementById('select-country').value = d;
+			document.getElementById('select-region').value = d;
+			this.setState({
+				filterRegion: d,
+				filterCountry: d
+			});
+		} else {
+			document.getElementById('select-country').value = d;
+			this.setState({
+				filterCountry: d
+			});
+		}
 	}
 
 	render() {
@@ -340,8 +357,6 @@ class Library extends Component {
 			filterSubtopics
 		} = this.state;
 		const filteredData = this.filterData();
-
-		console.log(geomapRegions, geomapCountries);
 
 		return (
 			<div className="library">
@@ -362,7 +377,7 @@ class Library extends Component {
 								topojson={'/topojson/continent_wld.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/continent_wld.svg'}
 							/>
 							<LibraryGeomap
@@ -371,7 +386,7 @@ class Library extends Component {
 								topojson={'/topojson/country_eu.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_eu.png'}
 							/>
 							<LibraryGeomap
@@ -380,7 +395,7 @@ class Library extends Component {
 								topojson={'/topojson/country_na.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_na.png'}
 							/>
 							<LibraryGeomap
@@ -389,7 +404,7 @@ class Library extends Component {
 								topojson={'/topojson/country_sa.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_sa.png'}
 							/>
 						</div>
@@ -399,7 +414,7 @@ class Library extends Component {
 								data={geomapCountries}
 								topojson={'/topojson/world-50m.json'}
 								height={500}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterCountry}
 								tooltipImgSource={'/images/icons/country/country_${d.country_id}.png'}
 							/>
 						</div>
@@ -410,7 +425,7 @@ class Library extends Component {
 								topojson={'/topojson/country_af.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_af.png'}
 							/>
 							<LibraryGeomap
@@ -419,7 +434,7 @@ class Library extends Component {
 								topojson={'/topojson/country_as.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_as.png'}
 							/>
 							<LibraryGeomap
@@ -428,7 +443,7 @@ class Library extends Component {
 								topojson={'/topojson/country_oc.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_oc.png'}
 							/>
 							<LibraryGeomap
@@ -437,7 +452,7 @@ class Library extends Component {
 								topojson={'/topojson/continent_mena.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/continent_mena.svg'}
 							/>
 						</div>
@@ -449,7 +464,7 @@ class Library extends Component {
 						<div className="region">
 							<h3>Region</h3>
 							<HTMLSelect
-								id={'select'}
+								id={'select-region'}
 								options={uniqueRegion}
 								onChange={(event) =>
 									this.handleValueChange(
@@ -461,7 +476,7 @@ class Library extends Component {
 						<div className="country">
 							<h3>Country</h3>
 							<HTMLSelect
-								id={'select'}
+								id={'select-country'}
 								options={uniqueCountries}
 								onChange={(event) =>
 									this.handleValueChange(

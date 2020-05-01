@@ -10,7 +10,6 @@ class LibraryGeomap extends Component {
     return (
       <div className={`geomap ${classname}`}>
         {classname === 'region' && (
-          console.log("data", data),
           <Geomap
             config={{
               data: data,
@@ -37,9 +36,9 @@ class LibraryGeomap extends Component {
               on: {
                 'click.shape': (d) => {
                   if (!d.type) {
-                    changeGeomapFilter(d.Region);
+                    changeGeomapFilter(d.Region, "region");
                   } else {
-                    changeGeomapFilter(" ");
+                    changeGeomapFilter(" ", "default");
                   }
                 }
               },
@@ -89,9 +88,9 @@ class LibraryGeomap extends Component {
               on: {
                 'click.shape': (d) => {
                   if (!d.type) {
-                    changeGeomapFilter(d.Country);
+                    changeGeomapFilter(d.Country, "country");
                   } else {
-                    changeGeomapFilter(" ");
+                    changeGeomapFilter(" ", "default");
                   }
                 }
               },
