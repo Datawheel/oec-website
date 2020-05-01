@@ -15,8 +15,7 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
 
   const [showAll, setShowAll] = useState(false);
 
-  /** @type {[string[], React.Dispatch<React.SetStateAction<string[]>>]} */
-  const [stack, setStack] = useState([]);
+  const [stack, setStack] = useState([""].slice(1));
   const stackIndex = stack.length;
 
   const pushCategory = parent => {
@@ -64,10 +63,10 @@ const SMHNaviList = ({activeItem, items, levels, renderItem}) => {
             key={`${index}-${level}`}
             onClick={() => {
               showAll && setShowAll(false);
-              const nextStack = [];
+              const nextStack = [""].slice(1);
               let n = index;
               while (n--) {
-                nextStack[n] = stack[n] || null;
+                nextStack[n] = stack[n] || "";
               }
               setStack(nextStack);
             }}

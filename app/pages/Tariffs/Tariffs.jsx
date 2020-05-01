@@ -1,302 +1,260 @@
-import React from "react";
-import {hot} from "react-hot-loader/root";
-import PropTypes from "prop-types";
-import axios from "axios";
-import {connect} from "react-redux";
-import {withNamespaces} from "react-i18next";
-import queryString from "query-string";
-
-import OECNavbar from "components/OECNavbar";
+import {Button} from "@blueprintjs/core";
+import {Client, TesseractDataSource} from "@datawheel/olap-client";
 import Footer from "components/Footer";
-import SearchMultiSelect from "components/SearchMultiSelect";
-import SelectMultiHierarchy from "components/SelectMultiHierarchy";
-import TariffTable from "pages/Tariffs/TariffTable";
-import {TARIFF_DATASETS} from "helpers/consts";
-import {Alignment, AnchorButton, Button, ButtonGroup, Navbar} from "@blueprintjs/core";
+import OECNavbar from "components/OECNavbar";
+import {extendItems} from "components/SelectMultiHierarchy";
+import queryString from "query-string";
+import React from "react";
+import {withNamespaces} from "react-i18next";
+import {countryConsts, productConsts, productLevels, vizTypes} from "./constants";
+import {calculateMapMode, combos} from "./mapcase";
+import {requestPartnerList, requestProductList, requestReporterList, requestTariffDataset} from "./requests";
+import TariffControls from "./TariffControls";
+import TariffGeomap from "./TariffGeomap";
+import TariffTable from "./TariffTable";
+import TariffViz from "./TariffViz";
+import {capitalize, findInDataTree, getMembers, parseSearchParams} from "./toolbox";
+
 import "./Tariffs.css";
 
-class Tariffs extends React.Component {
-
+/** @extends {React.PureComponent<import("react-i18next").WithNamespaces & import("react-router").RouteComponentProps, TariffState>} */
+class Tariffs extends React.PureComponent {
   constructor(props) {
-    super();
-    const parsedQueryString = queryString.parse(props.router.location.search, {arrayFormat: "comma"});
+    super(props);
+
+    const params = parseSearchParams(decodeURIComponent(props.location.search));
+
+    /** @type {TariffState} */
     this.state = {
-      scrolled: false,
-      dataset: TARIFF_DATASETS[0],
-      drilldownx: parsedQueryString.drilldown && ["country", "hs2", "hs4", "hs6"].indexOf(parsedQueryString.drilldown) > -1
-        ? parsedQueryString.selection_type === "country"
-          ? "Reporter+Country"
-          : parsedQueryString.drilldown
-        : "hs4",
-      drilldown: parsedQueryString.drilldown && ["country", "hs2", "hs4", "hs6"].indexOf(parsedQueryString.drilldown) > -1
-        ? parsedQueryString.drilldown
-        : parsedQueryString.selection_type === "product"
-          ? "Reporter+Country"
-          : "hs4",
-      selectionType: parsedQueryString.selection_type && ["reporter", "product"].indexOf(parsedQueryString.selection_type) > -1
-        ? parsedQueryString.selection_type
-        : "reporter",
-      tariffData: []
+      tariffError: "",
+      isGeomapAvailable: true,
+      isLoadingPartner: true,
+      isLoadingProduct: true,
+      isLoadingReporter: true,
+      isLoadingTariffs: true,
+      partnerCuts: params.partnerCuts ?? [],
+      partnerOptions: [],
+      productCuts: params.productCuts ?? [],
+      productLevel: params.productLevel ?? "Section",
+      productOptions: [],
+      reporterCuts: params.reporterCuts ?? [],
+      reporterOptions: [],
+      tariffDatums: [],
+      tariffMembers: {},
+      vizType: vizTypes.GEOMAP
     };
+
+    this.client = new Client(new TesseractDataSource("/olap-proxy/"));
   }
 
-  // On mount of component asynchronously fetch both countries and products to show
-  // in dropdown selections.
+  /**
+   * The same purpose as this.setState, but returns a promise.
+   * @template {keyof TariffState} K
+   * @param {Record<K, TariffState[K]> | ((state: Readonly<TariffState>) => Record<K, TariffState[K]>)} value
+   */
+  setStatePromise = value => new Promise(resolve => this.setState(value, resolve));
+
+  /**
+   * @param {keyof TariffState} key
+   * @param {TariffState[keyof TariffState] | ((state: TariffState) => TariffState[keyof TariffState])} value
+   */
+  stateUpdateHandler = (key, value) => {
+    if (
+      key === "partnerCuts" ||
+      key === "productCuts" ||
+      key === "productLevel" ||
+      key === "reporterCuts" ||
+      key === "vizType"
+    ) {
+      const finalValue = typeof value === "function" ? value(this.state) : value;
+
+      /** @type {{[K in keyof TariffState]: TariffState[K]}} */
+      const nextState = {[key]: finalValue};
+
+      if (key === "productCuts" && Array.isArray(finalValue) && finalValue.length > 0) {
+        const currentDepth = productLevels.indexOf(this.state.productLevel);
+        const itemDepth = productLevels.indexOf(finalValue[0].type);
+        if (currentDepth < itemDepth) {
+          nextState.productLevel = finalValue[0].type;
+        }
+      }
+
+      this.setState(nextState);
+    }
+  };
+
+  /**
+   * This function is in charge of reacting to the user pressing the browser's
+   * back and forward buttons.
+   * Checks is there's a saved state and applies it.
+   * @param {PopStateEvent} evt
+   */
+  historyPopHandler = evt => evt.state &&
+    this.setState({
+      partnerCuts: evt.state.partnerCuts,
+      productCuts: evt.state.productCuts,
+      productLevel: evt.state.productLevel,
+      reporterCuts: evt.state.reporterCuts,
+      vizType: evt.state.vizType
+    }, this.requestDataHandler);
+
+  /**
+   * Gets the data after all parameters are set.
+   */
+  requestDataHandler = () => this.setStatePromise({
+    tariffError: "",
+    isLoadingTariffs: true,
+    tariffDatums: [],
+    tariffMembers: {}
+  }).then(() => requestTariffDataset(this.client, this.state, this.props.i18n.language))
+    .then(
+      aggregation => {
+        const {productLevel} = this.state;
+
+        const tariffDatums = aggregation.data;
+        const tariffMembers = getMembers(tariffDatums, [
+          "Partner Country ID",
+          "Partner Country",
+          "Reporter Country ID",
+          "Reporter Country",
+          "Year",
+          productLevel
+        ]);
+
+        // disable map viz if there's no configuration set for the combo
+        const mapMode = calculateMapMode(tariffMembers, productLevel);
+        const isGeomapAvailable = combos.hasOwnProperty(mapMode);
+        const vizType = isGeomapAvailable ? this.state.vizType : vizTypes.TABLE;
+
+        if (typeof window === "object") {
+          const {reporterCuts, partnerCuts, productCuts} = this.state;
+          const qsParams = {
+            detail: productLevel,
+            reporters: reporterCuts.map(item => item.id).join(","),
+            partners: partnerCuts.map(item => item.id).join(","),
+            products: productCuts.map(item => item.id).join(","),
+            viz: vizType
+          };
+          const qs = queryString.stringify(qsParams, {skipEmptyString: true});
+          if (window.location.search.indexOf(qs) === -1) {
+            const qsState = {reporterCuts, partnerCuts, productCuts, productLevel, vizType};
+            window.history.pushState(qsState, "", `${window.location.pathname}?${qs}`);
+          }
+        }
+
+        return this.setStatePromise({isGeomapAvailable, isLoadingTariffs: false, tariffDatums, tariffMembers, vizType});
+      },
+      error => {
+        const data = error.response?.data;
+        const tariffError = data ? data.data || data.statusText : error.message;
+        return this.setStatePromise({tariffError, isLoadingTariffs: false});
+      }
+    );
+
   componentDidMount() {
-    const {dataset} = this.state;
+    const client = this.client;
+    const state = this.state;
+    const {language} = this.props.i18n;
 
-    // Parse query string to determine if there are pre-defined selections
-    const parsedQueryString = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
-
-    // API requests for dropdown content (ie Countries + Products)
-    const selectionApiUrls = dataset.selections.map(d => axios.get(d.dataUrl));
-    let drillDownFound = false;
-    axios.all(selectionApiUrls)
-      .then(axios.spread((...responses) => {
-
-        // populate dropdowns
-        responses.forEach((resp, i) => {
-          const {data} = resp.data;
-          const selectionId = dataset.selections[i].id;
-          drillDownFound = parsedQueryString.drilldown === selectionId || drillDownFound;
-          const thisSelectionQParams = parsedQueryString[selectionId];
-          dataset.selections[i].data = data
-            .map(dataset.selections[i].dataMap)
-            .sort((a, b) => a.name.localeCompare(b.name));
-          dataset.selections[i].data.forEach(d => {
-            if (thisSelectionQParams && thisSelectionQParams.includes(`${d.id}`)) {
-              if (selectionId === "products") {
-                const enrichedProduct = {...d,
-                  icon: `/images/icons/hs/hs_${d["Section ID"]}.svg`,
-                  type: ["HS6", "HS4", "HS2", "Section"].find(dd => dd in d),
-                  searchIndex: `${d.id}|${d.name}`
-                };
-                dataset.selections[i].selected.push(enrichedProduct);
-              }
-              else {
-                dataset.selections[i].selected.push(d);
-              }
-              console.log("selectionId!", selectionId, dataset.selections[i].selected);
-            }
-          });
+    const makeInitialRequest = (key, requestFn, {levels, getColor, getIcon}) => {
+      const onResolve = agg => {
+        const dataTree = extendItems(agg.data, levels, {getColor, getIcon});
+        const updatedCuts = findInDataTree(state[`${key}Cuts`], dataTree);
+        // @ts-ignore
+        this.setStatePromise({
+          [`isLoading${capitalize(key)}`]: false,
+          [`${key}Options`]: agg.data,
+          [`${key}Cuts`]: updatedCuts
         });
-        dataset.selectionsLoaded = true;
+        return updatedCuts;
+      };
+      const onReject = () => requestFn(client, language).then(onResolve, onReject);
+      return requestFn(client, language).then(onResolve, onReject);
+    };
 
-        const currentDrilldown = drillDownFound ? parsedQueryString.drilldown : null;
-        this.setState({dataset, currentDrilldown}, this.buildPrediction);
-      }));
-  }
-
-  updateSelection = selectionId => newItems => {
-    // selectionId is the argument you passed to the function
-    // newItems is the array returned
-    const {dataset} = this.state;
-    let {drilldown} = this.state;
-    const {router} = this.context;
-    const datasetSelections = dataset.selections.map(selection => {
-      if (selection.id === selectionId) {
-        selection.selected = newItems;
-        // if deleting items and new selected array is empty
-        // we need to turn off the drilldown toggle for this selection
-        // and reset the advanced parameters
-        if (selection.selected.length === 0 && selection.id === drilldown) {
-          drilldown = null;
-        }
-      }
-      return selection;
+    Promise.all([
+      makeInitialRequest("partner", requestPartnerList, countryConsts),
+      makeInitialRequest("product", requestProductList, productConsts),
+      makeInitialRequest("reporter", requestReporterList, countryConsts)
+    ]).then(cuts => {
+      cuts.some(cut => cut.length > 0)
+        ? this.requestDataHandler()
+        : this.setState({tariffError: "", isLoadingTariffs: false, tariffDatums: []});
     });
-    dataset.selections = datasetSelections;
-    // set query params for this selection
-    const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
-    queryArgs[selectionId] = newItems.map(d => d.id);
-    const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
-    router.replace(`/en/tariffs/?${stringifiedQueryArgs}`);
-    this.setState({drilldown, dataset});
-  };
 
-  buildPrediction = () => {
-    this.setState({error: false, loading: true});
-    const {dataset, drilldown, selectionType} = this.state;
-    let apiUrls = [];
-    const apiUrlRoot = "/olap-proxy/data.jsonrecords?cube=tariffs_i_wits_a_hs&measures=Ad+Valorem&parents=false&sparse=false";
-    const selections = dataset.selections.filter(selection => selection.selected.length);
-    const productSelection = selections.find(selection => selection.name === "Product");
-    const nonProductSelections = selections.filter(selection => selection.name !== "Product");
-    const nonProductdrilldowns = nonProductSelections.map(selection => selection.dimName);
-    const nonProductCuts = nonProductSelections.map(selection => `${selection.dimName}=${selection.selected.map(d => d.id)}`);
-    if (selectionType === "product") {
-      if (productSelection) {
-        const prodDrilldowns = [...new Set(productSelection.selected.map(d => d.type))];
-        apiUrls = prodDrilldowns.map(productLevelDrill => {
-          const prodIds = productSelection.selected.filter(d => d.type === productLevelDrill).map(d => d.id);
-          return `${apiUrlRoot}&drilldowns=Year,Measure,${nonProductdrilldowns},${drilldown},${productLevelDrill}&${nonProductCuts.join("&")}&${productLevelDrill}=${prodIds}`;
-        });
-      }
-      else {
-        apiUrls = [`${apiUrlRoot}&drilldowns=Year,Measure,${nonProductdrilldowns},${drilldown}&${nonProductCuts.join("&")}`];
-      }
-    }
-    else {
-      apiUrls = [`${apiUrlRoot}&drilldowns=Year,Measure,${nonProductdrilldowns},${drilldown.toUpperCase()}&${nonProductCuts.join("&")}`];
-    }
-    console.log("apiUrls!", apiUrls);
-    // return;
-
-    axios.all(apiUrls.map(url => axios.get(url)))
-      .then(axios.spread((...responses) => {
-        let allResults = [];
-        const errors = [];
-        responses.forEach((resp, i) => {
-          // console.log("resp.data", resp.data);
-          if (resp.data.error) {
-            errors.push(resp.data);
-          }
-          else {
-            allResults = allResults.concat(resp.data.data);
-          }
-        });
-        if (errors.length === apiUrls.length) {
-          this.setState({loading: false, error: true});
-        }
-        else {
-          this.setState({loading: false, error: false, tariffData: allResults || []});
-        }
-      }));
+    window.addEventListener("popstate", this.historyPopHandler);
   }
 
-  setDrilldown = drilldown => e => {
-    const {router} = this.context;
-    this.setState({drilldown});
-
-    // set query params for this selection
-    const queryArgs = queryString.parse(this.props.router.location.search, {arrayFormat: "comma"});
-    queryArgs.drilldown = drilldown;
-    const stringifiedQueryArgs = queryString.stringify(queryArgs, {arrayFormat: "comma"});
-    router.replace(`/en/tariffs/?${stringifiedQueryArgs}`);
-  };
+  componentWillUnmount() {
+    window.removeEventListener("popstate", this.historyPopHandler);
+  }
 
   render() {
-    const {dataset, drilldown, error, loading, scrolled, selectionType, tariffData} = this.state;
+    const {t} = this.props;
+    const state = this.state;
 
-    return <div className="prediction" onScroll={this.handleScroll}>
-      <OECNavbar
-        className={scrolled ? "background" : ""}
-        title={scrolled ? "Predictions" : ""}
-      />
+    const mapMode = calculateMapMode(state.tariffMembers, state.productLevel);
+    const Visualization = state.isGeomapAvailable && state.vizType === vizTypes.GEOMAP
+      ? TariffGeomap : TariffTable;
 
-      <div className="welcome">
-        {/* spinning orb thing */}
+    return (
+      <div className="tariff-page">
+        <OECNavbar />
+
         <div className="welcome-bg">
-          <img className="welcome-bg-img" src="/images/stars.png" alt="" draggable="false" />
+          <img
+            className="welcome-bg-img"
+            src="/images/home/stars.png"
+            alt="[Stars background]"
+          />
         </div>
 
-        {/* entity selection form */}
-        <div className="prediction-container-outer">
-          <Navbar>
-            <Navbar.Group align={Alignment.LEFT}>
-              <Navbar.Heading>
-                <h1>Tariffs Explorer</h1>
-              </Navbar.Heading>
-              <Navbar.Divider />
-              <AnchorButton
-                href={"?selection_type=reporter"}
-                key="by-country"
-                active={selectionType === "reporter"}
-                className="bp3-minimal"
-                text={"by Country"} />
-              <AnchorButton
-                href={"?selection_type=product"}
-                key="by-product"
-                active={selectionType === "product"}
-                className="bp3-minimal"
-                text={"by Product"} />
-            </Navbar.Group>
-          </Navbar>
+        <div className="tariff-content">
+          <h1>{t("tariffsexplorer_maintitle")}</h1>
 
-          {/* prediction selection dropdowns */}
-          <div className="prediction-controls">
-            {dataset.selectionsLoaded
-              ? dataset.selections.slice(0, 2).map(selection =>
-                <SearchMultiSelect
-                  disabled={selectionType === "product"}
-                  key={selection.id}
-                  updateSelection={this.updateSelection(selection.id)}
-                  initialItems={selection.selected}
-                  isDrilldown={null}
-                  itemType={selection.name}
-                  items={selection.data} />)
-              : null}
-            <div className="prediction-control">
-              <h3>Product</h3>
-              {selectionType === "product"
-                ? <SelectMultiHierarchy
-                  items={dataset.selections[2].data}
-                  onItemSelect={item => {
-                    // item: SelectedItem
-                    // make sure they're uniuqe!
-                    const nextItems = dataset.selections[2].selected.concat([item]).filter((thisItem, index, self) =>
-                      index === self.findIndex(t =>
-                        t.id === thisItem.id
-                      )
-                    );
-                    // const nextItems = dataset.selections[2].selected.concat([item]);
-                    console.log("nextItems!!!", nextItems);
-                    this.updateSelection(dataset.selections[2].id)(nextItems);
-                  }}
-                  onItemRemove={(evt, item) => {
-                  // evt: MouseEvent<HTMLButtonElement>
-                  // item: SelectedItem
-                    evt.stopPropagation();
-                    const nextItems = dataset.selections[2].selected.filter(i => i !== item);
-                    this.updateSelection(dataset.selections[2].id)(nextItems);
-                  }}
-                  onClear={() => {
-                    this.updateSelection(dataset.selections[2].id)([]);
-                  }}
-                  selectedItems={dataset.selections[2].selected}
-                />
-                : <ButtonGroup minimal={false}>
-                  <Button onClick={this.setDrilldown("hs2")} icon="more" active={drilldown === "hs2"}>All HS2</Button>
-                  <Button onClick={this.setDrilldown("hs4")} icon="layout-sorted-clusters" active={drilldown === "hs4"}>All HS4</Button>
-                  <Button onClick={this.setDrilldown("hs6")} icon="layout-skew-grid" active={drilldown === "hs6"}>All HS6</Button>
-                </ButtonGroup>}
-            </div>
-            <Button className="build-prediction-btn" rightIcon="arrow-right" text="Build" minimal={true} onClick={this.buildPrediction} />
-          </div>
+          <TariffControls
+            className="tariffs-parameters"
+            disableGeomap={!state.isGeomapAvailable}
+            onChange={this.stateUpdateHandler}
+            partnerCuts={state.partnerCuts}
+            isLoadingPartner={state.isLoadingPartner}
+            partnerOptions={state.partnerOptions}
+            productCuts={state.productCuts}
+            productLevel={state.productLevel}
+            isLoadingProduct={state.isLoadingProduct}
+            productOptions={state.productOptions}
+            reporterCuts={state.reporterCuts}
+            isLoadingReporter={state.isLoadingReporter}
+            reporterOptions={state.reporterOptions}
+            vizType={state.vizType}
+          >
+            <Button
+              className="query-button field-sm"
+              onClick={this.requestDataHandler}
+              rightIcon="double-chevron-right"
+              text={t("tariffsexplorer_action_query")}
+            />
+          </TariffControls>
 
-          {/* tariffs data table */}
-          <div className="tariffs-datatable-container">
-            {tariffData.length
-              ? <TariffTable
-                data={tariffData}
-                error={error}
-                loading={loading}
-                currencyFormat={dataset.currencyFormat}
-              /> : null }
-          </div>
+          <TariffViz
+            className="tariffs-visualization"
+            error={state.tariffError}
+            isLoading={state.isLoadingTariffs}
+            isEmpty={state.tariffDatums.length === 0}
+          >
+            <span>{mapMode}</span>
+            {state.tariffDatums.length > 0 && <Visualization
+              productLevel={state.productLevel}
+              tariffDatums={state.tariffDatums}
+              tariffMembers={state.tariffMembers}
+            />}
+          </TariffViz>
+        </div>
 
-        </div> {/* /end prediction-container-outer */}
-
-      </div> {/* /end welcome */}
-
-      <Footer />
-    </div>;
-
+        <Footer />
+      </div>
+    );
   }
 }
 
-Tariffs.need = [
-];
-
-Tariffs.contextTypes = {
-  formatters: PropTypes.object,
-  router: PropTypes.object
-};
-
-
-export default hot(withNamespaces()(
-  connect(state => ({
-    formatters: state.data.formatters,
-    locale: state.i18n.locale
-  }))(Tariffs)
-));
+export default withNamespaces()(Tariffs);
