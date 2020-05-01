@@ -18,13 +18,13 @@ class Footer extends React.Component {
   /** for the cases when we want 2 links side by side */
   renderHorizontalLinks(title, items) {
     return <span className="footer-link">
-      {title}
-      <br />
+      <Link key={`${title}-${items[0].title}`} to={items[0].url} className="footer-hlink" onFocus={() => this.setState({isOpen: true})}>{title}</Link>
+      {/* <br />
       <span className="footer-hlinks">
         {items.map((item, i) =>
           <Link key={`${title}-${item.title}`} to={item.url} className="footer-hlink" onFocus={() => this.setState({isOpen: true})}>{item.title}</Link>
         )}
-      </span>
+      </span> */}
     </span>;
   }
 
@@ -56,6 +56,7 @@ class Footer extends React.Component {
             : <li key={i}>{this.renderLink(group)}</li>;
         })}
         <div className="footer-contact">
+          <span>Created, Designed, and Developed by:</span>
           <ul key="logos" className="footer-sponsor-list">
             <li className="footer-sponsor-item">
               <a href="https://www.datawheel.us/" className="footer-sponsor-link" target="_blank" rel="noopener noreferrer">
@@ -68,6 +69,7 @@ class Footer extends React.Component {
               </a>
             </li>
           </ul>
+          <span>With the support of:</span>
           <ul key="logos" className="footer-sponsor-list">
             <li className="footer-sponsor-item">
               <a href="https://connectamericas.com" className="footer-sponsor-link" target="_blank" rel="noopener noreferrer">
