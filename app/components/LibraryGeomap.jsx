@@ -9,7 +9,6 @@ class LibraryGeomap extends Component {
     const {changeGeomapFilter} = this.props;
     const colorScaleColors = ["#FDE9CA", "#FCDBA4", "#F5C85D", "#EBCA27", "#D5DB04", "#8AC400", "#42A700", "#0E8700"];
 
-    console.log(width, height, colorScaleColors);
     return (
       <div className={`geomap ${classname}`} style={{height, width}}>
         {classname === "region" &&
@@ -47,7 +46,8 @@ class LibraryGeomap extends Component {
                 },
                 tbody: [
                   ["Papers", d => d.Count],
-                  ["Topics", d => d.Topics]
+                  ["Topics", d => d.Topics instanceof Array
+                    ? d.Topics.map(d => `${d}<br/>`).join("") : d.Topics]
                 ],
                 footer: "Click to filter table",
                 width: "200px"
@@ -102,7 +102,8 @@ class LibraryGeomap extends Component {
                 },
                 tbody: [
                   ["Papers", d => d.Count],
-                  ["Topics", d => d.Topics]
+                  ["Topics", d => d.Topics instanceof Array
+                    ? d.Topics.map(d => `${d}<br/>`).join("") : d.Topics]
                 ],
                 footer: "Click to filter table",
                 width: "200px"
