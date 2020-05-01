@@ -79,14 +79,15 @@
             transform: scale(1.25);
           }
         }
-        & .footer-hlinks {
-          & .footer-hlink {
-            color: var(--light-3);
-            padding-top: 0.625em;
-            padding-bottom: 0.625em;
+        & .footer-hlink {
+          color: var(--light-3) !important;
+          font-weight: 200;
+          /*
+          padding-top: 0.625em;
+          padding-bottom: 0.625em;
+          */
 
-            margin: 0 8px 0 0;
-          }
+          margin: 0 8px 0 0;
         }
       }
     }
@@ -96,6 +97,7 @@
     & .footer-contact {
       flex: 2;
       text-align: right;
+      font-size: 12px;
     }
 
     @mixin max-md {

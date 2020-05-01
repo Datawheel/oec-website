@@ -15,44 +15,97 @@ class Library extends Component {
 			columns: null,
 			dict: null,
 			uniqueRegion: null,
+			uniqueCountries: null,
 			uniqueSubtopics: null,
+			geomapRegions: null,
 			geomapCountries: null,
-			geomapContinents: null,
 			filterRegion: ' ',
+			filterCountry: ' ',
 			filterSubtopics: []
 		};
-		this.changeGeomapFilter = this.changeGeomapFilter.bind(this);
+		this.changeGeomapFilterRegion = this.changeGeomapFilterRegion.bind(this);
+		this.changeGeomapFilterCountry = this.changeGeomapFilterCountry.bind(this);
+	}
+
+	componentDidMount() {
+		this.fetchData();
+		this.createColumns();
 	}
 
 	fetchData = () => {
 		const dataApi = '/api/library';
 		const dictApi =
-			'/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=false&sparse=false';
+			'/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country&measures=Trade+Value&parents=true&sparse=false';
 		axios.all([axios.get(dataApi), axios.get(dictApi)]).then(
 			axios.spread((resp1, resp2) => {
 				const data = resp1.data.data.filter((f) => f.Region !== null);
 
-				const dictarray = resp2.data.data;
+				const dictArray = resp2.data.data;
 				const dict = {};
-				dictarray.map((d) => {
+				dictArray.map((d) => {
 					const object = {};
-					object['Country ID'] = d['Country ID'].slice(2, 5);
-					object['Continent'] = d['Continent'];
 					object['Continent ID'] = d['Continent ID'];
+					object['Continent'] = d['Continent'];
+					object['Country ID'] = d['Country ID'].slice(2, 5);
+					object['Country'] = d['Country'];
 					dict[d['Country']] = object;
 				});
 
+				// Reassign regions to countries and continents
+				const dictList = Object.keys(dict);
+				data.map(d => {
+					if (dictList.includes(d["Region"])) {
+						d["Country"] = dict[d["Region"]]["Country"];
+						d["Region"] = dict[d["Region"]]["Continent"];
+					} else {
+						if (d["Region"].split(',').length === 1) {
+							d["Country"] = "-";
+							d["Region"] = d["Region"];
+						} else {
+							const region = [];
+							d["Region"].replace(/ /g, '').split(',').map((f) => {
+								if (!region.includes(dict[f]["Continent"])) {
+									region.push(dict[f]["Continent"]);
+								}
+							});
+							d["Country"] = d["Region"];
+							d["Region"] = this.formatRegions(region);
+						}
+					}
+				});
+
 				const geomapData = this.getGeomapData(data, dict);
+
 				this.setState({
 					data,
 					dict,
-					geomapCountries: geomapData[0],
-					geomapContinents: geomapData[1],
+					geomapRegions: geomapData[0],
+					geomapCountries: geomapData[1],
 					uniqueRegion: geomapData[2],
-					uniqueSubtopics: geomapData[3]
+					uniqueCountries: geomapData[3],
+					uniqueSubtopics: geomapData[4]
 				});
 			})
 		);
+	};
+
+	formatRegions = (array) => {
+		return array.reduce((str, item, i) => {
+			if (!i) str += item;
+			else str += `, ${item}`;
+			return str;
+		}, "");
+	}
+
+	getUnique = (d, key) => {
+		if (d) {
+			const array = [...new Set(d.map((f) => f[`${key}`]))];
+			array.push(' ');
+			const sorted = array.sort((a, b) => a.localeCompare(b));
+			return sorted;
+		} else {
+			return null;
+		}
 	};
 
 	getUniqueRegions = (d) => {
@@ -86,70 +139,83 @@ class Library extends Component {
 		}
 	};
 
+	// Creates row for every [key] value of data
+	cleanData = (d, key) => {
+		let dreturn = [];
+		d.map(m => {
+			if (m[key].replace(/ /g, '').split(',').length === 1) {
+				const row = {};
+				row[key] = m[key];
+				row['Subtopic1'] = m.Subtopic1;
+				row['Subtopic2'] = m.Subtopic2;
+				row['Subtopic3'] = m.Subtopic3;
+				dreturn = dreturn.concat(row);
+			} else {
+				m[key].replace(/ /g, '').split(',').map(f => {
+					const row = {};
+					row[key] = f;
+					row['Subtopic1'] = m.Subtopic1;
+					row['Subtopic2'] = m.Subtopic2;
+					row['Subtopic3'] = m.Subtopic3;
+					dreturn = dreturn.concat(row);
+				})
+			}
+		});
+		return dreturn;
+	};
+
+	numberOfPapers = (d, key) => {
+		return d.reduce((acc, it) => {
+			acc[it[key]] = acc[it[key]] + 1 || 1;
+			return acc;
+		}, {});
+	};
+
+	groupData = (d, indexes, key, dict) => {
+		let dreturn = [];
+		const filters = indexes.filter(fil => fil != " ");
+		for (const index in filters) {
+			const data = d.filter(f => f[key] === filters[index]);
+			const subtopics1 = [...new Set(data.map((m) => m.Subtopic1))].filter((f) => f !== null);
+			const subtopics2 = [...new Set(data.map((m) => m.Subtopic2))].filter((f) => f !== null);
+			const subtopics3 = [...new Set(data.map((m) => m.Subtopic3))].filter((f) => f !== null);
+			const subtopics_array = subtopics1.concat(subtopics2).concat(subtopics3);
+			const subtopics = [...new Set(subtopics_array)].sort((a, b) => a.localeCompare(b));
+			const row = {}
+			row[key] = filters[index];
+			row["Count"] = data.length;
+			row["Topics"] = subtopics;
+			if (key === "Country") {
+				row["country_id"] = dict[filters[index]]["Country ID"];
+			}
+			dreturn = dreturn.concat(row);
+		}
+		return dreturn;
+	};
+
 	getGeomapData = (d, dict) => {
 		if (d) {
-			let cleanData = [];
-			d.map((m) => {
-				if (m.Region.split(',').length === 1) {
-					cleanData = cleanData.concat(m);
-				} else {
-					m.Region.split(',').map((f) => {
-						const row = {};
-						row['Region'] = f.replace(/ /g, '');
-						row['Year'] = m.Year;
-						row['Reference'] = m.Reference;
-						row['Link'] = m.Link;
-						row['Subtopic1'] = m.Subtopic1;
-						row['Subtopic2'] = m.Subtopic2;
-						row['Subtopic3'] = m.Subtopic3;
-						cleanData = cleanData.concat(row);
-					});
-				}
-			});
-			const uniqueRegion = this.getUniqueRegions(cleanData);
-			const uniqueSubtopics = this.getUniqueSubtopics(cleanData);
-			const countryPapers = cleanData.filter((f) => f.Region in dict);
-			const papersByCountry = countryPapers.reduce((acc, it) => {
-				acc[it.Region] = acc[it.Region] + 1 || 1;
-				return acc;
-			}, {});
-			const papersValue = Object.values(papersByCountry);
-			const maxPapers = Math.max(...papersValue);
-			const filters = uniqueRegion.slice(0);
-			filters.shift();
-			let countries = [];
-			let continents = [];
-			for (const index in filters) {
-				const value = cleanData.filter((f) => f.Region === filters[index]);
-				const subtopics1 = [...new Set(value.map((m) => m.Subtopic1))].filter((f) => f !== null);
-				const subtopics2 = [...new Set(value.map((m) => m.Subtopic2))].filter((f) => f !== null);
-				const subtopics3 = [...new Set(value.map((m) => m.Subtopic3))].filter((f) => f !== null);
-				const subtopics_array = subtopics1.concat(subtopics2).concat(subtopics3);
-				const subtopics = [...new Set(subtopics_array)].sort((a, b) => a.localeCompare(b));
-				const _gap = value.length / maxPapers;
-				let row = {};
-				if (dict[filters[index]]) {
-					row = {
-						country: filters[index],
-						country_id: dict[filters[index]] ? dict[filters[index]]['Country ID'] : filters[index],
-						continent: dict[filters[index]] ? dict[filters[index]]['Continent'] : filters[index],
-						continent_id: dict[filters[index]] ? dict[filters[index]]['Continent ID'] : filters[index],
-						count: value.length,
-						gap: _gap < 0.25 ? 1 : _gap < 0.5 ? 2 : _gap < 0.75 ? 3 : 4,
-						topics: subtopics
-					};
-					countries = countries.concat(row);
-				} else {
-					row = {
-						country: filters[index],
-						// country_id: filters[index],
-						count: value.length,
-						topics: subtopics
-					};
-					continents = continents.concat(row);
-				}
-			}
-			return [countries, continents, uniqueRegion, uniqueSubtopics];
+			// Get clean data by every row
+			const cleanDatabyRegion = this.cleanData(d, "Region");
+			const cleanDatabyCountry = this.cleanData(d, "Country");
+
+			// Get unique value per index
+			const uniqueRegions = this.getUnique(cleanDatabyRegion, "Region");
+			const uniqueCountries = this.getUnique(cleanDatabyCountry, "Country").filter(f => f != "-");
+			const uniqueSubtopics = this.getUniqueSubtopics(d);
+
+			// Calculate the amount of papers by region
+			const papersByRegion = this.numberOfPapers(cleanDatabyRegion, "Region");
+			const papersByCountry = this.numberOfPapers(cleanDatabyCountry, "Country");
+
+			// Get country with more papers
+			const countryPapersValue = Object.values(papersByCountry);
+			const maxPapers = Math.max(...countryPapersValue);
+
+			const regions = this.groupData(cleanDatabyRegion, uniqueRegions, "Region", dict);
+			const countries = this.groupData(cleanDatabyCountry, uniqueCountries, "Country", dict);
+
+			return [regions, countries, uniqueRegions, uniqueCountries, uniqueSubtopics];
 		} else {
 			return null;
 		}
@@ -163,6 +229,16 @@ class Library extends Component {
 				Cell: (props) => (
 					<div className="reference">
 						<span className="name">{props.original.Region}</span>
+					</div>
+				),
+				minWidth: 80
+			},
+			{
+				Header: 'Country',
+				accessor: 'Country',
+				Cell: (props) => (
+					<div className="reference">
+						<span className="name">{props.original.Country}</span>
 					</div>
 				),
 				minWidth: 80
@@ -200,36 +276,41 @@ class Library extends Component {
 		this.setState({columns});
 	};
 
-	componentDidMount() {
-		this.fetchData();
-		this.createColumns();
-	}
+	filterDatabyGeo = (data, filter, key) => {
+		return data.filter((f) => {
+			if (f[key].split(',').length === 1) {
+				return f[key] === filter;
+			} else {
+				return f[key].replace(/ /g, '').split(',').includes(filter);
+			}
+		});
+	};
 
 	filterData = () => {
-		const {data, filterRegion, filterSubtopics} = this.state;
+		const {data, filterRegion, filterCountry, filterSubtopics} = this.state;
 
-		const _filteredRegion =
-			filterRegion !== ' '
-				? data.filter((f) => {
-					if (f.Region.split(',').length === 1) {
-						return f.Region === filterRegion;
-					} else {
-						return f.Region.replace(/ /g, '').split(',').includes(filterRegion);
-					}
-				})
-				: data;
+		let _filteredDatabyGeo = null;
+		if (filterRegion !== ' ' && filterCountry !== ' ') {
+			_filteredDatabyGeo = this.filterDatabyGeo(this.filterDatabyGeo(data, filterRegion, "Region"), filterCountry, "Country");
+		} else if (filterRegion !== ' ' && filterCountry === ' ') {
+			_filteredDatabyGeo = this.filterDatabyGeo(data, filterRegion, "Region");
+		} else if (filterRegion === ' ' && filterCountry !== ' ') {
+			_filteredDatabyGeo = this.filterDatabyGeo(data, filterCountry, "Country");
+		} else {
+			_filteredDatabyGeo = data;
+		};
 
 		if (filterSubtopics.length > 0) {
 			const _filteredData = [];
 			filterSubtopics.map((d) => {
-				const _filteredBySubtopic = _filteredRegion.filter(
+				const _filteredBySubtopic = _filteredDatabyGeo.filter(
 					(f) => f.Subtopic1 === d.value || f.Subtopic2 === d.value || f.Subtopic3 === d.value
 				);
 				_filteredData.push(_filteredBySubtopic);
 			});
 			return _filteredData.flat();
 		} else {
-			return _filteredRegion;
+			return _filteredDatabyGeo;
 		}
 	};
 
@@ -241,11 +322,27 @@ class Library extends Component {
 		this.setState({[key]: d});
 	};
 
-	changeGeomapFilter(d) {
-		document.getElementById('select').value = d;
+	changeGeomapFilterRegion(d, key) {
+		document.getElementById('select-region').value = d;
 		this.setState({
 			filterRegion: d
 		});
+	}
+
+	changeGeomapFilterCountry(d, key) {
+		if (key === "default") {
+			document.getElementById('select-country').value = d;
+			document.getElementById('select-region').value = d;
+			this.setState({
+				filterRegion: d,
+				filterCountry: d
+			});
+		} else {
+			document.getElementById('select-country').value = d;
+			this.setState({
+				filterCountry: d
+			});
+		}
 	}
 
 	render() {
@@ -253,14 +350,13 @@ class Library extends Component {
 			data,
 			columns,
 			uniqueRegion,
+			uniqueCountries,
 			uniqueSubtopics,
+			geomapRegions,
 			geomapCountries,
-			geomapContinents,
 			filterSubtopics
 		} = this.state;
 		const filteredData = this.filterData();
-		console.log(geomapCountries);
-		console.log(geomapContinents);
 
 		return (
 			<div className="library">
@@ -274,33 +370,41 @@ class Library extends Component {
 
 				{data && (
 					<div className="geomaps">
-						<div className="continents">
+						<div className="regions left">
 							<LibraryGeomap
-								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'Africa')}
-								topojson={'/topojson/country_af.json'}
-								// projection={'geoMiller'}
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'Global')}
+								topojson={'/topojson/continent_wld.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
-								tooltipImgSource={'/images/icons/country/country_af.png'}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
+								tooltipImgSource={'/images/icons/country/continent_wld.svg'}
 							/>
 							<LibraryGeomap
-								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'Europe')}
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'Europe')}
 								topojson={'/topojson/country_eu.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_eu.png'}
 							/>
 							<LibraryGeomap
-								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'Latin America')}
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'North America')}
+								topojson={'/topojson/country_na.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
+								tooltipImgSource={'/images/icons/country/country_na.png'}
+							/>
+							<LibraryGeomap
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'South America')}
 								topojson={'/topojson/country_sa.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_sa.png'}
 							/>
 						</div>
@@ -309,36 +413,47 @@ class Library extends Component {
 								classname={'countries'}
 								data={geomapCountries}
 								topojson={'/topojson/world-50m.json'}
-								height={400}
-								changeGeomapFilter={this.changeGeomapFilter}
+								height={500}
+								changeGeomapFilter={this.changeGeomapFilterCountry}
 								tooltipImgSource={'/images/icons/country/country_${d.country_id}.png'}
 							/>
 						</div>
-						<div className="continents">
+						<div className="regions right">
 							<LibraryGeomap
-								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'Global')}
-								topojson={'/topojson/continent_wld.json'}
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'Africa')}
+								topojson={'/topojson/country_af.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
+								tooltipImgSource={'/images/icons/country/country_af.png'}
 							/>
 							<LibraryGeomap
-								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'Asia')}
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'Asia')}
 								topojson={'/topojson/country_as.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
 								tooltipImgSource={'/images/icons/country/country_as.png'}
 							/>
 							<LibraryGeomap
-								classname={'continent'}
-								data={geomapContinents.filter((d) => d.country === 'MENA')}
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'Oceania')}
+								topojson={'/topojson/country_oc.json'}
+								height={100}
+								width={100}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
+								tooltipImgSource={'/images/icons/country/country_oc.png'}
+							/>
+							<LibraryGeomap
+								classname={'region'}
+								data={geomapRegions.filter((d) => d.Region === 'MENA')}
 								topojson={'/topojson/continent_mena.json'}
 								height={100}
 								width={100}
-								changeGeomapFilter={this.changeGeomapFilter}
+								changeGeomapFilter={this.changeGeomapFilterRegion}
+								tooltipImgSource={'/images/icons/country/continent_mena.svg'}
 							/>
 						</div>
 					</div>
@@ -349,11 +464,23 @@ class Library extends Component {
 						<div className="region">
 							<h3>Region</h3>
 							<HTMLSelect
-								id={'select'}
+								id={'select-region'}
 								options={uniqueRegion}
 								onChange={(event) =>
 									this.handleValueChange(
 										'filterRegion',
+										event.currentTarget.selectedOptions[0].value
+									)}
+							/>
+						</div>
+						<div className="country">
+							<h3>Country</h3>
+							<HTMLSelect
+								id={'select-country'}
+								options={uniqueCountries}
+								onChange={(event) =>
+									this.handleValueChange(
+										'filterCountry',
 										event.currentTarget.selectedOptions[0].value
 									)}
 							/>

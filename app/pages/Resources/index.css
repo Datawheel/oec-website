@@ -529,17 +529,15 @@
 
 		& .geomaps {
 			display: flex;
-			flex-direction: row;
-			width: 100%;
 
-			& .continents {
+			& .regions {
 				display: flex;
-				flex: 0 0 10%;
 				flex-direction: column;
+				flex: 0 0 10%;
+				align-items: center;
 				justify-content: center;
-				padding: 0 var(--gutter-lg);
 
-				& .continent {
+				& .region {
 					width: max-content;
 					border: 1px solid var(--dark-1);
 					border-bottom: 0;
@@ -551,12 +549,10 @@
 
 			& .countries {
 				display: flex;
-				flex: 1 1 80%;
-				& .viz {
-					position: relative;
-					height: 500px;
-					width: 500px;
-				}
+				flex-direction: column;
+				flex: 0 0 80%;
+				align-items: center;
+				justify-content: center;
 			}
 		}
 
