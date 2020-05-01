@@ -18,6 +18,12 @@ class LibraryGeomap extends Component {
               height: height,
               width: width,
               legend: false,
+              legendConfig: {
+                shapeConfig: {
+                  height: () => 0,
+                  width: () => 0
+                }
+              },
               total: false,
               colorScale: 'Count',
               colorScaleConfig: {
