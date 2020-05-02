@@ -10,7 +10,7 @@ import Error from "../../components/Error";
 import About from "./About";
 import Api from "./Api";
 import Data from "./Data";
-import DataAvailability from "./DataAvailability";
+// import DataAvailability from "./DataAvailability";
 import Definitions from "./Definitions";
 import Library from "./Library";
 import Privacy from "./Privacy";
