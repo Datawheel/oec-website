@@ -12,13 +12,15 @@ const good = "#3182bd";
  * Finds a color if defined in the color lookup.
  * @param {Object} d
  */
-function findColor(d) {
+function findColor(d, config = this) {
   let detectedColors = [];
+  let isSectionHS = false;
   if (this && this._filteredData) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
+  if (config && config._filteredData) isSectionHS = config._filteredData.some(d => sections.hsSections.includes(d.Section));
 
-  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors["SITC Section"][d["Section ID"]] || colors.colorGrey;
+  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors[isSectionHS ? "Section" : "SITC Section"][d["Section ID"]] || colors.colorGrey;
   if ("Section" in d && !Array.isArray(d.Section)) {
     return "Patent Share" in d
       ? colors["CPC Section"][`${d["Section ID"]}`]
@@ -477,7 +479,9 @@ export default {
     },
     Line: {
       curve: "monotoneX",
-      stroke: d => findColor(d),
+      stroke(d) {
+        return findColor(d, this);
+      },
       strokeWidth: 3,
       strokeLinecap: "round"
     },

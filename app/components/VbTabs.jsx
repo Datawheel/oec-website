@@ -335,12 +335,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exporters"),
                           permalink: `${cube}/export/show/all/${viztype}/${time}/`,
-                          regexp: new RegExp(/geomap\/\w+\/export\/show\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/geomap\/\w+\/export\/show\/all\/[a-z0-9.-]+\/[0-9.-]+\//)
                         },
                         {
                           name: t("Importers"),
                           permalink: `${cube}/import/show/all/${viztype}/${time}/`,
-                          regexp: new RegExp(/geomap\/\w+\/import\/show\/all\/\w+\/\w+\//)
+                          regexp: new RegExp(/geomap\/\w+\/import\/show\/all\/[a-z0-9.-]+\/[0-9.-]+\//)
                         }
                       ]
                     }
