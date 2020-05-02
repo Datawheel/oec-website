@@ -21,9 +21,11 @@ export const subnationalCountries = [
 	// 'Germany',
 	'Japan (Regions)',
 	'Japan (Prefactures)',
-	'Russia',
+	'Russia (Regions)',
+	'Russia (Districts)',
 	// 'South Africa',
-	'Spain'
+	'Spain (Communities)',
+	'Spain (Provincies)'
 	// 'Turkey',
 	// 'United Kingdom',
 	// 'United States (State)',
@@ -84,7 +86,7 @@ export const subnationalData = {
 		productDepth: [ 'HS4' ],
 		flag: 'jpn'
 	},
-	Russia: {
+	'Russia (Regions)': {
 		cube: 'rus_m_hs',
 		basecube: 'HS',
 		profile: 'rus',
@@ -94,7 +96,27 @@ export const subnationalData = {
 		productDepth: [ 'HS4' ],
 		flag: 'rus'
 	},
-	Spain: {
+	'Russia (Districts)': {
+		cube: 'rus_m_hs',
+		basecube: 'HS',
+		profile: 'rus',
+		geo: 'District',
+		initial: 2015,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'rus'
+	},
+	'Spain (Communities)': {
+		cube: 'esp_m_hs',
+		basecube: 'HS',
+		profile: 'esp',
+		geo: 'Autonomous Communities',
+		initial: 2010,
+		final: 2019,
+		productDepth: [ 'HS4' ],
+		flag: 'esp'
+	},
+	'Spain (Provincies)': {
 		cube: 'esp_m_hs',
 		basecube: 'HS',
 		profile: 'esp',

@@ -127,6 +127,19 @@
     vertical-align: top;
   }
 
+  & .is-beta:after {
+    @mixin font-xxs;
+    background-color: var(--accent-dark);
+    border-radius: 4px;
+    content: "BETA";
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 4px;
+    margin-top: -2px;
+    padding: 1px 4px;
+    vertical-align: top;
+  }
+
   & .footer-sponsor-list {
     @mixin list-reset;
     & .footer-sponsor-item {

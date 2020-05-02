@@ -36,6 +36,9 @@ export default function RouteCreate() {
     const technologyCandidates = ["A", "B", "C", "D", "E", "F", "G", "H", "Y", "H0", "G0", "A6", "B6", "C0", "B2", "A4", "F0", "F2", "B0", "F1", "Y0", "E0", "C2", "B4", "A0", "E2", "D0", "A2", "F4", "B8", "G1", "D2", "G2", "C4", "H04", "G06", "H01", "A61", "G01", "B60", "G02", "B01", "H02", "B65", "F16", "A47", "C07", "H05", "C08", "F21", "A63", "F02", "G03", "G09", "H03", "B29", "F01", "G05", "G11", "C09", "A01", "G08", "C12", "F25", "Y02", "B23", "F04", "B32", "B41", "E21", "B62", "G10", "F24", "E04", "A43", "B64", "A45", "G07", "B25", "C10", "E05", "B05", "F05", "G06F", "H01L", "H04L", "A61B", "H04W", "H04N", "G02B", "A61M", "G01N", "A61K", "B65D", "H01M", "G06T", "G06Q", "A61F", "H04B", "G06K", "H05K", "Y10T", "B01D", "G02F", "G09G", "H01R", "H04R", "C07D", "H04M", "B01J", "G01R", "A63B", "B29C", "B32B", "E21B", "H02M", "H02J", "G11C", "B60R", "A61N", "B41J", "H05B", "G01S", "H01Q", "F21S", "A43B", "F21V", "B60W", "H02K", "H01J", "G03G", "G08B", "C07C"];
     const firmCandidates = ["11bc748915", "a157918810", "b8c1acc425", "87de88d17b", "7a01e8ddac", "15d39b3f2a", "2eb971d57b", "dbc08b2573", "0faa77ca42", "abb53dc868", "23d57363cb", "b5e019f538", "6ad9ab7fc6", "cb321ed4d0", "5517da6319", "9f34a7c959", "4bdae8f1a7", "3dac8941a0", "e916d571f1", "f44eedb4a5", "0d3a83bfc8", "41ef0cf58d", "2f111a9ce2", "decf643da9", "a206115bd6", "811141d321", "a6fed19225", "16993cffaa", "442fdaabf5", "adb93bfc8e", "dc35081fb7", "dc40dfac00", "1765456121", "fae178ebf4", "c99fe1e0b9", "7827e711f4", "67f88397c5", "9f4299c85f", "ffe06cf343", "5a72270be0", "b33fbe57f2", "e2bf16c475", "27d1fe114b", "9f7704687f", "4d70b25495", "8e4d49bd8c", "1574143f54", "ace192312e", "69177dc604", "1c7fe6585c", "a4f0a651d6", "bdce540b93", "78ce8bd6ea", "26c8a5e500", "37ce6630a8", "edef3c419a", "b9ff98ac74", "96a8b4d3ac", "4a8f5060b0", "e3806d07bb", "66d76d37cc", "48c29d69a7", "a46913eda0", "6a8460a7f8", "4af00db829", "0a8c2269fd", "fdd08023dc", "46cf408a4d", "7ec5a3132d", "32050ae9ac", "8eaa0d8c1a", "d348d7f6fb", "3cb89b4de4", "d354337a5f", "c61317f152", "c0cc9dc323", "f589dbeca8", "bf0ddf34a6", "79a53b8347", "95080624a7", "23ab12e369", "7a4f0a0373", "848b635c85", "57c8aa446e", "d2e6d21938", "e8e745a379", "72ddda3a57", "28fa7aedd5", "cfbea0d3af", "88639e7689", "f47f95da7e", "54c228ff08", "0f6a4563c4", "81ff8a9f5a", "f5eb75e633", "beccddfa85", "9fa4977ce4", "1700aa6b92", "a8a7a9e4f9", "55d803de66", "9f988f3d7b"];
 
+    if (path.includes("visualize")) {
+      return countryCandidates[Math.floor(Math.random() * countryCandidates.length)];
+    }
     if (path.includes("bilateral-country")) {
       const c1Index = Math.floor(Math.random() * countryCandidates.slice(0, 80).length);
       const c1 = countryCandidates.splice(c1Index, 1)[0];
@@ -72,6 +75,17 @@ export default function RouteCreate() {
     return null;
   }
 
+  /** */
+  function checkForVizId(nextState, replace) {
+    if (!nextState.params.chart) {
+      const reqestedUrl = nextState.location.pathname;
+      const randId = genRandId(reqestedUrl);
+      const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}tree_map/hs92/export/${randId}/all/show/2018/` : `${reqestedUrl}/tree_map/hs92/export/${randId}/all/show/2018/`;
+      return replace({pathname: nextUrl});
+    }
+    return null;
+  }
+
   return (
     <Route path="/" component={App} history={browserHistory}>
       <IndexRoute component={Home} />
@@ -81,7 +95,7 @@ export default function RouteCreate() {
       <Route exact path="/admin" component={Builder} />
       <Route exact path="/explorer" component={Explorer} />
       <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={props => <Vizbuilder {...props} isEmbed={true} />} />
-      <Route exact path="/:lang/visualize/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={Vizbuilder} />
+      <Route exact path="/:lang/visualize(/:chart)(/:cube)(/:flow)(/:country)(/:partner)(/:viztype)(/:time)" component={Vizbuilder} onEnter={checkForVizId} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
       <Route exact path="/:lang/reset" component={Reset} />

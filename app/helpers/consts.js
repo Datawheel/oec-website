@@ -71,8 +71,8 @@ module.exports = {
     // tools
     {title: "Tools", items: [
       {title: "Predictions",     url: `/${locale}/prediction?dataset=trade-annual`},
-      // {title: "Tariff Explorer", url: `/${locale}/tariffs/?destinations=xxwld`},
-      {title: "Visualizations",  url: `/${locale}/visualize/tree_map/hs92/export/deu/all/show/2018/`}
+      {title: "Tariff Explorer", url: `/${locale}/tariffs/`, beta: true},
+      {title: "Visualizations",  url: `/${locale}/visualize`}
     ]},
     // academy
     {title: "Academy", items: [
@@ -82,7 +82,8 @@ module.exports = {
     ]},
     // data
     {title: "Data", items: [
-      {title: "Data Download",   url: `/${locale}/resources/data/`},
+      {title: "Availability",    url: `/${locale}/resources/data-availability`},
+      {title: "Download",        url: `/${locale}/resources/data/`},
       {title: "API",             url: `/${locale}/resources/api`}
     ]},
     // about

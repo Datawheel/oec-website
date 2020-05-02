@@ -387,6 +387,7 @@ class Custom extends Component {
 					data[row[selector + ' ID']][yearValue] = values;
 				}
 				const finalData = Object.values(data);
+
 				finalData.sort(
 					(a, b) => a[yearValue][`${yearValue} Ranking`] - b[`${yearValue}`][`${yearValue} Ranking`]
 				);
@@ -406,16 +407,6 @@ class Custom extends Component {
 		const { singleyear, yearRangeInitial, yearRangeFinal } = this.state;
 
 		const finalData = await this.groupData(paths);
-
-		// Export paths for etl
-		const { country, productDepth, productRevision } = this.state;
-		console.log(country, productDepth, productRevision, paths);
-		const consolePath = {};
-		consolePath['indicator'] = country ? 'ECI' : 'PCI';
-		consolePath['product_depth'] = productDepth;
-		consolePath['product_revision'] = productRevision;
-		consolePath['paths'] = paths;
-		console.log(consolePath);
 
 		const columns = await this.createColumns(singleyear, [ yearRangeInitial, yearRangeFinal ]);
 
@@ -462,6 +453,8 @@ class Custom extends Component {
 				dataLength = pathData.length;
 			}
 		}
+
+		console.log(data);
 
 		let flag = 1;
 		const finalData = Object.values(data).map((m) => {
@@ -744,7 +737,7 @@ class Custom extends Component {
 				if (type) {
 					return (
 						<div className="value">
-							<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.000')}`}</span>
+							<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.00')}`}</span>
 						</div>
 					);
 				} else {
@@ -752,7 +745,7 @@ class Custom extends Component {
 						return (
 							<div className="value">
 								<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format(
-									'0.000'
+									'0.00'
 								)} `}</span>
 								<span>({numeral(props.original[`${year}`][`${year} Ranking`]).format('0o')})</span>
 							</div>

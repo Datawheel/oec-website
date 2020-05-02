@@ -131,7 +131,7 @@
 					text-decoration: none;
 
 					& .content-name {
-						color: white;
+						color: var(--accent-light);
 						opacity: 1;
 					}
 					& .content-name:hover {
@@ -497,6 +497,7 @@
 		& .filters {
 			display: flex;
 			align-items: center;
+			flex-wrap: wrap;
 
 			& h3 {
 				margin-right: var(--gutter-sm);
@@ -529,16 +530,20 @@
 
 		& .geomaps {
 			display: flex;
+			flex-wrap: wrap;
 
 			& .regions {
 				display: flex;
 				flex-direction: column;
-				flex: 0 0 10%;
+				flex: 0;
+    		max-width: 100px;
 				align-items: center;
 				justify-content: center;
 
 				& .region {
 					width: max-content;
+					max-height: 100px;
+					flex: 1;
 					border: 1px solid var(--dark-1);
 					border-bottom: 0;
 					&:last-child {
@@ -550,7 +555,7 @@
 			& .countries {
 				display: flex;
 				flex-direction: column;
-				flex: 0 0 80%;
+				flex: 1;
 				align-items: center;
 				justify-content: center;
 			}
@@ -699,5 +704,19 @@
 @media (max-width: 768px) {
 	.publications-content .papers .paper .preview {
 		display: none;
+	}
+
+	.library-content .library .geomaps {
+		flex-direction: column;
+		& .regions {
+			flex-direction: row;
+			max-width: 100%;
+			flex: 1;
+			flex-wrap: wrap;
+			& .region {
+				min-width: 100px;
+				border: 1px solid var(--dark-1);
+			}
+		}
 	}
 }
