@@ -230,7 +230,7 @@ export default class Publications extends Component {
         name:
           "The Dynamics of Economic Complexity and the Product Space over a 42 year period",
         link:
-          "http://www.hks.harvard.edu/centers/cid/publications/faculty-working-papers/cid-working-paper-no.-189",
+          "https://static1.squarespace.com/static/5759bc7886db431d658b7d33/t/5783bc96725e25016e67ddaa/1468251288547/189DynamicsofEconComplex.pdf",
         year: "2009",
         author: "C.A. Hidalgo",
         abstract:
@@ -251,7 +251,7 @@ export default class Publications extends Component {
       {
         name: "A Network View of Economic Complexity",
         link:
-          "http://kms1.isn.ethz.ch/serviceengine/Files/ISN/97394/ichaptersection_singledocument/646EBB06-3D08-4A82-BB09-B473C23937A7/en/Ch_2.pdf",
+          "https://static1.squarespace.com/static/5759bc7886db431d658b7d33/t/5783bd92b3db2b8f172eb722/1468251540792/HidalgoHausmann_DAI_2008.pdf",
         year: "2008",
         author: "C.A. Hidalgo, R. Hausmann",
         abstract:
