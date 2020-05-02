@@ -21,9 +21,9 @@ class Rankings extends Component {
 				{(function() {
 					switch (page) {
 						case 'eci':
-							return <ECI depth={depth} rev={rev} />;
+							return <ECI type={page} depth={depth} rev={rev} />;
 						case 'pci':
-							return <PCI depth={depth} rev={rev} />;
+							return <ECI type={page} depth={depth} rev={rev} />;
 						case 'custom':
 							return <Custom />;
 						case 'legacy':
