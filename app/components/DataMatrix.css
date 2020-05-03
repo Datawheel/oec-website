@@ -36,6 +36,22 @@
       }
     }
     & tbody {
+      & tr.coming-soon {
+        & td {
+          color: var(--dark-1);
+          &:first-child:after {
+            @mixin font-xxs;
+            background-color: var(--accent-dark);
+            border-radius: 4px;
+            color: var(--light-2);
+            content: "COMING SOON";
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 4px;
+            vertical-align: top;
+          }
+        }
+      }
       & tr:nth-child(even) {
         background: var(--dark-3);
       }

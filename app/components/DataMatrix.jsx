@@ -8,10 +8,20 @@ import "./DataMatrix.css";
 class DataMatrix extends Component {
 
   render() {
-
     const {matrix} = this.props;
 
     if (!matrix) return null;
+
+    // annotate subnational cubes to indicate which datasets are available now
+    const availableSubnatDatasets = [
+      "trade_s_chn_m_hs",
+      "trade_s_can_m_hs",
+      "trade_s_deu_m_egw",
+      "trade_s_jpn_m_hs",
+      "trade_s_rus_m_hs",
+      "trade_s_esp_m_hs"
+    ];
+    matrix.subnational.products = matrix.subnational.products.map(d => ({...d, availableNow: availableSubnatDatasets.includes(d.cubeName)}));
 
     return (
       <div className="data-matrix">
@@ -34,7 +44,7 @@ class DataMatrix extends Component {
                   </thead>
                   <tbody>
                     {matrix[nation][group].map(cube =>
-                      <tr key={cube.name}>
+                      <tr key={cube.name} className={cube.availableNow === false ? "coming-soon" : "available-now"}>
                         <td>{cube.fullName}</td>
                         <td>{cube.resolutions.geography || "-"}</td>
                         <td>{cube.resolutions.product || "-"}</td>
