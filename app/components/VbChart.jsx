@@ -76,6 +76,7 @@ class VbChart extends React.Component {
   shouldComponentUpdate = (prevProps, prevState) =>
     prevProps.permalink !== this.props.permalink ||
     prevProps.countryMembers !== this.props.countryMembers ||
+    prevProps.data.length !== this.props.data.length ||
     JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected) ||
     JSON.stringify(prevProps.xConfig) !== JSON.stringify(this.props.xConfig) ||
     JSON.stringify(prevProps.yConfig) !== JSON.stringify(this.props.yConfig) ||
@@ -146,11 +147,9 @@ class VbChart extends React.Component {
 
     let timeFilter = time.replace(".", ",");
     if (isTimeSeries) {
-      // console.log("hi", timeItems);
       const interval = time.split(".");
       const j = timeItems.findIndex(d => d.value === interval[0]);
       const i = timeItems.findIndex(d => d.value === interval[1]);
-      console.log(i, j, interval);
       timeFilter = timeItems.slice(i, j + 1).map(d => d.value).join();
     }
     params.Time = timeFilter;
@@ -174,7 +173,7 @@ class VbChart extends React.Component {
       const year = time * 1;
       params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }
-    console.log(params);
+
     return axios
       .get(OLAP_API, {params})
       .then(resp => {

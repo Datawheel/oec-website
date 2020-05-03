@@ -719,10 +719,12 @@ class Vizbuilder extends React.Component {
     const {routeParams} = this.props;
     const {chart, time} = routeParams;
     const isSubnat = cube.includes("subnational");
+
     const cubeSelected = isSubnat ? subnat[cube] : this.state._dataset;
     const timeItems = isSubnat ? this.state.subnatTimeItems : cubeSelected.timeItems;
+    const cubeName = this.props.cubeSelected.name;
 
-    if (isSubnat) {
+    if (isSubnat && cubeName !== cubeSelected.cube) {
       this.props.updateCubeSelected({
         name: cubeSelected.cube,
         geoLevels: cubeSelected.geoLevels,
@@ -734,7 +736,7 @@ class Vizbuilder extends React.Component {
         currency: cubeSelected.currency
       });
     }
-    else {
+    else if (!isSubnat && cubeName !== cubeSelected.cubeName) {
       this.props.updateCubeSelected({
         name: cubeSelected.cubeName,
         geoLevels: cubeSelected.geoLevels,
@@ -745,6 +747,7 @@ class Vizbuilder extends React.Component {
         geoItems: this.props.countryMembers
       });
     }
+
 
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const timeItemsSelected = [].concat(timeItems)

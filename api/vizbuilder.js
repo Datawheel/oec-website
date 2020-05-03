@@ -20,13 +20,16 @@ module.exports = function(app) {
       }
       else {
         return axios.get(`${origin}/api/stats/eci`, {params: {
-          cube: "trade_i_baci_a_92",
-          rca: "Exporter Country,HS4,Trade Value",
-          alias: "Country,HS4",
+          cube: "trade_i_baci_a_96",
+          rca: "Exporter Country,HS6,Trade Value",
+          alias: "Country,HS6",
           measures: "Trade Value",
-          Year: queryParams.Year || 2017,
+          Year: queryParams.Year || 2018,
           parents: true,
-          threshold_Country: 1000000000
+          threshold_Country: 3000000000,
+          threshold_HS4: 1500000000,
+          threshold_Population: 1000000,
+          YearPopulation: queryParams.Year || 2018
         }});
       }
     };
@@ -76,7 +79,7 @@ module.exports = function(app) {
       parents: true
     };
 
-    axios.get("http://localhost:3300/api/stats/relatedness", {params}).then(response => {
+    axios.get(`${origin}/api/stats/relatedness`, {params}).then(response => {
       const rcaData = response.data.data;
       const rcaObj = rcaData.reduce((all, d) => {
         all[d["HS4 ID"] * 1] = d;
@@ -85,7 +88,6 @@ module.exports = function(app) {
       // Includes RCA values into connections data
       data.forEach(d => {
         Object.assign(d, rcaObj[d.source * 1] || {});
-        // d["Trade Value RCA"] = rcaObj[d.source * 1] || null;
       });
       res.json(data);
     }).catch(error => error);
