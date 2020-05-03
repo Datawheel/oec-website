@@ -57,7 +57,7 @@ class Footer extends React.Component {
         })}
         <div className="footer-contact">
           <span>Created, Designed, and Developed by:</span>
-          <ul key="logos" className="footer-sponsor-list">
+          <ul key="logos-datawheel" className="footer-sponsor-list">
             <li className="footer-sponsor-item">
               <a href="https://www.datawheel.us/" className="footer-sponsor-link" target="_blank" rel="noopener noreferrer">
                 <img
@@ -70,7 +70,7 @@ class Footer extends React.Component {
             </li>
           </ul>
           <span>With the support of:</span>
-          <ul key="logos" className="footer-sponsor-list">
+          <ul key="logos-connectamericas" className="footer-sponsor-list">
             <li className="footer-sponsor-item">
               <a href="https://connectamericas.com" className="footer-sponsor-link" target="_blank" rel="noopener noreferrer">
                 <img

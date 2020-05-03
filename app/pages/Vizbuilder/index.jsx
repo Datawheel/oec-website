@@ -192,6 +192,8 @@ class Vizbuilder extends React.Component {
     const {geoLevels, productLevels, timeLevels} = subnatItem;
     const {routeParams} = this.props;
     const {country, time, viztype} = routeParams;
+
+    const isGeoWildCard = args[0] === "wildcard";
     const geoParam = args[0] || country;
     const timeParam = args[1] || time;
     const filterParam = args[2] || viztype;
@@ -231,7 +233,7 @@ class Vizbuilder extends React.Component {
     const itemsProduct = getHierarchyList(dataProduct.data, productLevels);
     const itemsTime = getHierarchyList(dataTimeTemp, timeLevels);
 
-    const selectedGeo = selectedItems(itemsGeo, geoParam, "selectedSubnatGeo");
+    const selectedGeo = isGeoWildCard ? [] : selectedItems(itemsGeo, geoParam, "selectedSubnatGeo");
     const selectedProduct = selectedItems(itemsProduct, filterParam, "selectedSubnatProduct");
     const subnatTimeItems = itemsTime
       .map(d => ({value: d.id, title: d.name, type: d.type}))
@@ -240,7 +242,7 @@ class Vizbuilder extends React.Component {
     const filteredTimeItems = subnatTimeItems
       .filter(d => timeParam.split(".").includes(d.value.toString()));
 
-    this.setState({
+    const nextState = {
       subnatItem,
       subnatGeography: dataGeo.data,
       subnatGeoItems: itemsGeo,
@@ -252,7 +254,11 @@ class Vizbuilder extends React.Component {
       selectedSubnatTimeTemp: filteredTimeItems,
       ...selectedGeo,
       ...selectedProduct
-    });
+    };
+
+    if (isGeoWildCard) nextState.selectedSubnatGeo = this.state.selectedSubnatGeo;
+
+    this.setState(nextState);
   }
 
   fetchProductNames = async(cubeName, levelName = "HS6", levels = ["Section", "HS2", "HS4", "HS6"]) => {
@@ -549,11 +555,20 @@ class Vizbuilder extends React.Component {
   handleControls = () => this.setState({controls: !this.state.controls})
 
   handleItemMultiSelect = (key, d) => {
-    this.setState({[key]: d});
-    if (key === "_selectedItemsCountry" && subnat.cubeSelector.some(h => d[d.length - 1].label === h.id)) {
+    const nextState = {[key]: d};
+    let callback = undefined;
+    if (
+      key === "_selectedItemsCountry" &&
+      subnat.cubeSelector.map(h => h.id).includes(d[d.length - 1].label)
+    ) {
       const cube = subnat.cubeSelector.find(h => d[d.length - 1].label === h.id);
-      this.setState({subnatCubeSelected: cube}, () => this.fetchSubnationalData(cube.cube));
+      nextState.subnatCubeSelected = cube;
+      nextState.selectedSubnatGeoTemp = [];
+      // nextState.selectedSubnatGeo = [];
+      callback = () => this.fetchSubnationalData(cube.cube, "wildcard");
     }
+
+    this.setState(nextState, callback);
   }
 
   handleScroll = () => {
