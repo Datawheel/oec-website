@@ -159,6 +159,7 @@ class VbChart extends React.Component {
     if (partnerId) params.Country = partnerId.map(d => d.value).join();
     if (geoId) params["Subnat Geography"] = geoId;
     if (isFilter) params.Product = viztype;
+    if (params.drilldowns.includes("Country")) params.properties = "ISO 3";
 
     const measureName = "Trade Value";
     const interval = time.split(".");
@@ -501,6 +502,7 @@ class VbChart extends React.Component {
 
     const isTechnology = cube.includes("cpc");
     const isFilter = !["show", "all"].includes(viztype);
+    const isGeo = !["show", "all"].includes(country);
 
     const tickFormatter = value =>
       !isTechnology ? `${currency || "$"}${formatAbbreviate(value)}` : formatAbbreviate(value);
@@ -759,11 +761,11 @@ class VbChart extends React.Component {
     }
     else if (chart === "geomap" && data && !loading) {
       const i = isSubnat ? isSubnat.geoLevels.indexOf(this.state.subnatGeoDepth) : -1;
-      const topojson = isSubnat
+      const topojson = isSubnat && !isGeo
         ? isSubnat.topojson[i === -1 ? isSubnat.topojson.length - 1 : i]
         : "/topojson/world-50m.json";
 
-      const geoGroupBy = isSubnat ? `${this.state.subnatGeoDepth} ID` : "ISO 3";
+      const geoGroupBy = isSubnat && !isGeo ? `${this.state.subnatGeoDepth} ID` : "ISO 3";
 
       return (
         <div>
@@ -787,8 +789,8 @@ class VbChart extends React.Component {
                 topojson,
                 // topojsonFilter: d => d.id !== "ata",
                 // topojsonId: "id",
-                topojsonId: isSubnat ? d => d.properties.id : "id",
-                topojsonKey: isSubnat ? "objects" : "id",
+                topojsonId: isSubnat && !isGeo ? d => d.properties.id : "id",
+                topojsonKey: isSubnat && !isGeo ? "objects" : "id",
                 // topojsonKey: "id",
                 total: false
               }}

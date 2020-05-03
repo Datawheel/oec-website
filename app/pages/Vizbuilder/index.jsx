@@ -933,7 +933,7 @@ class Vizbuilder extends React.Component {
               </div>}
 
               {
-                countrySelector && !isGeomap ? <div className="columns">
+                countrySelector ? <div className="columns">
                   <div className="column-1">
                     <OECMultiSelect
                       items={this.props.countryMembers}
@@ -987,7 +987,7 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {partnerSelector && <div className="columns">
+              {partnerSelector && !isGeomap && <div className="columns">
                 <div className="column-1">
                   <OECMultiSelect
                     items={this.props.countryMembers}

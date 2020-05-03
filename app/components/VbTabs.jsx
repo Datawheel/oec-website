@@ -331,6 +331,20 @@ class VbTabs extends React.Component {
                   callback={d => this.props.callback(d)}
                   items={[
                     {
+                      name: t("Country"), nest: [
+                        {
+                          name: t("Export Destinations"),
+                          permalink: `${cube}/export/${country}/show/all/${time}/`,
+                          regexp: new RegExp(/geomap\/\w+\/export\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("Import Origins"),
+                          permalink: `${cube}/import/${country}/show/all/${time}/`,
+                          regexp: new RegExp(/geomap\/\w+\/import\/[a-z0-9.-]+\/show\/all\/[0-9.-]+\//)
+                        }
+                      ]
+                    },
+                    {
                       name: t("Product"), nest: [
                         {
                           name: t("Exporters"),
@@ -343,16 +357,21 @@ class VbTabs extends React.Component {
                           regexp: new RegExp(/geomap\/\w+\/import\/show\/all\/[a-z0-9.-]+\/[0-9.-]+\//)
                         }
                       ]
+                    },
+                    {
+                      name: t("Bilateral"), nest: [
+                        {
+                          name: t("Exports by Product"), // ((?!.*(all|show)).*)
+                          permalink: `${cube}/export/${country}/show/${viztype}/${timePlot}/`,
+                          regexp: new RegExp(/geomap\/\w+\/export\/[a-z0-9.-]+\/show\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("Imports by Product"),
+                          permalink: `${cube}/import/${country}/show/${viztype}/${timePlot}/`,
+                          regexp: new RegExp(/geomap\/\w+\/import\/[a-z0-9.-]+\/show\/((?!.*(all|show)).*)\/[0-9.-]+\//)
+                        }
+                      ]
                     }
-                    // {
-                    //   name: t("Technology"), nest: [
-                    //     {
-                    //       name: t("Patenters"),
-                    //       permalink: "cpc/uspto/show/all/A21/2019/",
-                    //       regexp: new RegExp(/geomap\/cpc\/uspto\/show\/all\/\w+\/\w+\//)
-                    //     }
-                    //   ]
-                    // }
                   ]}
                 />
               }
