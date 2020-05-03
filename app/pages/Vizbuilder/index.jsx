@@ -387,10 +387,10 @@ class Vizbuilder extends React.Component {
 
     let countryIds = notEmpty(_selectedItemsCountry)
       ? parseIdsToURL(_selectedItemsCountry, "label")
-      : "show";
+      : country || "show";
     let partnerIds = notEmpty(_selectedItemsPartner)
       ? parseIdsToURL(_selectedItemsPartner, "label")
-      : "all";
+      : partner || "all";
 
     const isTechnologyFilter = notEmpty(_selectedItemsTechnology);
     const isTradeFilter = notEmpty(_selectedItemsProduct);
@@ -399,7 +399,7 @@ class Vizbuilder extends React.Component {
       ? isTechnologyFilter
         ? parseIdsToURL(_selectedItemsTechnology, "value")
         : parseIdsToURL(_selectedItemsProduct)
-      : "show";
+      : viztype || "show";
 
     let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
     let flowSelected = isTechnologyFilter ? "uspto" : _flow.value;
