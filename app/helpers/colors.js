@@ -51,13 +51,13 @@ module.exports = {
   },
 
   "Flow": {
-    1: "#4495bc", // Blue (exports)
-    2: "#942217" // Red (imports)
+    1: "#942217", // (imports)
+    2: "#4495bc" // (exports)
   },
 
   "Trade Flow": {
-    1: "#4495bc", // Blue (exports)
-    2: "#942217" // Red (imports)
+    1: "#942217", // (imports)
+    2: "#4495bc" // (exports)
   },
 
   "Continent": {
