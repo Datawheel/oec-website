@@ -10,8 +10,8 @@ import Error from "../../components/Error";
 import About from "./About";
 import Api from "./Api";
 import Data from "./Data";
-import Definitions from "./Definitions";
 import Library from "./Library";
+import Methodology from "./Methodology";
 import Privacy from "./Privacy";
 import Publications from "./Publications";
 import Terms from "./Terms";
@@ -69,8 +69,8 @@ class Resources extends Component {
                 return <Api />;
               case "data":
                 return <Data />;
-              case "definitions":
-                return <Definitions />;
+              case "methodology":
+                return <Methodology />;
               case "privacy":
                 return <Privacy />;
               case "terms":
