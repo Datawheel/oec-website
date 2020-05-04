@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { hot } from 'react-hot-loader/root';
+import React, {Component} from 'react';
+import {hot} from 'react-hot-loader/root';
 import './index.css';
 
 import OECNavbar from '../../components/OECNavbar';
@@ -12,12 +12,12 @@ import Legacy from './Legacy';
 
 class Rankings extends Component {
 	render() {
-		const { page, depth, rev } = this.props.router.params;
+		const {page, depth, rev} = this.props.router.params;
 
 		return (
 			<div>
 				<OECNavbar />
-				{(function() {
+				{(function () {
 					switch (page) {
 						case 'eci':
 							return <Static type={page} depth={depth} rev={rev} />;
@@ -25,8 +25,10 @@ class Rankings extends Component {
 							return <Static type={page} depth={depth} rev={rev} />;
 						case 'custom':
 							return <Custom />;
-						case 'legacy':
-							return <Legacy />;
+						case 'legacy_eci':
+							return <Legacy type={"eci"} depth={depth} rev={rev} />;
+						case 'legacy_pci':
+							return <Legacy type={"pci"} depth={depth} rev={rev} />;
 						default:
 							return <Error />;
 					}

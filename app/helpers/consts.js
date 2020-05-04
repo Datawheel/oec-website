@@ -64,8 +64,8 @@ module.exports = {
         ]}
       ]},
       {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
-      {title: "Legacy Rankings", url: `/${locale}/rankings/legacy`}
-
+      {title: "ECI Legacy Rankings", url: `/${locale}/rankings/legacy_eci`},
+      {title: "PCI Legacy Rankings", url: `/${locale}/rankings/legacy_pci/hs4/hs12`},
     ]},
     // tools
     {title: "Tools", items: [
