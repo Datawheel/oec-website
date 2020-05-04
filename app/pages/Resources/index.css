@@ -35,10 +35,10 @@
 		}
 
 		& p {
-			font-size: var(--font-sm);
+			font-size: 1.0rem;
 			font-weight: 300;
 			margin-bottom: var(--gutter-sm);
-			line-height: 1.2rem;
+			line-height: 1.5rem;
 		}
 
 		& img {

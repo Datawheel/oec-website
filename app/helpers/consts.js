@@ -64,8 +64,7 @@ module.exports = {
         ]}
       ]},
       {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
-      {title: "Legacy Rankings", url: `/${locale}/rankings/legacy`},
-      {title: "Methodology", url: `/${locale}/resources/definitions`}
+      {title: "Legacy Rankings", url: `/${locale}/rankings/legacy`}
 
     ]},
     // tools
@@ -76,7 +75,7 @@ module.exports = {
     ]},
     // academy
     {title: "Academy", items: [
-      {title: "Definitions",  url: `/${locale}/resources/definitions`},
+      {title: "Methodology",  url: `/${locale}/resources/methodology`},
       {title: "Library",  url: `/${locale}/resources/library`},
       {title: "Publications", url: `/${locale}/resources/publications`}
     ]},
