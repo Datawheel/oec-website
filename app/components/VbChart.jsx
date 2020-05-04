@@ -847,6 +847,9 @@ class VbChart extends React.Component {
         };
       }
 
+      const width = window.innerWidth;
+      const mobile = width < 768 ? 0.5 : 1;
+
       return (
         <div>
           <div className="vb-chart">
@@ -858,8 +861,8 @@ class VbChart extends React.Component {
                 links: "/network/network_hs4.json",
                 groupBy: ["Section ID", "HS4 ID"],
                 size: d => d["Trade Value"] * 1 || 1,
-                sizeMin: 5,
-                sizeMax: 15,
+                sizeMin: 5 * mobile,
+                sizeMax: 15 * mobile,
                 legendTooltip: {
                   tbody: []
                 },
