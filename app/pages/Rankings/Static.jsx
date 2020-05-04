@@ -45,6 +45,7 @@ export default class Static extends Component {
 
   fetchData = (path, type, depth, rev) => {
     const data = [];
+    this.setState({_loading: true, data: []});
     axios.get(path).then(resp => {
       const pathData = resp.data.data;
       // Country, HS4, HS6
