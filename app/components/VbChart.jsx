@@ -894,6 +894,20 @@ class VbChart extends React.Component {
       );
     }
     else if (chart === "rings" && data && data.length > 0) {
+      const selected = viztype.split(".")[0];
+      if (![5, 6].includes(selected.length)) {
+        const selectedProduct = this.props.selectedProducts.find(d => d.id === selected * 1) || {};
+        const name = selectedProduct.name;
+        return <div>
+          <div className="vb-chart">
+            <div className="vb-chart-no-data">
+              <h3 className="title">
+                {t(`No connections available for \"${name},${selected}\".`)}
+              </h3>
+            </div>
+          </div>
+        </div>;
+      }
       return (
         <div>
           <div className="vb-chart">

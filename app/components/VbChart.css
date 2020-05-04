@@ -1,5 +1,11 @@
 .vb-chart {
   height: calc(100vh - var(--nav-height) - 8rem);
+  & .vb-chart-no-data {
+    align-items: center;
+    display: flex;
+    height: inherit;
+    justify-content: center;
+  }
 }
 
 .vb-chart-options {
