@@ -153,13 +153,61 @@
 
   }
 
+  /*********************************
+   * Vertical scroll of updated datasets
+   *
+   *********************************/
+  & .home-data-marquee {
+    display: flex;
+    color: var(--light-3);
+    margin: 15px 0 0 0;
+
+    & .home-data-marquee-title {
+      flex: 1;
+      text-align: right;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 1.125;
+    }
+    & .home-data-marquee-datasets {
+      flex: 1;
+      text-align: left;
+      height: 21px;
+      overflow: hidden;
+
+      & ul {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 0 10px;
+        position: relative;
+        bottom: 0;
+        transition: bottom .5s linear;
+        & li {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          & a {
+            color: var(--light-3);
+            font-size: 17px;
+            line-height: 1.25;
+          }
+        }
+      }
+    }
+  }
+
+  /*********************************
+  * Grid of tiles
+  *
+  *********************************/
   & .home-grid {
     box-sizing: border-box;
     display: grid;
     grid-template-columns: 100%;
     grid-gap: var(--gutter-md) var(--gutter-md);
     grid-auto-flow: row dense;
-    padding: var(--gutter-sm) var(--gutter-md);
+    padding: 0 var(--gutter-md) var(--gutter-sm);
     width: 100%;
 
     @mixin min-xs {
