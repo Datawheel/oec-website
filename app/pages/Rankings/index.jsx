@@ -6,8 +6,7 @@ import OECNavbar from '../../components/OECNavbar';
 import Footer from '../../components/Footer';
 import Error from '../../components/Error';
 
-import ECI from './ECI';
-import PCI from './PCI';
+import Static from './Static';
 import Custom from './Custom';
 import Legacy from './Legacy';
 
@@ -21,9 +20,9 @@ class Rankings extends Component {
 				{(function() {
 					switch (page) {
 						case 'eci':
-							return <ECI type={page} depth={depth} rev={rev} />;
+							return <Static type={page} depth={depth} rev={rev} />;
 						case 'pci':
-							return <ECI type={page} depth={depth} rev={rev} />;
+							return <Static type={page} depth={depth} rev={rev} />;
 						case 'custom':
 							return <Custom />;
 						case 'legacy':
