@@ -24,6 +24,7 @@ export default class Static extends Component {
     this.fetchData(path, type, depth, rev);
   }
 
+  // Checks the changes on the variables: type (eci/pci), depth (hs4, hs6), rev (hs92,...,hs07)
   componentDidUpdate = (prevProps, prevState) => {
     const {type, depth, rev} = this.props;
     if (type !== prevProps.type || depth !== prevProps.depth || rev !== prevProps.rev) {
@@ -32,6 +33,7 @@ export default class Static extends Component {
     }
   }
 
+  // Creates the path for the data to be loaded
   pathCreator = (type, depth, rev) => {
     let path = null;
     if (type === 'eci') {
@@ -45,6 +47,7 @@ export default class Static extends Component {
 
   fetchData = (path, type, depth, rev) => {
     const data = [];
+    // Reset _loading for the component get's off the display
     this.setState({_loading: true, data: []});
     axios.get(path).then(resp => {
       const pathData = resp.data.data;
@@ -52,28 +55,31 @@ export default class Static extends Component {
       const measure = type === "eci" ? 'Country' : depth.toUpperCase();
       // Get list of unique countries/products
       const unique = [...new Set(pathData.map(m => m[`${measure} ID`]))];
+      // Get list of years on the data and gets first and last year
       const uniqueYears = [...new Set(pathData.map(m => m.Year))];
       const maxYear = Math.max(...uniqueYears);
       const minYear = Math.min(...uniqueYears);
 
-      // Set ranking for countries that don't have in max year
+      // Used for setting the rankings fon countries that don't have in max year
       const maxYearDataLength = pathData.filter(f => f.Year === maxYear).length;
       let flag = 1;
 
       // eslint-disable-next-line guard-for-in
       for (const index in unique) {
         const rowData = pathData.filter(f => f[`${measure} ID`] === unique[index]);
+        // Creates first two values of the array with country/product name and id
         const row = {};
         row[measure] = rowData[0][measure];
         row[`${measure} ID`] = unique[index];
+        // Aggregates the values for the years that we have on the cube
         rowData.forEach(d => {
           const values = {};
           values[`${d.Year} ${`${type}`.toUpperCase()}`] = d[`${type}`.toUpperCase()];
           values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()  } Rank`];
           row[`${d.Year}`] = values;
         });
-        // Add non values to rows
-        range(minYear, maxYear).map(d => {
+        // Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
+        range(minYear, maxYear).forEach(d => {
           if (!row[d]) {
             if (d !== maxYear) {
               const values = {};
@@ -90,10 +96,14 @@ export default class Static extends Component {
             }
           }
         });
+        // Push the data for the country/product to the one with all the countries/products
         data.push(row);
       }
+
+      //Sort for the final year
       data.sort((a, b) => a[maxYear][`${maxYear} Ranking`] - b[maxYear][`${maxYear} Ranking`]);
 
+      // Create columns
       const columns = this.createColumns(type, depth, rev, minYear, maxYear);
 
       this.setState({
@@ -108,6 +118,7 @@ export default class Static extends Component {
   };
 
   createColumns = (type, depth, rev, initialYear, finalYear) => {
+    // Column ID (1 to .....n)
     const columnID = {
       id: 'ranking',
       Header: '',
@@ -117,8 +128,8 @@ export default class Static extends Component {
       sortable: false
     };
 
+    // Set the columns name between Countries and Products
     let columnNAME = {};
-
     if (type === "eci") {
       columnNAME = {
         id: 'category',
@@ -207,6 +218,7 @@ export default class Static extends Component {
       }
     }
 
+    // Set the name for the columns for each year
     const measure = type.toUpperCase();
     const columnYEARS = range(initialYear, finalYear).map((year, index, {length}) => ({
       id: length === index + 1 ? 'lastyear' : `${year}`,
