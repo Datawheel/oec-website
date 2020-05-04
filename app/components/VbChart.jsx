@@ -851,7 +851,6 @@ class VbChart extends React.Component {
         <div>
           <div className="vb-chart">
             <Network
-            // forceUpdate={true}
               config={{
                 ...baseConfig,
                 ...networkConfig,
@@ -861,23 +860,10 @@ class VbChart extends React.Component {
                 size: d => d["Trade Value"] * 1 || 1,
                 sizeMin: 5,
                 sizeMax: 15,
+                tooltipConfig: {
+                  tbody: []
+                },
                 total: undefined
-
-                // stroke: d => {
-                //   const proximity = d.size - 1;
-                //   const ranges = [
-                //     {min: 0, max: 0.326532, color: "#585D6B"},
-                //     {min: 0.326532, max: 0.357962, color: "#666679"},
-                //     {min: 0.357962, max: 0.464879, color: "#766E86"},
-                //     {min: 0.464879, max: 1, color: "#8A7591"}
-                //   ];
-                //   const selected = ranges.find(
-                //     h => h.min <= proximity && proximity < h.max
-                //   );
-                //   return selected.color || "gray";
-                // }
-
-
               }}
               nodesFormat={resp => resp.nodes}
               linksFormat={resp => resp.edges}

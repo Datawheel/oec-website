@@ -45,14 +45,45 @@ function subtitle(entity) {
   // return dimension;
 }
 
-class Home extends Component {
-  render() {
 
-    const {locale, tiles} = this.props;
+// cherrypick subnat datasets to get latest available dates
+const availableSubnatDatasets = [
+  "trade_s_chn_m_hs",
+  "trade_s_can_m_hs",
+  "trade_s_deu_m_egw",
+  "trade_s_jpn_m_hs",
+  "trade_s_rus_m_hs",
+  "trade_s_esp_m_hs"
+];
+
+class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentDataMarqueeOffset: 0
+    };
+  }
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      const OFFSET = 21.5;
+      const currentDataMarqueeOffset = this.state.currentDataMarqueeOffset >= OFFSET * (availableSubnatDatasets.length - 1)
+        ? 0
+        : this.state.currentDataMarqueeOffset + OFFSET;
+      this.setState({currentDataMarqueeOffset});
+    }, 6000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  render() {
+    const {locale, matrix, tiles} = this.props;
+    const {currentDataMarqueeOffset} = this.state;
     let notMobile = true;
     if (typeof window !== "undefined") {
       notMobile = window.innerWidth > 768;
     }
+    const subnatDatasets = matrix.subnational.products.filter(d => availableSubnatDatasets.includes(d.cubeName));
 
     return (
       <div className="home">
@@ -113,6 +144,17 @@ class Home extends Component {
             <a href="" className="more-info">Learn More</a>
           </p>
           <div className="launch-video">Watch a video</div> */}
+        </div>
+
+        <div className="home-data-marquee">
+          <div className="home-data-marquee-title">⚡ Latest Data Updates</div>
+          <div className="home-data-marquee-datasets">
+            <ul style={{bottom: `${currentDataMarqueeOffset}px`}}>
+              {subnatDatasets.map(dataset =>
+                <li key={dataset.cubeName}><a href="">{dataset.fullName}: {dataset.start} - {dataset.end}</a></li>
+              )}
+            </ul>
+          </div>
         </div>
 
         <ul className="home-grid">
@@ -234,7 +276,12 @@ class Home extends Component {
 }
 
 Home.need = [
-  fetchData("homeTiles", "/api/home")
+  fetchData("homeTiles", "/api/home"),
+  fetchData("datamatrix", "/api/matrix")
 ];
 
-export default connect(state => ({tiles: state.data.homeTiles, locale: state.i18n.locale}))(hot(Home));
+export default connect(state => ({
+  matrix: state.data.datamatrix,
+  tiles: state.data.homeTiles,
+  locale: state.i18n.locale
+}))(hot(Home));
