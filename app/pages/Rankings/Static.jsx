@@ -26,7 +26,7 @@ export default class Static extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     const {type, depth, rev} = this.props;
-    if (type !== prevState.type || depth !== prevState.depth || rev !== prevState.rev) {
+    if (type !== prevProps.type || depth !== prevProps.depth || rev !== prevProps.rev) {
       const path = this.pathCreator(type, depth, rev);
       this.fetchData(path, type, depth, rev);
     }
