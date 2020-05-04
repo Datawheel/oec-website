@@ -12,14 +12,14 @@ const good = "#3182bd";
  * Finds a color if defined in the color lookup.
  * @param {Object} d
  */
-function findColor(d, config = this) {
+function findColor(d) {
   let detectedColors = [];
-  let isSectionHS = false;
+
   if (this && this._filteredData) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
-  if (config && config._filteredData) isSectionHS = config._filteredData.some(d => sections.hsSections.includes(d.Section));
-
+  // if (config && config._filteredData) isSectionHS = config._filteredData.some(d => sections.hsSections.includes(d.Section));
+  const isSectionHS = sections.hsSections.includes(d.Section);
   if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors[isSectionHS ? "Section" : "SITC Section"][d["Section ID"]] || colors.colorGrey;
   if ("Section" in d && !Array.isArray(d.Section)) {
     return "Patent Share" in d
@@ -94,7 +94,10 @@ function backgroundImage(d, ascending) {
   const options = {2: "export", 1: "import"};
 
   if (!ascending) {
-    if ("Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
+    if (
+      "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
+      !sections.hsSections.includes(d.Section)
+    ) {
       return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
     }
     if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
@@ -162,7 +165,10 @@ function backgroundImage(d, ascending) {
     else if ("Level 1 ID" in d && !Array.isArray(d["Level 1"])) {
       return `/images/icons/cpf/cpf_${d["Level 1 ID"]}.svg`;
     }
-    else if ("Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
+    else if (
+      "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
+      !sections.hsSections.includes(d.Section)
+    ) {
       return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
@@ -481,7 +487,7 @@ export default {
     Line: {
       curve: "monotoneX",
       stroke(d) {
-        return findColor(d, this);
+        return findColor(d);
       },
       strokeWidth: 3,
       strokeLinecap: "round"
