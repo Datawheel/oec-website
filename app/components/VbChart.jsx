@@ -860,7 +860,7 @@ class VbChart extends React.Component {
                 size: d => d["Trade Value"] * 1 || 1,
                 sizeMin: 5,
                 sizeMax: 15,
-                tooltipConfig: {
+                legendTooltip: {
                   tbody: []
                 },
                 total: undefined
