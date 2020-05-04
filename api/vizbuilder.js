@@ -75,10 +75,11 @@ module.exports = function(app) {
       alias: "Country,HS4",
       measures: "Trade Value",
       filter_Country: queryParams.Country,
-      Year: queryParams.Year || 2017,
+      Year: queryParams.Year || 2018,
       parents: true
     };
 
+    const origin = `${req.protocol}://${req.headers.host}`;
     axios.get(`${origin}/api/stats/relatedness`, {params}).then(response => {
       const rcaData = response.data.data;
       const rcaObj = rcaData.reduce((all, d) => {

@@ -19,8 +19,10 @@ import VirtualSelector from "components/VirtualSelector";
 // Helpers
 import colors from "helpers/colors";
 import subnat from "helpers/subnatVizbuilder";
+import {getRandom} from "helpers/utils";
 import {getVbTitle} from "helpers/vbTitle";
 import {queryParser} from "helpers/formatters";
+import {countryItems, hsProductItems} from "helpers/random";
 
 import "./Vizbuilder.css";
 
@@ -301,6 +303,7 @@ class Vizbuilder extends React.Component {
       axios.get("/olap-proxy/data?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false")
     ]).then(axios.spread((...resp) => {
       const productData = resp[0].data.data;
+
       const productKeys = createItems(productData, ["Section", "HS2", "HS4", "HS6"], "/images/icons/hs/hs_");
       const countryMembers = resp[1].data
         .map(d => ({...d, color: colors.Continent[d.parent_id]}))
@@ -483,12 +486,18 @@ class Vizbuilder extends React.Component {
     const {routeParams} = this.props;
     const {cube} = routeParams;
 
+    const countryRandom = getRandom(countryItems);
+    let partnerRandom = getRandom(countryItems);
+    while (countryRandom === partnerRandom) {
+      partnerRandom = getRandom(countryItems);
+    }
+
     let countryIds = notEmpty(_selectedItemsCountryTitle)
       ? parseIdsToURL(_selectedItemsCountryTitle, "label")
-      : "deu";
+      : countryRandom || "deu";
     let partnerIds = notEmpty(_selectedItemsPartnerTitle)
       ? parseIdsToURL(_selectedItemsPartnerTitle, "label")
-      : "usa";
+      : partnerRandom || "usa";
 
     const isTechnologyFilter = notEmpty(_selectedItemsTechnologyTitle);
     const isTradeFilter = notEmpty(_selectedItemsProductTitle);
@@ -497,7 +506,7 @@ class Vizbuilder extends React.Component {
       ? isTechnologyFilter
         ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
         : parseIdsToURL(_selectedItemsProductTitle)
-      : "10101";
+      : getRandom(hsProductItems) || "10101";
     let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
     const flow = isTechnologyFilter ? "uspto" : _flow.value;
 
@@ -524,8 +533,8 @@ class Vizbuilder extends React.Component {
     // Generates structure of permalinks for subnational
     if (cube.includes("subnational")) {
       const {subnatGeoItems, subnatProductItems, selectedSubnatTimeTemp, startTime, endTime} = this.state;
-      const geoId = subnatGeoItems.map(d => d.id)[0];
-      const productId = subnatProductItems.map(d => d.id)[0];
+      const geoId = getRandom(subnatGeoItems.map(d => d.id));
+      const productId = getRandom(subnatProductItems.map(d => d.id));
 
       countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : geoId;
       dataset = cube;
@@ -535,7 +544,7 @@ class Vizbuilder extends React.Component {
         .join(".");
       timePlot = `${startTime.value}.${endTime.value}`;
       filterIds = notEmpty(selectedSubnatProduct) ? parseIdsToURL(selectedSubnatProduct, "id") : productId;
-      if (notEmpty(_selectedItemsPartnerTitle)) partnerIds = "deu";
+      if (notEmpty(_selectedItemsPartnerTitle)) partnerIds = partnerRandom || "deu";
     }
 
 
@@ -1205,10 +1214,11 @@ const mapDispatchToProps = dispatch => ({
 
 /** */
 function mapStateToProps(state) {
-  const {axisConfig, countryMembers, cubeSelected, loading, wdiIndicators} = state.vizbuilder;
+  const {axisConfig, countryMembers, cubeSelected, data, loading, wdiIndicators} = state.vizbuilder;
   const {xConfig, yConfig} = axisConfig;
   return {
     auth: state.auth,
+    data,
     xConfig,
     yConfig,
     countryMembers,
