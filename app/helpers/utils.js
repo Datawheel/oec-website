@@ -1,4 +1,7 @@
 /** */
+export const getRandom = items => items[Math.floor(Math.random() * items.length)];
+
+/** */
 export const range = (start, end, step = 1) => {
   end *= 1, start *= 1;
   const len = Math.floor((end - start) / step) + 1;
