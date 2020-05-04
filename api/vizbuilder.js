@@ -19,12 +19,14 @@ module.exports = function(app) {
         }});
       }
       else {
+        const year = queryParams.Year * 1;
+        const years = `${year - 2},${year - 1},${year}`;
         return axios.get(`${origin}/api/stats/eci`, {params: {
           cube: "trade_i_baci_a_96",
           rca: "Exporter Country,HS6,Trade Value",
           alias: "Country,HS6",
           measures: "Trade Value",
-          Year: queryParams.Year || 2018,
+          Year: years,
           parents: true,
           threshold_Country: 3000000000,
           threshold_HS4: 1500000000,
