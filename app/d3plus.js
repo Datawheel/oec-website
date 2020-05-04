@@ -301,7 +301,6 @@ export default {
       if (!title) title = "Unspecified Territories";
       const bgColor = findColorV2(itemBgImg, d);
       const imgUrl = backgroundImageV2(itemBgImg, d);
-      console.log(bgColor, imgUrl, itemBgImg, d);
 
       return tooltipTitle(bgColor, imgUrl, title);
     }
