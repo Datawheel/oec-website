@@ -1,17 +1,18 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Helmet from 'react-helmet';
 import MathJax from 'react-mathjax2';
-import { AnchorLink } from '@datawheel/canon-core';
+import {AnchorLink} from '@datawheel/canon-core';
 
 export default class Methodology extends Component {
 	render() {
 		const tableofcontents = [
-			{ content: 'what-complexity', title: 'What is Economic Complexity?' },
-			{ content: 'who-complexity', title: 'Who uses Economic Complexity methods?' },
-			{ content: 'keys-complexity', title: 'What are some key concepts in Economic Complexity?' },
-			{ content: 'what-relatedness', title: 'What is Relatedness?' },
-			{ content: 'how-relatedness', title: 'How do you calculate Relatedness?' },
-			{ content: 'calculate-relatedness', title: 'How is the Economic Complexity Index calculated?' },
+			{content: 'introduction', title: 'Introduction: The Need For Economic Complexity'},
+			{content: 'what-complexity', title: 'What is Economic Complexity?'},
+			{content: 'who-complexity', title: 'Who uses Economic Complexity methods?'},
+			{content: 'keys-complexity', title: 'What are some key concepts in Economic Complexity?'},
+			{content: 'what-relatedness', title: 'What is Relatedness?'},
+			{content: 'how-relatedness', title: 'How do you calculate Relatedness?'},
+			{content: 'calculate-relatedness', title: 'How is the Economic Complexity Index calculated?'},
 			{
 				content: 'complexity-topics',
 				title: 'How Does Economic Complexity relate to Economic Growth, Inequality, and Sustainability?'
@@ -42,7 +43,7 @@ export default class Methodology extends Component {
 				reference:
 					'Romer, P. M. The Origins of Endogenous Growth. The Journal of Economic Perspectives 8, 3–22 (1994).'
 			},
-			{ reference: 'Fukuyama, F. Trust: The Social Virtues and the Creation of Prosperity. (Free Press, 1995).' },
+			{reference: 'Fukuyama, F. Trust: The Social Virtues and the Creation of Prosperity. (Free Press, 1995).'},
 			{
 				reference:
 					'Knack, S. & Keefer, P. Does Social Capital Have an Economic Payoff? A Cross-Country Investigation. The Quarterly Journal of Economics 112, 1251–1288 (1997).'
@@ -55,7 +56,7 @@ export default class Methodology extends Component {
 				reference:
 					'Coleman, J. S. Social Capital in the Creation of Human Capital. American Journal of Sociology 94, S95–S120 (1988).'
 			},
-			{ reference: 'Porter, M. E. The Competitive Advantage of Nations. Simon and Shuster (1990).' },
+			{reference: 'Porter, M. E. The Competitive Advantage of Nations. Simon and Shuster (1990).'},
 			{
 				reference:
 					'Hausmann, R. & Hidalgo, C. A. The network structure of economic output. Journal of Economic Growth 1–34 (2011).'
@@ -153,7 +154,7 @@ export default class Methodology extends Component {
 			<div className="definitions">
 				<Helmet title="Methodology" />
 
-				<h1>Introduction: The Need For Economic Complexity</h1>
+				<h1>Methodology</h1>
 
 				<div className="table-of-contents">
 					<ul>
@@ -169,27 +170,34 @@ export default class Methodology extends Component {
 					</ul>
 				</div>
 
-				<p>
-					Why are some countries rich and others poor? For centuries, scholars have been working to identify
-					the factors that explain differences in prosperity. Their work has taught us about the importance of
-					institutions,<sup>1-3</sup> technology,<sup>4,5</sup> human capital, and social capital.<sup>6-9</sup>{' '}
-					Yet, we have also learned that economic prosperity cannot be tied narrowly to any individual factor.
-					In fact, differences between rich and poor countries are multifarious, and the factors that drive
-					prosperity can be both numerous and highly specific.<sup>10,11</sup> Hence, we need systemic
-					explanations that are not narrowly focused on one factor or the other, but that consider “all of the
-					above.”
-				</p>
+				<div className="definitions-block">
+					<a id={`definitions-title-introduction`} className="definitions-title-block-anchor" />
+					<div className="definitions-content">
+						<h1>Introduction: The Need For Economic Complexity</h1>
 
-				<p>
-					Economic complexity is an approach to understand the development of national and regional economies
-					focused on “all of the above.” Its methods use high resolution data on the activities that are
-					present in locations to predict the development dynamics of countries, cities, and regions. These
-					methods can predict the economic activities that a country, city, or region will enter or exit in
-					the future,<sup>12,13</sup> as well as an economy’s expected level of income,<sup>14,15</sup>{' '}
-					economic growth,<sup>14,15</sup> income inequality,<sup>16</sup> and emissions.<sup>17,18</sup>
-				</p>
+						<p>
+							Why are some countries rich and others poor? For centuries, scholars have been working to identify
+							the factors that explain differences in prosperity. Their work has taught us about the importance of
+							institutions,<sup>1-3</sup> technology,<sup>4,5</sup> human capital, and social capital.<sup>6-9</sup>{' '}
+							Yet, we have also learned that economic prosperity cannot be tied narrowly to any individual factor.
+							In fact, differences between rich and poor countries are multifarious, and the factors that drive
+							prosperity can be both numerous and highly specific.<sup>10,11</sup> Hence, we need systemic
+							explanations that are not narrowly focused on one factor or the other, but that consider “all of the
+							above.”
+						</p>
 
-				<p>In this section, we explain some of the basic ideas that give shape to this field of study.</p>
+						<p>
+							Economic complexity is an approach to understand the development of national and regional economies
+							focused on “all of the above.” Its methods use high resolution data on the activities that are
+							present in locations to predict the development dynamics of countries, cities, and regions. These
+							methods can predict the economic activities that a country, city, or region will enter or exit in
+							the future,<sup>12,13</sup> as well as an economy’s expected level of income,<sup>14,15</sup>{' '}
+							economic growth,<sup>14,15</sup> income inequality,<sup>16</sup> and emissions.<sup>17,18</sup>
+						</p>
+
+						<p>In this section, we explain some of the basic ideas that give shape to this field of study.</p>
+					</div>
+				</div>
 
 				<div className="definitions-block">
 					<a id={`definitions-title-what-complexity`} className="definitions-title-block-anchor" />
