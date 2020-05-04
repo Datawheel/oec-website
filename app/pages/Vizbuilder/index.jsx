@@ -367,6 +367,13 @@ class Vizbuilder extends React.Component {
     window.removeEventListener("scroll", this.handleScroll);
   }
 
+  safeChangeHandler = (stateKey, item) => {
+    const items = this.state[stateKey];
+    const validItems = items.filter(d => d.type === item.type && d.id !== item.id);
+    const nextItems = validItems.concat(item);
+    this.setState({[stateKey]: nextItems});
+  }
+
   /**
    * @description Creates a visualization after to click "Build Visualization" button
    */
@@ -892,10 +899,7 @@ class Vizbuilder extends React.Component {
                       getIcon={subnatItem.productIcon}
                       items={this.state.subnatProductItems}
                       levels={productLevels}
-                      onItemSelect={item => {
-                        const nextItems = this.state.selectedSubnatProductTemp.concat(item);
-                        this.setState({selectedSubnatProductTemp: nextItems});
-                      }}
+                      onItemSelect={item => this.safeChangeHandler("selectedSubnatProductTemp", item)}
                       onItemRemove={(evt, item) => {
                         // evt: MouseEvent<HTMLButtonElement>
                         evt.stopPropagation();
@@ -921,10 +925,7 @@ class Vizbuilder extends React.Component {
                       getIcon={d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
                       items={this.state.product}
                       levels={["Section", "HS2", "HS4", "HS6"]}
-                      onItemSelect={item => {
-                        const nextItems = this.state._selectedItemsProduct.concat(item);
-                        this.setState({_selectedItemsProduct: nextItems});
-                      }}
+                      onItemSelect={item => this.safeChangeHandler("_selectedItemsProduct", item)}
                       onItemRemove={(evt, item) => {
                         // evt: MouseEvent<HTMLButtonElement>
                         // item: SelectedItem
@@ -967,7 +968,9 @@ class Vizbuilder extends React.Component {
                       items={this.state.subnatGeography}
                       levels={this.state.subnatGeoLevels || []}
                       onItemSelect={item => {
-                        const nextItems = this.state.selectedSubnatGeoTemp.concat(item);
+                        const items = this.state.selectedSubnatGeoTemp;
+                        const validItems = items.filter(d => d.type === item.type && d.id !== item.id);
+                        const nextItems = validItems.concat(item);
                         const nextState = {selectedSubnatGeoTemp: nextItems};
                         if (this.state.selectedSubnatGeoTemp.length === 0) {
                           const levels = this.state.subnatTimeLevels;
