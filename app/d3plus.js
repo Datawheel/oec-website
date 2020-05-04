@@ -297,7 +297,8 @@ export default {
       let itemBgImg = Array.isArray(parent[1]) ? "WildCard" : parentId;
       if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].find(h => Object.keys(d).includes(h)) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
 
-      const title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
+      let title = Array.isArray(parent[1]) ? "Multiple Items" : parent[1];
+      if (!title) title = "Unspecified Territories";
       const bgColor = findColorV2(itemBgImg, d);
       const imgUrl = backgroundImageV2(itemBgImg, d);
 
@@ -370,10 +371,10 @@ export default {
       }
       // Look for measures...
       if (d["Trade Value RCA"]) {
-        tbodyData.push(["Trade Value RCA", `${formatAbbreviate(d["Trade Value RCA"])}`]);
+        tbodyData.push(["RCA", `${formatAbbreviate(d["Trade Value RCA"])}`]);
       }
       if (d["Trade Value Relatedness"]) {
-        tbodyData.push(["Trade Value Relatedness", `${formatAbbreviate(d["Trade Value Relatedness"])}`]);
+        tbodyData.push(["Relatedness", `${formatAbbreviate(d["Trade Value Relatedness"])}`]);
       }
       if (d.shareDelta) {
         tbodyData.push(["Market Share ∆", `${formatAbbreviate(d.shareDelta * 100)}%`]);
