@@ -9,7 +9,6 @@ import {range} from 'helpers/utils';
 import Loading from 'components/Loading';
 import RankingText from 'components/RankingText';
 import RankingTable from 'components/RankingTable';
-import StaticRankingsTable from 'components/StaticRankingsTable';
 
 export default class Static extends Component {
   state = {
