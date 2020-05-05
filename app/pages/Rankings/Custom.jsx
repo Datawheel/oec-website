@@ -721,8 +721,10 @@ class Custom extends Component {
 		}
 
 		const measure = country ? 'ECI' : 'PCI';
-		const columnYEARS = range(years[0], years[1]).map((year, index, {length}) => ({
-			id: length === index + 1 ? 'lastyear' : `${year}`,
+		const YEARS = range(years[0], years[1]);
+		YEARS.reverse()
+		const columnYEARS = YEARS.map((year, index, {length}) => ({
+			id: index === 0 ? 'lastyear' : `${year}`,
 			Header: () => (
 				<div className="header">
 					<span className="year">{year}</span>
