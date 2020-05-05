@@ -288,7 +288,7 @@ export default class Legacy extends Component {
                   {revOptions.map((d, k) =>
                     <AnchorButton
                       key={k}
-                      className={depth.toUpperCase() === d && 'active'}
+                      className={rev.toUpperCase() === d && 'active'}
                       text={d}
                       href={`/en/rankings/legacy_pci/${depth}/${d.toLowerCase()}`}
                     />
