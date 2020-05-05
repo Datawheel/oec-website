@@ -16,12 +16,11 @@ export default class Legacy extends Component {
     type: null,
     depth: null,
     rev: null,
-    path: null,
     data: null,
     columns: null,
     _loading: true
   }
-  /*
+
   componentDidMount = () => {
     const {type, depth, rev} = this.props;
     const path = this.pathCreator(type, depth, rev);
@@ -35,7 +34,6 @@ export default class Legacy extends Component {
       this.fetchData(path, type, depth, rev);
     }
   }
-  */
 
   pathCreator = (type, depth, rev) => {
     let path = null;
@@ -43,7 +41,7 @@ export default class Legacy extends Component {
       path = `/olap-proxy/data.jsonrecords?cube=legacy_complexity_eci_a&drilldowns=Country,Year&measures=ECI&parents=false&sparse=false`;
     }
     else {
-      path = `/olap-proxy/data.jsonrecords?cube=legacy_complexity_${type}_a_${rev}_${depth}&drilldowns=${depth.toUpperCase()},${type.toUpperCase()}+Rank,Year&measures=${type.toUpperCase()}&parents=false&sparse=false`;
+      path = `/olap-proxy/data.jsonrecords?cube=legacy_complexity_pci_a_${rev}_${depth}&drilldowns=Year,${depth.toUpperCase()}&measures=PCI&parents=false&sparse=false`;
     }
     return path;
   }
@@ -89,9 +87,9 @@ export default class Legacy extends Component {
         });
         data.push(row);
       }
-      data.sort((a, b) => a[maxYear][`${maxYear}`] - b[maxYear][`${maxYear}`]);
+      data.sort((a, b) => b[maxYear][`${maxYear} ${`${type}`.toUpperCase()}`] - a[maxYear][`${maxYear} ${`${type}`.toUpperCase()}`]);
 
-      console.log("data", data);
+      console.log("data", data, minYear, maxYear);
       const columns = this.createColumns(type, depth, rev, minYear, maxYear);
 
       this.setState({
@@ -206,8 +204,10 @@ export default class Legacy extends Component {
     }
 
     const measure = type.toUpperCase();
-    const columnYEARS = range(initialYear, finalYear).map((year, index, {length}) => ({
-      id: length === index + 1 ? 'lastyear' : `${year}`,
+    const YEARS = range(initialYear, finalYear);
+    YEARS.reverse();
+    const columnYEARS = YEARS.map((year, index, {length}) => ({
+      id: index === 0 ? 'lastyear' : `${year}`,
       Header: () =>
         <div className="header">
           <span className="year">{year}</span>
@@ -227,6 +227,7 @@ export default class Legacy extends Component {
             </div>
           );
         }
+        return <span />;
       },
       className: 'year'
     }));
