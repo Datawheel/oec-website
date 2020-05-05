@@ -100,7 +100,7 @@ export default class Static extends Component {
         data.push(row);
       }
 
-      //Sort for the final year
+      // Sort for the final year
       data.sort((a, b) => a[maxYear][`${maxYear} Ranking`] - b[maxYear][`${maxYear} Ranking`]);
 
       // Create columns
@@ -220,8 +220,10 @@ export default class Static extends Component {
 
     // Set the name for the columns for each year
     const measure = type.toUpperCase();
-    const columnYEARS = range(initialYear, finalYear).map((year, index, {length}) => ({
-      id: length === index + 1 ? 'lastyear' : `${year}`,
+    const YEARS = range(initialYear, finalYear);
+    YEARS.reverse();
+    const columnYEARS = YEARS.map((year, index, {length}) => ({
+      id: index === 0 ? 'lastyear' : `${year}`,
       Header: () =>
         <div className="header">
           <span className="year">{year}</span>
