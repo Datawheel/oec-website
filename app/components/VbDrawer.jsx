@@ -145,8 +145,6 @@ class VbDrawer extends React.Component {
       });
     }
 
-    console.log(countries);
-
     const timeTitle = timeTitleFormat(time);
     const profileType =  isSubnatProfile
       ? cube : isGeoGrouping ? "country" : parentKey === "Section" ? "hs92" : cube;
