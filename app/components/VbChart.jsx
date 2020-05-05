@@ -11,7 +11,7 @@ import {
   Rings,
   Plot
 } from "d3plus-react";
-import {range} from "helpers/utils";
+import {parseURL, range} from "helpers/utils";
 import colors from "helpers/colors";
 import subnat from "helpers/subnatVizbuilder";
 import {formatAbbreviate} from "d3plus-format";
@@ -174,7 +174,7 @@ class VbChart extends React.Component {
       const year = time * 1;
       params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }
-
+    const fullURL = `${OLAP_API}?${parseURL(params)}`;
     return axios
       .get(OLAP_API, {params})
       .then(resp => {
@@ -195,7 +195,7 @@ class VbChart extends React.Component {
             return Object.assign(d, {"Time ID": timeId});
           });
         }
-        this.props.updateData({data, loading: false});
+        this.props.updateData({API: fullURL, data, loading: false});
         const nextState = {
           data,
           auth: true,
@@ -207,7 +207,7 @@ class VbChart extends React.Component {
       }).catch(error => {
         // TODO: AUTH
         const nextState = {data: [], loading: false, routeParams};
-        this.props.updateData({data: [], loading: false});
+        this.props.updateData({API: undefined, data: [], loading: false});
         if (error.response && error.response.status === 401) nextState.auth = false;
         this.setState(nextState);
       });
@@ -218,7 +218,7 @@ class VbChart extends React.Component {
     const {geoLevels} = cubeSelected;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
     // Uses subnat cubes
-    const prevState = {data: [], loading: true};
+    const prevState = {API: undefined, data: [], loading: true};
     this.props.updateData(prevState);
     if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
     this.setState(prevState);
@@ -297,8 +297,9 @@ class VbChart extends React.Component {
             });
 
             const data = [...exportData, ...importData];
-
-            this.props.updateData({data, loading: false});
+            const fullURL1 = `${OLAP_API}?${parseURL(exportsBalanceParams)}`;
+            const fullURL2 = `${OLAP_API}?${parseURL(importsBalanceParams)}`;
+            this.props.updateData({API: [fullURL1, fullURL2], data, loading: false});
             this.setState({
               data,
               loading: false,
@@ -414,7 +415,8 @@ class VbChart extends React.Component {
         })
         .then(resp => {
           const data = resp.data.data;
-          this.props.updateData({data, loading: false});
+          const fullURL = `${CANON_STATS_API}${endpoint}${parseURL(apiStatsParams)}`;
+          this.props.updateData({API: fullURL, data, loading: false});
           this.setState({
             data,
             auth: true,
@@ -432,7 +434,8 @@ class VbChart extends React.Component {
         .get("/api/connections/hs4", {params: ringsParams})
         .then(resp => {
           const data = resp.data;
-          this.props.updateData({data, loading: false});
+          const fullURL = `/api/connections/hs4?${parseURL(ringsParams)}`;
+          this.props.updateData({API: fullURL, data, loading: false});
           this.setState({
             data,
             auth: true,
@@ -449,7 +452,8 @@ class VbChart extends React.Component {
       };
       return axios.get("/api/gdp/eci", {params: scatterParams}).then(resp => {
         const data = resp.data;
-        this.props.updateData({data, loading: false});
+        const fullURL = `/api/gdp/eci?${parseURL(scatterParams)}`;
+        this.props.updateData({API: fullURL, data, loading: false});
         this.setState({
           data,
           loading: false,
@@ -463,7 +467,8 @@ class VbChart extends React.Component {
       .then(resp => {
         let data = resp.data.data;
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
-        this.props.updateData({data, loading: false});
+        const fullURL = `${OLAP_API}?${parseURL(params)}`;
+        this.props.updateData({API: fullURL, data, loading: false});
         this.setState({
           data,
           auth: true,
@@ -471,7 +476,7 @@ class VbChart extends React.Component {
           routeParams
         });
       }).catch(error => {
-        this.props.updateData({data: [], loading: false});
+        this.props.updateData({API: undefined, data: [], loading: false});
         this.setState({data: [], loading: false, routeParams});
       });
   };

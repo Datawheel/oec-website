@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from "react-redux";
 import {Link} from "react-router";
 import {withNamespaces} from "react-i18next";
 import {
@@ -44,6 +45,7 @@ class VbShare extends React.Component {
       permalink: "",
       separator: ",",
       imageFormat: "svg",
+      isCopiedLink: false,
       autoFocus: true,
       canEscapeKeyClose: true,
       canOutsideClickClose: true,
@@ -116,7 +118,9 @@ class VbShare extends React.Component {
   }
 
   shouldComponentUpdate = (prevProps, prevState) => this.state.isOpen !== prevState.isOpen ||
-  this.state.separator !== prevState.separator || this.state.imageFormat !== prevState.imageFormat;
+  this.state.separator !== prevState.separator || this.state.imageFormat !== prevState.imageFormat ||
+  this.state.isCopiedLink1 !== prevState.isCopiedLink1 || this.state.isCopiedLink2 !== prevState.isCopiedLink2 ||
+  prevProps.API !== this.props.API;
 
   handleOpen = () => this.setState({isOpen: true});
   handleClose = () => {
@@ -125,14 +129,23 @@ class VbShare extends React.Component {
 
   handleSeparator = evt => this.setState({separator: evt.target.value});
   handleImageFormat = evt => (console.log(evt.target.value), this.setState({imageFormat: evt.target.value}));
+  handleCopyClipboard = (key, text) => {
+    this.setState({[key]: true});
+    navigator.clipboard.writeText(text);
+  }
 
   render() {
     const {separator} = this.state;
-    const {data} = this.props;
+    const {API, data, location, t} = this.props;
     const filteredData = data.slice();
+    const {origin} = location;
 
     const columnKeys = filteredData[0] ? Object.keys(data[0]) : [];
     const columns = columnKeys.map(d => ({Header: d, accessor: d}));
+
+    const isStringAPI = typeof API === "string";
+    const isUndefinedAPI = typeof API === "undefined";
+    const fullURLs = isStringAPI ? [API] : isUndefinedAPI ? undefined : API;
 
     return <div>
       <Button className="vb-chart-button-option" icon="import" text="Download" onClick={this.handleOpen} />
@@ -145,7 +158,26 @@ class VbShare extends React.Component {
       >
         <div className="bp3-drawer-body">
           <div className="vb-share-option">
-            <h5 className="title">Preview data</h5>
+            <h5 className="title">{t("API")}</h5>
+            {fullURLs.map((d, i, {length}) => {
+              const URL = `${origin}${d}`;
+              const style = length > 1 && i < length - 1 ? {marginBottom: 5} : {};
+              return <InputGroup
+                key={`vb_download_api_${d}_${i}`}
+                style={style}
+                value={URL}
+                rightElement={<Button
+                  className="is-copy"
+                  minimal={true}
+                  onClick={() => this.handleCopyClipboard(`isCopiedLink${i + 1}`, URL)}
+                  text={this.state[`isCopiedLink${i + 1}`] ? t("Copied") : t("Copy")}
+                />}
+              />;
+            })}
+          </div>
+
+          <div className="vb-share-option">
+            <h5 className="title">{t("Preview data")}</h5>
             <ReactTable
               columns={columns}
               data={filteredData.slice(0, 5)}
@@ -159,7 +191,7 @@ class VbShare extends React.Component {
               fontSize="md"
               icon="import"
               onClick={this.onCSV.bind(this)}
-              text="Download CSV"
+              text={t("Download CSV")}
             />
           </div>
           <div className="vb-share-option">
@@ -172,12 +204,12 @@ class VbShare extends React.Component {
             >
               <Radio label="Colon" value="," />
               <Radio label="Semicolon" value=";" />
-              <Radio label="Tab" value="\t" />
+              <Radio label="Tab" value="\r\t" />
             </RadioGroup>
           </div>
 
           <div className="vb-share-option">
-            <h5 className="title">Save visualization</h5>
+            <h5 className="title">{t("Save visualization")}</h5>
             <Button
               className="save-image-download-button vb-chart-button-option"
               onClick={() => this.onSave()}
@@ -187,7 +219,7 @@ class VbShare extends React.Component {
               fontSize="md"
               fill
             >
-              {this.state.imageProcessing ? "Processing image" : `Download ${this.state.imageFormat.toUpperCase()}`}
+              {this.state.imageProcessing ? t("Processing image") : `Download ${this.state.imageFormat.toUpperCase()}`}
             </Button>
           </div>
 
@@ -212,4 +244,14 @@ class VbShare extends React.Component {
   }
 }
 
-export default withNamespaces()(VbShare);
+/** */
+function mapStateToProps(state) {
+  const {API} = state.vizbuilder;
+  console.log(state.vizbuilder);
+
+  return {
+    API
+  };
+}
+
+export default withNamespaces()(connect(mapStateToProps)(VbShare));
