@@ -247,7 +247,6 @@ class VbShare extends React.Component {
 /** */
 function mapStateToProps(state) {
   const {API} = state.vizbuilder;
-  console.log(state.vizbuilder);
 
   return {
     API
