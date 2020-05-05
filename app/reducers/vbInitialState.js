@@ -10,6 +10,7 @@ const axisConfig = {
  */
 export default function initialStateFactory() {
   return {
+    API: undefined,
     data: [],
     loading: true,
     status: 200,
