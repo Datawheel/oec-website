@@ -138,8 +138,8 @@ class Vizbuilder extends React.Component {
       _partner: undefined,
       _endYear: {title: 2018, value: 2018},
       _endYearTitle: {title: 2018, value: 2018},
-      _startYear: {title: 2014, value: 2014},
-      _startYearTitle: {title: 2014, value: 2014},
+      _startYear: {title: 2013, value: 2013},
+      _startYearTitle: {title: 2013, value: 2013},
       scrolled: false,
 
       _selectedItemsProduct: [],
