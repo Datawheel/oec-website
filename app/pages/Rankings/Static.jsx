@@ -242,6 +242,7 @@ export default class Static extends Component {
             </div>
           );
         }
+        return <span />;
       },
       className: 'year'
     }));
