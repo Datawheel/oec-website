@@ -75,7 +75,7 @@ export default class Static extends Component {
         rowData.forEach(d => {
           const values = {};
           values[`${d.Year} ${`${type}`.toUpperCase()}`] = d[`${type}`.toUpperCase()];
-          values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()  } Rank`];
+          values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()} Rank`];
           row[`${d.Year}`] = values;
         });
         // Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
@@ -83,8 +83,8 @@ export default class Static extends Component {
           if (!row[d]) {
             if (d !== maxYear) {
               const values = {};
-              values[`${d  } ${  `${type}`.toUpperCase()}`] = -1000;
-              values[`${d  } Ranking`] = null;
+              values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
+              values[`${d} Ranking`] = null;
               row[`${d}`] = values;
             }
             else {
@@ -208,7 +208,7 @@ export default class Static extends Component {
                   <div className="name">{props.original[`${depth.toUpperCase()}`]}</div>
                   <Icon icon={'chevron-right'} iconSize={14} />
                 </a>
-                :                   <div className="link">
+                : <div className="link">
                   <div className="name">{props.original[`${depth.toUpperCase()}`]}</div>
                 </div>
               }
@@ -258,25 +258,22 @@ export default class Static extends Component {
     const {type, depth, rev} = this.props;
     const {data, columns, _loading} = this.state;
 
+    const title = {
+      eci: "Economic Complexity Rankings (ECI)",
+      pci: "Product Complexity Rankings (PCI)"
+    }
+
     const depthDict = {
       hs4: '4 Digits',
       hs6: '6 Digits'
     };
 
-    const revDict = {
-      hs92: `'95-'18 (HS92)`,
-      hs96: `'98-'18 (HS96)`,
-      hs02: `'03-'18 (HS02)`,
-      hs07: `'08-'18 (HS07)`,
-      hs12: `'12-'18 (HS12)`
-    };
-
     return (
       <div className="rankings-page">
         <div className="rankings-content">
-          <Helmet title={`${type.toUpperCase()} ${depthDict[depth]} ${revDict[rev]} Rankings`} />
+          <Helmet title={`${title[type]}`} />
 
-          <RankingText type={'static'} title={`${type.toUpperCase()} ${depthDict[depth]} ${revDict[rev]} Rankings`} />
+          <RankingText type={'static'} title={`${title[type]}`} subtitle={`* Using exports data classified according the Harmonized System (${rev.toUpperCase()}) with a depth of ${depthDict[depth]}.`} />
 
           {_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
         </div>

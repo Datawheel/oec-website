@@ -17,16 +17,19 @@
 		}
 
 		& .about {
-			& .text {
-				min-width: 20%;
-				font-size: var(--font-xs);
-				letter-spacing: 0.01em;
-				line-height: 1.5;
-				margin-right: 0.01rem;
+			& p {
+				font-size: var(--font-sm);
+				font-weight: 300;
+				margin-bottom: var(--gutter-sm);
+				line-height: 1rem;
 
 				& .link {
 					color: var(--accent);
 				}
+			}
+
+			& .italic {
+				font-style: italic;
 			}
 		}
 

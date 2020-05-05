@@ -89,7 +89,6 @@ export default class Legacy extends Component {
       }
       data.sort((a, b) => b[maxYear][`${maxYear} ${`${type}`.toUpperCase()}`] - a[maxYear][`${maxYear} ${`${type}`.toUpperCase()}`]);
 
-      console.log("data", data, minYear, maxYear);
       const columns = this.createColumns(type, depth, rev, minYear, maxYear);
 
       this.setState({
@@ -241,12 +240,17 @@ export default class Legacy extends Component {
     const {type} = this.props;
     const {data, columns, _loading} = this.state;
 
+    const title = {
+      eci: "Economic Complexity Legacy Rankings (ECI)",
+      pci: "Product Complexity Legacy Rankings (PCI)"
+    }
+
     return (
       <div className="rankings-page">
         <div className="rankings-content">
-          <Helmet title={`${type.toUpperCase()} Legacy Rankings`} />
+          <Helmet title={`${title[type]}`} />
 
-          <RankingText type={'legacy'} title={`${type.toUpperCase()} Legacy Rankings`} />
+          <RankingText type={'legacy'} title={`${title[type]}`} subtitle={type} />
 
           {_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
         </div>
