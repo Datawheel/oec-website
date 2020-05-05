@@ -454,8 +454,6 @@ class Custom extends Component {
 			}
 		}
 
-		console.log(data);
-
 		let flag = 1;
 		const finalData = Object.values(data).map((m) => {
 			range(yearRangeInitial, yearRangeFinal).map((year) => {
