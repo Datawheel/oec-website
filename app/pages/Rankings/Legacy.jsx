@@ -1,9 +1,11 @@
 /* eslint-disable quotes */
 import React, {Component} from 'react';
 import Helmet from "react-helmet";
+import {Route} from "react-router"
 import axios from 'axios';
 import numeral from 'numeral';
 import {Icon} from '@blueprintjs/core';
+import {AnchorButton, Button, ButtonGroup} from '@blueprintjs/core';
 
 import {range} from 'helpers/utils';
 
@@ -236,8 +238,18 @@ export default class Legacy extends Component {
     return columns.filter(f => f !== null);
   };
 
+  handleOnClick = (change, value, keep) => {
+    let path = null;
+    if (change === "depth") {
+      path = `/en/rankings/legacy_pci/${value.toLowerCase()}/${keep}`;
+    } else {
+      path = `/en/rankings/legacy_pci/${keep}/${value.toLowerCase()}`;
+    }
+    return <Route path={path} />;
+  }
+
   render() {
-    const {type} = this.props;
+    const {type, depth, rev} = this.props;
     const {data, columns, _loading} = this.state;
 
     const title = {
@@ -245,12 +257,46 @@ export default class Legacy extends Component {
       pci: "Product Complexity Legacy Rankings (PCI)"
     }
 
+    const depthOptions = ["HS4", "HS6"];
+    const revOptions = ["HS92", "HS96", "HS02", "HS07"];
+
     return (
       <div className="rankings-page">
         <div className="rankings-content">
           <Helmet title={`${title[type]}`} />
 
           <RankingText type={'legacy'} title={`${title[type]}`} subtitle={type} />
+
+          {!_loading && type === "pci" && (
+            <div className="settings legacy-selector">
+              <div className="selector">
+                <h4 className="first">Depth: </h4>
+                <ButtonGroup fill={true}>
+                  {depthOptions.map((d, k) =>
+                    <AnchorButton
+                      key={k}
+                      className={depth.toUpperCase() === d && 'active'}
+                      text={d}
+                      href={`/en/rankings/legacy_pci/${d.toLowerCase()}/${rev}`}
+                    />
+                  )}
+                </ButtonGroup>
+              </div>
+              <div className="selector">
+                <h4>Rev: </h4>
+                <ButtonGroup fill={true}>
+                  {revOptions.map((d, k) =>
+                    <AnchorButton
+                      key={k}
+                      className={rev.toUpperCase() === d && 'active'}
+                      text={d}
+                      href={`/en/rankings/legacy_pci/${depth}/${d.toLowerCase()}`}
+                    />
+                  )}
+                </ButtonGroup>
+              </div>
+            </div>
+          )}
 
           {_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
         </div>
