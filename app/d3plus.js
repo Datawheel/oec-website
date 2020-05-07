@@ -2,7 +2,7 @@ import colors from "./helpers/colors";
 import style from "style.yml";
 import {formatAbbreviate} from "d3plus-format";
 import {mean} from "d3-array";
-import {hsId} from "./helpers/formatters";
+import {hsId, timeFormat} from "./helpers/formatters";
 import sections from "./helpers/sections";
 
 const bad = "#cf5555";
@@ -404,7 +404,18 @@ export default {
       if (x && x[0] && x[0].__data__.share) {
         tbodyData.push(["Percent", `${formatAbbreviate(x[0].__data__.share * 100)}%`]);
       }
-      if (d.Year && d.Year < 3000) {
+
+      if (d.Time && d.Time < 203012) {
+        const timeOptions = {
+          4: "Year",
+          5: "Quarter",
+          6: "Month"
+        };
+
+        const timeLength = d.Time.toString().length;
+        tbodyData.push([timeOptions[timeLength] || "Time", timeFormat(d.Time.toString())]);
+      }
+      else if (d.Year && d.Year < 3000) {
         tbodyData.push(["Year", d.Year]);
       }
       return tbodyData;
