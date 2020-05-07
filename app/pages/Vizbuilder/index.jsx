@@ -975,6 +975,8 @@ class Vizbuilder extends React.Component {
                           const items = this.state.subnatTimeItems;
                           nextState.subnatTimeLevelSelected = levels[levels.length - 1];
                           nextState.selectedSubnatTimeTemp = [items[0]];
+                          nextState.endTimeTemp = items[0];
+                          nextState.startTimeTemp = items[3];
                         }
                         this.setState(nextState);
                       }}
