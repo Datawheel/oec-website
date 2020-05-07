@@ -56,10 +56,10 @@ export default class Static extends Component {
   fetchData = (path, type, depth, rev) => {
     const data = [];
     const pathGDP = '/olap-proxy/data.jsonrecords?Indicator=NY.GDP.PCAP.PP.KD&cube=indicators_i_wdi_a&drilldowns=Country%2CYear&measures=Measure&parents=false&sparse=false';
-    const pathTrade = '/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country%2CYear&measures=Trade+Value&parents=false&sparse=false';
+    // const pathTrade = '/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country%2CYear&measures=Trade+Value&parents=false&sparse=false';
     // Reset _loading for the component get's off the display
     this.setState({_loading: true, data: []});
-    axios.all([axios.get(path), axios.get(pathGDP)], axios.get(pathTrade)).then(
+    axios.all([axios.get(path), axios.get(pathGDP)]).then(
       axios.spread((resp1, resp2, resp3) => {
         const pathData = resp1.data.data;
         // Country, HS4, HS6
@@ -138,7 +138,6 @@ export default class Static extends Component {
           // Data for the scatter chart
           gdpData = resp1.data.data;
           gdpRaw = resp2.data.data.filter(f => uniqueYears.includes(f.Year));
-          // tradeRaw = resp3.data.data.filter(f => uniqueYears.includes(f.Year));
           gdpData.forEach(d => {
             const _gdp = gdpRaw.filter(f => f["Country ID"].slice(f["Country ID"].length - 3) === d["Country ID"]);
             const _gdpMatch = _gdp.find(f => f.Year === d.Year);
@@ -147,16 +146,6 @@ export default class Static extends Component {
             } else {
               d["GDP"] = null;
             }
-
-            /*
-            const _trade = tradeRaw.filter(f => f["Country ID"].slice(f["Country ID"].length - 3) === d["Country ID"]);
-            const _tradeMatch = _trade.find(f => f.Year === d.Year);
-            if (_tradeMatch !== undefined) {
-              d["Trade Value"] = _tradeMatch["Trade Value"];
-            } else {
-              d["Trade Value"] = null;
-            }
-            */
           });
           _graphs = true;
         } else {
@@ -201,7 +190,7 @@ export default class Static extends Component {
       columnNAME = {
         id: 'category',
         accessor: d => d.Country,
-        width: 400,
+        width: 240,
         Header: () =>
           <div className="header">
             <span className="year">{'Country'}</span>
@@ -350,7 +339,13 @@ export default class Static extends Component {
         <div className="rankings-content">
           <Helmet title={`${title[type]}`} />
 
-          <RankingText type={'static'} title={`${title[type]}`} subtitle={`* Using exports data classified according the Harmonized System (${rev.toUpperCase()}) with a depth of ${depthDict[depth]}.`} />
+          <RankingText
+            type={'static'}
+            title={`${title[type]}`}
+            subtitle={`* Using exports data classified according the Harmonized System (${rev.toUpperCase()}) with a depth of ${depthDict[depth]}
+                      for countries with more than $1 Billion in total exports, and more than 1 in Million of citizens and products that have a
+                      trade value over $500 Millions on the market.`}
+          />
 
           {type === "eci" && _graphs && (
             <div className="settings legacy-selector">
@@ -369,7 +364,11 @@ export default class Static extends Component {
 
           {type === "eci" && _graphs && (
             <div className="graph-component">
-              <ECIgraphs graphData={graphData.filter(f => f.Year === graphYear)} gdpData={gdpData.filter(f => f.Year === graphYear)} year={graphYear} />
+              <ECIgraphs
+                graphData={graphData.filter(f => f.Year === graphYear)}
+                gdpData={gdpData.filter(f => f.Year === graphYear)}
+                year={graphYear}
+              />
             </div>
           )}
 

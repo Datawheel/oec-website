@@ -8,30 +8,34 @@ class RankingText extends Component {
 				{type === 'static' && (
 					<div>
 						<h1 className="title">{title}</h1>
+						<p className="italic">
+							{subtitle}
+						</p>
 						<div className="about">
-							<p>
-								The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product.
+							<div className="paragraph">
+								<p>
+									The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product.
 							</p>
-							<p>
-								ECI and PCI values are estimated directly from matrices summarizing the geography of economic activity, and can be calculated on demand.
+								<p>
+									ECI and PCI values are estimated directly from matrices summarizing the geography of economic activity, and can be calculated on demand.
 							</p>
-							<p>
-								Formally, the complexity of location (ECI) is a function of the complexity of the activities present in it. Similarly, the complexity of an activity (PCI) is a function of the complexities of the locations where that activity is present.
+							</div>
+							<div className="paragraph">
+								<p>
+									Formally, the complexity of location (ECI) is a function of the complexity of the activities present in it. Similarly, the complexity of an activity (PCI) is a function of the complexities of the locations where that activity is present.
 							</p>
-							<p>
-								For details about the methodology see the {' '}
-								<a
-									href="/en/resources/definitions"
-									className="link"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									Definitions section
+								<p>
+									For details about the methodology see the {' '}
+									<a
+										href="/en/resources/methodology"
+										className="link"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										Methodology section
 								</a>{' '} in the OEC Academy.
 							</p>
-							<p className="italic">
-								{subtitle}
-							</p>
+							</div>
 						</div>
 					</div>
 				)}
@@ -39,52 +43,56 @@ class RankingText extends Component {
 					<div>
 						<h1 className="title">{title}</h1>
 						<div className="about">
-							<p>
-								The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product.
+							<div className="paragraph">
+								<p>
+									The Economic Complexity Index (ECI) and the Product Complexity Index (PCI) are, respectively, measures of the relative knowledge intensity of an economy or a product.
 							</p>
-							<p>
-								ECI and PCI values are estimated directly from matrices summarizing the geography of economic activity, and can be calculated on demand.
+								<p>
+									ECI and PCI values are estimated directly from matrices summarizing the geography of economic activity, and can be calculated on demand.
 							</p>
-							<p>
-								Formally, the complexity of location (ECI) is a function of the complexity of the activities present in it. Similarly, the complexity of an activity (PCI) is a function of the complexities of the locations where that activity is present.
+							</div>
+							<div className="paragraph">
+								<p>
+									Formally, the complexity of location (ECI) is a function of the complexity of the activities present in it. Similarly, the complexity of an activity (PCI) is a function of the complexities of the locations where that activity is present.
 							</p>
-							<p>
-								For details about the methodology see the {' '}
-								<a
-									href="/en/resources/definitions"
-									className="link"
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									Definitions section
-								</a>{' '} in the OEC Academy.
-							</p>
-							{subtitle === "eci" ? (
-								<p className="italic">
-									These are the rankings of the OEC 3.0 version for the {' '}
+								<p>
+									For details about the methodology see the {' '}
 									<a
-										href="https://oec.world/en/rankings/country/eci/"
+										href="/en/resources/methodology"
 										className="link"
 										target="_blank"
 										rel="noopener noreferrer"
 									>
-										Economic Complexity Index
-								</a>{' '}.
-								</p>
-							) : (
-									<p className="italic">
-										These are the rankings of the OEC 3.0 version for the {' '}
-										<a
-											href="https://oec.world/en/rankings/product/sitc/"
-											className="link"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											Product Complexity Index
-								</a>.
-									</p>
-								)}
+										Methodology section
+								</a>{' '} in the OEC Academy.
+							</p>
+							</div>
 						</div>
+						{subtitle === "eci" ? (
+							<p className="italic">
+								These are the rankings of the OEC 3.0 version for the {' '}
+								<a
+									href="https://oec.world/en/rankings/country/eci/"
+									className="link"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									Economic Complexity Index
+								</a>{' '}.
+							</p>
+						) : (
+								<p className="italic">
+									These are the rankings of the OEC 3.0 version for the {' '}
+									<a
+										href="https://oec.world/en/rankings/product/sitc/"
+										className="link"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										Product Complexity Index
+								</a>.
+								</p>
+							)}
 					</div>
 				)}
 				{type === 'dynamic' && (
