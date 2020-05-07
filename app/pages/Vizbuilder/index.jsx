@@ -893,7 +893,7 @@ class Vizbuilder extends React.Component {
               {isSubnat && productSelector && <div className="columns">
                 <div className="column-1">
                   <div className="selector select-multi-section-wrapper">
-                    <h4 className="title">{t("Product Subnat")}</h4>
+                    <h4 className="title">{t("Product")}</h4>
                     <SelectMultiHierarchy
                       getColor={subnatItem.productColor}
                       getIcon={subnatItem.productIcon}
