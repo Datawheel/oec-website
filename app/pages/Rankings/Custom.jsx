@@ -36,7 +36,8 @@ class Custom extends Component {
 			countryExpThreshold: null,
 			populationThreshold: null,
 			productExpThreshold: null,
-			cachedPopulationThreshold: null,
+			subnationalGeoThreshold: null,
+			subnationalRCAThreshold: null,
 			data: null,
 			columns: null,
 			_ready: false,
@@ -62,6 +63,8 @@ class Custom extends Component {
 		const defaultCountryThreshold = 1000000000;
 		const defaultPopulationThreshold = 1000000;
 		const defaultProductThreshold = 500000000;
+		const defaultSubnationalGeoThreshold = 100000000;
+		const defaultSubnationalRCAThreshold = 10;
 
 		this.setState({
 			subnationalValue: subnationalCountries[0],
@@ -73,6 +76,8 @@ class Custom extends Component {
 			countryExpThreshold: defaultCountryThreshold,
 			populationThreshold: defaultPopulationThreshold,
 			productExpThreshold: defaultProductThreshold,
+			subnationalGeoThreshold: defaultSubnationalGeoThreshold,
+			subnationalRCAThreshold: defaultSubnationalRCAThreshold,
 			_ready: true
 		});
 	}
@@ -96,8 +101,7 @@ class Custom extends Component {
 				productRevision: 'HS92',
 				yearValue: yearsNational[productRevision].final,
 				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final,
-				populationThreshold: this.state.cachedPopulationThreshold
+				yearRangeFinal: yearsNational[productRevision].final
 			});
 		} else {
 			this.setState({
@@ -106,9 +110,7 @@ class Custom extends Component {
 				productRevision: 'HS92',
 				yearValue: subnationalData[subnationalValue].final,
 				yearRangeInitial: subnationalData[subnationalValue].final - 1,
-				yearRangeFinal: subnationalData[subnationalValue].final,
-				cachedPopulationThreshold: this.state.populationThreshold,
-				populationThreshold: 0
+				yearRangeFinal: subnationalData[subnationalValue].final
 			});
 		}
 	}
@@ -230,7 +232,9 @@ class Custom extends Component {
 			productRevision,
 			countryExpThreshold,
 			populationThreshold,
-			productExpThreshold
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold
 		} = this.state;
 		const index = country ? 'eci' : 'pci';
 		const populationYear = years[2] < 2018 ? years[2] : 2018;
@@ -262,24 +266,29 @@ class Custom extends Component {
 		} else {
 			const basecube = subnationalData[subnationalValue].basecube;
 			let yearRight = null;
+			let yearPopulationRight = null;
 
 			if (years.length === 1) {
 				yearRight = years[0] > 2018 ? '2018' : `${years[0]}`;
+				yearPopulationRight = years[0] > 2018 ? '2018' : `${years[0]}`;
 			} else if (years.length === 2) {
 				yearRight = years[1] > 2018 ? '2017,2018' : `${years[0]},${years[1]}`;
+				yearPopulationRight = years[1] > 2018 ? '2017,2018' : `${years[0]},${years[1]}`;
 			} else {
 				yearRight = years[2] > 2018 ? `2016,2017,2018` : `${years[0]},${years[1]},${years[2]}`;
+				yearPopulationRight = years[2] > 2018 ? `2016,2017,2018` : `${years[0]},${years[1]},${years[2]}`;
 			}
 
 			if (basecube === 'HS') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
-						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},Subnat%20Geography:0.01`;
+						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
+						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold * pathMultiplicatorThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${yearPopulationRight}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}`;
 			} else if (basecube === 'SITC') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
 						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
-						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},Subnat%20Geography:0.01
+						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold * pathMultiplicatorThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${yearPopulationRight}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}
 						`;
 			}
 		}
@@ -508,7 +517,7 @@ class Custom extends Component {
 				columnNAME = {
 					id: 'category',
 					accessor: (d) => d.Country,
-					width: 240,
+					width: 400,
 					Header: () => (
 						<div className="header">
 							<span className="year">{'Country'}</span>
@@ -773,6 +782,8 @@ class Custom extends Component {
 			countryExpThreshold,
 			populationThreshold,
 			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold,
 			data,
 			columns,
 			_ready,
@@ -817,6 +828,8 @@ class Custom extends Component {
 							countryExpThreshold,
 							populationThreshold,
 							productExpThreshold,
+							subnationalGeoThreshold,
+							subnationalRCAThreshold,
 							_authUser
 						}}
 						handleCategorySwitch={this.handleCategorySwitch}

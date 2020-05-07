@@ -1,11 +1,11 @@
 /* eslint-disable object-curly-spacing */
 /* eslint-disable indent */
 /* eslint-disable quotes */
-import React, { Component } from 'react';
-import { Button, ButtonGroup, HTMLSelect, Slider, Switch } from '@blueprintjs/core';
-import { range } from 'helpers/utils';
+import React, {Component} from 'react';
+import {Button, ButtonGroup, HTMLSelect, Slider, Switch} from '@blueprintjs/core';
+import {range} from 'helpers/utils';
 import SimpleSelect from "components/SimpleSelect";
-import { subnationalCountries, subnationalData, yearsNational } from 'helpers/rankingsyears';
+import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
 
 import './RankingBuilder.css';
 
@@ -25,6 +25,8 @@ class RankingsBuilder extends Component {
 			countryExpThreshold,
 			populationThreshold,
 			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold,
 			_authUser
 		} = this.props.variables;
 		const {
@@ -137,7 +139,7 @@ class RankingsBuilder extends Component {
 								<span>Single-year</span>
 								<Switch
 									onChange={event => handlePeriodYearSwitch('singleyear', !event.currentTarget.checked)}
-									// checked={range(initialYear, finalYear).length === 1 ? false : null}
+								// checked={range(initialYear, finalYear).length === 1 ? false : null}
 								/>
 								<span>Multi-year</span>
 							</div>
@@ -161,7 +163,7 @@ class RankingsBuilder extends Component {
 												className={
 													singleyear
 														? yearValue === d && 'active'
-													: 													range(yearRangeInitial, yearRangeFinal).map(
+														: range(yearRangeInitial, yearRangeFinal).map(
 															j => j === d && 'range'
 														)
 
@@ -181,8 +183,8 @@ class RankingsBuilder extends Component {
 						<div className="setting no-padding">
 							<h3 className="first">
 								{!subnational
-									?	'Country Export Value Threshold'
-									:	'Subnational Geography Export Value Threshold'
+									? 'Country Export Value Threshold'
+									: 'Country Export Value Threshold (for Basecube)'
 								}
 							</h3>
 							<Slider
@@ -193,11 +195,15 @@ class RankingsBuilder extends Component {
 								onChange={handleThresholdSlider('countryExpThreshold')}
 								labelRenderer={renderMoneyThresholdSlider}
 								value={countryExpThreshold}
-								// disabled={subnational}
 							/>
 						</div>
 						<div className="setting no-padding">
-							<h3>Country Population Value Threshold </h3>
+							<h3>
+								{!subnational
+									? 'Country Population Value Threshold'
+									: 'Country Population Value Threshold (for Basecube)'
+								}
+							</h3>
 							<Slider
 								min={0}
 								max={5000000}
@@ -206,11 +212,15 @@ class RankingsBuilder extends Component {
 								onChange={handleThresholdSlider('populationThreshold')}
 								labelRenderer={renderThresholdSlider}
 								value={populationThreshold}
-								disabled={subnational}
 							/>
 						</div>
 						<div className="setting no-padding">
-							<h3>Product Export Value Threshold </h3>
+							<h3>
+								{!subnational
+									? 'Product Export Value Threshold'
+									: 'Product Export Value Threshold (for Basecube)'
+								}
+							</h3>
 							<Slider
 								min={0}
 								max={2000000000}
@@ -219,9 +229,38 @@ class RankingsBuilder extends Component {
 								onChange={handleThresholdSlider('productExpThreshold')}
 								labelRenderer={renderMoneyThresholdSlider}
 								value={productExpThreshold}
-								// disabled={subnational}
 							/>
 						</div>
+						{subnational && (
+							<div className="setting no-padding">
+							<h3>Subnational Geography Export Value Threshold</h3>
+							<Slider
+								min={0}
+								max={500000000}
+								stepSize={25000000}
+								labelStepSize={100000000}
+								onChange={handleThresholdSlider('subnationalGeoThreshold')}
+								labelRenderer={renderMoneyThresholdSlider}
+								value={subnationalGeoThreshold}
+							// disabled={subnational}
+							/>
+						</div>
+						)}
+						{subnational && (
+							<div className="setting no-padding">
+							<h3>Products with RCA > 1 in in Subnational Geography Threshold</h3>
+							<Slider
+								min={0}
+								max={30}
+								stepSize={5}
+								labelStepSize={5}
+								onChange={handleThresholdSlider('subnationalRCAThreshold')}
+								labelRenderer={renderThresholdSlider}
+								value={subnationalRCAThreshold}
+							// disabled={subnational}
+							/>
+						</div>
+						)}
 						<div className="setting last">
 							<div className="build-button">
 								<Button onClick={() => apiGetData()}>Build Table</Button>
