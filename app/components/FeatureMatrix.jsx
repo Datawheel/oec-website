@@ -69,7 +69,7 @@ const versions = [
   {
     title: "Pro",
     price: "Free",
-    interval: "w/ verified e-mail",
+    interval: "Until September 2020",
     // price: "$24.99",
     // interval: "per month",
     buyText: "Upgrade",
