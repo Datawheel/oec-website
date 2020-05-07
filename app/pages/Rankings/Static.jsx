@@ -5,17 +5,25 @@ import axios from 'axios';
 import numeral from 'numeral';
 import {Icon} from '@blueprintjs/core';
 
+
 import {range} from 'helpers/utils';
 
 import Loading from 'components/Loading';
 import RankingText from 'components/RankingText';
 import RankingTable from 'components/RankingTable';
+import SimpleSelect from 'components/SimpleSelect';
+import ECIgraphs from 'components/ECIgraphs';
 
 export default class Static extends Component {
   state = {
     data: null,
     columns: null,
-    _loading: true
+    graphData: null,
+    graphYears: null,
+    graphYear: null,
+    gdpData: null,
+    _loading: true,
+    _graphs: false
   }
 
   componentDidMount = () => {
@@ -37,7 +45,7 @@ export default class Static extends Component {
   pathCreator = (type, depth, rev) => {
     let path = null;
     if (type === 'eci') {
-      path = `/olap-proxy/data.jsonrecords?cube=complexity_${type}_a_${rev}_${depth}&drilldowns=Country,${type.toUpperCase()}+Rank,Year&measures=${type.toUpperCase()}&parents=false&sparse=false`;
+      path = `/olap-proxy/data.jsonrecords?cube=complexity_${type}_a_${rev}_${depth}&drilldowns=Country,${type.toUpperCase()}+Rank,Year&measures=${type.toUpperCase()}&parents=true&sparse=false`;
     }
     else {
       path = `/olap-proxy/data.jsonrecords?cube=complexity_${type}_a_${rev}_${depth}&drilldowns=${depth.toUpperCase()},${type.toUpperCase()}+Rank,Year&measures=${type.toUpperCase()}&parents=false&sparse=false`;
@@ -47,74 +55,133 @@ export default class Static extends Component {
 
   fetchData = (path, type, depth, rev) => {
     const data = [];
+    const pathGDP = '/olap-proxy/data.jsonrecords?Indicator=NY.GDP.PCAP.PP.KD&cube=indicators_i_wdi_a&drilldowns=Country%2CYear&measures=Measure&parents=false&sparse=false';
+    const pathTrade = '/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country%2CYear&measures=Trade+Value&parents=false&sparse=false';
     // Reset _loading for the component get's off the display
     this.setState({_loading: true, data: []});
-    axios.get(path).then(resp => {
-      const pathData = resp.data.data;
-      // Country, HS4, HS6
-      const measure = type === "eci" ? 'Country' : depth.toUpperCase();
-      // Get list of unique countries/products
-      const unique = [...new Set(pathData.map(m => m[`${measure} ID`]))];
-      // Get list of years on the data and gets first and last year
-      const uniqueYears = [...new Set(pathData.map(m => m.Year))];
-      const maxYear = Math.max(...uniqueYears);
-      const minYear = Math.min(...uniqueYears);
+    axios.all([axios.get(path), axios.get(pathGDP)], axios.get(pathTrade)).then(
+      axios.spread((resp1, resp2, resp3) => {
+        const pathData = resp1.data.data;
+        // Country, HS4, HS6
+        const measure = type === "eci" ? 'Country' : depth.toUpperCase();
+        // Get list of unique countries/products
+        const unique = [...new Set(pathData.map(m => m[`${measure} ID`]))];
+        // Get list of years on the data and gets first and last year
+        const uniqueYears = [...new Set(pathData.map(m => m.Year))];
+        const maxYear = Math.max(...uniqueYears);
+        const minYear = Math.min(...uniqueYears);
 
-      // Used for setting the rankings fon countries that don't have in max year
-      const maxYearDataLength = pathData.filter(f => f.Year === maxYear).length;
-      let flag = 1;
+        // Used for setting the rankings fon countries that don't have in max year
+        const maxYearDataLength = pathData.filter(f => f.Year === maxYear).length;
+        let flag = 1;
 
-      // eslint-disable-next-line guard-for-in
-      for (const index in unique) {
-        const rowData = pathData.filter(f => f[`${measure} ID`] === unique[index]);
-        // Creates first two values of the array with country/product name and id
-        const row = {};
-        row[measure] = rowData[0][measure];
-        row[`${measure} ID`] = unique[index];
-        // Aggregates the values for the years that we have on the cube
-        rowData.forEach(d => {
-          const values = {};
-          values[`${d.Year} ${`${type}`.toUpperCase()}`] = d[`${type}`.toUpperCase()];
-          values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()} Rank`];
-          row[`${d.Year}`] = values;
-        });
-        // Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
-        range(minYear, maxYear).forEach(d => {
-          if (!row[d]) {
-            if (d !== maxYear) {
-              const values = {};
-              values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
-              values[`${d} Ranking`] = null;
-              row[`${d}`] = values;
+        // eslint-disable-next-line guard-for-in
+        for (const index in unique) {
+          const rowData = pathData.filter(f => f[`${measure} ID`] === unique[index]);
+          // Creates first two values of the array with country/product name and id
+          const row = {};
+          row[measure] = rowData[0][measure];
+          row[`${measure} ID`] = unique[index];
+          // Aggregates the values for the years that we have on the cube
+          rowData.forEach(d => {
+            const values = {};
+            values[`${d.Year} ${`${type}`.toUpperCase()}`] = d[`${type}`.toUpperCase()];
+            values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()} Rank`];
+            row[`${d.Year}`] = values;
+          });
+          // Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
+          range(minYear, maxYear).forEach(d => {
+            if (!row[d]) {
+              if (d !== maxYear) {
+                const values = {};
+                values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
+                values[`${d} Ranking`] = null;
+                row[`${d}`] = values;
+              }
+              else {
+                const values = {};
+                values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
+                values[`${d} Ranking`] = maxYearDataLength + flag;
+                row[`${d}`] = values;
+                flag += 1;
+              }
             }
-            else {
-              const values = {};
-              values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
-              values[`${d} Ranking`] = maxYearDataLength + flag;
-              row[`${d}`] = values;
-              flag += 1;
+          });
+          // Push the data for the country/product to the one with all the countries/products
+          data.push(row);
+        }
+
+        // Sort for the final year
+        data.sort((a, b) => a[maxYear][`${maxYear} Ranking`] - b[maxYear][`${maxYear} Ranking`]);
+
+        // Create columns
+        const columns = this.createColumns(type, depth, rev, minYear, maxYear);
+
+        // Create the data for the ECI graphics
+        let graphData = null;
+        let graphYears = null;
+        let graphYear = null;
+        let gdpRaw = null;
+        let gdpData = null;
+        let _graphs = null;
+        if (type === "eci") {
+          // Data for the geomap
+          graphData = resp1.data.data.slice();
+          graphData.forEach(d => {
+            d["Country ID"] = d["Country ID"].slice(d["Country ID"].length - 3);
+          });
+
+          // Years for the geomap data
+          graphYears = uniqueYears.slice().sort((a, b) => b - a).map(d => ({title: d, value: d}));
+          graphYear = maxYear;
+
+          // Data for the scatter chart
+          gdpData = resp1.data.data;
+          gdpRaw = resp2.data.data.filter(f => uniqueYears.includes(f.Year));
+          // tradeRaw = resp3.data.data.filter(f => uniqueYears.includes(f.Year));
+          gdpData.forEach(d => {
+            const _gdp = gdpRaw.filter(f => f["Country ID"].slice(f["Country ID"].length - 3) === d["Country ID"]);
+            const _gdpMatch = _gdp.find(f => f.Year === d.Year);
+            if (_gdpMatch !== undefined) {
+              d["GDP"] = _gdpMatch.Measure;
+            } else {
+              d["GDP"] = null;
             }
-          }
+
+            /*
+            const _trade = tradeRaw.filter(f => f["Country ID"].slice(f["Country ID"].length - 3) === d["Country ID"]);
+            const _tradeMatch = _trade.find(f => f.Year === d.Year);
+            if (_tradeMatch !== undefined) {
+              d["Trade Value"] = _tradeMatch["Trade Value"];
+            } else {
+              d["Trade Value"] = null;
+            }
+            */
+          });
+          _graphs = true;
+        } else {
+          graphData = null;
+          graphYears = null;
+          graphYear = null;
+          gdpData = null;
+          _graphs = false;
+        }
+
+        this.setState({
+          type,
+          depth,
+          rev,
+          data,
+          columns,
+          graphData,
+          graphYears,
+          graphYear,
+          gdpData: gdpData.filter(f => f.GDP !== null),
+          _loading: false,
+          _graphs
         });
-        // Push the data for the country/product to the one with all the countries/products
-        data.push(row);
-      }
-
-      // Sort for the final year
-      data.sort((a, b) => a[maxYear][`${maxYear} Ranking`] - b[maxYear][`${maxYear} Ranking`]);
-
-      // Create columns
-      const columns = this.createColumns(type, depth, rev, minYear, maxYear);
-
-      this.setState({
-        type,
-        depth,
-        rev,
-        data,
-        columns,
-        _loading: false
-      });
-    });
+      })
+    );
   };
 
   createColumns = (type, depth, rev, initialYear, finalYear) => {
@@ -254,9 +321,19 @@ export default class Static extends Component {
     return columns.filter(f => f !== null);
   };
 
+  handleYearSelect(key, value) {
+    this.setState({
+      _graphs: false
+    })
+    this.setState({
+      [key]: value,
+      _graphs: true
+    });
+  }
+
   render() {
     const {type, depth, rev} = this.props;
-    const {data, columns, _loading} = this.state;
+    const {data, columns, graphData, graphYears, graphYear, gdpData, _loading, _graphs} = this.state;
 
     const title = {
       eci: "Economic Complexity Rankings (ECI)",
@@ -274,6 +351,27 @@ export default class Static extends Component {
           <Helmet title={`${title[type]}`} />
 
           <RankingText type={'static'} title={`${title[type]}`} subtitle={`* Using exports data classified according the Harmonized System (${rev.toUpperCase()}) with a depth of ${depthDict[depth]}.`} />
+
+          {type === "eci" && _graphs && (
+            <div className="settings legacy-selector">
+              <div className="selector">
+                <h4 className="first">Visualization Year: </h4>
+                <SimpleSelect
+                  items={graphYears}
+                  title={undefined}
+                  state={"graphYear"}
+                  selectedItem={graphYears.find(d => d.value === graphYear) || {}}
+                  callback={(key, value) => this.handleYearSelect(key, value.value)}
+                />
+              </div>
+            </div>
+          )}
+
+          {type === "eci" && _graphs && (
+            <div className="graph-component">
+              <ECIgraphs graphData={graphData.filter(f => f.Year === graphYear)} gdpData={gdpData.filter(f => f.Year === graphYear)} year={graphYear} />
+            </div>
+          )}
 
           {_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
         </div>

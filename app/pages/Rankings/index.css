@@ -155,6 +155,17 @@
 				}
 			}
 		}
+
+		& .graph-component {
+			& .graphs {
+				display: flex;
+
+				& .graph {
+					flex: 0 0 50%;
+					padding: var(--gutter-md) var(--gutter-md);
+				}
+			}
+		}
 	}
 }
 
@@ -164,6 +175,16 @@
 
 		& .selector{
 			margin-bottom: var(--gutter-sm);
+		}
+	}
+
+	.graph-component {
+		& .graphs {
+			flex-direction: column;
+
+			& .graph {
+				flex: 0 0 100%;
+			}
 		}
 	}
 }
