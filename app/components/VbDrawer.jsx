@@ -72,7 +72,7 @@ class VbDrawer extends React.Component {
 
     const drilldowns = ["HS6", "HS4", "HS2", "Section", "Country", "Continent"];
     const {countryMembers, cubeSelected, groupBy, relatedItems, routeParams, t} = this.props;
-    const {cube, country, partner, viztype, time} = routeParams;
+    const {cube, chart, country, partner, viztype, time} = routeParams;
     const {geoLevels} = cubeSelected;
     const preps = {
       export: "to",
@@ -84,7 +84,6 @@ class VbDrawer extends React.Component {
     const titleId = relatedItems[`${titleKey} ID`];
     const titleName = relatedItems[titleKey];
 
-
     const isProductSelected = (
       cubeSelected.productLevels || ["HS6", "HS4", "HS2", "Section"]
     ).some(d => relatedItems[d]) && relatedItems["Trade Value"];
@@ -94,7 +93,7 @@ class VbDrawer extends React.Component {
     const timeName = relatedItems[timeId];
 
     const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country) || new RegExp(/(Country)/).test(titleKey);
-    const isCountryPermalink = new RegExp(/^(?!(all|show)).*$/).test(country);
+    let isCountryPermalink = new RegExp(/^(?!(all|show)).*$/).test(country);
     const isGeoGrouping = new RegExp(/show/).test(partner);
     const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
     const isProductPermalink = new RegExp(/^(?!(all|show)).*$/).test(viztype);
@@ -102,6 +101,10 @@ class VbDrawer extends React.Component {
       ? relatedItems[`${groupBy[0]} ID`]
       : relatedItems["Section ID"] || relatedItems["Continent ID"];
     const parentKey = groupBy[0];
+
+    if (chart === "scatter") {
+      isCountryPermalink = false;
+    }
 
     const isSubnatProfile = groupBy.includes("Subnat Geography");
     const isSubnatCube = cube.includes("subnational");
