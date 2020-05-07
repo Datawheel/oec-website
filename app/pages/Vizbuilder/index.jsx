@@ -397,10 +397,10 @@ class Vizbuilder extends React.Component {
 
     let countryIds = notEmpty(_selectedItemsCountry)
       ? parseIdsToURL(_selectedItemsCountry, "label")
-      : country || "show";
+      : ["show", "all"].includes(country) ? country : "show";
     let partnerIds = notEmpty(_selectedItemsPartner)
       ? parseIdsToURL(_selectedItemsPartner, "label")
-      : partner || "all";
+      : ["show", "all"].includes(partner) ? partner : "all";
 
     const isTechnologyFilter = notEmpty(_selectedItemsTechnology);
     const isTradeFilter = notEmpty(_selectedItemsProduct);
@@ -668,11 +668,10 @@ class Vizbuilder extends React.Component {
     // TODO improve this logic
     const timeItemsV2 = isSubnat ? this.state.subnatTimeItems : years;
     const timeItemsSelected = [].concat(timeItemsV2).reverse().filter(d => time.split(".").includes(d.value.toString()));
-    // const timeIds = time.split(".").map(d => ({value: d * 1, title: d * 1}));
     const _startYear = isTimeSeriesChart && timeItemsSelected[0]
-      ? timeItemsSelected[0] : this.state._startYear;
+      ? timeItemsSelected[0] : isSubnat ? timeItemsV2[0] || {} : this.state._startYear;
     const _endYear = isTimeSeriesChart && timeItemsSelected[1]
-      ? timeItemsSelected[1] : this.state._endYear;
+      ? timeItemsSelected[1] :  isSubnat ? timeItemsV2[3] || {} : this.state._endYear;
 
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
@@ -764,14 +763,13 @@ class Vizbuilder extends React.Component {
       });
     }
 
-
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const timeItemsSelected = [].concat(timeItems)
       .reverse().filter(d => time.split(".").includes(d.value.toString()));
     const _startYear = isTimeSeriesChart
-      ? timeItemsSelected[0] : this.state._startYear;
+      ? timeItemsSelected[0] : isSubnat ? timeItems[3] || {} : this.state._startYear;
     const _endYear = isTimeSeriesChart && timeItemsSelected[1]
-      ? timeItemsSelected[1] : this.state._endYear;
+      ? timeItemsSelected[1] : isSubnat ? timeItems[0] || {} : this.state._endYear;
 
     const nextState = {
       loading: false,

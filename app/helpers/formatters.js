@@ -1,4 +1,4 @@
-const timeFormat = time => {
+export const timeFormat = time => {
   const timeItems = time.split(".").map(d => {
     const n = d.length;
     if (n === 4) return d;
