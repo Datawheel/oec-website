@@ -120,7 +120,7 @@ export default class Legacy extends Component {
       columnNAME = {
         id: 'category',
         accessor: d => d.Country,
-        width: 400,
+        width: 240,
         Header: () =>
           <div className="header">
             <span className="year">{'Country'}</span>
