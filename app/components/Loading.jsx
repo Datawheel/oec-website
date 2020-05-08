@@ -49,7 +49,7 @@ class Loading extends Component {
       <div className="oec-loader-shell">
         <header>
           <img className="navbar-logo-img" src="/images/oec-logo.svg" alt="Observatory of Economic Complexity" draggable="false" />
-          <Spinner />
+          <Spinner size={30} />
           <h3 className="heading u-font-xl">{t("Loading.title")}...</h3>
         </header>
         <div className="oec-loader-body">

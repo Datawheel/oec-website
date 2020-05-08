@@ -30,9 +30,13 @@
 
 .oec-loader-shell {
   color: var(--light-3);
-  width: 80%;
+  width: 50%;
   max-width: 1236px;
-  margin: auto;
+  margin: 40px auto;
+
+  @mixin max-md {
+    width: 75%;
+  }
 
   & header {
     display: flex;

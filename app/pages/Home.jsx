@@ -147,11 +147,11 @@ class Home extends Component {
         </div>
 
         <div className="home-data-marquee">
-          <div className="home-data-marquee-title">⚡ Latest Data Updates</div>
+          <div className="home-data-marquee-title">⚡ Latest Data</div>
           <div className="home-data-marquee-datasets">
             <ul style={{bottom: `${currentDataMarqueeOffset}px`}}>
               {subnatDatasets.map(dataset =>
-                <li key={dataset.cubeName}><a href="">{dataset.fullName}: {dataset.start} - {dataset.end}</a></li>
+                <li key={dataset.cubeName}><a href="">{dataset.fullName}: {dataset.end}</a></li>
               )}
             </ul>
           </div>
