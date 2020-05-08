@@ -17,20 +17,27 @@
 		}
 
 		& .about {
-			& p {
-				font-size: var(--font-sm);
-				font-weight: 300;
-				margin-bottom: var(--gutter-sm);
-				line-height: 1rem;
+			display: flex;
+			width: 100%;
 
-				& .link {
-					color: var(--accent);
+			& .paragraph {
+				width: 50%;
+
+				& p {
+					font-size: var(--font-sm);
+					font-weight: 300;
+					margin-bottom: var(--gutter-sm);
+					line-height: 1rem;
+
+					& .link {
+						color: var(--accent);
+					}
 				}
 			}
+		}
 
-			& .italic {
-				font-style: italic;
-			}
+		& .italic {
+			font-style: italic;
 		}
 
 		& .settings {
