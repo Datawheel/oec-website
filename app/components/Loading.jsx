@@ -3,6 +3,39 @@ import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 import {NonIdealState, Spinner} from "@blueprintjs/core";
 import "./Loading.css";
+import "./OECNavbar.css";
+
+/**
+ * Shuffles array in place. ES6 version
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+const LOADING_ITEMS = [
+  {img: "/images/loading/loading_1_History.png", txt: [
+    "Did you know the OEC has been around since 2011?",
+    "Born as a research project at MIT, today the OEC is a professional tool serving data to millions of users every year.",
+    "Learn about the history of the OEC in the about section."
+  ]},
+  {img: "/images/loading/loading_2_ECI.png", txt: [
+    "The Economic Complexity Index (ECI) is a measure of economic capacity that is predictive of income, economic growth, income inequality & greehouse gas emissions. Technically, ECI is a principal component of a matrix connecting similar locations.",
+    "Learn more about ECI in the OEC Academy."
+  ]},
+  {img: "/images/loading/loading_3_Predictions.png", txt: [
+    "Looking for a forecasting tool?",
+    "The OEC prediction section allows you to create custom LSTM models and fit them directly over any of the millions of time series we have available."
+  ]},
+  {img: "/images/loading/loading_4_Library.png", txt: [
+    "Want to keep up with research on Economic Complexity?",
+    "The OEC library has a curated list of hundreds of papers organized by topics and geography."
+  ]}
+];
 
 /**
   This component is displayed when the needs of another component are being
@@ -11,10 +44,26 @@ import "./Loading.css";
 class Loading extends Component {
   render() {
     const {t} = this.props;
-    return <NonIdealState
-      className="app-loading"
-      title={t("Loading.title")}
-      icon={<Spinner />} />;
+    const items = shuffle(LOADING_ITEMS);
+    return <div className="app-loading">
+      <div className="oec-loader-shell">
+        <header>
+          <img className="navbar-logo-img" src="/images/oec-logo.svg" alt="Observatory of Economic Complexity" draggable="false" />
+          <Spinner />
+          <h3 className="heading u-font-xl">{t("Loading.title")}...</h3>
+        </header>
+        <div className="oec-loader-body">
+          <div className="oec-loader-fade-container">
+            {items.map(item =>
+              <div className="oec-loader-fader" key={item.img}>
+                <img src={item.img} />
+                {item.txt.map((t, i) => <p key={i}>{t}</p>)}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>;
   }
 }
 

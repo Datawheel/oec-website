@@ -20,7 +20,7 @@ import Account from "./pages/User/Account";
 // import Subscription from "./pages/User/Subscription";
 import Rankings from "./pages/Rankings";
 import Resources from "./pages/Resources";
-
+import Loading from "components/Loading";
 import ErrorPage from "./pages/ErrorPage";
 
 /** */
@@ -91,6 +91,7 @@ export default function RouteCreate() {
       <IndexRoute component={Home} />
       <Route exact path="(/:lang)" component={Home} />
       <Route path="/welcome" component={Welcome} />
+      <Route path="/loading" component={Loading} />
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route exact path="/admin" component={Builder} />
       <Route exact path="/explorer" component={Explorer} />
