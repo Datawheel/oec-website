@@ -158,7 +158,7 @@
   "rankings_text_3": "This page includes rankings using the Economic Complexity Index (ECI).",
   "rankings_title_country": "Economic Complexity Rankings (ECI)",
   "rankings_title_product": "Product Complexity Rankings (PCI)",
-  "vb_title_network_pgi": "What are the Opportunity Gain values of the products exported by {{country}}? ({{time}})",
+  "vb_title_network_ogi": "What are the Opportunity Gain values of the products exported by {{country}}? ({{time}})",
   "vb_title_network_rca": "What are the most specialized products of {{country}}? ({{time}})",
   "vb_title_network_relatedness": "What are the export opportunities of {{country}}? ({{time}})",
   "vb_title_rings": "What does {{country}} export that is similar to {{product}}? ({{time}})",

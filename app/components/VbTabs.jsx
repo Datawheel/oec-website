@@ -271,8 +271,8 @@ class VbTabs extends React.Component {
                         },
                         {
                           name: t("Opportunity Gain Space"),
-                          permalink: `${cube}/pgi/${country}/all/show/${time}/`,
-                          regexp: new RegExp(/network\/\w+\/pgi\/\w+\/all\/show\/[0-9.-]+\//)
+                          permalink: `${cube}/ogi/${country}/all/show/${time}/`,
+                          regexp: new RegExp(/network\/\w+\/ogi\/\w+\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Relatedness Space"),

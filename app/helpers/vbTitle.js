@@ -51,7 +51,7 @@ export const getVbTitle = (items, axis, routeParams) => {
     const networkTitleParams = {country: _countryNames, time};
     const networkTitleOptions = {
       export: ["vb_title_network_rca", networkTitleParams],
-      pgi: ["vb_title_network_pgi", networkTitleParams],
+      ogi: ["vb_title_network_ogi", networkTitleParams],
       relatedness: ["vb_title_network_relatedness", networkTitleParams]
     };
 

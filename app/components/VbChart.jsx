@@ -11,6 +11,7 @@ import {
   Rings,
   Plot
 } from "d3plus-react";
+import {tooltipTitle} from "../d3plus.js";
 import {parseURL, range} from "helpers/utils";
 import colors from "helpers/colors";
 import subnat from "helpers/subnatVizbuilder";
@@ -407,7 +408,7 @@ class VbChart extends React.Component {
         Year: timeFilter
       };
 
-      const endpoint = flow === "pgi" ? "opportunity_gain" : "relatedness";
+      const endpoint = flow === "ogi" ? "opportunity_gain" : "relatedness";
 
       return axios
         .get(`${CANON_STATS_API}${endpoint}`, {
@@ -816,7 +817,7 @@ class VbChart extends React.Component {
     }
     else if (chart === "network" && data && data.length > 0) {
       const measureNetworkName =
-        flow === "pgi"
+        flow === "ogi"
           ? "Trade Value Opportunity Gain"
           : flow === "export"
             ? "Trade Value RCA"
@@ -902,17 +903,45 @@ class VbChart extends React.Component {
           </div>
         </div>;
       }
+
+      const labels = this.props.cubeSelected.productItems.reduce((obj, d) => {
+        if (!obj[d["HS4 ID"]]) obj[d["HS4 ID"]] = d.HS4;
+        return obj;
+      }, {});
+      const labelsRings = data.reduce((obj, d) => {
+        if (!obj[d["HS4 ID"]]) obj[d["HS4 ID"]] = d;
+        return obj;
+      }, {});
+
       return (
         <div>
           <div className="vb-chart">
             <Rings
               config={{
-                center: viztype,
-                label: "",
+                data,
+                center: selected,
+                label: d => labels[d.id] || "",
+                legend: false,
                 links: data,
                 total: undefined,
                 tooltipConfig: {
-                  title: (d, x, i) => console.log(d, x, i)
+                  title: d => {
+                    const parentId = d.id.slice(0, -4);
+                    const color = colors.Section[parentId] || "gray";
+                    const image = `/images/icons/hs/hs_${parentId}.svg`;
+                    return tooltipTitle(color, image, labels[d.id] || "");
+                  },
+                  tbody: d => {
+                    const data = labelsRings[d.id];
+                    const output = [];
+                    if (data) {
+                      output.push([t("HS4 ID"), data["HS4 ID"].toString().slice(-4)]);
+                      output.push([t("Relatedness"), formatAbbreviate(data["Trade Value Relatedness"])]);
+                      output.push([t("RCA"), formatAbbreviate(data["Trade Value RCA"])]);
+                      output.push([t("Exports Value"), `$${formatAbbreviate(data["Trade Value"])}`]);
+                    }
+                    return output;
+                  }
                 },
                 shapeConfig: {
                   Circle: {
