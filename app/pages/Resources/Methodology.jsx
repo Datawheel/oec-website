@@ -6,21 +6,20 @@ import {AnchorLink} from '@datawheel/canon-core';
 export default class Methodology extends Component {
 	render() {
 		const tableofcontents = [
-			{content: 'introduction', title: 'Introduction: The Need For Economic Complexity'},
-			{content: 'what-complexity', title: 'What is Economic Complexity?'},
-			{content: 'who-complexity', title: 'Who uses Economic Complexity methods?'},
-			{content: 'keys-complexity', title: 'What are some key concepts in Economic Complexity?'},
-			{content: 'what-relatedness', title: 'What is Relatedness?'},
-			{content: 'how-relatedness', title: 'How do you calculate Relatedness?'},
-			{content: 'calculate-relatedness', title: 'How is the Economic Complexity Index calculated?'},
-			{
-				content: 'complexity-topics',
-				title: 'How Does Economic Complexity relate to Economic Growth, Inequality, and Sustainability?'
-			},
-			{
-				content: 'references',
-				title: 'References'
-			}
+			{content: 'introduction', title: 'Introduction'},
+			{content: 'economic-complexity', title: 'What is Economic Complexity?'},
+			{content: 'applications', title: 'What are some of the applications of Economic Complexity?'},
+			{content: 'other-fields', title: 'How is Economic Complexity Related to Other Fields of Research?'},
+			{content: 'division-labor', title: 'How is Economic Complexity Related to The Division of Labor?'},
+			{content: 'uses', title: 'Who uses Economic Complexity methods?'},
+			{content: 'what-is-relatedness', title: 'What is Relatedness?'},
+			{content: 'calculate', title: 'How do you calculate Relatedness?'},
+			{content: 'eci', title: 'What is the Economic Complexity Index (ECI)?'},
+			{content: 'eci-intuituvely', title: 'How is the Economic Complexity Index calculated (intuitively)?'},
+			{content: 'eci-technically', title: 'How is the Economic Complexity Index calculated (technically)?'},
+			{content: 'eci-subnational', title: 'How is the Economic Complexity Index calculated for subnational data (technically)?'},
+			{content: 'economic-growth', title: 'How Does Economic Complexity relate to Economic Growth, Inequality, and Sustainability?'},
+			{content: 'references', title: 'References'}
 		];
 		const references = [
 			{
@@ -161,7 +160,7 @@ export default class Methodology extends Component {
 						{tableofcontents.map((d) => (
 							<AnchorLink
 								key={d.content}
-								to={`definitions-title-${d.content}`}
+								to={d.content}
 								className="content-table-item"
 							>
 								<li className="content-name">{d.title}</li>
@@ -171,178 +170,84 @@ export default class Methodology extends Component {
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-introduction`} className="definitions-title-block-anchor" />
+					<a id={`introduction`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
-						<h1>Introduction: The Need For Economic Complexity</h1>
+						<h2>Introduction</h2>
 
-						<p>
-							Why are some countries rich and others poor? For centuries, scholars have been working to identify
-							the factors that explain differences in prosperity. Their work has taught us about the importance of
-							institutions,<sup>1-3</sup> technology,<sup>4,5</sup> human capital, and social capital.<sup>6-9</sup>{' '}
-							Yet, we have also learned that economic prosperity cannot be tied narrowly to any individual factor.
-							In fact, differences between rich and poor countries are multifarious, and the factors that drive
-							prosperity can be both numerous and highly specific.<sup>10,11</sup> Hence, we need systemic
-							explanations that are not narrowly focused on one factor or the other, but that consider “all of the
-							above.”
-						</p>
+						<p>Why are some countries rich and others poor? For centuries, scholars have been working to identify the factors that explain differences in prosperity. Their work has taught us about the importance of institutions,<sup>1–3</sup> technology,<sup>4,5</sup> human capital, and social capital.<sup>6–9</sup> Yet, we have also learned that economic prosperity cannot be tied narrowly to single factors. In fact, differences between rich and poor countries are multifarious, and include numerous highly specific factors.<sup>10,11</sup> Hence, we need ways to capture international differences in development outcomes that are not narrowly focused on a single factor, but that consider “all of the above.”</p>
 
-						<p>
-							Economic complexity is an approach to understand the development of national and regional economies
-							focused on “all of the above.” Its methods use high resolution data on the activities that are
-							present in locations to predict the development dynamics of countries, cities, and regions. These
-							methods can predict the economic activities that a country, city, or region will enter or exit in
-							the future,<sup>12,13</sup> as well as an economy’s expected level of income,<sup>14,15</sup>{' '}
-							economic growth,<sup>14,15</sup> income inequality,<sup>16</sup> and emissions.<sup>17,18</sup>
-						</p>
+						<p>Economic complexity can help us understand the development of national and regional economies through measures focused on “all of the above.” Its methods use high resolution data on the activities that are present in locations to predict the development dynamics of countries, cities, and regions. These methods can predict the economic activities that a country, city, or region will enter or exit in the future,<sup>12,13</sup> as well as an economy’s expected level of income,<sup>14,15</sup> economic growth,<sup>14,15</sup> income inequality,<sup>16</sup> and emissions.<sup>17,18</sup></p>
 
-						<p>In this section, we explain some of the basic ideas that give shape to this field of study.</p>
+						<p>In this section, we explain some of the basic ideas that shape the field of Economic Complexity.</p>
 					</div>
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-what-complexity`} className="definitions-title-block-anchor" />
+					<a id={`economic-complexity`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
 						<h2>What is Economic Complexity?</h2>
 
 						<p>Economic Complexity is both an academic field and a concept.</p>
 
-						<p>
-							As an academic field, Economic Complexity studies the geography and dynamics of productive
-							capabilities. This includes the knowledge, institutions, and infrastructure that economies
-							need to produce and export products, or the capabilities that firms, cities, and regions
-							need to enter into new technologies and industries.
-						</p>
+						<p>As an academic field, Economic Complexity studies the geography and dynamics of economic activities using methods inspired in ideas from complex systems, networks, and computer science.</p>
 
-						<p>
-							What makes the field of Economic Complexity somehow unique, is that it studies the geography
-							of productive capabilities and its dynamics using an outcomes based approach. That is,
-							instead of trying to figure out what capabilities are a-priori, it uses data on what
-							economies do to infer what capabilities an economy has. For example, by using the tools of
-							economic complexity, one can take data on the products that a country exports and predict
-							the products that this country could export in the future.<sup>11,12</sup> This is not
-							because these methods help you identify exactly what each product or industry needs, but
-							because they leverage the idea that similar industries require similar capabilities to
-							estimate the percentage of them that may be present in a location (without having to
-							identify what these capabilities are). Similarly, Economic Complexity methods have also been
-							shown to predict a country’s expected level of income,<sup>13,14</sup> economic growth,<sup>13,14</sup>{' '}
-							income inequality,<sup>15</sup> and greenhouse gas emissions,<sup>16,17</sup> as well as the
-							spatial concentration of economic activities.<sup>18</sup>
-						</p>
-
-						<p>
-							The field of Economic Complexity is closely related to other fields of study, such as
-							Economic Geography, which has long focused on the geographic distribution of economic
-							activity, and Network Science, since Economic Complexity uses methods developed originally
-							in the Network Science and Complex Systems community.
-						</p>
-
-						<p>
-							As a concept, Economic Complexity is related to the idea of the division of labor, or more
-							specifically, the division of knowledge. Because individuals are limited in what they can
-							know,<sup>15,19</sup> the only way economies can expand their knowledge is by dividing it up
-							among many individuals. Complex products, like medical imaging devices or jet engines,
-							require vast amounts of knowledge that can only be accumulated by large networks of people.
-							The accumulation of vast amounts of knowledge in large professional networks is only
-							possible in economies with good institutions, social capital, infrastructure, and education.<sup>19</sup>{' '}
-							This implies that the production of complex products represents evidence of “all of the
-							above:” the simultaneous presence of detailed capabilities. Economic complexity is therefore
-							related to an economy’s ability to engage in knowledge intensive industries, products, and
-							technologies, and is expressed in the composition of a country’s or region’s productive
-							output.
-						</p>
+						<p>What makes the field of Economic Complexity somehow unique, is that it studies the geography of activities using an outcomes based approach. That is, instead of trying to figure out what capabilities or factors drive an economy, it uses data on the geography of economic activities to infer the presence of bundles of capabilities.</p>
 					</div>
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-who-complexity`} className="definitions-title-block-anchor" />
+					<a id={`applications`} className="definitions-title-block-anchor" />
+					<div className="definitions-content">
+						<h2>What are some of the applications of Economic Complexity?</h2>
+
+						<p>Economic complexity methods are used to predict and explain the dynamics of economic activities and of economic aggregates, such as income per capita. For example, using the concept of relatedness (e.g. the product space), one can take data on the products that a country exports, or the industries present in a city, and predict which products or industries are more likely to grow in the future.<sup>11,12</sup> What is good about these methods is that they do not make any strong assumptions about the capabilities or factors required to produce each product because they leverage the idea that similar economic activities require similar capabilities (without having to identify what these capabilities are). </p>
+
+						<p>Similarly, metrics of Economic Complexity, such as the Economic Complexity Index, can be used to predict a country’s expected level of income,<sup>13,14</sup> economic growth,<sup>13,14</sup> income inequality,<sup>15</sup> and greenhouse gas emissions.<sup>16,17</sup> Measures of the complexity required to produce an activity also help explain the spatial concentration of economic activities (complex economic activities are more concentrated in space).<sup>18</sup></p>
+					</div>
+				</div>
+
+				<div className="definitions-block">
+					<a id={`other-fields`} className="definitions-title-block-anchor" />
+					<div className="definitions-content">
+						<h2>How is Economic Complexity Related to Other Fields of Research?</h2>
+
+						<p>The field of Economic Complexity is closely related to other fields of study, such as Economic Geography, which has long focused on the geographic distribution of economic activity, and Network Science, since Economic Complexity uses methods developed originally in the Network Science and Complex Systems community.</p>
+					</div>
+				</div>
+
+				<div className="definitions-block">
+					<a id={`division-labor`} className="definitions-title-block-anchor" />
+					<div className="definitions-content">
+						<h2>How is Economic Complexity Related to The Division of Labor?</h2>
+
+						<p>As a concept, Economic Complexity is related to the idea of the division of labor, or more specifically, the division of knowledge. Because individuals are limited in what they can know,<sup>15,19</sup> the only way economies can expand their knowledge is by dividing it up among many individuals. Complex products, like medical imaging devices or jet engines, require vast amounts of knowledge that can only be accumulated in large networks of people.</p>
+
+						<p>The accumulation of knowledge in large professional networks is only possible in economies with good institutions, social capital, infrastructure, and education.<sup>19</sup> This adds credence to the idea that economic complexity measures gather evidence on “all of the above”.</p>
+					</div>
+				</div>
+
+				<div className="definitions-block">
+					<a id={`uses`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
 						<h2>Who uses Economic Complexity methods?</h2>
 
-						<p>
-							Outside academia, Economic Complexity methods are used by multilateral organizations and
-							national development agencies focused on economic development, by export promotion agencies
-							and shipping companies to predict the evolution of international trade patterns, and by
-							financial companies to create financial instruments (because of the ability of economic
-							complexity methods to predict long term economic growth).
-						</p>
+						<p>Outside academia, Economic Complexity methods are used by multilateral organizations and national development agencies focused on economic development, by export promotion agencies and shipping companies wanting to predict the evolution of international trade patterns, and by financial companies (to price bonds and other instruments, because of the ability of economic complexity to predict long term economic growth).</p>
 					</div>
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-keys-complexity`} className="definitions-title-block-anchor" />
-					<div className="definitions-content">
-						<h2>What are some key concepts in Economic Complexity?</h2>
-
-						<p>There are a few key ideas and principles in Economic Complexity.</p>
-
-						<h3>The Principle of Relatedness:</h3>
-
-						<p>
-							The principle of relatedness<sup>13</sup> is a statistical law that tells us that the
-							probability that a location (a country, city, or region), enters an economic activity (e.g.
-							a product, industry, technology), grows with the number of related activities present in a
-							location. The principle of relatedness can be used to predict which activities a location is
-							more likely to enter or exit. It has been shown to be true for countries entering new
-							products,<sup>12,15</sup> regions entering new industries,<sup>20,21</sup> cities patenting
-							in new technologies,<sup>22,23</sup> and even universities publishing in new research areas.<sup>24</sup>
-						</p>
-
-						<h3>The Economic Complexity Index (ECI):</h3>
-
-						<p>
-							The Economic Complexity Index, or ECI, is a measure of an economy’s capacity which can be
-							inferred from data connecting locations to the activities that are present in them. The
-							Economic Complexity Index has been shown to predict important macroeconomic outcomes,
-							including a country’s level of income,<sup>14,15</sup> economic growth,<sup>14,15</sup>{' '}
-							income inequality,<sup>16</sup> and emissions.<sup>17,18</sup> It has also been estimated
-							using diverse data sources, such as trade data,<sup>14,15</sup> employment data,<sup>25</sup>{' '}
-							stock market data,<sup>26</sup> and patent data.<sup>27</sup>
-						</p>
-
-						<h3>The Product Complexity Index (PCI):</h3>
-
-						<p>
-							The Product Complexity Index, or PCI, is a measure of the complexity required to produce a
-							product or engage in an economic activity. The Product Complexity Index is correlated with
-							the spatial concentration of economic activities.<sup>28</sup>
-						</p>
-
-						<h3>Proximity:</h3>
-
-						<p>
-							Proximity is the idea of measuring similarity between activities, or locations. There are
-							multiple ways to estimate proximity, using simple indicators such as conditional
-							probabilities,<sup>12</sup> or more sophisticated indicators, such as the ratio between
-							observed coincidences and those expected from an econometric model.<sup>20,21</sup>
-						</p>
-					</div>
-				</div>
-
-				<div className="definitions-block">
-					<a id={`definitions-title-what-relatedness`} className="definitions-title-block-anchor" />
+					<a id={`what-is-relatedness`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
 						<h2>What is Relatedness?</h2>
 
-						<p>
-							Relatedness measures the “similarity” or “compatibility” between an economy and an activity.
-							For instance, it can be used to estimate whether the export structure of Bulgaria is
-							compatible with what is needed to export cars, or if the technologies in which Toulouse has
-							patented in the past are compatible with patenting on another technology, such as liquid
-							crystal displays. Relatedness can be used to predict the probability that a location will
-							enter or exit an activity.
-						</p>
+						<p>Relatedness measures the “similarity” or “compatibility” between an economy and an activity. For instance, it can be used to estimate whether the export structure of Bulgaria is compatible with what is needed to export cars, or if the technologies in which Toulouse has patented in the past are compatible with patenting in a particular technology, such as liquid crystal displays. Relatedness can be used to predict the probability that a location will enter or exit an activity.</p>
 
-						<p>
-							Usually, scholars measure the relatedness of a location and the economic activities in which
-							that location is not currently engaged in to predict the probability that the region will
-							enter that activity in the future. Similarly, low relatedness values predict the activities
-							that a location will exit in the future.
-						</p>
+						<p>Usually, scholars measure relatedness between a location and an economic activity to predict the probability that a region will enter or exit that activity in the future. The fact that the growth of an activity in a location is correlated with relatedness is known as <span className="highlighted">The Principle of Relatedness:</span><sup>13</sup> a statistical law that tells us that the probability that a location (a country, city, or region), enters an economic activity (e.g. a product, industry, technology), grows with the number of related activities present in a location. The principle of relatedness has been shown to be true for countries entering new products,<sup>12,15</sup> regions entering new industries,<sup>20,21</sup> cities patenting in new technologies,<sup>22,23</sup> and even universities publishing in new research areas.<sup>24</sup></p>
 					</div>
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-how-relatedness`} className="definitions-title-block-anchor" />
+					<a id={`calculate`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
 						<h2>How do you calculate Relatedness?</h2>
 
@@ -425,18 +330,42 @@ export default class Methodology extends Component {
 						</p>
 
 						<p>
-							Higher relatedness values are associated with a higher probability of entering an activity
-							in the future, or of growth in that activity (more exports, employment, etc). Low
-							relatedness values are associated with a decrease in the activity and a higher probability
-							of exit.
+							Similarity metrics, such as {' '}
+							<MathJax.Context input="tex">
+								<MathJax.Node inline>{"\\phi_{pp'}"}</MathJax.Node>
+							</MathJax.Context>{' '}, are known as metrics of <span className="highlighted">proximity.</span> There are multiple ways to estimate proximity, using simple indicators such as conditional probabilities<sup>12</sup>, or more sophisticated indicators, such as the ratio between observed coincidences and those expected from an econometric model.<sup>20,21</sup>
 						</p>
 					</div>
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-calculate-relatedness`} className="definitions-title-block-anchor" />
+					<a id={`eci`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
-						<h2>How is the Economic Complexity Index calculated?</h2>
+						<h2>What is the Economic Complexity Index (ECI)?</h2>
+
+						<p>The Economic Complexity Index, or ECI, is a measure of an economy’s capacity which can be inferred from data connecting locations to the activities that are present in them. The Economic Complexity Index has been shown to predict important macroeconomic outcomes, including a country’s level of income,<sup>14,15</sup> economic growth,<sup>14,15</sup> income inequality,<sup>16</sup> and greenhouse gas emissions.<sup>17,18</sup> It has also been estimated using diverse data sources, such as trade data<sup>14,15</sup>, employment data,<sup>25</sup> stock market data,<sup>26</sup> and patent data.<sup>27</sup></p>
+
+						<p>The Product Complexity Index, or PCI, is a measure of the complexity required to produce a product or engage in an economic activity. The Product Complexity Index is correlated with the spatial concentration of economic activities.<sup>28</sup></p>
+					</div>
+				</div>
+
+				<div className="definitions-block">
+					<a id={`eci-intuituvely`} className="definitions-title-block-anchor" />
+					<div className="definitions-content">
+						<h2>How is the Economic Complexity Index calculated (intuitively)?</h2>
+
+						<p>Imagine being asked to grade a multiple choice exam in a language you have never heard. To help you grade the exam, the teacher gives you an answer key, but also informs you that you need to award more points to challenging questions. The teacher doesn’t have a key for that, so you need to infer the difficulty of questions directly from the student's answers?</p>
+
+						<p>One way to start is to look at how many students answered each question correctly. Easy questions were probably answered correctly by most students, while difficult questions were probably answered correctly by only a few students. Yet, some students may be guessing their answers, so a correct answer means more if it is coming from a student that answered most questions correctly.</p>
+
+						<p>This thought experiment should give you the basic intuition behind economic complexity. Now, think that instead of students you have economies (e.g. countries, cities, regions), and instead of questions you have economic activities (products, industries, technologies). Economic complexity is the idea that you can infer “how good of a student” an economy is by looking at the activities that it is able to develop successfully, and by looking at the other places where those activities are present.</p>
+					</div>
+				</div>
+
+				<div className="definitions-block">
+					<a id={`eci-technically`} className="definitions-title-block-anchor" />
+					<div className="definitions-content">
+						<h2>How is the Economic Complexity Index calculated (technically)?</h2>
 
 						<p>
 							The problem of estimating economic complexity is the problem of estimating both, the
@@ -753,53 +682,60 @@ export default class Methodology extends Component {
 								<MathJax.Node inline>{'K_{c}'}</MathJax.Node>
 							</MathJax.Context>.
 						</p>
+
+						<p></p>
 					</div>
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-complexity-topics`} className="definitions-title-block-anchor" />
+					<a id={`eci-subnational`} className="definitions-title-block-anchor" />
+					<div className="definitions-content">
+						<h2>How is the Economic Complexity Index calculated for subnational data (technically)?</h2>
+
+						<p>Since subnational level data varies in terms of the units of observation (provinces, municipalities, etc.), we combine PCIs calculated using international trade data, with presence absence matrices characterizing local data.</p>
+
+						<p>Formally, we define subnational ECIs as:</p>
+
+						<p className="formula">
+							<MathJax.Context input="tex">
+								<MathJax.Node inline>{'ECI_c=\\frac{1}{M_c}  \\sum_p M_{cp} PCI_p'}</MathJax.Node>
+							</MathJax.Context>
+						</p>
+
+						<p>Here, we define {''}
+							<MathJax.Context input="tex">
+								<MathJax.Node inline>{'M_{cp}'}</MathJax.Node>
+							</MathJax.Context>{' '} using the following modified version of RCA:</p>
+
+						<p className="formula">
+							<MathJax.Context input="tex">
+								<MathJax.Node inline>{'R_cp=\\frac{X_{cp}^{local}/X_c^{local}}{X_p^{world}/X^{world}}'}</MathJax.Node>
+							</MathJax.Context>
+						</p>
+
+						<p>That is, we compare the share of an activity in a local unit (e.g. region, province), with the share of that activity in the world. This is to avoid having the most developed regions in a country appear to have comparative advantage in every product, and also, to make the ECI values obtained for subnational regions comparable with those of countries in the international datasets.</p>
+					</div>
+				</div>
+
+				<div className="definitions-block">
+					<a id={`economic-growth`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
 						<h2>How Does Economic Complexity relate to Economic Growth, Inequality, and Sustainability?</h2>
 
-						<p>
-							During the last decades a number of studies have documented relationships between economic
-							complexity and important social and macroeconomic outcomes.
-						</p>
+						<p>During the last decades a number of studies have documented relationships between economic complexity and important social and macroeconomic outcomes.</p>
 
-						<p>
-							The first string of studies focused on the relationship between economic complexity and
-							economic growth. The paper that introduced the idea of economic complexity,<sup>14</sup>{' '}
-							showed that economies with higher economic complexity, per unit of GDP per capita, grew
-							faster. This finding was later confirmed and expanded in a subsequent book (The Atlas of
-							Economic Complexity) and in various papers using international and subnational level data.<sup>29–32</sup>{' '}
-							On average, scholars find that an increase of one standard deviation in economic complexity,
-							at the same level of GDP per capita, is associated with an increase in annualized growth of
-							between 4% to 7%. This is a strong effect, but it is important to keep in mind that an
-							increase of one standard deviation in ECI is an extremely large effect (since ECI values,
-							which are normalized, range usually between -2 and 2).
-						</p>
+						<p>The first string of studies focused on the relationship between economic complexity and economic growth. The paper that introduced the idea of economic complexity<sup>14</sup>, showed that economies with higher economic complexity, per unit of GDP per capita, grew faster. This finding was later confirmed and expanded in a subsequent book (The Atlas of Economic Complexity) and in various papers using international and subnational level data.<sup>29–32</sup> On average, scholars find that an increase of one standard deviation in economic complexity, at the same level of GDP per capita, is associated with an increase in annualized growth of between 4% to 7%. This is a strong effect, but it is important to keep in mind that an increase of one standard deviation in ECI is an extremely large effect (since ECI values, which are normalized, range usually between -2 and 2).</p>
 
-						<p>
-							More recently, people studying economic complexity have turned their attention to other
-							topics, such as income inequality and environmental sustainability.
-						</p>
+						<p>More recently, people studying economic complexity have turned their attention to other topics, such as income inequality and environmental sustainability.</p>
 
-						<p>
-							In recent years we have learned that countries with higher levels of economic complexity
-							tend to experience lower levels of income inequality,<sup>16,33</sup> and also, to produce a
-							comparatively lower number of emissions.<sup>17,18</sup>
-						</p>
+						<p>In recent years we have learned that countries with higher levels of economic complexity tend to experience lower levels of income inequality,<sup>16,33</sup> and also, to produce a comparatively lower number of emissions.<sup>17,18</sup></p>
 
-						<p>
-							Together, the ability of economic complexity to predict economic growth, inequality, and
-							lowered emissions, make it an interesting policy target for countries looking to foster
-							inclusive development.
-						</p>
+						<p>Together, the ability of economic complexity to predict economic growth, inequality, and lowered emissions, make it an interesting policy target for countries looking to foster inclusive development.</p>
 					</div>
 				</div>
 
 				<div className="definitions-block">
-					<a id={`definitions-title-references`} className="definitions-title-block-anchor" />
+					<a id={`references`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
 						<h2>References</h2>
 

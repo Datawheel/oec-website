@@ -10,7 +10,7 @@
 
 		& h1 {
 			font-size: var(--font-xxl);
-			font-weight: 300;
+			font-weight: 500;
 		}
 
 		& h2 {
@@ -39,6 +39,11 @@
 			font-weight: 300;
 			margin-bottom: var(--gutter-sm);
 			line-height: 1.5rem;
+
+			& .highlighted {
+				font-weight: bold;
+				font-style: italic;
+			}
 		}
 
 		& img {
