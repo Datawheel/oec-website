@@ -27,7 +27,7 @@ class RankingText extends Component {
 								<p>
 									For details about the methodology see the {' '}
 									<a
-										href="/en/resources/methodology"
+										href="/en/resources/methodology#eci"
 										className="link"
 										target="_blank"
 										rel="noopener noreferrer"
@@ -58,7 +58,7 @@ class RankingText extends Component {
 								<p>
 									For details about the methodology see the {' '}
 									<a
-										href="/en/resources/methodology"
+										href="/en/resources/methodology#eci"
 										className="link"
 										target="_blank"
 										rel="noopener noreferrer"
