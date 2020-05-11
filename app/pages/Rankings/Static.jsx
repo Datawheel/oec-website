@@ -342,37 +342,37 @@ export default class Static extends Component {
           <RankingText
             type={'static'}
             title={`${title[type]}`}
-            subtitle={`* Using exports data classified according the Harmonized System (${rev.toUpperCase()}) with a depth of ${depthDict[depth]}
-                      for countries with more than $1 Billion in total exports, and more than 1 in Million of citizens and products that have a
-                      trade value over $500 Millions on the market.`}
+            subtitleRev={rev.toUpperCase()}
+            subtitleDepth={depthDict[depth]}
           />
 
-          {type === "eci" && _graphs && (
-            <div className="settings legacy-selector">
-              <div className="selector">
-                <h4 className="first">Visualization Year: </h4>
-                <SimpleSelect
-                  items={graphYears}
-                  title={undefined}
-                  state={"graphYear"}
-                  selectedItem={graphYears.find(d => d.value === graphYear) || {}}
-                  callback={(key, value) => this.handleYearSelect(key, value.value)}
-                />
-              </div>
-            </div>
-          )}
-
-          {type === "eci" && _graphs && (
-            <div className="graph-component">
-              <ECIgraphs
-                graphData={graphData.filter(f => f.Year === graphYear)}
-                gdpData={gdpData.filter(f => f.Year === graphYear)}
-                year={graphYear}
-              />
-            </div>
-          )}
-
-          {_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
+          {_loading
+            ? <Loading />
+            : (<div>
+              {type === "eci" && _graphs && (<div>
+                <div className="settings legacy-selector">
+                  <div className="selector">
+                    <h4 className="first">Visualization Year: </h4>
+                    <SimpleSelect
+                      items={graphYears}
+                      title={undefined}
+                      state={"graphYear"}
+                      selectedItem={graphYears.find(d => d.value === graphYear) || {}}
+                      callback={(key, value) => this.handleYearSelect(key, value.value)}
+                    />
+                  </div>
+                </div>
+                <div className="graph-component">
+                  <ECIgraphs
+                    graphData={graphData.filter(f => f.Year === graphYear)}
+                    gdpData={gdpData.filter(f => f.Year === graphYear)}
+                    year={graphYear}
+                  />
+                </div>
+              </div>)}
+              {data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
+            </div>)
+          }
         </div>
       </div>
     );

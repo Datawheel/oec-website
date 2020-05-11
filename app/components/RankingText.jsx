@@ -2,14 +2,21 @@ import React, {Component} from 'react';
 
 class RankingText extends Component {
 	render() {
-		const {type, title, subtitle} = this.props;
+		const {type, title, subtitleRev, subtitleDepth} = this.props;
 		return (
 			<div className="ranking-text">
 				{type === 'static' && (
 					<div>
 						<h1 className="title">{title}</h1>
 						<p className="italic">
-							{subtitle}
+							* Using exports data classified according the Harmonized System ({subtitleRev}) with a depth of {subtitleDepth} for countries with population of at least 1 million and exports of at least $1 billion, and products with world trade over 500 million.
+						To explore different rankings and vary these parameters visit the {' '}
+							<a
+								href="/en/rankings/custom"
+								className="link"
+							>
+								custom rankings section
+								</a>.
 						</p>
 						<div className="about">
 							<div className="paragraph">
@@ -29,8 +36,6 @@ class RankingText extends Component {
 									<a
 										href="/en/resources/methodology#eci"
 										className="link"
-										target="_blank"
-										rel="noopener noreferrer"
 									>
 										Methodology section
 								</a>{' '} in the OEC Academy.
@@ -60,8 +65,6 @@ class RankingText extends Component {
 									<a
 										href="/en/resources/methodology#eci"
 										className="link"
-										target="_blank"
-										rel="noopener noreferrer"
 									>
 										Methodology section
 								</a>{' '} in the OEC Academy.
@@ -74,8 +77,6 @@ class RankingText extends Component {
 								<a
 									href="https://oec.world/en/rankings/country/eci/"
 									className="link"
-									target="_blank"
-									rel="noopener noreferrer"
 								>
 									Economic Complexity Index
 								</a>{' '}.
@@ -86,8 +87,6 @@ class RankingText extends Component {
 									<a
 										href="https://oec.world/en/rankings/product/sitc/"
 										className="link"
-										target="_blank"
-										rel="noopener noreferrer"
 									>
 										Product Complexity Index
 								</a>.
