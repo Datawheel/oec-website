@@ -12,7 +12,7 @@ export default class Methodology extends Component {
 			{content: 'other-fields', title: 'How is Economic Complexity Related to Other Fields of Research?'},
 			{content: 'division-labor', title: 'How is Economic Complexity Related to The Division of Labor?'},
 			{content: 'uses', title: 'Who uses Economic Complexity methods?'},
-			{content: 'what-is-relatedness', title: 'What is Relatedness?'},
+			{content: 'relatedness', title: 'What is Relatedness?'},
 			{content: 'calculate', title: 'How do you calculate Relatedness?'},
 			{content: 'eci', title: 'What is the Economic Complexity Index (ECI)?'},
 			{content: 'eci-intuituvely', title: 'How is the Economic Complexity Index calculated (intuitively)?'},
@@ -236,7 +236,7 @@ export default class Methodology extends Component {
 				</div>
 
 				<div className="definitions-block">
-					<a id={`what-is-relatedness`} className="definitions-title-block-anchor" />
+					<a id={`relatedness`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
 						<h2>What is Relatedness?</h2>
 
