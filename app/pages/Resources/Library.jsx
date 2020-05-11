@@ -377,7 +377,6 @@ class Library extends Component {
 	}
 
 	changeGeomapFilterCountry(d, key) {
-		console.log(key);
 		if (key === "default") {
 			document.getElementById("select-region").value = d;
 			document.getElementById("select-country").value = d;
