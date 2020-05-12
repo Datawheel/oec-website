@@ -9,7 +9,7 @@ class ECIgraphs extends Component {
     console.log("data", graphData, gdpData);
     // const colorScaleColors = ["#F2FDFF", "#CAF5FD", "#A4EDFC", "#5DD9F5", "#27BFEB", "#049EDB", "#007CC4", "#005AA7", "#003D87"];
     // const colorScaleColors = ["#DEF3F5", "#CAF1F5", "#B7EFF5", "#91EAF5", "#71E3F6", "#57D9F7", "#44CBF8", "#36BAF9", "#2CA5FB", "#268FFD", "#227BFF" ];
-    const colorScaleColors = ["#DEF3F5", "#CAF1F5", "#B7EFF5", "#91EAF5", "#71E3F6", "#57D9F7", "#44CBF8", "#36BAF9", "#2CA5FB", "#268FFD"];
+    const colorScaleColors = ["#FFF5F2", "#FFE0D6", "#FFCBBA", "#FFA584", "#FF8855", "#FF7830", "#FF7514", "#FF7F00", "#FF9900", "#FFB300", "#FFCC00"];
 
     // Calculate min and max values for ECI value
     const uniqueECI = [...new Set(gdpData.map(m => m.ECI))];
@@ -83,8 +83,20 @@ class ECIgraphs extends Component {
                 fontSize: 14,
                 textAnchor: "middle"
               },
+              size: "Trade Value",
+              sizeMin: 12,
+              sizeMax: 13,
               legend: false,
               total: false,
+              shapeConfig: {
+                Circle: {
+                  backgroundImage: d => `/images/icons/country/country_${d["Country ID"]}.png`,
+                  fill: "transparent",
+                  stroke: "none",
+                  label: "",
+                  borderRadius: "100%"
+                }
+              },
               tooltipConfig: {
                 title: d => {
                   let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
@@ -95,6 +107,7 @@ class ECIgraphs extends Component {
                 },
                 tbody: [
                   ["Country ID", d => d["Country ID"].toUpperCase()],
+                  ["Trade Value", d => `$${formatAbbreviate(d["Trade Value"])}`],
                   ["GDP per capita, PPP (constant 2011 international $)", d => formatAbbreviate(d["GDP"])],
                   ["Economic Complexity Ranking (ECI)", d => formatAbbreviate(d["ECI"])],
                   ["ECI Rank", d => d["ECI Rank"]],

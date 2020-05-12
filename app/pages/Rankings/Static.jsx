@@ -4,8 +4,6 @@ import Helmet from "react-helmet";
 import axios from 'axios';
 import numeral from 'numeral';
 import {Icon} from '@blueprintjs/core';
-
-
 import {range} from 'helpers/utils';
 
 import Loading from 'components/Loading';
@@ -55,12 +53,11 @@ export default class Static extends Component {
 
   fetchData = (path, type, depth, rev) => {
     const data = [];
-    const pathGDP = '/olap-proxy/data.jsonrecords?Indicator=NY.GDP.PCAP.PP.KD&cube=indicators_i_wdi_a&drilldowns=Country%2CYear&measures=Measure&parents=false&sparse=false';
-    // const pathTrade = '/olap-proxy/data.jsonrecords?cube=trade_i_baci_a_92&drilldowns=Exporter+Country%2CYear&measures=Trade+Value&parents=false&sparse=false';
+    const gdpApi = "/api/gdptrade";
     // Reset _loading for the component get's off the display
     this.setState({_loading: true, data: []});
-    axios.all([axios.get(path), axios.get(pathGDP)]).then(
-      axios.spread((resp1, resp2, resp3) => {
+    axios.all([axios.get(path), axios.get(gdpApi)]).then(
+      axios.spread((resp1, resp2) => {
         const pathData = resp1.data.data;
         // Country, HS4, HS6
         const measure = type === "eci" ? 'Country' : depth.toUpperCase();
@@ -121,7 +118,6 @@ export default class Static extends Component {
         let graphData = null;
         let graphYears = null;
         let graphYear = null;
-        let gdpRaw = null;
         let gdpData = null;
         let _graphs = null;
         if (type === "eci") {
@@ -136,17 +132,21 @@ export default class Static extends Component {
           graphYear = maxYear;
 
           // Data for the scatter chart
-          gdpData = resp1.data.data;
-          gdpRaw = resp2.data.data.filter(f => uniqueYears.includes(f.Year));
-          gdpData.forEach(d => {
-            const _gdp = gdpRaw.filter(f => f["Country ID"].slice(f["Country ID"].length - 3) === d["Country ID"]);
-            const _gdpMatch = _gdp.find(f => f.Year === d.Year);
-            if (_gdpMatch !== undefined) {
-              d["GDP"] = _gdpMatch.Measure;
+          gdpData = resp1.data.data.slice();
+
+          // Read data from the GDP/TRADE api
+          const gdpRaw = resp2.data.data.filter(f => uniqueYears.includes(f.Year));
+          gdpData.forEach(m => {
+            const row = gdpRaw.filter(f => f["Country ID"].slice(2) === m["Country ID"] && f.Year === m.Year)[0];
+            if (row) {
+              m["GDP"] = row["GDP"];
+              m["Trade Value"] = row["Trade Value"];
             } else {
-              d["GDP"] = null;
+              m["GDP"] = null;
+              m["Trade Value"] = null;
             }
           });
+          console.log("GDP Data", gdpData);
           _graphs = true;
         } else {
           graphData = null;
