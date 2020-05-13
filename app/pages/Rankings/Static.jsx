@@ -20,6 +20,8 @@ export default class Static extends Component {
     graphYears: null,
     graphYear: null,
     gdpData: null,
+    filterGraph: null,
+    filterGDP: null,
     _loading: true,
     _graphs: false
   }
@@ -146,14 +148,11 @@ export default class Static extends Component {
               m["Trade Value"] = null;
             }
           });
-          console.log("GDP Data", gdpData);
-          _graphs = true;
         } else {
           graphData = null;
           graphYears = null;
           graphYear = null;
           gdpData = null;
-          _graphs = false;
         }
 
         this.setState({
@@ -166,8 +165,7 @@ export default class Static extends Component {
           graphYears,
           graphYear,
           gdpData: gdpData.filter(f => f.GDP !== null),
-          _loading: false,
-          _graphs
+          _loading: false
         });
       })
     );
@@ -312,17 +310,27 @@ export default class Static extends Component {
 
   handleYearSelect(key, value) {
     this.setState({
-      _graphs: false
-    })
-    this.setState({
       [key]: value,
-      _graphs: true
+      _graphs: false
     });
+  }
+
+  eciData = (ver, year) => {
+    const {graphData, gdpData} = this.state;
+    if (!ver) {
+      const filterGraph = graphData.filter(f => f.Year === year);
+      const filterGDP = gdpData.filter(f => f.Year === year);
+      this.setState({filterGraph, filterGDP, _graphs: true});
+    } else {
+    }
   }
 
   render() {
     const {type, depth, rev} = this.props;
-    const {data, columns, graphData, graphYears, graphYear, gdpData, _loading, _graphs} = this.state;
+    const {data, columns, graphData, graphYears, graphYear, filterGraph, filterGDP, _loading, _graphs} = this.state;
+
+    graphData && this.eciData(_graphs, graphYear);
+    console.log(_graphs);
 
     const title = {
       eci: "Economic Complexity Rankings (ECI)",
@@ -349,27 +357,29 @@ export default class Static extends Component {
           {_loading
             ? <Loading />
             : (<div>
-              {type === "eci" && _graphs && (<div>
-                <div className="settings legacy-selector">
-                  <div className="selector">
-                    <h4 className="first">Visualization Year: </h4>
-                    <SimpleSelect
-                      items={graphYears}
-                      title={undefined}
-                      state={"graphYear"}
-                      selectedItem={graphYears.find(d => d.value === graphYear) || {}}
-                      callback={(key, value) => this.handleYearSelect(key, value.value)}
-                    />
-                  </div>
+              <div className="settings legacy-selector">
+                <div className="selector">
+                  <h4 className="first">Visualization Year: </h4>
+                  <SimpleSelect
+                    items={graphYears}
+                    title={undefined}
+                    state={"graphYear"}
+                    selectedItem={graphYears.find(d => d.value === graphYear) || {}}
+                    callback={(key, value) => this.handleYearSelect(key, value.value)}
+                  />
                 </div>
-                <div className="graph-component">
+              </div>
+              {type === "eci" &&
+                _graphs
+                ? <div className="graph-component">
                   <ECIgraphs
-                    graphData={graphData.filter(f => f.Year === graphYear)}
-                    gdpData={gdpData.filter(f => f.Year === graphYear)}
+                    graphData={filterGraph}
+                    gdpData={filterGDP}
                     year={graphYear}
                   />
                 </div>
-              </div>)}
+                : <Loading />
+              }
               {data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
             </div>)
           }

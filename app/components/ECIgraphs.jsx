@@ -5,8 +5,7 @@ import {formatAbbreviate} from 'd3plus-format';
 class ECIgraphs extends Component {
   state = {}
   render() {
-    const {graphData, gdpData, year} = this.props;
-    console.log("data", graphData, gdpData);
+    const {graphData, gdpData, year, _graphs} = this.props;
     // const colorScaleColors = ["#F2FDFF", "#CAF5FD", "#A4EDFC", "#5DD9F5", "#27BFEB", "#049EDB", "#007CC4", "#005AA7", "#003D87"];
     // const colorScaleColors = ["#DEF3F5", "#CAF1F5", "#B7EFF5", "#91EAF5", "#71E3F6", "#57D9F7", "#44CBF8", "#36BAF9", "#2CA5FB", "#268FFD", "#227BFF" ];
     const colorScaleColors = ["#FFF5F2", "#FFE0D6", "#FFCBBA", "#FFA584", "#FF8855", "#FF7830", "#FF7514", "#FF7F00", "#FF9900", "#FFB300", "#FFCC00"];
