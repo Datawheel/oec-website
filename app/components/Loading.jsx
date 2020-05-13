@@ -21,19 +21,19 @@ const LOADING_ITEMS = [
   {img: "/images/loading/loading_1_History.png", txt: [
     "Did you know the OEC has been around since 2011?",
     "Born as a research project at MIT, today the OEC is a professional tool serving data to millions of users every year.",
-    "Learn about the history of the OEC in the about section."
+    "Learn about the history of the OEC in the <b>about section</b>."
   ]},
   {img: "/images/loading/loading_2_ECI.png", txt: [
     "The Economic Complexity Index (ECI) is a measure of economic capacity that is predictive of income, economic growth, income inequality & greehouse gas emissions. Technically, ECI is a principal component of a matrix connecting similar locations.",
-    "Learn more about ECI in the OEC Academy."
+    "Learn more about ECI in the <b>OEC Academy</b>."
   ]},
   {img: "/images/loading/loading_3_Predictions.png", txt: [
     "Looking for a forecasting tool?",
-    "The OEC prediction section allows you to create custom LSTM models and fit them directly over any of the millions of time series we have available."
+    "The <b>OEC prediction section</b> allows you to create custom LSTM models and fit them directly over any of the millions of time series we have available."
   ]},
   {img: "/images/loading/loading_4_Library.png", txt: [
     "Want to keep up with research on Economic Complexity?",
-    "The OEC library has a curated list of hundreds of papers organized by topics and geography."
+    "The <b>OEC library</b> has a curated list of hundreds of papers organized by topics and geography."
   ]}
 ];
 
@@ -57,7 +57,7 @@ class Loading extends Component {
             {items.map(item =>
               <div className="oec-loader-fader" key={item.img}>
                 <img src={item.img} />
-                {item.txt.map((t, i) => <p key={i}>{t}</p>)}
+                {item.txt.map((t, i) => <p key={i} dangerouslySetInnerHTML={{__html: t}} />)}
               </div>
             )}
           </div>
