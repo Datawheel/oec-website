@@ -65,7 +65,7 @@ class Home extends Component {
   }
   componentDidMount() {
     this.intervalId = setInterval(() => {
-      const OFFSET = 21.5;
+      const OFFSET = 28;
       const currentDataMarqueeOffset = this.state.currentDataMarqueeOffset >= OFFSET * (availableSubnatDatasets.length - 1)
         ? 0
         : this.state.currentDataMarqueeOffset + OFFSET;

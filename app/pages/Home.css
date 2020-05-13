@@ -52,6 +52,9 @@
           &::placeholder {
             color: var(--dark-1);
           }
+          @mixin max-sm {
+            padding: 0.25em 1em 0.25em 2em;
+          }
         }
         & .cms-profilesearch-container {
           margin: 0 var(--gutter-md) 0;
@@ -158,12 +161,15 @@
    *
    *********************************/
   & .home-data-marquee {
-    display: flex;
+    align-items: center;
     color: var(--light-3);
-    margin: 15px 0 0 0;
+    display: flex;
+    justify-content: center;
+    margin: 15px auto 0;
+    width: 100%;
 
     & .home-data-marquee-title {
-      flex: 1;
+      flex: none;
       text-align: right;
       font-size: 17px;
       font-weight: 600;
@@ -171,19 +177,23 @@
       line-height: 1.125;
     }
     & .home-data-marquee-datasets {
-      flex: 1;
+      flex: none;
+      margin: 0 0 0 10px;
       text-align: left;
-      height: 21px;
+      height: 28px;
       overflow: hidden;
 
       & ul {
+        background-color: var(--dark-2);
+        display: inline-block;
         list-style: none;
         margin: 0;
-        padding: 0 0 0 10px;
+        padding: 0 5px 0;
         position: relative;
         bottom: 0;
         transition: bottom .5s linear;
         & li {
+          padding: 4px 0 3px;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
