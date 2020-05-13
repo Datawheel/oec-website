@@ -46,7 +46,7 @@ class RankingText extends Component {
 										ECI
 								</a>{' '} see the {' '}
 									<a
-										href="/en/resources/methodology#eci"
+										href="/en/resources/methodology"
 										className="link"
 									>
 										Methodology section
