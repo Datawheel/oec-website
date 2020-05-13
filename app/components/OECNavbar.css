@@ -202,12 +202,22 @@
       &::placeholder {
         color: var(--dark-1);
       }
+      @mixin max-sm {
+        padding: 0.25em 1em 0.25em 2em !important;
+      }
+    }
+    @mixin max-sm {
+      & .cms-profilesearch-icon {
+        left: 0.35em !important;
+        top: 47% !important;
+        width: 0.4em !important;
+      }
     }
     & .cms-profilecolumn {
       flex: 1 0 calc(20% - var(--gutter-lg));
     }
     & .cms-profilecolumn-title {
-      background: var(--dark-4);
+      background-color: var(--dark-4) !important;
       margin-top: var(--gutter-sm);
     }
     & .bp3-non-ideal-state {

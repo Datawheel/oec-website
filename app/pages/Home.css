@@ -52,6 +52,9 @@
           &::placeholder {
             color: var(--dark-1);
           }
+          @mixin max-sm {
+            padding: 0.25em 1em 0.25em 2em;
+          }
         }
         & .cms-profilesearch-container {
           margin: 0 var(--gutter-md) 0;
