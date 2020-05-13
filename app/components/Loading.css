@@ -44,8 +44,11 @@
   }
   & .oec-loader-body {
     & .oec-loader-fade-container {
-      position:relative;
-      min-height: 40vh;
+      position: relative;
+      height: 500px;
+      @mixin max-sm {
+        height: 450px;
+      }
       & .oec-loader-fader {
         opacity: 0;
         position: absolute;
@@ -54,17 +57,17 @@
         animation-name: cf4FadeInOut;
         animation-timing-function: ease-in-out;
         animation-iteration-count: infinite;
-        animation-duration: 16s;
+        animation-duration: 40s;
         /* animation-direction: alternate; */
 
         &:nth-of-type(1) {
-          animation-delay: 12s;
+          animation-delay: 30s;
         }
         &:nth-of-type(2) {
-          animation-delay: 8s;
+          animation-delay: 20s;
         }
         &:nth-of-type(3) {
-          animation-delay: 4s;
+          animation-delay: 10s;
         }
         &:nth-of-type(4) {
           animation-delay: 0;
@@ -90,11 +93,15 @@
       }
     }
     & p {
-      font-size: 1.0rem;
+      font-size: 1rem;
       font-weight: 300;
-      margin-bottom: 0.75rem;
-      line-height: 1.5rem;
+      margin: 0.75rem auto;
+      max-width: 500px;
+      line-height: 1.4;
       text-align: center;
+      & b {
+        font-weight: 800;
+      }
     }
   }
 }
