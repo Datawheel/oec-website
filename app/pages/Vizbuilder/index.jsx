@@ -25,6 +25,7 @@ import {queryParser} from "helpers/formatters";
 import {countryItems, hsProductItems} from "helpers/random";
 
 import "./Vizbuilder.css";
+import Loading from "../../components/Loading";
 
 
 const notEmpty = items => items && items.length;
@@ -1198,7 +1199,7 @@ class Vizbuilder extends React.Component {
             </div>
             {vbChartComponent}
           </div> : <div className="vb-column">
-            <LoadingChart />
+            <Loading />
           </div>}
         </div>
       </div>

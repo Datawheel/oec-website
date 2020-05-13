@@ -26,6 +26,7 @@ import VbShare from "./VbShare";
 import VbDownload from "./VbDownload";
 import PaywallChart from "./PaywallChart";
 import LoadingChart from "./LoadingChart";
+import Loading from "./Loading.jsx";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
 const measures = ["Trade Value", "Growth", "Growth (%)"];
@@ -499,7 +500,7 @@ class VbChart extends React.Component {
     const {currency} = cubeSelected;
 
     if (loading) {
-      return <LoadingChart title={t("Fetching data...")}/>;
+      return <Loading />;
     }
 
     if (!auth) {
@@ -979,6 +980,12 @@ class VbChart extends React.Component {
                 size: "Trade Value",
                 sizeMin: 5,
                 sizeMax: 40,
+                shapeConfig: {
+                  Circle: {
+                    backgroundImage: d => `/images/icons/country/country_${d["Country ID"].slice(2, 5)}_circle.png`,
+                    label: ""
+                  }
+                },
                 tooltipConfig: {
                   tbody: d => [
                     ["Country ID", d["Country ID"].slice(-3).toUpperCase()],

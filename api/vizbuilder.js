@@ -19,19 +19,12 @@ module.exports = function(app) {
         }});
       }
       else {
-        const year = queryParams.Year * 1;
-        const years = `${year - 2},${year - 1},${year}`;
-        return axios.get(`${origin}/api/stats/eci`, {params: {
-          cube: "trade_i_baci_a_96",
-          rca: "Exporter Country,HS6,Trade Value",
+        return axios.get(`${origin}/olap-proxy/data`, {params: {
+          cube: "complexity_eci_a_hs96_hs6",
+          drilldowns: "Country",
           alias: "Country,HS6",
-          measures: "Trade Value",
-          Year: years,
-          parents: true,
-          threshold_Country: 3000000000,
-          threshold_HS4: 1500000000,
-          threshold_Population: 1000000,
-          YearPopulation: queryParams.Year || 2018
+          measures: "ECI",
+          Year: queryParams.Year || 2018
         }});
       }
     };
@@ -58,7 +51,7 @@ module.exports = function(app) {
       [[resp2.data.data, queryParams.x], [resp3.data.data, queryParams.y]].forEach(tempData => {
         const isOEC = new RegExp(/OEC/).test(tempData[1]);
         const filteredData = isOEC
-          ? tempData[0].map(d => ({...d, [tempData[1]]: d["Trade Value ECI"]}))
+          ? tempData[0].map(d => ({...d, [tempData[1]]: d.ECI}))
           : tempData[0].map(d => ({...d, [tempData[1]]: d.Measure}));
         data = mergeById(data, filteredData);
       });

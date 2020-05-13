@@ -85,16 +85,13 @@ class ECIgraphs extends Component {
               },
               size: "Trade Value",
               sizeMin: 12,
-              sizeMax: 13,
+              sizeMax: 14,
               legend: false,
               total: false,
               shapeConfig: {
                 Circle: {
-                  backgroundImage: d => `/images/icons/country/country_${d["Country ID"]}.png`,
-                  fill: "transparent",
-                  stroke: "none",
-                  label: "",
-                  borderRadius: "100%"
+                  backgroundImage: d => `/images/icons/country/country_${d["Country ID"]}_circle.png`,
+                  label: ""
                 }
               },
               tooltipConfig: {
