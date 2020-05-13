@@ -32,7 +32,19 @@ class RankingText extends Component {
 									Formally, the complexity of location (ECI) is a function of the complexity of the activities present in it. Similarly, the complexity of an activity (PCI) is a function of the complexities of the locations where that activity is present.
 							</p>
 								<p>
-									For details about the methodology see the {' '}
+									For details about {' '}
+									<a
+										href="/en/resources/methodology#relatedness"
+										className="link"
+									>
+										Relatedness
+								</a>{' '} and {' '}
+									<a
+										href="/en/resources/methodology#eci"
+										className="link"
+									>
+										ECI
+								</a>{' '} see the {' '}
 									<a
 										href="/en/resources/methodology#eci"
 										className="link"
