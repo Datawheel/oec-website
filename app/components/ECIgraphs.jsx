@@ -90,11 +90,8 @@ class ECIgraphs extends Component {
               total: false,
               shapeConfig: {
                 Circle: {
-                  backgroundImage: d => `/images/icons/country/country_${d["Country ID"]}.png`,
-                  fill: "transparent",
-                  stroke: "none",
-                  label: "",
-                  borderRadius: "100%"
+                  backgroundImage: d => `/images/icons/country/country_${d["Country ID"]}_circle.png`,
+                  label: ""
                 }
               },
               tooltipConfig: {
