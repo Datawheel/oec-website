@@ -85,7 +85,7 @@ class ECIgraphs extends Component {
               },
               size: "Trade Value",
               sizeMin: 12,
-              sizeMax: 13,
+              sizeMax: 14,
               legend: false,
               total: false,
               shapeConfig: {
