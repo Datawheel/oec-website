@@ -982,7 +982,7 @@ class VbChart extends React.Component {
                 sizeMax: 40,
                 shapeConfig: {
                   Circle: {
-                    backgroundImage: d => `/images/icons/country/country_${d["Country ID"]}_circle.png`,
+                    backgroundImage: d => `/images/icons/country/country_${d["Country ID"].slice(2, 5)}_circle.png`,
                     label: ""
                   }
                 },
