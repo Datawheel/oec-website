@@ -173,6 +173,12 @@
 				}
 			}
 		}
+
+		& .download {
+			display: flex;
+			justify-content: end;
+			margin-right: var(--gutter-sm);
+		}
 	}
 }
 

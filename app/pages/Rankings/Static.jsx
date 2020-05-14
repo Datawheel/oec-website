@@ -11,10 +11,12 @@ import RankingText from 'components/RankingText';
 import RankingTable from 'components/RankingTable';
 import SimpleSelect from 'components/SimpleSelect';
 import ECIgraphs from 'components/ECIgraphs';
+import VbDownload from 'components/VbDownload';
 
 export default class Static extends Component {
   state = {
     data: null,
+    dataDownload: null,
     columns: null,
     graphData: null,
     graphYears: null,
@@ -22,6 +24,8 @@ export default class Static extends Component {
     gdpData: null,
     filterGraph: null,
     filterGDP: null,
+    location: null,
+    path: null,
     _loading: true,
     _graphs: false
   }
@@ -30,6 +34,7 @@ export default class Static extends Component {
     const {type, depth, rev} = this.props;
     const path = this.pathCreator(type, depth, rev);
     this.fetchData(path, type, depth, rev);
+    this.setState({location: window.location});
   }
 
   // Checks the changes on the variables: type (eci/pci), depth (hs4, hs6), rev (hs92,...,hs07)
@@ -55,6 +60,7 @@ export default class Static extends Component {
 
   fetchData = (path, type, depth, rev) => {
     const data = [];
+    const dataDownload = [];
     const gdpApi = "/api/gdptrade";
     // Reset _loading for the component get's off the display
     this.setState({_loading: true, data: []});
@@ -79,6 +85,7 @@ export default class Static extends Component {
           const rowData = pathData.filter(f => f[`${measure} ID`] === unique[index]);
           // Creates first two values of the array with country/product name and id
           const row = {};
+          const rowDownload = {};
           row[measure] = rowData[0][measure];
           row[`${measure} ID`] = unique[index];
           // Aggregates the values for the years that we have on the cube
@@ -87,6 +94,7 @@ export default class Static extends Component {
             values[`${d.Year} ${`${type}`.toUpperCase()}`] = d[`${type}`.toUpperCase()];
             values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()} Rank`];
             row[`${d.Year}`] = values;
+            rowDownload[`${d.Year}`] = d[`${type}`.toUpperCase()];
           });
           // Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
           range(minYear, maxYear).forEach(d => {
@@ -96,18 +104,29 @@ export default class Static extends Component {
                 values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
                 values[`${d} Ranking`] = null;
                 row[`${d}`] = values;
+                rowDownload[`${d}`] = null;
               }
               else {
                 const values = {};
                 values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
                 values[`${d} Ranking`] = maxYearDataLength + flag;
                 row[`${d}`] = values;
+                rowDownload[`${d}`] = null;
                 flag += 1;
               }
             }
           });
+          rowDownload[`${measure} ID`] = unique[index];
+          rowDownload[measure] = rowData[0][measure];
+
+          let rowDownloadInverted = {};
+          Object.keys(rowDownload).map(function (key) {
+            rowDownloadInverted[key] = rowDownload[key];
+          });
+
           // Push the data for the country/product to the one with all the countries/products
           data.push(row);
+          dataDownload.push(rowDownloadInverted);
         }
 
         // Sort for the final year
@@ -148,6 +167,7 @@ export default class Static extends Component {
               m["Trade Value"] = null;
             }
           });
+          gdpData = gdpData.filter(f => f.GDP !== null);
         } else {
           graphData = null;
           graphYears = null;
@@ -160,11 +180,13 @@ export default class Static extends Component {
           depth,
           rev,
           data,
+          dataDownload,
           columns,
           graphData,
           graphYears,
           graphYear,
-          gdpData: gdpData.filter(f => f.GDP !== null),
+          gdpData,
+          path,
           _loading: false
         });
       })
@@ -327,10 +349,9 @@ export default class Static extends Component {
 
   render() {
     const {type, depth, rev} = this.props;
-    const {data, columns, graphData, graphYears, graphYear, filterGraph, filterGDP, _loading, _graphs} = this.state;
+    const {data, dataDownload, columns, graphData, graphYears, graphYear, filterGraph, filterGDP, path, _loading, _graphs, location} = this.state;
 
-    graphData && this.eciData(_graphs, graphYear);
-    console.log(_graphs);
+    type === "eci" && graphData && this.eciData(_graphs, graphYear);
 
     const title = {
       eci: "Economic Complexity Rankings (ECI)",
@@ -341,6 +362,14 @@ export default class Static extends Component {
       hs4: '4 Digits',
       hs6: '6 Digits'
     };
+
+    const downloadYear = {
+      hs92: '95-18',
+      hs96: '98-18',
+      hs02: '03-18',
+      hs07: '08-18',
+      hs12: '12-18'
+    }
 
     return (
       <div className="rankings-page">
@@ -357,29 +386,40 @@ export default class Static extends Component {
           {_loading
             ? <Loading />
             : (<div>
-              <div className="settings legacy-selector">
-                <div className="selector">
-                  <h4 className="first">Visualization Year: </h4>
-                  <SimpleSelect
-                    items={graphYears}
-                    title={undefined}
-                    state={"graphYear"}
-                    selectedItem={graphYears.find(d => d.value === graphYear) || {}}
-                    callback={(key, value) => this.handleYearSelect(key, value.value)}
-                  />
+              {type === "eci" &&
+                <div className="settings legacy-selector">
+                  <div className="selector">
+                    <h4 className="first">Visualization Year: </h4>
+                    <SimpleSelect
+                      items={graphYears}
+                      title={undefined}
+                      state={"graphYear"}
+                      selectedItem={graphYears.find(d => d.value === graphYear) || {}}
+                      callback={(key, value) => this.handleYearSelect(key, value.value)}
+                    />
+                  </div>
                 </div>
-              </div>
+              }
               {type === "eci" &&
                 _graphs
-                ? <div className="graph-component">
+                 && <div className="graph-component">
                   <ECIgraphs
                     graphData={filterGraph}
                     gdpData={filterGDP}
                     year={graphYear}
                   />
                 </div>
-                : <Loading />
               }
+              <div className="download">
+                <VbDownload
+                  data={dataDownload}
+                  location={location}
+                  title={`${type}_${depth}_${rev}_${downloadYear[rev]}`}
+                  customAPI={[path]}
+                  saveViz={false}
+                  buttonTitle={'Download Table'}
+                />
+              </div>
               {data && <RankingTable data={data} columns={columns} country={type === 'eci' ? true : false} />}
             </div>)
           }
