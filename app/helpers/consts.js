@@ -65,11 +65,11 @@ module.exports = {
       ]},
       {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
       {title: "ECI Legacy Rankings", url: `/${locale}/rankings/legacy_eci`},
-      {title: "PCI Legacy Rankings", url: `/${locale}/rankings/legacy_pci/hs6/hs92`},
+      {title: "PCI Legacy Rankings", url: `/${locale}/rankings/legacy_pci/hs6/hs92`}
     ]},
     // tools
     {title: "Tools", items: [
-      {title: "Predictions",     url: `/${locale}/prediction?dataset=trade-annual`},
+      {title: "Trade Forecasts",     url: `/${locale}/prediction?dataset=trade-annual`},
       {title: "Tariff Explorer", url: `/${locale}/tariffs/`, beta: true},
       {title: "Visualizations",  url: `/${locale}/visualize`}
     ]},

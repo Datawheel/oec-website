@@ -73,9 +73,9 @@ class PredictionLanding extends React.Component {
         {/* entity selection form */}
         <div className="prediction-about-outer">
           <div className="prediction-about-l">
-            <h1>OEC Trade Predictions</h1>
+            <h1>OEC Trade Forecasts</h1>
             <p>
-            The predictions shown in this tool use a long short-term memory model or LSTM. The LSTM approach is a form of machine learning which utilizes a recurrent neural network. In the case of the predictions shown on this page we are using a data time series (based on the user selected dataset) as input for the model. The model is then able to learn order dependence and produce a sequence prediction.
+            The forecasts shown in this tool use a long short-term memory model or LSTM. The LSTM approach is a form of machine learning which utilizes a recurrent neural network. In the case of the forecasts shown on this page we are using a data time series (based on the user selected dataset) as input for the model. The model is then able to learn order dependence and produce a sequence prediction.
             </p>
             <h2 className="ispro">PRO</h2>
             <p>

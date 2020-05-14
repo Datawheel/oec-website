@@ -49,6 +49,8 @@
         max-width: 500px;
         & .cp-input {
           background: var(--dark-4);
+          border-radius: 0.1em;
+          padding: 0.25em 3em 0.375em 2em;
           &::placeholder {
             color: var(--dark-1);
           }
