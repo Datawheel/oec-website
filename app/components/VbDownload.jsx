@@ -38,7 +38,7 @@ const getBackground = elem => {
 
 };
 
-class VbShare extends React.Component {
+class VbDownload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -118,9 +118,9 @@ class VbShare extends React.Component {
   }
 
   shouldComponentUpdate = (prevProps, prevState) => this.state.isOpen !== prevState.isOpen ||
-  this.state.separator !== prevState.separator || this.state.imageFormat !== prevState.imageFormat ||
-  this.state.isCopiedLink1 !== prevState.isCopiedLink1 || this.state.isCopiedLink2 !== prevState.isCopiedLink2 ||
-  prevProps.API !== this.props.API;
+    this.state.separator !== prevState.separator || this.state.imageFormat !== prevState.imageFormat ||
+    this.state.isCopiedLink1 !== prevState.isCopiedLink1 || this.state.isCopiedLink2 !== prevState.isCopiedLink2 ||
+    prevProps.API !== this.props.API;
 
   handleOpen = () => this.setState({isOpen: true});
   handleClose = () => {
@@ -136,7 +136,10 @@ class VbShare extends React.Component {
 
   render() {
     const {separator} = this.state;
-    const {API, data, location, t} = this.props;
+    const {data, location, t, saveViz, buttonTitle} = this.props;
+    const REDUX_API = this.props.API;
+    const CUSTOM_API = this.props.customAPI;
+    const API = CUSTOM_API || REDUX_API;
     const filteredData = data.slice();
     const {origin} = location;
 
@@ -145,15 +148,15 @@ class VbShare extends React.Component {
 
     const isStringAPI = typeof API === "string";
     const isUndefinedAPI = typeof API === "undefined";
-    const fullURLs = isStringAPI ? [API] : isUndefinedAPI ? undefined : API;
+    const fullURLs = isStringAPI ? [API] : isUndefinedAPI ? [] : API;
 
     return <div>
-      <Button className="vb-chart-button-option" icon="import" text="Download" onClick={this.handleOpen} />
+      <Button className="vb-chart-button-option" icon="import" text={buttonTitle} onClick={this.handleOpen} />
       <Drawer
         className={"vb-drawer"}
         icon={"import"}
         onClose={this.handleClose}
-        title={"Download"}
+        title={buttonTitle}
         {...this.state}
       >
         <div className="bp3-drawer-body">
@@ -208,33 +211,37 @@ class VbShare extends React.Component {
             </RadioGroup>
           </div>
 
-          <div className="vb-share-option">
-            <h5 className="title">{t("Save visualization")}</h5>
-            <Button
-              className="save-image-download-button vb-chart-button-option"
-              onClick={() => this.onSave()}
-              rebuilding={this.state.imageProcessing}
-              disabled={this.state.imageProcessing}
-              icon={this.state.imageProcessing ? "cog" : "media"}
-              fontSize="md"
-              fill
-            >
-              {this.state.imageProcessing ? t("Processing image") : `Download ${this.state.imageFormat.toUpperCase()}`}
-            </Button>
-          </div>
+          {saveViz &&
+            <div>
+              <div className="vb-share-option">
+                <h5 className="title">{t("Save visualization")}</h5>
+                <Button
+                  className="save-image-download-button vb-chart-button-option"
+                  onClick={() => this.onSave()}
+                  rebuilding={this.state.imageProcessing}
+                  disabled={this.state.imageProcessing}
+                  icon={this.state.imageProcessing ? "cog" : "media"}
+                  fontSize="md"
+                  fill
+                >
+                  {this.state.imageProcessing ? t("Processing image") : `Download ${this.state.imageFormat.toUpperCase()}`}
+                </Button>
+              </div>
 
-          <div className="vb-share-option">
-            <RadioGroup
-              label="Image Format"
-              className="vb-radiogroup"
-              onChange={this.handleImageFormat}
-              selectedValue={this.state.imageFormat}
-              inline={true}
-            >
-              <Radio label="PNG" value="png" />
-              <Radio label="SVG" value="svg" />
-            </RadioGroup>
-          </div>
+              <div className="vb-share-option">
+                <RadioGroup
+                  label="Image Format"
+                  className="vb-radiogroup"
+                  onChange={this.handleImageFormat}
+                  selectedValue={this.state.imageFormat}
+                  inline={true}
+                >
+                  <Radio label="PNG" value="png" />
+                  <Radio label="SVG" value="svg" />
+                </RadioGroup>
+              </div>
+            </div>
+          }
 
 
 
@@ -253,4 +260,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default withNamespaces()(connect(mapStateToProps)(VbShare));
+VbDownload.defaultProps = {
+  saveViz: true,
+  buttonTitle: "Download"
+}
+
+export default withNamespaces()(connect(mapStateToProps)(VbDownload));
