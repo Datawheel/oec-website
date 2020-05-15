@@ -262,7 +262,8 @@ class Home extends Component {
         <section className="call-to-action section">
           <div className="cta-inner">
             <h2>Explore without limits, signup for premium</h2>
-            <p>When you sign up for premium you&apos;ll get access to the latest trade data including subnational data from Canada, China, Germany, Japan, Russia and Spain. More coming soon!</p>
+            <p>When you sign up for premium you&apos;ll get access to the latest trade data including subnational data from Canada, China, Germany, Japan, Russia and Spain.</p>
+            <p>More coming soon!</p>
             <Button className="navbar-user-signup">
               <Link to={`${locale}/signup`}>Register</Link>
             </Button>

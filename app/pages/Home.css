@@ -2,7 +2,7 @@
 
 .home {
   background: var(--dark-4);
-  text-align: center;
+  text-align: left;
   min-height: 100vh;
   overflow: hidden; /* prevent the ring from expanding the viewport */
   /* center the world */
@@ -23,6 +23,7 @@
       flex: 1 1 auto;
       padding: 0;
       z-index: 2;
+      text-align: center;
 
       & .home-hero-logo {
         margin: 0 auto;
@@ -47,9 +48,20 @@
       & .cms-profilesearch {
         margin: 0 auto var(--gutter-sm);
         max-width: 500px;
+        & .cp-input-label {
+          & .cms-profilesearch-icon {
+            left: 0.55em;
+            top: 45%;
+            @mixin max-sm {
+              left: 0.35em;
+            }
+          }
+        }
         & .cp-input {
           background: var(--dark-4);
+          border-color: #000000;
           border-radius: 0.1em;
+          line-height: 1.7;
           padding: 0.25em 3em 0.375em 2em;
           &::placeholder {
             color: var(--dark-1);
@@ -81,7 +93,10 @@
             }
           }
         }
-      }
+        & .cms-profilesearch-reset-button-text {
+          line-height: 1.2
+        }
+      } /* end .cms-profilesearch */
 
       /* logos */
       & .home-hero-sponsor-list {
@@ -166,27 +181,28 @@
     align-items: center;
     color: var(--light-3);
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: 15px auto 0;
+    margin: 40px 0 30px 0;
     width: 100%;
+    color: #fff;
 
     & .home-data-marquee-title {
       flex: none;
       text-align: right;
-      font-size: 17px;
+      font-size: 28px;
       font-weight: 600;
       letter-spacing: 0;
-      line-height: 1.125;
+      line-height: 1.5;
     }
     & .home-data-marquee-datasets {
       flex: none;
       margin: 0 0 0 10px;
-      text-align: left;
+      text-align: center;
       height: 28px;
       overflow: hidden;
 
       & ul {
-        background-color: var(--dark-2);
         display: inline-block;
         list-style: none;
         margin: 0;
@@ -295,24 +311,26 @@
 
   /*********************************
    * Feature Tiles Section
+   * ("Great tools for great explorers")
    *
    *********************************/
   & .features-tiles.section {
     background-color: white;
     color: var(--dark-2);
+    padding: calc(4rem / 2);
 
     & .features-tiles.header {
       & .header-inner {
         margin: 0 auto;
         max-width: 620px;
         & h2 {
-          font-size: 44px;
+          font-size: 42px;
           line-height: 54px;
-          margin-bottom: 15px;
-          padding: 0 10px;
+          margin-bottom: 20px;
+          padding: 20px 10px 0 10px;
         }
         & p {
-          font-size: 22px;
+          font-size: 21px;
           line-height: 29px;
           margin-bottom: 10px;
           padding: 0 10px;
@@ -333,14 +351,18 @@
       & .tiles-item {
         flex-basis: 317px;
         max-width: 317px;
-        padding: 32px;
+        padding: 30px 30px 40px 30px;
+
+        @mixin min-md {
+          padding: 60px 30px 80px 30px;
+        }
 
         & .features-tiles-item-content {
           & h3 {
             font-size: 20px;
           }
           & p {
-            font-size: 16px;
+            font-size: 17px;
           }
           & a {
             font-size: 16px;
@@ -351,10 +373,15 @@
     }
   }
 
+  /*********************************
+   * "Explore without limits..." Section
+   *
+   *********************************/
   & .call-to-action.section {
     background-color: var(--dark-2);
+    text-align: center;
     & .cta-inner {
-      margin: 0 auto;
+      margin: 70px auto 70px auto;
       max-width: 720px;
 
       & h2 {
@@ -362,17 +389,19 @@
         font-size: 34px;
         line-height: 44px;
         margin-bottom: 15px;
-        padding: 0 10px;
+        padding: 10px;
       }
 
       & p {
-        font-size: 16px;
+        font-size: 18px;
         color: var(--light-2);
-        padding: 0 10px;
+        padding: 0 63px;
+        margin-bottom: 30px;
       }
 
       & button {
         margin: 10px 0 20px 0;
+        font-size: 24px;
       }
     }
   }
