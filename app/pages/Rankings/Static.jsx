@@ -143,17 +143,17 @@ export default class Static extends Component {
         let _graphs = null;
         if (type === "eci") {
           // Data for the geomap
-          graphData = resp1.data.data.slice();
+          const graphData = resp1.data.data.slice();
           graphData.forEach(d => {
             d["Country ID"] = d["Country ID"].slice(d["Country ID"].length - 3);
           });
 
           // Years for the geomap data
-          graphYears = uniqueYears.slice().sort((a, b) => b - a).map(d => ({title: d, value: d}));
-          graphYear = maxYear;
+          const graphYears = uniqueYears.slice().sort((a, b) => b - a).map(d => ({title: d, value: d}));
+          const graphYear = maxYear;
 
           // Data for the scatter chart
-          gdpData = resp1.data.data.slice();
+          const gdpData = resp1.data.data.slice();
 
           // Read data from the GDP/TRADE api
           const gdpRaw = resp2.data.data.filter(f => uniqueYears.includes(f.Year));
@@ -167,28 +167,39 @@ export default class Static extends Component {
               m["Trade Value"] = null;
             }
           });
-          gdpData = gdpData.filter(f => f.GDP !== null);
+
+          this.setState({
+            type,
+            depth,
+            rev,
+            data,
+            dataDownload,
+            columns,
+            graphData,
+            graphYears,
+            graphYear,
+            gdpData: gdpData.filter(f => f.GDP !== null),
+            path,
+            _loading: false
+          });
         } else {
-          graphData = null;
-          graphYears = null;
-          graphYear = null;
-          gdpData = null;
+          this.setState({
+            type,
+            depth,
+            rev,
+            data,
+            dataDownload,
+            columns,
+            path,
+            graphData: null,
+            graphYears: null,
+            graphYear: null,
+            gdpData: null,
+            _loading: false
+          });
         }
 
-        this.setState({
-          type,
-          depth,
-          rev,
-          data,
-          dataDownload,
-          columns,
-          graphData,
-          graphYears,
-          graphYear,
-          gdpData,
-          path,
-          _loading: false
-        });
+
       })
     );
   };
@@ -352,6 +363,7 @@ export default class Static extends Component {
     const {data, dataDownload, columns, graphData, graphYears, graphYear, filterGraph, filterGDP, path, _loading, _graphs, location} = this.state;
 
     type === "eci" && graphData && this.eciData(_graphs, graphYear);
+    console.log(graphYears);
 
     const title = {
       eci: "Economic Complexity Rankings (ECI)",
@@ -386,7 +398,7 @@ export default class Static extends Component {
           {_loading
             ? <Loading />
             : (<div>
-              {type === "eci" &&
+              {type === "eci" && graphYears &&
                 <div className="settings legacy-selector">
                   <div className="selector">
                     <h4 className="first">Visualization Year: </h4>
@@ -402,7 +414,7 @@ export default class Static extends Component {
               }
               {type === "eci" &&
                 _graphs
-                 && <div className="graph-component">
+                && <div className="graph-component">
                   <ECIgraphs
                     graphData={filterGraph}
                     gdpData={filterGDP}
