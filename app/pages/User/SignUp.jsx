@@ -19,7 +19,7 @@ class SignUp extends Component {
         <OECNavbar />
         <div className="signup-page-content">
           <h1 className="signup-page-title">Welcome to the OEC</h1>
-          <h3 className="signup-page-subtitle">Please create an account</h3>
+          <h3 className="signup-page-subtitle">Register for the OEC pro today, and enjoy unlimited access to all of our premium features for free until <strong>September 1st 2020</strong>.</h3>
           <div className="signup-page-form">
             <SignUpForm redirect={`/${locale}/account`} />
             <div className="signup-page-signup">
