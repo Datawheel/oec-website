@@ -10,91 +10,125 @@ module.exports = {
   DEFAULT_PREDICTION_COLOR,
   NAV: [
     // profiles
-    {title: "Reports", items: [
-      {title: "Countries",          url: `/${locale}/profile/country/`},
-      {title: "Products",           url: `/${locale}/profile/hs92/`},
-      {title: "States/Provinces",   url: `/${locale}/subnational/`, pro: true},
-      {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`, pro: true},
-      {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`, pro: true}
-    ]},
+    {
+      title: "Reports", items: [
+        {title: "Countries", url: `/${locale}/profile/country/`},
+        {title: "Products", url: `/${locale}/profile/hs92/`},
+        {title: "States/Provinces", url: `/${locale}/subnational/`, pro: true},
+        {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`, pro: true},
+        {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`, pro: true}
+      ]
+    },
     // rankings
-    {title: "Rankings", items: [
-      {title: "Countries", items: [
-        {title: "ECI '95-'18 (HS92)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs92`},
-          {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs92`}
-        ]},
-        {title: "ECI '98-'18 (HS96)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs96`},
-          {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs96`}
-        ]},
-        {title: "ECI '03-'18 (HS02)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs02`},
-          {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs02`}
-        ]},
-        {title: "ECI '08-'18 (HS07)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs07`},
-          {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs07`}
-        ]},
-        {title: "ECI '12-'18 (HS12)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs12`},
-          {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs12`}
-        ]}
-      ]},
-      {title: "Products", items: [
-        {title: "PCI '95-'18 (HS92)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs92`},
-          {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs92`}
-        ]},
-        {title: "PCI '98-'18 (HS96)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs96`},
-          {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs96`}
-        ]},
-        {title: "PCI '03-'18 (HS02)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs02`},
-          {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs02`}
-        ]},
-        {title: "PCI '08-'18 (HS07)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs07`},
-          {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs07`}
-        ]},
-        {title: "PCI '12-'18 (HS12)", items: [
-          {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs12`},
-          {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs12`}
-        ]}
-      ]},
-      {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
-      {title: "ECI Legacy Rankings", url: `/${locale}/rankings/legacy_eci`},
-      {title: "PCI Legacy Rankings", url: `/${locale}/rankings/legacy_pci/hs6/hs92`}
-    ]},
+    {
+      title: "Rankings", items: [
+        {
+          title: "Countries", items: [
+            {
+              title: "ECI '95-'18 (HS92)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs92`},
+                {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs92`}
+              ]
+            },
+            {
+              title: "ECI '98-'18 (HS96)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs96`},
+                {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs96`}
+              ]
+            },
+            {
+              title: "ECI '03-'18 (HS02)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs02`},
+                {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs02`}
+              ]
+            },
+            {
+              title: "ECI '08-'18 (HS07)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs07`},
+                {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs07`}
+              ]
+            },
+            {
+              title: "ECI '12-'18 (HS12)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs12`},
+                {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs12`}
+              ]
+            }
+          ]
+        },
+        {
+          title: "Products", items: [
+            {
+              title: "PCI '95-'18 (HS92)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs92`},
+                {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs92`}
+              ]
+            },
+            {
+              title: "PCI '98-'18 (HS96)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs96`},
+                {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs96`}
+              ]
+            },
+            {
+              title: "PCI '03-'18 (HS02)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs02`},
+                {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs02`}
+              ]
+            },
+            {
+              title: "PCI '08-'18 (HS07)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs07`},
+                {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs07`}
+              ]
+            },
+            {
+              title: "PCI '12-'18 (HS12)", items: [
+                {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs12`},
+                {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs12`}
+              ]
+            }
+          ]
+        },
+        {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
+        {title: "ECI Legacy Rankings", url: `/${locale}/rankings/legacy_eci`},
+        {title: "PCI Legacy Rankings", url: `/${locale}/rankings/legacy_pci/hs6/hs92`}
+      ]
+    },
     // tools
-    {title: "Tools", items: [
-      {title: "Trade Forecasts",     url: `/${locale}/prediction?dataset=trade-annual`},
-      {title: "Tariff Explorer", url: `/${locale}/tariffs/`, beta: true},
-      {title: "Visualizations",  url: `/${locale}/visualize`}
-    ]},
+    {
+      title: "Tools", items: [
+        {title: "Trade Forecasts", url: `/${locale}/prediction?dataset=trade-annual`},
+        {title: "Tariff Explorer", url: `/${locale}/tariffs/`, beta: true},
+        {title: "Visualizations", url: `/${locale}/visualize`}
+      ]
+    },
     // academy
-    {title: "Academy", items: [
-      {title: "Methodology", items: [
-        {title: "Methods",  url: `/${locale}/resources/methods`},
-        {title: "Economic Complexity",     url: `/${locale}/resources/methods#eci`},
-        {title: "Relatedness",     url: `/${locale}/resources/methods#relatedness`},
-      ]},
-      {title: "Library",  url: `/${locale}/resources/library`},
-      {title: "Publications", url: `/${locale}/resources/publications`}
-    ]},
+    {
+      title: "Academy", items: [
+        {title: "Methods", url: `/${locale}/resources/methods`},
+        {title: "_ Economic Complexity", url: `/${locale}/resources/methods#eci`},
+        {title: "_ Relatedness", url: `/${locale}/resources/methods#relatedness`},
+        {title: "Library", url: `/${locale}/resources/library`},
+        {title: "Publications", url: `/${locale}/resources/publications`}
+      ]
+    },
     // data
-    {title: "Data", items: [
-      {title: "Availability",    url: `/${locale}/resources/data-availability`},
-      {title: "Download",        url: `/${locale}/resources/data/`},
-      {title: "API",             url: `/${locale}/resources/api`}
-    ]},
+    {
+      title: "Data", items: [
+        {title: "Availability", url: `/${locale}/resources/data-availability`},
+        {title: "Download", url: `/${locale}/resources/data/`},
+        {title: "API", url: `/${locale}/resources/api`}
+      ]
+    },
     // about
-    {title: "About", items: [
-      {title: "About the OEC",  url: `/${locale}/resources/about`},
-      {title: "Privacy Policy", url: `/${locale}/resources/privacy`},
-      {title: "Terms",          url: `/${locale}/resources/terms`}
-    ]}
+    {
+      title: "About", items: [
+        {title: "About the OEC", url: `/${locale}/resources/about`},
+        {title: "Privacy Policy", url: `/${locale}/resources/privacy`},
+        {title: "Terms", url: `/${locale}/resources/terms`}
+      ]
+    }
   ],
   SUBNATIONAL_COUNTRIES: [
     {
