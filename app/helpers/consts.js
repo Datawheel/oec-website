@@ -75,7 +75,11 @@ module.exports = {
     ]},
     // academy
     {title: "Academy", items: [
-      {title: "Methodology",  url: `/${locale}/resources/methodology`},
+      {title: "Methodology", items: [
+        {title: "Methods",  url: `/${locale}/resources/methods`},
+        {title: "Economic Complexity",     url: `/${locale}/resources/methods#eci`},
+        {title: "Relatedness",     url: `/${locale}/resources/methods#relatedness`},
+      ]},
       {title: "Library",  url: `/${locale}/resources/library`},
       {title: "Publications", url: `/${locale}/resources/publications`}
     ]},

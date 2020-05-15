@@ -69,7 +69,7 @@ class Resources extends Component {
                 return <Api />;
               case "data":
                 return <Data />;
-              case "methodology":
+              case "methods":
                 return <Methodology />;
               case "privacy":
                 return <Privacy />;
