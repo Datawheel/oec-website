@@ -18,6 +18,7 @@ import RankingTable from 'components/RankingTable';
 
 import {range, normalizeString} from 'helpers/utils';
 import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
+import {datasets} from 'helpers/rankingsyears';
 import {SUBNATIONAL_COUNTRIES} from 'helpers/consts';
 
 class Custom extends Component {
@@ -811,6 +812,7 @@ class Custom extends Component {
 		} = this.state;
 		console.log("here:", SUBNATIONAL_COUNTRIES);
 		console.log("filtered:", SUBNATIONAL_COUNTRIES.filter(f => f.available === true));
+		console.log("dataset", datasets);
 
 		const _authUser = this.props.auth.msg === 'LOGIN_SUCCESS' ? true : false;
 

@@ -1,16 +1,31 @@
+// After refactoring, rename file as rankingsBuilder and delete the ? variables
+import {range} from './utils';
+
+export const datasets = [
+	{value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", defaultDepth: "HS6", yearsRange: range(1995, 2018)},
+	{value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", defaultDepth: "HS6", yearsRange: range(1998, 2018)},
+	{value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", defaultDepth: "HS6", yearsRange: range(2003, 2018)},
+	{value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", defaultDepth: "HS6", yearsRange: range(2008, 2018)},
+	{value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", defaultDepth: "HS6", yearsRange: range(2012, 2018)},
+	{value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", defaultDepth: "HS6", yearsRange: range(2018, 2018)},
+	{value: "sitc", cubeName: "trade_i_comtrade_a_sitc2_new", title: "SITC", defaultDepth: "Subgroup", yearsRange: range(1962, 2018)}
+];
+
+// ?
 export const yearsNational = {
-	Category: { initial: 1962, final: 2018 },
-	Section: { initial: 1962, final: 2018 },
-	Division: { initial: 1962, final: 2018 },
-	Group: { initial: 1962, final: 2018 },
-	Subgroup: { initial: 1962, final: 2018 },
-	HS92: { initial: 1995, final: 2018 },
-	HS96: { initial: 1998, final: 2018 },
-	HS02: { initial: 2003, final: 2018 },
-	HS07: { initial: 2008, final: 2018 },
-	HS12: { initial: 2012, final: 2018 }
+	Category: {initial: 1962, final: 2018},
+	Section: {initial: 1962, final: 2018},
+	Division: {initial: 1962, final: 2018},
+	Group: {initial: 1962, final: 2018},
+	Subgroup: {initial: 1962, final: 2018},
+	HS92: {initial: 1995, final: 2018},
+	HS96: {initial: 1998, final: 2018},
+	HS02: {initial: 2003, final: 2018},
+	HS07: {initial: 2008, final: 2018},
+	HS12: {initial: 2012, final: 2018}
 };
 
+// ?
 export const subnationalCountries = [
 	// 'Brazil (State)',
 	// 'Brazil (Municipality)',
@@ -33,8 +48,8 @@ export const subnationalCountries = [
 	// 'Uruguay'
 ];
 
-//productDepth: [ 'Section', 'HS2', 'HS4']
 
+// ?
 export const subnationalData = {
 	Canada: {
 		cube: 'can_m_hs',
@@ -43,7 +58,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1988,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'can'
 	},
 	China: {
@@ -53,7 +68,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'chn'
 	},
 	Germany: {
@@ -63,7 +78,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1980,
 		final: 2019,
-		productDepth: [ 'EGW1', 'Product' ],
+		productDepth: ['EGW1', 'Product'],
 		flag: 'deu'
 	},
 	'Japan (Regions)': {
@@ -73,7 +88,7 @@ export const subnationalData = {
 		geo: 'Region',
 		initial: 2009,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'jpn'
 	},
 	'Japan (Prefactures)': {
@@ -83,7 +98,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2009,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'jpn'
 	},
 	'Russia (Regions)': {
@@ -93,7 +108,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2015,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'rus'
 	},
 	'Russia (Districts)': {
@@ -103,7 +118,7 @@ export const subnationalData = {
 		geo: 'District',
 		initial: 2015,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'rus'
 	},
 	'Spain (Communities)': {
@@ -113,7 +128,7 @@ export const subnationalData = {
 		geo: 'Autonomous Communities',
 		initial: 2010,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'esp'
 	},
 	'Spain (Provincies)': {
@@ -123,7 +138,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2010,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'esp'
 	},
 	'Brazil (State)': {
@@ -133,7 +148,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'bra'
 	},
 	'Brazil (Municipality)': {
@@ -143,7 +158,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 1997,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'bra'
 	},
 	Bolivia: {
@@ -153,7 +168,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2006,
 		final: 2019,
-		productDepth: [ 'Section', 'Division', 'Group' ],
+		productDepth: ['Section', 'Division', 'Group'],
 		flag: 'bol'
 	},
 	Ecuador: {
@@ -163,7 +178,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2013,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'ecu'
 	},
 	'South Africa': {
@@ -173,7 +188,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2018,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'zaf'
 	},
 	Turkey: {
@@ -183,7 +198,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2002,
 		final: 2019,
-		productDepth: [ 'Section' ],
+		productDepth: ['Section'],
 		flag: 'tur'
 	},
 	'United Kingdom': {
@@ -193,7 +208,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2011,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'gbr'
 	},
 	'United States (State)': {
@@ -203,7 +218,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'usa'
 	},
 	'United States (District)': {
@@ -213,7 +228,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2019,
 		final: 2019,
-		productDepth: [ 'HS4' ],
+		productDepth: ['HS4'],
 		flag: 'usa'
 	},
 	Uruguay: {
@@ -223,7 +238,7 @@ export const subnationalData = {
 		geo: 'Subnat Geography',
 		initial: 2010,
 		final: 2018,
-		productDepth: [ 'Section', 'HS2' ],
+		productDepth: ['Section', 'HS2'],
 		flag: 'ury'
 	}
 };
