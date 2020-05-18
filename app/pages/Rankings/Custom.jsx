@@ -270,29 +270,27 @@ class Custom extends Component {
 
 			if (years.length === 1) {
 				yearRight = years[0] > 2018 ? '2018' : `${years[0]}`;
-				yearPopulationRight = years[0] > 2018 ? '2018' : `${years[0]}`;
 			} else if (years.length === 2) {
 				yearRight = years[1] > 2018 ? '2017,2018' : `${years[0]},${years[1]}`;
-				yearPopulationRight = years[1] > 2018 ? '2017,2018' : `${years[0]},${years[1]}`;
 			} else {
 				yearRight = years[2] > 2018 ? `2016,2017,2018` : `${years[0]},${years[1]},${years[2]}`;
-				yearPopulationRight = years[2] > 2018 ? `2016,2017,2018` : `${years[0]},${years[1]},${years[2]}`;
 			}
 
 			if (basecube === 'HS') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
 						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
-						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold * pathMultiplicatorThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${yearPopulationRight}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}`;
+						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${populationYear}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}`;
 			} else if (basecube === 'SITC') {
 				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
 					.cube}&rca=${subnationalData[subnationalValue]
 						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
-						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold * pathMultiplicatorThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${yearPopulationRight}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}
+						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${populationYear}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}
 						`;
 			}
 		}
 	}
+
 
 	apiGetData() {
 		this.setState({_loading: true});

@@ -455,7 +455,10 @@ export default class Methodology extends Component {
 
 						<p className="formula">
 							<MathJax.Context input="tex">
-								<MathJax.Node inline>{'X_c=\\sum_p X_{cp} , X_p=\\sum_c X_{cp}'}</MathJax.Node>
+								<MathJax.Node inline>{'X_c=\\sum_p X_{cp}'}</MathJax.Node>
+							</MathJax.Context>, {' '}
+							<MathJax.Context input="tex">
+								<MathJax.Node inline>{'X_p=\\sum_c X_{cp}'}</MathJax.Node>
 							</MathJax.Context>{' '}
 							and {''}
 							<MathJax.Context input="tex">

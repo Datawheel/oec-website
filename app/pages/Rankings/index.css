@@ -88,6 +88,7 @@
 
 		& .app-loading {
 			margin-top: var(--gutter-lg);
+			margin-bottom: 6.25rem;
 		}
 
 		& h3 {
