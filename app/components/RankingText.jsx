@@ -34,22 +34,22 @@ class RankingText extends Component {
 								<p>
 									For details about {' '}
 									<a
-										href="/en/resources/methodology#relatedness"
+										href="/en/resources/methods#relatedness"
 										className="link"
 									>
 										Relatedness
 								</a>{' '} and {' '}
 									<a
-										href="/en/resources/methodology#eci"
+										href="/en/resources/methods#eci"
 										className="link"
 									>
 										ECI
 								</a>{' '} see the {' '}
 									<a
-										href="/en/resources/methodology"
+										href="/en/resources/methods"
 										className="link"
 									>
-										Methodology section
+										methods section
 								</a>{' '} in the OEC Academy.
 							</p>
 							</div>
@@ -75,7 +75,7 @@ class RankingText extends Component {
 								<p>
 									For details about the methodology see the {' '}
 									<a
-										href="/en/resources/methodology#eci"
+										href="/en/resources/methods#eci"
 										className="link"
 									>
 										Methodology section
