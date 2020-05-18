@@ -18,6 +18,7 @@ import RankingTable from 'components/RankingTable';
 
 import {range, normalizeString} from 'helpers/utils';
 import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
+import {SUBNATIONAL_COUNTRIES} from 'helpers/consts';
 
 class Custom extends Component {
 	constructor(props) {
@@ -57,6 +58,7 @@ class Custom extends Component {
 		this.apiGetData = this.apiGetData.bind(this);
 	}
 
+	// Set default variables after the first run of code
 	componentDidMount() {
 		const defaultDepth = 'HS4';
 		const defaultRevision = 'HS92';
@@ -82,16 +84,18 @@ class Custom extends Component {
 		});
 	}
 
+	// Execute props for checking if it's a pro user
 	componentWillMount() {
 		this.props.isAuthenticated();
 	}
 
 	/* BUILDER ORIENTED FUNCTIONS */
-
+	// Handle the Category Switch
 	handleCategorySwitch(key, value) {
 		this.setState({[key]: value});
 	}
 
+	// Handle the Country Switch
 	handleCountrySwitch(key, value) {
 		const {subnational, subnationalValue, productRevision} = this.state;
 		if (subnational) {
@@ -115,6 +119,7 @@ class Custom extends Component {
 		}
 	}
 
+	// Handle the Country Select
 	handleCountrySelect(key, value) {
 		this.setState({
 			[key]: value,
@@ -125,6 +130,7 @@ class Custom extends Component {
 		});
 	}
 
+	// Handle the Product Button
 	handleProductButtons(key, value) {
 		const {productRevision} = this.state;
 		if (this.state[key] !== 'SITC' && value === 'SITC') {
@@ -148,6 +154,7 @@ class Custom extends Component {
 		}
 	}
 
+	// Handle the Product Select
 	handleProductSelect(key, value) {
 		const {productRevision} = this.state;
 		this.setState({
@@ -158,10 +165,12 @@ class Custom extends Component {
 		});
 	}
 
+	// Handle the Period Year Switch
 	handlePeriodYearSwitch(key, value) {
 		this.setState({[key]: value});
 	}
 
+	// Handle the Period Year Buttons
 	handlePeriodYearButtons(key, value) {
 		const {singleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal} = this.state;
 		if (singleyear) {
@@ -195,24 +204,32 @@ class Custom extends Component {
 		}
 	}
 
+	// Handle the Period Switch for change initial and final year
 	handlePeriodRangeSwitch(key, value) {
 		this.setState({[key]: value});
 	}
 
+	// Handle the Thresholds Sliders
 	handleThresholdSlider(key) {
 		return (value) => this.setState({[key]: value});
 	}
 
+	// Render the Threshold values in Slider for normal values
 	renderThresholdSlider(val) {
 		return `${formatAbbreviate(val)}`;
 	}
 
+	// Handle the Threshold values in Slider for money values
 	renderMoneyThresholdSlider(val) {
 		return `$${formatAbbreviate(val)}`;
 	}
 
 	/* TABLE ORIENTED FUNCTIONS*/
+	/* NEW LOGIC*/
 
+
+	/* OLD LOGIC*/
+	// Aggregate years for the rest of functions
 	yearAggregation(year, initial) {
 		if (year === initial) {
 			return [year];
@@ -223,6 +240,7 @@ class Custom extends Component {
 		}
 	}
 
+	// Create the path of the data required
 	pathCreator(years) {
 		const {
 			country,
@@ -291,7 +309,7 @@ class Custom extends Component {
 		}
 	}
 
-
+	// Build the data request from the server
 	apiGetData() {
 		this.setState({_loading: true});
 		const {
@@ -339,6 +357,7 @@ class Custom extends Component {
 		}
 	}
 
+	// Get name of selector for the returned data
 	getSelector = (country) => {
 		const {subnational, subnationalValue, productDepth, productRevision} = this.state;
 
@@ -370,6 +389,7 @@ class Custom extends Component {
 		return selector;
 	};
 
+	// Calls the data from the server for a singleyear
 	fetchSingleyearData = (path) => {
 		const {country, singleyear, yearValue} = this.state;
 		axios.all([axios.get(path)]).then(
@@ -406,6 +426,7 @@ class Custom extends Component {
 		);
 	};
 
+	// Calls the data from the server for multiyears
 	fetchMultiyearData = async (paths) => {
 		const {singleyear, yearRangeInitial, yearRangeFinal} = this.state;
 
@@ -485,6 +506,7 @@ class Custom extends Component {
 		return finalData;
 	};
 
+	// Creates the columns for the tables
 	createColumns(type, array) {
 		const {country, subnational, subnationalValue, productDepth, productRevision} = this.state;
 		let years = null;
@@ -787,6 +809,8 @@ class Custom extends Component {
 			_ready,
 			_loading
 		} = this.state;
+		console.log("here:", SUBNATIONAL_COUNTRIES);
+		console.log("filtered:", SUBNATIONAL_COUNTRIES.filter(f => f.available === true));
 
 		const _authUser = this.props.auth.msg === 'LOGIN_SUCCESS' ? true : false;
 
