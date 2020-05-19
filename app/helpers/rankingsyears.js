@@ -1,14 +1,46 @@
 // After refactoring, rename file as rankingsBuilder and delete the ? variables
 import {range} from './utils';
 
-export const datasets = [
-	{value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", defaultDepth: "HS6", yearsRange: range(1995, 2018)},
-	{value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", defaultDepth: "HS6", yearsRange: range(1998, 2018)},
-	{value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", defaultDepth: "HS6", yearsRange: range(2003, 2018)},
-	{value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", defaultDepth: "HS6", yearsRange: range(2008, 2018)},
-	{value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", defaultDepth: "HS6", yearsRange: range(2012, 2018)},
-	{value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", defaultDepth: "HS6", yearsRange: range(2018, 2018)},
-	{value: "sitc", cubeName: "trade_i_comtrade_a_sitc2_new", title: "SITC", defaultDepth: "Subgroup", yearsRange: range(1962, 2018)}
+export const DATASETS = {
+	HS92: {title: 'HS92', lang: 'hs92', cubeName: 'trade_i_baci_a_92', defaultDepth: 'HS4', yearsRange: range(1995, 2018)},
+	HS96: {title: 'HS96', lang: 'hs96', cubeName: 'trade_i_baci_a_96', defaultDepth: 'HS4', yearsRange: range(1998, 2018)},
+	HS02: {title: 'HS02', lang: 'hs02', cubeName: 'trade_i_baci_a_02', defaultDepth: 'HS4', yearsRange: range(2003, 2018)},
+	HS07: {title: 'HS07', lang: 'hs07', cubeName: 'trade_i_baci_a_07', defaultDepth: 'HS4', yearsRange: range(2008, 2018)},
+	HS12: {title: 'HS12', lang: 'hs12', cubeName: 'trade_i_baci_a_12', defaultDepth: 'HS4', yearsRange: range(2012, 2018)},
+	HS17: {title: 'HS17', lang: 'hs17', cubeName: 'trade_i_baci_a_17', defaultDepth: 'HS4', yearsRange: range(2018, 2018)},
+	SITC: {title: 'SITC', lang: 'sitc', cubeName: 'trade_i_comtrade_a_sitc2_new', defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)}
+};
+
+export const SUBNATIONAL_DATASETS = {
+	bra: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(1997,2019)},
+	jpn: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2009,2019)},
+	rus: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2015,2019)},
+	can: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(1988,2019)},
+	ury: {productDepth: ['Section', 'HS2'], defaultDepth: 'HS2', yearsRange: range(2010,2018)},
+	deu: {productDepth: ['EGW1', 'Product'], defaultDepth: 'EGW', yearsRange: range(1980,2019)},
+	usa: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2019,2019)},
+	tur: {productDepth: ['Section'], defaultDepth: 'Section', yearsRange: range(2002,2019)},
+	esp: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2010,2019)},
+	zaf: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2018,2019)},
+	chn: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2019,2019)},
+	fra: {productDepth: ['Level 3'], defaultDepth: 'Level 3', yearsRange: range(1990,2020)},
+	bol: {productDepth: ['Section', 'Division', 'Group'], defaultDepth: 'Section', yearsRange: range(2006,2019)},
+	ecu: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2013,2019)},
+	gbr: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2011,2019)}
+};
+
+export const DATASETS_DEPTH = [
+	{title: 'HS4', value: 'HS4'},
+	{title: 'HS6', value: 'HS6'}
+];
+
+export const DATASETS_REV_HS = [
+	{title: 'HS92 - 1992', value: 'HS92',},
+	{title: 'HS96 - 1996', value: 'HS96',},
+	{title: 'HS02 - 2002', value: 'HS02',},
+	{title: 'HS07 - 2007', value: 'HS07',},
+	{title: 'HS12 - 2012', value: 'HS12',},
+	{title: 'HS17 - 2017', value: 'HS17',}
 ];
 
 // ?
@@ -30,7 +62,7 @@ export const subnationalCountries = [
 	// 'Brazil (State)',
 	// 'Brazil (Municipality)',
 	// 'Bolivia',
-	'Canada',
+	'can',
 	'China',
 	// 'Ecuador',
 	// 'Germany',
@@ -51,7 +83,7 @@ export const subnationalCountries = [
 
 // ?
 export const subnationalData = {
-	Canada: {
+	can: {
 		cube: 'can_m_hs',
 		basecube: 'HS',
 		profile: 'can',
@@ -61,7 +93,7 @@ export const subnationalData = {
 		productDepth: ['HS4'],
 		flag: 'can'
 	},
-	China: {
+	chn: {
 		cube: 'chn_m_hs',
 		basecube: 'HS',
 		profile: 'chn',
@@ -71,7 +103,7 @@ export const subnationalData = {
 		productDepth: ['HS4'],
 		flag: 'chn'
 	},
-	Germany: {
+	deu: {
 		cube: 'deu_m_egw',
 		basecube: 'EGW',
 		profile: 'deu',
@@ -81,7 +113,7 @@ export const subnationalData = {
 		productDepth: ['EGW1', 'Product'],
 		flag: 'deu'
 	},
-	'Japan (Regions)': {
+	'jpn': {
 		cube: 'jpn_m_hs',
 		basecube: 'HS',
 		profile: 'jpn',
@@ -101,7 +133,7 @@ export const subnationalData = {
 		productDepth: ['HS4'],
 		flag: 'jpn'
 	},
-	'Russia (Regions)': {
+	'rus': {
 		cube: 'rus_m_hs',
 		basecube: 'HS',
 		profile: 'rus',
@@ -121,7 +153,7 @@ export const subnationalData = {
 		productDepth: ['HS4'],
 		flag: 'rus'
 	},
-	'Spain (Communities)': {
+	'esp': {
 		cube: 'esp_m_hs',
 		basecube: 'HS',
 		profile: 'esp',

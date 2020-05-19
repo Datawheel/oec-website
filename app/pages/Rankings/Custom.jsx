@@ -17,22 +17,29 @@ import RankingBuilder from 'components/RankingBuilder';
 import RankingTable from 'components/RankingTable';
 
 import {range, normalizeString} from 'helpers/utils';
+import {DATASETS, SUBNATIONAL_DATASETS} from 'helpers/rankingsyears';
 import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
-import {datasets} from 'helpers/rankingsyears';
-import {SUBNATIONAL_COUNTRIES} from 'helpers/consts';
 
 class Custom extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			country: true,
-			subnational: false,
-			subnationalValue: null,
+			// New variables
+			isCountry: true,
+			isNational: true,
+			subnationalCountry: null,
+			subnationalDepth: null,
+			yearInitial: null,
+			yearFinal: null,
+			yearRange: null,
+			// Old variables
+			// Boolean Values
+			singleyear: true,
+			rangeChangeInitial: true,
+			// Not Boolean Values
 			productDepth: null,
 			productRevision: null,
-			singleyear: true,
 			yearValue: null,
-			rangeChangeInitial: true,
 			yearRangeInitial: null,
 			yearRangeFinal: null,
 			countryExpThreshold: null,
@@ -42,6 +49,7 @@ class Custom extends Component {
 			subnationalRCAThreshold: null,
 			data: null,
 			columns: null,
+			// Loaders
 			_ready: false,
 			_loading: false
 		};
@@ -70,7 +78,9 @@ class Custom extends Component {
 		const defaultSubnationalRCAThreshold = 10;
 
 		this.setState({
-			subnationalValue: subnationalCountries[0],
+			yearRange: DATASETS[defaultRevision].yearsRange,
+			// Old values
+			subnationalCountry: subnationalCountries[0],
 			productDepth: defaultDepth,
 			productRevision: defaultRevision,
 			yearValue: yearsNational[defaultRevision].final,
@@ -91,6 +101,7 @@ class Custom extends Component {
 	}
 
 	/* BUILDER ORIENTED FUNCTIONS */
+
 	// Handle the Category Switch
 	handleCategorySwitch(key, value) {
 		this.setState({[key]: value});
@@ -98,24 +109,16 @@ class Custom extends Component {
 
 	// Handle the Country Switch
 	handleCountrySwitch(key, value) {
-		const {subnational, subnationalValue, productRevision} = this.state;
-		if (subnational) {
+		const {productRevision, subnationalCountry} = this.state;
+		if (value) {
 			this.setState({
 				[key]: value,
-				productDepth: 'HS4',
-				productRevision: 'HS92',
-				yearValue: yearsNational[productRevision].final,
-				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
+				yearRange: DATASETS[productRevision].yearsRange
 			});
 		} else {
 			this.setState({
 				[key]: value,
-				productDepth: 'HS4',
-				productRevision: 'HS92',
-				yearValue: subnationalData[subnationalValue].final,
-				yearRangeInitial: subnationalData[subnationalValue].final - 1,
-				yearRangeFinal: subnationalData[subnationalValue].final
+				yearRange: SUBNATIONAL_DATASETS[subnationalCountry].yearsRange
 			});
 		}
 	}
@@ -125,6 +128,7 @@ class Custom extends Component {
 		this.setState({
 			[key]: value,
 			productDepth: 'HS4',
+			yearRange: SUBNATIONAL_DATASETS[value].yearsRange,
 			yearValue: subnationalData[value].final,
 			yearRangeInitial: subnationalData[value].final - 1,
 			yearRangeFinal: subnationalData[value].final
@@ -160,6 +164,7 @@ class Custom extends Component {
 		const {productRevision} = this.state;
 		this.setState({
 			[key]: value,
+			yearRange: DATASETS[value].yearsRange,
 			yearValue: yearsNational[productRevision].final,
 			yearRangeInitial: yearsNational[productRevision].final - 1,
 			yearRangeFinal: yearsNational[productRevision].final
@@ -244,9 +249,9 @@ class Custom extends Component {
 	// Create the path of the data required
 	pathCreator(years) {
 		const {
-			country,
-			subnational,
-			subnationalValue,
+			isCountry,
+			isNational,
+			subnationalCountry,
 			productDepth,
 			productRevision,
 			countryExpThreshold,
@@ -255,7 +260,7 @@ class Custom extends Component {
 			subnationalGeoThreshold,
 			subnationalRCAThreshold
 		} = this.state;
-		const index = country ? 'eci' : 'pci';
+		const index = isCountry ? 'eci' : 'pci';
 		const populationYear = years[2] < 2018 ? years[2] : 2018;
 
 		let pathYears = null;
@@ -272,7 +277,7 @@ class Custom extends Component {
 			pathMultiplicatorThreshold = 3;
 		}
 
-		if (!subnational) {
+		if (!isNational) {
 			if (productDepth !== 'SITC') {
 				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(
 					2
@@ -283,7 +288,7 @@ class Custom extends Component {
 				&threshold=Country:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}:${productExpThreshold * pathMultiplicatorThreshold},Population:${populationThreshold}&YearPopulation=${populationYear}`;
 			}
 		} else {
-			const basecube = subnationalData[subnationalValue].basecube;
+			const basecube = subnationalData[subnationalCountry].basecube;
 			let yearRight = null;
 			let yearPopulationRight = null;
 
@@ -296,13 +301,13 @@ class Custom extends Component {
 			}
 
 			if (basecube === 'HS') {
-				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
-					.cube}&rca=${subnationalData[subnationalValue]
+				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalCountry]
+					.cube}&rca=${subnationalData[subnationalCountry]
 						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
 						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${populationYear}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}`;
 			} else if (basecube === 'SITC') {
-				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
-					.cube}&rca=${subnationalData[subnationalValue]
+				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalCountry]
+					.cube}&rca=${subnationalData[subnationalCountry]
 						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
 						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${populationYear}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}
 						`;
@@ -315,8 +320,8 @@ class Custom extends Component {
 		this.setState({_loading: true});
 		const {
 			singleyear,
-			subnational,
-			subnationalValue,
+			isNational,
+			subnationalCountry,
 			productRevision,
 			yearValue,
 			yearRangeInitial,
@@ -324,30 +329,30 @@ class Custom extends Component {
 		} = this.state;
 
 		if (singleyear) {
-			const aggregatedYears = subnational
-				? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial)
+			const aggregatedYears = isNational
+				? this.yearAggregation(yearValue, subnationalData[subnationalCountry].initial)
 				: this.yearAggregation(yearValue, yearsNational[productRevision].initial);
 			const path = this.pathCreator(aggregatedYears);
 			this.fetchSingleyearData(path);
 		} else {
-			const dataInitial = subnational
-				? subnationalData[subnationalValue].initial
+			const dataInitial = isNational
+				? subnationalData[subnationalCountry].initial
 				: yearsNational[productRevision].initial;
-			const dataFinal = subnational
-				? subnationalData[subnationalValue].final
+			const dataFinal = isNational
+				? subnationalData[subnationalCountry].final
 				: yearsNational[productRevision].final;
 			const dataLength = range(dataInitial, dataFinal).length;
 			if (dataLength === 1) {
-				const aggregatedYears = subnational
-					? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial)
+				const aggregatedYears = isNational
+					? this.yearAggregation(yearValue, subnationalData[subnationalCountry].initial)
 					: this.yearAggregation(yearValue, yearsNational[productRevision].initial);
 				const path = this.pathCreator(aggregatedYears);
 				this.fetchSingleyearData(path);
 			} else {
 				const pathArray = [];
 				range(yearRangeInitial, yearRangeFinal).map((d) => {
-					const aggregatedYears = subnational
-						? this.yearAggregation(d, subnationalData[subnationalValue].initial)
+					const aggregatedYears = isNational
+						? this.yearAggregation(d, subnationalData[subnationalCountry].initial)
 						: this.yearAggregation(d, yearsNational[productRevision].initial);
 					const path = this.pathCreator(aggregatedYears);
 					pathArray.push({year: d, path});
@@ -359,13 +364,13 @@ class Custom extends Component {
 	}
 
 	// Get name of selector for the returned data
-	getSelector = (country) => {
-		const {subnational, subnationalValue, productDepth, productRevision} = this.state;
+	getSelector = (isCountry) => {
+		const {isNational, subnationalCountry, productDepth, productRevision} = this.state;
 
 		let selector = null;
 
-		if (!subnational) {
-			if (country) {
+		if (!isNational) {
+			if (isCountry) {
 				selector = 'Country';
 			} else {
 				if (productDepth !== 'SITC') {
@@ -375,10 +380,10 @@ class Custom extends Component {
 				}
 			}
 		} else {
-			if (country) {
-				selector = subnationalData[subnationalValue].geo;
+			if (isCountry) {
+				selector = subnationalData[subnationalCountry].geo;
 			} else {
-				const basecube = subnationalData[subnationalValue].basecube;
+				const basecube = subnationalData[subnationalCountry].basecube;
 				if (basecube === 'HS') {
 					selector = `${productDepth}`;
 				} else if (basecube === 'SITC') {
@@ -392,12 +397,12 @@ class Custom extends Component {
 
 	// Calls the data from the server for a singleyear
 	fetchSingleyearData = (path) => {
-		const {country, singleyear, yearValue} = this.state;
+		const {isCountry, singleyear, yearValue} = this.state;
 		axios.all([axios.get(path)]).then(
 			axios.spread((resp) => {
 				const array = resp.data.data;
-				const measure = country ? 'ECI' : 'PCI';
-				const selector = this.getSelector(country);
+				const measure = isCountry ? 'ECI' : 'PCI';
+				const selector = this.getSelector(isCountry);
 
 				let data = {};
 				for (const index in array) {
@@ -445,11 +450,11 @@ class Custom extends Component {
 	// Functions for grouping data
 	// Transform data into one array
 	groupData = async (array) => {
-		const {country, yearRangeInitial, yearRangeFinal} = this.state;
+		const {isCountry, yearRangeInitial, yearRangeFinal} = this.state;
 
-		const measure = country ? 'ECI' : 'PCI';
+		const measure = isCountry ? 'ECI' : 'PCI';
 
-		const selector = this.getSelector(country);
+		const selector = this.getSelector(isCountry);
 
 		let data = {};
 		let dataLength = {};
@@ -509,12 +514,12 @@ class Custom extends Component {
 
 	// Creates the columns for the tables
 	createColumns(type, array) {
-		const {country, subnational, subnationalValue, productDepth, productRevision} = this.state;
+		const {isCountry, isNational, subnationalCountry, productDepth, productRevision} = this.state;
 		let years = null;
-		const dataInitial = subnational
-			? subnationalData[subnationalValue].initial
+		const dataInitial = isNational
+			? subnationalData[subnationalCountry].initial
 			: yearsNational[productRevision].initial;
-		const dataFinal = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
+		const dataFinal = isNational ? subnationalData[subnationalCountry].final : yearsNational[productRevision].final;
 		const dataLength = range(dataInitial, dataFinal).length;
 		if (dataLength === 1) {
 			years = [array, array];
@@ -532,9 +537,9 @@ class Custom extends Component {
 		};
 
 		let columnNAME = {};
-		if (!subnational) {
+		if (!isNational) {
 			// National Columns
-			if (country) {
+			if (isCountry) {
 				columnNAME = {
 					id: 'category',
 					accessor: (d) => d.Country,
@@ -655,14 +660,14 @@ class Custom extends Component {
 			}
 		} else {
 			// Subnational Columns
-			if (country) {
+			if (isCountry) {
 				columnNAME = {
 					id: 'category',
-					accessor: (d) => d[subnationalData[subnationalValue].geo],
+					accessor: (d) => d[subnationalData[subnationalCountry].geo],
 					width: 400,
 					Header: () => (
 						<div className="header">
-							<span className="year">{subnationalData[subnationalValue].geo}</span>
+							<span className="year">{subnationalData[subnationalCountry].geo}</span>
 							<div className="icons">
 								<Icon icon={'caret-up'} iconSize={16} />
 								<Icon icon={'caret-down'} iconSize={16} />
@@ -673,14 +678,14 @@ class Custom extends Component {
 					Cell: (props) => (
 						<div className="category">
 							<img
-								src={`/images/icons/country/country_${subnationalData[subnationalValue].flag}.png`}
+								src={`/images/icons/country/country_${subnationalData[subnationalCountry].flag}.png`}
 								alt="icon"
 								className="icon"
 							/>
 							<a
-								href={`/en/profile/subnational_${subnationalData[subnationalValue]
+								href={`/en/profile/subnational_${subnationalData[subnationalCountry]
 									.profile}/${normalizeString(
-										props.original[subnationalData[subnationalValue].geo]
+										props.original[subnationalData[subnationalCountry].geo]
 											.replace(/ /g, '-')
 											.replace(',', '')
 											.toLowerCase()
@@ -689,14 +694,14 @@ class Custom extends Component {
 								target="_blank"
 								rel="noopener noreferrer"
 							>
-								<div className="name">{props.original[subnationalData[subnationalValue].geo]}</div>
+								<div className="name">{props.original[subnationalData[subnationalCountry].geo]}</div>
 								<Icon icon={'chevron-right'} iconSize={14} />
 							</a>
 						</div>
 					)
 				};
 			} else {
-				const basecube = subnationalData[subnationalValue].basecube;
+				const basecube = subnationalData[subnationalCountry].basecube;
 				if (basecube === 'HS') {
 					columnNAME = {
 						id: 'category',
@@ -744,7 +749,7 @@ class Custom extends Component {
 			}
 		}
 
-		const measure = country ? 'ECI' : 'PCI';
+		const measure = isCountry ? 'ECI' : 'PCI';
 		const YEARS = range(years[0], years[1]);
 		YEARS.reverse()
 		const columnYEARS = YEARS.map((year, index, {length}) => ({
@@ -790,9 +795,14 @@ class Custom extends Component {
 
 	render() {
 		const {
-			country,
-			subnational,
-			subnationalValue,
+			isCountry,
+			isNational,
+			subnationalCountry,
+			subnationalDepth,
+			yearInitial,
+			yearFinal,
+			yearRange,
+			// Old Variables
 			productDepth,
 			productRevision,
 			singleyear,
@@ -810,9 +820,6 @@ class Custom extends Component {
 			_ready,
 			_loading
 		} = this.state;
-		console.log("here:", SUBNATIONAL_COUNTRIES);
-		console.log("filtered:", SUBNATIONAL_COUNTRIES.filter(f => f.available === true));
-		console.log("dataset", datasets);
 
 		const _authUser = this.props.auth.msg === 'LOGIN_SUCCESS' ? true : false;
 
@@ -839,9 +846,15 @@ class Custom extends Component {
 
 					<RankingBuilder
 						variables={{
-							country,
-							subnational,
-							subnationalValue,
+							// New Variables
+							isCountry,
+							isNational,
+							subnationalCountry,
+							subnationalDepth,
+							yearInitial,
+							yearFinal,
+							yearRange,
+							// Old Variables
 							productDepth,
 							productRevision,
 							singleyear,
@@ -870,7 +883,7 @@ class Custom extends Component {
 						apiGetData={this.apiGetData}
 					/>
 
-					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={country} />}
+					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={isCountry} />}
 				</div>
 			</div>
 		);
