@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import MathJax from 'react-mathjax2';
 import {AnchorLink} from '@datawheel/canon-core';
 
-export default class Methodology extends Component {
+export default class Methods extends Component {
 	render() {
 		const tableofcontents = [
 			{content: 'introduction', title: 'Introduction'},
@@ -151,9 +151,9 @@ export default class Methodology extends Component {
 		];
 		return (
 			<div className="definitions">
-				<Helmet title="Methodology" />
+				<Helmet title="Methods" />
 
-				<h1>Methodology</h1>
+				<h1>Methods</h1>
 
 				<div className="table-of-contents">
 					<ul>
@@ -169,6 +169,8 @@ export default class Methodology extends Component {
 					</ul>
 				</div>
 
+				<img src="/images/methods/rings_color.png" alt="rings"/>
+
 				<div className="definitions-block">
 					<a id={`introduction`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
@@ -181,6 +183,8 @@ export default class Methodology extends Component {
 						<p>In this section, we explain some of the basic ideas that shape the field of Economic Complexity.</p>
 					</div>
 				</div>
+
+				<img src="/images/methods/product_connections_color-01.png" alt=""/>
 
 				<div className="definitions-block">
 					<a id={`economic-complexity`} className="definitions-title-block-anchor" />
@@ -205,6 +209,8 @@ export default class Methodology extends Component {
 						<p>Similarly, metrics of Economic Complexity, such as the Economic Complexity Index, can be used to predict a country’s expected level of income,<sup>13,14</sup> economic growth,<sup>13,14</sup> income inequality,<sup>15</sup> and greenhouse gas emissions.<sup>16,17</sup> Measures of the complexity required to produce an activity also help explain the spatial concentration of economic activities (complex economic activities are more concentrated in space).<sup>18</sup></p>
 					</div>
 				</div>
+
+				<img src="/images/methods/stacked_color-02.png" alt=""/>
 
 				<div className="definitions-block">
 					<a id={`other-fields`} className="definitions-title-block-anchor" />
@@ -234,6 +240,8 @@ export default class Methodology extends Component {
 						<p>Outside academia, Economic Complexity methods are used by multilateral organizations and national development agencies focused on economic development, by export promotion agencies and shipping companies wanting to predict the evolution of international trade patterns, and by financial companies (to price bonds and other instruments, because of the ability of economic complexity to predict long term economic growth).</p>
 					</div>
 				</div>
+
+				<img src="/images/methods/lines_trade-color.png" alt=""/>
 
 				<div className="definitions-block">
 					<a id={`relatedness`} className="definitions-title-block-anchor" />
@@ -338,6 +346,8 @@ export default class Methodology extends Component {
 					</div>
 				</div>
 
+				<img src="/images/methods/prediction_line_color.png" alt=""/>
+
 				<div className="definitions-block">
 					<a id={`eci`} className="definitions-title-block-anchor" />
 					<div className="definitions-content">
@@ -361,6 +371,8 @@ export default class Methodology extends Component {
 						<p>This thought experiment should give you the basic intuition behind economic complexity. Now, think that instead of students you have economies (e.g. countries, cities, regions), and instead of questions you have economic activities (products, industries, technologies). Economic complexity is the idea that you can infer “how good of a student” an economy is by looking at the activities that it is able to develop successfully, and by looking at the other places where those activities are present.</p>
 					</div>
 				</div>
+
+				<img src="/images/methods/stacked_color-01.png" alt=""/>
 
 				<div className="definitions-block">
 					<a id={`eci-technically`} className="definitions-title-block-anchor" />
@@ -719,6 +731,8 @@ export default class Methodology extends Component {
 						<p>That is, we compare the share of an activity in a local unit (e.g. region, province), with the share of that activity in the world. This is to avoid having the most developed regions in a country appear to have comparative advantage in every product, and also, to make the ECI values obtained for subnational regions comparable with those of countries in the international datasets.</p>
 					</div>
 				</div>
+
+				<img src="/images/methods/map_color.png" alt=""/>
 
 				<div className="definitions-block">
 					<a id={`economic-growth`} className="definitions-title-block-anchor" />
