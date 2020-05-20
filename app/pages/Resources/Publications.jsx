@@ -35,7 +35,7 @@ export default class Publications extends Component {
         name: "When All Products Are Digital: Complexity and Intangible Value in the Ecosystem of Digitizing Firms",
         link: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3589188",
         year: "2020",
-        autor: "Pouya Rhmati, Ali R. Tafti, J. Christopher Westland, César A. Hidalgo",
+        author: "Pouya Rhmati, Ali R. Tafti, J. Christopher Westland, César A. Hidalgo",
         abstract: "During the last four decades, digital technologies have disrupted many industries. Car control systems have gone from mechanical to digital. Telephones have changed from sound boxes to portable computers. But have the firms that digitized their products and services become more valuable than firms that didn’t? Here we introduce the construct of digital proximity, which considers the interdependent activities of firms linked in an economic network. We then explore how the digitization of products and services affects a company’s Tobin's q—the ratio of market value over assets—a measure of the intangible value of a firm. Our panel regression methods and robustness tests suggest the positive influence of a firm’s digital proximity on its Tobin’s q. This implies that firms able to come closer to the digital sector have increased their intangible value compared to those that have failed to do so. These findings contribute a new way of measuring digitization and its impact on firm performance that is complementary to traditional measures of information technology (IT) intensity. ",
         img: "when-all-products-are-digital.png",
         pdf: "when-all-products-are-digital.pdf",
