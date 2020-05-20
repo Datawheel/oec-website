@@ -4,9 +4,9 @@ import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import {Button} from "@blueprintjs/core";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
+import classnames from "classnames";
 // Components
 import Footer from "components/Footer";
-import LoadingChart from "components/LoadingChart";
 import OECButtonGroup from "components/OECButtonGroup";
 import OECMultiSelect from "components/OECMultiSelect";
 import OECNavbar from "components/OECNavbar";
@@ -330,6 +330,7 @@ class Vizbuilder extends React.Component {
 
   componentDidMount = () => {
     window.addEventListener("scroll", this.handleScroll);
+    if (document && this.props.isEmbed) document.body.style.backgroundColor = "transparent";
     const {routeParams} = this.props;
     const {cube} = routeParams;
     if (cube.includes("subnational")) {
@@ -845,6 +846,7 @@ class Vizbuilder extends React.Component {
       .filter(d => d.type === this.state.subnatTimeLevelSelected);
 
     const vbChartComponent = <VbChart
+      isEmbed={this.props.isEmbed}
       permalink={this.state.permalink}
       routeParams={routeParams}
       router={this.props.router}
@@ -878,7 +880,6 @@ class Vizbuilder extends React.Component {
         <div className="vb-columns">
           <div
             className="vb-column aside"
-            // style={!this.state.controls ? {marginLeft: -250} : {}}
           >
             {<div className="content">
               <VbTabs
@@ -1198,8 +1199,8 @@ class Vizbuilder extends React.Component {
               </div>
             </div>
             {vbChartComponent}
-          </div> : <div className="vb-column">
-            <Loading />
+          </div> : <div className={classnames("vb-column", {"loading-embed": this.props.isEmbed})}>
+            <Loading isDark={this.props.isEmbed} />
           </div>}
         </div>
       </div>

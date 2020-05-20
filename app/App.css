@@ -1,8 +1,12 @@
 @import "helpers/mixins.css";
 @import "helpers/animations.css"; /* make keyframe animations always available */
 
-html, body {
+body {
   background-color: var(--dark-4);
+}
+
+html > & .vb-embed{
+  background-color: red;
 }
 
 p > a,

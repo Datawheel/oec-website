@@ -500,7 +500,7 @@ class VbChart extends React.Component {
     const {currency} = cubeSelected;
 
     if (loading) {
-      return <Loading />;
+      return <Loading isDark={this.props.isEmbed} />;
     }
 
     if (!auth) {
