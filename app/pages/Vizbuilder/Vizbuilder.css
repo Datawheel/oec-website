@@ -122,6 +122,17 @@
 
 }
 
+.vb-embed {
+  & .app-loading {
+    & .heading {
+      color: var(--dark-1);
+    }
+    & .oec-loader-fade-container p {
+      color: var(--dark-1);
+    }
+  }
+}
+
 .multi-select-wrapper, .select-multi-section-wrapper {
   margin-bottom: 12px;
   & .title {
