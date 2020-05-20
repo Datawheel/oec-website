@@ -45,7 +45,6 @@ class Loading extends Component {
   render() {
     const {isDark, t} = this.props;
     const items = shuffle(LOADING_ITEMS);
-    console.log(isDark);
     return <div className="app-loading">
       <div className="oec-loader-shell">
         <header>

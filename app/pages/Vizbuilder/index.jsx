@@ -328,9 +328,15 @@ class Vizbuilder extends React.Component {
     }));
   }
 
+  componentWillMount = () => {
+    if (typeof window !== "undefined" && this.props.isEmbed) {
+      document.querySelector("html").style.backgroundColor = "transparent";
+      document.body.style.backgroundColor = "transparent";
+    }
+  }
+
   componentDidMount = () => {
     window.addEventListener("scroll", this.handleScroll);
-    if (document && this.props.isEmbed) document.body.style.backgroundColor = "transparent";
     const {routeParams} = this.props;
     const {cube} = routeParams;
     if (cube.includes("subnational")) {
