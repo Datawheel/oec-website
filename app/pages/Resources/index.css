@@ -129,13 +129,12 @@
 			}
 
 			& .table-of-contents {
-				font-size: var(--font-sm);
-				font-weight: 300;
-
 				& .content-table-item {
 					text-decoration: none;
 
 					& .content-name {
+						font-size: var(--font-md);
+						font-weight: 300;
 						color: var(--accent-light);
 						opacity: 1;
 					}
