@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 class RankingText extends Component {
 	render() {
-		const {type, title, subtitleRev, subtitleDepth} = this.props;
+		const {type, title, subtitle, subtitleRev, subtitleDepth} = this.props;
 		return (
 			<div className="ranking-text">
 				{type === 'static' && (
@@ -73,12 +73,24 @@ class RankingText extends Component {
 									Formally, the complexity of location (ECI) is a function of the complexity of the activities present in it. Similarly, the complexity of an activity (PCI) is a function of the complexities of the locations where that activity is present.
 							</p>
 								<p>
-									For details about the methodology see the {' '}
+									For details about {' '}
+									<a
+										href="/en/resources/methods#relatedness"
+										className="link"
+									>
+										Relatedness
+								</a>{' '} and {' '}
 									<a
 										href="/en/resources/methods#eci"
 										className="link"
 									>
-										Methodology section
+										ECI
+								</a>{' '} see the {' '}
+									<a
+										href="/en/resources/methods"
+										className="link"
+									>
+										methods section
 								</a>{' '} in the OEC Academy.
 							</p>
 							</div>
