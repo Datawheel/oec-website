@@ -134,7 +134,7 @@ module.exports = {
     {
       name: "Brazil",
       code: "bra",
-      available: false,
+      available: true,
       cube: "trade_s_bra_mun_m_hs",
       dimension: "Subnat Geography",
       limit: 7000,
@@ -330,7 +330,7 @@ module.exports = {
     {
       name: "Great Britain",
       code: "gbr",
-      available: false,
+      available: true,
       cube: "trade_s_gbr_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
