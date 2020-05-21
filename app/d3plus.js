@@ -20,12 +20,14 @@ function findColor(d) {
   }
   const isSectionHS = sections.hsSections.includes(d.Section);
   if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
-    return colors[isSectionHS ? "Section" : "Category"][d["Category ID"]] || colors.colorGrey;
+    const level = isSectionHS ? "Section" : "Category";
+    return colors[level][d[`${level} ID`]] || colors.colorGrey;
   }
   if ("Section" in d && !Array.isArray(d.Section)) {
+    const level = isSectionHS ? "Section" : "Category";
     return "Patent Share" in d
       ? colors["CPC Section"][d["Section ID"]]
-      : colors[isSectionHS ? "Section" : "Category"][d["Category ID"]];
+      : colors[level][d[`${level} ID`]];
   }
 
   if (detectedColors.length !== 1) {
