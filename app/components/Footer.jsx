@@ -35,12 +35,12 @@ class Footer extends React.Component {
           const {items, title} = group;
           return items
             ? <ul key={i} className="footer-nav-group u-hide-below-sm">
-              <p className={`footer-group display${group.pro ? " is-pro" : ""}`}>{title}</p>
+              <li className={`footer-group display${group.pro ? " is-pro" : ""}`}>{title}</li>
               {items.map((item, ii) => {
                 const {items, title} = item;
                 return items
-                  ? <ul key={ii}>
-                    <p className="footer-subgroup display">{title}</p>
+                  ? <li><ul key={ii}>
+                    <li className="footer-subgroup display">{title}</li>
                     {items.map((item, ii) =>
                       item.items && item.items.length
                         ? <li className="nav-group-item nav-group-nested-item" key={`${item.title}-${item.title}-nav-group-nested-item`}>
@@ -49,7 +49,7 @@ class Footer extends React.Component {
                         : <li key={ii}>{this.renderLink(item)}</li>)
                     }
 
-                  </ul>
+                  </ul></li>
                   : <li key={ii}>{this.renderLink(item)}</li>;
               })}
             </ul>
