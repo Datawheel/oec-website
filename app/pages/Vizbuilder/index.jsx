@@ -89,15 +89,16 @@ const timeOptions = {
 };
 
 /** */
-export function createItems(data, levels, iconUrl) {
+export function createItems(data, levels, iconUrl, iconFormat = "svg") {
+  const parentId = levels[0];
   return data.reduce((obj, d) => {
     levels.forEach(type => {
       const id = d[`${type} ID`];
       if (!(id in obj)) {
-        const sId = d["Section ID"];
+        const sId = d[`${parentId} ID`];
         obj[id] = {
-          color: colors.Section[sId],
-          icon: `${iconUrl}${sId}.svg`,
+          color: colors[parentId][sId],
+          icon: `${iconUrl}${sId}.${iconFormat}`,
           id,
           name: d[type],
           type
@@ -273,7 +274,10 @@ class Vizbuilder extends React.Component {
       sparse: false
     };
     const {routeParams} = this.props;
-    const {viztype} = routeParams;
+    const {cube, viztype} = routeParams;
+
+    const prefixIcon = cube === "sitc" ? "/images/icons/sitc/sitc_" : "/images/icons/hs/hs_";
+    const iconFormat = cube === "sitc" ? "png" : "svg";
 
     const queryString = queryParser(params);
 
@@ -281,7 +285,7 @@ class Vizbuilder extends React.Component {
       .then(resp => resp.data);
 
     const productData = data.data;
-    const productKeys = createItems(productData, levels, "/images/icons/hs/hs_");
+    const productKeys = createItems(productData, levels, prefixIcon, iconFormat);
     const _selectedItemsProduct = isFinite(viztype.split(".")[0])
       ? viztype.split(".").map(d => productKeys[d]) : [];
 
@@ -295,6 +299,8 @@ class Vizbuilder extends React.Component {
 
   fetchCache = () => {
     const {productLevel, _dataset} = this.state;
+    const {routeParams} = this.props;
+    const {cube} = routeParams;
     const cubeName = _dataset.cubeName;
 
     // Gets members of HS products, Countries and Technologies
@@ -304,8 +310,10 @@ class Vizbuilder extends React.Component {
       axios.get("/olap-proxy/data?cube=indicators_i_wdi_a&drilldowns=Indicator&measures=Measure&parents=false&sparse=false")
     ]).then(axios.spread((...resp) => {
       const productData = resp[0].data.data;
-
-      const productKeys = createItems(productData, ["Section", "HS2", "HS4", "HS6"], "/images/icons/hs/hs_");
+      const {productLevels} = _dataset;
+      const prefixIcon = cube === "sitc" ? "/images/icons/sitc/sitc_" : "/images/icons/hs/hs_";
+      const iconFormat = cube === "sitc" ? "png" : "svg";
+      const productKeys = createItems(productData, productLevels, prefixIcon, iconFormat);
       const countryMembers = resp[1].data
         .map(d => ({...d, color: colors.Continent[d.parent_id]}))
         .sort((a, b) => a.title > b.title ? 1 : -1);
@@ -348,8 +356,10 @@ class Vizbuilder extends React.Component {
   componentDidUpdate = (prevProps, prevState) => {
     // Updates product list
     if (this.state.cubeSelected.cubeName !== prevState.cubeSelected.cubeName) {
-      const {cubeName} = this.state.cubeSelected;
-      this.fetchProductNames(cubeName);
+      const {cubeName, productLevel, productLevels} = this.state.cubeSelected;
+      const level = productLevel ||
+        productLevels[productLevels.length - 1] || "HS6";
+      this.fetchProductNames(cubeName, level, productLevels);
     }
     // Updates loading panel
     if (prevProps.params.cube !== this.props.params.cube) {
@@ -927,10 +937,15 @@ class Vizbuilder extends React.Component {
                   <div className="selector select-multi-section-wrapper">
                     <h4 className="title">{t("Product")}</h4>
                     <SelectMultiHierarchy
-                      getColor={d => colors.Section[d["Section ID"]]}
-                      getIcon={d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
+                      getColor={cube === "sitc"
+                        ? d => colors.Category[d["Category ID"]]
+                        : d => colors.Section[d["Section ID"]]}
+                      getIcon={cube === "sitc"
+                        ? d => `/images/icons/sitc/sitc_${d["Category ID"]}.png`
+                        : d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
                       items={this.state.product}
-                      levels={["Section", "HS2", "HS4", "HS6"]}
+                      // levels={["Section", "HS2", "HS4", "HS6"]}
+                      levels={this.state._dataset.productLevels}
                       onItemSelect={item => this.safeChangeHandler("_selectedItemsProduct", item)}
                       onItemRemove={(evt, item) => {
                         // evt: MouseEvent<HTMLButtonElement>
