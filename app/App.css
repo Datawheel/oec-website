@@ -5,10 +5,6 @@ html, body {
   background-color: var(--dark-4);
 }
 
-html:has(& > .vb-embed) {
-  background: blue;
-}
-
 p > a,
 .link,
 .cp-hero-credits-link {

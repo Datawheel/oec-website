@@ -18,13 +18,14 @@ function findColor(d) {
   if (this && this._filteredData) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
-  // if (config && config._filteredData) isSectionHS = config._filteredData.some(d => sections.hsSections.includes(d.Section));
   const isSectionHS = sections.hsSections.includes(d.Section);
-  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors[isSectionHS ? "Section" : "SITC Section"][d["Section ID"]] || colors.colorGrey;
+  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
+    return colors[isSectionHS ? "Section" : "Category"][d["Category ID"]] || colors.colorGrey;
+  }
   if ("Section" in d && !Array.isArray(d.Section)) {
     return "Patent Share" in d
-      ? colors["CPC Section"][`${d["Section ID"]}`]
-      : colors.Section[`${d["Section ID"]}`];
+      ? colors["CPC Section"][d["Section ID"]]
+      : colors[isSectionHS ? "Section" : "Category"][d["Category ID"]];
   }
 
   if (detectedColors.length !== 1) {
@@ -61,7 +62,8 @@ export const backgroundImageV2 = (key, d) => {
     case "Section":
       return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
     case "SITC Section":
-      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
+    case "Category":
+      return `/images/icons/sitc/sitc_${d["Category ID"]}.png`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Level 1":
@@ -98,7 +100,7 @@ function backgroundImage(d, ascending) {
       "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
       !sections.hsSections.includes(d.Section)
     ) {
-      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
+      return `/images/icons/sitc/sitc_${d["Category ID"]}.png`;
     }
     if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
@@ -224,6 +226,7 @@ export default {
   aggs: {
     "Trade Value Growth": d => d.length > 1 ? 0 : d[0],
     "Section ID": mean,
+    "Category ID": mean,
     "EGW1 ID": mean,
     "Flow ID": mean
   },
