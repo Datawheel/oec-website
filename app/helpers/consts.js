@@ -328,7 +328,7 @@ module.exports = {
       ]
     },
     {
-      name: "Great Britain",
+      name: "United Kingdom",
       code: "gbr",
       available: true,
       cube: "trade_s_gbr_m_hs",

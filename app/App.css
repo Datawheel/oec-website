@@ -3,7 +3,6 @@
 
 html, body {
   background-color: var(--dark-4);
-  pointer-events: none;
 }
 
 html:has(& > .vb-embed) {
