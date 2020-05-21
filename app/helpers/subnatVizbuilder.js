@@ -116,7 +116,7 @@ const datasets = [
   {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", timeItems: cubeData(2008, 2018), productLevel: "HS6", ...hsCubes},
   {value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", timeItems: cubeData(2012, 2018), productLevel: "HS6", ...hsCubes},
   {value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", timeItems: cubeData(2018, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", timeItems: cubeData(1964, 2018), productLevel: "Subgroup", ...sitcCubes}
+  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", timeItems: cubeData(1962, 2018), productLevel: "Subgroup", ...sitcCubes}
 ];
 
 module.exports = {

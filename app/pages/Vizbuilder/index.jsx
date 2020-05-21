@@ -7,6 +7,7 @@ import {withNamespaces} from "react-i18next";
 import classnames from "classnames";
 // Components
 import Footer from "components/Footer";
+import Loading from "components/Loading";
 import OECButtonGroup from "components/OECButtonGroup";
 import OECMultiSelect from "components/OECMultiSelect";
 import OECNavbar from "components/OECNavbar";
@@ -25,7 +26,6 @@ import {queryParser} from "helpers/formatters";
 import {countryItems, hsProductItems} from "helpers/random";
 
 import "./Vizbuilder.css";
-import Loading from "../../components/Loading";
 
 
 const notEmpty = items => items && items.length;
