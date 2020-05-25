@@ -331,14 +331,14 @@ export default {
       const parentName = this._groupBy[0](d);
       let parent = Object.entries(d).find(h => h[1] === parentName) || [undefined];
       let parentId = parent[0];
-      if (parentId.includes(" ID")) {
+      if (parentId && parentId.includes(" ID")) {
         parentId = parentId.slice(0, -3);
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
       const itemName = this._groupBy[len - 1](d);
       let item = Object.entries(d).find(h => h[1] === itemName) || [undefined];
       let itemId = item[0];
-      if (itemId.includes(" ID")) {
+      if (itemId && itemId.includes(" ID")) {
         itemId = itemId.slice(0, -3);
         item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
       }

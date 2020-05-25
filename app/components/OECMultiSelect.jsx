@@ -91,7 +91,7 @@ class OECMultiSelect extends React.Component {
   };
   handleClear = () => {
     this.setState({selectedItems: []});
-    this.props.callback([]);
+    this.props.onClear([]);
   };
 
   areItemsEqual(itemA, itemB) {

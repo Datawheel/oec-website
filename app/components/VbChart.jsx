@@ -219,12 +219,14 @@ class VbChart extends React.Component {
     const {cubeSelected, routeParams} = this.props;
     const {geoLevels} = cubeSelected;
     const {cube, chart, flow, country, partner, viztype, time} = routeParams;
-    // Uses subnat cubes
+
+    // Updates Redux state, with an empty data array
     const prevState = {API: undefined, data: [], loading: true};
     this.props.updateData(prevState);
     if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
     this.setState(prevState);
 
+    // If cube selected is subnational, uses fetchSubnatData function
     if (subnat[cube]) return this.fetchSubnatData();
 
     // Gets countries and partners
@@ -247,9 +249,13 @@ class VbChart extends React.Component {
       : range(timeInterval[0], timeInterval[timeInterval.length - 1]).join();
     if (timeInterval.length === 1) timeInterval.push(timeInterval[0]);
 
+    // Gets cube config
     const cubeName = cubeSelected.name;
-    const measureName = isTechnology ? "Patent Share" : "Trade Value";
-    const growth = `Year,${measureName}`;
+    const measureName = cubeSelected.measure;
+    const timeDimension = "Year";
+    const {productLevels} = cubeSelected;
+
+    const growth = `${timeDimension},${measureName}`;
 
     const reporterCountry = geoLevels[0];
     const partnerCountry = geoLevels[1];
@@ -257,7 +263,7 @@ class VbChart extends React.Component {
     if (isTradeBalance) {
       const balanceParams = {
         cube: cubeName,
-        drilldowns: "Year",
+        drilldowns: timeDimension,
         measures: measureName,
         parents: true,
         Year: timeFilter
@@ -344,13 +350,18 @@ class VbChart extends React.Component {
         isProduct && countryId.length === 0 ? countryType : countryTypeBalance
     };
 
-    if (chart === "line") dd.show = isFilter ? countryType : "Section";
+    if (chart === "line") dd.show = isFilter ? countryType : productLevels[0];
 
-    const drilldowns = ["Year"];
+    const drilldowns = [timeDimension];
     if (!isTechnology) {
-      drilldowns.push(
-        !dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance
-      );
+      if (country === "all" && partner === "all") {
+        drilldowns.push(this.state.depth);
+      }
+      else {
+        drilldowns.push(
+          !dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance
+        );
+      }
     }
     if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
     if (isTechnology && partner === "all" && !isFilter) {

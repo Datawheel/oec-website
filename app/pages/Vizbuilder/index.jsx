@@ -415,7 +415,7 @@ class Vizbuilder extends React.Component {
 
     let countryIds = notEmpty(_selectedItemsCountry)
       ? parseIdsToURL(_selectedItemsCountry, "label")
-      : ["show", "all"].includes(country) ? country : "show";
+      : ["show", "all"].includes(country) ? country : "all";
     let partnerIds = notEmpty(_selectedItemsPartner)
       ? parseIdsToURL(_selectedItemsPartner, "label")
       : ["show", "all"].includes(partner) ? partner : "all";
@@ -492,6 +492,7 @@ class Vizbuilder extends React.Component {
     router.push(permalink);
   }
 
+  /** Generates the permalink used in each tab */
   getPermalinkIds = () => {
     const {
       _selectedItemsCountryTitle,
@@ -509,7 +510,12 @@ class Vizbuilder extends React.Component {
       selectedSubnatProduct
     } = this.state;
     const {routeParams} = this.props;
-    const {cube} = routeParams;
+    const {chart, country, cube, partner} = routeParams;
+
+    const isCountry = new RegExp(/^(?!all).*$/).test(country);
+    const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
+    const isTimeSeriesChart = new RegExp(/(stacked|line)/).test(chart);
+    const isWorld = !isCountry && !isPartner;
 
     const countryRandom = getRandom(countryItems);
     let partnerRandom = getRandom(countryItems);
@@ -519,10 +525,10 @@ class Vizbuilder extends React.Component {
 
     let countryIds = notEmpty(_selectedItemsCountryTitle)
       ? parseIdsToURL(_selectedItemsCountryTitle, "label")
-      : countryRandom || "deu";
+      : isWorld ? "all" : countryRandom;
     let partnerIds = notEmpty(_selectedItemsPartnerTitle)
       ? parseIdsToURL(_selectedItemsPartnerTitle, "label")
-      : partnerRandom || "usa";
+      : isWorld && !notEmpty(_selectedItemsCountryTitle) ? "all" : partnerRandom;
 
     const isTechnologyFilter = notEmpty(_selectedItemsTechnologyTitle);
     const isTradeFilter = notEmpty(_selectedItemsProductTitle);
@@ -531,14 +537,17 @@ class Vizbuilder extends React.Component {
       ? isTechnologyFilter
         ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
         : parseIdsToURL(_selectedItemsProductTitle)
-      : getRandom(hsProductItems) || "10101";
-    let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
-    const flow = isTechnologyFilter ? "uspto" : _flow.value;
+      : getRandom(hsProductItems);
+    let dataset = _dataset.value;
+    const flow = _flow.value;
 
-    let timeIds = _selectedItemsYearTitle
+    const timeSelected =  _selectedItemsYearTitle
       .map(d => d.value)
-      .sort((a, b) => a > b ? 1 : -1)
-      .join(".");
+      .sort((a, b) => a > b ? 1 : -1);
+
+    // Select time filter
+    let timeIds = timeSelected.join(".");
+    if (isTimeSeriesChart) timeIds = timeSelected[timeSelected.length - 1];
 
     /** Creates permalink config for scatter plot */
     const scatterFlow = _xAxis.value;
@@ -760,6 +769,7 @@ class Vizbuilder extends React.Component {
     if (isSubnat && cubeName !== cubeSelected.cube) {
       this.props.updateCubeSelected({
         name: cubeSelected.cube,
+        measure: cubeSelected.measure,
         geoLevels: cubeSelected.geoLevels,
         productItems: this.state.subnatProductItems,
         productLevels: cubeSelected.productLevels,
@@ -772,6 +782,7 @@ class Vizbuilder extends React.Component {
     else if (!isSubnat && cubeName !== cubeSelected.cubeName) {
       this.props.updateCubeSelected({
         name: cubeSelected.cubeName,
+        measure: cubeSelected.measure,
         geoLevels: cubeSelected.geoLevels,
         productItems: this.state.product,
         productLevels: cubeSelected.productLevels,
@@ -808,17 +819,19 @@ class Vizbuilder extends React.Component {
     const {activeTab, cubeSelected, scrolled} = this.state;
     const {auth, location, routeParams, t} = this.props;
     const {timeItems} = cubeSelected;
-    const {chart, cube, country, viztype, time} = routeParams;
+    const {chart, cube, country, partner, viztype, time} = routeParams;
     const redirect = `${location.basename}${location.pathname}`;
 
     /** Conditions */
-    const isCountry = !["show", "all"].includes(country);
+    const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country);
+    const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
     const isProduct = isFinite(viztype.split(".")[0]);
     const isGeomap = ["geomap"].includes(chart);
     const isScatterChart = ["scatter"].includes(chart);
     const isNetworkChart = ["network"].includes(chart);
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const isSubnat = cube.includes("subnational");
+    const isWorld = !isCountry && !isPartner;
 
     /** Panel Selector */
     let subnatSelector =
@@ -850,7 +863,9 @@ class Vizbuilder extends React.Component {
         geo: isSubnatTitle ? this.state.selectedSubnatGeo : this.state._selectedItemsCountryTitle,
         geoPartner: this.state._selectedItemsPartnerTitle,
         product: isSubnatTitle ? this.state.selectedSubnatProduct : this.state._selectedItemsProductTitle,
-        technology: this.state._selectedItemsTechnologyTitle},
+        technology: this.state._selectedItemsTechnologyTitle,
+        isWorld
+      },
       {
         x: this.props.xConfig,
         y: this.props.yConfig
@@ -964,13 +979,15 @@ class Vizbuilder extends React.Component {
               </div>}
 
               {
-                countrySelector ? <div className="columns">
+                countrySelector || isWorld ? <div className="columns">
                   <div className="column-1">
                     <OECMultiSelect
                       items={this.props.countryMembers}
                       itemType={"country"}
                       selectedItems={this.state._selectedItemsCountry}
+                      placeholder={t("Select a country...")}
                       title={t("Country")}
+                      onClear={d => this.setState({_selectedItemsCountry: d})}
                       callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
                     />
                   </div>
@@ -1031,6 +1048,7 @@ class Vizbuilder extends React.Component {
                     selectedItems={this.state._selectedItemsPartner}
                     title={t("Partner")}
                     callback={d => this.handleItemMultiSelect("_selectedItemsPartner", d)}
+                    onClear={d => this.setState({_selectedItemsPartner: d})}
                   />
                 </div>
               </div>}
@@ -1115,6 +1133,7 @@ class Vizbuilder extends React.Component {
                     selectedItems={this.state.selectedSubnatTimeTemp}
                     title={t(this.state.subnatTimeLevelSelected)}
                     callback={d => this.handleItemMultiSelect("selectedSubnatTimeTemp", d)}
+                    onClear={() => this.setState({selectedSubnatTimeTemp: subnatTimeItems[0]})}
                   />
                 </div>}
               </div> : null}

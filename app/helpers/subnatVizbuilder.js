@@ -1,5 +1,9 @@
 const {range} = require("helpers/utils.js");
 const colors = require("helpers/colors.js");
+const tradeMeasure = {
+  measure: "Trade Value"
+};
+
 const cubes = {
   // subnational_fra: {
   //   cube: "trade_s_fra_q_cpf",
@@ -23,7 +27,8 @@ const cubes = {
     ],
     productLevels: ["Section", "HS2", "HS4", "Product"],
     geoLevels: ["Autonomous Communities", "Subnat Geography"],
-    timeLevels: ["Year", "Quarter", "Month"]
+    timeLevels: ["Year", "Quarter", "Month"],
+    ...tradeMeasure
   },
   subnational_rus: {
     cube: "trade_s_rus_m_hs",
@@ -35,7 +40,8 @@ const cubes = {
     ],
     productLevels: ["Section", "HS2", "HS4", "Product"],
     geoLevels: ["District", "Subnat Geography"],
-    timeLevels: ["Year", "Quarter", "Month"]
+    timeLevels: ["Year", "Quarter", "Month"],
+    ...tradeMeasure
   },
   subnational_chn: {
     cube: "trade_s_chn_m_hs",
@@ -46,7 +52,8 @@ const cubes = {
     ],
     productLevels: ["Section", "HS2", "HS4", "Product"],
     geoLevels: ["Subnat Geography"],
-    timeLevels: ["Year", "Quarter", "Month"]
+    timeLevels: ["Year", "Quarter", "Month"],
+    ...tradeMeasure
   },
   subnational_can: {
     cube: "trade_s_can_m_hs",
@@ -59,7 +66,8 @@ const cubes = {
     ],
     productLevels: ["Section", "HS2", "HS4", "Product"],
     geoLevels: ["Subnat Geography"],
-    timeLevels: ["Year", "Quarter", "Month"]
+    timeLevels: ["Year", "Quarter", "Month"],
+    ...tradeMeasure
   },
   subnational_jpn: {
     cube: "trade_s_jpn_m_hs",
@@ -72,7 +80,8 @@ const cubes = {
     ],
     productLevels: ["Section", "HS2", "HS4", "Product"],
     geoLevels: ["Region", "Subnat Geography"],
-    timeLevels: ["Year", "Quarter", "Month"]
+    timeLevels: ["Year", "Quarter", "Month"],
+    ...tradeMeasure
   },
   subnational_deu: {
     cube: "trade_s_deu_m_egw",
@@ -87,7 +96,8 @@ const cubes = {
     geoIcon: d => `/images/icons/subnational/deu/flag_${d["Subnat Geography ID"]}.png`,
     productLevels: ["EGW1", "Product"],
     geoLevels: ["Subnat Geography"],
-    timeLevels: ["Year", "Quarter", "Month"]
+    timeLevels: ["Year", "Quarter", "Month"],
+    ...tradeMeasure
   }
 };
 
@@ -110,13 +120,13 @@ const sitcCubes = {
 };
 
 const datasets = [
-  {value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", timeItems: cubeData(1995, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", timeItems: cubeData(1998, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", timeItems: cubeData(2003, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", timeItems: cubeData(2008, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", timeItems: cubeData(2012, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", timeItems: cubeData(2018, 2018), productLevel: "HS6", ...hsCubes},
-  {value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", timeItems: cubeData(1962, 2018), productLevel: "Subgroup", ...sitcCubes}
+  {...tradeMeasure, value: "hs92", cubeName: "trade_i_baci_a_92", title: "HS92", timeItems: cubeData(1995, 2018), productLevel: "HS6", ...hsCubes},
+  {...tradeMeasure, value: "hs96", cubeName: "trade_i_baci_a_96", title: "HS96", timeItems: cubeData(1998, 2018), productLevel: "HS6", ...hsCubes},
+  {...tradeMeasure, value: "hs02", cubeName: "trade_i_baci_a_02", title: "HS02", timeItems: cubeData(2003, 2018), productLevel: "HS6", ...hsCubes},
+  {...tradeMeasure, value: "hs07", cubeName: "trade_i_baci_a_07", title: "HS07", timeItems: cubeData(2008, 2018), productLevel: "HS6", ...hsCubes},
+  {...tradeMeasure, value: "hs12", cubeName: "trade_i_baci_a_12", title: "HS12", timeItems: cubeData(2012, 2018), productLevel: "HS6", ...hsCubes},
+  {...tradeMeasure, value: "hs17", cubeName: "trade_i_baci_a_17", title: "HS17", timeItems: cubeData(2018, 2018), productLevel: "HS6", ...hsCubes},
+  {...tradeMeasure, value: "sitc", cubeName: "trade_i_oec_a_sitc2", title: "SITC", timeItems: cubeData(1962, 2018), productLevel: "Subgroup", ...sitcCubes}
 ];
 
 module.exports = {
