@@ -124,14 +124,9 @@ export default class Static extends Component {
             }
           });
 
-          let rowDownloadInverted = {};
-          Object.keys(rowDownload).map(function (key) {
-            rowDownloadInverted[key] = rowDownload[key];
-          });
-
           // Push the data for the country/product to the one with all the countries/products
           data.push(row);
-          dataDownload.push(rowDownloadInverted);
+          dataDownload.push(rowDownload);
         }
 
         // Sort for the final year
