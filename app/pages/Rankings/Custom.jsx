@@ -17,6 +17,7 @@ import RankingBuilder from 'components/RankingBuilder';
 import RankingTable from 'components/RankingTable';
 
 import {range, normalizeString} from 'helpers/utils';
+import {SUBNATIONAL_COUNTRIES} from 'helpers/consts';
 import {DATASETS, SUBNATIONAL_DATASETS} from 'helpers/rankingsyears';
 import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
 
@@ -25,28 +26,30 @@ class Custom extends Component {
 		super(props);
 		this.state = {
 			// New variables
+			NATIONAL_AVAILABLE: null,
+			SUBNATIONAL_AVAILABLE: null,
 			isCountry: true,
 			isNational: true,
+			isSingleyear: true,
 			subnationalCountry: null,
 			subnationalDepth: null,
+			productDepth: null,
+			productRevision: null,
 			yearInitial: null,
 			yearFinal: null,
 			yearRange: null,
-			// Old variables
-			// Boolean Values
-			singleyear: true,
-			rangeChangeInitial: true,
-			// Not Boolean Values
-			productDepth: null,
-			productRevision: null,
-			yearValue: null,
-			yearRangeInitial: null,
-			yearRangeFinal: null,
 			countryExpThreshold: null,
 			populationThreshold: null,
 			productExpThreshold: null,
 			subnationalGeoThreshold: null,
 			subnationalRCAThreshold: null,
+			// Old variables
+			// Boolean Values
+			rangeChangeInitial: true,
+			// Not Boolean Values
+			yearValue: null,
+			yearRangeInitial: null,
+			yearRangeFinal: null,
 			data: null,
 			columns: null,
 			// Loaders
@@ -64,13 +67,24 @@ class Custom extends Component {
 		this.handleThresholdSlider = this.handleThresholdSlider.bind(this);
 		this.renderThresholdSlider = this.renderThresholdSlider.bind(this);
 		this.renderMoneyThresholdSlider = this.renderMoneyThresholdSlider.bind(this);
+		this.showVariables = this.showVariables.bind(this);
 		this.apiGetData = this.apiGetData.bind(this);
 	}
 
 	// Set default variables after the first run of code
 	componentDidMount() {
-		const defaultDepth = 'HS4';
-		const defaultRevision = 'HS92';
+		const NATIONAL_AVAILABLE = DATASETS.filter(d => d.available === true);
+		const NATIONAL_DEFAULT = NATIONAL_AVAILABLE[0];
+		const SUBNATIONAL_AVAILABLE = SUBNATIONAL_COUNTRIES.filter(d => d.available === true).sort((a, b) => (a.name).localeCompare(b.name));
+		const SUBNATIONAL_DEFAULT = SUBNATIONAL_AVAILABLE[0];
+
+		const defaultSubnationalCountry = SUBNATIONAL_DEFAULT.code;
+		const defaultSubnationalDepth = SUBNATIONAL_DEFAULT.dimension;
+		const defaultDepth = NATIONAL_DEFAULT.defaultDepth;
+		const defaultRevision = NATIONAL_DEFAULT.name;
+		const defaultYearRange = NATIONAL_DEFAULT.yearsRange;
+		const defaultYearFinal = defaultYearRange.slice().reverse()[0];
+
 		const defaultCountryThreshold = 1000000000;
 		const defaultPopulationThreshold = 1000000;
 		const defaultProductThreshold = 500000000;
@@ -78,11 +92,16 @@ class Custom extends Component {
 		const defaultSubnationalRCAThreshold = 10;
 
 		this.setState({
-			yearRange: DATASETS[defaultRevision].yearsRange,
-			// Old values
-			subnationalCountry: subnationalCountries[0],
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			subnationalCountry: defaultSubnationalCountry,
+			subnationalDepth: defaultSubnationalDepth,
 			productDepth: defaultDepth,
 			productRevision: defaultRevision,
+			yearRange: defaultYearRange,
+			yearInitial: defaultYearFinal - 1,
+			yearFinal: defaultYearFinal,
+			// Old values
 			yearValue: yearsNational[defaultRevision].final,
 			yearRangeInitial: yearsNational[defaultRevision].final - 1,
 			yearRangeFinal: yearsNational[defaultRevision].final,
@@ -109,15 +128,19 @@ class Custom extends Component {
 
 	// Handle the Country Switch
 	handleCountrySwitch(key, value) {
-		const {productRevision, subnationalCountry} = this.state;
+		const {productDepth, productRevision, subnationalCountry} = this.state;
 		if (value) {
+			const newProductDepth = DATASETS.find(d => d.name === productRevision).availableDepths.includes(productDepth) ? productDepth : DATASETS.find(d => d.name === productRevision).availableDepths[0];
 			this.setState({
 				[key]: value,
-				yearRange: DATASETS[productRevision].yearsRange
+				productDepth: newProductDepth,
+				yearRange: DATASETS.find(d => d.name === productRevision).yearsRange
 			});
 		} else {
+			const newProductDepth = SUBNATIONAL_DATASETS[subnationalCountry].productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[subnationalCountry].productDepth[0];
 			this.setState({
 				[key]: value,
+				productDepth: newProductDepth,
 				yearRange: SUBNATIONAL_DATASETS[subnationalCountry].yearsRange
 			});
 		}
@@ -125,13 +148,12 @@ class Custom extends Component {
 
 	// Handle the Country Select
 	handleCountrySelect(key, value) {
+		const {productDepth} = this.state;
+		const newProductDepth = SUBNATIONAL_DATASETS[value].productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[value].productDepth[0];
 		this.setState({
 			[key]: value,
-			productDepth: 'HS4',
-			yearRange: SUBNATIONAL_DATASETS[value].yearsRange,
-			yearValue: subnationalData[value].final,
-			yearRangeInitial: subnationalData[value].final - 1,
-			yearRangeFinal: subnationalData[value].final
+			productDepth: newProductDepth,
+			yearRange: SUBNATIONAL_DATASETS[value].yearsRange
 		});
 	}
 
@@ -161,14 +183,20 @@ class Custom extends Component {
 
 	// Handle the Product Select
 	handleProductSelect(key, value) {
-		const {productRevision} = this.state;
-		this.setState({
-			[key]: value,
-			yearRange: DATASETS[value].yearsRange,
-			yearValue: yearsNational[productRevision].final,
-			yearRangeInitial: yearsNational[productRevision].final - 1,
-			yearRangeFinal: yearsNational[productRevision].final
-		});
+		const {yearFinal} = this.state;
+		if (key === 'productRevision') {
+			const newYearRange = DATASETS.find(d => d.name === value).yearsRange;
+			const newYearFinal = newYearRange.includes(yearFinal) ? yearFinal : newYearRange[0];
+			this.setState({
+				[key]: value,
+				yearRange: newYearRange,
+				yearFinal: newYearFinal
+			});
+		} else {
+			this.setState({
+				[key]: value
+			});
+		}
 	}
 
 	// Handle the Period Year Switch
@@ -178,8 +206,8 @@ class Custom extends Component {
 
 	// Handle the Period Year Buttons
 	handlePeriodYearButtons(key, value) {
-		const {singleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal} = this.state;
-		if (singleyear) {
+		const {isSingleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal} = this.state;
+		if (isSingleyear) {
 			this.setState({[key]: value});
 		} else {
 			if (rangeChangeInitial) {
@@ -319,7 +347,7 @@ class Custom extends Component {
 	apiGetData() {
 		this.setState({_loading: true});
 		const {
-			singleyear,
+			isSingleyear,
 			isNational,
 			subnationalCountry,
 			productRevision,
@@ -328,7 +356,7 @@ class Custom extends Component {
 			yearRangeFinal
 		} = this.state;
 
-		if (singleyear) {
+		if (isSingleyear) {
 			const aggregatedYears = isNational
 				? this.yearAggregation(yearValue, subnationalData[subnationalCountry].initial)
 				: this.yearAggregation(yearValue, yearsNational[productRevision].initial);
@@ -397,7 +425,7 @@ class Custom extends Component {
 
 	// Calls the data from the server for a singleyear
 	fetchSingleyearData = (path) => {
-		const {isCountry, singleyear, yearValue} = this.state;
+		const {isCountry, isSingleyear, yearValue} = this.state;
 		axios.all([axios.get(path)]).then(
 			axios.spread((resp) => {
 				const array = resp.data.data;
@@ -421,7 +449,7 @@ class Custom extends Component {
 					(a, b) => a[yearValue][`${yearValue} Ranking`] - b[`${yearValue}`][`${yearValue} Ranking`]
 				);
 
-				const columns = this.createColumns(singleyear, yearValue);
+				const columns = this.createColumns(isSingleyear, yearValue);
 
 				this.setState({
 					data: finalData,
@@ -434,11 +462,11 @@ class Custom extends Component {
 
 	// Calls the data from the server for multiyears
 	fetchMultiyearData = async (paths) => {
-		const {singleyear, yearRangeInitial, yearRangeFinal} = this.state;
+		const {isSingleyear, yearRangeInitial, yearRangeFinal} = this.state;
 
 		const finalData = await this.groupData(paths);
 
-		const columns = await this.createColumns(singleyear, [yearRangeInitial, yearRangeFinal]);
+		const columns = await this.createColumns(isSingleyear, [yearRangeInitial, yearRangeFinal]);
 
 		this.setState({
 			data: finalData,
@@ -793,21 +821,23 @@ class Custom extends Component {
 		return columns.filter((f) => f !== null);
 	}
 
-	render() {
+	showVariables = () => {
 		const {
 			isCountry,
 			isNational,
+			isSingleyear,
 			subnationalCountry,
 			subnationalDepth,
 			yearInitial,
 			yearFinal,
 			yearRange,
-			// Old Variables
+			// Old variables
+			// Boolean Values
+			rangeChangeInitial,
+			// Not Boolean Values
 			productDepth,
 			productRevision,
-			singleyear,
 			yearValue,
-			rangeChangeInitial,
 			yearRangeInitial,
 			yearRangeFinal,
 			countryExpThreshold,
@@ -815,6 +845,61 @@ class Custom extends Component {
 			productExpThreshold,
 			subnationalGeoThreshold,
 			subnationalRCAThreshold,
+		} = this.state;
+
+		if (isNational) {
+			console.log('------ National ------');
+			console.log(isCountry ? 'Country' : 'Product');
+			console.log('Year Range', yearRange);
+			console.log(isSingleyear ? 'Singleyear' : 'Multiyear');
+			isSingleyear ? console.log('Year', yearFinal) : console.log('Initial Year', yearInitial, 'Final Year', yearFinal);
+			console.log('Product Depth', productDepth);
+			console.log('Product Revision', productRevision);
+			console.log('CountryExpT', countryExpThreshold);
+			console.log('PopulationT', populationThreshold);
+			console.log('ProductExpT', productExpThreshold);
+		} else {
+			console.log('------ Subnational ------');
+			console.log(isCountry ? 'Country' : 'Product');
+			console.log('Subnational Country', subnationalCountry);
+			console.log('Subnational Depth', subnationalDepth);
+			console.log('Year Range', yearRange);
+			console.log(isSingleyear ? 'Singleyear' : 'Multiyear');
+			isSingleyear ? console.log('Year', yearFinal) : console.log('Initial Year', yearInitial, 'Final Year', yearFinal);
+			console.log('Product Depth', productDepth);
+			console.log('Product Revision', productRevision);
+			console.log('CountryExpT', countryExpThreshold);
+			console.log('PopulationT', populationThreshold);
+			console.log('ProductExpT', productExpThreshold);
+			console.log('SubnatGeoT', subnationalGeoThreshold);
+			console.log('SubnatRCAT', subnationalRCAThreshold);
+		}
+	}
+
+	render() {
+		const {
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isCountry,
+			isNational,
+			isSingleyear,
+			productDepth,
+			productRevision,
+			subnationalCountry,
+			subnationalDepth,
+			yearInitial,
+			yearFinal,
+			yearRange,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold,
+			// Old Variables
+			yearValue,
+			rangeChangeInitial,
+			yearRangeInitial,
+			yearRangeFinal,
 			data,
 			columns,
 			_ready,
@@ -846,6 +931,8 @@ class Custom extends Component {
 
 					<RankingBuilder
 						variables={{
+							NATIONAL_AVAILABLE,
+							SUBNATIONAL_AVAILABLE,
 							// New Variables
 							isCountry,
 							isNational,
@@ -857,7 +944,7 @@ class Custom extends Component {
 							// Old Variables
 							productDepth,
 							productRevision,
-							singleyear,
+							isSingleyear,
 							yearValue,
 							rangeChangeInitial,
 							yearRangeInitial,
@@ -880,6 +967,7 @@ class Custom extends Component {
 						handleThresholdSlider={this.handleThresholdSlider}
 						renderThresholdSlider={this.renderThresholdSlider}
 						renderMoneyThresholdSlider={this.renderMoneyThresholdSlider}
+						showVariables={this.showVariables}
 						apiGetData={this.apiGetData}
 					/>
 

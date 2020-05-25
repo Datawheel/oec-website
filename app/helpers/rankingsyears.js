@@ -1,15 +1,15 @@
 // After refactoring, rename file as rankingsBuilder and delete the ? variables
 import {range} from './utils';
 
-export const DATASETS = {
-	HS92: {title: 'HS92', lang: 'hs92', cubeName: 'trade_i_baci_a_92', defaultDepth: 'HS4', yearsRange: range(1995, 2018)},
-	HS96: {title: 'HS96', lang: 'hs96', cubeName: 'trade_i_baci_a_96', defaultDepth: 'HS4', yearsRange: range(1998, 2018)},
-	HS02: {title: 'HS02', lang: 'hs02', cubeName: 'trade_i_baci_a_02', defaultDepth: 'HS4', yearsRange: range(2003, 2018)},
-	HS07: {title: 'HS07', lang: 'hs07', cubeName: 'trade_i_baci_a_07', defaultDepth: 'HS4', yearsRange: range(2008, 2018)},
-	HS12: {title: 'HS12', lang: 'hs12', cubeName: 'trade_i_baci_a_12', defaultDepth: 'HS4', yearsRange: range(2012, 2018)},
-	HS17: {title: 'HS17', lang: 'hs17', cubeName: 'trade_i_baci_a_17', defaultDepth: 'HS4', yearsRange: range(2018, 2018)},
-	SITC: {title: 'SITC', lang: 'sitc', cubeName: 'trade_i_comtrade_a_sitc2_new', defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)}
-};
+export const DATASETS = [
+	{name: 'HS92', lang: 'hs92', title: 'HS92 - 1992', available: true, cubeName: 'trade_i_baci_a_92', defaultDepth: 'HS4', availableDepths: ['HS4', 'HS6'], yearsRange: range(1995, 2018)},
+	{name: 'HS96', lang: 'hs96', title: 'HS96 - 1996', available: true, cubeName: 'trade_i_baci_a_96', defaultDepth: 'HS4', availableDepths: ['HS4', 'HS6'], yearsRange: range(1998, 2018)},
+	{name: 'HS02', lang: 'hs02', title: 'HS02 - 2002', available: true, cubeName: 'trade_i_baci_a_02', defaultDepth: 'HS4', availableDepths: ['HS4', 'HS6'], yearsRange: range(2003, 2018)},
+	{name: 'HS07', lang: 'hs07', title: 'HS07 - 2007', available: true, cubeName: 'trade_i_baci_a_07', defaultDepth: 'HS4', availableDepths: ['HS4', 'HS6'], yearsRange: range(2008, 2018)},
+	{name: 'HS12', lang: 'hs12', title: 'HS12 - 2012', available: true, cubeName: 'trade_i_baci_a_12', defaultDepth: 'HS4', availableDepths: ['HS4', 'HS6'], yearsRange: range(2012, 2018)},
+	{name: 'HS17', lang: 'hs17', title: 'HS17 - 2017', available: true, cubeName: 'trade_i_baci_a_17', defaultDepth: 'HS4', availableDepths: ['HS4', 'HS6'], yearsRange: range(2018, 2018)},
+	{name: 'SITC', lang: 'sitc', title: 'SITC', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', defaultDepth: 'Subgroup', availableDepths: ['HS4', 'HS6'], yearsRange: range(1962, 2018)}
+];
 
 export const SUBNATIONAL_DATASETS = {
 	bra: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(1997,2019)},
@@ -28,20 +28,6 @@ export const SUBNATIONAL_DATASETS = {
 	ecu: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2013,2019)},
 	gbr: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2011,2019)}
 };
-
-export const DATASETS_DEPTH = [
-	{title: 'HS4', value: 'HS4'},
-	{title: 'HS6', value: 'HS6'}
-];
-
-export const DATASETS_REV_HS = [
-	{title: 'HS92 - 1992', value: 'HS92',},
-	{title: 'HS96 - 1996', value: 'HS96',},
-	{title: 'HS02 - 2002', value: 'HS02',},
-	{title: 'HS07 - 2007', value: 'HS07',},
-	{title: 'HS12 - 2012', value: 'HS12',},
-	{title: 'HS17 - 2017', value: 'HS17',}
-];
 
 // ?
 export const yearsNational = {

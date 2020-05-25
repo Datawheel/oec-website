@@ -2,32 +2,32 @@
 /* eslint-disable indent */
 /* eslint-disable quotes */
 import React, {Component} from 'react';
-import {Button, ButtonGroup, HTMLSelect, Slider, Switch} from '@blueprintjs/core';
+import {Button, ButtonGroup, Slider, Switch} from '@blueprintjs/core';
+import classNames from "classnames";
 
 import SimpleSelect from "components/SimpleSelect";
 
 import {range} from 'helpers/utils';
-import {SUBNATIONAL_COUNTRIES} from 'helpers/consts';
-import {DATASETS, DATASETS_DEPTH, DATASETS_REV_HS} from 'helpers/rankingsyears';
-
-import {subnationalData, yearsNational} from 'helpers/rankingsyears';
+import {SUBNATIONAL_DATASETS} from 'helpers/rankingsyears';
 
 import './RankingBuilder.css';
 
 class RankingsBuilder extends Component {
 	render() {
 		const {
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
 			isCountry,
 			isNational,
+			isSingleyear,
 			subnationalCountry,
 			subnationalDepth,
+			productDepth,
+			productRevision,
 			yearInitial,
 			yearFinal,
 			yearRange,
 			// Old Variables
-			productDepth,
-			productRevision,
-			singleyear,
 			yearValue,
 			rangeChangeInitial,
 			yearRangeInitial,
@@ -51,28 +51,20 @@ class RankingsBuilder extends Component {
 			handleThresholdSlider,
 			renderThresholdSlider,
 			renderMoneyThresholdSlider,
-			apiGetData
+			apiGetData,
+			showVariables
 		} = this.props;
 
 		// Set the values for the options of the custom rankings
-		const SUBNATIONAL_AVAILABLE = SUBNATIONAL_COUNTRIES.filter(d => d.available === true).sort((a, b) => (a.name).localeCompare(b.name));
 		const OPTIONS_SUBNATIONAL = SUBNATIONAL_AVAILABLE.map(d => ({title: d.name, value: d.code}));
+		const SUBNATIONAL_PRODUCT_DEPTH = SUBNATIONAL_DATASETS[subnationalCountry].productDepth.map(d => ({title: d, value: d}));
 		const SUBNATIONAL_DEPTH = SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry).geoLevels.map(d => ({title: d.name, value: d.level}));
+		const PRODUCT_DEPTH = NATIONAL_AVAILABLE.find(d => d.name === productRevision).availableDepths.map(d => ({title: d, value: d}));
+		const PRODUCT_REV = NATIONAL_AVAILABLE.map(d => ({title: d.title, value: d.name }));
 
 		// Set those options in the selectors
-		const OPTIONS_DEPTH = isNational ? DATASETS_DEPTH : [{title: "HS4", value: "HS4"}];
-		const OPTIONS_REV = isNational ? DATASETS_REV_HS : SUBNATIONAL_DEPTH;
-
-		console.log("subnational:", SUBNATIONAL_COUNTRIES);
-		console.log("dataset", DATASETS);
-		console.log(DATASETS_REV_HS, OPTIONS_SUBNATIONAL);
-		console.log("subnational depth:", subnationalDepth);
-		console.log('yearRange', yearRange);
-
-		const initialYear = isNational
-			? yearsNational[productRevision].initial
-			: subnationalData[subnationalCountry].initial;
-		const finalYear = isNational ? yearsNational[productRevision].final : subnationalData[subnationalCountry].final;
+		const OPTIONS_DEPTH = isNational ? PRODUCT_DEPTH : SUBNATIONAL_PRODUCT_DEPTH;
+		const OPTIONS_REV = isNational ? PRODUCT_REV : SUBNATIONAL_DEPTH;
 
 		return (
 			<div className="builder columns">
@@ -131,7 +123,7 @@ class RankingsBuilder extends Component {
 								items={OPTIONS_REV}
 								title={undefined}
 								state={isNational ? 'productRevision' : 'subnationalDepth'}
-								selectedItem={OPTIONS_REV.find(d => d.value === productRevision) || {}}
+								selectedItem={OPTIONS_REV.find(d => isNational ? d.value === productRevision : d.value === subnationalDepth) || {}}
 								callback={(key, value) => handleProductSelect(key, value.value)}
 							/>
 						</div>
@@ -145,12 +137,11 @@ class RankingsBuilder extends Component {
 							<div className="switch">
 								<span>Single-year</span>
 								<Switch
-									onChange={event => handlePeriodYearSwitch('singleyear', !event.currentTarget.checked)}
-								// checked={range(initialYear, finalYear).length === 1 ? false : null}
+									onChange={event => handlePeriodYearSwitch('isSingleyear', !event.currentTarget.checked)}
 								/>
 								<span>Multi-year</span>
 							</div>
-							{!singleyear &&
+							{!isSingleyear &&
 								<div className="switch last">
 									<span>Initial Year</span>
 									<Switch
@@ -166,14 +157,12 @@ class RankingsBuilder extends Component {
 										{yearRange.map((d, k) =>
 											<Button
 												key={k}
-												onClick={() => handlePeriodYearButtons('yearValue', d)}
-												className={
-													singleyear
-														? yearValue === d && 'active'
-														: range(yearRangeInitial, yearRangeFinal).map(
-															j => j === d && 'range'
-														)
-												}
+												onClick={() => handlePeriodYearButtons('yearFinal', d)}
+												className={classNames(
+													isSingleyear
+														? yearFinal === d ? 'active' : null
+														: range(yearRangeInitial, yearRangeFinal).includes(d) ? 'active' : null
+												)}
 											>
 												{d}
 											</Button>
@@ -249,7 +238,6 @@ class RankingsBuilder extends Component {
 									onChange={handleThresholdSlider('subnationalGeoThreshold')}
 									labelRenderer={renderMoneyThresholdSlider}
 									value={subnationalGeoThreshold}
-								// disabled={subnational}
 								/>
 							</div>
 						)}
@@ -264,13 +252,12 @@ class RankingsBuilder extends Component {
 									onChange={handleThresholdSlider('subnationalRCAThreshold')}
 									labelRenderer={renderThresholdSlider}
 									value={subnationalRCAThreshold}
-								// disabled={subnational}
 								/>
 							</div>
 						)}
 						<div className="setting last">
 							<div className="build-button">
-								<Button onClick={() => apiGetData()}>Build Table</Button>
+								<Button onClick={() => showVariables()}>Build Table</Button>
 							</div>
 						</div>
 					</div>
