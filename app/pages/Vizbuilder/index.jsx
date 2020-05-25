@@ -1,4 +1,5 @@
 import React from "react";
+import Helmet from "react-helmet";
 import axios from "axios";
 import throttle from "@datawheel/canon-cms/src/utils/throttle";
 import {Button} from "@blueprintjs/core";
@@ -894,16 +895,21 @@ class Vizbuilder extends React.Component {
       }}
     />;
 
+    const vbInternalTitle = t(vbTitle, Object.assign(vbParams, {interpolation: {escapeValue: false}}));
+    const vbHelmet = <Helmet title={vbInternalTitle} />;
+
     if (this.props.isEmbed) {
       return <div className="vb-embed">
+        {vbHelmet}
         {vbChartComponent}
       </div>;
     }
 
     return <div id="vizbuilder">
+      {vbHelmet}
       <OECNavbar
         className={scrolled ? "background" : ""}
-        title={t(vbTitle, Object.assign(vbParams, {interpolation: {escapeValue: false}}))}
+        title={vbInternalTitle}
         scrolled={scrolled}
       />
 
