@@ -431,7 +431,7 @@ class Vizbuilder extends React.Component {
       : viztype || "show";
 
     let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
-    let flowSelected = isTechnologyFilter ? "uspto" : _flow.value;
+    let flowSelected = flow === "show" ? flow : _flow.value;
 
     /** Creates permalink config for scatter plot */
     if (chart === "scatter") {
@@ -820,7 +820,7 @@ class Vizbuilder extends React.Component {
     const {activeTab, cubeSelected, scrolled} = this.state;
     const {auth, location, routeParams, t} = this.props;
     const {timeItems} = cubeSelected;
-    const {chart, cube, country, partner, viztype, time} = routeParams;
+    const {chart, cube, country, flow, partner, viztype, time} = routeParams;
     const redirect = `${location.basename}${location.pathname}`;
 
     /** Conditions */
@@ -833,6 +833,7 @@ class Vizbuilder extends React.Component {
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const isSubnat = cube.includes("subnational");
     const isWorld = !isCountry && !isPartner;
+    const isTradeBalanceChart = flow === "show";
 
     /** Panel Selector */
     let subnatSelector =
@@ -1100,7 +1101,7 @@ class Vizbuilder extends React.Component {
                   />
                 </div>}
 
-                {!isScatterChart && <div className="column-1-2">
+                {!isScatterChart && !isTradeBalanceChart && <div className="column-1-2">
                   <SimpleSelect
                     items={flowItems}
                     title={t("Trade Flow")}
