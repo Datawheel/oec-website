@@ -251,7 +251,6 @@ export default class Legacy extends Component {
   render() {
     const {type, depth, rev} = this.props;
     const {data, columns, _loading} = this.state;
-    console.log(type);
 
     const title = {
       eci: "Economic Complexity Legacy Rankings (ECI)",

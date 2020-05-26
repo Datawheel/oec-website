@@ -401,7 +401,6 @@ export default class Static extends Component {
     const {data, dataDownload, columns, graphData, graphYears, graphYear, filterGraph, filterGDP, path, _loading, _graphs, location} = this.state;
 
     type === "eci" && graphData && this.eciData(_graphs, graphYear);
-    console.log(graphYears);
 
     const title = {
       eci: "Economic Complexity Rankings (ECI)",
