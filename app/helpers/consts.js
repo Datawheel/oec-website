@@ -23,33 +23,33 @@ module.exports = {
     {
       title: "Rankings", items: [
         {
-          title: "Countries", items: [
+          title: "Countries (ECI)", items: [
             {
-              title: "ECI '95-'18 (HS92)", items: [
+              title: "1995-2018 (HS92)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs92`},
                 {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs92`}
               ]
             },
             {
-              title: "ECI '98-'18 (HS96)", items: [
+              title: "1998-2018 (HS96)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs96`},
                 {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs96`}
               ]
             },
             {
-              title: "ECI '03-'18 (HS02)", items: [
+              title: "2003-2018 (HS02)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs02`},
                 {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs02`}
               ]
             },
             {
-              title: "ECI '08-'18 (HS07)", items: [
+              title: "2008-2018 (HS07)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs07`},
                 {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs07`}
               ]
             },
             {
-              title: "ECI '12-'18 (HS12)", items: [
+              title: "2012-2018 (HS12)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/eci/hs4/hs12`},
                 {title: "6 Digit", url: `/${locale}/rankings/eci/hs6/hs12`}
               ]
@@ -57,33 +57,33 @@ module.exports = {
           ]
         },
         {
-          title: "Products", items: [
+          title: "Products (PCI)", items: [
             {
-              title: "PCI '95-'18 (HS92)", items: [
+              title: "1995-2018 (HS92)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs92`},
                 {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs92`}
               ]
             },
             {
-              title: "PCI '98-'18 (HS96)", items: [
+              title: "1998-2018 (HS96)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs96`},
                 {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs96`}
               ]
             },
             {
-              title: "PCI '03-'18 (HS02)", items: [
+              title: "2003-2018 (HS02)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs02`},
                 {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs02`}
               ]
             },
             {
-              title: "PCI '08-'18 (HS07)", items: [
+              title: "2008-2018 (HS07)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs07`},
                 {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs07`}
               ]
             },
             {
-              title: "PCI '12-'18 (HS12)", items: [
+              title: "2012-2018 (HS12)", items: [
                 {title: "4 Digit", url: `/${locale}/rankings/pci/hs4/hs12`},
                 {title: "6 Digit", url: `/${locale}/rankings/pci/hs6/hs12`}
               ]
