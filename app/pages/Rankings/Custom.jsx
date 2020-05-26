@@ -119,6 +119,19 @@ class Custom extends Component {
 		this.props.isAuthenticated();
 	}
 
+	// Validate the years selected between changes
+	yearValidation = (dataset, year) => {
+		if (dataset.includes(year)) {
+			return year;
+		} else {
+			if (year < dataset[0]) {
+				return dataset[0];
+			} else {
+				return dataset.slice().reverse()[0];
+			}
+		}
+	}
+
 	/* BUILDER ORIENTED FUNCTIONS */
 
 	// Handle the Category Switch
@@ -128,37 +141,50 @@ class Custom extends Component {
 
 	// Handle the Country Switch
 	handleCountrySwitch(key, value) {
-		const {productDepth, productRevision, subnationalCountry} = this.state;
+		const {subnationalCountry, productDepth, productRevision, yearFinal} = this.state;
 		if (value) {
-			const newProductDepth = DATASETS.find(d => d.name === productRevision).availableDepths.includes(productDepth) ? productDepth : DATASETS.find(d => d.name === productRevision).availableDepths[0];
+			const DATASET = DATASETS.find(d => d.name === productRevision);
+			const newProductDepth = DATASET.availableDepths.includes(productDepth) ? productDepth : DATASETS.find(d => d.name === productRevision).availableDepths[0];
+			const newYearRange = DATASET.yearsRange;
+			const newYearFinal = this.yearValidation(newYearRange, yearFinal);
 			this.setState({
 				[key]: value,
 				productDepth: newProductDepth,
-				yearRange: DATASETS.find(d => d.name === productRevision).yearsRange
+				yearFinal: newYearFinal,
+				yearRange: newYearRange
 			});
 		} else {
-			const newProductDepth = SUBNATIONAL_DATASETS[subnationalCountry].productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[subnationalCountry].productDepth[0];
+			const DATASET = SUBNATIONAL_DATASETS[subnationalCountry];
+			const newProductDepth = DATASET.productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[subnationalCountry].productDepth[0];
+			const newYearRange = DATASET.yearsRange;
+			const newYearFinal = this.yearValidation(newYearRange, yearFinal);
 			this.setState({
 				[key]: value,
 				productDepth: newProductDepth,
-				yearRange: SUBNATIONAL_DATASETS[subnationalCountry].yearsRange
+				yearFinal: newYearFinal,
+				yearRange: newYearRange
 			});
 		}
 	}
 
 	// Handle the Country Select
 	handleCountrySelect(key, value) {
-		const {productDepth} = this.state;
-		const newProductDepth = SUBNATIONAL_DATASETS[value].productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[value].productDepth[0];
+		const {productDepth, yearFinal} = this.state;
+		const DATASET = SUBNATIONAL_DATASETS[value];
+		const newProductDepth = DATASET.productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[value].productDepth[0];
+		const newYearRange = DATASET.yearsRange;
+		const newYearFinal = this.yearValidation(newYearRange, yearFinal);
 		this.setState({
 			[key]: value,
 			productDepth: newProductDepth,
-			yearRange: SUBNATIONAL_DATASETS[value].yearsRange
+			yearFinal: newYearFinal,
+			yearRange: newYearRange
 		});
 	}
 
 	// Handle the Product Button
 	handleProductButtons(key, value) {
+		console.log(key, value);
 		const {productRevision} = this.state;
 		if (this.state[key] !== 'SITC' && value === 'SITC') {
 			this.setState({
