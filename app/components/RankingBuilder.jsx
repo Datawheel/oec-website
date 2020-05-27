@@ -20,6 +20,7 @@ class RankingsBuilder extends Component {
 			isCountry,
 			isNational,
 			isSingleyear,
+			isChangeInitialYear,
 			subnationalCountry,
 			subnationalDepth,
 			productDepth,
@@ -29,7 +30,6 @@ class RankingsBuilder extends Component {
 			yearRange,
 			// Old Variables
 			yearValue,
-			rangeChangeInitial,
 			yearRangeInitial,
 			yearRangeFinal,
 			countryExpThreshold,
@@ -58,9 +58,9 @@ class RankingsBuilder extends Component {
 		// Set the values for the options of the custom rankings
 		const OPTIONS_SUBNATIONAL = SUBNATIONAL_AVAILABLE.map(d => ({title: d.name, value: d.code}));
 		const SUBNATIONAL_PRODUCT_DEPTH = SUBNATIONAL_DATASETS[subnationalCountry].productDepth.map(d => ({title: d, value: d}));
-		const SUBNATIONAL_DEPTH = SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry).geoLevels.map(d => ({title: d.name, value: d.level}));
+		const SUBNATIONAL_DEPTH = SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry).geoLevels.slice().reverse().map(d => ({title: d.name, value: d.level}));
 		const PRODUCT_DEPTH = NATIONAL_AVAILABLE.find(d => d.name === productRevision).availableDepths.map(d => ({title: d, value: d}));
-		const PRODUCT_REV = NATIONAL_AVAILABLE.map(d => ({title: d.title, value: d.name }));
+		const PRODUCT_REV = NATIONAL_AVAILABLE.map(d => ({title: d.title, value: d.name}));
 
 		// Set those options in the selectors
 		const OPTIONS_DEPTH = isNational ? PRODUCT_DEPTH : SUBNATIONAL_PRODUCT_DEPTH;
@@ -146,7 +146,7 @@ class RankingsBuilder extends Component {
 									<span>Initial Year</span>
 									<Switch
 										onChange={event =>
-											handlePeriodRangeSwitch('rangeChangeInitial', !event.currentTarget.checked)}
+											handlePeriodRangeSwitch('isChangeInitialYear', !event.currentTarget.checked)}
 									/>
 									<span>Final Year</span>
 								</div>
@@ -157,11 +157,16 @@ class RankingsBuilder extends Component {
 										{yearRange.map((d, k) =>
 											<Button
 												key={k}
-												onClick={() => handlePeriodYearButtons('yearFinal', d)}
+												onClick={() => handlePeriodYearButtons(
+													isSingleyear,
+													isChangeInitialYear,
+													isSingleyear ? 'yearFinal' : isChangeInitialYear ? 'yearInitial' : 'yearFinal',
+													d
+												)}
 												className={classNames(
 													isSingleyear
 														? yearFinal === d ? 'active' : null
-														: range(yearRangeInitial, yearRangeFinal).includes(d) ? 'active' : null
+														: range(yearInitial, yearFinal).includes(d) ? 'active' : null
 												)}
 											>
 												{d}

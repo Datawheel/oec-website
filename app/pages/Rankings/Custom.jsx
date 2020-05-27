@@ -31,6 +31,7 @@ class Custom extends Component {
 			isCountry: true,
 			isNational: true,
 			isSingleyear: true,
+			isChangeInitialYear: true,
 			subnationalCountry: null,
 			subnationalDepth: null,
 			productDepth: null,
@@ -44,8 +45,6 @@ class Custom extends Component {
 			subnationalGeoThreshold: null,
 			subnationalRCAThreshold: null,
 			// Old variables
-			// Boolean Values
-			rangeChangeInitial: true,
 			// Not Boolean Values
 			yearValue: null,
 			yearRangeInitial: null,
@@ -169,13 +168,19 @@ class Custom extends Component {
 
 	// Handle the Country Select
 	handleCountrySelect(key, value) {
-		const {productDepth, yearFinal} = this.state;
+		const {subnationalDepth, productDepth, yearFinal} = this.state;
+
+		const SUBNATIONAL_DATASET = SUBNATIONAL_COUNTRIES.find(d => d.code === value);
+		const subnationalDepths = [...new Set(SUBNATIONAL_DATASET.geoLevels.map(d => d.level))];
+		const newSubnationalDepth = subnationalDepths.includes(subnationalDepth) ? subnationalDepth : subnationalDepths.slice().reverse()[0];
+
 		const DATASET = SUBNATIONAL_DATASETS[value];
 		const newProductDepth = DATASET.productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[value].productDepth[0];
 		const newYearRange = DATASET.yearsRange;
 		const newYearFinal = this.yearValidation(newYearRange, yearFinal);
 		this.setState({
 			[key]: value,
+			subnationalDepth: newSubnationalDepth,
 			productDepth: newProductDepth,
 			yearFinal: newYearFinal,
 			yearRange: newYearRange
@@ -211,8 +216,9 @@ class Custom extends Component {
 	handleProductSelect(key, value) {
 		const {yearFinal} = this.state;
 		if (key === 'productRevision') {
-			const newYearRange = DATASETS.find(d => d.name === value).yearsRange;
-			const newYearFinal = newYearRange.includes(yearFinal) ? yearFinal : newYearRange[0];
+			const DATASET = DATASETS.find(d => d.name === value);
+			const newYearRange = DATASET.yearsRange;
+			const newYearFinal = this.yearValidation(newYearRange, yearFinal);
 			this.setState({
 				[key]: value,
 				yearRange: newYearRange,
@@ -227,46 +233,43 @@ class Custom extends Component {
 
 	// Handle the Period Year Switch
 	handlePeriodYearSwitch(key, value) {
-		this.setState({[key]: value});
-	}
-
-	// Handle the Period Year Buttons
-	handlePeriodYearButtons(key, value) {
-		const {isSingleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal} = this.state;
-		if (isSingleyear) {
+		const {yearFinal, yearRange} = this.state;
+		console.log(yearRange);
+		if (value) {
 			this.setState({[key]: value});
 		} else {
-			if (rangeChangeInitial) {
-				if (value === yearsNational[productRevision].final) {
-					this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
-				} else if (value < yearRangeInitial) {
-					this.setState({yearRangeInitial: value});
-				} else if (yearRangeInitial < value && value < yearRangeFinal) {
-					if (range(value, yearRangeFinal).length >= 2) {
-						this.setState({yearRangeInitial: value});
-					}
-				} else if (yearRangeFinal < value) {
-					this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
-				}
-			} else {
-				if (value === yearsNational[productRevision].initial) {
-					this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
-				} else if (value < yearRangeInitial) {
-					this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
-				} else if (yearRangeInitial < value && value < yearRangeFinal) {
-					if (range(yearRangeInitial, value).length >= 2) {
-						this.setState({yearRangeFinal: value});
-					}
-				} else if (yearRangeFinal < value) {
-					this.setState({yearRangeFinal: value});
-				}
-			}
+			const newYearFinal = yearFinal === yearRange[0] ? yearRange[1] : yearFinal;
+			this.setState({
+				[key]: value,
+				yearInitial: newYearFinal - 1,
+				yearFinal: newYearFinal
+			});
 		}
 	}
 
 	// Handle the Period Switch for change initial and final year
 	handlePeriodRangeSwitch(key, value) {
+		console.log(key, value);
 		this.setState({[key]: value});
+	}
+
+	// Handle the Period Year Buttons
+	handlePeriodYearButtons(singleyear, initialyear, key, value) {
+		console.log(singleyear, key, value);
+		const {yearInitial, yearFinal} = this.state;
+		if (singleyear) {
+			this.setState({yearInitial: value - 1, [key]: value});
+		} else {
+			if (initialyear) {
+				if (value < yearFinal) {
+					this.setState({yearInitial: value});
+				}
+			} else {
+				if (value > yearInitial) {
+					this.setState({yearFinal: value});
+				}
+			}
+		}
 	}
 
 	// Handle the Thresholds Sliders
@@ -852,6 +855,7 @@ class Custom extends Component {
 			isCountry,
 			isNational,
 			isSingleyear,
+			isChangeInitialYear,
 			subnationalCountry,
 			subnationalDepth,
 			yearInitial,
@@ -859,7 +863,6 @@ class Custom extends Component {
 			yearRange,
 			// Old variables
 			// Boolean Values
-			rangeChangeInitial,
 			// Not Boolean Values
 			productDepth,
 			productRevision,
@@ -909,6 +912,7 @@ class Custom extends Component {
 			isCountry,
 			isNational,
 			isSingleyear,
+			isChangeInitialYear,
 			productDepth,
 			productRevision,
 			subnationalCountry,
@@ -923,7 +927,6 @@ class Custom extends Component {
 			subnationalRCAThreshold,
 			// Old Variables
 			yearValue,
-			rangeChangeInitial,
 			yearRangeInitial,
 			yearRangeFinal,
 			data,
@@ -962,17 +965,17 @@ class Custom extends Component {
 							// New Variables
 							isCountry,
 							isNational,
+							isSingleyear,
+							isChangeInitialYear,
 							subnationalCountry,
 							subnationalDepth,
+							productDepth,
+							productRevision,
 							yearInitial,
 							yearFinal,
 							yearRange,
 							// Old Variables
-							productDepth,
-							productRevision,
-							isSingleyear,
 							yearValue,
-							rangeChangeInitial,
 							yearRangeInitial,
 							yearRangeFinal,
 							countryExpThreshold,

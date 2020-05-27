@@ -22,7 +22,7 @@ export const SUBNATIONAL_DATASETS = {
 	tur: {productDepth: ['Section'], defaultDepth: 'Section', yearsRange: range(2002,2019)},
 	esp: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2010,2019)},
 	zaf: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2018,2019)},
-	chn: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2019,2019)},
+	chn: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2018,2019)},
 	fra: {productDepth: ['Level 3'], defaultDepth: 'Level 3', yearsRange: range(1990,2020)},
 	bol: {productDepth: ['Section', 'Division', 'Group'], defaultDepth: 'Section', yearsRange: range(2006,2019)},
 	ecu: {productDepth: ['HS4'], defaultDepth: 'HS4', yearsRange: range(2013,2019)},
