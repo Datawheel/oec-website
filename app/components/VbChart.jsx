@@ -36,6 +36,9 @@ const OLAP_API = "/olap-proxy/data";
 
 const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
 
+const CancelToken = axios.CancelToken;
+let cancel;
+
 class VbChart extends React.Component {
   constructor(props) {
     super(props);
@@ -177,8 +180,13 @@ class VbChart extends React.Component {
       params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }
     const fullURL = `${OLAP_API}?${parseURL(params)}`;
+    if (cancel !== undefined) {
+      cancel();
+    }
     return axios
-      .get(OLAP_API, {params})
+      .get(OLAP_API, {cancelToken: new CancelToken(c => {
+        cancel = c;
+      }), params})
       .then(resp => {
         let data = resp.data.data;
 
@@ -378,7 +386,6 @@ class VbChart extends React.Component {
       Year: timeFilter
     };
 
-    // const {diff} = this.state.selected;
     if (this.state.selected.includes("Growth")) {
       const diff = 1;
       params.growth = growth;
@@ -477,8 +484,14 @@ class VbChart extends React.Component {
       });
     }
 
+    if (cancel !== undefined) {
+      cancel();
+    }
     return axios
-      .get(OLAP_API, {params})
+      .get(OLAP_API, {
+        cancelToken: new CancelToken(c => {
+          cancel = c;
+        }), params})
       .then(resp => {
         let data = resp.data.data;
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);
