@@ -421,16 +421,13 @@ class Vizbuilder extends React.Component {
       ? parseIdsToURL(_selectedItemsPartner, "label")
       : ["show", "all"].includes(partner) ? partner : "all";
 
-    const isTechnologyFilter = notEmpty(_selectedItemsTechnology);
     const isTradeFilter = notEmpty(_selectedItemsProduct);
 
-    let filterIds = isTechnologyFilter || isTradeFilter
-      ? isTechnologyFilter
-        ? parseIdsToURL(_selectedItemsTechnology, "value")
-        : parseIdsToURL(_selectedItemsProduct)
-      : viztype || "show";
+    let filterIds = isTradeFilter
+      ? parseIdsToURL(_selectedItemsProduct)
+      : viztype;
 
-    let dataset = isTechnologyFilter ? "cpc" : _dataset.value;
+    let dataset = _dataset.value;
     let flowSelected = flow === "show" ? flow : _flow.value;
 
     /** Creates permalink config for scatter plot */
@@ -447,9 +444,10 @@ class Vizbuilder extends React.Component {
       : _selectedItemsYear.map(d => d.value).sort((a, b) => a > b ? 1 : -1).join(".");
 
     /** Creates permalink config for subnational plot */
+    const notEmptySubnatGeo = notEmpty(this.state.selectedSubnatGeoTemp);
     if (
-      notEmpty(this.state.selectedSubnatGeoTemp) ||
-      cube.includes("subnational") && notEmpty(this.state.selectedSubnatProductTemp)
+      notEmptySubnatGeo ||
+      cube.includes("subnational") && notEmpty(this.state.selectedSubnatProductTemp) && notEmptySubnatGeo
     ) {
       const {selectedSubnatGeoTemp, selectedSubnatProductTemp, selectedSubnatTimeTemp, subnatCubeSelected} = this.state;
       dataset = `subnational_${subnatCubeSelected.id}`;
@@ -836,16 +834,16 @@ class Vizbuilder extends React.Component {
     const isTradeBalanceChart = flow === "show";
 
     /** Panel Selector */
-    let subnatSelector =
+    const subnatSelector =
       subnat.cubeSelector.some(d => country.split(".").includes(d.id)) ||
       subnat.cubeSelector.some(d => this.state._selectedItemsCountry.map(d => d.label).includes(d.id)) ||
       isSubnat;
     const productSelector = isProduct && !isScatterChart;
-    let countrySelector = isCountry && !isScatterChart || isSubnat;
+    const countrySelector = isCountry && !isScatterChart || isSubnat;
     const partnerSelector = countrySelector && !productSelector && !isNetworkChart;
     if (productSelector) {
-      if (isSubnat) countrySelector = false;
-      subnatSelector = false;
+      // if (isSubnat) countrySelector = false;
+      // subnatSelector = false;
     }
 
     const timeButtons = isSubnat ? this.state.subnatTimeItems : timeItems;
@@ -855,9 +853,10 @@ class Vizbuilder extends React.Component {
 
     const subnatItem = subnat[cube] || {};
     const {productLevels} = subnatItem;
-    let isSubnatPanel = notEmpty(this.state.selectedSubnatGeoTemp);
+    const isSubnatPanel = notEmpty(this.state.selectedSubnatGeoTemp);
     const isSubnatCube = cube.includes("subnational");
-    if (productSelector && isSubnatCube) isSubnatPanel = true;
+    let isSubnatPanelProduct = false;
+    if (productSelector && isSubnatCube) isSubnatPanelProduct = true;
     const isSubnatTitle = subnat[cube];
 
     const {vbTitle, vbParams} = getVbTitle(
