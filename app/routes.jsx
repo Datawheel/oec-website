@@ -84,10 +84,20 @@ export default function RouteCreate() {
 
   /** */
   function checkForVizId(nextState, replace) {
+    const {params} = nextState;
+    const reqestedUrl = nextState.location.pathname;
     if (!nextState.params.chart) {
-      const reqestedUrl = nextState.location.pathname;
       const randId = genRandId(reqestedUrl);
-      const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}tree_map/hs92/export/${randId}/all/show/2018/` : `${reqestedUrl}/tree_map/hs92/export/${randId}/all/show/2018/`;
+      const nextUrl = reqestedUrl.slice(-1) === "/"
+        ? `${reqestedUrl}tree_map/hs92/export/${randId}/all/show/2018/`
+        : `${reqestedUrl}/tree_map/hs92/export/${randId}/all/show/2018/`;
+      return replace({pathname: nextUrl});
+    }
+    if (
+      ["hs92", "hs96", "hs02", "hs07", "hs12", "hs17"].includes(params.cube) &&
+      HS_TO_OEC_HS[params.viztype]
+    ) {
+      const nextUrl = reqestedUrl.replace(params.viztype, HS_TO_OEC_HS[params.viztype]);
       return replace({pathname: nextUrl});
     }
     return null;
