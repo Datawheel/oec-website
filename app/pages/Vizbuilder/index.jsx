@@ -902,6 +902,10 @@ class Vizbuilder extends React.Component {
     if (this.props.isEmbed) {
       return <div className="vb-embed">
         {vbHelmet}
+        <VbTitle
+          params={vbParams}
+          title={vbTitle}
+        />
         {vbChartComponent}
       </div>;
     }
