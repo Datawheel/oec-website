@@ -832,7 +832,7 @@ class Vizbuilder extends React.Component {
     const isNetworkChart = ["network"].includes(chart);
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     const isSubnat = cube.includes("subnational");
-    const isWorld = !isCountry && !isPartner;
+    const isWorld = !isCountry && !isPartner || country === "wld";
     const isTradeBalanceChart = flow === "show";
 
     /** Panel Selector */

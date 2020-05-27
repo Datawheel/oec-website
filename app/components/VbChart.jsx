@@ -218,7 +218,9 @@ class VbChart extends React.Component {
   fetchData = () => {
     const {cubeSelected, routeParams} = this.props;
     const {geoLevels} = cubeSelected;
-    const {cube, chart, flow, country, partner, viztype, time} = routeParams;
+    const {cube, chart, flow, partner, viztype, time} = routeParams;
+    let {country} = routeParams;
+    if (country === "wld") country = "all";
 
     // Updates Redux state, with an empty data array
     const prevState = {API: undefined, data: [], loading: true};
