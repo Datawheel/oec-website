@@ -23,6 +23,8 @@ import Resources from "./pages/Resources";
 import Loading from "components/Loading";
 import ErrorPage from "./pages/ErrorPage";
 
+import {HS_TO_OEC_HS} from "helpers/consts";
+
 /** */
 export default function RouteCreate() {
 
@@ -66,10 +68,15 @@ export default function RouteCreate() {
 
   /** */
   function checkForId(nextState, replace) {
-    if (!nextState.params.id) {
-      const reqestedUrl = nextState.location.pathname;
+    const {location, params} = nextState;
+    const reqestedUrl = location.pathname;
+    if (!params.id) {
       const randId = genRandId(reqestedUrl);
       const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
+      return replace({pathname: nextUrl});
+    }
+    else if (reqestedUrl.includes("profile/hs92") && HS_TO_OEC_HS[params.id]) {
+      const nextUrl = reqestedUrl.replace(params.id, HS_TO_OEC_HS[params.id]);
       return replace({pathname: nextUrl});
     }
     return null;
