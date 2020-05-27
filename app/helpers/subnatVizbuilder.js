@@ -114,7 +114,7 @@ const hsCubes = {
 };
 
 const sitcCubes = {
-  geoLevels: ["Reporter Country", "Partner Country"],
+  geoLevels: ["Exporter Country", "Importer Country"],
   productLevels: sitcLevels,
   timeLevels: ["Year"]
 };
