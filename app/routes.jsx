@@ -112,7 +112,7 @@ export default function RouteCreate() {
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route exact path="/admin" component={Builder} />
       <Route exact path="/explorer" component={Explorer} />
-      <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={props => <Vizbuilder {...props} isEmbed={true} />} />
+      <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={props => <Vizbuilder {...props} isEmbed={true} />} onEnter={checkForVizId} />
       <Route exact path="/:lang/visualize(/:chart)(/:cube)(/:flow)(/:country)(/:partner)(/:viztype)(/:time)" component={Vizbuilder} onEnter={checkForVizId} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />
