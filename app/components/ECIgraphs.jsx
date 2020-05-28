@@ -6,10 +6,9 @@ class ECIgraphs extends Component {
   state = {}
   render() {
     const {graphData, gdpData, year} = this.props;
-    // const colorScaleColors = ["#F2FDFF", "#CAF5FD", "#A4EDFC", "#5DD9F5", "#27BFEB", "#049EDB", "#007CC4", "#005AA7", "#003D87"];
-    // const colorScaleColors = ["#DEF3F5", "#CAF1F5", "#B7EFF5", "#91EAF5", "#71E3F6", "#57D9F7", "#44CBF8", "#36BAF9", "#2CA5FB", "#268FFD", "#227BFF" ];
-    // const colorScaleColors = ["#FFF5F2", "#FFE0D6", "#FFCBBA", "#FFA584", "#FF8855", "#FF7830", "#FF7514", "#FF7F00", "#FF9900", "#FFB300", "#FFCC00"];
-    const colorScaleColors = ['#FFF2FF', '#FEE3FE', '#FED5FE', '#FBB8FB', '#F99CF8', '#F582F4', '#F069EE', '#EB54E7', '#E441DF', '#DC31D5', '#D224CA', '#C719BD', '#BB10AE', '#AC0A9E', '#9C058C'];
+    // blue const colorScaleColors = ['#fff5eb', '#fee6ce', '#fdd0a2', '#fdae6b', '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
+    // red  const colorScaleColors = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
+    const colorScaleColors = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
 
     // Calculate min and max values for ECI value
     const uniqueECI = [...new Set(gdpData.map(m => m.ECI))];
