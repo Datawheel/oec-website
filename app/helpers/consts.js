@@ -15,8 +15,8 @@ module.exports = {
         {title: "Countries", url: `/${locale}/profile/country/`},
         {title: "Products", url: `/${locale}/profile/hs92/`},
         {title: "States/Provinces", url: `/${locale}/subnational/`, pro: true},
-        {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`, pro: true},
-        {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`, pro: true}
+        {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`},
+        {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`}
       ]
     },
     // rankings
