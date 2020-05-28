@@ -34,6 +34,14 @@
 					}
 				}
 			}
+
+			& .paragraph.first {
+				padding-right: var(--gutter-sm);
+			}
+
+			& .paragraph.second {
+				padding-left: var(--gutter-sm);
+			}
 		}
 
 		& .italic {
