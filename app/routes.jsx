@@ -3,6 +3,7 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 
 import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
+import ProfileShareImg from "./pages/Profile/ProfileShareImg";
 import Subnational from "./pages/Subnational/Subnational";
 import PredictionLanding from "./pages/Prediction/PredictionLanding";
 import Prediction from "./pages/Prediction/Prediction";
@@ -110,6 +111,7 @@ export default function RouteCreate() {
       <Route path="/welcome" component={Welcome} />
       <Route path="/loading" component={Loading} />
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
+      <Route path="/:lang/profile-share/:slug(/:id)(/:slug2)(/:id2)" component={ProfileShareImg} />
       <Route exact path="/admin" component={Builder} />
       <Route exact path="/explorer" component={Explorer} />
       <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={props => <Vizbuilder {...props} isEmbed={true} />} onEnter={checkForVizId} />
