@@ -97,7 +97,7 @@ class RankingText extends Component {
 									<p className="italic">
 										These are the rankings of the OEC 3.0 version for the {' '}
 										<a
-											href="https://oec.world/en/rankings/country/eci/"
+											href="https://legacy.oec.world/en/rankings/country/eci/"
 											className="link"
 										>
 											Economic Complexity Index
@@ -107,7 +107,7 @@ class RankingText extends Component {
 										<p className="italic">
 											These are the rankings of the OEC 3.0 version for the {' '}
 											<a
-												href="https://oec.world/en/rankings/product/sitc/"
+												href="https://legacy.oec.world/en/rankings/product/sitc/"
 												className="link"
 											>
 												Product Complexity Index
