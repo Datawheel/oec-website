@@ -6,9 +6,7 @@ class ECIgraphs extends Component {
   state = {}
   render() {
     const {graphData, gdpData, year} = this.props;
-    // blue const colorScaleColors = ['#fff5eb', '#fee6ce', '#fdd0a2', '#fdae6b', '#fd8d3c', '#f16913', '#d94801', '#a63603', '#7f2704'];
-    // red  const colorScaleColors = ['#f7fbff', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
-    const colorScaleColors = ['#f7fcf5', '#e5f5e0', '#c7e9c0', '#a1d99b', '#74c476', '#41ab5d', '#238b45', '#006d2c', '#00441b'];
+    const colorScaleColors = ['#e2ebf3', '#deebf7', '#c6dbef', '#9ecae1', '#6baed6', '#4292c6', '#2171b5', '#08519c', '#08306b'];
 
     // Calculate min and max values for ECI value
     const uniqueECI = [...new Set(gdpData.map(m => m.ECI))];
