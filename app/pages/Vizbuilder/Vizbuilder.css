@@ -123,6 +123,16 @@
 }
 
 .vb-embed {
+  min-height: 100vh;
+  & .title {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: var(--font-lg);
+    margin: 0;
+  }
+  & .vb-chart {
+    height: calc(100vh - 3rem - var(--font-lg));
+  }
   & .app-loading {
     & .heading {
       color: var(--dark-1);

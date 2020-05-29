@@ -3,6 +3,7 @@ import {Route, IndexRoute, browserHistory} from "react-router";
 
 import {Builder} from "@datawheel/canon-cms";
 import Profile from "./pages/Profile";
+import ProfileShareImg from "./pages/Profile/ProfileShareImg";
 import Subnational from "./pages/Subnational/Subnational";
 import PredictionLanding from "./pages/Prediction/PredictionLanding";
 import Prediction from "./pages/Prediction/Prediction";
@@ -22,6 +23,8 @@ import Rankings from "./pages/Rankings";
 import Resources from "./pages/Resources";
 import Loading from "components/Loading";
 import ErrorPage from "./pages/ErrorPage";
+
+import {HS_TO_OEC_HS} from "helpers/consts";
 
 /** */
 export default function RouteCreate() {
@@ -66,10 +69,15 @@ export default function RouteCreate() {
 
   /** */
   function checkForId(nextState, replace) {
-    if (!nextState.params.id) {
-      const reqestedUrl = nextState.location.pathname;
+    const {location, params} = nextState;
+    const reqestedUrl = location.pathname;
+    if (!params.id) {
       const randId = genRandId(reqestedUrl);
       const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}${randId}` : `${reqestedUrl}/${randId}`;
+      return replace({pathname: nextUrl});
+    }
+    else if (reqestedUrl.includes("profile/hs92") && HS_TO_OEC_HS[params.id]) {
+      const nextUrl = reqestedUrl.replace(params.id, HS_TO_OEC_HS[params.id]);
       return replace({pathname: nextUrl});
     }
     return null;
@@ -77,10 +85,20 @@ export default function RouteCreate() {
 
   /** */
   function checkForVizId(nextState, replace) {
+    const {params} = nextState;
+    const reqestedUrl = nextState.location.pathname;
     if (!nextState.params.chart) {
-      const reqestedUrl = nextState.location.pathname;
       const randId = genRandId(reqestedUrl);
-      const nextUrl = reqestedUrl.slice(-1) === "/" ? `${reqestedUrl}tree_map/hs92/export/${randId}/all/show/2018/` : `${reqestedUrl}/tree_map/hs92/export/${randId}/all/show/2018/`;
+      const nextUrl = reqestedUrl.slice(-1) === "/"
+        ? `${reqestedUrl}tree_map/hs92/export/${randId}/all/show/2018/`
+        : `${reqestedUrl}/tree_map/hs92/export/${randId}/all/show/2018/`;
+      return replace({pathname: nextUrl});
+    }
+    if (
+      ["hs92", "hs96", "hs02", "hs07", "hs12", "hs17"].includes(params.cube) &&
+      HS_TO_OEC_HS[params.viztype]
+    ) {
+      const nextUrl = reqestedUrl.replace(params.viztype, HS_TO_OEC_HS[params.viztype]);
       return replace({pathname: nextUrl});
     }
     return null;
@@ -93,9 +111,10 @@ export default function RouteCreate() {
       <Route path="/welcome" component={Welcome} />
       <Route path="/loading" component={Loading} />
       <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
+      <Route path="/:lang/profile-share/:slug(/:id)(/:slug2)(/:id2)" component={ProfileShareImg} />
       <Route exact path="/admin" component={Builder} />
       <Route exact path="/explorer" component={Explorer} />
-      <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={props => <Vizbuilder {...props} isEmbed={true} />} />
+      <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={props => <Vizbuilder {...props} isEmbed={true} />} onEnter={checkForVizId} />
       <Route exact path="/:lang/visualize(/:chart)(/:cube)(/:flow)(/:country)(/:partner)(/:viztype)(/:time)" component={Vizbuilder} onEnter={checkForVizId} />
       <Route exact path="/:lang/login" component={Login} />
       <Route exact path="/:lang/signup" component={SignUp} />

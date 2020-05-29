@@ -12,6 +12,7 @@ import {range} from 'helpers/utils';
 import Loading from 'components/Loading';
 import RankingText from 'components/RankingText';
 import RankingTable from 'components/RankingTable';
+import VbDownload from 'components/VbDownload';
 
 export default class Legacy extends Component {
   state = {
@@ -19,7 +20,10 @@ export default class Legacy extends Component {
     depth: null,
     rev: null,
     data: null,
+    dataDownload: null,
     columns: null,
+    path: null,
+    location: null,
     _loading: true
   }
 
@@ -27,6 +31,7 @@ export default class Legacy extends Component {
     const {type, depth, rev} = this.props;
     const path = this.pathCreator(type, depth, rev);
     this.fetchData(path, type, depth, rev);
+    this.setState({location: window.location});
   }
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -50,6 +55,7 @@ export default class Legacy extends Component {
 
   fetchData = (path, type, depth, rev) => {
     const data = [];
+    const dataDownload = [];
     this.setState({_loading: true, data: []});
     axios.get(path).then(resp => {
       const pathData = resp.data.data;
@@ -65,13 +71,22 @@ export default class Legacy extends Component {
       for (const index in unique) {
         const rowData = pathData.filter(f => f[`${measure} ID`] === unique[index]);
         const row = {};
+        const rowDownload = {};
         row[measure] = rowData[0][measure];
         row[`${measure} ID`] = unique[index];
         rowData.forEach(d => {
           const values = {};
           values[`${d.Year} ${`${type}`.toUpperCase()}`] = d[`${type}`.toUpperCase()];
           row[`${d.Year}`] = values;
+          rowDownload[`${d.Year}`] = d[`${type}`.toUpperCase()];
         });
+        if (type === "eci") {
+          rowDownload[`${measure} ID`] = unique[index];
+        } else {
+          const HSDigits = depth.slice(-1);
+          rowDownload[`${measure} ID`] = unique[index].toString().slice(-HSDigits);
+        }
+        rowDownload[measure] = rowData[0][measure];
         // Add non values to rows
         range(minYear, maxYear).map(d => {
           if (!row[d]) {
@@ -88,6 +103,7 @@ export default class Legacy extends Component {
           }
         });
         data.push(row);
+        dataDownload.push(rowDownload);
       }
       data.sort((a, b) => b[maxYear][`${maxYear} ${`${type}`.toUpperCase()}`] - a[maxYear][`${maxYear} ${`${type}`.toUpperCase()}`]);
 
@@ -98,7 +114,9 @@ export default class Legacy extends Component {
         depth,
         rev,
         data,
+        dataDownload,
         columns,
+        path,
         _loading: false
       });
     });
@@ -204,6 +222,44 @@ export default class Legacy extends Component {
       }
     }
 
+    let columnCODE = null;
+    let HSDigits = null;
+    if (type === 'pci') {
+      HSDigits = depth.slice(-1);
+      columnCODE = {
+        id: 'category',
+        accessor: d => d[`${depth.toUpperCase()} ID`],
+        width: 100,
+        Header: () =>
+          <div className="header">
+            <span className="year">{'Product ID'}</span>
+            <div className="icons">
+              <Icon icon={'caret-up'} iconSize={16} />
+              <Icon icon={'caret-down'} iconSize={16} />
+            </div>
+          </div>,
+        Cell: props =>
+          <div className="category">
+            {rev.toUpperCase() === 'HS92'
+              ? <a
+                href={`/en/profile/${rev}/${props.original[
+                  `${depth.toUpperCase()} ID`
+                ]}`}
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="name">{props.original[`${depth.toUpperCase()} ID`].toString().slice(-HSDigits)}</div>
+                <Icon icon={'chevron-right'} iconSize={14} />
+              </a>
+              : <div className="link">
+                <div className="name">{props.original[`${depth.toUpperCase()} ID`]}</div>
+              </div>
+            }
+          </div>
+      };
+    };
+
     const measure = type.toUpperCase();
     const YEARS = range(initialYear, finalYear);
     YEARS.reverse();
@@ -233,7 +289,7 @@ export default class Legacy extends Component {
       className: 'year'
     }));
 
-    const columns = [columnID, columnNAME, ...columnYEARS];
+    const columns = type === 'eci' ? [columnID, columnNAME, ...columnYEARS] : [columnID, columnNAME, columnCODE, ...columnYEARS];
 
     return columns.filter(f => f !== null);
   };
@@ -250,8 +306,7 @@ export default class Legacy extends Component {
 
   render() {
     const {type, depth, rev} = this.props;
-    const {data, columns, _loading} = this.state;
-    console.log(type);
+    const {data, dataDownload, columns, path, location, _loading} = this.state;
 
     const title = {
       eci: "Economic Complexity Legacy Rankings (ECI)",
@@ -296,6 +351,19 @@ export default class Legacy extends Component {
                   )}
                 </ButtonGroup>
               </div>
+            </div>
+          )}
+
+          {!_loading && (
+            <div className="download">
+              <VbDownload
+                data={dataDownload}
+                location={location}
+                title={type === 'eci' ? 'legacy_eci' : `legacy_pci_${depth}_${rev}`}
+                customAPI={[path]}
+                saveViz={false}
+                buttonTitle={'Download Table'}
+              />
             </div>
           )}
 

@@ -36,6 +36,9 @@ const OLAP_API = "/olap-proxy/data";
 
 const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
 
+const CancelToken = axios.CancelToken;
+let cancel;
+
 class VbChart extends React.Component {
   constructor(props) {
     super(props);
@@ -177,8 +180,13 @@ class VbChart extends React.Component {
       params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }
     const fullURL = `${OLAP_API}?${parseURL(params)}`;
+    if (cancel !== undefined) {
+      cancel();
+    }
     return axios
-      .get(OLAP_API, {params})
+      .get(OLAP_API, {cancelToken: new CancelToken(c => {
+        cancel = c;
+      }), params})
       .then(resp => {
         let data = resp.data.data;
 
@@ -218,13 +226,17 @@ class VbChart extends React.Component {
   fetchData = () => {
     const {cubeSelected, routeParams} = this.props;
     const {geoLevels} = cubeSelected;
-    const {cube, chart, flow, country, partner, viztype, time} = routeParams;
-    // Uses subnat cubes
+    const {cube, chart, flow, partner, viztype, time} = routeParams;
+    let {country} = routeParams;
+    if (country === "wld") country = "all";
+
+    // Updates Redux state, with an empty data array
     const prevState = {API: undefined, data: [], loading: true};
     this.props.updateData(prevState);
     if (!["tree_map"].includes(chart)) prevState.selected = measures[0];
     this.setState(prevState);
 
+    // If cube selected is subnational, uses fetchSubnatData function
     if (subnat[cube]) return this.fetchSubnatData();
 
     // Gets countries and partners
@@ -247,9 +259,13 @@ class VbChart extends React.Component {
       : range(timeInterval[0], timeInterval[timeInterval.length - 1]).join();
     if (timeInterval.length === 1) timeInterval.push(timeInterval[0]);
 
+    // Gets cube config
     const cubeName = cubeSelected.name;
-    const measureName = isTechnology ? "Patent Share" : "Trade Value";
-    const growth = `Year,${measureName}`;
+    const measureName = cubeSelected.measure;
+    const timeDimension = "Year";
+    const {productLevels} = cubeSelected;
+
+    const growth = `${timeDimension},${measureName}`;
 
     const reporterCountry = geoLevels[0];
     const partnerCountry = geoLevels[1];
@@ -257,7 +273,7 @@ class VbChart extends React.Component {
     if (isTradeBalance) {
       const balanceParams = {
         cube: cubeName,
-        drilldowns: "Year",
+        drilldowns: timeDimension,
         measures: measureName,
         parents: true,
         Year: timeFilter
@@ -344,13 +360,18 @@ class VbChart extends React.Component {
         isProduct && countryId.length === 0 ? countryType : countryTypeBalance
     };
 
-    if (chart === "line") dd.show = isFilter ? countryType : "Section";
+    if (chart === "line") dd.show = isFilter ? countryType : productLevels[0];
 
-    const drilldowns = ["Year"];
+    const drilldowns = [timeDimension];
     if (!isTechnology) {
-      drilldowns.push(
-        !dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance
-      );
+      if (country === "all" && partner === "all") {
+        drilldowns.push(this.state.depth);
+      }
+      else {
+        drilldowns.push(
+          !dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance
+        );
+      }
     }
     if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
     if (isTechnology && partner === "all" && !isFilter) {
@@ -365,7 +386,6 @@ class VbChart extends React.Component {
       Year: timeFilter
     };
 
-    // const {diff} = this.state.selected;
     if (this.state.selected.includes("Growth")) {
       const diff = 1;
       params.growth = growth;
@@ -464,8 +484,14 @@ class VbChart extends React.Component {
       });
     }
 
+    if (cancel !== undefined) {
+      cancel();
+    }
     return axios
-      .get(OLAP_API, {params})
+      .get(OLAP_API, {
+        cancelToken: new CancelToken(c => {
+          cancel = c;
+        }), params})
       .then(resp => {
         let data = resp.data.data;
         if (this.state.selected.includes("Growth")) data = data.filter(d => d.Year === time * 1);

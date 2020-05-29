@@ -11,14 +11,13 @@ export const getList = n => getNames(n).reduce((str, item, i) => {
 const getNames = items => items.map(d => typeof d === "string" ? d : d.name || d.title);
 
 export const getVbTitle = (items, axis, routeParams) => {
-  const {geo, geoPartner, product, technology} = items;
+  const {geo, geoPartner, product, isWorld} = items;
   const {x, y} = axis;
 
   const {cube, chart, flow, country, partner, viztype, time} = routeParams;
-  const _countryNames = getList(geo);
+  const _countryNames = isWorld ? "the World" : getList(geo);
   const _partnerNames = getList(geoPartner);
   const _productNames = getList(product ? product : []);
-  const _technologyNames = getList(technology);
 
   const isTrade = new RegExp(/(export|import)/).test(flow);
   const isTimeSeriesChart = new RegExp(/(stacked|line)/).test(chart);

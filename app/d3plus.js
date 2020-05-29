@@ -18,13 +18,16 @@ function findColor(d) {
   if (this && this._filteredData) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
-  // if (config && config._filteredData) isSectionHS = config._filteredData.some(d => sections.hsSections.includes(d.Section));
   const isSectionHS = sections.hsSections.includes(d.Section);
-  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) return colors[isSectionHS ? "Section" : "SITC Section"][d["Section ID"]] || colors.colorGrey;
+  if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
+    const level = isSectionHS ? "Section" : "Category";
+    return colors[level][d[`${level} ID`]] || colors.colorGrey;
+  }
   if ("Section" in d && !Array.isArray(d.Section)) {
+    const level = isSectionHS ? "Section" : "Category";
     return "Patent Share" in d
-      ? colors["CPC Section"][`${d["Section ID"]}`]
-      : colors.Section[`${d["Section ID"]}`];
+      ? colors["CPC Section"][d["Section ID"]]
+      : colors[level][d[`${level} ID`]];
   }
 
   if (detectedColors.length !== 1) {
@@ -61,7 +64,8 @@ export const backgroundImageV2 = (key, d) => {
     case "Section":
       return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
     case "SITC Section":
-      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
+    case "Category":
+      return `/images/icons/sitc/sitc_${d["Category ID"]}.png`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Level 1":
@@ -98,7 +102,7 @@ function backgroundImage(d, ascending) {
       "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
       !sections.hsSections.includes(d.Section)
     ) {
-      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
+      return `/images/icons/sitc/sitc_${d["Category ID"]}.png`;
     }
     if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
@@ -224,6 +228,7 @@ export default {
   aggs: {
     "Trade Value Growth": d => d.length > 1 ? 0 : d[0],
     "Section ID": mean,
+    "Category ID": mean,
     "EGW1 ID": mean,
     "Flow ID": mean
   },
@@ -326,14 +331,14 @@ export default {
       const parentName = this._groupBy[0](d);
       let parent = Object.entries(d).find(h => h[1] === parentName) || [undefined];
       let parentId = parent[0];
-      if (parentId.includes(" ID")) {
+      if (parentId && parentId.includes(" ID")) {
         parentId = parentId.slice(0, -3);
         parent = Object.entries(d).find(h => h[0] === parentId) || [undefined];
       }
       const itemName = this._groupBy[len - 1](d);
       let item = Object.entries(d).find(h => h[1] === itemName) || [undefined];
       let itemId = item[0];
-      if (itemId.includes(" ID")) {
+      if (itemId && itemId.includes(" ID")) {
         itemId = itemId.slice(0, -3);
         item = Object.entries(d).find(h => h[0] === itemId) || [undefined];
       }
