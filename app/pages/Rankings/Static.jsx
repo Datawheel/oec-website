@@ -374,7 +374,7 @@ export default class Static extends Component {
       className: 'year'
     }));
 
-    const columns = type === 'ECI' ? [columnID, columnNAME, ...columnYEARS] : [columnID, columnNAME, columnCODE, ...columnYEARS];
+    const columns = type === 'eci' ? [columnID, columnNAME, ...columnYEARS] : [columnID, columnNAME, columnCODE, ...columnYEARS];
 
     return columns.filter(f => f !== null);
   };

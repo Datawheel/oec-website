@@ -222,6 +222,44 @@ export default class Legacy extends Component {
       }
     }
 
+    let columnCODE = null;
+    let HSDigits = null;
+    if (type === 'pci') {
+      HSDigits = depth.slice(-1);
+      columnCODE = {
+        id: 'category',
+        accessor: d => d[`${depth.toUpperCase()} ID`],
+        width: 100,
+        Header: () =>
+          <div className="header">
+            <span className="year">{'Product ID'}</span>
+            <div className="icons">
+              <Icon icon={'caret-up'} iconSize={16} />
+              <Icon icon={'caret-down'} iconSize={16} />
+            </div>
+          </div>,
+        Cell: props =>
+          <div className="category">
+            {rev.toUpperCase() === 'HS92'
+              ? <a
+                href={`/en/profile/${rev}/${props.original[
+                  `${depth.toUpperCase()} ID`
+                ]}`}
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="name">{props.original[`${depth.toUpperCase()} ID`].toString().slice(-HSDigits)}</div>
+                <Icon icon={'chevron-right'} iconSize={14} />
+              </a>
+              : <div className="link">
+                <div className="name">{props.original[`${depth.toUpperCase()} ID`]}</div>
+              </div>
+            }
+          </div>
+      };
+    };
+
     const measure = type.toUpperCase();
     const YEARS = range(initialYear, finalYear);
     YEARS.reverse();
@@ -251,7 +289,7 @@ export default class Legacy extends Component {
       className: 'year'
     }));
 
-    const columns = [columnID, columnNAME, ...columnYEARS];
+    const columns = type === 'eci' ? [columnID, columnNAME, ...columnYEARS] : [columnID, columnNAME, columnCODE, ...columnYEARS];
 
     return columns.filter(f => f !== null);
   };

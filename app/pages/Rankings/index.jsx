@@ -13,6 +13,7 @@ import Legacy from './Legacy';
 class Rankings extends Component {
 	render() {
 		const {page, depth, rev} = this.props.router.params;
+		console.log(page, depth, rev);
 
 		return (
 			<div>
@@ -23,12 +24,16 @@ class Rankings extends Component {
 							return <Static type={page} depth={depth} rev={rev} />;
 						case 'pci':
 							return <Static type={page} depth={depth} rev={rev} />;
-						case 'custom':
-							return <Custom />;
 						case 'legacy_eci':
 							return <Legacy type={"eci"} depth={depth} rev={rev} />;
 						case 'legacy_pci':
 							return <Legacy type={"pci"} depth={depth} rev={rev} />;
+						case 'country':
+							return <Legacy type={"eci"} depth={depth} rev={rev} />;
+						case 'product':
+							return <Legacy type={"pci"} depth={depth} rev={rev} />;
+						case 'custom':
+							return <Custom />;
 						default:
 							return <Error />;
 					}
