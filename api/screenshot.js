@@ -31,9 +31,9 @@ function daysBetween(date1, date2) {
 module.exports = function(app) {
 
   app.get("/api/screenshot", async(req, res) => {
-    // get url from query arg
-    const {url, profileType} = req.query;
-    if (!url || !profileType) {
+    // get path and profileType from query arg
+    const {profilePath, profileType, profileIds} = req.query;
+    if (!profilePath || !profileType) {
       return res.status(404).json([]);
     }
 
@@ -41,13 +41,17 @@ module.exports = function(app) {
     const urlRoot = req.get("host").includes("localhost")
       ? `http://${req.get("host")}`
       : `https://${req.get("host")}`;
-    const shareUrl = url[0] === "/"
-      ? `${urlRoot}${url.replace("profile", "profile-share")}`
-      : `${urlRoot}/${url.replace("profile", "profile-share")}`;
+    // const urlRoot = "https://staging.oec.world";
+    const shareUrl = profilePath[0] === "/"
+      ? `${urlRoot}${profilePath.replace("profile", "profile-share")}`
+      : `${urlRoot}/${profilePath.replace("profile", "profile-share")}`;
 
-    // get slug from url
-    const splitUrl = url.split(profileType);
-    const slug = splitUrl.length && splitUrl.length > 1 ? splitUrl[1].replace("/", "") : "";
+    // get slug from url if profileIds is not passed
+    let slug = profileIds;
+    if (!profileIds) {
+      const splitUrl = profilePath.split(profileType);
+      slug = splitUrl.length && splitUrl.length > 1 ? splitUrl[1].replace("/", "") : "";
+    }
 
     // file path for image to be saved to
     const folder = `/static/images/screenshots/${profileType}`;
@@ -75,10 +79,11 @@ module.exports = function(app) {
       // fetch the screenshot the save it to the file system
       const browser = await puppeteer.launch({args: ["--no-sandbox"], defaultViewport: {width: 960, height: 540, deviceScaleFactor: 2}});
       const page = await browser.newPage();
-      await page.goto(shareUrl, {waitUntil: "networkidle0", timeout: 0});
+      // 20 second timeout
+      await page.goto(shareUrl, {waitUntil: "networkidle2", timeout: 20000});
       await page.screenshot({path: imgPath});
       await browser.close();
-      return res.status(200).send({msg: "Screenshot complete."});
+      return res.status(200).send({msg: "Screenshot complete.", imgPath});
     }
     catch (err) {
       console.error(`screenshot error: ${err}`);
