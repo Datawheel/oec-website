@@ -88,13 +88,13 @@ class ProfileShareImg extends React.Component {
       if (slug === "country") {
         placeholder = "Explore Other Countries";
         desc = `Find the latest trade statistics and economic complexity data for ${title}.`;
-        img = `https://pro.oec.world/api/image?slug=${slug}&id=${profile.variables.id}&type=splash`;
+        img = `https://oec.world/api/image?slug=${slug}&id=${profile.variables.id}&type=splash`;
         const iso3 = profile.variables.iso3 || "";
         title = iso3 ? `${title} (${iso3.toUpperCase()}) Exports, Imports, and Trade Partners` : `${title} Exports, Imports, and Trade Partners`;
       }
       else if (slug === "hs92") {
         placeholder = "Explore Other Products";
-        img = `https://pro.oec.world/api/image?slug=${slug}&id=${profile.variables.id}&type=splash`;
+        img = `https://oec.world/api/image?slug=${slug}&id=${profile.variables.id}&type=splash`;
         if (profile.sections.length && profile.sections[0].subtitles.length) {
           const hscode = stripP(profile.sections[0].subtitles[0].subtitle).split(" ")[0];
           // this is the special case where we're looking at an HS Section profile

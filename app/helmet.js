@@ -14,7 +14,8 @@ export default {
     {name: "mobile-web-app-capable", content: "yes"},
     {name: "apple-mobile-web-app-capable", content: "yes"},
     {name: "apple-mobile-web-app-status-bar-style", content: "black"},
-    {name: "apple-mobile-web-app-title", content: title}
+    {name: "apple-mobile-web-app-title", content: title},
+    {property: "og:image", content: "https://oec.world/images/logos/oec-share.jpg"}
   ],
   title
 };
