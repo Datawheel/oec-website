@@ -50,7 +50,7 @@ class Profile extends React.Component {
     // kickoff XHR request to screenshot service
     const {profile, router} = this.props;
     if (profile.meta) {
-      const profileType = profile.meta.map(d => d.slug).join("_");
+      const profileType = profile.dims.map(d => d.slug).join("_");
       const profileIds = profile.dims.map(d => `${d.id}`).join("_");
       const screenshotUrl = `/api/screenshot/?profilePath=${router.location.pathname}&profileType=${profileType}&profileIds=${profileIds}`;
       axios.get(screenshotUrl)
@@ -98,7 +98,7 @@ class Profile extends React.Component {
 
     let placeholder = "Explore Other Reports";
     if (profile.meta) {
-      const slug = profile.meta.map(d => d.slug).join("_");
+      const slug = profile.dims.map(d => d.slug).join("_");
       const ids = profile.dims.map(d => d.id).join("_");
       img = `https://pro.oec.world/images/screenshots/${slug}/${slug}_${ids}.jpg`;
       if (slug === "country") {
