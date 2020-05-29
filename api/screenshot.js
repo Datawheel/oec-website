@@ -57,6 +57,8 @@ module.exports = function(app) {
     const folder = `/static/images/screenshots/${profileType}`;
     const folderPath = path.join(process.cwd(), folder);
     const imgPath = path.join(folderPath, `${profileType}_${slug}.jpg`);
+    // send the http (web) accessible path in the return resp
+    const webPath = `${urlRoot}/images/screenshots/${profileType}/${profileType}_${slug}.jpg`;
 
     try {
 
@@ -83,7 +85,7 @@ module.exports = function(app) {
       await page.goto(shareUrl, {waitUntil: "networkidle2", timeout: 20000});
       await page.screenshot({path: imgPath});
       await browser.close();
-      return res.status(200).send({msg: "Screenshot complete.", imgPath});
+      return res.status(200).send({msg: "Screenshot complete.", img: webPath});
     }
     catch (err) {
       console.error(`screenshot error: ${err}`);
