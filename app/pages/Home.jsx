@@ -195,7 +195,7 @@ class Home extends Component {
           <div className="features-tiles header">
             <div className="header-inner">
               <h2>Great tools for great explorers</h2>
-              <p>When you register for <a href={`/${locale}/signup`}>OEC Premium</a> you&apos;ll have access to new tools like predictions, subnational rankings and an advanced viz builder.</p>
+              <p>When you register for <a href={`/${locale}/signup`}>OEC Premium</a> you&apos;ll have access to new tools like forecasts, subnational rankings and an advanced viz builder.</p>
             </div>
           </div>
           <div className="tiles-wrap">
@@ -211,8 +211,8 @@ class Home extends Component {
                   </div>
                 </div>
                 <div className="features-tiles-item-content">
-                  <h3 className="">Predictions</h3>
-                  <p className="">Create your own custom combination out of millions of possible time series predictions.</p>
+                  <h3 className="">Forecasts</h3>
+                  <p className="">Create your own custom combination out of millions of possible time series forecasts.</p>
                   <a href={`/${locale}/prediction`}>Get started &raquo;</a>
                 </div>
               </div>

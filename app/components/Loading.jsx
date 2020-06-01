@@ -29,7 +29,7 @@ const LOADING_ITEMS = [
   ]},
   {img: "/images/loading/loading_3_Predictions.png", txt: [
     "Looking for a forecasting tool?",
-    "The <b>OEC prediction section</b> allows you to create custom LSTM models and fit them directly over any of the millions of time series we have available."
+    "The <b>OEC forecast section</b> allows you to create custom LSTM models and fit them directly over any of the millions of time series we have available."
   ]},
   {img: "/images/loading/loading_4_Library.png", txt: [
     "Want to keep up with research on Economic Complexity?",

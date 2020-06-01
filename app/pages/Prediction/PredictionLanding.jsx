@@ -79,7 +79,7 @@ class PredictionLanding extends React.Component {
             </p>
             <h2 className="ispro">PRO</h2>
             <p>
-              OEC trade predictions are a pro feature. But don&apos;t let that stop you! <a href="/en/login?redirect=en%2Fprediction%2F">Sign in</a> to your account or <a href="/en/signup">sign up</a> today.
+              OEC trade forecasts are a pro feature. But don&apos;t let that stop you! <a href="/en/login?redirect=en%2Fprediction%2F">Sign in</a> to your account or <a href="/en/signup">sign up</a> today.
             </p>
           </div>
           <div className="prediction-about-r">
