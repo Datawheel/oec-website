@@ -110,8 +110,8 @@ export default function RouteCreate() {
       <Route exact path="(/:lang)" component={Home} />
       <Route path="/welcome" component={Welcome} />
       <Route path="/loading" component={Loading} />
-      <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route path="/:lang/profile-share/:slug(/:id)(/:slug2)(/:id2)" component={ProfileShareImg} />
+      <Route path="/:lang/profile/:slug(/:id)(/:slug2)(/:id2)" component={Profile} onEnter={checkForId} />
       <Route exact path="/admin" component={Builder} />
       <Route exact path="/explorer" component={Explorer} />
       <Route exact path="/:lang/visualize/embed/:chart/:cube/:flow/:country/:partner/:viztype/:time" component={props => <Vizbuilder {...props} isEmbed={true} />} onEnter={checkForVizId} />
