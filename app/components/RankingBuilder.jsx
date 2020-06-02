@@ -8,7 +8,7 @@ import classNames from "classnames";
 import SimpleSelect from "components/SimpleSelect";
 
 import {range} from 'helpers/utils';
-import {SUBNATIONAL_DATASETS} from 'helpers/rankingsyears';
+import {SUBNATIONAL_DATASETS, REVISION_OPTIONS} from 'helpers/rankings';
 
 import './RankingBuilder.css';
 
@@ -22,9 +22,11 @@ class RankingsBuilder extends Component {
 			isSingleyear,
 			isChangeInitialYear,
 			subnationalCountry,
-			subnationalDepth,
+			subnationalCountryDepth,
+			subnationalProductDepth,
 			productDepth,
 			productRevision,
+			productBasecube,
 			yearInitial,
 			yearFinal,
 			yearRange,
@@ -59,8 +61,8 @@ class RankingsBuilder extends Component {
 		const OPTIONS_SUBNATIONAL = SUBNATIONAL_AVAILABLE.map(d => ({title: d.name, value: d.code}));
 		const SUBNATIONAL_PRODUCT_DEPTH = SUBNATIONAL_DATASETS[subnationalCountry].productDepth.map(d => ({title: d, value: d}));
 		const SUBNATIONAL_DEPTH = SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry).geoLevels.slice().reverse().map(d => ({title: d.name, value: d.level}));
-		const PRODUCT_DEPTH = NATIONAL_AVAILABLE.find(d => d.name === productRevision).availableDepths.map(d => ({title: d, value: d}));
-		const PRODUCT_REV = NATIONAL_AVAILABLE.map(d => ({title: d.title, value: d.name}));
+		const PRODUCT_DEPTH = REVISION_OPTIONS.filter(d => d.available === true).map(d => ({title: d.name, value: d.value, basecube: d.basecube}));
+		const PRODUCT_REV = NATIONAL_AVAILABLE.filter(d => d.basecube === productBasecube).map(d => ({title: d.title, value: d.name}));
 
 		// Set those options in the selectors
 		const OPTIONS_DEPTH = isNational ? PRODUCT_DEPTH : SUBNATIONAL_PRODUCT_DEPTH;
@@ -112,8 +114,16 @@ class RankingsBuilder extends Component {
 								{OPTIONS_DEPTH.map((d, k) =>
 									<Button
 										key={k}
-										onClick={() => handleProductButtons('productDepth', d.title)}
-										className={productDepth === d.title && 'active'}
+										onClick={() => (
+											isNational
+												? handleProductButtons('productDepth', d.title, d.basecube)
+												: handleProductButtons('subnationalProductDepth', d.title, null)
+										)}
+										className={
+											isNational
+												? productDepth === d.title && 'active'
+												: subnationalProductDepth === d.title && 'active'
+										}
 									>
 										{d.title}
 									</Button>
@@ -122,8 +132,8 @@ class RankingsBuilder extends Component {
 							<SimpleSelect
 								items={OPTIONS_REV}
 								title={undefined}
-								state={isNational ? 'productRevision' : 'subnationalDepth'}
-								selectedItem={OPTIONS_REV.find(d => isNational ? d.value === productRevision : d.value === subnationalDepth) || {}}
+								state={isNational ? 'productRevision' : 'subnationalCountryDepth'}
+								selectedItem={OPTIONS_REV.find(d => isNational ? d.value === productRevision : d.value === subnationalCountryDepth) || {}}
 								callback={(key, value) => handleProductSelect(key, value.value)}
 							/>
 						</div>

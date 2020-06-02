@@ -18,8 +18,8 @@ import RankingTable from 'components/RankingTable';
 
 import {range, normalizeString} from 'helpers/utils';
 import {SUBNATIONAL_COUNTRIES} from 'helpers/consts';
-import {DATASETS, SUBNATIONAL_DATASETS} from 'helpers/rankingsyears';
-import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
+import {DATASETS, SUBNATIONAL_DATASETS} from 'helpers/rankings';
+import {subnationalData, yearsNational} from 'helpers/rankings';
 
 class Custom extends Component {
 	constructor(props) {
@@ -33,9 +33,11 @@ class Custom extends Component {
 			isSingleyear: true,
 			isChangeInitialYear: true,
 			subnationalCountry: null,
-			subnationalDepth: null,
+			subnationalCountryDepth: null,
+			subnationalProductDepth: null,
 			productDepth: null,
 			productRevision: null,
+			productBasecube: null,
 			yearInitial: null,
 			yearFinal: null,
 			yearRange: null,
@@ -78,9 +80,11 @@ class Custom extends Component {
 		const SUBNATIONAL_DEFAULT = SUBNATIONAL_AVAILABLE[0];
 
 		const defaultSubnationalCountry = SUBNATIONAL_DEFAULT.code;
-		const defaultSubnationalDepth = SUBNATIONAL_DEFAULT.dimension;
+		const defaultSubnationalCountryDepth = SUBNATIONAL_DEFAULT.geoLevels[0].level;
+		const defaultSubnationalProductDepth = SUBNATIONAL_DATASETS[defaultSubnationalCountry].defaultDepth;
 		const defaultDepth = NATIONAL_DEFAULT.defaultDepth;
 		const defaultRevision = NATIONAL_DEFAULT.name;
+		const defaultBasecube = NATIONAL_DEFAULT.basecube;
 		const defaultYearRange = NATIONAL_DEFAULT.yearsRange;
 		const defaultYearFinal = defaultYearRange.slice().reverse()[0];
 
@@ -94,9 +98,11 @@ class Custom extends Component {
 			NATIONAL_AVAILABLE,
 			SUBNATIONAL_AVAILABLE,
 			subnationalCountry: defaultSubnationalCountry,
-			subnationalDepth: defaultSubnationalDepth,
+			subnationalCountryDepth: defaultSubnationalCountryDepth,
+			subnationalProductDepth: defaultSubnationalProductDepth,
 			productDepth: defaultDepth,
 			productRevision: defaultRevision,
+			productBasecube: defaultBasecube,
 			yearRange: defaultYearRange,
 			yearInitial: defaultYearFinal - 1,
 			yearFinal: defaultYearFinal,
@@ -118,17 +124,11 @@ class Custom extends Component {
 		this.props.isAuthenticated();
 	}
 
-	// Validate the years selected between changes
-	yearValidation = (dataset, year) => {
-		if (dataset.includes(year)) {
-			return year;
-		} else {
-			if (year < dataset[0]) {
-				return dataset[0];
-			} else {
-				return dataset.slice().reverse()[0];
-			}
-		}
+	// Returns new year range and validates the year selected in the new range
+	yearValidation = (array, y) => {
+		const range = array.yearsRange;
+		const year = range.includes(y) ? y : y < range[0] ? range[0] : range.slice().reverse()[0];
+		return [range, year];
 	}
 
 	/* BUILDER ORIENTED FUNCTIONS */
@@ -140,75 +140,55 @@ class Custom extends Component {
 
 	// Handle the Country Switch
 	handleCountrySwitch(key, value) {
-		const {subnationalCountry, productDepth, productRevision, yearFinal} = this.state;
-		if (value) {
-			const DATASET = DATASETS.find(d => d.name === productRevision);
-			const newProductDepth = DATASET.availableDepths.includes(productDepth) ? productDepth : DATASETS.find(d => d.name === productRevision).availableDepths[0];
-			const newYearRange = DATASET.yearsRange;
-			const newYearFinal = this.yearValidation(newYearRange, yearFinal);
-			this.setState({
-				[key]: value,
-				productDepth: newProductDepth,
-				yearFinal: newYearFinal,
-				yearRange: newYearRange
-			});
-		} else {
-			const DATASET = SUBNATIONAL_DATASETS[subnationalCountry];
-			const newProductDepth = DATASET.productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[subnationalCountry].productDepth[0];
-			const newYearRange = DATASET.yearsRange;
-			const newYearFinal = this.yearValidation(newYearRange, yearFinal);
-			this.setState({
-				[key]: value,
-				productDepth: newProductDepth,
-				yearFinal: newYearFinal,
-				yearRange: newYearRange
-			});
-		}
+		const {NATIONAL_AVAILABLE, subnationalCountry, productRevision, yearFinal} = this.state;
+		const DATASET = value ? SUBNATIONAL_DATASETS[subnationalCountry] : NATIONAL_AVAILABLE.find(d => d.name === productRevision);
+		const YEARS = this.yearValidation(DATASET, yearFinal);
+
+		this.setState({
+			[key]: value,
+			yearRange: YEARS[0],
+			yearFinal: YEARS[1]
+		});
 	}
 
 	// Handle the Country Select
 	handleCountrySelect(key, value) {
-		const {subnationalDepth, productDepth, yearFinal} = this.state;
-
-		const SUBNATIONAL_DATASET = SUBNATIONAL_COUNTRIES.find(d => d.code === value);
-		const subnationalDepths = [...new Set(SUBNATIONAL_DATASET.geoLevels.map(d => d.level))];
-		const newSubnationalDepth = subnationalDepths.includes(subnationalDepth) ? subnationalDepth : subnationalDepths.slice().reverse()[0];
+		const {SUBNATIONAL_AVAILABLE, subnationalCountryDepth, productDepth, yearFinal} = this.state;
 
 		const DATASET = SUBNATIONAL_DATASETS[value];
-		const newProductDepth = DATASET.productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[value].productDepth[0];
-		const newYearRange = DATASET.yearsRange;
-		const newYearFinal = this.yearValidation(newYearRange, yearFinal);
+		const YEARS = this.yearValidation(DATASET, yearFinal);
+
+		const SUBNATIONAL_DATASET = SUBNATIONAL_AVAILABLE.find(d => d.code === value);
+		const subnationalCountryDepths = SUBNATIONAL_DATASET.geoLevels.map(d => d.level).reverse();
+		const newSubnationalCountryDepth = subnationalCountryDepths.includes(subnationalCountryDepth) ? subnationalCountryDepth : subnationalCountryDepths[0];
+		const newSubnationalProductDepth = DATASET.productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[value].productDepth[0];
+
 		this.setState({
 			[key]: value,
-			subnationalDepth: newSubnationalDepth,
-			productDepth: newProductDepth,
-			yearFinal: newYearFinal,
-			yearRange: newYearRange
+			subnationalCountryDepth: newSubnationalCountryDepth,
+			subnationalProductDepth: newSubnationalProductDepth,
+			yearRange: YEARS[0],
+			yearFinal: YEARS[1]
 		});
 	}
 
-	// Handle the Product Button
-	handleProductButtons(key, value) {
-		console.log(key, value);
-		const {productRevision} = this.state;
-		if (this.state[key] !== 'SITC' && value === 'SITC') {
+	// Handle the Product Button (here)
+	handleProductButtons(key, value, basecube) {
+		const {NATIONAL_AVAILABLE, productRevision} = this.state;
+		console.log(key, value, basecube);
+		if (key === 'productDepth') {
+			const BASECUBE = NATIONAL_AVAILABLE.filter(d => d.basecube === basecube);
+			const newProductRevision = BASECUBE.find(d => d.name === productRevision) ? productRevision : BASECUBE[0].name;
+			console.log(newProductRevision);
 			this.setState({
 				[key]: value,
-				productRevision: 'Category',
-				yearValue: yearsNational[productRevision].final,
-				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
-			});
-		} else if (this.state[key] === 'SITC' && value !== 'SITC') {
-			this.setState({
-				[key]: value,
-				productRevision: 'HS92',
-				yearValue: yearsNational[productRevision].final,
-				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
+				productRevision: newProductRevision,
+				productBasecube: basecube
 			});
 		} else {
-			this.setState({[key]: value});
+			this.setState({
+				[key]: value
+			});
 		}
 	}
 
@@ -217,8 +197,10 @@ class Custom extends Component {
 		const {yearFinal} = this.state;
 		if (key === 'productRevision') {
 			const DATASET = DATASETS.find(d => d.name === value);
-			const newYearRange = DATASET.yearsRange;
-			const newYearFinal = this.yearValidation(newYearRange, yearFinal);
+			const YEARS = this.yearValidation(DATASET, yearFinal);
+			const newYearRange = YEARS[0];
+			const newYearFinal = YEARS[1];
+
 			this.setState({
 				[key]: value,
 				yearRange: newYearRange,
@@ -857,7 +839,7 @@ class Custom extends Component {
 			isSingleyear,
 			isChangeInitialYear,
 			subnationalCountry,
-			subnationalDepth,
+			subnationalCountryDepth,
 			yearInitial,
 			yearFinal,
 			yearRange,
@@ -891,7 +873,7 @@ class Custom extends Component {
 			console.log('------ Subnational ------');
 			console.log(isCountry ? 'Country' : 'Product');
 			console.log('Subnational Country', subnationalCountry);
-			console.log('Subnational Depth', subnationalDepth);
+			console.log('Subnational Depth', subnationalCountryDepth);
 			console.log('Year Range', yearRange);
 			console.log(isSingleyear ? 'Singleyear' : 'Multiyear');
 			isSingleyear ? console.log('Year', yearFinal) : console.log('Initial Year', yearInitial, 'Final Year', yearFinal);
@@ -915,8 +897,10 @@ class Custom extends Component {
 			isChangeInitialYear,
 			productDepth,
 			productRevision,
+			productBasecube,
 			subnationalCountry,
-			subnationalDepth,
+			subnationalCountryDepth,
+			subnationalProductDepth,
 			yearInitial,
 			yearFinal,
 			yearRange,
@@ -968,9 +952,11 @@ class Custom extends Component {
 							isSingleyear,
 							isChangeInitialYear,
 							subnationalCountry,
-							subnationalDepth,
+							subnationalCountryDepth,
+							subnationalProductDepth,
 							productDepth,
 							productRevision,
+							productBasecube,
 							yearInitial,
 							yearFinal,
 							yearRange,
