@@ -7,9 +7,9 @@ export const DATASETS = [
 	{name: 'HS02', lang: 'hs02', title: 'HS02 - 2002', available: true, cubeName: 'trade_i_baci_a_02', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2003, 2018)},
 	{name: 'HS07', lang: 'hs07', title: 'HS07 - 2007', available: true, cubeName: 'trade_i_baci_a_07', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2008, 2018)},
 	{name: 'HS12', lang: 'hs12', title: 'HS12 - 2012', available: true, cubeName: 'trade_i_baci_a_12', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2012, 2018)},
-	{name: 'HS17', lang: 'hs17', title: 'HS17 - 2017', available: true, cubeName: 'trade_i_baci_a_17', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2018, 2018)},
-	{name: 'Category', lang: 'category', title: 'Category', available: true, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
-	{name: 'Section', lang: 'section', title: 'Section', available: true, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
+	{name: 'HS17', lang: 'hs17', title: 'HS17 - 2017', available: false, cubeName: 'trade_i_baci_a_17', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2018, 2018)},
+	{name: 'Category', lang: 'category', title: 'Category', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
+	{name: 'Section', lang: 'section', title: 'Section', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
 	{name: 'Division', lang: 'division', title: 'Division', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
 	{name: 'Group', lang: 'group', title: 'Group', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
 	{name: 'Subgroup', lang: 'subgroup', title: 'Subgroup', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)}
@@ -18,7 +18,7 @@ export const DATASETS = [
 export const REVISION_OPTIONS = [
 	{name: 'HS4', value: 'HS4', basecube: 'HS', available: true},
 	{name: 'HS6', value: 'HS6', basecube: 'HS', available: true},
-	{name: 'SITC', value: 'SITC', basecube: 'SITC', available: true}
+	{name: 'SITC', value: 'SITC', basecube: 'SITC', available: false}
 ];
 
 export const SUBNATIONAL_DATASETS = {

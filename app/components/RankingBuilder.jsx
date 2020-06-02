@@ -53,7 +53,7 @@ class RankingsBuilder extends Component {
 			handleThresholdSlider,
 			renderThresholdSlider,
 			renderMoneyThresholdSlider,
-			apiGetData,
+			createTable,
 			showVariables
 		} = this.props;
 
@@ -272,7 +272,7 @@ class RankingsBuilder extends Component {
 						)}
 						<div className="setting last">
 							<div className="build-button">
-								<Button onClick={() => showVariables()}>Build Table</Button>
+								<Button onClick={() => createTable()}>Build Table</Button>
 							</div>
 						</div>
 					</div>
