@@ -13,7 +13,6 @@ import Legacy from './Legacy';
 class Rankings extends Component {
 	render() {
 		const {page, depth, rev} = this.props.router.params;
-		console.log(page, depth, rev);
 
 		return (
 			<div>
