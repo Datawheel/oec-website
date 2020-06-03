@@ -2,17 +2,17 @@
 import {range} from './utils';
 
 export const DATASETS = [
-	{name: 'HS92', lang: 'hs92', title: 'HS92 - 1992', available: true, cubeName: 'trade_i_baci_a_92', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(1995, 2018)},
-	{name: 'HS96', lang: 'hs96', title: 'HS96 - 1996', available: true, cubeName: 'trade_i_baci_a_96', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(1998, 2018)},
-	{name: 'HS02', lang: 'hs02', title: 'HS02 - 2002', available: true, cubeName: 'trade_i_baci_a_02', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2003, 2018)},
-	{name: 'HS07', lang: 'hs07', title: 'HS07 - 2007', available: true, cubeName: 'trade_i_baci_a_07', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2008, 2018)},
-	{name: 'HS12', lang: 'hs12', title: 'HS12 - 2012', available: true, cubeName: 'trade_i_baci_a_12', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2012, 2018)},
-	{name: 'HS17', lang: 'hs17', title: 'HS17 - 2017', available: false, cubeName: 'trade_i_baci_a_17', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2018, 2018)},
-	{name: 'Category', lang: 'category', title: 'Category', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
-	{name: 'Section', lang: 'section', title: 'Section', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
-	{name: 'Division', lang: 'division', title: 'Division', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
-	{name: 'Group', lang: 'group', title: 'Group', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
-	{name: 'Subgroup', lang: 'subgroup', title: 'Subgroup', available: false, cubeName: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)}
+	{name: 'HS92', lang: 'hs92', title: 'HS92 - 1992', available: true, cube: 'trade_i_baci_a_92', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(1995, 2018)},
+	{name: 'HS96', lang: 'hs96', title: 'HS96 - 1996', available: true, cube: 'trade_i_baci_a_96', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(1998, 2018)},
+	{name: 'HS02', lang: 'hs02', title: 'HS02 - 2002', available: true, cube: 'trade_i_baci_a_02', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2003, 2018)},
+	{name: 'HS07', lang: 'hs07', title: 'HS07 - 2007', available: true, cube: 'trade_i_baci_a_07', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2008, 2018)},
+	{name: 'HS12', lang: 'hs12', title: 'HS12 - 2012', available: true, cube: 'trade_i_baci_a_12', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2012, 2018)},
+	{name: 'HS17', lang: 'hs17', title: 'HS17 - 2017', available: false, cube: 'trade_i_baci_a_17', basecube: 'HS', availableDepths: ['HS4', 'HS6'], defaultDepth: 'HS4', yearsRange: range(2018, 2018)},
+	{name: 'Category', lang: 'category', title: 'Category', available: false, cube: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
+	{name: 'Section', lang: 'section', title: 'Section', available: false, cube: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
+	{name: 'Division', lang: 'division', title: 'Division', available: false, cube: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
+	{name: 'Group', lang: 'group', title: 'Group', available: false, cube: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)},
+	{name: 'Subgroup', lang: 'subgroup', title: 'Subgroup', available: false, cube: 'trade_i_comtrade_a_sitc2_new', basecube: 'SITC', availableDepths: ['Category', 'Section', 'Division', 'Group', 'Subgroup'], defaultDepth: 'Subgroup', yearsRange: range(1962, 2018)}
 ];
 
 export const REVISION_OPTIONS = [

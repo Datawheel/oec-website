@@ -38,6 +38,7 @@ class Custom extends Component {
 			productDepth: null,
 			productRevision: null,
 			productBasecube: null,
+			productCube: null,
 			yearInitial: null,
 			yearFinal: null,
 			yearRange: null,
@@ -125,10 +126,15 @@ class Custom extends Component {
 	}
 
 	// Returns new year range and validates the year selected in the new range
-	yearValidation = (array, y) => {
+	yearValidation = (array, initialyear, finalyear) => {
 		const range = array.yearsRange;
-		const year = range.includes(y) ? y : y < range[0] ? range[0] : range.slice().reverse()[0];
-		return [range, year];
+		const initial = range.includes(initialyear) ? initialyear : initialyear < range[0] ? range[0] : range.slice().reverse()[0];
+		const final = range.includes(finalyear) ? finalyear : finalyear < range[0] ? range[0] : range.slice().reverse()[0];
+		return {
+			yearRange: range,
+			initialYear: initial,
+			finalYear: final
+		};
 	}
 
 	/* BUILDER ORIENTED FUNCTIONS */
@@ -140,23 +146,25 @@ class Custom extends Component {
 
 	// Handle the Country Switch
 	handleCountrySwitch(key, value) {
-		const {NATIONAL_AVAILABLE, subnationalCountry, productRevision, yearFinal} = this.state;
+		const {NATIONAL_AVAILABLE, subnationalCountry, productRevision, yearInitial, yearFinal} = this.state;
 		const DATASET = value ? NATIONAL_AVAILABLE.find(d => d.name === productRevision) : SUBNATIONAL_DATASETS[subnationalCountry];
-		const YEARS = this.yearValidation(DATASET, yearFinal);
+		const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
+		console.log(YEARS);
 
 		this.setState({
 			[key]: value,
-			yearRange: YEARS[0],
-			yearFinal: YEARS[1]
+			yearRange: YEARS['yearRange'],
+			yearInitial: YEARS['initialYear'],
+			yearFinal: YEARS['finalYear']
 		});
 	}
 
 	// Handle the Country Select
 	handleCountrySelect(key, value) {
-		const {SUBNATIONAL_AVAILABLE, subnationalCountryDepth, productDepth, yearFinal} = this.state;
+		const {SUBNATIONAL_AVAILABLE, subnationalCountryDepth, productDepth, yearInitial, yearFinal} = this.state;
 
 		const DATASET = SUBNATIONAL_DATASETS[value];
-		const YEARS = this.yearValidation(DATASET, yearFinal);
+		const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
 
 		const SUBNATIONAL_DATASET = SUBNATIONAL_AVAILABLE.find(d => d.code === value);
 		const subnationalCountryDepths = SUBNATIONAL_DATASET.geoLevels.map(d => d.level).reverse();
@@ -167,18 +175,19 @@ class Custom extends Component {
 			[key]: value,
 			subnationalCountryDepth: newSubnationalCountryDepth,
 			subnationalProductDepth: newSubnationalProductDepth,
-			yearRange: YEARS[0],
-			yearFinal: YEARS[1]
+			yearRange: YEARS['yearRange'],
+			yearInitial: YEARS['initialYear'],
+			yearFinal: YEARS['finalYear']
 		});
 	}
 
 	// Handle the Product Button
 	handleProductButtons(key, value, basecube) {
-		const {NATIONAL_AVAILABLE, productRevision, yearFinal} = this.state;
+		const {NATIONAL_AVAILABLE, productRevision, yearInitial, yearFinal} = this.state;
 		if (key === 'productDepth') {
 			const BASECUBE = NATIONAL_AVAILABLE.filter(d => d.basecube === basecube).find(d => d.name === productRevision);
 			const DATASET = BASECUBE ? BASECUBE : NATIONAL_AVAILABLE.filter(d => d.basecube === basecube)[0];
-			const YEARS = this.yearValidation(DATASET, yearFinal);
+			const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
 
 			const newProductRevision = DATASET.name;
 
@@ -186,8 +195,9 @@ class Custom extends Component {
 				[key]: value,
 				productRevision: newProductRevision,
 				productBasecube: basecube,
-				yearRange: YEARS[0],
-				yearFinal: YEARS[1]
+				yearRange: YEARS['yearRange'],
+				yearInitial: YEARS['initialYear'],
+				yearFinal: YEARS['finalYear']
 			});
 		} else {
 			this.setState({
@@ -198,17 +208,16 @@ class Custom extends Component {
 
 	// Handle the Product Select
 	handleProductSelect(key, value) {
-		const {yearFinal} = this.state;
+		const {yearInitial, yearFinal} = this.state;
 		if (key === 'productRevision') {
 			const DATASET = DATASETS.find(d => d.name === value);
-			const YEARS = this.yearValidation(DATASET, yearFinal);
-			const newYearRange = YEARS[0];
-			const newYearFinal = YEARS[1];
+			const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
 
 			this.setState({
 				[key]: value,
-				yearRange: newYearRange,
-				yearFinal: newYearFinal
+				yearRange: YEARS['yearRange'],
+				yearInitial: YEARS['initialYear'],
+				yearFinal: YEARS['finalYear']
 			});
 		} else {
 			this.setState({
@@ -299,6 +308,35 @@ class Custom extends Component {
 			subnationalRCAThreshold
 		} = this.state;
 
+		// Creates the range of years for the data call
+		const pathYearRange = range(isSingleyear ? yearFinal : yearInitial, yearFinal);
+		const paths = this.pathGenerator(pathYearRange);
+		console.log(paths);
+
+		this.showVariables();
+	}
+
+	showVariables = () => {
+		const {
+			isCountry,
+			isNational,
+			isSingleyear,
+			isChangeInitialYear,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			productDepth,
+			productRevision,
+			productBasecube,
+			yearInitial,
+			yearFinal,
+			yearRange,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold
+		} = this.state;
 		if (isNational) {
 			console.log('------ National ------');
 			console.log(isCountry ? 'Country' : 'Product');
@@ -327,16 +365,105 @@ class Custom extends Component {
 		}
 	}
 
+	pathYearValidator = (range, year) => {
+		const {isNational} = this.state;
+		const maxYearRight = 2018;
+		const maxPopulationYear = 2018;
+		const populationYear = year > maxPopulationYear ? maxPopulationYear : year;
+		let pathYear = null;
+		let yearRight = null;
+		let thresholdAggregator = null;
+
+		if (year === range[0]) {
+			pathYear = `${year}`;
+			yearRight = isNational ? null : year > 2018 ? `${maxYearRight}` : pathYear;
+			thresholdAggregator = 1;
+		} else if (year - 1 === range[0]) {
+			pathYear = `${year - 1},${year}`;
+			yearRight = isNational ? null : year > 2018 ? `${maxYearRight - 1},${maxYearRight}` : pathYear;
+			thresholdAggregator = 2;
+		} else {
+			pathYear = `${year - 2},${year - 1},${year}`;
+			yearRight = isNational ? null : year > 2018 ? `${maxYearRight - 2},${maxYearRight - 1},${maxYearRight}` : pathYear;
+			thresholdAggregator = 3;
+		}
+
+		return {
+			pathYear,
+			populationYear: `${populationYear}`,
+			yearRight,
+			thresholdAggregator
+		}
+	}
+
 	// Function that creates the paths for the data requested
-	// Example:
-	// api/stats/eci?
-	// cube=trade_i_baci_a_92
-	// &rca=Exporter+Country,HS4,Trade+Value
-	// &alias=Country,HS4
-	// &Year=2015,2016,2017
-	// &ranking=true
-	// &threshold=Country:3000000000,HS4:1500000000,Population:1000000
-	// &YearPopulation=2017
+	pathGenerator = (range) => {
+		const {
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isCountry,
+			isNational,
+			isSingleyear,
+			isChangeInitialYear,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			productDepth,
+			productRevision,
+			productBasecube,
+			yearInitial,
+			yearFinal,
+			yearRange,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold
+		} = this.state;
+		const DATASET = isNational ? NATIONAL_AVAILABLE.find(d => d.name === productRevision) : SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry);
+		const INDEX = isCountry ? 'eci' : 'pci';
+		const paths = [];
+
+		for (const i in range) {
+			const yearValidator = this.pathYearValidator(yearRange, range[i]);
+			let params = null;
+
+			if (isNational) {
+				params = {
+					cube: DATASET.cube,
+					rca: `Exporter Country,${productDepth},Trade Value`,
+					alias: `Country,${productDepth}`,
+					Year: yearValidator['pathYear'],
+					ranking: true,
+					threshold: `Country:${countryExpThreshold * yearValidator['thresholdAggregator']},${productDepth}:${productExpThreshold * yearValidator['thresholdAggregator']},Population:${populationThreshold}`,
+					YearPopulation: yearValidator['populationYear'],
+					debug: true
+				};
+			} else {
+				params = {
+					cube: DATASET.cube,
+					rca: `${subnationalCountryDepth},${subnationalProductDepth},Trade Value`,
+					Year: yearValidator['pathYear'],
+					ranking: true,
+					method: 'subnational',
+					cubeRight: 'trade_i_baci_a_92',
+					rcaRight: `Exporter Country,${subnationalProductDepth},Trade Value`,
+					YearRight: yearValidator['yearRight'],
+					aliasRight: `Country,${subnationalProductDepth}`,
+					'Trade Flow': 2,
+					threshold: `CountryRight:${countryExpThreshold * yearValidator['thresholdAggregator']},${subnationalProductDepth}Right:${productExpThreshold * yearValidator['thresholdAggregator']},PopulationRight:${populationThreshold},Subnat Geography:${subnationalGeoThreshold * yearValidator['thresholdAggregator']}`,
+					YearPopulation: yearValidator['populationYear'],
+					eciThreshold: `Subnat Geography:${subnationalRCAThreshold}`,
+					debug: true
+				};
+			}
+
+			const path = axios.get(`/api/stats/${INDEX}`, {params});
+			paths.push(path);
+		}
+
+		return paths;
+	}
 
 	// Function that calls and creates the data for the table and download
 
