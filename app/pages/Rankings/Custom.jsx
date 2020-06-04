@@ -286,7 +286,7 @@ class Custom extends Component {
 	/* NEW LOGIC*/
 
 	// Function that reads the entry parameters and export the data to the page
-	createTable = () => {
+	createTable = async () => {
 		const {
 			isCountry,
 			isNational,
@@ -307,62 +307,17 @@ class Custom extends Component {
 			subnationalGeoThreshold,
 			subnationalRCAThreshold
 		} = this.state;
+
+		const INDEX = isCountry ? 'eci' : 'pci';
 
 		// Creates the range of years for the data call
 		const pathYearRange = range(isSingleyear ? yearFinal : yearInitial, yearFinal);
-		const paths = this.pathGenerator(pathYearRange);
-		console.log(paths);
+		const data = await this.fetchData(INDEX, pathYearRange);
+		console.log(data);
+		const filteredData = await this.filteredData(INDEX, pathYearRange, data);
+		console.log('finaldata', filteredData);
 
-		this.showVariables();
-	}
-
-	showVariables = () => {
-		const {
-			isCountry,
-			isNational,
-			isSingleyear,
-			isChangeInitialYear,
-			subnationalCountry,
-			subnationalCountryDepth,
-			subnationalProductDepth,
-			productDepth,
-			productRevision,
-			productBasecube,
-			yearInitial,
-			yearFinal,
-			yearRange,
-			countryExpThreshold,
-			populationThreshold,
-			productExpThreshold,
-			subnationalGeoThreshold,
-			subnationalRCAThreshold
-		} = this.state;
-		if (isNational) {
-			console.log('------ National ------');
-			console.log(isCountry ? 'Country' : 'Product');
-			console.log('Year Range', yearRange);
-			console.log(isSingleyear ? 'Singleyear' : 'Multiyear');
-			isSingleyear ? console.log('Year', yearFinal) : console.log('Initial Year', yearInitial, 'Final Year', yearFinal);
-			console.log('Product Depth', productDepth);
-			console.log('Product Revision', productRevision);
-			console.log('CountryExpT', countryExpThreshold);
-			console.log('PopulationT', populationThreshold);
-			console.log('ProductExpT', productExpThreshold);
-		} else {
-			console.log('------ Subnational ------');
-			console.log(isCountry ? 'Country' : 'Product');
-			console.log('Subnational Country', subnationalCountry);
-			console.log('Subnational Depth', subnationalCountryDepth);
-			console.log('Year Range', yearRange);
-			console.log(isSingleyear ? 'Singleyear' : 'Multiyear');
-			isSingleyear ? console.log('Year', yearFinal) : console.log('Initial Year', yearInitial, 'Final Year', yearFinal);
-			console.log('Product Depth', subnationalProductDepth);
-			console.log('CountryExpT', countryExpThreshold);
-			console.log('PopulationT', populationThreshold);
-			console.log('ProductExpT', productExpThreshold);
-			console.log('SubnatGeoT', subnationalGeoThreshold);
-			console.log('SubnatRCAT', subnationalRCAThreshold);
-		}
+		await this.showVariables();
 	}
 
 	pathYearValidator = (range, year) => {
@@ -397,22 +352,17 @@ class Custom extends Component {
 	}
 
 	// Function that creates the paths for the data requested
-	pathGenerator = (range) => {
+	fetchData = async (INDEX, range) => {
 		const {
 			NATIONAL_AVAILABLE,
 			SUBNATIONAL_AVAILABLE,
 			isCountry,
 			isNational,
-			isSingleyear,
-			isChangeInitialYear,
 			subnationalCountry,
 			subnationalCountryDepth,
 			subnationalProductDepth,
 			productDepth,
 			productRevision,
-			productBasecube,
-			yearInitial,
-			yearFinal,
 			yearRange,
 			countryExpThreshold,
 			populationThreshold,
@@ -421,8 +371,7 @@ class Custom extends Component {
 			subnationalRCAThreshold
 		} = this.state;
 		const DATASET = isNational ? NATIONAL_AVAILABLE.find(d => d.name === productRevision) : SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry);
-		const INDEX = isCountry ? 'eci' : 'pci';
-		const paths = [];
+		const dataset = [];
 
 		for (const i in range) {
 			const yearValidator = this.pathYearValidator(yearRange, range[i]);
@@ -458,16 +407,106 @@ class Custom extends Component {
 				};
 			}
 
-			const path = axios.get(`/api/stats/${INDEX}`, {params});
-			paths.push(path);
+			const data = await axios.get(`/api/stats/${INDEX}`, {params}).then(resp => {
+				resp.data.data.forEach(d => {
+					d[`${INDEX.toUpperCase()}`] = d[`Trade Value ${INDEX.toUpperCase()}`];
+					d[`${INDEX.toUpperCase()} Rank`] = d[`Trade Value ${INDEX.toUpperCase()} Ranking`];
+					d['Year'] = range[i];
+					delete d[`Trade Value ${INDEX.toUpperCase()}`];
+					delete d[`Trade Value ${INDEX.toUpperCase()} Ranking`];
+				});
+				return resp.data.data
+			});
+			dataset.push(data);
 		}
 
-		return paths;
+		return dataset.flat();
 	}
 
-	// Function that calls and creates the data for the table and download
+	filteredData = (type, range, rawdata) => {
+		const {
+			isCountry,
+			isNational,
+			isSingleyear,
+			isChangeInitialYear,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			productDepth,
+			productRevision,
+			productBasecube,
+			yearInitial,
+			yearFinal,
+			yearRange,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold
+		} = this.state;
 
-	// Function that creates the columns of the table
+		// Country, HS4, HS6
+		const measure = isCountry ? isNational ? 'Country' : subnationalCountryDepth : isNational ? productDepth : subnationalProductDepth;
+		// Get list of unique countries/products
+		const unique = [...new Set(rawdata.map(m => m[`${measure} ID`]))];
+		const maxYear = Math.max(...range);
+		const minYear = Math.min(...range);
+
+		// Used for setting the rankings fon countries that don't have in max year
+		const maxYearDataLength = rawdata.filter(f => f.Year === maxYear).length;
+		let flag = 1;
+
+		const data = [];
+		const dataDownload = [];
+
+		for (const index in unique) {
+			const rowData = rawdata.filter(f => f[`${measure} ID`] === unique[index]);
+			// Creates first two values of the array with country/product name and id
+			const row = {};
+			const rowDownload = {};
+			row[measure] = rowData[0][measure];
+			row[`${measure} ID`] = unique[index];
+			// Aggregates the values for the years that we have on the cube
+			rowData.forEach(d => {
+				const values = {};
+				values[`${d.Year} ${`${type.toUpperCase()}`}`] = d[`${type}`.toUpperCase()];
+				values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()} Rank`];
+				row[`${d.Year}`] = values;
+				rowDownload[`${d.Year}`] = d[`${type}`.toUpperCase()];
+			});
+			// Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
+			range.forEach(d => {
+				if (!row[d]) {
+					if (d !== maxYear) {
+						const values = {};
+						values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
+						values[`${d} Ranking`] = null;
+						row[`${d}`] = values;
+						rowDownload[`${d}`] = null;
+					}
+					else {
+						const values = {};
+						values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
+						values[`${d} Ranking`] = maxYearDataLength + flag;
+						row[`${d}`] = values;
+						rowDownload[`${d}`] = null;
+						flag += 1;
+					}
+				}
+			});
+			rowDownload[`${measure} ID`] = unique[index];
+			rowDownload[measure] = rowData[0][measure];
+
+			// Push the data for the country/product to the one with all the countries/products
+			data.push(row);
+			dataDownload.push(rowDownload);
+		}
+
+		data.sort((a, b) => a[maxYear][`${maxYear} Ranking`] - b[maxYear][`${maxYear} Ranking`]);
+
+		return {data, dataDownload}
+	}
+
 
 	/* OLD LOGIC*/
 	// Aggregate years for the rest of functions

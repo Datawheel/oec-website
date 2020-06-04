@@ -131,6 +131,7 @@ export default class Static extends Component {
 
         // Sort for the final year
         data.sort((a, b) => a[maxYear][`${maxYear} Ranking`] - b[maxYear][`${maxYear} Ranking`]);
+        console.log(data);
 
         // Create columns
         const columns = this.createColumns(type, depth, rev, minYear, maxYear);
