@@ -104,7 +104,7 @@ class SignUpForm extends Component {
     ]).then(axios.spread((resp1, resp2) => {
 
       const sectors = resp1.data
-        .filter(d => d.value.length === 4)
+        .filter(d => d.value.length === 1)
         .map(d => ({...d, label: d.value}));
 
       const countries = resp2.data
@@ -176,10 +176,10 @@ class SignUpForm extends Component {
                 <span className="bp3-icon bp3-icon-user"></span>
                 <input className="bp3-input" placeholder={ t("SignUp.Username") } value={this.state.username} type="text" name="username" onFocus={this.onChange} onChange={this.onChange} tabIndex="2" />
               </div>
-              <div className="bp3-input-group">
+              {/* <div className="bp3-input-group">
                 <span className="bp3-icon bp3-icon-phone"></span>
                 <input className="bp3-input" placeholder="Phone Number" value={this.state.phone} type="text" name="phone" onFocus={this.onChange} onChange={this.onChange} tabIndex="3" />
-              </div>
+              </div> */}
               <div className="bp3-input-group">
                 <span className="bp3-icon bp3-icon-lock"></span>
                 <input className="bp3-input" placeholder={ t("SignUp.Password") } value={this.state.password} type="password" name="password" onFocus={this.onChange} onChange={this.onChange} autoComplete="Off" tabIndex="4" />
@@ -200,9 +200,10 @@ class SignUpForm extends Component {
                 items={sectors}
                 itemType="sector"
                 selectedItems={selectedSectors}
-                placeholder="What sector do you work in?"
+                placeholder="What industry sector do you work in?"
                 tabIndex="7"
                 callback={d => this.handleItemMultiSelect("selectedSectors", d)}
+                onClear={d => this.handleItemMultiSelect("selectedSectors", d)}
               />
               <OECMultiSelect
                 disabled={!countries.length}
@@ -213,6 +214,7 @@ class SignUpForm extends Component {
                 placeholder="Country"
                 tabIndex="8"
                 callback={d => this.handleItemMultiSelect("selectedCountries", d)}
+                onClear={d => this.handleItemMultiSelect("selectedCountries", d)}
               />
               <OECMultiSelect
                 disabled={!usage.length}
@@ -223,6 +225,7 @@ class SignUpForm extends Component {
                 placeholder="What do you use the OEC for?"
                 tabIndex="9"
                 callback={d => this.handleItemMultiSelect("selectedUsage", d)}
+                onClear={d => this.handleItemMultiSelect("selectedUsage", d)}
               />
               <label className="bp3-control bp3-checkbox" htmlFor="nlbox">
                 <input type="checkbox" id="nlbox" name="newsletter" checked={this.state.newsletter} onChange={this.onChange} tabIndex="10" />
