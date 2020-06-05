@@ -956,7 +956,6 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-
               {!isSubnat && productSelector && <div className="columns">
                 <div className="column-1">
                   <div className="selector select-multi-section-wrapper">
@@ -969,8 +968,7 @@ class Vizbuilder extends React.Component {
                         ? d => `/images/icons/sitc/sitc_${d["Category ID"]}.png`
                         : d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
                       items={this.state.product}
-                      // levels={["Section", "HS2", "HS4", "HS6"]}
-                      levels={this.state._dataset.productLevels}
+                      levels={chart === "rings" ? ["HS4"] : this.state._dataset.productLevels}
                       onItemSelect={item => this.safeChangeHandler("_selectedItemsProduct", item)}
                       onItemRemove={(evt, item) => {
                         // evt: MouseEvent<HTMLButtonElement>

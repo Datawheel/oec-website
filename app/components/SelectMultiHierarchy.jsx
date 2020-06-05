@@ -313,7 +313,7 @@ export function extendItems(items, levels, {getColor = () => "", getIcon = () =>
   });
 
   nestedItems.entries(items);
-  return extendedItems;
+  return Object.values(extendedItems.reduce((acc, cur) => Object.assign(acc, {[cur.id]: cur}), {}));
 }
 
 export default SelectMultiHierarchy;
