@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="{{ g.locale }}" dir="{{ g.dir }}">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="{% block description %}An online resource for international trade data and economic complexity indicators available through interactive visualizations of countries and products.{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    {% if "/visualize/" not in request.path %}
+    <!-- Facebook Properties -->
+    <meta property="og:image" content="http://atlas.media.mit.edu/static/img/facebook.jpg" />
+    {% endif %}
+
+    <title>OEC{% block title %}{% endblock %}</title>
+
+    <link rel="shortcut icon" type="image/png" href="/static/img/favicon.ico?v=6">
+
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/oec-{{ g.dir }}.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/libs/font-awesome-4.3.0/css/font-awesome.min.css" />
+    <link type="text/css" rel="stylesheet" media="all" href="/static/css/introjs.css" />
+
+    <script src="/static/js/libs/caman.full.min.js"></script>
+    <script src="/static/js/libs/modernizr.custom.js"></script>
+    <script src="/static/js/libs/d3.v3.min.js?v=3"></script>
+    <script src="/static/js/libs/d3plus.js?v=4"></script>
+    <script src="/static/js/libs/topojson.js?v=3"></script>
+    <script src="/static/js/libs/localforage.js"></script>
+    <script src="/static/js/libs/moment.min.js"></script>
+    <script src="/static/js/libs/jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/libs/intro.js"></script>
+    <script>moment.lang("{{g.locale}}")</script>
+
+    {% assets "js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}?v=2"></script>
+    {% endassets %}
+
+    <script>
+
+      function redirect(url, seconds){
+        seconds = !seconds && seconds !== 0 ? 6 : seconds;
+        if (seconds <=0){
+          window.location = url;
+        }
+        else {
+          seconds--;
+          d3.select("#redirect").text("This page will redirect in "+seconds+" seconds.")
+          setTimeout(function(){ redirect(url, seconds) }, 1000)
+        }
+      }
+
+      var resizeFunctions = [], scrollFunctions = [], cache_version = "{{ g.cache_version }}";
+
+      var oec = {};
+      oec.translations = {{ g.translations|safe }};
+      oec.locale = "{{ g.locale }}";
+      oec.ui = {
+        "border": 1,
+        "font": {
+          "family": ["Source Sans Pro", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
+          "size": 13,
+          "weight": 200
+        },
+        "dark": {
+          "primary": "#212831",
+          "secondary": "white"
+        },
+        "light": {
+          "primary": "white",
+          "secondary": "#212831"
+        },
+        "margin": 0,
+        "padding": 5
+      };
+
+      oec.darkUI = d3plus.util.copy(oec.ui);
+      oec.darkUI.color = oec.ui.dark;
+      delete oec.darkUI.dark;
+      delete oec.darkUI.light;
+
+      var color = "#212831";
+
+      function analyze_palette(palette) {
+        if (!palette) return;
+        if (palette.constructor === String) {
+          palette = JSON.parse(palette.replace(/'/g, '"'));
+        }
+        var color;
+        for (var p = 0; p < palette.length; p++) {
+          var c = d3.hsl(palette[p]);
+          if (c.l > 0.5) {
+            color = d3plus.color.legible(palette[p]);
+            break;
+          }
+        }
+        return color;
+      }
+
+    </script>
+
+    {% block head %}
+    {% endblock %}
+
+  </head>
+  <body class="{{ g.dir }}{% if g.page_type %} {{g.page_type}}{% endif %}">
+
+    <form id="download" action="/en/visualize/download/" method="post">
+      <div style="display:none;">
+        <input id="format" name="format" type="hidden" value="">
+        <input id="content" name="content" type="hidden" value="">
+        <input id="title" name="title" type="hidden" value="">
+      </div>
+    </form>
+
+    <div id="mask"></div>
+
+    <div class="modal" id="share">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2>{{ _('Share') }}</h2>
+          <a href="#close" class="btn-close">×</a>
+        </div>
+        <div class="modal-body">
+          <h3>{{ _('Short URL') }}</h3>
+          <input type="text" class="short_url" onfocus="this.select()" onMouseUp="return false" value="">
+          <h3>{{ _('Embed') }}</h3>
+          <input type="text" class="embed_code" onfocus="this.select()" onMouseUp="return false" value="&lt;iframe width=&quot;560&quot; height=&quot;315&quot; src=&quot;http://atlas.media.mit.edu/?controls=false&quot; frameborder=&quot;0&quot; &gt;&lt;/iframe&gt;">
+          <h3>{{ _('Social Media') }}</h3>
+          <a href="" class="share_button" target="_blank" onclick="javascript:popup(this.href);return false;" id="Facebook" title="Facebook">
+            <i class="fa fa-facebook"></i>
+          </a>
+          <a href="" class="share_button" target="_blank" onclick="javascript:popup(this.href);return false;" id="Twitter" title="Tweet" data-lang="{{ g.locale }}"  xml:lang="{{ g.locale }}">
+            <i class="fa fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="download">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h2>{{ _('Download') }}</h2>
+          <a href="#close" class="btn-close">×</a>
+        </div>
+        <div class="modal-body">
+          <a href="#svg" class="download_button" id="svg">
+            <i class="fa fa-file-code-o"></i> SVG
+          </a>
+          <a href="#png" class="download_button" id="png">
+            <i class="fa fa-file-image-o"></i> PNG
+          </a>
+          <a href="#csv" class="download_button" id="csv">
+            <i class="fa fa-file-excel-o"></i> CSV
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    {% for category, msg in get_flashed_messages(with_categories=true) %}
+    <div id="server_message" class="flash-{{ category }}">
+      {{ msg|safe }} <span id="redirect"></span>
+      <i class="close_message fa fa-times-circle"></i>
+    </div>
+    {% endfor %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block js %}
+    {% endblock %}
+
+    <!-- Google Analytics! -->
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-22403682-3']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+
+    <!-- All Pages -->
+    <script type="text/javascript">
+
+      d3.selectAll(".close_message").on("click", function(){
+
+        d3.select("#server_message")
+          .style("margin-top", function(){
+            return -this.offsetHeight+"px"
+          }).transition().delay(600)
+          .remove()
+
+      });
+
+      if (resizeFunctions.length) {
+
+        var resize,
+            oldWidth = window.innerWidth,
+            oldHeight = window.innerHeight,
+            mobile = oldWidth < 768;
+
+        function resizeEnd() {
+          if (oldWidth !== window.innerWidth || (!mobile && oldHeight !== window.innerHeight)) {
+            oldWidth = window.innerWidth;
+            oldHeight = window.innerHeight;
+            for (var i = 0; i < resizeFunctions.length; i++) {
+              resizeFunctions[i]();
+            }
+          }
+        }
+
+        window.onresize = function(){
+          clearTimeout(resize);
+          resize = setTimeout(resizeEnd, 200);
+        }
+
+      }
+
+      if (scrollFunctions.length) {
+        document.onscroll = function(){
+          for (var i = 0; i < scrollFunctions.length; i++) {
+            scrollFunctions[i]();
+          }
+        }
+      }
+
+      // close modal windows
+      d3.selectAll(".modal .btn-close").on("click", function(){
+        d3.selectAll(".modal").classed("active", false);
+        d3.select("#mask").classed("visible", false);
+        d3.select("body").classed("frozen", false);
+        d3.event.preventDefault();
+      });
+
+      d3.select("#mask").on("click", function(){
+        d3.select("#mask").classed("visible", false);
+
+        d3.selectAll(".modal").classed("active", false);
+
+        d3.select("#hamburger_button").classed("open", false);
+        d3.select("#mobileNav").classed("open", false);
+        d3.select("body").classed("frozen", false);
+      })
+
+      d3.selectAll(".tour a").on(d3plus.client.pointer.click, function() {
+        window.location.href = '/?tour=true';
+        d3.event.preventDefault();
+      });
+
+      d3.selectAll("[data-tooltip]")
+        .on(d3plus.client.pointer.over,function(){
+
+          d3plus.tooltip.remove("data-tooltip");
+
+          var size = this.getBoundingClientRect();
+
+          d3plus.tooltip.remove("data-tooltip");
+          d3plus.tooltip.create({
+            "x": size.left+size.width/2,
+            "y": size.top+size.height/2,
+            "offset": size.height/2,
+            "arrow": true,
+            "description": d3.select(this).attr("data-tooltip"),
+            "width": "auto",
+            "id": "data-tooltip",
+            "align": "top center",
+            // "parent": parent,
+            "max_width": 180
+          })
+
+        })
+        .on(d3plus.client.pointer.out,function(){
+          d3plus.tooltip.remove("data-tooltip");
+        })
+
+    </script>
+
+  </body>
+</html>

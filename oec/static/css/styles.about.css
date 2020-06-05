@@ -1,0 +1,76 @@
+/************/
+/* Overview */
+/************/
+div.data_sources {
+  overflow: auto;
+}
+div.data_sources div {
+  border: solid 1px #888;
+  display: inline-block;
+  float: left;
+  padding: 10px;
+  width: 250px;
+}
+div.data_sources div#hs {
+  margin: 0 0 0 30px;
+}
+div.data_sources h4 {
+  margin: 0 0 5px 0;
+}
+
+/***********/
+/* Updates */
+/***********/
+#updates h2 {
+  margin: 10px 0px;
+  width: 100%;
+}
+
+#updates article {
+  border-bottom: solid 1px #ccc;
+  margin: 10px 0px;
+  padding-bottom: 20px;
+}
+
+#updates article img {
+  max-width: 580px;
+}
+
+#updates article:last-child {
+  border-bottom: none
+}
+
+#updates article .date {
+  margin: -10px 0px 10px;
+  text-align: center;
+}
+
+#updates ul {
+  list-style-type: circle;
+  margin-top: 10px;
+  padding-left: 25px;
+}
+
+#updates li {
+  margin: 4px 0px;
+}
+
+/************************/
+/* Data Classifications */
+/************************/
+table {
+  font-size: 14px;
+}
+table tbody tr td img.icon {
+ width: 20px;
+}
+table tbody tr td a {
+  vertical-align: top;
+}
+
+ol {
+  list-style-type: decimal;
+}
+ol li {
+  margin: 10px 0;
+}

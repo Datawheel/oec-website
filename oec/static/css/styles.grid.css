@@ -1,0 +1,25 @@
+.col1, .col2, .col3, .col1_5 {
+  display: inline-block;
+  height: 100%;
+  margin: 0px;
+  padding: 10px;
+  position: relative;
+  text-align: left;
+  vertical-align: top;
+}
+
+.col1 {
+  width: 180px;
+}
+
+.col2 {
+  width: 580px;
+}
+
+.col3 {
+  width: 780px;
+}
+
+.col1_5 {
+  width: 280px;
+}

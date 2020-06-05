@@ -1,0 +1,296 @@
+{% extends "templates/nav.html" %}
+
+{% block title %} - {% if category == "country" %}{{ category|title }}{% else %}{{ category|upper }} Product{% endif %} Ranking ({{ year }}){% endblock %}
+
+{% block head %}
+    {% if year > g.available_years[category][0]  %}
+    <link rel="prev" href="/rankings/{{ category }}/{{ year-1 }}/" />
+    {% endif %}
+    {% if year < g.available_years[category][-1]  %}
+    <link rel="next" href="/rankings/{{ category }}/{{ year+1 }}/" />
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+
+<section class="nav-section">
+  <aside>
+    {% if year > g.available_years[category][0]  %}
+    <a id="prev" href="/{{ g.locale }}/rankings/{{ category }}/{{ year-1 }}/">
+      <h2 class="year-nav">
+        <i class="fa fa-angle-left"></i>
+        {{ year-1 }}
+      </h2>
+    </a>
+    {% endif %}
+  </aside>
+  <content>
+    {% if category == "country" %}
+      <h1><a class="complexity_switch" href="/{{ g.locale }}/rankings/hs92/" data-tooltip="Switch to Product">{{ _('Economic Complexity') }}</a> {{ _('Rankings') }} ({{ year }})</h1>
+    {% else %}
+      <h1><a class="complexity_switch" href="/{{ g.locale }}/rankings/country/" data-tooltip="Switch to Country">{{ _('Product Complexity') }}</a> {{ _('Rankings') }} ({{ year }})</h1>
+    {% endif %}
+  </content>
+  <aside>
+    {% if year < g.available_years[category][-1]  %}
+    <a id="next" href="/{{ g.locale }}/rankings/{{ category }}/{{ year+1 }}/">
+      <h2 class="year-nav">
+        {{ year+1 }}
+        <i class="fa fa-angle-right"></i>
+      </h2>
+    </a>
+    {% endif %}
+  </aside>
+</section>
+
+<section>
+
+  <aside id="explorer">
+
+    <div id="rank_changers" class="{% if category == "country" %}eci-changer{% else %}pci-changer{% endif %}">
+
+      {% if category != "country" %}
+      <div class="dropdown_container">
+        <h3>{{ _("Dataset") }}</h3>
+        <select id="change_dataset">
+          <option value="hs07" {% if category == 'hs07' %} selected="selected"{% endif %}>HS07</option>
+          <option value="hs02" {% if category == 'hs02' %} selected="selected"{% endif %}>HS02</option>
+          <option value="hs96" {% if category == 'hs96' %} selected="selected"{% endif %}>HS96</option>
+          <option value="hs92" {% if category == 'hs92' %} selected="selected"{% endif %}>HS92</option>
+          <option value="sitc" {% if category == 'sitc' %} selected="selected"{% endif %}>SITC</option>
+        </select>
+      </div>
+      {% endif %}
+
+      <div class="dropdown_container">
+        <h3>{{ _("Year") }}</h3>
+        <select id="change_year">
+          {% for y in years %}
+          <option value="{{ y }}" {% if y == year %}selected="selected"{% endif %}>{{ y }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      {% if category != "country" and category != "sitc" %}
+      <div class="dropdown_container">
+        <h3>{{ _('Depth') }}</h3>
+        <select id="change_depth">
+          <option value="4" {% if depth == 4 %}selected="selected"{% endif %}>4 Digit</option>
+          <option value="6" {% if depth == 6 %}selected="selected"{% endif %}>6 Digit</option>
+        </select>
+      </div>
+      {% endif %}
+
+      <a class="download" href="/{{ g.locale }}/rankings/{{ category }}/{{ year }}/?download=true">
+        <i class="fa fa-save"></i>
+        {{ _("Download Current Year") }}
+      </a>
+      </li>
+      <a class="download" href="/{{ g.locale }}/rankings/{{ category }}/?download=true">
+        <i class="fa fa-save"></i>
+        {{ _('Download All Years') }}
+      </a>
+
+    </div>
+
+  </aside>
+
+  <content>
+
+    <table>
+      <thead>
+        <tr>
+
+          {% for c in cols %}
+          <th class="{{ c.id }}"{% if c.sortable %} data-sortable{% if c["sort-alpha"] %} data-sort-alpha{% endif %}{% endif %}>{{ c.name }}{% if c.sortable %}<i class="fa fa-sort"></i>{% endif %}</th>
+          {% endfor %}
+
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for r in rankings %}
+        <tr>
+          {% if category == "country" %}
+          <td class="rank"><span>{{ r[2]["eci_rank"] }}</span></td>
+          <td class="delta">
+            {% if r[2]["eci_rank_delta"] > 0 %}
+              <i class="fa fa-caret-up fa-lg"></i> {{ r[2]["eci_rank_delta"] }}
+            {% elif r[2]["eci_rank_delta"] < 0 and r[2]["eci_rank_delta"] %}
+              <i class="fa fa-caret-down fa-lg"></i> {{ r[2]["eci_rank_delta"]|abs }}
+            {% endif %}
+          </td>
+          <td class="id">{{ r[0]["id_3char"]|upper }}</td>
+          <td class="country"><img class="icon" src="/static/img/icons/country/country_{{ r[0].id }}.png" /> <a href="{{ r[0].get_profile_url() }}">{{ r[1].name }}</a></td>
+          <td class="eci">{{ r[2]["eci"]|num_format("eci") }}</td>
+          {% else %}
+          <td class="rank"><span>{{ r[2]["pci_rank"] }}</span></td>
+          <td class="delta">
+            {% if r[2]["pci_rank_delta"] > 0 %}
+              <i class="fa fa-caret-up fa-lg"></i> {{ r[2]["pci_rank_delta"] }}
+            {% elif r[2]["pci_rank_delta"] < 0 and r[2]["pci_rank_delta"] %}
+              <i class="fa fa-caret-down fa-lg"></i> {{ r[2]["pci_rank_delta"]|abs }}
+            {% endif %}
+          </td>
+          <td class="id">{{ r[0].get_display_id() }}</td>
+          <td class="product"><img class="icon" style="background-color: {{ r[0].color }};" src="{{ r[0].get_icon() }}" /> <a href="{{ r[0].get_profile_url() }}">{{ r[1].name }}</a></td>
+          <td class="pci">{{ r[2]["pci"]|num_format("pci") }}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  </content>
+</section>
+
+{% endblock %}
+
+
+{% block js %}
+  <script>
+
+    var currentYear = "{{ year }}";
+    var currentDepth = {{ depth }};
+    var category = "{{ category }}";
+    var year_first_time = true;
+    var depth_first_time = true;
+
+    function change_year(new_year) {
+
+      if (!year_first_time) {
+
+        var url = window.location.pathname.split("/");
+
+        if(url.length == 6){
+          url.splice(4, 1, new_year);
+        }
+        else {
+          url.splice(4, 0, new_year);
+        }
+
+        url = url.join("/");
+
+        if (depth_form) {
+          url = url + "?depth=" + depth_form.focus();
+        }
+
+        window.location = url;
+
+      }
+
+      year_first_time = false;
+
+    }
+
+    var width = d3.select("#rank_changers").node().offsetWidth;
+
+    if (!d3.select("#change_dataset").empty()) {
+
+      d3plus.form()
+        .type("drop")
+        .data("#change_dataset")
+        .focus(category, function(c){
+          if (category !== c) {
+            window.location = "/" + oec.locale + "/rankings/" + c;
+          }
+        })
+        .format({"text": function(d){
+          return d.toUpperCase();
+        }})
+        .width(width)
+        .search(false)
+        .ui(oec.darkUI)
+        .draw();
+
+    }
+
+    var year_form = d3plus.form()
+      .type("drop")
+      .data("#change_year")
+      .data({"sort": true})
+      .focus(currentYear, change_year)
+      .order({
+        "sort": "desc"
+      })
+      .width(width)
+      .search(false)
+      .ui(oec.darkUI)
+      .draw();
+
+    if (!d3.select("#change_depth").empty()) {
+
+      var depth_form = d3plus.form()
+        .type("toggle")
+        .data("#change_depth")
+        .data({"sort": true})
+        .focus(4, function(selected_depth){
+          if(!depth_first_time){
+            window.location = window.location.pathname + "?depth=" + selected_depth;
+          }
+          depth_first_time = false;
+        })
+        .order({
+          "sort": "asc"
+        })
+        .width(width)
+        .search(false)
+        .ui(oec.darkUI)
+        .draw();
+
+    }
+
+
+    // var total = d3.selectAll("tbody tr")[0].length
+    // // Add color to rankings
+    // var color = d3.scale.linear()
+    //   .domain([0, total/2, total-1])
+    //   .interpolate(d3.interpolateRgb)
+    //   .range(["#00cc00", "#cccccc", "#cc0000"])
+    // d3.selectAll("tbody tr").select("td span")
+    //   .style("color", function(d, i){
+    //     return color(i);
+    //   })
+
+    d3.selectAll("thead th[data-sortable]").on(d3plus.client.pointer.click, function(){
+
+      /* Changing sort direction is a 3-way toggle with the order being:
+        1st click = descending
+        2nd click = ascending
+        3rd click = null (turn sorting off)
+      */
+      var current_sort_direction = d3.select(this).attr("data-direction");
+      var new_sort_direction = current_sort_direction ? current_sort_direction == "down" ? "up" : null : "down";
+
+      // Reset all columns sorting to null
+      d3.select(this.parentNode).selectAll("th .fa").attr("class", "fa fa-sort");
+      d3.select(this.parentNode).selectAll("th").attr("data-direction", null);
+      var sortby = "rank";
+      var alpha_sort = null;
+
+      if(new_sort_direction){
+        d3.select(this).select(".fa").attr("class", "fa fa-sort-"+new_sort_direction)
+        d3.select(this).attr("data-direction", new_sort_direction);
+        sortby = d3.select(this).attr("class");
+        alpha_sort = d3.select(this).attr("data-sort-alpha") != null;
+      }
+
+      d3.selectAll("tbody tr").datum(function(d, i){
+        return d3.select(this).select("."+sortby).text();
+      }).sort(function(a, b){
+        if(!alpha_sort){
+          a = {"val":parseFloat(a)}, b = {"val":parseFloat(b)};
+        }
+        else {
+          a = {"val":a.toLowerCase()}, b = {"val":b.toLowerCase()};
+        }
+        var sortd = new_sort_direction != "up" ? "asc" : "desc";
+        return d3plus.array.comparator(a, b, "val", sortd);
+      })
+    })
+
+  </script>
+{% endblock %}

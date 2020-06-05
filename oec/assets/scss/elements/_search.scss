@@ -1,0 +1,298 @@
+#search {
+  background-color: rgba(33, 40, 49, 1);
+}
+
+#search, #launch {
+  @include flex();
+  @include flex-direction(column);
+  @include align-items(center);
+  @include transition(opacity 0.5s);
+  bottom: 0;
+  @include left(0);
+  opacity: 0;
+  position: fixed;
+  @include right(0);
+  top: 0;
+  visibility: hidden;
+  z-index: 40;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  #search_close img {
+    background-color: $darkbackground;
+  }
+
+  #search_close, .modal_close {
+    cursor: pointer;
+    @include padding(15px, 15px, 15px, 15px);
+    position: absolute;
+    @include margin(8px, 0, 0, -5px);
+    @include right(0);
+    top: 0;
+
+    img {
+      @include transition(opacity 0.1s, transform 0.5s);
+      @include transform(rotate(-180deg));
+      opacity: 1;
+      height: 16px;
+      width: 16px;
+
+      &:hover, &:focus {
+        opacity: 0.7;
+      }
+    }
+
+    &.open img {
+      @include transform(rotate(0deg));
+    }
+
+    div {
+      @include transition(opacity 1s 2s);
+      font-size: 9px;
+      @include margin(1px, 0, 0, -4px);
+      opacity: 0.4;
+      position: absolute;
+      text-transform: uppercase;
+    }
+  }
+
+  .modal_body {
+    @include padding(50px, 35px, 50px, 35px);
+    @include text-align(center);
+  }
+
+  #search_div {
+    @include padding(50px, 35px, 0, 35px);
+    @include text-align(left);
+    width: 93%;
+
+    #search_input {
+      background-color: transparent;
+      border: 0;
+      border-bottom: 1px solid $darkbordercolor;
+      font-family: $source-sans;
+      font-size: 30px;
+      font-weight: 300;
+      color: white;
+      margin-bottom: 15px;
+      width: 100%;
+
+      &:focus {
+        @include shadow(none);
+        outline: none;
+      }
+
+      @include placeholder {
+        font-family: $source-sans;
+        font-weight: 300;
+        color: $darkbordercolor;
+      }
+
+    }
+
+    #search_modes {
+      @include text-align(center);
+    @include font-smoothing(antialiased);
+
+      .d3plus_toggle > * {
+        @include margin(0, 5px, 0, 5px, !important);
+
+        @media all and (max-width: 480px) {
+          @include margin(0, 3px, 0, 3px, !important);
+        }
+
+      }
+
+      .d3plus_node {
+        @include transition(color 1.5s);
+        background-color: rgba(0,0,0,0) !important;
+        border: 0 !important;
+        color: $lightbordercolor !important;
+        border-bottom: 1px solid $lightbordercolor !important;
+
+        &:hover {
+          color: #fff !important;
+        }
+
+        &.d3plus_button_active {
+          color: white !important;
+          border-bottom: 1px solid $brightlinkcolor !important;
+
+          .d3plus_button_label {
+            opacity: 1;
+            text-transform: uppercase;
+
+            &:hover {
+              opacity: 0.8 !important;
+            }
+          }
+        }
+      }
+
+      .d3plus_button_label {
+        font-family: $montserrat;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 1px;
+        opacity: 1;
+        @include padding(6px, 10px, 6px, 10px, !important);
+        text-transform: uppercase;
+
+        @media all and (max-width: 480px) {
+          font-size: 11px;
+          @include padding(6px, 0, 6px, 0, !important);
+        }
+
+        &:hover {
+          opacity: 0.7 !important;
+        }
+      }
+
+    }
+
+  }
+
+  #search_results {
+    @include flex();
+    @include flex-direction(row);
+    @include flex-wrap();
+    @include align-content(flex-start);
+    margin-top: 35px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 93%;
+    height: 100%;
+
+    @media all and (max-width: 480px) {
+      // @include flex-direction(column);
+    }
+
+    h1 {
+      @include flex-size(1);
+    }
+
+    .search-loading, .search-error {
+      font-size: 30px;
+      line-height: 30px;
+      @include text-align(center);
+      padding-top: 21vh;
+    }
+
+    .search_group {
+      @include flex-size(1);
+      @include margin(0, 10px, 0, 10px);
+      @include text-align(center);
+
+      & > h1 {
+        color: $darkbordercolor;
+        font-family: $montserrat;
+        font-weight: 400;
+        font-size: 20px;
+        letter-spacing: 1px;
+        line-height: 1.15;
+        margin-bottom: -10px;
+        text-transform: uppercase;
+      }
+
+      .result {
+        @include margin(25px, auto, 25px, auto);
+      }
+
+    }
+
+    .result {
+      @include flex();
+      @include flex-size(1);
+      @include flex-direction(row);
+      @include justify(flex-start);
+      @include align-items(center);
+      @include background-stretch();
+      @include margin(25px, 25px, 25px, 25px);
+      height: 90px;
+      min-width: 250px;
+      max-width: 500px;
+      overflow: hidden;
+      position: relative;
+      @include text-align(left);
+      z-index: 0;
+
+      @media all and (max-width: 480px) {
+        @include flex-size(initial);
+        @include margin(10px, 10px, 10px, 10px);
+        height: 80px;
+      }
+
+      @media all and (max-width: 768px) {
+        min-width: auto;
+        max-width: auto;
+      }
+
+      .button_cover {
+        @include box();
+        background-color: $l-darkbackground;
+        border: 1px solid $darkbordercolor;
+        height: 100%;
+        @include left(0);
+        opacity: 0.7;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      $iconsize: 40px;
+
+      .icon {
+        @include margin(0, 15px, 0, 15px);
+        max-height: $iconsize;
+        max-width: $iconsize;
+        min-height: $iconsize;
+        min-width: $iconsize;
+        z-index: 2;
+        -webkit-filter: drop-shadow($shadow);
+        filter: drop-shadow($shadow);
+      }
+
+      h1 {
+        color: #ddd;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 25px;
+        margin-bottom: 0;
+        @include margin-right(15px);
+        text-shadow: $shadow;
+        z-index: 2;
+      }
+
+      &:hover, &:focus {
+        @include shadow(0 2px 0 $brightlinkcolor);
+        border-bottom: none;
+      }
+
+      &:active h1:after {
+        @include animation(spin-right 1.5s linear infinite);
+        content: "";
+        background-repeat: no-repeat;
+        background-image: url("/static/img/nav/spinner.png");
+        background-size: cover;
+        display: inline-block;
+        cursor: pointer;
+        @include margin-left(5px);
+        top: 3px;
+        width: 20px;
+        height: 20px;
+        position: relative;
+      }
+
+    }
+
+  }
+
+  #explore {
+    .result {
+      background-color: $l2-darkbackground !important;
+    }
+  }
+
+}

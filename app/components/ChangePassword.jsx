@@ -34,6 +34,22 @@ class ChangePassword extends Component {
       return;
     }
 
+    /*
+     * /^
+     *  (?=.*\d)    // should contain at least one digit
+     *  (?=.*[a-z]) // should contain at least one lower case
+     *  (?=.*[A-Z]) // should contain at least one upper case
+     *  .           // anything else here (for special characters)
+     *  {8,32}      // should contain at least 8 characters but no more than 32
+     * $/
+     */
+    const re = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/);
+
+    if (!re.test(password1)) {
+      this.notify("New password must be at least 8 digits and include a number, upper-case letter and lower-case letter.", Intent.DANGER);
+      return;
+    }
+
     const payload = {
       oldPassword: password,
       newPassword: password1
@@ -51,7 +67,7 @@ class ChangePassword extends Component {
         }
       })
       .catch(() => {
-        this.notify("Error changing password, please try again later.", Intent.WARNING);
+        this.notify("Error changing password, please try again.", Intent.WARNING);
       });
 
   }
@@ -102,7 +118,7 @@ class ChangePassword extends Component {
 
         </form>
 
-        <button type="button" className="bp3-fill bp3-button bp3-intent-danger" onClick={this.save.bind(this)}>
+        <button type="button" className="bp3-fill bp3-button" onClick={this.save.bind(this)}>
           Submit
         </button>
 

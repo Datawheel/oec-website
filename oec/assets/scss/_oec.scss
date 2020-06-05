@@ -1,0 +1,233 @@
+@import "helpers/functions";
+@import "helpers/reset";
+@import "helpers/variables";
+@import "helpers/vendor";
+
+body {
+  background-color: $darkbackground;
+  color: #fff;
+  font-family: $source-sans;
+  // height: 100vh;
+
+  &.frozen {
+    overflow: hidden;
+  }
+
+  &.error {
+    overflow: hidden;
+  }
+
+  .fa-angle-left:before {
+    @include ltr {
+      content: unicode("f104");
+    }
+    @include rtl {
+      content: unicode("f105");
+    }
+  }
+
+  .fa-angle-right:before {
+    @include ltr {
+      content: unicode("f105");
+    }
+    @include rtl {
+      content: unicode("f104");
+    }
+  }
+}
+
+@media screen and (max-device-width: 480px){
+  body{
+    -webkit-text-size-adjust: none;
+  }
+}
+
+.wordwrap {
+  @include wordwrap();
+}
+
+h1,h2,h3,h4 {
+  -webkit-margin-before: 0em;
+  -webkit-margin-after: 0em;
+}
+
+h1, h2, h4 {
+  font-family: $source-sans;
+  font-weight: 300;
+}
+
+h3 {
+  font-family: $montserrat;
+  font-weight: 400;
+  font-size: 26px;
+  letter-spacing: 1px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 40px;
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: 30px;
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: 25px;
+  line-height: 1.4;
+}
+
+p {
+  color: white;
+  font-family: $source-sans;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 26px;
+  @include margin(0, 0, 25px, 0, !important);
+  text-align: left;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  sup {
+    display: inline-block;
+    @include margin(2px, 2px, 2px, 2px);
+    margin-top: -5px;
+  }
+
+  a {
+    @include transition(border-bottom 0.1s);
+    border-bottom: 1px solid transparent;
+    color: $lightlinkcolor;
+    text-decoration: none;
+    &:hover {
+      border-bottom: 1px solid $lightlinkcolor;
+    }
+  }
+
+}
+
+a {
+  color: white;
+  position: relative;
+  text-decoration: none;
+
+  &.anchor:before {
+    content: "";
+    left: 0;
+    position: absolute;
+    top: -($header + 10);
+  }
+
+}
+
+table {
+  @include shadow();
+  background-color: white;
+  color: $black;
+  margin-bottom: 20px;
+  width: 100%;
+
+  tr {
+    border-bottom: 1px solid $darkbordercolor;
+    font-family: $source-sans;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    th, td {
+      font-size: 15px;
+      line-height: 20px;
+      @include padding(10px, 10px, 10px, 10px);
+
+    }
+
+    th {
+      text-align: left;
+    }
+
+    a {
+      color: $darkbackground;
+      &:hover {
+        border-bottom: 1px solid $darkbackground;
+      }
+    }
+
+  }
+
+}
+
+ol {
+  font-family: $source-sans;
+  font-size: 14px;
+  line-height: 20px;
+  @include margin(35px, 35px, 35px, 35px);
+  @include padding(10px, 0, 20px, 0);
+
+  li {
+    @include padding(5px, 0, 5px, 0);
+  }
+}
+
+pre {
+  @include shadow(inset 0 0 2px rgba(0, 0, 0, 0.25));
+  background-color: $l2-darkbackground;
+  color: #eee;
+  @include margin(10px, 0, 20px, 0);
+  overflow-x: scroll;
+  @include padding(20px, 0, 20px, 0);
+  width: 100%;
+}
+
+blockquote {
+  font-family: $source-sans;
+  font-style: italic;
+  @include padding(0px, 30px, 0px, 30px);
+  margin-bottom: 20px;
+
+  p {
+    font-size: 13px;
+    font-style: normal;
+    line-height: 15px;
+    margin-top: 5px;
+    text-align: right;
+  }
+
+}
+
+section {
+
+    .columns {
+      @include column-count(3);
+      max-width: 1600px;
+
+      @media all and (max-width: 1400px) {
+        @include column-count(2);
+      }
+
+      @media all and (max-width: 1000px) {
+        @include column-count(1);
+      }
+
+    }
+}
+
+@import "elements/nav";
+@import "elements/home";
+@import "elements/search";
+@import "elements/container";
+@import "elements/hamburger";
+@import "elements/profile";
+@import "elements/visualize";
+@import "elements/rankings";
+@import "elements/resources";
+@import "elements/publications";
+@import "elements/api";
+@import "elements/modal";
+@import "elements/error";

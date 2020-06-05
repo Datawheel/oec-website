@@ -122,16 +122,33 @@
 
 }
 
+.bp3-drawer .oec-button-group .oec-button-group-items .cp-button.is-active {
+  background-color: var(--dark-1);
+  border-color: var(--dark-1);
+  color: var(--white);
+}
+
+.bp3-drawer .vb-chart-options {
+  margin-top: 0px;
+  height: 100%;
+  & .vb-chart-options-config {
+    height: 100%;
+  }
+}
+
 .vb-embed {
   min-height: 100vh;
+
   & .title {
-    text-align: center;
-    text-transform: uppercase;
     font-size: var(--font-lg);
     margin: 0;
+    text-align: center;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
   & .vb-chart {
-    height: calc(100vh - 3rem - var(--font-lg));
+    height: calc(100vh - var(--font-lg) - 0.4rem);
   }
   & .app-loading {
     & .heading {

@@ -1,0 +1,18 @@
+{% extends "templates/about.html" %}
+
+{% block about_title %}:: Updates / Blog{% endblock %}
+{% block description %}{{ _('A Development blog of updates to the site.') }}{% endblock %}
+
+{% block about_content %}
+<div class="col2" id="updates">
+  {% for update in updates %}
+  <article>
+    <h2 class="title">{{ update.title }}</h2>
+    <div class="date">
+      Released on <time pubdate date="{{ update.date.meta }}"><a href="{{ update.url }}">{{ update.date.human }}</a></time>
+    </div>
+    {{ update.body|safe }}
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

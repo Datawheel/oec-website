@@ -1,0 +1,364 @@
+/***********/
+/* General */
+/***********/
+body {
+  background-attachment: none;
+  background: transparent;
+  overflow: hidden;
+}
+#app {
+  float: left;
+}
+
+/***********/
+/* Share   */
+/***********/
+#share a.share_button {
+  color: #000;
+  display: inline-block;
+  margin: 0 20px 0 0;
+  text-align: center;
+  width: 20px;
+}
+#share a.share_button:last-child {
+  margin: 0 0 0 0;
+}
+#share i {
+  display: inline-block;
+  font-size: 20px;
+}
+#short{
+  display: none;
+}
+
+/***********/
+/* Modal   */
+/***********/
+.btn-close {
+  color: #aaaaaa;
+  font-size: 30px;
+  text-decoration: none;
+  position: absolute;
+  right: 5px;
+  top: 0;
+}
+.btn-close:hover {
+  color: #919191;
+}
+.modal:before {
+  content: "";
+  display: none;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+.modal.active:before {
+  display: block;
+}
+.modal.active .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+  top: 20%;
+}
+.modal-dialog {
+  background: #fefefe;
+  border: #333333 solid 1px;
+  border-radius: 5px;
+  margin-left: -200px;
+  position: fixed;
+  left: 50%;
+  top: -100%;
+  z-index: 11;
+  width: 360px;
+  -webkit-transform: translate(0, -500%);
+  -ms-transform: translate(0, -500%);
+  transform: translate(0, -500%);
+  -webkit-transition: -webkit-transform 0.3s ease-out;
+  -moz-transition: -moz-transform 0.3s ease-out;
+  -o-transition: -o-transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+}
+.modal-body {
+  padding: 20px;
+}
+.modal-body h3 {
+  font-size: 16px;
+  margin: 10px 0 5px 0;
+}
+.modal-body h3:first-child {
+  margin: 0;
+}
+.modal-body input {
+  border: solid 1px rgb(236, 236, 236);
+  color: #888;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin: 0px;
+  overflow: hidden;
+  padding: 3px;
+  width: 100%;
+}
+.modal-body input:focus {
+  color: #444;
+  outline: 0;
+}
+.modal-header,
+.modal-footer {
+  padding: 10px 20px;
+}
+.modal-header {
+  border-bottom: #eeeeee solid 1px;
+}
+.modal-header h2 {
+  font-size: 20px;
+}
+.modal-footer {
+  border-top: #eeeeee solid 1px;
+  text-align: right;
+}
+
+
+
+/***********/
+/* Loading */
+/***********/
+div#loading {
+  width: 100%;
+}
+
+div#loading > h2 {
+  display: block;
+  margin-top: -16px;
+  opacity: 0.25;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  width: 100%;
+  -webkit-animation: pulse 1s infinite;
+}
+
+@-webkit-keyframes pulse
+{
+  0%  { opacity: 0.25; }
+  50% { opacity: 1; }
+  100%{ opacity: 0.25; }
+}
+
+/*******/
+/* Viz */
+/*******/
+#app #viz{
+  display: none;
+}
+
+/**************/
+/* Data Table */
+/**************/
+#app #text{
+  display: none;
+}
+#app #text{
+  overflow-y: scroll;
+/*  position: absolute;
+  z-index: -1;*/
+}
+#app #text h2#total {
+  text-align:center;
+}
+#app #text ol {
+/*  list-style-type: decimal;*/
+  margin: 0 0 0 40px;
+}
+#app #text table{
+  width: 100%;
+}
+#app #text table tr.odd{
+  background: #eee;
+}
+#app #text table td,
+#app #text table th{
+  padding: 2px 6px;
+  vertical-align: top;
+}
+#app #text table th {
+  text-align: left;
+}
+#app #text table th:nth-child(1),
+#app #text table td:nth-child(1){
+  width: 20px;
+}
+#app #text table th:nth-child(2),
+#app #text table td:nth-child(2){
+  width: 40px;
+}
+.rtl #app #text table th:nth-child(3),
+.rtl #app #text table td:nth-child(3){
+  text-align: right;
+}
+#app #text table td:nth-child(4){
+  width: 75px;
+  text-align: right;
+}
+#app #text table td:nth-child(5){
+  width: 40px;
+  text-align: right;
+}
+#app #text table th:nth-child(5),
+#app #text table td:nth-child(5){
+  min-width: 35px;
+}
+#app #text table tbody tr:nth-child(even) {
+  background: transparent;
+}
+#app #text table tbody tr:nth-child(odd) {
+  background: #f7f7f7;
+}
+
+/******/
+/* UI */
+/******/
+#app #ui {
+  text-align: center;
+  visibility: hidden;
+}
+#app #layout,
+#app #depth,
+#app #color,
+#app #value,
+#app #more_years {
+  display: inline-block;
+  vertical-align: top;
+}
+
+#app #more_years i {
+  margin-right: 5px;
+}
+
+/************/
+/* Controls */
+/************/
+#controls {
+  display: block;
+  font-size:90%;
+  right: 0px;
+  margin: 0px;
+  position: absolute;
+  top: 0px;
+  visibility: hidden;
+  width: 200px;
+}
+#controls #show_hide {
+  cursor: pointer;
+  font-size: 16px;
+  left: -28px;
+  position: absolute;
+  top: -4px;
+  z-index: 999;
+}
+#controls #show_hide i {
+  -webkit-transition: 0.5s ease;
+  -moz-transition: 0.5s ease;
+  -o-transition: 0.5s ease;
+  -ms-transition: 0.5s ease;
+  transition: 0.5s ease;
+}
+#controls > * {
+  padding: 5px 10px;
+}
+#controls h3 {
+  font-size: 11px;
+  font-weight: normal;
+  margin: 0 0 2px 0;
+}
+#controls .dropdown_container {
+  clear: both;
+}
+#controls .dropdown_container#start_year,
+#controls .dropdown_container#end_year {
+  clear: none;
+  float: left;
+  width: 80px;
+}
+#controls .dropdown_container#start_year select,
+#controls .dropdown_container#end_year select{
+  width: 65px;
+}
+#controls button {
+  font-size: 12px;
+  margin: 10px;
+  padding: 5px;
+  width: 180px;
+}
+#controls button#build {
+  background-color: #0085BF;
+  color: white;
+  font-size: 12px;
+  height: 0px;
+  padding: 0px 20px;
+  position: relative;
+  text-align: left;
+  visibility: hidden;
+  -webkit-animation: 2s blink infinite;
+}
+
+#controls button#build.active {
+  box-shadow: rgba(0,0,0,0.25) 0px 2.5px 5px;
+}
+
+#controls button#build:after {
+  color: white;
+  content: "\f053";
+  display: block;
+  font-family: FontAwesome;
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  position: absolute;
+  left: 6px;
+  top: 9px;
+}
+
+@-webkit-keyframes blink
+{
+  0%  { background-color: #0085BF; }
+  50% { background-color: #00a9f2; }
+  100%{ background-color: #0085BF; }
+}
+
+#controls .control_container h3 {
+  margin: 0px 0px 8px 0px;
+}
+
+#controls .control_container a.icon {
+  background-color: white;
+  border: 1px solid rgb(236, 236, 236);
+  margin: 0px -4px 0px 0px;
+  padding: 3px 3px 3px 18px;
+}
+
+#controls .control_container a.icon:before {
+  left: 3px;
+  top: 3px;
+}
+
+#controls .control_container a.icon:hover {
+  background-color: rgb(236, 236, 236);
+  text-decoration: none;
+}
+
+#controls #view_as_text a {
+  border: 0;
+  background-color: transparent;
+  padding: 5px 5px 5px 20px;
+}
+
+#controls #view_as_text a:before {
+  top: 5px;
+}
+

@@ -1,0 +1,439 @@
+html {
+/*  height: 100%;*/
+  margin: 0 auto;
+  padding: 0;
+}
+
+body {
+  background-attachment: fixed;
+  background-color: #f7f7f7;
+  background-image: url("/static/img/nav/tile.png");
+  background-position: top center;
+  background-size: 100px;
+  color: #444444;
+  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  font-size: 12px;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+
+/******************/
+/* Background Map */
+/******************/
+div#fullscreen {
+  background-image: url("/static/img/nav/map.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  image-rendering: -moz-crisp-edges;         /* Firefox */
+  image-rendering:   -o-crisp-edges;         /* Opera */
+  image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  z-index: -1;
+}
+
+/*******************************************************************/
+/* Used for SEO content that we want crawlers to see but not users */
+/*******************************************************************/
+.visually_hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
+
+/***************************/
+/* Load Retina Backgrounds */
+/***************************/
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) {
+
+  body {
+    background-image: url("/static/img/nav/tile_retina.png");
+  }
+
+  div#fullscreen {
+    background-image: url("/static/img/nav/map_retina.png");
+  }
+
+}
+
+/******************/
+/* Page container */
+/******************/
+#container {
+  margin: 0 auto;
+  padding: 0px 0px 1px 0px;
+  width: 1000px;
+}
+
+/*************************/
+/* White box for Content */
+/*************************/
+.content {
+  background-color: white;
+  border: 1px solid #0085BF;
+  margin: 0px auto 20px;
+  width: 1000px;
+}
+
+/***********************/
+/* Top of page Warning */
+/***********************/
+#server_message{
+  background: #0085BF;
+  color: #ffffff;
+  font-size: 14px;
+  margin-top: 0px;
+  opacity: 0.75;
+  padding: 10px 0;
+  text-align: center;
+  -webkit-transition: margin-top 0.6s;
+          transition: margin-top 0.6s;
+}
+
+#server_message i {
+  opacity: 0.5;
+  -webkit-transition: opacity 0.1s;
+          transition: opacity 0.1s;
+}
+
+#server_message i:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+#server_message a {
+  color: white;
+  text-decoration: underline;
+}
+
+/**********************/
+/* Anchor Link Styles */
+/**********************/
+a {
+  color: #0085BF;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
+a:active, a:focus {
+  -moz-outline-style:none;
+       outline-style: none;
+}
+
+/****************/
+/* Title Styles */
+/****************/
+h2 {
+  color: #0085BF;
+  display: block;
+  font-size: 22px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  line-height: 28px;
+  margin: 0px auto 10px;
+  text-align: center;
+  width: 700px;
+}
+
+h3 {
+  color: #0085BF;
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 14px;
+  margin: 10px 0px;
+  text-transform: uppercase;
+}
+
+h4 {
+  color: #444444;
+  display: block;
+  font-size: 12px;
+  font-weight: normal;
+  letter-spacing: 1px;
+  line-height: 14px;
+  margin: 0px;
+}
+
+h5 {
+  color: #888888;
+  display: block;
+  font-size: 12px;
+  font-weight: lighter;
+  letter-spacing: 1px;
+  line-height: 14px;
+  margin: 0px;
+}
+
+/********************/
+/* Paragraph Styles */
+/********************/
+p {
+  color: #444444;
+  font-size: 12px;
+  line-height: 16px;
+  margin-bottom: 20px;
+}
+
+/***************/
+/* List Styles */
+/***************/
+ul, ol {
+  list-style: initial;
+  margin: initial;
+  padding: 0 0 0 40px;
+}
+
+/***********************/
+/* Sidebar Menu Styles */
+/***********************/
+#sidebar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#sidebar > ul > li {
+  border-bottom: 1px solid #aaaaaa;
+}
+
+#sidebar > ul > li:last-child {
+  border-bottom: 0px;
+}
+
+#sidebar > ul > li > a {
+  color: #888888;
+  display: block;
+  font-size: 12px;
+  height: 15px;
+  letter-spacing: 1px;
+  padding: 10px;
+  text-decoration: none;
+  -webkit-transition: background-color 0.3s, color 0.3s;
+          transition: background-color 0.3s, color 0.3s;
+}
+
+#sidebar > ul > li > a:hover {
+  color: #444444;
+}
+
+#sidebar > ul > li.active > a {
+  background-color: #0085BF;
+  color: #eeeeee;
+}
+
+#sidebar > ul > li > ul {
+  height: 0px;
+  margin: 0px;
+  overflow: hidden;
+  padding: 0px;
+}
+
+body.about #sidebar > ul > li.active > ul {
+  height: auto;
+}
+
+#sidebar > ul > li > ul > ul {
+  margin: 10px;
+}
+
+#sidebar > ul > li > ul > ul > h3 {
+  font-size: 11px;
+  margin: 5px 0px;
+}
+
+#sidebar > ul > li > ul > ul > li > a {
+  color: #444;
+  display: block;
+  padding: 2px 5px;
+  position: relative;
+  width: 100%;
+}
+
+#sidebar > ul > li > ul > ul > li.active > a {
+  background-color: #ddd;
+}
+
+/******************/
+/* Default Button */
+/******************/
+button, a.button {
+  background-color: #0085BF;
+  border: 1px solid #0085BF;
+  color: #f7f7f7;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  margin: 5px;
+  padding: 4px 6px;
+  text-align: center;
+  -webkit-transition: background-color .1s;
+          transition: background-color .1s;
+}
+button:hover, a.button:hover {
+  background-color: #1790C5;
+  text-decoration: none;
+}
+
+/*****************/
+/* Rankings Span */
+/*****************/
+span.rank {
+  color: #f7f7f7;
+  display: inline-block;
+  font-size: 14px;
+  line-height: 14px;
+  min-width: 14px;
+  padding: 2px;
+  text-align: center;
+}
+
+/*****************/
+/* Overall Input */
+/*****************/
+input#search {
+  background-color: white !important;
+  border: 1px solid #dddddd;
+  color: #888888;
+  display: inline-block;
+  font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  height: 10px;
+  outline: none;
+  opacity: 0.75;
+  padding: 5px;
+  -webkit-transition: border-color .1s, color .1s, opacity .1s;
+          transition: border-color .1s, color .1s, opacity .1s;
+  width: 100px;
+}
+
+input#search:focus {
+  border: 1px solid #0085BF;
+  color: #444444;
+  opacity: 1;
+}
+
+/**********************/
+/* Typeahead Dropdown */
+/**********************/
+.tt-dropdown-menu {
+  padding: 0px;
+  background-color: white;
+  border-style: solid;
+  border-color: #888888;
+  border-width: 1px;
+  margin: 3px 0px 10px -34px;
+  min-width: 180px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  text-align: left;
+  width: 180px;
+}
+
+.tt-suggestion {
+  display: block;
+  padding: 3px 4px;
+  -webkit-transition: background-color .1s;
+          transition: background-color .1s;
+}
+
+.tt-suggestion p {
+  color: #888888;
+  font-size: 12px;
+  line-height: 13px;
+  margin: 3px !important;
+  letter-spacing: 1px;
+  -webkit-transition: color .1s;
+          transition: color .1s;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  background-color: #0085BF;
+}
+
+.tt-suggestion.tt-is-under-cursor p {
+  color: #ffffff;
+}
+
+
+
+
+
+
+
+
+/* NOT DOUBLE-CHECKED */
+
+
+hr {
+  background-color: #cccccc;
+  border: 0;
+  clear: both;
+  color: #cccccc;
+  height: 1px;
+  margin: 10px;
+}
+
+.app_title h2 {
+  font-size: 30px;
+  font-weight: normal;
+  line-height: 36px;
+  margin: 6px 0 0 10px;
+/*  width: 815px;*/
+/*  width: 828px;*/
+}
+.rtl .app_title h2 {
+  text-align: right;
+}
+
+dl dt {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+dl dd {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #666;
+}
+
+.disabled {
+  color: #bbb !important;
+  cursor: default;
+  pointer-events: none;
+}
+
+
+/*
+ * Buttons for social sites
+ */
+#social {
+  font-size: 12px;
+  color:#343434;
+  margin: 35px 0;
+  padding:0;
+  text-align:center;
+}

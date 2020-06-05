@@ -1,0 +1,618 @@
+{% extends "templates/nav.html" %}
+
+{% set title = profile.title() %}
+{% block title %}
+{% if g.page_sub_type == "country" %}
+ - {{ profile.attr.get_name() }} ({{ profile.attr.get_display_id()|upper }}) {{_('Exports')}}, {{_('Imports')}}, {{_('and')}} {{_('Trade Partners')}}
+{% else %}
+ - {{ profile.attr.get_name() }} ({{ profile.classification|upper }}: {{ profile.attr.get_display_id() }}) {{_('Product Trade')}}, {{_('Exporters')}} {{_('and')}} {{_('Importers')}}
+{% endif %}
+{% endblock %}
+
+{% block body %}
+
+<article class="{{ g.page_sub_type }}">
+<header class="profile_header {{ g.page_sub_type }}" data-step="3" data-intro="The country profiles have been completely redesigned showing a set of quick stats to give an overview of the relative size of the particular country's economy (In this case: {{ profile.attr.get_name() }}).">
+  {% set image = profile.attr.get_image() %}
+  {% if image %}
+  <div class="header_image">
+    <img src="{{ image }}">
+  </div>
+  {% endif %}
+  <div id="title">
+    <img class="icon" src="{{ profile.attr.get_icon() }}">
+    <h1>
+      {{ title }}
+    </h1>
+  </div>
+
+  {% set stats = profile.stats() %}
+  <div id="stats">
+    {% for stat in stats %}
+    <div class="stat {{ stat.key }}">
+      <div class="stat_text">
+        <h3>
+          {% if "top" in stat.key %}
+            {{ stat.val[2:]|upper }}
+          {% elif stat.val %}
+            {{ stat.val|num_format(stat.key, suffix_html=True)|safe }}
+          {% else %}
+            &mdash;
+          {% endif %}
+        </h3>
+        <sub>
+          {{ stat.title }}
+          {% if stat.rank %}
+          <span class="rank">{{ stat.rank|num_format('ordinal') }} of {{ stat.total }}</span>
+          {% endif %}
+        </sub>
+      </div>
+      {% if stat.sparkline %}
+      <div class="sparkline" data-array="{{ stat.sparkline.val }}"></div>
+      <div class="years">
+        <div class="year">{{ stat.sparkline.start }}</div>
+        <div class="year">{{ stat.sparkline.end }}</div>
+      </div>
+      {% elif "top" in stat.key %}
+      <a class="stat_flag" href="{{ url_for('profile.profile_country', lang=g.locale, attr_id=stat.val[2:]) }}">
+        <img src="/static/img/icons/country/country_{{ stat.val }}.png">
+      </a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  {% set author = profile.attr.get_author() %}
+  {% if author %}
+  <div class="author">
+    <a href="{{ author.link }}" target="_blank">
+      <i class="fa fa-camera"></i>{{ _("Photo by") }} {{ author.name }}
+    </a>
+  </div>
+  {% endif %}
+
+  <div class="share">
+    <div class="drawer">
+      <div class="drawer-content">
+        <a href="{{ profile.facebook_url() }}" onclick="javascript:popup(this.href);return false;" title="Share on Facebook">
+          <i class="fa fa-facebook"></i>
+        </a>
+        <a href="{{ profile.twitter_url() }}" onclick="javascript:popup(this.href);return false;" title="Share on Twitter">
+          <i class="fa fa-twitter"></i>
+        </a>
+      </div>
+    </div>
+
+    <img src="/static/img/profile/share.png" alt="share">
+  </div>
+
+</header>
+</article>
+
+{% if g.page_sub_type == "country" %}
+<div id="topojson"></div>
+{% endif %}
+
+<article class="intro-article">
+<section>
+
+  <aside>
+
+    {% if g.page_sub_type == "country" %}
+    {% set extra = 2 %}
+    {% else %}
+    {% set extra = 1 %}
+    {% endif %}
+
+    <ul class="hierarchy contents {{ g.page_sub_type }}">
+      <li class="depth2">{{ _('Visualizations') }}</li>
+
+      {% for section in profile.sections()[:extra] %}
+      {% for build in section.builds %}
+      <li class="depth6"><a href="#{{ build.title|replace(" ","_") }}">{{ build.title }}</a></li>
+      {% endfor %}
+      {% endfor %}
+
+      {% if g.page_sub_type == "country" or profile.classification == "hs92" %}
+      <li class="depth6"><a href="#dataviva">DataViva</a></li>
+      {% endif %}
+
+      {% if profile.id == "usa" %}
+      <li class="depth6"><a href="#datausa">Data USA</a></li>
+      {% endif %}
+
+      {% if g.page_sub_type == "country" %}
+      <li class="depth6"><a href="#pantheon">Pantheon</a></li>
+      {% endif %}
+    </ul>
+
+  </aside>
+
+  <content>
+    <div class="columns">
+    {% for p in profile.intro() %}
+      <p>{{ p|safe }}</p>
+    {% endfor %}
+    </div>
+  </content>
+</section>
+</article>
+
+<article class="viz-article">
+  <script>var build_data = [];</script>
+  {% set title = None %}
+  {% set tour_step = 5 %}
+  {% for section in profile.sections() %}
+  {% if section.title %}
+  {% if title != section.title %}
+  {% if title != None %}
+
+  {% endif %}
+</article>
+
+<!-- <article{% if section.source %} class="{{ section.source }}"{% endif %}> -->
+<article class="titled-section{% if section.source %} {{ section.source }}{% endif %}">
+  {% set title = section.title %}
+  {% endif %}
+  <h1>{{ section.title|safe }}</h1>
+  {% if section.subtitle %}
+  <section class="subtitle-section">
+    <aside></aside>
+    <content>
+      <p>{{ section.subtitle|safe }}</p>
+    </content>
+  </section>
+  {% endif %}
+  {% endif %}
+  {% for build in section.builds %}
+  <section {% if build.tour %}data-position="floating" data-step="{{ build.seq }}" data-intro="{{ build.tour }}"{% endif %}>
+    <aside>
+      <a name="{% if section.source %}{{ section.source }}{% else %}{{ build.title|replace(" ","_") }}{% endif %}" class="anchor"></a>
+      <h2>{{ build.title }}</h2>
+      {% if build.subtitle %}
+      
+      {% if build.subtitle is string %}
+        <p>{{ build.subtitle|safe }}</p>
+      {% else %}
+        {% for pg in build.subtitle %}
+        <p>{{ pg|safe }}</p>
+        {% endfor %}      
+      {% endif %}
+      
+      {% endif %}
+      {% if not build.iframe %}
+      <p class="explore_link">
+        <a href="/{{ g.locale }}/visualize/{{ build.build.url() }}" class="deep-link" target="_blank">{{ _('Explore on Visualizations page') }} <i class="fa fa-external-link"></i></a>
+      </p>
+      <div class="share_container">
+        <div class="share_icons_container">
+          <a href="{{ build.build.twitter_url() }}" onclick="javascript:popup(this.href);return false;" title="Share on Twitter">
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a href="{{ build.build.facebook_url() }}" onclick="javascript:popup(this.href);return false;" title="Share on Facebook">
+            <i class="fa fa-facebook"></i>
+          </a>
+          <a href="#" class="share_toggle" data-target='share_short_url' title="Direct URL">
+            <i class="fa fa-link"></i>
+          </a>
+          <a href="#" class="share_toggle" data-target='share_embed_url' title="Embed URL">
+            <i class="fa fa-image"></i>
+          </a>
+        </div>
+        <div class="share_input_container">
+            <input class="share_input share_short_url" type="text" value="http://atlas.media.mit.edu/{{ g.locale }}/visualize/{{ build.build.url() }}" />
+
+            <input class="share_input share_embed_url" type="text" value='&lt;iframe width="560" height="315" src="http://atlas.media.mit.edu/{{ g.locale }}/visualize/embed/{{ build.build.url() }}?controls=false" frameborder="0" &gt;&lt;/iframe&gt;' />
+        </div>
+      </div>
+      {% endif %}
+    </aside>
+    <content>
+      {% if build.iframe %}
+      <iframe class="viz" data-url="{{ build.iframe }}"></iframe>
+      {% else %}
+      <div class="viz" data-title="{{ build.title }}"></div>
+      <script>build_data.push({{ build.build.serialize()|safe }});</script>
+      {% endif %}
+    </content>
+
+  </section>
+  {% endfor %}
+  {% endfor %}
+</article>
+
+<article>
+  <section class="prof-nav">
+  {% set prev = profile.attr.prev() %}
+  {% if prev %}
+  {% set image = prev.get_image() %}
+  <a href="{{ prev.get_profile_url() }}" class="profile_header profile_button prev" style="background-color: {{ prev.color }};{% if image %} background-image: url('{{image}}'){% endif %}">
+    <div class="button_cover"></div>
+    <i class="fa fa-angle-left"></i>
+    <h1>
+      {{ prev.get_name() }}
+    </h1>
+    <img class="icon" src="{{ prev.get_icon() }}">
+  </a>
+  {% endif %}
+
+  {% set next = profile.attr.next() %}
+  {% if next %}
+  {% set image = next.get_image() %}
+
+  <a href="{{ next.get_profile_url() }}" class="profile_header profile_button next" style="background-color: {{ prev.color }};{% if image %} background-image: url('{{image}}'){% endif %}">
+    <div class="button_cover"></div>
+    <img class="icon" src="{{ next.get_icon() }}">
+    <h1>
+      {{ next.get_name() }}
+    </h1>
+    <i class="fa fa-angle-right"></i>
+  </a>
+  {% endif %}
+  </section>
+</article>
+
+<script>
+
+  // var palette = "{{ profile.palette()|safe }}";
+  // This is the old logic of using the image's palette to define color.
+  // if (palette.length) {
+  //   palette = JSON.parse(palette.replace(/'/g, '"'));
+  //   color = analyze_palette(palette);
+  //   if (!color) color = palette[1];
+  // }
+  // else {
+  //   color = d3plus.color.legible("{{ profile.attr.color }}");
+  // }
+  // color = d3plus.color.legible("{{ profile.attr.color }}");
+
+  d3.selectAll(".sparkline").each(function(){
+    var w = d3.select(this).node().offsetWidth;
+    d3.select(this).attr("data-width", w);
+    var a = JSON.parse(d3.select(this).attr("data-array"));
+    // var a = [1.171, 1.088, 1.275, 0.882, 1.171, 1.088, 1.275, 0.882, 1.171, 1.088, 1.275, 0.882];
+    var y = d3.scale.linear()
+      .domain([d3.min(a), d3.max(a)])
+      .range([d3.select(this).node().offsetHeight, 0]);
+
+    var x = d3.scale.linear()
+      .domain([0, a.length - 1])
+      .range([0, w]);
+
+    var line = d3.svg.line()
+      .x(function(d, i){ return x(i); })
+      .y(function(d){ return y(d); });
+
+    var svg = d3.select(this).append("svg")
+      .attr("width", "100%")
+      .append("g")
+        .attr("class", "sparkgroup")
+        .attr("transform", "scale(1,1)");
+
+    var path = svg.append("path")
+      .datum(a)
+      .attr("class", "sparkpath")
+      .attr("d", line);
+
+    var length = path.node().getTotalLength();
+
+    path
+      .attr("stroke-dasharray", length + " " + length)
+      .attr("stroke-dashoffset", length)
+      .transition().duration(2500).delay(500)
+        .attr("stroke-dashoffset", 0)
+
+  });
+
+  function resizeSparklines() {
+    d3.selectAll(".sparkline").each(function(){
+      var div = d3.select(this),
+          w = parseFloat(div.attr("data-width"), 10),
+          r = div.node().offsetWidth/w;
+      div.select(".sparkgroup").attr("transform", "scale(" + r + ",1)");
+    })
+  }
+  resizeFunctions.push(resizeSparklines);
+
+  // If it's a country page, create the map!
+  var map = d3.select("#topojson");
+  if (!map.empty()) {
+
+    load("/static/json/country_coords.json?v=2", function(coords){
+
+      var key = "countries",
+          id = "{{ profile.attr.id }}",
+          width = 250,
+          height = width;
+
+      var svg = map.append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      if (!coords.objects[key].lookup) {
+        coords.objects[key].lookup = coords.objects[key].geometries.reduce(function(obj, d){
+          obj[d.id] = d;
+          return obj;
+        }, {});
+        coords.objects[key].lookup.all = coords.objects[key].geometries;
+      }
+
+      var geo_ids = [id];
+      if (id === "eublx") {
+        geo_ids = ["eubel", "eulux"];
+      }
+
+      // List of countries that get cropped in the regular projection
+      var projection = d3.geo.mercator(),
+          path;
+
+      if (id === "xxwld") {
+
+        projection.scale(40).translate([width/2, height/2]);
+        path = d3.geo.path().projection(projection);
+
+      }
+      else {
+
+        var rotate = rotate = ["eurus"].indexOf(id) >= 0 ? -155 : 0;
+
+        projection.scale(1).translate([0,0]).rotate([rotate,0]);
+        path = d3.geo.path().projection(projection);
+
+        coords.objects[key].geometries = [];
+        geo_ids.forEach(function(g){
+          coords.objects[key].geometries.push(coords.objects[key].lookup[g]);
+        });
+
+        var country = topojson.feature(coords, coords.objects[key]).features[0];
+
+        // List of countries specifying how many landmasses to zoom to:
+        var landmass = {
+          "nausa": 1,
+          "saecu": 1,
+          "afsyc": 1,
+          "asmys": 2,
+          "eugbr": 2,
+          "asjpn": 4
+        }
+
+        if (landmass[id]) {
+
+          var areas = [], test = d3plus.util.copy(country);
+          country.geometry.coordinates.forEach(function(c, i){
+            test.geometry.coordinates = [c];
+            areas.push(path.area(test))
+          })
+
+          var sorted = areas.slice().sort(function(a, b){ return b-a; });
+          var maxArea = sorted[landmass[id] - 1];
+          country.geometry.coordinates = country.geometry.coordinates.filter(function(c, i){
+            return areas[i] >= maxArea;
+          });
+
+        }
+        else {
+
+          // Logic for removing small/far away geometries.
+          var test = d3plus.util.copy(country),
+              areas = [],
+              areaMax = 0,
+              distances = [],
+              center = path.centroid(country);
+
+          country.geometry.coordinates = country.geometry.coordinates.filter(function(c){
+
+            test.geometry.coordinates = [c];
+            var area = path.area(test);
+            if (area > 0) {
+              areas.push(area);
+              if (area > areaMax) {
+                areaMax = area;
+              }
+              distances.push(d3plus.network.distance(path.centroid(test), center))
+              return true;
+            }
+            else {
+              return false;
+            }
+
+          });
+
+          var distanceCutoff = d3.quantile(distances.reduce(function(arr, dist, i) {
+            if (dist) arr.push(areas[i]/dist);
+            return arr;
+          }, []), 0.9);
+
+          country.geometry.coordinates = country.geometry.coordinates.filter(function(c, i){
+            return distances[i] === 0 || areas[i]/distances[i] >= distanceCutoff;
+          });
+
+        }
+
+        var b = path.bounds(country),
+            zoom = d3.min([(b[1][0] - b[0][0]) * 100, 0.9]),
+            s = zoom / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
+            t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+
+        projection
+          .scale(s)
+          .translate(t);
+
+      }
+
+      coords.objects[key].geometries = coords.objects[key].lookup.all;
+
+      var countries = topojson.feature(coords, coords.objects[key]);
+
+      // var scale = 0.5;
+      var group = svg.append("g")
+        .attr("id", "topojson-" + id)
+        // .attr("transform", "translate("+(width*(scale/2))+","+(height*(scale/2))+")scale("+scale+","+scale+")");
+
+      group.selectAll("path").data(countries.features)
+        .enter().append("path")
+        .attr("d", path)
+        .attr("class", "coords")
+        .classed("focus", function(d){
+          return id === "xxwld" || geo_ids.indexOf(d.id) >= 0 ? true : false;
+        });
+
+      map.classed("loaded", true);
+
+      // group.transition().duration(1000)
+      //   .attr("transform", "translate(0,0)scale(1,1)");
+
+    });
+
+  }
+
+  var builds = [];
+  d3.selectAll(".viz").each(function(d, i){
+    builds.push({
+      "container": d3.select(this),
+      "data": build_data[i],
+      "index": i,
+      "loaded": false,
+      "timer": false
+    })
+  })
+
+  function resizeApps() {
+
+    // if (window.innerWidth > 768) {
+    //   var header_height = d3.select("header").node().offsetHeight;
+    //   // map.style("margin-top", -header_height-10 +"px");
+    // }
+    // else {
+    //   // map.style("margin-top", "0px");
+    // }
+
+    var h = window.innerWidth < 768 ? window.innerHeight : window.innerHeight * 0.7;
+    builds.forEach(function(b, i){
+      var w = d3.select(b.container.node().parentNode).node().offsetWidth;
+      var height = b.data && b.data.viz.slug === "network" ? window.innerWidth > 768 ? w * 0.7 : w : h * 0.9;
+      height = height > 600 ? 600 : height;
+      b.container.style("height", height + "px");
+      b.top = b.container.node().offsetTop;
+      if (w !== b.width || h !== b.height) {
+        if (b.viz) {
+          if (b.loaded) b.viz.width(w).height(height).draw();
+        }
+        else {
+          b.container.style("width", w + "px");
+        }
+        b.width = w;
+        b.height = height;
+      }
+    })
+  }
+  resizeApps();
+  resizeFunctions.push(resizeApps);
+
+  var scrollBuffer = -150;
+  function buildInView(b) {
+    var top = window.scrollY, height = window.innerHeight;
+    return top+height > b.top+scrollBuffer && top+scrollBuffer < b.top+b.height;
+  }
+
+  function buildScroll(ms) {
+    if (ms === undefined) ms = 500;
+    for (var i = 0; i < builds.length; i++) {
+      var b = builds[i];
+      if (!b.timer && !b.loaded) {
+        if (buildInView(b)) {
+          b.timer = setTimeout(function(build){
+            clearTimeout(build.timer);
+            build.timer = false;
+            if (buildInView(build)) {
+              buildLoad(build)
+            }
+          }, ms, b)
+
+        }
+      }
+    }
+  }
+
+  function buildLoad(build) {
+    var url = build.container.attr("data-url");
+    if (url) {
+      build.container.attr("src", url);
+    }
+    else {
+      build.viz = visualization(build_data[build.index], build.container);
+    }
+    build.loaded = true;
+  }
+
+  buildScroll(0);
+
+  scrollFunctions.push(buildScroll);
+
+  var classification = "{{ g.page_sub_type }}";
+  if (classification === "product") classification = "hs92";
+  d3.select("header #title").on("click", function(){
+    search(classification);
+  });
+
+  // Demo Mode
+  // setTimeout(function(){
+  //   var s = 0;
+  //   var scroller = setInterval(function(){
+  //     window.scrollTo(0, s);
+  //     s++;
+  //     if (s === 4000) {
+  //       clearInterval(scroller);
+  //       window.location = "/en/profile/country/";
+  //     };
+  //   }, 25);
+  // }, 7000);
+
+  if (RegExp('tour', 'gi').test(window.location.search)) {
+    setTimeout(function(){
+
+      var intro = introJs();
+      intro.setOptions({
+        doneLabel: 'Next page'
+      });
+
+      intro.oncomplete(function() {
+        window.location.href = '/en/visualize/tree_map/hs92/export/ita/all/show/2013/?tour=true';
+      }).start();
+
+    }, 2000)
+  }
+
+  d3.select(".share").on("click", function(){
+    d3.select(this).classed("open", !d3.select(this).classed("open"));
+  });
+
+  function gravdept_next(elem) {
+      do {
+          elem = elem.nextSibling;
+      } while (elem && elem.nodeType != 1);
+      return elem;
+  }
+
+  function gravdept_toggle(elem) {
+      var nextElem = gravdept_next(elem);
+
+      if (nextElem.style.display==='block') { nextElem.style.display='none'; }
+      else { nextElem.style.display='block'; }
+  }
+
+  d3.selectAll(".share_toggle").on("click", function(){
+    var target_icon = d3.select(this).attr("data-target");
+
+    d3.select(this.parentNode.parentNode).selectAll(".share_input").style("display", "none");
+
+    target_icon = d3.select(this.parentNode.parentNode).select("."+target_icon);
+
+    target_icon.style("display", "inline-block");
+
+    d3.event.preventDefault();
+  })
+
+
+</script>
+{% endblock %}

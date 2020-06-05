@@ -1,0 +1,188 @@
+/****************/
+/* Header Reset */
+/****************/
+header {
+  margin: 0;
+}
+
+/*************************************/
+/* Center content in all header DIVs */
+/*************************************/
+header > div {
+  text-align: center !important;
+}
+
+/************************/
+/* Small Logo in Header */
+/************************/
+header a#logo {
+  background-image: url("/static/img/nav/logo.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  display: inline-block;
+  height: 31px;
+  text-indent: -10000px;
+  width: 174px;
+}
+
+/********************/
+/* Nav Link Styling */
+/********************/
+header nav ul {
+  margin: 0;
+  padding: 0;
+}
+
+header nav ul li {
+  display: inline-block;
+  margin: 6px 0px;
+  max-width: 170px;
+  padding: 0px 10px;
+}
+
+header nav a {
+  color: #888888;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-decoration: none;
+  text-transform: uppercase;
+  -webkit-transition: color .1s;
+          transition: color .1s;
+}
+
+header nav a:hover {
+  color: #444444;
+  text-decoration: none;
+}
+
+header nav a.current {
+  border-bottom: 2px solid #0085BF;
+  color: #0085BF;
+}
+
+header select {
+  width: 10px;
+}
+
+header #d3plus_button_language_selector {
+  text-transform: uppercase;
+}
+
+header #search {
+  height: 15px;
+  margin: 0px 5px;
+  width: 124px;
+}
+.tt-hint{
+  background: none repeat scroll 0 0 !important;
+}
+
+/******************/
+/* Secondary Nav  */
+/******************/
+
+header #secondary_nav {
+  color: #bbb;
+  text-align: left;
+  padding: 5px 0 5px 0;
+  background-color: rgba(200,200,200,0.6);
+  display: inline-block;
+  position: relative;
+  left: -26px;
+  top: -3px;
+  border: 1px solid #ccc;
+}
+
+header #secondary_nav a {
+  color: #aaa;
+  font-size: 12px;
+  margin: 0 10px;
+}
+
+header #secondary_nav a:hover {
+  color: #666;
+}
+
+header #secondary_nav a.current {
+  border-bottom: 0;
+  color: #666;
+}
+
+/******************/
+/* Footer Styling */
+/******************/
+footer {
+  margin: 20px;
+  text-align: center;
+}
+
+footer div#macro_connections {
+  background-image: url("/static/img/nav/macro_connections.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  display: inline-block;
+  height: 60px;
+  text-indent: -10000px;
+  width: 148px;
+  vertical-align: top;
+}
+
+footer > p {
+  color: #888888;
+  display: inline-block;
+  font-size: 10px;
+  line-height: 13px;
+  margin: 10px;
+  text-align: left;
+  width: 475px;
+}
+
+footer > p > a {
+  color: #888888;
+  text-decoration: underline;
+}
+
+footer > p > a:hover {
+  color: #444444;
+}
+
+footer > p img {
+  vertical-align: top;
+}
+
+footer ul.lang {
+  margin: 10px 0;
+}
+
+footer ul.lang li {
+  display: inline-block;
+  margin: 0 4px 0 0;
+}
+
+footer ul.lang li a {
+  color: #888888;
+  font-size: 10px;
+}
+
+/**********************/
+/* Load Retina Images */
+/**********************/
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) {
+
+  header a#logo {
+    background-image: url("/static/img/nav/logo_retina.png");
+  }
+
+  footer > div#macro_connections {
+    background-image: url("/static/img/nav/macro_connections_retina.png");
+  }
+
+}

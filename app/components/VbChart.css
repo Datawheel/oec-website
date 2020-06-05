@@ -8,11 +8,33 @@
   }
 }
 
+.vb-chart-cog {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 100;
+}
+
 .vb-chart-options {
+  flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: var(--gutter-sm);
+  & .vb-chart-options-more-details {
+    margin-bottom: var(--gutter-sm);
+    font-size: var(--font-md);
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  & .vb-chart-options-config {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 .vb-share-download-options {

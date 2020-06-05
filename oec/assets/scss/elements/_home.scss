@@ -1,0 +1,245 @@
+body.home {
+
+  background: $l-darkbackground url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQAOZxU3GjMhiIIHpvXVn4YIwAZAisCCyAFgQXQAkCAAiqRGXMgseLwAAAABJRU5ErkJggg==) repeat;
+  @include font-smoothing(antialiased);
+
+  nav {
+    background: none;
+    // position: static;
+
+    #logo {
+      visibility: hidden;
+    }
+
+  }
+
+  #container {
+    height: 100vh;
+    margin-top: 0;
+    overflow: hidden;
+  }
+
+  footer {
+    bottom: 0;
+    @include left(0);
+    position: fixed;
+    @include right(0);
+
+    @media all and (max-width: 768px) {
+      position: static;
+    }
+
+  }
+
+}
+
+$default_size: 600px;
+
+.bg-frame {
+  height: $default_size;
+  @include margin($header + 10px, auto, 20px, auto);
+  position: relative;
+  width: $default_size;
+
+  .ring-pulse {
+    @include animation(pulse 8s ease-in infinite);
+    @include rounded(50%);
+    border: 1px solid #fff;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: -5;
+  }
+
+  .echo-ring {
+    @include animation(pulse 8s ease-in 4s infinite);
+  }
+
+  #ring {
+    @include rounded(50%);
+    background-color: $darkbackground;
+    border: 1px solid $lightlinkcolor;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+
+    // this next line fixes a weird clipping bug in Chrome
+    // http://stackoverflow.com/questions/5736503/how-to-make-css3-rounded-corners-hide-overflow-in-chrome-opera
+    -webkit-mask-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC);
+
+    $star_size: 150%;
+
+    .star-rotate {
+      @include animation(spin-right 120s linear infinite);
+      @include left(68%);
+      @include margin-left(-$star_size/2);
+      margin-top: -$star_size/2;
+      opacity: 0.4;
+      position: absolute;
+      top: 64%;
+      width: $star_size;
+      z-index: 0;
+    }
+
+    #big_logo {
+      @include left(13%);
+      position: absolute;
+      top: 23%;
+      width: 38%;
+    }
+
+    #observatory {
+      @include left(8%);
+      position: absolute;
+      top: 14%;
+      width: 100%;
+      @include rtl {
+        @include flip;
+      }
+    }
+
+    #info {
+      color: white;
+      display: block;
+      font-family: $source-sans;
+      font-size: $default_size/35;
+      font-weight: 300;
+      line-height: 1.4;
+      position: absolute;
+      @include text-shadow(-2px 0 5px $darkbackground);
+      @include text-align(center);
+      bottom: 18%;
+      @include ltr {
+        right: 14%;
+      }
+      @include rtl {
+        left: 19%;
+      }
+      width: 36%;
+
+      a {
+        @include transition(color 1s, opacity 0.5s);
+        border-bottom: 1px solid transparent;
+        color: $lightlinkcolor;
+        display: inline-block;
+        font-family: $montserrat;
+        font-weight: 400;
+        font-size: 75%;
+        @include margin(2%, 2%, 2%, 2%);
+        opacity: 0.8;
+        text-transform: uppercase;
+
+        &:hover {
+          opacity: 1;
+          color: $brightlinkcolor;
+        }
+      }
+
+    }
+
+    #launch_vid {
+      @include transition(opacity 0.5s);
+      cursor: pointer;
+      position: absolute;
+      bottom: 17%;
+      opacity: 0.6;
+      @include rtl {
+        left: 23%;
+      }
+      @include ltr {
+        right: 22%;
+      }
+
+      &:hover {
+        opacity: 1;
+      }
+
+      img {
+        @include transition(opacity 1s);
+        width: $default_size/28;
+        height: $default_size/28;
+        display: inline-block;
+        @include margin(0, 5px, 0, auto);
+      }
+
+      span {
+        font-size: $default_size/45;
+        vertical-align: middle;
+      }
+
+    }
+
+    #search_home {
+      @include transition(text-shadow 0.75s, opacity 1.5s);
+      @include rounded(2px);
+      bottom: 10%;
+      border-bottom: 1px solid $darkbordercolor;
+      color: #fff;
+      cursor: pointer;
+      display: block;
+      font-family: $source-sans;
+      font-size: $default_size/32;
+      font-weight: 300;
+      @include left(33%);
+      opacity: 0.8;
+      padding-bottom: 3px;
+      position: absolute;
+      width: 37%;
+
+      &:hover {
+        @include text-shadow(0 0 2px #eee);
+        opacity: 1;
+      }
+
+      img {
+        margin-bottom: -5px;
+        @include margin-right(0);
+        margin-top: 5px;
+        @include padding-right(3px);
+        position: relative;
+        top: 0;
+        width: 6%;
+      }
+    }
+  }
+
+}
+
+#launch {
+  background-color: rgba(63, 70, 79, 0.8);
+
+  iframe {
+    @include shadow(0 0 200px rgba(0,0,0,0.6));
+  }
+}
+
+@include keyframes(pulse) {
+  0% {
+    @include transform(scale(1));
+    opacity: 0.1;
+  }
+  100% {
+    @include transform(scale(2));
+    opacity: 0;
+  }
+}
+
+@include keyframes(spin-right) {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    @include transform(rotate(360deg));
+    opacity: 0.2;
+  }
+}

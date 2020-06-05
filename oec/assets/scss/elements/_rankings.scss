@@ -1,0 +1,329 @@
+$rank_sidebar: 150px;
+
+body.rankings {
+  @include font-smoothing(antialiased);
+
+  #container {
+
+    #content .nav-section {
+      @include flex();
+      @include flex-direction(row);
+      @include justify(space-between);
+      @include align-items(baseline);
+      @include padding(30px, 0, 10px, 0);
+      @include margin(0, 30px, 0, 30px, !important);
+
+      @media all and (min-width: 1100px) {
+        max-width: 1058px;
+        @include margin(0, auto, 0, auto, !important);
+      }
+
+      @media all and (max-width: 550px) {
+        @include padding(30px, 0, 30px, 0);
+        @include margin(0, 15px, 0, 15px, !important);
+      }
+
+      @media all and (max-width: 768px) {
+        @include flex-direction(row);
+      }
+
+      aside {
+        @include flex(1 auto);
+        width: auto !important;
+        @include margin(0, 0, 0, 0);
+
+        a {
+          color: $lightlinkcolor;
+
+          i {
+            margin-top: 3px;
+          }
+
+          h2.year-nav {
+            @include transition(opacity 0.6s);
+            font-weight: 400;
+            font-size: 26px;
+            opacity: 0.6;
+            &:hover {
+              opacity: 1;
+            }
+
+            @media all and (min-width: 769px) and (max-width: 955px) {
+              font-size: 23px;
+            }
+
+            @media all and (max-width: 768px) {
+              font-size: 17px;
+            }
+          }
+        }
+
+        &:last-child {
+          @include text-align(right);
+        }
+
+      }
+
+      content {
+        @include text-align(center);
+
+        h1 a.complexity_switch {
+          border-bottom: 1px solid $l2-darkbackground;
+          padding-bottom: 2px;
+
+          &:before {
+            position: absolute;
+            color: $l2-darkbackground;
+            content: unicode("f074");
+            font-family: FontAwesome;
+            font-size: 20px;
+            top: 15px;
+            @include left(-25px);
+
+            @include rtl {
+              @include flip();
+            }
+          }
+
+          &:hover {
+            color: $lightlinkcolor;
+            &:before {
+              color: $lightlinkcolor;
+            }
+          }
+
+          &:focus, &:active {
+            color: $lightlinkcolor;
+            border-bottom: 1px solid $lightbordercolor;
+          }
+        }
+
+        @media all and (min-width: 769px) and (max-width: 955px) {
+          h1 {
+            font-size: 30px;
+
+            a.complexity_switch:before {
+              color: $l2-darkbackground;
+              font-size: 16px;
+              top: 10px;
+              @include left(-21px);
+            }
+          }
+        }
+        @media all and (max-width: 768px) {
+          h1 {
+            font-size: 20px;
+            font-weight: 400;
+
+            a.complexity_switch:before {
+              color: $darkbordercolor;
+              font-size: 10px;
+              top: 8px;
+              @include left(-15px);
+            }
+          }
+        }
+      }
+    }
+
+    aside {
+      width: $rank_sidebar !important;
+    }
+
+    #explorer {
+      @include margin-left(-155px);
+        @media all and (max-width: 1175px) {
+          @include margin(0, 30px, 20px, 30px);
+        }
+
+      & ~ content {
+        max-width: 695px;
+      }
+
+      #rank_changers {
+
+        $font-size: 16px;
+
+        margin-top: 0;
+
+        h3 {
+          font-size: $font-size;
+          @include margin(13px, 0, 6px, 0);
+        }
+
+        .change_dataset {
+          margin-bottom: 15px;
+
+          .active {
+            color: #333 !important;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: -1px;
+            &:hover {
+              border-color: #333 !important;
+            }
+          }
+        }
+
+        .download {
+          border: 1px solid white;
+          color: white;
+          display: block;
+          font-size: 12px;
+          font-weight: 200;
+          height: 15px;
+          @include margin(0, 0, 15px, 0);
+          @include padding(5px, 5px, 5px, 5px);
+          top: $font-size + 3;
+          position: relative;
+
+          &:hover {
+            background-color: white;
+            color: $darkbackground;
+          }
+
+          i {
+            @include margin-right(2px);
+            margin-top: 1px;
+          }
+
+        }
+
+        &.pci-changer {
+          @media all and (max-width: 426px) {
+            .download {
+              margin-top: 0px;
+            }
+          }
+        }
+      }
+
+    }
+
+    table {
+      background-color: $l-darkbackground;
+      color: #ccc;
+      border: 1px solid $darkbordercolor;
+      margin-bottom: 20px;
+
+      a {
+        @include margin-left(7px);
+        color: white;
+        font-weight: 700;
+
+        &:hover {
+          border-bottom: 0;
+          &:after {
+            @include ltr {
+              content: unicode("f105");
+            }
+            @include rtl {
+              content: unicode("f104");
+            }
+            font-family: FontAwesome;
+            @include padding-left(7px);
+          }
+        }
+      }
+      
+      th {
+       @include rtl {
+        text-align: right;
+       }
+      }
+
+      th[data-sortable] {
+        display: table-cell !important;
+
+        i {
+          @include transition(opacity 0.1s);
+          display: inline-block;
+          @include margin-left(5px);
+          padding-top: 3px;
+          opacity: 0.5;
+
+          &.fa-sort-down, &.fa-sort-up {
+            opacity: 1;
+          }
+
+          &.fa-sort-down {
+            margin-top: -3px;
+          }
+
+          &.fa-sort-up {
+            margin-top: 3px;
+          }
+
+        }
+
+        &:hover {
+          cursor: pointer;
+
+          i {
+            opacity: 1;
+          }
+
+        }
+
+        &.delta, &.id {
+
+          @media all and (max-width: 500px) {
+            display: none !important;
+          }
+
+        }
+      }
+
+      .rank {
+        font-weight: bold;
+        @include text-align(center);
+        width: 50px;
+      }
+
+      .delta {
+        @include text-align(left);
+        width: 50px;
+
+        .fa-caret-up {
+          // color: #00cc00;
+          color: $pri-c-highlight;
+        }
+        .fa-caret-down {
+          // color: #cc0000;
+          color: $sec-w-highlight;
+        }
+      }
+
+      .id {
+        @include text-align(center);
+        width: 50px;
+      }
+
+      .country, .product {
+        @include flex;
+        @include align-items(center);
+        @include justify(flex-start);
+        img {
+          @include margin-right(5px);
+          width: 20px;
+        }
+      }
+
+      .eci, .pci {
+        width: 50px;
+      }
+
+      .delta, .id {
+
+        @media all and (max-width: 500px) {
+          display: none;
+        }
+
+      }
+
+    }
+
+  }
+
+
+}

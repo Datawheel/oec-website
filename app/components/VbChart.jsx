@@ -16,6 +16,7 @@ import {parseURL, range} from "helpers/utils";
 import colors from "helpers/colors";
 import subnat from "helpers/subnatVizbuilder";
 import {formatAbbreviate} from "d3plus-format";
+import {Drawer, Icon, Position} from "@blueprintjs/core";
 
 import "./VbChart.css";
 
@@ -25,7 +26,6 @@ import VbDrawer from "./VbDrawer";
 import VbShare from "./VbShare";
 import VbDownload from "./VbDownload";
 import PaywallChart from "./PaywallChart";
-import LoadingChart from "./LoadingChart";
 import Loading from "./Loading.jsx";
 
 const ddTech = ["Section", "Superclass", "Class", "Subclass"];
@@ -39,21 +39,45 @@ const geoFilter = (d, type) => type.split(".").includes(d.value.slice(2, 5));
 const CancelToken = axios.CancelToken;
 let cancel;
 
+class VbDrawerEmbed extends React.PureComponent {
+  state = {
+    canEscapeKeyClose: true,
+    canOutsideClickClose: true,
+    enforceFocus: true,
+    hasBackdrop: true,
+    autoFocus: true,
+    isOpen: true,
+    position: Position.BOTTOM,
+    size: 100
+  }
+
+  handleClose = () => {
+    this.setState({isOpen: false});
+    this.props.callback(false);
+  };
+  render() {
+    return <Drawer {...this.state} isOpen={this.props.isOpen} onClose={this.handleClose}>
+      {this.props.children}
+    </Drawer>;
+  }
+}
+
 class VbChart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      auth: true,
       data: [],
+      depth: "HS4",
       isOpenDrawer: false,
-      relatedItems: {},
+      isOpenMoreDetails: false,
       loading: true,
+      relatedItems: {},
       routeParams: this.props.routeParams,
       scale: "Log",
+      selected: measures[0],
       stackLayout: "Value",
       subnatGeoDepth: undefined,
-      selected: measures[0],
-      auth: true,
-      depth: "HS4",
       techDepth: ddTech[ddTech.length - 1]
     };
   }
@@ -85,15 +109,16 @@ class VbChart extends React.Component {
     JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected) ||
     JSON.stringify(prevProps.xConfig) !== JSON.stringify(this.props.xConfig) ||
     JSON.stringify(prevProps.yConfig) !== JSON.stringify(this.props.yConfig) ||
-    prevState.loading !== this.state.loading ||
     prevState.depth !== this.state.depth ||
-    prevState.scale !== this.state.scale ||
     prevState.isOpenDrawer !== this.state.isOpenDrawer ||
+    prevState.isOpenMoreDetails !== this.state.isOpenMoreDetails ||
+    prevState.loading !== this.state.loading ||
+    prevState.scale !== this.state.scale ||
     prevState.selected !== this.state.selected ||
     prevState.stackLayout !== this.state.stackLayout ||
     prevState.subnatGeoDepth !== this.state.subnatGeoDepth;
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = prevProps => {
     if (JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected)) {
       const levels = this.props.cubeSelected.productLevels;
       const depth = levels.includes("HS4") ? "HS4" : levels[levels.length - 1];
@@ -503,7 +528,7 @@ class VbChart extends React.Component {
           loading: false,
           routeParams
         });
-      }).catch(error => {
+      }).catch(() => {
         this.props.updateData({API: undefined, data: [], loading: false});
         this.setState({data: [], loading: false, routeParams});
       });
@@ -627,10 +652,37 @@ class VbChart extends React.Component {
         />
       </div>;
 
+    const cog = this.props.isEmbed ? <div className="vb-chart-cog"
+    >
+      <Icon onClick={() => this.setState({isOpenMoreDetails: !this.state.isOpenMoreDetails})} icon="cog" />
+    </div> : <span />;
+
+
     if (chart === "tree_map" && data && data.length > 0) {
       const isContinentGroupBy = baseConfig.groupBy[0] === "Continent";
+      const treemapChartOptions = <div className="vb-chart-options">
+        <div className="vb-chart-options-config">
+          {!isTechnology && !isContinentGroupBy && !isGeoSubnatGroupBy && productDepthItems.length > 1 &&
+      <OECButtonGroup
+        items={productDepthItems}
+        selected={this.state.depth}
+        title={"Depth"}
+        callback={depth => this.setState({depth}, () => this.fetchData())}
+      />}
+          {!isTechnology &&
+      <OECButtonGroup
+        items={measures}
+        selected={this.state.selected}
+        title={""}
+        callback={selected =>
+          this.setState({selected}, () => this.fetchData())
+        }
+      />}
+          {vbChartOptions}
+        </div></div>;
       return (
         <div>
+          {cog}
           <div className="vb-chart">
             <Treemap
               config={{
@@ -641,45 +693,40 @@ class VbChart extends React.Component {
               }}
             />
           </div>
-          <div className="vb-chart-options">
-            {!isTechnology && !isContinentGroupBy && !isGeoSubnatGroupBy && productDepthItems.length > 1 &&
-              <OECButtonGroup
-                items={productDepthItems}
-                selected={this.state.depth}
-                title={"Depth"}
-                callback={depth =>
-                  this.setState({depth}, () => this.fetchData())
-                }
-              />}
-            {isTechnology && !isContinentGroupBy && !isGeoSubnatGroupBy &&
-              <OECButtonGroup
-                items={ddTech.slice(1)}
-                selected={this.state.techDepth}
-                title={"Depth"}
-                callback={depth =>
-                  this.setState({techDepth: depth}, () => this.fetchData())
-                }
-              />}
 
-            {!isTechnology &&
-              <OECButtonGroup
-                items={measures}
-                selected={this.state.selected}
-                title={""}
-                callback={selected =>
-                  this.setState({selected}, () => this.fetchData())
-                }
-              />}
-
-            {vbChartOptions}
-
-            {vbDrawerComponent()}
-          </div>
+          {this.props.isEmbed
+            ? <VbDrawerEmbed
+              callback={isOpenMoreDetails => this.setState({isOpenMoreDetails})}
+              isOpen={this.state.isOpenMoreDetails}>{treemapChartOptions}</VbDrawerEmbed>
+            : treemapChartOptions}
+          {vbDrawerComponent()}
         </div>
       );
     }
     else if (chart === "stacked" && data && data.length > 0) {
       if (this.state.stackLayout === "Share") baseConfig.stackOffset = "expand";
+      const stackedChartOptions = <div className="vb-chart-options">
+        <div className="vb-chart-options-config">
+          {!isTechnology &&
+        <OECButtonGroup
+          items={productDepthItems}
+          selected={this.state.depth}
+          title={"Depth"}
+          callback={depth =>
+            this.setState({depth}, () => this.fetchData())
+          }
+        />}
+          <OECButtonGroup
+            items={["Value", "Share"]}
+            selected={this.state.stackLayout}
+            title={"Layout"}
+            callback={depth =>
+              this.setState({stackLayout: depth})
+            }
+          />
+          {vbChartOptions}
+        </div>
+      </div>;
       return (
         <div>
           <div className="vb-chart">
@@ -698,7 +745,7 @@ class VbChart extends React.Component {
                 x: isSubnat && data[0]["Time ID"] ? "Time ID" : "Year",
                 time: isSubnat && data[0]["Time ID"] ? "Time ID" : "Year",
                 xConfig: {
-                  title: isSubnat ? t("Time") : t("Year")
+                  title: this.props.isEmbed ? "" : isSubnat ? t("Time") : t("Year")
                 },
                 y: measure,
                 yConfig: {
@@ -707,37 +754,12 @@ class VbChart extends React.Component {
                 }
               }}
             /></div>
-          <div className="vb-chart-options">
-            {!isTechnology &&
-              <OECButtonGroup
-                items={productDepthItems}
-                selected={this.state.depth}
-                title={"Depth"}
-                callback={depth =>
-                  this.setState({depth}, () => this.fetchData())
-                }
-              />
-            }
-            {isTechnology &&
-              <OECButtonGroup
-                items={ddTech.slice(1)}
-                selected={this.state.techDepth}
-                title={"Depth"}
-                callback={depth =>
-                  this.setState({techDepth: depth}, () => this.fetchData())
-                }
-              />}
-            <OECButtonGroup
-              items={["Value", "Share"]}
-              selected={this.state.stackLayout}
-              title={"Layout"}
-              callback={depth =>
-                this.setState({stackLayout: depth})
-              }
-            />
-            {vbChartOptions}
-            {vbDrawerComponent()}
-          </div>
+          {this.props.isEmbed
+            ? <VbDrawerEmbed
+              callback={isOpenMoreDetails => this.setState({isOpenMoreDetails})}
+              isOpen={this.state.isOpenMoreDetails}>{stackedChartOptions}</VbDrawerEmbed>
+            : stackedChartOptions}
+          {vbDrawerComponent()}
         </div>
       );
     }
@@ -756,6 +778,18 @@ class VbChart extends React.Component {
         const findItem = item => ["all", "show"].includes(item);
         if (findItem(country) && findItem(partner) && isSubnat) lineGroupBy = [geoLevels[geoLevels.length - 1]];
       }
+
+      const lineChartOptions = <div className="vb-chart-options">
+        <div className="vb-chart-options-config">
+          <OECButtonGroup
+            items={["Log", "Linear"]}
+            selected={this.state.scale}
+            title={"Scale"}
+            callback={scale => this.setState({scale})}
+          />
+          {vbChartOptions}
+        </div>
+      </div>;
 
       return (
         <div>
@@ -779,16 +813,13 @@ class VbChart extends React.Component {
               }}
             />
           </div>
-          <div className="vb-chart-options">
-            <OECButtonGroup
-              items={["Log", "Linear"]}
-              selected={this.state.scale}
-              title={"Scale"}
-              callback={scale => this.setState({scale})}
-            />
-            {vbChartOptions}
-            {vbDrawerComponent(lineGroupBy)}
-          </div>
+          {this.props.isEmbed
+            ? <VbDrawerEmbed
+              callback={isOpenMoreDetails => this.setState({isOpenMoreDetails})}
+              isOpen={this.state.isOpenMoreDetails}>{lineChartOptions}</VbDrawerEmbed>
+            : lineChartOptions}
+          {vbDrawerComponent(lineGroupBy)}
+
         </div>
       );
     }
@@ -799,7 +830,17 @@ class VbChart extends React.Component {
         : "/topojson/world-50m.json";
 
       const geoGroupBy = isSubnat && !isGeo ? `${this.state.subnatGeoDepth} ID` : "ISO 3";
-
+      const geomapChartOptions = <div className="vb-chart-options">
+        <div className="vb-chart-options-config">
+          {isSubnat && isSubnat.geoLevels.length > 1 && <OECButtonGroup
+            items={isSubnat.geoLevels}
+            selected={this.state.subnatGeoDepth}
+            title={"Depth"}
+            callback={subnatGeoDepth => this.setState({subnatGeoDepth}, () => this.fetchData())}
+          />}
+          {vbChartOptions}
+        </div>
+      </div>;
       return (
         <div>
           <div className="vb-chart">
@@ -829,16 +870,12 @@ class VbChart extends React.Component {
               }}
             />
           </div>
-          <div className="vb-chart-options">
-            {isSubnat && isSubnat.geoLevels.length > 1 && <OECButtonGroup
-              items={isSubnat.geoLevels}
-              selected={this.state.subnatGeoDepth}
-              title={"Depth"}
-              callback={subnatGeoDepth => this.setState({subnatGeoDepth}, () => this.fetchData())}
-            />}
-            {vbChartOptions}
-            {vbDrawerComponent(geoGroupBy)}
-          </div>
+          {this.props.isEmbed
+            ? <VbDrawerEmbed
+              callback={isOpenMoreDetails => this.setState({isOpenMoreDetails})}
+              isOpen={this.state.isOpenMoreDetails}>{geomapChartOptions}</VbDrawerEmbed>
+            : geomapChartOptions}
+          {vbDrawerComponent(geoGroupBy)}
         </div>
       );
     }
@@ -882,6 +919,9 @@ class VbChart extends React.Component {
 
       const width = window.innerWidth;
       const mobile = width < 768 ? 0.5 : 1;
+      const networkChartOptions = <div className="vb-chart-options">
+        {vbChartOptions}
+      </div>;
 
       return (
         <div>
@@ -909,9 +949,11 @@ class VbChart extends React.Component {
               }}
             />
           </div>
-          <div className="vb-chart-options">
-            {vbChartOptions}
-          </div>
+          {this.props.isEmbed
+            ? <VbDrawerEmbed
+              callback={isOpenMoreDetails => this.setState({isOpenMoreDetails})}
+              isOpen={this.state.isOpenMoreDetails}>{networkChartOptions}</VbDrawerEmbed>
+            : networkChartOptions}
         </div>
       );
     }
@@ -939,6 +981,10 @@ class VbChart extends React.Component {
         if (!obj[d["HS4 ID"]]) obj[d["HS4 ID"]] = d;
         return obj;
       }, {});
+
+      const ringsChartOptions = <div className="vb-chart-options">
+        {vbChartOptions}
+      </div>;
 
       return (
         <div>
@@ -978,9 +1024,11 @@ class VbChart extends React.Component {
               }}
             />
           </div>
-          <div className="vb-chart-options">
-            {vbChartOptions}
-          </div>
+          {this.props.isEmbed
+            ? <VbDrawerEmbed
+              callback={isOpenMoreDetails => this.setState({isOpenMoreDetails})}
+              isOpen={this.state.isOpenMoreDetails}>{ringsChartOptions}</VbDrawerEmbed>
+            : ringsChartOptions}
         </div>
       );
     }
@@ -990,6 +1038,9 @@ class VbChart extends React.Component {
       const yTitle = yConfig.title || "";
       const xSelected = xConfig.selected.toLowerCase();
       const ySelected = yConfig.selected.toLowerCase();
+      const scatterChartOptions = <div className="vb-chart-options">
+        {vbChartOptions}
+      </div>;
       return (
         <div>
           <div className="vb-chart">
@@ -1033,9 +1084,11 @@ class VbChart extends React.Component {
               }}
             />
           </div>
-          <div className="vb-chart-options">
-            {vbChartOptions}
-          </div>
+          {this.props.isEmbed
+            ? <VbDrawerEmbed
+              callback={isOpenMoreDetails => this.setState({isOpenMoreDetails})}
+              isOpen={this.state.isOpenMoreDetails}>{scatterChartOptions}</VbDrawerEmbed>
+            : scatterChartOptions}
           {vbDrawerComponent(["Continent", "Country"])}
         </div>
       );
