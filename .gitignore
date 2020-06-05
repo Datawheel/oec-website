@@ -1,10 +1,36 @@
+npm-debug.log*
+.DS_Store
+.gitconfig
+
+scripts/*.ipynb
+scripts/.ipynb_checkpoints
+
+# node modules should never be synced with git
+node_modules
+
+# cache control for canon-stats
+canon_stats_cache.sqlite
+
+# these static files will be generated on build
+/static/assets
+/packages/*/static/assets
+/static/reports
+packages/*/static/reports
+/index.js
+/packages/*/index.js
+/venv
 *.pyc
-*.DS_Store
-logs/
-robots.txt
-oec/static/db/
-oec/static/generated/
-oec/static/.webassets-cache/
-.Python
-google8f7012b9de435ae0.html
-cache/
+
+# environment variable files for autoenv and direnv
+.env
+.envrc
+
+# docker files
+dockerfiles/nginx/certs/*
+dockerfiles/nginx/conf.d/default.conf
+
+# pm2 ecosystem config
+*.config.js
+
+# dont commit gcp permissions
+oec-gcp-bucket-token.json

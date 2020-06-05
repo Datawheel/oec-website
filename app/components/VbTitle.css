@@ -1,0 +1,35 @@
+.vb-title-wrapper {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  & .vb-title {
+    flex: 1;
+    & .title {
+      font-size: var(--font-xxl);
+      text-align: center
+      ;
+    }
+  }
+
+  & .vb-title-button {
+    width: calc(2 * var(--gutter-lg));
+    & .bp3-icon {
+      color: var(--dark-1);
+    }
+    & .bp3-button {
+      background: transparent;
+      box-shadow: none;
+      color: var(--dark-1);
+      font-size: var(--font-lg);
+      text-align: center;
+      &:hover {
+        background: inherit;
+        box-shadow: inherit;
+        color: var(--white);
+        & .bp3-icon {
+          color: var(--white);
+        }
+      }
+    }
+  }
+}

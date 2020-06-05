@@ -1,0 +1,32 @@
+.oec-button-group {
+  align-items: center;
+  display: flex;
+  width: auto;
+  &.cp-button-group {
+    margin-bottom: 0;
+  }
+  & .cp-button {
+    border: 1px solid var(--dark-1);
+  }
+  & .oec-button-group-title {
+    font-size: var(--font-md);
+    margin-right: var(--gutter-xs) !important;
+    flex: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  & .oec-button-group-items {
+    display: flex;
+    & .cp-button.is-active {
+      background-color: var(--white);
+      border-color: var(--white);
+      color: var(--dark-4);
+    }
+  }
+}
+
+.vb-chart-options {
+  & .oec-button-group {
+    margin-left: var(--gutter-sm);
+  }
+}

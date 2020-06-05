@@ -1,0 +1,175 @@
+@import "../helpers/mixins.css";
+
+.footer {
+  /* theming */
+  background-color: var(--dark-4);
+  color: var(--light-3);
+  /* sizing */
+  margin: 0;
+  padding: var(--gutter-lg) var(--gutter-md);
+  /* layout */
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap; /* prevent from breaking on small screens */
+  width: 100%;
+
+  & .container {
+    max-width: var(--container-width);
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    & ul {
+      list-style-type: none;
+      padding-left: 0;
+      &.footer-nav-group {
+        max-width: 200px;
+      }
+      & .footer-group {
+        @mixin font-md;
+        font-weight: var(--label-font-weight);
+        margin-bottom: 10px;
+      }
+      & .footer-subgroup {
+        @mixin font-sm;
+        font-weight: var(--label-font-weight);
+        margin: var(--gutter-sm) 0 0;
+      }
+      & .footer-link {
+        @mixin font-md;
+        color: var(--light-3);
+        display: block;
+        font-weight: 200;
+        padding-top: 0.625em;
+        padding-bottom: 0.625em;
+
+        /* adjust padding & font size on bigger screens */
+        @mixin min-sm {
+          padding-top: 0.25em;
+          padding-bottom: 0.25em;
+        }
+        @mixin min-md {
+          @mixin font-sm;
+          padding-top: 0.25em;
+          padding-bottom: 0.25em;
+        }
+
+        /* icon sizing & positioning */
+        & .footer-link-icon {
+          display: inline-block;
+          width: 0.9em;
+          margin-right: 0.5em;
+          transition: 0.1s ease-out;
+        }
+
+        /* interactions */
+        &:hover, &:focus {
+          color: var(--white);
+          background-color: var(--black);
+          text-decoration: none;
+
+          @mixin min-sm {
+            background-color: var(--dark-4);
+          }
+
+          & .footer-link-icon {
+            transform: scale(1.25);
+          }
+        }
+        & .footer-hlink {
+          color: var(--light-3) !important;
+          font-weight: 200;
+          /*
+          padding-top: 0.625em;
+          padding-bottom: 0.625em;
+          */
+
+          margin: 0 8px 0 0;
+        }
+      }
+    }
+    & > ul {
+      flex: 1;
+    }
+    & .footer-contact {
+      flex: 2;
+      text-align: right;
+      font-size: 12px;
+    }
+
+    @mixin max-md {
+      flex-wrap: wrap;
+      & .footer-contact {
+        flex: none;
+        text-align: center;
+        width: 100%;
+      }
+    }
+  }
+  & a {
+    color: var(--white);
+    font-weight: 400;
+  }
+
+  & .is-pro:after {
+    @mixin font-xxs;
+    background-color: var(--accent-dark);
+    border-radius: 4px;
+    content: "PRO";
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 4px;
+    margin-top: -2px;
+    padding: 1px 4px;
+    vertical-align: top;
+  }
+
+  & .is-beta:after {
+    @mixin font-xxs;
+    background-color: var(--accent-dark);
+    border-radius: 4px;
+    content: "BETA";
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 4px;
+    margin-top: -2px;
+    padding: 1px 4px;
+    vertical-align: top;
+  }
+
+  & .footer-sponsor-list {
+    @mixin list-reset;
+    & .footer-sponsor-item {
+      width: auto;
+      display: inline-block;
+      & .footer-sponsor-link {
+        display: block;
+        padding: 0.55rem 0 1rem 1.5rem;
+        /* transitions */
+        opacity: 0.75;
+        transition:
+          opacity 0.1s ease-out,
+          transform 0.1s ease-out;
+
+        &:hover, &:focus {
+          opacity: 1;
+          transform: scale(1.075);
+        }
+        & .footer-sponsor-img {
+          max-height: 2rem;
+        }
+        & .footer-sponsor-img.sm {
+          max-height: 1.675rem;
+        }
+
+        @mixin max-md {
+          padding: 1rem 0.5rem;
+        }
+      }
+    }
+  }
+}

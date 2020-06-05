@@ -1,36 +1,10 @@
-# Flask framework
-flask
-
-# Helper lib for running scripts locally without server
-flask-script
-
-# Localization
-flask-babel
-
-# DB libs for connecting to MySQL
-# WARNING: Must have MySQL server installed!
-MySQL-python
-flask-sqlalchemy
-
-# General caching for views
-flask-cache
-
-# Better JSON serializer that knows how to handle Decimal types
+pystan
+numpy
+pandas
+networkx
+requests
+requests_cache
+statsmodels
+scikit-learn
+fbprophet
 simplejson
-
-# Required for natural language processing to facilitate search
-textblob
-fuzzywuzzy
-
-# JS compiler
-Flask-Assets
-
-# SCSS compiler
-Flask-Scss
-
-# Cache helper scripts
-selenium
-click
-
-# Opbeat for logging errors
-opbeat[flask]

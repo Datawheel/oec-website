@@ -1,0 +1,17 @@
+.subnational-list {
+  max-height: 500px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  & ul {
+    list-style: none;
+    padding: 0;
+    column-count: 2;
+    list-style-type: none;
+    & li {
+      list-style-type: none;
+      & a {
+        color: white;
+      }
+    }
+  }
+}

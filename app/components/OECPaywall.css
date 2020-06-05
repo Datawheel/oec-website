@@ -1,0 +1,16 @@
+.bp3-dialog.paywall-component-dialog {
+  background-color: var(--dark-3) !important;
+  & .bp3-dialog-header {
+    background-color: var(--dark-4) !important;
+  }
+  & .bp3-button {
+    border-radius: 1rem;
+    text-transform: uppercase;
+    border: 0;
+    color: var(--white) !important;
+    padding: 0px 20px;
+    &.bp3-intent-success {
+      background-color: var(--accent-dark) !important;
+    }
+  }
+}

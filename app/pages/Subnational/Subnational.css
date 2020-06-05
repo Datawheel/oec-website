@@ -1,0 +1,104 @@
+@import "../../helpers/mixins.css";
+
+.subnational {
+  background-color: var(--dark-4);
+  & .subnational-content {
+    color: var(--light-3);
+    padding: var(--nav-height) 0 var(--gutter-lg);
+    position: relative;
+    & h1 {
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: var(--gutter-sm);
+      text-align: center;
+    }
+    & .subnational-intro {
+      @mixin font-md;
+      margin: 0 auto;
+      text-align: center;
+    }
+    & .subnational-country-index {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0 auto;
+      max-width: 1200px;
+      padding: 0 0 var(--gutter-lg);
+      @mixin max-sm {
+        padding: 0 0 var(--gutter-md);
+      }
+      & .subnational-country-item {
+        display: flex;
+        flex-direction: column;
+        max-width: 150px;
+        padding: 15px;
+        & .subnational-country-item-flag {
+
+        }
+        & .subnational-country-item-name {
+          @mixin font-md;
+          font-weight: 400;
+          text-align: center;
+          color: var(--light-3);
+        }
+        &:hover {
+          background-color: var(--light-3);
+          & .subnational-country-item-name {
+            color: var(--dark-2);
+          }
+        }
+        @mixin max-sm {
+          max-width: 100px;
+        }
+        &.subnational-country-item-soon{
+          position: relative;
+          cursor: default;
+          & .subnational-country-item-soon-cover{
+            position: absolute;
+            background: rgba(0,0,0,0);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            cursor: normal;
+            z-index: 1;
+          }
+          & .subnational-country-item-flag {
+            position: relative;
+            & .subnational-country-item-soon-label{
+              @mixin font-sm;
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-weight: 400;
+              color: var(--light-3);
+              pointer-events: all;
+              opacity: 1;
+              z-index: 3;
+              text-align: center;
+            }
+            & img{
+              opacity: 0.2;
+            }
+          }
+          & .subnational-country-item-name {
+            opacity: 0.2;
+          }
+          &:hover{
+            background-color: transparent;
+            & .subnational-country-item-name {
+              color: var(--light-3);
+            }
+          }
+        }
+
+      }
+    }
+  }
+}

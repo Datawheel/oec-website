@@ -1,0 +1,40 @@
+@import "@datawheel/canon-cms/src/css/mixins.css";
+/*
+  From canon cms, some nice mixins to help you write less css, including:
+    - media queries (both mobile & max-width first)
+    - typography (font sizes using style.yml, also available as utility classes)
+    - accessibly hiding text; useful to add context for screen readers
+    - layout (set a parent `position` to `relative`, then give the child a mixin like `absolute-expand` or `absolute-center`
+    - resets (list-reset, button-reset)
+
+  Direct link to canon mixins file:
+  https://github.com/Datawheel/canon/blob/master/packages/cms/src/css/mixins.css
+
+  Note: many of these are also available as utility classes:
+  https://github.com/Datawheel/canon/blob/master/packages/cms/src/css/utilities.css
+*/
+
+@define-mixin striped-bg
+  $stripe-color: var(--dark-3),
+  $bg-color: var(--dark-4)
+{
+  background-color: $bg-color;
+  background-image: linear-gradient(-45deg,
+    $bg-color 16.67%,
+    $stripe-color 16.67%, $stripe-color 50%,
+    $bg-color 50.00%,     $bg-color 66.67%,
+    $stripe-color 66.67%, $stripe-color 100%
+  );
+  background-size: 5px 5px;
+}
+
+@define-mixin link-theme {
+  font-weight: normal;
+  color: var(--accent-light);
+  text-decoration: none;
+
+  &:hover, &:focus {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+}

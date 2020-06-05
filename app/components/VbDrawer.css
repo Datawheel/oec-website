@@ -1,0 +1,50 @@
+.bp3-overlay {
+  z-index: 22 !important;
+}
+
+.vb-drawer-icon {
+  width: var(--gutter-lg);
+  min-width: var(--gutter-lg);
+  height: var(--gutter-lg);
+  margin-right: var(--gutter-sm);
+}
+
+.vb-related-viz {
+  display: flex;
+  flex: 1;
+  color: var(--white);
+  font-size: var(--font-md);
+  margin-bottom: var(--gutter-sm);
+  align-items: center;
+  & .icon {
+    width: 24px;
+    height: 24px;
+    margin-right: var(--gutter-xs);
+  }
+}
+
+.vb-drawer.bp3-drawer {
+  background: var(--dark-2) !important;
+  color: var(--white);
+  & .bp3-drawer-header {
+    background: var(--dark-4) !important;
+    & .bp3-heading {
+      color: var(--white);
+    }
+  }
+  & .bp3-drawer-body {
+    padding: 20px !important;
+    & .vb-drawer-stat {
+      font-size: var(--font-md);
+      width: 100%;
+      flex: 1;
+      display: flex;
+      border-bottom: 1px solid var(--dark-1);
+      padding: var(--gutter-sm) 0px;
+      justify-content: space-between;
+      & .title {
+        font-weight: bold;
+      }
+    }
+  }
+}

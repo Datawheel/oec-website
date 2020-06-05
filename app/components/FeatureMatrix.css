@@ -1,0 +1,70 @@
+@import "../helpers/mixins.css";
+
+.feature-matrix {
+  background: var(--white);
+  border-radius: 1em;
+  box-sizing: border-box;
+  color: var(--black);
+  padding: var(--gutter-md);
+  width: 100%;
+  & table {
+    @mixin font-md;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  & th {
+    vertical-align: top;
+  }
+  & th span {
+    display: block;
+    &.feature-version-title {
+      @mixin font-sm;
+      color: var(--dark-1);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+    &.feature-version-price {
+      @mixin font-xxl;
+      & sup {
+        @mixin font-lg;
+        margin-left: 2px;
+      }
+    }
+    &.feature-version-interval {
+      color: var(--dark-1);
+      @mixin font-xs;
+    }
+  }
+  & .feature-group-title {
+    @mixin font-sm;
+    color: var(--dark-1);
+    font-weight: bold;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    & td {
+      border-bottom: 1px solid var(--light-2);
+    }
+  }
+  & td {
+    padding: 0.5em;
+    & .bp3-popover-wrapper {
+      display: inline-block;
+    }
+    & .bp3-icon-help {
+      color: var(--accent-light);
+      margin-left: 2px;
+    }
+    & .bp3-icon-tick-circle {
+      color: var(--accent-dark);
+    }
+    &:not(:first-child) {
+      color: var(--dark-1);
+      font-weight: bold;
+      text-align: center;
+      width: 160px;
+    }
+    &:last-child {
+      color: var(--accent-dark);
+    }
+  }
+}

@@ -1,0 +1,192 @@
+@import "helpers/mixins.css";
+@import "helpers/animations.css"; /* make keyframe animations always available */
+
+html, body {
+  background-color: var(--dark-4);
+}
+
+p > a,
+.link,
+.cp-hero-credits-link {
+  @mixin link-theme;
+}
+
+.columns {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  & .column-1-2,
+  & .column-1-3,
+  & .column-1-4 {
+    flex: 1;
+    min-width: 200px;
+  }
+  & .column-1 {
+    min-width: 100%;
+  }
+  & .column-1-2 {
+    min-width: 50%;
+  }
+  & .column-1-4 {
+    min-width: 25%;
+  }
+}
+
+.is-fullwidth {
+  width: 100%;
+}
+
+.cp-button {
+  & a {
+    color: var(--label-color);
+  }
+  &:hover a, &:focus a {
+    color: var(--white);
+    text-decoration: none;
+  }
+}
+
+/* --------------------------
+// blueprint
+-------------------------- */
+
+.bp3-dialog {
+  background-color: var(--dark-1) !important;
+  color: var(--white);
+  & .bp3-dialog-header {
+    background-color: var(--dark-2) !important;
+    & .bp3-heading {
+      @mixin font-sm;
+      color: var(--white);
+    }
+  }
+}
+
+.bp3-popover-target {
+  width: 100%;
+}
+
+.bp3-popover-target.bp3-popover-open {
+  width: 100%;
+}
+
+.bp3-tooltip {
+  max-width: 300px;
+}
+
+.bp3-tag-input .bp3-tag {
+  background-color: var(--dark-4);
+}
+
+.bp3-non-ideal-state {
+  & .bp3-heading {
+    @mixin font-md;
+    color: var(--gray);
+  }
+}
+
+/* --------------------------
+// d3plus
+-------------------------- */
+
+/* .d3plus-textBox text {
+  font-family: "Fira Sans Condensed", sans-serif !important;
+  font-weight: 600 !important;
+} */
+
+.d3plus-Message {
+  color: var(--white);
+}
+
+.d3plus-tooltip {
+  & table {
+    min-width: 95% !important;
+    width: 95% !important;
+    align-items: center !important;
+    display: flex !important;
+    margin: 10px auto !important;
+  }
+  & tbody {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  & tr {
+    border-top: 1px solid var(--dark-1) !important;
+    width: 100% !important;
+    &:first-child {
+      border-top: 0px solid var(--dark-1) !important;
+    }
+  }
+  & td {
+    text-align: right;
+    padding: 5px 5px;
+    flex: 1 !important;
+    width: 100% !important;
+    &:first-child {
+      text-align: left;
+      font-weight: var(--display-font-weight);
+    }
+  }
+  z-index: 101 !important;
+  border: 1px solid var(--dark-1) !important;
+}
+
+.d3plus-tooltip-title-wrapper {
+  display: flex;
+  align-items: flex-start;
+  & .icon {
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    & img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  & .title {
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    & span {
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical
+    }
+  }
+}
+
+/* --------------------------
+// paywall section formatting
+-------------------------- */
+.profile-paywall {
+  min-height: 350px;
+  & .profile-paywall-image {
+    @mixin absolute-expand;
+    background-size: 100% 100%;
+    filter: blur(2px);
+    opacity: 0.25;
+  }
+  & .profile-paywall-content {
+    @mixin absolute-expand;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  & .profile-paywall-button {
+    @mixin font-lg;
+    background-color: var(--accent-dark);
+    color: var(--white) !important;
+    display: block;
+    margin: var(--gutter-sm);
+    padding: var(--gutter-sm) var(--gutter-md);
+    &:hover, &:focus {
+      background-color: var(--accent);
+      text-decoration: none !important;
+    }
+  }
+}

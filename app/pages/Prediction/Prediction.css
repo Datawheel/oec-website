@@ -1,0 +1,410 @@
+.prediction-about-outer {
+  background-color: var(--dark-4);
+  color: var(--light-3);
+  display: flex;
+  margin: calc(var(--gutter-lg)*2) var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
+  overflow: hidden;
+  padding: var(--gutter-sm);
+  position: relative;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+  }
+
+  & .prediction-about-l {
+    margin: 0 35px;
+    max-width: 350px;
+    flex: 1 0 calc(40% - 60px);
+
+    @media (max-width: 700px) {
+      max-width: none;
+      margin: 0;
+    }
+
+    & p {
+      font-size: 16px;
+      line-height: 23px;
+    }
+
+    & h2.ispro {
+      background-color: #3C71A6;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: bold;
+      padding: 5px;
+    }
+  }
+  & .prediction-about-r {
+    overflow-x: scroll;
+    & h2 a {
+      color: var(--light-3);
+    }
+    & ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      & li {
+        display: inline-block;
+        margin: 10px;
+        border: 1px solid var(--dark-1);
+        height: 150px;
+        overflow: hidden;
+        position: relative;
+        min-width: 150px;
+        min-width: 150px;
+        flex: 1;
+        z-index: 1;
+
+        & a {
+          color: var(--light-2);
+          display: flex;
+          flex-wrap: wrap;
+          height: 100%;
+          padding: 5px;
+          text-align: center;
+          width: 100%;
+          &:hover {
+            text-decoration: none;
+          }
+
+          & .prediction-title {
+            align-self: flex-end;
+            display: block;
+            flex: 1 0 100%;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 2px 0;
+          }
+          & .prediction-subtitle {
+            display: block;
+            flex: 1 0 100%;
+            font-size: 13px;
+          }
+        }
+        & .prediction-bg {
+          background-image: url('/images/predictions/prediction-placeholder.png');
+          background-size: cover;
+          background-position: 50% 50%;
+          background-repeat: no-repeat;
+          height: 100%;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          position: absolute;
+          opacity: .4;
+          transition: all .5s;
+          width: 100%;
+          z-index: -1;
+        }
+        &:hover {
+          & .prediction-bg {
+            transform: scale(1.2);
+          }
+        }
+      }
+    }
+  }
+}
+
+.prediction-container-outer {
+  background-color: var(--dark-4);
+  color: var(--light-3);
+  margin: calc(var(--gutter-lg)*2) var(--gutter-lg) var(--gutter-lg) var(--gutter-lg);
+  padding: var(--gutter-sm);
+  position: relative;
+
+  & .bp3-navbar {
+    background: var(--dark-4);
+    min-height: 60px;
+    & h1 {
+      margin: 0;
+    }
+    & a, & a.bp3-active, & a:hover {
+      color: var(--light-3);
+    }
+    & a:hover {
+      background: #394350;
+    }
+    & .bp3-navbar-divider {
+      border-color: var(--dark-1);
+    }
+    & .bp3-navbar-group {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
+  & .prediction-controls {
+    display: flex;
+    align-items: center;
+    align-content: flex-start;
+    flex-wrap: wrap;
+
+    &.advanced-params {
+      border: solid 1px var(--dark-1);
+      margin: 0 0 20px 0;
+    }
+
+    & .prediction-control {
+      flex: 1;
+      padding: 5px 10px;
+      max-width: 250px;
+      min-width: 200px;
+      &.slider-control {
+        padding: 5px 15px;
+      }
+
+      & .prediction-date-selections {
+        display: flex;
+        & .prediction-date-dropdown {
+          &.prediction-date-start {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+          &.prediction-date-end {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+          }
+        }
+      }
+    }
+  }
+
+  & .prediction-viz-container {
+    border: solid 1px var(--dark-2);
+    min-height: 400px;
+
+    & .prediction-viz {
+      position: relative;
+
+      & .prediction-overlay {
+        background-color: var(--dark-4);
+        color: var(--light-3);
+        font-size: 20px;
+        height: 100%;
+        left: 0;
+        opacity: 0.8;
+        padding: 100px 0 0 0;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        width: 100%;
+        z-index: 99;
+      }
+    }
+  }
+
+  & .prediction-controls-container {
+    margin: 10px 0 0 0;
+  }
+
+  /* ---------------------------
+  BUTTON STYLES!!!
+  --------------------------- */
+  & .bp3-button:not([class*="bp3-minimal"]) {
+    background: rgb(99, 115, 127) !important;
+    color: var(--white) !important;
+    opacity: 0.7;
+    box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.6), inset 0 -1px 0 rgba(16, 22, 26, 0.4);
+    &.bp3-active {
+      background: rgb(56, 65, 72) !important;
+      color: var(--white) !important;
+    }
+    &:hover {
+      background: rgb(81, 94, 104) !important;
+      color: var(--white) !important;
+    }
+
+    & .bp3-icon {
+      color: var(--white);
+    }
+  }
+
+} /* end .prediction-container-outer */
+
+.d3plus-tooltip {
+  z-index: 9 !important;
+}
+
+/* ---------------------------
+Multi select
+--------------------------- */
+input.bp3-input-ghost.bp3-multi-select-tag-input-input{
+  color: var(--white)
+}
+.bp3-menu-item.bp3-disabled {
+  & .bp3-text-overflow-ellipsis {
+    color: var(--white)
+  }
+}
+
+/* ---------------------------
+tabs
+--------------------------- */
+.bp3-tab-list {
+  margin-bottom: -1px;
+
+  & .bp3-tab-indicator-wrapper {
+    & .bp3-tab-indicator {
+      background-color: transparent;
+    }
+  }
+
+  /* individual tab */
+  & .bp3-tab {
+    margin-right: 0;
+    /* typography
+    @add-mixin heading-font;
+    @add-mixin font-xxs; */
+    /* theming */
+    box-shadow: none;
+    border-radius: 5px 5px 0 0;
+    border: 1px solid transparent;
+    color: var(--gray);
+    /* override blueprint */
+    cursor: default;
+    /* remove ugly blue halo */
+    outline: 0;
+    padding: 0 var(--gutter-md);
+
+    /* button */
+    & .bp3-button {
+      /* blueprint overrides */
+      background: inherit !important;
+      color: inherit !important;
+      font: inherit;
+      text-transform: inherit;
+      cursor: default;
+      /* sizing */
+      padding-left: 1em;
+      padding-right: 1em;
+      /* remove icon */
+      &:before {
+        display: none;
+      }
+    }
+
+    /* icon */
+    & .bp3-button:before {
+      color: inherit !important;
+      font-size: 1em;
+      margin-left: -0.25em;
+      margin-right: 0.5em;
+    }
+
+    /* interactions */
+    &:hover, &:focus {
+      color: var(--light-1) !important;
+    }
+
+    /* active tab */
+    &[aria-selected=true] {
+      /* background-color: var(--light-1) !important; */
+      background-color: var(--dark-1) !important;
+      color: var(--light-1);
+      border-color: var(--dark-1);
+      border-bottom-color: var(--dark-1);
+      z-index: 1;
+      margin-right: 0 !important;
+
+      & button {
+        outline: none;
+      }
+
+      /* hide .control-group top left border radius */
+      &:first-child {
+        overflow: visible; /* override blueprint */
+
+        &:after {
+          content: '';
+          /* sizing */
+          display: block;
+          width: 5px;
+          height: 5px;
+          /* positioning */
+          position: absolute;
+          left: -1px;
+          bottom: -5px;
+          z-index: 1;
+          /* theming */
+          /* background-color: var(--light-1); */
+          border-left: 1px solid var(--light-2);
+        }
+      }
+    }
+  }
+  /* remove margin from following panels */
+  & ~ .bp3-tab-panel {
+    margin-top: 0; /* override blueprint */
+  }
+}
+
+button:focus {outline:0;}
+
+
+/* ---------------------------
+Under viz options (key)
+--------------------------- */
+.prediction-viz-key {
+  margin: 10px 0;
+  text-align: center;
+  & button {
+    margin: 0 10px;
+    /*
+    & .bp3-button-text {
+      color: var(--dark-1);
+    }
+    &.bp3-active {
+      & .bp3-button-text {
+        color: var(--light-3);
+      }
+    }
+    &:hover {
+      background: rgb(81, 94, 104) !important;
+      & span {
+        color: var(--light-3);
+      }
+    }
+    */
+  }
+}
+
+
+/* ---------------------------
+Data table styles
+--------------------------- */
+.prediction-datatable-container {
+  & .rt-td {
+    & .number {
+      text-align: right;
+    }
+  }
+  & .ReactTable .-pagination .-btn {
+    background-color: rgba(115, 134, 148, 0.3);
+    color: var(--light-3);
+  }
+}
+
+/* ---------------------------
+About text styles
+--------------------------- */
+.prediction-about-container {
+  max-width: 800px;
+  margin: 40px auto;
+
+  & .info-card {
+    align-items: center;
+    border: solid 1px var(--dark-2);
+    margin: 20px 0;
+    padding: 10px;
+    display: flex;
+    & h3 {
+      margin: 0 0 10px 0;
+    }
+    & .info-card-icon {
+      padding: 0 20px 0 0;
+    }
+  }
+}

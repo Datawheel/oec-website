@@ -1,0 +1,16 @@
+.menu-item-text {
+  display: flex;
+  & img {
+    width: 20px;
+    margin-right: 5px;
+  }
+}
+
+.bp3-multi-select-tag-input-input::placeholder {
+  color: var(--white) !important;
+  font-size: var(--gutter-sm);
+}
+
+.bp3-input.bp3-tag-input.bp3-fill.bp3-multi-select {
+  border-radius: 0px !important;
+}

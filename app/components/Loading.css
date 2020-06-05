@@ -1,0 +1,107 @@
+@import "../helpers/mixins.css";
+
+[id="Canon"] > .app-loading {
+  /* take up the whole screen */
+  @mixin absolute-expand;
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* theming */
+  background-color: var(--dark-4);
+}
+@keyframes cf4FadeInOut {
+  0% {
+    opacity:1;
+  }
+  17% {
+    opacity:1;
+  }
+  25% {
+    opacity:0;
+  }
+  92% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+.oec-loader-shell {
+  color: var(--light-3);
+  width: 50%;
+  max-width: 1236px;
+  margin: 40px auto;
+
+  @mixin max-md {
+    width: 75%;
+  }
+
+  & header {
+    display: flex;
+    justify-content: space-between;
+  }
+  & .oec-loader-body {
+    & .oec-loader-fade-container {
+      position: relative;
+      height: 500px;
+      @mixin max-sm {
+        height: 450px;
+      }
+      & .oec-loader-fader {
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        transition: opacity 1s ease-in-out;
+        animation-name: cf4FadeInOut;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        animation-duration: 40s;
+        /* animation-direction: alternate; */
+
+        &:nth-of-type(1) {
+          animation-delay: 30s;
+        }
+        &:nth-of-type(2) {
+          animation-delay: 20s;
+        }
+        &:nth-of-type(3) {
+          animation-delay: 10s;
+        }
+        &:nth-of-type(4) {
+          animation-delay: 0;
+        }
+      }
+      & img:before, & img:after {
+        z-index: -1;
+        position: absolute;
+        content: "";
+        bottom: 15px;
+        left: 10px;
+        width: 50%;
+        top: 80%;
+        max-width:300px;
+        background: #777;
+        box-shadow: 0 15px 10px #777;
+        transform: rotate(-3deg);
+      }
+      & img:after {
+        transform: rotate(3deg);
+        right: 10px;
+        left: auto;
+      }
+    }
+    & p {
+      font-size: 1rem;
+      font-weight: 300;
+      margin: 0.75rem auto;
+      max-width: 500px;
+      line-height: 1.4;
+      text-align: center;
+      & b {
+        font-weight: 800;
+      }
+    }
+  }
+}

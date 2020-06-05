@@ -1,0 +1,409 @@
+@import "../helpers/mixins.css";
+
+.home {
+  background: var(--dark-4);
+  text-align: left;
+  min-height: 100vh;
+  overflow: hidden; /* prevent the ring from expanding the viewport */
+  /* center the world */
+  display: flex;
+  flex-direction: column;
+
+  & .home-hero {
+    align-items: center;
+    border-bottom: 1px solid rgb(109, 111, 118);
+    display: flex;
+    height: 500px;
+    padding: var(--nav-height) var(--gutter-lg) 0;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+
+    & .home-hero-content {
+      flex: 1 1 auto;
+      padding: 0;
+      z-index: 2;
+      text-align: center;
+
+      & .home-hero-logo {
+        margin: 0 auto;
+      }
+
+      /* introduction */
+      & .home-hero-tagline {
+        /* typography */
+        @mixin font-smoothing;
+        font-weight: var(--label-font-weight);
+        /* sizing */
+        margin: var(--gutter-sm) auto var(--gutter-md);
+        /* positioning */
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        /* theming */
+        color: var(--light-3);
+      }
+
+      & .cms-profilesearch {
+        margin: 0 auto var(--gutter-sm);
+        max-width: 500px;
+        & .cp-input-label {
+          & .cms-profilesearch-icon {
+            left: 0.55em;
+            top: 45%;
+            @mixin max-sm {
+              left: 0.35em;
+            }
+          }
+        }
+        & .cp-input {
+          background: var(--dark-4);
+          border-color: #000000;
+          border-radius: 0.1em;
+          line-height: 1.7;
+          padding: 0.25em 3em 0.375em 2em;
+          &::placeholder {
+            color: var(--dark-1);
+          }
+          @mixin max-sm {
+            padding: 0.25em 1em 0.25em 2em;
+          }
+        }
+        & .cms-profilesearch-container {
+          margin: 0 var(--gutter-md) 0;
+          & .bp3-non-ideal-state {
+            background-color: var(--dark-3);
+            & .bp3-heading {
+              color: var(--light-3);
+            }
+          }
+          & .cms-profilesearch-list {
+            background: var(--dark-3);
+            height: auto;
+            max-height: 300px;
+          }
+          & .cms-profilesearch-list-item-link {
+            @mixin font-md;
+            background-color: var(--dark-3);
+            color: var(--white);
+            text-align: left;
+            &:hover, &:focus {
+              background-color: var(--dark-2);
+            }
+          }
+        }
+        & .cms-profilesearch-reset-button-text {
+          line-height: 1.2
+        }
+      } /* end .cms-profilesearch */
+
+      /* logos */
+      & .home-hero-sponsor-list {
+        @mixin list-reset;
+        & .home-hero-sponsor-item {
+          width: auto;
+          display: inline-block;
+          & .home-hero-sponsor-link {
+            display: block;
+            padding: 1rem;
+            /* transitions */
+            opacity: 0.75;
+            transition:
+              opacity 0.1s ease-out,
+              transform 0.1s ease-out;
+
+            &:hover, &:focus {
+              opacity: 1;
+              transform: scale(1.075);
+            }
+            & .home-hero-sponsor-img {
+              max-height: 1.875rem;
+            }
+          }
+        }
+      }
+    }
+
+    & .home-hero-observatory {
+      align-self: flex-end;
+      width: 400px;
+      z-index: 2;
+      & img {
+        border: 0;
+        margin-bottom: -5px;
+        width: 100%;
+      }
+
+      @mixin max-md {
+        display: none;
+      }
+    }
+
+    & .home-hero-skybox {
+      @mixin absolute-expand;
+      overflow: hidden;
+
+      & .home-hero-sky {
+        animation: spin-right 400s linear infinite;
+        background: var(--black);
+        height: 200vw;
+        left: -50%;
+        position: absolute;
+        width: 200vw;
+        top: -50vw;
+        z-index: 1;
+
+        & .home-hero-stars {
+          @mixin absolute-expand;
+          background: var(--black) url(/images/home/stars.png) repeat top center;
+          display: block;
+          z-index: 0;
+        }
+        & .home-hero-twinkling {
+          @mixin absolute-expand;
+          animation: twinkle 200s linear infinite;
+          background: transparent url(/images/home/twinkling.png) repeat top center;
+          display: block;
+          z-index: 1;
+        }
+
+      }
+    }
+
+  }
+
+  /*********************************
+   * Vertical scroll of updated datasets
+   *
+   *********************************/
+  & .home-data-marquee {
+    align-items: center;
+    color: var(--light-3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 40px 0 30px 0;
+    width: 100%;
+    color: #fff;
+
+    & .home-data-marquee-title {
+      flex: none;
+      text-align: right;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 1.5;
+    }
+    & .home-data-marquee-datasets {
+      flex: none;
+      margin: 0 0 0 10px;
+      text-align: center;
+      height: 28px;
+      overflow: hidden;
+
+      & ul {
+        display: inline-block;
+        list-style: none;
+        margin: 0;
+        padding: 0 5px 0;
+        position: relative;
+        bottom: 0;
+        transition: bottom .5s linear;
+        & li {
+          padding: 4px 0 3px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          & a {
+            color: var(--light-3);
+            font-size: 17px;
+            line-height: 1.25;
+          }
+        }
+      }
+    }
+  }
+
+  /*********************************
+  * Grid of tiles
+  *
+  *********************************/
+  & .home-grid {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-gap: var(--gutter-md) var(--gutter-md);
+    grid-auto-flow: row dense;
+    padding: 0 var(--gutter-md) var(--gutter-sm);
+    width: 100%;
+
+    @mixin min-xs {
+      grid-template-columns: 50% 50%;
+      width: calc(100% - var(--gutter-md));
+    }
+
+    @mixin min-sm {
+      grid-template-columns: 33.3% 33.3% 33.3%;
+      width: calc(100% - calc(var(--gutter-md) * 2));
+    }
+
+    @mixin min-md {
+      grid-template-columns: 25% 25% 25% 25%;
+      width: calc(100% - calc(var(--gutter-md) * 3));
+    }
+
+    @mixin min-lg {
+      grid-template-columns: 20% 20% 20% 20% 20%;
+      width: calc(100% - calc(var(--gutter-md) * 4));
+    }
+
+    @mixin min-xl {
+      grid-template-columns: 16.6% 16.6% 16.6% 16.6% 16.6% 16.6%;
+      width: calc(100% - calc(var(--gutter-md) * 5));
+    }
+
+    @mixin min-xl {
+      grid-template-columns: 14.2% 14.2% 14.2% 14.2% 14.2% 14.2% 14.2%;
+      width: calc(100% - calc(var(--gutter-md) * 6));
+    }
+
+    & .home-grid-tile {
+      height: 150px;
+      margin: 0;
+      & .cms-profilesearch-tile-link {
+        background-color: rgba(21, 25, 31, 0.45);
+        text-shadow: 0 1px 2px var(--black);
+        &:hover {
+          background-color: rgba(21, 25, 31, 0.25);
+        }
+        & .cms-profilesearch-tile-link-sub {
+          @mixin font-md;
+          font-weight: 400;
+          margin-top: 0.25rem !important;
+        }
+      }
+      &.home-grid-tile-large {
+        @mixin min-sm {
+          grid-column: auto / span 2;
+          grid-row: auto / span 2;
+          height: calc(300px + var(--gutter-md));
+          & .cms-profilesearch-tile-link,
+          & .cms-profilesearch-tile-image-container {
+            height: calc(300px + var(--gutter-md));
+          }
+        }
+      }
+      &.home-grid-tile-new:after {
+        @mixin font-xs;
+        background-color: var(--accent-dark);
+        color: var(--white);
+        content: "New";
+        font-weight: 800;
+        left: 0;
+        padding: 0.2em 0.5em;
+        position: absolute;
+        text-transform: uppercase;
+        top: 0;
+      }
+    }
+  }
+
+  /*********************************
+   * Feature Tiles Section
+   * ("Great tools for great explorers")
+   *
+   *********************************/
+  & .features-tiles.section {
+    background-color: white;
+    color: var(--dark-2);
+    padding: calc(4rem / 2);
+
+    & .features-tiles.header {
+      & .header-inner {
+        margin: 0 auto;
+        max-width: 620px;
+        & h2 {
+          font-size: 42px;
+          line-height: 54px;
+          margin-bottom: 20px;
+          padding: 20px 10px 0 10px;
+        }
+        & p {
+          font-size: 21px;
+          line-height: 29px;
+          margin-bottom: 10px;
+          padding: 0 10px;
+          & a {
+            color: inherit;
+            font-weight: normal;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    & .tiles-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      & .tiles-item {
+        flex-basis: 317px;
+        max-width: 317px;
+        padding: 30px 30px 40px 30px;
+
+        @mixin min-md {
+          padding: 60px 30px 80px 30px;
+        }
+
+        & .features-tiles-item-content {
+          & h3 {
+            font-size: 20px;
+          }
+          & p {
+            font-size: 17px;
+          }
+          & a {
+            font-size: 16px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  /*********************************
+   * "Explore without limits..." Section
+   *
+   *********************************/
+  & .call-to-action.section {
+    background-color: var(--dark-2);
+    text-align: center;
+    & .cta-inner {
+      margin: 70px auto 70px auto;
+      max-width: 720px;
+
+      & h2 {
+        color: white;
+        font-size: 34px;
+        line-height: 44px;
+        margin-bottom: 15px;
+        padding: 10px;
+      }
+
+      & p {
+        font-size: 18px;
+        color: var(--light-2);
+        padding: 0 63px;
+        margin-bottom: 30px;
+      }
+
+      & button {
+        margin: 10px 0 20px 0;
+        font-size: 24px;
+      }
+    }
+  }
+
+}

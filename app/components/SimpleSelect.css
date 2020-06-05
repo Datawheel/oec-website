@@ -1,0 +1,16 @@
+.bp3-select-popover .bp3-popover-content {
+  padding: 0px;
+}
+
+.bp3-select-popover .bp3-menu {
+  min-width: 150px !important;
+}
+
+.oec-selector.is-disabled {
+  & .button-virtual-selector {
+    &.bp3-button {
+      color: var(--dark-1) !important;
+      cursor: not-allowed;
+    }
+  }
+}
