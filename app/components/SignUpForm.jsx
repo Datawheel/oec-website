@@ -59,10 +59,24 @@ class SignUpForm extends Component {
       username
     } = this.state;
 
+    /*
+     * /^
+     *  (?=.*\d)    // should contain at least one digit
+     *  (?=.*[a-z]) // should contain at least one lower case
+     *  (?=.*[A-Z]) // should contain at least one upper case
+     *  .           // anything else here (for special characters)
+     *  {8,32}      // should contain at least 8 characters but no more than 32
+     * $/
+     */
+    const re = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32}$/);
+
     if (password !== passwordAgain) {
       this.setState({error: {icon: "lock", message: t("SignUp.error.PasswordMatch")}});
     }
-    else if (!username || !email || !password || !company || !phone) {
+    else if (!re.test(password)) {
+      this.setState({error: {icon: "lock", message: "Password must be at least 8 digits and include a number, upper-case letter and lower-case letter."}});
+    }
+    else if (!username || !email || !password || !company) {
       this.setState({error: {icon: "id-number", message: t("SignUp.error.IncompleteFields")}});
     }
     else if (!selectedSectors.length) {
@@ -85,7 +99,6 @@ class SignUpForm extends Component {
         password,
         redirect,
         company,
-        phone,
         newsletter,
         sector: selectedSectors.map(d => d.value).join(","),
         usage: selectedUsage.map(d => d.value).join(","),
