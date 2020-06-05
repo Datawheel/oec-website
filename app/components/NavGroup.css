@@ -168,6 +168,7 @@
 /* space out subtitles (override blueprint) */
 .nav-group-subtitle {
   margin-bottom: 0.25rem;
+  margin-top: 0.25rem;
 }
 /* space out adjacent nested lists */
 .nav-group-item:not(:last-child) > .nav-group-nested-list {

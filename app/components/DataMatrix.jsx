@@ -14,12 +14,15 @@ class DataMatrix extends Component {
 
     // annotate subnational cubes to indicate which datasets are available now
     const availableSubnatDatasets = [
-      "trade_s_chn_m_hs",
+      "trade_s_bra_mun_m_hs",
       "trade_s_can_m_hs",
+      "trade_s_chn_m_hs",
       "trade_s_deu_m_egw",
       "trade_s_jpn_m_hs",
       "trade_s_rus_m_hs",
-      "trade_s_esp_m_hs"
+      "trade_s_zaf_m_hs",
+      "trade_s_esp_m_hs",
+      "trade_s_gbr_m_hs"
     ];
     matrix.subnational.products = matrix.subnational.products.map(d => ({...d, availableNow: availableSubnatDatasets.includes(d.cubeName)}));
 

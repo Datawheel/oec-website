@@ -18,23 +18,23 @@ module.exports = {
         {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`},
         {
           title: "Subnational", url: `/${locale}/subnational/`, pro: true, items: [
-            {title: "🇧🇷 Brazil",    url: `/${locale}/subnational/#subnational-country-block-bra`},
-            // {title: "🇧🇴 Bolivia",   url: `/${locale}/subnational/#subnational-country-block-bol`},
-            {title: "🇨🇦 Canada",    url: `/${locale}/subnational/#subnational-country-block-can`},
-            // {title: "🇨🇱 Chile",     url: `/${locale}/subnational/#subnational-country-block-chl`},
-            {title: "🇨🇳 China",     url: `/${locale}/subnational/#subnational-country-block-chn`},
+            {title: "🇧🇷 Brazil", url: `/${locale}/subnational/#subnational-country-block-bra`, cubeName: "trade_s_bra_mun_m_hs"},
+            // {title: "🇧🇴 Bolivia",url: `/${locale}/subnational/#subnational-country-block-bol`},
+            {title: "🇨🇦 Canada", url: `/${locale}/subnational/#subnational-country-block-can`, cubeName: "trade_s_can_m_hs"},
+            // {title: "🇨🇱 Chile",  url: `/${locale}/subnational/#subnational-country-block-chl`},
+            {title: "🇨🇳 China",  url: `/${locale}/subnational/#subnational-country-block-chn`, cubeName: "trade_s_chn_m_hs"},
             // {title: "🇨🇴 Colombia",  url: `/${locale}/subnational/#subnational-country-block-col`},
-            // {title: "🇫🇷 France",    url: `/${locale}/subnational/#subnational-country-block-fra`},
-            {title: "🇩🇪 Germany",   url: `/${locale}/subnational/#subnational-country-block-deu`},
-            // {title: "🇮🇳 India",     url: `/${locale}/subnational/#subnational-country-block-ind`},
-            {title: "🇯🇵 Japan",     url: `/${locale}/subnational/#subnational-country-block-jpn`},
-            {title: "🇷🇺 Russia",    url: `/${locale}/subnational/#subnational-country-block-rus`},
-            {title: "🇿🇦 S. Africa", url: `/${locale}/subnational/#subnational-country-block-zaf`},
-            {title: "🇪🇸 Spain",     url: `/${locale}/subnational/#subnational-country-block-esp`},
-            // {title: "🇹🇷 Turkey",    url: `/${locale}/subnational/#subnational-country-block-tur`},
-            // {title: "🇺🇾 Uruguay",   url: `/${locale}/subnational/#subnational-country-block-ury`},
-            // {title: "🇺🇸 USA",       url: `/${locale}/subnational/#subnational-country-block-usa`},
-            {title: "🇬🇧 UK",        url: `/${locale}/subnational/#subnational-country-block-gbr`}
+            // {title: "🇫🇷 France", url: `/${locale}/subnational/#subnational-country-block-fra`},
+            {title: "🇩🇪 Germany", url: `/${locale}/subnational/#subnational-country-block-deu`, cubeName: "trade_s_deu_m_egw"},
+            // {title: "🇮🇳 India",  url: `/${locale}/subnational/#subnational-country-block-ind`},
+            {title: "🇯🇵 Japan",  url: `/${locale}/subnational/#subnational-country-block-jpn`, cubeName: "trade_s_jpn_m_hs"},
+            {title: "🇷🇺 Russia", url: `/${locale}/subnational/#subnational-country-block-rus`, cubeName: "trade_s_rus_m_hs"},
+            {title: "🇿🇦 S. Africa", url: `/${locale}/subnational/#subnational-country-block-zaf`, cubeName: "trade_s_zaf_m_hs"},
+            {title: "🇪🇸 Spain",  url: `/${locale}/subnational/#subnational-country-block-esp`, cubeName: "trade_s_esp_m_hs"},
+            // {title: "🇹🇷 Turkey", url: `/${locale}/subnational/#subnational-country-block-tur`},
+            // {title: "🇺🇾 Uruguay", url: `/${locale}/subnational/#subnational-country-block-ury`},
+            // {title: "🇺🇸 USA", url: `/${locale}/subnational/#subnational-country-block-usa`},
+            {title: "🇬🇧 UK", url: `/${locale}/subnational/#subnational-country-block-gbr`, cubeName: "trade_s_gbr_m_hs"}
           ]
         }
       ]
