@@ -14,9 +14,29 @@ module.exports = {
       title: "Reports", items: [
         {title: "Countries", url: `/${locale}/profile/country/`},
         {title: "Products", url: `/${locale}/profile/hs92/`},
-        {title: "States/Provinces", url: `/${locale}/subnational/`, pro: true},
         {title: "Country to Country", url: `/${locale}/profile/bilateral-country/`},
-        {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`}
+        {title: "Product in Country", url: `/${locale}/profile/bilateral-product/`},
+        {
+          title: "Subnational", url: `/${locale}/subnational/`, pro: true, items: [
+            {title: "🇧🇷 Brazil",    url: `/${locale}/subnational/#subnational-country-block-bra`},
+            // {title: "🇧🇴 Bolivia",   url: `/${locale}/subnational/#subnational-country-block-bol`},
+            {title: "🇨🇦 Canada",    url: `/${locale}/subnational/#subnational-country-block-can`},
+            // {title: "🇨🇱 Chile",     url: `/${locale}/subnational/#subnational-country-block-chl`},
+            {title: "🇨🇳 China",     url: `/${locale}/subnational/#subnational-country-block-chn`},
+            // {title: "🇨🇴 Colombia",  url: `/${locale}/subnational/#subnational-country-block-col`},
+            // {title: "🇫🇷 France",    url: `/${locale}/subnational/#subnational-country-block-fra`},
+            {title: "🇩🇪 Germany",   url: `/${locale}/subnational/#subnational-country-block-deu`},
+            // {title: "🇮🇳 India",     url: `/${locale}/subnational/#subnational-country-block-ind`},
+            {title: "🇯🇵 Japan",     url: `/${locale}/subnational/#subnational-country-block-jpn`},
+            {title: "🇷🇺 Russia",    url: `/${locale}/subnational/#subnational-country-block-rus`},
+            {title: "🇿🇦 S. Africa", url: `/${locale}/subnational/#subnational-country-block-zaf`},
+            {title: "🇪🇸 Spain",     url: `/${locale}/subnational/#subnational-country-block-esp`},
+            // {title: "🇹🇷 Turkey",    url: `/${locale}/subnational/#subnational-country-block-tur`},
+            // {title: "🇺🇾 Uruguay",   url: `/${locale}/subnational/#subnational-country-block-ury`},
+            // {title: "🇺🇸 USA",       url: `/${locale}/subnational/#subnational-country-block-usa`},
+            {title: "🇬🇧 UK",        url: `/${locale}/subnational/#subnational-country-block-gbr`}
+          ]
+        }
       ]
     },
     // rankings
@@ -107,8 +127,8 @@ module.exports = {
     {
       title: "Academy", items: [
         {title: "Methods", url: `/${locale}/resources/methods`},
-        {title: "_ Economic Complexity", url: `/${locale}/resources/methods#eci`},
-        {title: "_ Relatedness", url: `/${locale}/resources/methods#relatedness`},
+        {title: "  Economic Complexity", url: `/${locale}/resources/methods#eci`},
+        {title: "  Relatedness", url: `/${locale}/resources/methods#relatedness`},
         {title: "Library", url: `/${locale}/resources/library`},
         {title: "Publications", url: `/${locale}/resources/publications`}
       ]
@@ -279,7 +299,7 @@ module.exports = {
     {
       name: "South Africa",
       code: "zaf",
-      available: false,
+      available: true,
       cube: "trade_s_zaf_m_hs",
       dimension: "Port of Entry",
       geoLevels: [

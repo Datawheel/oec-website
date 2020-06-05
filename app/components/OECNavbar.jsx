@@ -9,6 +9,7 @@ import {select} from "d3-selection";
 import {AnchorLink} from "@datawheel/canon-core";
 import {ProfileSearch} from "@datawheel/canon-cms";
 import Button from "@datawheel/canon-cms/src/components/fields/Button.jsx";
+import {fetchData} from "@datawheel/canon-core";
 
 import {NAV} from "helpers/consts";
 import {profileSearchConfig} from "helpers/search";
@@ -67,10 +68,12 @@ class OECNavbar extends Component {
   }
 
   render() {
-    const {auth, locale, title, scrolled, shortTitle} = this.props;
+    const {auth, locale, matrix, title, scrolled, shortTitle} = this.props;
     const {navVisible, searchVisible} = this.state;
     const {basename, pathname, search} = this.context.router.location;
     const currentURL = encodeURIComponent(`${basename}${pathname}${search}`.replace("//", "/"));
+
+    console.log("nav matrix!", matrix);
 
     return (
       <React.Fragment>
@@ -156,7 +159,12 @@ OECNavbar.contextTypes = {
   router: PropTypes.object
 };
 
+OECNavbar.need = [
+  fetchData("datamatrix", "/api/matrix")
+];
+
 export default connect(state => ({
   auth: state.auth,
-  locale: state.i18n.locale
+  locale: state.i18n.locale,
+  matrix: state.data.datamatrix
 }))(hot(OECNavbar));
