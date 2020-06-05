@@ -53,8 +53,7 @@ class RankingsBuilder extends Component {
 			handleThresholdSlider,
 			renderThresholdSlider,
 			renderMoneyThresholdSlider,
-			createTable,
-			showVariables
+			createTable
 		} = this.props;
 
 		// Set the values for the options of the custom rankings
