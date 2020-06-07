@@ -424,11 +424,9 @@ class VbChart extends React.Component {
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
     if (isProduct) {
       const productTemp = viztype.split(".")[0];
-      const len = productTemp.length;
-      const digit = len + len % 2 - 2;
-      const productLevelsV2 = {1: "Section", 2: "HS2", 4: "HS4", 6: "HS6"};
+      const productLevelsV2 = cubeSelected.productItems[productTemp] || {type: "HS4"};
 
-      params[productLevelsV2[digit]] = viztype.replace(".", ",");
+      params[productLevelsV2.type] = viztype.replace(".", ",");
     }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
@@ -973,12 +971,9 @@ class VbChart extends React.Component {
         </div>;
       }
 
-      const labels = this.props.cubeSelected.productItems.reduce((obj, d) => {
-        if (!obj[d["HS4 ID"]]) obj[d["HS4 ID"]] = d.HS4;
-        return obj;
-      }, {});
+      const labels = this.props.cubeSelected.productItems;
       const labelsRings = data.reduce((obj, d) => {
-        if (!obj[d["HS4 ID"]]) obj[d["HS4 ID"]] = d;
+        if (!obj[d.id]) obj[d.id] = d;
         return obj;
       }, {});
 
@@ -993,7 +988,7 @@ class VbChart extends React.Component {
               config={{
                 data,
                 center: selected,
-                label: d => labels[d.id] || "",
+                label: d => labels[d.id] ? labels[d.id].name : "",
                 legend: false,
                 links: data,
                 total: undefined,
@@ -1002,7 +997,8 @@ class VbChart extends React.Component {
                     const parentId = d.id.slice(0, -4);
                     const color = colors.Section[parentId] || "gray";
                     const image = `/images/icons/hs/hs_${parentId}.svg`;
-                    return tooltipTitle(color, image, labels[d.id] || "");
+                    const name = labels[d.id] ? labels[d.id].name : "";
+                    return tooltipTitle(color, image, name || "");
                   },
                   tbody: d => {
                     const data = labelsRings[d.id];

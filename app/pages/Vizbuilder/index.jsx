@@ -783,7 +783,7 @@ class Vizbuilder extends React.Component {
         name: cubeSelected.cubeName,
         measure: cubeSelected.measure,
         geoLevels: cubeSelected.geoLevels,
-        productItems: this.state.product,
+        productItems: this.state.productKeys,
         productLevels: cubeSelected.productLevels,
         timeLevels: cubeSelected.timeLevels,
         timeItems,
