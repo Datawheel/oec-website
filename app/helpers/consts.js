@@ -301,9 +301,9 @@ module.exports = {
       code: "zaf",
       available: true,
       cube: "trade_s_zaf_m_hs",
-      dimension: "Port of Entry",
+      dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Ports", level: "Port of Entry", slug: "ports"}
+        {name: "Ports", level: "Subnat Geography", slug: "ports"}
       ]
     },
     {
