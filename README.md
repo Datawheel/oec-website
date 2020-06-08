@@ -127,3 +127,15 @@ There are properties in the Paywall formatter that can be overridden by the `pay
 ```
 - Test the new country in `/subnational`.
 - Success!
+
+---
+
+## Installation / Deployment on Ubuntu Linux
+
+The following packages are required for using the latest version of puppeteer 3+ which uses the latest chromium:
+
+```
+sudo apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb libgbm-dev
+```
+
+We use puppeteer for the screenshot server.
