@@ -12,7 +12,7 @@ export default class Api extends Component {
 
         <h2>Coming soon...</h2>
         <p>
-          Documentation for the public API is still in development. In the meantime, the documentation for the legacy (OEC v3.0) documenation is still available here: <a href="https://oec.world/api/" target="_blank" rel="noopener noreferrer">OEC 3.0 API Documentation</a>.
+          Documentation for the public API is still in development. In the meantime, the documentation for the legacy (OEC v3.0) documenation is still available here: <a href="https://legacy.oec.world/api/" target="_blank" rel="noopener noreferrer">OEC 3.0 API Documentation</a>.
         </p>
         <br />
         <br />
