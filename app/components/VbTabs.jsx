@@ -162,6 +162,20 @@ class VbTabs extends React.Component {
                   activeOption={activeOption}
                   callback={d => this.props.callback(d)}
                   items={[
+                    isSubnat ? {
+                      name: t("State/Province"), nest: [
+                        {
+                          name: t("Exports"),
+                          permalink: `${cube}/export/all/all/show/${timePlot}/`,
+                          regexp: new RegExp(/stacked\/\w+\/export\/all\/all\/show\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("Imports"),
+                          permalink: `${cube}/import/all/all/show/${timePlot}/`,
+                          regexp: new RegExp(/stacked\/\w+\/import\/all\/all\/show\/[0-9.-]+\//)
+                        }
+                      ]
+                    } : undefined,
                     {
                       name: t("Country"), nest: [
                         {
@@ -386,6 +400,20 @@ class VbTabs extends React.Component {
                   chart="line"
                   callback={d => this.props.callback(d)}
                   items={[
+                    isSubnat ? {
+                      name: t("State/Province"), nest: [
+                        {
+                          name: t("Exports"),
+                          permalink: `${cube}/export/all/all/show/${timePlot}/`,
+                          regexp: new RegExp(/line\/\w+\/export\/all\/all\/show\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("Imports"),
+                          permalink: `${cube}/import/all/all/show/${timePlot}/`,
+                          regexp: new RegExp(/line\/\w+\/import\/all\/all\/show\/[0-9.-]+\//)
+                        }
+                      ]
+                    } : undefined,
                     {
                       name: t("Country"), nest: [
                         {

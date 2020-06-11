@@ -544,12 +544,11 @@ class Vizbuilder extends React.Component {
     let dataset = _dataset.value || _dataset.id;
     const flow = _flow.value;
 
-    // TODO _selectedItemsYearTitle
     const timeSelected = dataset.includes("subnational")
       ? this.state.selectedSubnatTimeTemp
         .map(d => d.value)
         .sort((a, b) => a > b ? 1 : -1)
-      : []
+      : _selectedItemsYearTitle
         .map(d => d.value)
         .sort((a, b) => a > b ? 1 : -1);
 
@@ -710,7 +709,6 @@ class Vizbuilder extends React.Component {
       ? timeItemsSelected[0] : isSubnat ? timeItemsV2[0] || {} : this.state._startYear;
     const _endYear = isTimeSeriesChart && timeItemsSelected[1]
       ? timeItemsSelected[1] :  isSubnat ? timeItemsV2[3] || {} : this.state._endYear;
-
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
@@ -1149,8 +1147,8 @@ class Vizbuilder extends React.Component {
                       else {
                         this.setState({
                           _selectedItemsYear: [timeItems[0]],
-                          _startYear: [timeItems[0]],
-                          _endYear: [timeItems[1]]
+                          _startYear: timeItems[1],
+                          _endYear: timeItems[0]
                         });
                         this.props.updateCubeSelectedTemp({
                           name: cubeSelected.cubeName,
