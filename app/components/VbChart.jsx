@@ -167,10 +167,11 @@ class VbChart extends React.Component {
     // if (isFilter || timeSeriesChart)
     drilldowns.push(timeLevel);
 
+
     const params = {
       cube: subnatData.cube,
       drilldowns: drilldowns.join(),
-      measures: "Trade Value",
+      measures: subnatData.measure,
       parents: true
     };
 
@@ -187,7 +188,7 @@ class VbChart extends React.Component {
     if (flowItems[flow]) params["Trade Flow"] = flowItems[flow];
     else params.drilldowns = `Trade Flow,${timeLevel}`;
     if (partnerId) params.Country = partnerId.map(d => d.value).join();
-    if (geoId) params["Subnat Geography"] = geoId;
+    if (geoId && cube.slice(-3) !== geoId) params["Subnat Geography"] = geoId;
     if (isFilter) params.Product = viztype;
     if (params.drilldowns.includes("Country")) params.properties = "ISO 3";
 
@@ -200,7 +201,9 @@ class VbChart extends React.Component {
       delete params.Time;
       const diff = 1;
       params.growth = growth;
-      params.drilldowns += `,${timeLevel}`;
+      if (!params.drilldowns.includes(timeLevel)) {
+        params.drilldowns += `,${timeLevel}`;
+      }
       const year = time * 1;
       params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }

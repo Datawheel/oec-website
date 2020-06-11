@@ -47,6 +47,7 @@ const cubes = {
     cube: "trade_s_chn_m_hs",
     name: "China",
     id: "chn",
+    value: "subnational_chn",
     topojson: [
       "/shapes/subnational_chn_provinces.topojson"
     ],

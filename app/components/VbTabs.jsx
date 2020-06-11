@@ -53,20 +53,20 @@ class VbTabs extends React.Component {
                   chart="tree_map"
                   callback={d => this.props.callback(d)}
                   items={[
-                    // isSubnat ? {
-                    //   name: t("State/Province"), nest: [
-                    //     {
-                    //       name: t("Exports"),
-                    //       permalink: `${cube}/export/all/all/show/${time}/`,
-                    //       regexp: new RegExp(/tree_map\/\w+\/export\/all\/all\/show\/[0-9.-]+\//)
-                    //     },
-                    //     {
-                    //       name: t("Imports"),
-                    //       permalink: `${cube}/import/all/all/show/${time}/`,
-                    //       regexp: new RegExp(/tree_map\/\w+\/import\/all\/all\/show\/[0-9.-]+\//)
-                    //     }
-                    //   ]
-                    // } : undefined,
+                    isSubnat ? {
+                      name: t("State/Province"), nest: [
+                        {
+                          name: t("Exports"),
+                          permalink: `${cube}/export/all/all/show/${time}/`,
+                          regexp: new RegExp(/tree_map\/\w+\/export\/all\/all\/show\/[0-9.-]+\//)
+                        },
+                        {
+                          name: t("Imports"),
+                          permalink: `${cube}/import/all/all/show/${time}/`,
+                          regexp: new RegExp(/tree_map\/\w+\/import\/all\/all\/show\/[0-9.-]+\//)
+                        }
+                      ]
+                    } : undefined,
                     {
                       name: t("Country"), nest: [
                         {

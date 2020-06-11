@@ -123,13 +123,14 @@ class Vizbuilder extends React.Component {
     const {params} = this.props;
     const {cube, country} = params;
 
-    const cubeSelected = datasets.find(d => d.value === cube) || datasets[0];
+    // Gets cube selected in the permalink
+    const cubeSelected = datasets.find(d => d.value === cube) || subnat[cube] || datasets[0];
 
     this.state = {
       activeTab: params ? params.chart : "tree_map",
-      controls: params ? params.cube.includes("subnational") : true,
+      // controls: params ? params.cube.includes("subnational") : true,
       product: [],
-      productLevel: cubeSelected.productLevel,
+      productLevel: cubeSelected.productLevel || cubeSelected.productLevels[cubeSelected.productLevels.length - 1],
       technology: [],
       permalink: undefined,
       permalinkCube: undefined,
@@ -257,6 +258,7 @@ class Vizbuilder extends React.Component {
       subnatTimeLevels: timeLevels,
       subnatProductItems: itemsProduct,
       selectedSubnatTimeTemp: filteredTimeItems,
+      // _dataset,
       ...selectedGeo,
       ...selectedProduct
     };
@@ -302,7 +304,7 @@ class Vizbuilder extends React.Component {
     const {productLevel, _dataset} = this.state;
     const {routeParams} = this.props;
     const {cube} = routeParams;
-    const cubeName = _dataset.cubeName;
+    const cubeName = _dataset.cubeName || _dataset.cube;
 
     // Gets members of HS products, Countries and Technologies
     axios.all([
@@ -407,7 +409,6 @@ class Vizbuilder extends React.Component {
       _selectedItemsCountry,
       _selectedItemsPartner,
       _selectedItemsProduct,
-      _selectedItemsTechnology,
       _selectedItemsYear,
       _startYear,
       _xAxis,
@@ -427,7 +428,7 @@ class Vizbuilder extends React.Component {
       ? parseIdsToURL(_selectedItemsProduct)
       : viztype;
 
-    let dataset = _dataset.value;
+    let dataset = _dataset.value || _dataset.id;
     let flowSelected = flow === "show" ? flow : _flow.value;
 
     /** Creates permalink config for scatter plot */
@@ -441,7 +442,9 @@ class Vizbuilder extends React.Component {
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     let timeIds = isTimeSeriesChart
       ? `${_startYear.value}.${_endYear.value}`
-      : _selectedItemsYear.map(d => d.value).sort((a, b) => a > b ? 1 : -1).join(".");
+      : dataset.includes("subnational")
+        ? parseIdsToURL(this.state.selectedSubnatTimeTemp, "value")
+        : _selectedItemsYear.map(d => d.value).sort((a, b) => a > b ? 1 : -1).join(".");
 
     /** Creates permalink config for subnational plot */
     const notEmptySubnatGeo = notEmpty(this.state.selectedSubnatGeoTemp);
@@ -537,12 +540,18 @@ class Vizbuilder extends React.Component {
         ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
         : parseIdsToURL(_selectedItemsProductTitle)
       : getRandom(hsProductItems);
-    let dataset = _dataset.value;
+
+    let dataset = _dataset.value || _dataset.id;
     const flow = _flow.value;
 
-    const timeSelected =  _selectedItemsYearTitle
-      .map(d => d.value)
-      .sort((a, b) => a > b ? 1 : -1);
+    // TODO _selectedItemsYearTitle
+    const timeSelected = dataset.includes("subnational")
+      ? this.state.selectedSubnatTimeTemp
+        .map(d => d.value)
+        .sort((a, b) => a > b ? 1 : -1)
+      : []
+        .map(d => d.value)
+        .sort((a, b) => a > b ? 1 : -1);
 
     // Select time filter
     let timeIds = timeSelected.join(".");
@@ -569,7 +578,10 @@ class Vizbuilder extends React.Component {
       const geoId = getRandom(subnatGeoItems.map(d => d.id));
       const productId = getRandom(subnatProductItems.map(d => d.id));
 
-      countryIds = notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : geoId;
+      const isSubnatCountrySelected = cube.slice(-3) === country;
+      countryIds = isSubnatCountrySelected
+        ? country
+        : notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : geoId;
       dataset = cube;
       timeIds = selectedSubnatTimeTemp
         .map(d => d.value)
@@ -650,7 +662,6 @@ class Vizbuilder extends React.Component {
     const technologyData = usePrevState ? prevState.technology : this.state.technology;
     const productKeys = usePrevState ? prevState.productKeys : this.state.productKeys;
     const {countryMembers, wdiIndicators, routeParams} = this.props;
-    const years = this.state._dataset.timeItems;
 
     let {country, chart, cube, flow, partner, time, viztype} = routeParams;
 
@@ -676,6 +687,7 @@ class Vizbuilder extends React.Component {
     // Get selected countries
     const filterCountry = type => countryMembers.filter(d => type.split(".").includes(d.label));
     const countryItems = filterCountry(country);
+    const years = this.state._dataset.timeItems || this.props.cubeSelected.timeItems;
     const timeItems = years.filter(d => time.split(".").includes(d.value.toString()));
 
     const selectedItems = {
@@ -768,6 +780,7 @@ class Vizbuilder extends React.Component {
     if (isSubnat && cubeName !== cubeSelected.cube) {
       this.props.updateCubeSelected({
         name: cubeSelected.cube,
+        title: cubeSelected.name,
         measure: cubeSelected.measure,
         geoLevels: cubeSelected.geoLevels,
         productItems: this.state.subnatProductItems,
@@ -781,6 +794,7 @@ class Vizbuilder extends React.Component {
     else if (!isSubnat && cubeName !== cubeSelected.cubeName) {
       this.props.updateCubeSelected({
         name: cubeSelected.cubeName,
+        title: cubeSelected.title,
         measure: cubeSelected.measure,
         geoLevels: cubeSelected.geoLevels,
         productItems: this.state.product,
@@ -846,7 +860,10 @@ class Vizbuilder extends React.Component {
       // subnatSelector = false;
     }
 
-    const timeButtons = isSubnat ? this.state.subnatTimeItems : timeItems;
+    const subnatTimeItems = this.state.subnatTimeItems
+      .filter(d => d.type === this.state.subnatTimeLevelSelected);
+
+    const timeButtons = isSubnat ? subnatTimeItems : timeItems;
     const timeIndex = timeButtons.findIndex(d => d.value * 1 === time.split(".")[0] * 1);
     const prevTime = !isTimeSeriesChart ? timeButtons[timeIndex + 1] : undefined;
     const nextTime = !isTimeSeriesChart ? timeButtons[timeIndex - 1] : undefined;
@@ -858,14 +875,20 @@ class Vizbuilder extends React.Component {
     let isSubnatPanelProduct = false;
     if (productSelector && isSubnatCube) isSubnatPanelProduct = true;
     const isSubnatTitle = subnat[cube];
+    const isSubnatCountrySelected = cube.slice(-3) === country;
 
     const {vbTitle, vbParams} = getVbTitle(
       {
-        geo: isSubnatTitle ? this.state.selectedSubnatGeo : this.state._selectedItemsCountryTitle,
+        geo: isSubnatTitle
+          ? isSubnatCountrySelected
+            ? this.state._selectedItemsCountryTitle
+            : this.state.selectedSubnatGeo
+          : this.state._selectedItemsCountryTitle,
         geoPartner: this.state._selectedItemsPartnerTitle,
         product: isSubnatTitle ? this.state.selectedSubnatProduct : this.state._selectedItemsProductTitle,
         technology: this.state._selectedItemsTechnologyTitle,
-        isWorld
+        isWorld,
+        datasetName: this.props.cubeSelected.title
       },
       {
         x: this.props.xConfig,
@@ -873,9 +896,6 @@ class Vizbuilder extends React.Component {
       },
       routeParams
     );
-
-    const subnatTimeItems = this.state.subnatTimeItems
-      .filter(d => d.type === this.state.subnatTimeLevelSelected);
 
     const vbChartComponent = <VbChart
       isEmbed={this.props.isEmbed}
@@ -897,6 +917,9 @@ class Vizbuilder extends React.Component {
 
     const vbInternalTitle = t(vbTitle, Object.assign(vbParams, {interpolation: {escapeValue: false}}));
     const vbHelmet = <Helmet title={vbInternalTitle} />;
+
+    const subnatDataset = subnat.subnational_chn;
+    const isSubnatDatasetSelected = this.state._dataset.value.includes("subnational");
 
     if (this.props.isEmbed) {
       return <div className="vb-embed">
@@ -986,20 +1009,19 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {
-                countrySelector || isWorld ? <div className="columns">
-                  <div className="column-1">
-                    <OECMultiSelect
-                      items={this.props.countryMembers}
-                      itemType={"country"}
-                      selectedItems={this.state._selectedItemsCountry}
-                      placeholder={t("Select a country...")}
-                      title={t("Country")}
-                      onClear={d => this.setState({_selectedItemsCountry: d})}
-                      callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
-                    />
-                  </div>
-                </div> : null}
+              {countrySelector || isWorld ? <div className="columns">
+                <div className="column-1">
+                  <OECMultiSelect
+                    items={this.props.countryMembers}
+                    itemType={"country"}
+                    selectedItems={this.state._selectedItemsCountry}
+                    placeholder={t("Select a country...")}
+                    title={t("Country")}
+                    onClear={d => this.setState({_selectedItemsCountry: d})}
+                    callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
+                  />
+                </div>
+              </div> : null}
 
               {subnatSelector && <div className="columns">
                 <div className="column-1">
@@ -1094,11 +1116,55 @@ class Vizbuilder extends React.Component {
               <div className="columns">
                 {!isScatterChart && !isSubnatPanel && <div className="column-1-2">
                   <SimpleSelect
-                    items={datasets}
+                    items={subnatSelector
+                      ? [subnatDataset].concat(datasets)
+                      : datasets}
                     title={t("Dataset")}
+                    isPro={subnatSelector}
                     state="_dataset"
                     selectedItem={this.state._dataset}
-                    callback={this.updateFilter}
+                    callback={(key, value) => {
+                      const cubeSelected = value;
+                      const isSubnat = cubeSelected.value.includes("subnational");
+                      const timeItems = isSubnat ? this.state.subnatTimeItems : cubeSelected.timeItems;
+                      if (isSubnat) {
+                        this.props.updateCubeSelectedTemp({
+                          name: cubeSelected.cube,
+                          measure: cubeSelected.measure,
+                          geoLevels: cubeSelected.geoLevels,
+                          productItems: this.state.subnatProductItems,
+                          productLevels: cubeSelected.productLevels,
+                          timeLevels: cubeSelected.timeLevels,
+                          timeItems,
+                          geoItems: this.state.subnatGeoItems,
+                          currency: cubeSelected.currency
+                        });
+                        this.setState({
+                          subnatTimeLevelSelected: timeItems[0].type,
+                          selectedSubnatTimeTemp: [timeItems[0]],
+                          startTimeTemp: timeItems[1],
+                          endTimeTemp: timeItems[0]
+                        });
+                      }
+                      else {
+                        this.setState({
+                          _selectedItemsYear: [timeItems[0]],
+                          _startYear: [timeItems[0]],
+                          _endYear: [timeItems[1]]
+                        });
+                        this.props.updateCubeSelectedTemp({
+                          name: cubeSelected.cubeName,
+                          measure: cubeSelected.measure,
+                          geoLevels: cubeSelected.geoLevels,
+                          productItems: this.state.product,
+                          productLevels: cubeSelected.productLevels,
+                          timeLevels: cubeSelected.timeLevels,
+                          timeItems,
+                          geoItems: this.props.countryMembers
+                        });
+                      }
+                      this.updateFilter(key, value);
+                    }}
                   />
                 </div>}
 
@@ -1113,8 +1179,8 @@ class Vizbuilder extends React.Component {
                 </div>}
 
               </div>
-
-              {isSubnatPanel ? <div className="columns">
+              {/* isSubnatPanel TODO */}
+              {isSubnatDatasetSelected ? <div className="columns">
                 <div className="column-1">
                   <div className="selector select-multi-section-wrapper">
                     <h4 className="title">{t("Time Dimension")}</h4>
@@ -1135,6 +1201,7 @@ class Vizbuilder extends React.Component {
                     />
                   </div>
                 </div>
+                {/* subnatTimeItems */}
                 {!isTimeSeriesChart && <div className="column-1">
                   <OECMultiSelect
                     items={subnatTimeItems}
@@ -1146,10 +1213,11 @@ class Vizbuilder extends React.Component {
                 </div>}
               </div> : null}
 
-              {!isTimeSeriesChart && !isSubnatPanel && <div className="columns">
+              {!isTimeSeriesChart && !isSubnatDatasetSelected && <div className="columns">
                 <div className="column-1">
+                  {/* MultiSelect Year used on non-subnational data */}
                   <OECMultiSelect
-                    items={timeItems}
+                    items={this.props.cubeSelectedTemp.timeItems}
                     selectedItems={this.state._selectedItemsYear}
                     title={t("Year")}
                     callback={d => this.handleItemMultiSelect("_selectedItemsYear", d)}
@@ -1157,10 +1225,11 @@ class Vizbuilder extends React.Component {
                 </div>
               </div>}
 
-              {isTimeSeriesChart && !isSubnatPanel ? <div className="columns">
+              {/* TODO isSubnatPanel */}
+              {isTimeSeriesChart && !isSubnatDatasetSelected ? <div className="columns">
                 <div className="column-1-2">
                   <SimpleSelect
-                    items={timeItems}
+                    items={this.props.cubeSelectedTemp.timeItems}
                     title={t("Start Year")}
                     state="_startYear"
                     selectedItem={this.state._startYear}
@@ -1169,7 +1238,7 @@ class Vizbuilder extends React.Component {
                 </div>
                 <div className="column-1-2">
                   <SimpleSelect
-                    items={timeItems}
+                    items={this.props.cubeSelectedTemp.timeItems}
                     title={t("End Year")}
                     state="_endYear"
                     selectedItem={this.state._endYear}
@@ -1178,7 +1247,8 @@ class Vizbuilder extends React.Component {
                 </div>
               </div> : null}
 
-              {isTimeSeriesChart && isSubnatPanel ? <div className="columns">
+              {/* TODO isSubnatPanel */}
+              {isTimeSeriesChart && isSubnatDatasetSelected ? <div className="columns">
                 <div className="column-1-2">
                   <SimpleSelect
                     items={subnatTimeItems}
@@ -1262,12 +1332,13 @@ const mapDispatchToProps = dispatch => ({
   addCountryMembers: payload => dispatch({type: "VB_UPDATE_COUNTRY_MEMBERS", payload}),
   addWdiIndicators: payload => dispatch({type: "VB_UPDATE_WDI", payload}),
   updateCubeSelected: payload => dispatch({type: "VB_UPDATE_CUBE_SELECTED", payload}),
+  updateCubeSelectedTemp: payload => dispatch({type: "VB_UPDATE_CUBE_SELECTED_TEMP", payload}),
   updateAxisConfig: payload => dispatch({type: "VB_UPDATE_AXIS_CONFIG", payload})
 });
 
 /** */
 function mapStateToProps(state) {
-  const {axisConfig, countryMembers, cubeSelected, data, loading, wdiIndicators} = state.vizbuilder;
+  const {axisConfig, countryMembers, cubeSelected, cubeSelectedTemp, data, loading, wdiIndicators} = state.vizbuilder;
   const {xConfig, yConfig} = axisConfig;
   return {
     auth: state.auth,
@@ -1276,6 +1347,7 @@ function mapStateToProps(state) {
     yConfig,
     countryMembers,
     cubeSelected,
+    cubeSelectedTemp,
     loading,
     wdiIndicators
   };
