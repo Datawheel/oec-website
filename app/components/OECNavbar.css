@@ -30,6 +30,10 @@
     outline: thin solid var(--accent);
     outline-offset: 0;
   }
+
+  &.navbar-share {
+    background: linear-gradient(var(--dark-4), transparent);
+  }
 }
 
 /* logo */
