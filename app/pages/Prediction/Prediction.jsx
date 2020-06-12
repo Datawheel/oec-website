@@ -348,7 +348,15 @@ class Prediction extends React.Component {
         title={scrolled ? "Forecasts" : ""}
       />
 
-      <OECPaywall auth={auth} paywall={true} redirect={`/${router.location.pathname}${encodeURIComponent(router.location.search)}`} />
+      <OECPaywall
+        auth={auth}
+        callback={d => {
+          if (window && window !== undefined && window.location) {
+            window.location = "/en/prediction";
+          }
+        }}
+        paywall={true}
+        redirect={`/${router.location.pathname}${encodeURIComponent(router.location.search)}`} />
 
       <div className="welcome">
         {/* spinning orb thing */}
