@@ -119,7 +119,6 @@ class VbChart extends React.Component {
     prevState.subnatGeoDepth !== this.state.subnatGeoDepth;
 
   componentDidUpdate = prevProps => {
-    console.log(prevProps, this.props);
     if (JSON.stringify(prevProps.cubeSelected) !== JSON.stringify(this.props.cubeSelected)) {
       const levels = this.props.cubeSelected.productLevels;
       const depth = levels.includes("HS4") ? "HS4" : levels[levels.length - 1];
