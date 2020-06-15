@@ -150,7 +150,10 @@ class VbDrawer extends React.Component {
 
     const timeTitle = timeTitleFormat(time);
     const profileType =  isSubnatProfile
-      ? cube : isGeoGrouping ? "country" : parentKey === "Section" ? "hs92" : cube;
+      ? cube
+      : isGeoGrouping
+        ? "country"
+        : parentKey === "Section" ? "hs92" : isCountrySelected ? "country" : cube;
 
     const drawerIcon = <div
       className="vb-drawer-icon"
