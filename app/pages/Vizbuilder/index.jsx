@@ -38,6 +38,7 @@ const getHierarchyList = (items, levels) => {
       if (!obj[id]) {
         const item = {
           id,
+          label: "Hello",
           name: d[level],
           type: level
         };
