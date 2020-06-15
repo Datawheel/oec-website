@@ -357,23 +357,17 @@ class VbChart extends React.Component {
         );
     }
 
-    const countryType = isTechnology
-      ? "Organization Country"
-      : flow === "export"
-        ? reporterCountry
-        : partnerCountry;
+    const countryType = flow === "export"
+      ? reporterCountry
+      : partnerCountry;
 
-    const countryTypeBalance = isTechnology
-      ? "Organization Country"
-      : flow === "export"
-        ? partnerCountry
-        : reporterCountry;
+    const countryTypeBalance = flow === "export"
+      ? partnerCountry
+      : reporterCountry;
 
-    const partnerType = isTechnology
-      ? "Organization Country"
-      : flow === "export"
-        ? partnerCountry
-        : reporterCountry;
+    const partnerType = flow === "export"
+      ? partnerCountry
+      : reporterCountry;
 
     const dd = {
       show: isTechnology
@@ -390,21 +384,26 @@ class VbChart extends React.Component {
 
     if (chart === "line") dd.show = isFilter ? countryType : productLevels[0];
 
+    const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country);
+    const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
+    const isWorld = !isCountry && !isPartner;
+
     const drilldowns = [timeDimension];
-    if (!isTechnology) {
-      if (country === "all" && partner === "all") {
-        drilldowns.push(this.state.depth);
-      }
+    if (country === "all" && partner === "all") {
+      drilldowns.push(this.state.depth);
+    }
+    else {
+      if (isWorld) drilldowns.push(countryType);
       else {
         drilldowns.push(
           !dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance
         );
       }
     }
-    if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
-    if (isTechnology && partner === "all" && !isFilter) {
-      drilldowns.push(this.state.techDepth);
-    }
+    // if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
+    // if (isTechnology && partner === "all" && !isFilter) {
+    //   drilldowns.push(this.state.techDepth);
+    // }
 
     const params = {
       cube: cubeName,
