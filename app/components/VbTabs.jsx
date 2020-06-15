@@ -72,12 +72,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports"),
                           permalink: `${cube}/export/${country}/all/show/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/export\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/export\/(?!all\/)(.*)\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports"),
                           permalink: `${cube}/import/${country}/all/show/${time}/`,
-                          regexp: new RegExp(/tree_map\/\w+\/import\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/tree_map\/\w+\/import\/(?!all\/)(.*)\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Export Destinations"),
@@ -181,12 +181,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports"),
                           permalink: `${cube}/export/${country}/all/show/${timePlot}/`,
-                          regexp: new RegExp(/stacked\/\w+\/export\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/stacked\/\w+\/export\/(?!all\/)(.*)\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports"),
                           permalink: `${cube}/import/${country}/all/show/${timePlot}/`,
-                          regexp: new RegExp(/stacked\/\w+\/import\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/stacked\/\w+\/import\/(?!all\/)(.*)\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Export Destinations"),
@@ -424,12 +424,12 @@ class VbTabs extends React.Component {
                         {
                           name: t("Exports"),
                           permalink: `${cube}/export/${country}/all/show/${timePlot}/`,
-                          regexp: new RegExp(/line\/\w+\/export\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/line\/\w+\/export\/(?!all\/)(.*)\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Imports"),
                           permalink: `${cube}/import/${country}/all/show/${timePlot}/`,
-                          regexp: new RegExp(/line\/\w+\/import\/[a-z0-9.-]+\/all\/show\/[0-9.-]+\//)
+                          regexp: new RegExp(/line\/\w+\/import\/(?!all\/)(.*)\/all\/show\/[0-9.-]+\//)
                         },
                         {
                           name: t("Export Destinations"),
