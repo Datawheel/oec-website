@@ -21,6 +21,7 @@ const cubes = {
     cube: "trade_s_esp_m_hs",
     name: "Spain",
     id: "esp",
+    value: "subnational_esp",
     topojson: [
       "/shapes/subnational_esp_autonomous.topojson",
       "/shapes/subnational_esp_provinces.topojson"
@@ -34,6 +35,7 @@ const cubes = {
     cube: "trade_s_rus_m_hs",
     name: "Russia",
     id: "rus",
+    value: "subnational_rus",
     topojson: [
       "/shapes/subnational_rus_districts.topojson",
       "/shapes/subnational_rus_regions.topojson"
@@ -60,6 +62,7 @@ const cubes = {
     cube: "trade_s_can_m_hs",
     name: "Canada",
     id: "can",
+    value: "subnational_can",
     geoIcon: d => `/images/icons/subnational/can/flag_${d["Subnat Geography ID"]}.png`,
     currency: "CAD ",
     topojson: [
@@ -74,6 +77,7 @@ const cubes = {
     cube: "trade_s_jpn_m_hs",
     name: "Japan",
     id: "jpn",
+    value: "subnational_jpn",
     currency: "¥",
     topojson: [
       "/shapes/subnational_jpn_regions.topojson",
@@ -89,6 +93,7 @@ const cubes = {
     name: "Germany",
     id: "deu",
     currency: "€",
+    value: "subnational_deu",
     topojson: [
       "/shapes/subnational_deu_regions.topojson"
     ],

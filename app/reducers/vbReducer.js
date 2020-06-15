@@ -30,6 +30,7 @@ export default function vizbuilderReducer(state = vbInitialState(), action) {
       newState.data = action.payload.data;
       newState.loading = action.payload.loading;
       newState.API = action.payload.API;
+      newState.cubeSelected = state.cubeSelectedTemp;
       return newState;
     }
 

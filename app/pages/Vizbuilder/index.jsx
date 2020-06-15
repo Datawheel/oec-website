@@ -832,6 +832,7 @@ class Vizbuilder extends React.Component {
     const {timeItems} = cubeSelected;
     const {chart, cube, country, flow, partner, viztype, time} = routeParams;
     const redirect = `${location.basename}${location.pathname}`;
+    const isAuth = auth.user;
 
     /** Conditions */
     const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country);
@@ -916,7 +917,7 @@ class Vizbuilder extends React.Component {
     const vbInternalTitle = t(vbTitle, Object.assign(vbParams, {interpolation: {escapeValue: false}}));
     const vbHelmet = <Helmet title={vbInternalTitle} />;
 
-    const subnatDataset = subnat.subnational_chn;
+    const subnatDataset = subnat[`subnational_${country}`] || subnat[cube] || {};
     const isSubnatDatasetSelected = this.state._dataset.value.includes("subnational");
 
     if (this.props.isEmbed) {
@@ -1114,11 +1115,11 @@ class Vizbuilder extends React.Component {
               <div className="columns">
                 {!isScatterChart && !isSubnatPanel && <div className="column-1-2">
                   <SimpleSelect
-                    items={subnatSelector
+                    items={subnatSelector && isAuth
                       ? [subnatDataset].concat(datasets)
                       : datasets}
                     title={t("Dataset")}
-                    isPro={subnatSelector}
+                    isPro={subnatSelector && isAuth}
                     state="_dataset"
                     selectedItem={this.state._dataset}
                     callback={(key, value) => {
@@ -1145,11 +1146,15 @@ class Vizbuilder extends React.Component {
                         });
                       }
                       else {
-                        this.setState({
+                        const nextState = {
                           _selectedItemsYear: [timeItems[0]],
                           _startYear: timeItems[1],
                           _endYear: timeItems[0]
-                        });
+                        };
+                        if (!this.state._selectedItemsYearTitle[0]) {
+                          nextState._selectedItemsYearTitle = [timeItems[0]];
+                        }
+                        this.setState(nextState);
                         this.props.updateCubeSelectedTemp({
                           name: cubeSelected.cubeName,
                           measure: cubeSelected.measure,
