@@ -235,7 +235,7 @@ module.exports = {
     {
       name: "USA",
       code: "usa",
-      available: false,
+      available: true,
       cube: "trade_s_usa_district_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
@@ -260,6 +260,17 @@ module.exports = {
             projection: d3_composite.geoAlbersUsaTerritories()
           },
           profileSlug: "subnational_usa_district"
+        },
+        {
+          overrideCube: "trade_s_usa_port_m_hs",
+          name: "Ports",
+          level: "Subnat Geography",
+          slug: "ports",
+          ignoreIdsMap: [],
+          extraMapConfig: {
+            projection: d3_composite.geoAlbersUsaTerritories()
+          },
+          profileSlug: "subnational_usa_port"
         }
       ]
     },
