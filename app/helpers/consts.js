@@ -1,7 +1,5 @@
 const toHS = require("helpers/funcs.js").toHS;
 const colors = require("helpers/colors.js");
-const d3_composite = require("d3-composite-projections");
-const d3plus_format = require("d3plus-format");
 const locale = "en";
 const DEFAULT_PREDICTION_COLOR = "#209292";
 
@@ -248,7 +246,7 @@ module.exports = {
             "04000US60", "04000US69", "04000US66"
           ],
           extraMapConfig: {
-            projection: d3_composite.geoAlbersUsaTerritories()
+            projection: "geoAlbersUsaTerritories"
           },
           profileSlug: "subnational_usa_state"
         },
@@ -257,7 +255,7 @@ module.exports = {
           level: "Subnat Geography",
           slug: "districts",
           extraMapConfig: {
-            projection: d3_composite.geoAlbersUsaTerritories()
+            projection: "geoAlbersUsaTerritories"
           },
           profileSlug: "subnational_usa_district"
         },
@@ -268,7 +266,7 @@ module.exports = {
           slug: "ports",
           ignoreIdsMap: [],
           extraMapConfig: {
-            projection: d3_composite.geoAlbersUsaTerritories()
+            projection: "geoAlbersUsaTerritories"
           },
           profileSlug: "subnational_usa_port"
         }
@@ -294,14 +292,14 @@ module.exports = {
         {
           name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous",
           extraMapConfig: {
-            projection: d3_composite.geoConicConformalSpain()
+            projection: "geoConicConformalSpain"
           },
           ignoreIdsList: ["100"]
         },
         {
           name: "Provinces", level: "Subnat Geography", slug: "provinces",
           extraMapConfig: {
-            projection: d3_composite.geoConicConformalSpain()
+            projection: "geoConicConformalSpain"
           },
           ignoreIdsList: ["0"]
         }
