@@ -38,7 +38,6 @@ const getHierarchyList = (items, levels) => {
       if (!obj[id]) {
         const item = {
           id,
-          label: "Hello",
           name: d[level],
           type: level
         };
@@ -246,8 +245,9 @@ class Vizbuilder extends React.Component {
       .map(d => ({value: d.id, title: d.name, type: d.type}))
       .sort((a, b) => b.value - a.value);
 
-    const filteredTimeItems = subnatTimeItems
-      .filter(d => timeParam.split(".").includes(d.value.toString()));
+    const filteredTimeItems = timeParam === "wildcard"
+      ? [subnatTimeItems[0]]
+      : subnatTimeItems.filter(d => timeParam.split(".").includes(d.value.toString()));
 
     const nextState = {
       subnatItem,
@@ -442,7 +442,9 @@ class Vizbuilder extends React.Component {
 
     const isTimeSeriesChart = ["line", "stacked"].includes(chart);
     let timeIds = isTimeSeriesChart
-      ? `${_startYear.value}.${_endYear.value}`
+      ? dataset.includes("subnational")
+        ? `${this.state.startTimeTemp.value}.${this.state.endTimeTemp.value}`
+        : `${_startYear.value}.${_endYear.value}`
       : dataset.includes("subnational")
         ? parseIdsToURL(this.state.selectedSubnatTimeTemp, "value")
         : _selectedItemsYear.map(d => d.value).sort((a, b) => a > b ? 1 : -1).join(".");
@@ -500,7 +502,6 @@ class Vizbuilder extends React.Component {
     const {
       _selectedItemsCountryTitle,
       _selectedItemsPartnerTitle,
-      _selectedItemsTechnologyTitle,
       _selectedItemsProductTitle,
       _dataset,
       _flow,
@@ -533,19 +534,16 @@ class Vizbuilder extends React.Component {
       ? parseIdsToURL(_selectedItemsPartnerTitle, "label")
       : isWorld && !notEmpty(_selectedItemsCountryTitle) ? "all" : partnerRandom;
 
-    const isTechnologyFilter = notEmpty(_selectedItemsTechnologyTitle);
     const isTradeFilter = notEmpty(_selectedItemsProductTitle);
 
-    let filterIds = isTechnologyFilter || isTradeFilter
-      ? isTechnologyFilter
-        ? parseIdsToURL(_selectedItemsTechnologyTitle, "value")
-        : parseIdsToURL(_selectedItemsProductTitle)
+    let filterIds = isTradeFilter
+      ? parseIdsToURL(_selectedItemsProductTitle)
       : getRandom(hsProductItems);
 
     let dataset = _dataset.value || _dataset.id;
     const flow = _flow.value;
 
-    const timeSelected = dataset.includes("subnational")
+    const timeSelected = dataset.includes("subnational") || cube.includes("subnational")
       ? this.state.selectedSubnatTimeTemp
         .map(d => d.value)
         .sort((a, b) => a > b ? 1 : -1)
@@ -583,10 +581,10 @@ class Vizbuilder extends React.Component {
         ? country
         : notEmpty(selectedSubnatGeo) ? parseIdsToURL(selectedSubnatGeo, "id") : geoId;
       dataset = cube;
-      timeIds = selectedSubnatTimeTemp
+      const timeSubnatOptions = selectedSubnatTimeTemp
         .map(d => d.value)
-        .sort((a, b) => a > b ? 1 : -1)
-        .join(".");
+        .sort((a, b) => a > b ? 1 : -1);
+      timeIds = timeSubnatOptions.slice(-1);
       timePlot = `${startTime.value}.${endTime.value}`;
       filterIds = notEmpty(selectedSubnatProduct) ? parseIdsToURL(selectedSubnatProduct, "id") : productId;
       if (notEmpty(_selectedItemsPartnerTitle)) partnerIds = partnerRandom || "deu";
@@ -611,15 +609,21 @@ class Vizbuilder extends React.Component {
   handleItemMultiSelect = (key, d) => {
     const nextState = {[key]: d};
     let callback = undefined;
+    const label = d.length ? d[d.length - 1].label : undefined;
     if (
-      key === "_selectedItemsCountry" &&
-      subnat.cubeSelector.map(h => h.id).includes(d[d.length - 1].label)
+      key === "_selectedItemsCountry" && label &&
+      subnat.cubeSelector.map(h => h.id).includes(label)
     ) {
-      const cube = subnat.cubeSelector.find(h => d[d.length - 1].label === h.id);
+      const {isAuth} = this.props;
+      const cube = subnat.cubeSelector.find(h => label === h.id);
       nextState.subnatCubeSelected = cube;
       nextState.selectedSubnatGeoTemp = [];
+      if (isAuth) {
+        nextState._dataset = cube;
+        nextState.subnatTimeLevelSelected = cube.timeLevels.slice(-1)[0];
+      }
       // nextState.selectedSubnatGeo = [];
-      callback = () => this.fetchSubnationalData(cube.cube, "wildcard");
+      callback = () => this.fetchSubnationalData(cube.cube, "wildcard", "wildcard");
     }
 
     this.setState(nextState, callback);
@@ -782,6 +786,7 @@ class Vizbuilder extends React.Component {
         title: cubeSelected.name,
         measure: cubeSelected.measure,
         geoLevels: cubeSelected.geoLevels,
+        port: cubeSelected.port,
         productItems: this.state.subnatProductItems,
         productLevels: cubeSelected.productLevels,
         timeLevels: cubeSelected.timeLevels,
@@ -829,11 +834,10 @@ class Vizbuilder extends React.Component {
 
   render() {
     const {activeTab, cubeSelected, scrolled} = this.state;
-    const {auth, location, routeParams, t} = this.props;
+    const {auth, isAuth, location, routeParams, t} = this.props;
     const {timeItems} = cubeSelected;
     const {chart, cube, country, flow, partner, viztype, time} = routeParams;
     const redirect = `${location.basename}${location.pathname}`;
-    const isAuth = auth.user;
 
     /** Conditions */
     const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country);
@@ -888,7 +892,8 @@ class Vizbuilder extends React.Component {
         product: isSubnatTitle ? this.state.selectedSubnatProduct : this.state._selectedItemsProductTitle,
         technology: this.state._selectedItemsTechnologyTitle,
         isWorld,
-        datasetName: this.props.cubeSelected.title
+        datasetName: this.props.cubeSelected.title,
+        isPort: subnatItem.port
       },
       {
         x: this.props.xConfig,
@@ -1017,7 +1022,14 @@ class Vizbuilder extends React.Component {
                     selectedItems={this.state._selectedItemsCountry}
                     placeholder={t("Select a country...")}
                     title={t("Country")}
-                    onClear={d => this.setState({_selectedItemsCountry: d})}
+                    onClear={d => {
+                      const nextState = {_selectedItemsCountry: d};
+                      if (isSubnat) {
+                        nextState._dataset = datasets[0];
+                        nextState._selectedItemsYear = [datasets[0].timeItems[0]];
+                      }
+                      this.setState(nextState);
+                    }}
                     callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
                   />
                 </div>
@@ -1132,6 +1144,7 @@ class Vizbuilder extends React.Component {
                           name: cubeSelected.cube,
                           measure: cubeSelected.measure,
                           geoLevels: cubeSelected.geoLevels,
+                          port: cubeSelected.port,
                           productItems: this.state.subnatProductItems,
                           productLevels: cubeSelected.productLevels,
                           timeLevels: cubeSelected.timeLevels,
@@ -1190,6 +1203,7 @@ class Vizbuilder extends React.Component {
                     <h4 className="title">{t("Time Dimension")}</h4>
                     <OECButtonGroup
                       items={this.state.subnatTimeLevels}
+                      loading={this.state.subnatTimeLevels.length === 0}
                       selected={this.state.subnatTimeLevelSelected}
                       title={undefined}
                       callback={depth => {
@@ -1346,14 +1360,15 @@ function mapStateToProps(state) {
   const {xConfig, yConfig} = axisConfig;
   return {
     auth: state.auth,
-    data,
-    xConfig,
-    yConfig,
     countryMembers,
     cubeSelected,
     cubeSelectedTemp,
+    data,
+    isAuth: state.auth.user,
     loading,
-    wdiIndicators
+    wdiIndicators,
+    xConfig,
+    yConfig
   };
 }
 

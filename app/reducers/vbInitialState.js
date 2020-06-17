@@ -15,6 +15,7 @@ export default function initialStateFactory() {
     geoItems: [],
     geoLevels: [],
     name: "",
+    port: false,
     productItems: [],
     productLevels: [],
     timeItems: [],
