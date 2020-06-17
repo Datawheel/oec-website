@@ -24,7 +24,6 @@ class DataMatrix extends Component {
       "trade_s_zaf_m_hs",
       "trade_s_esp_m_hs",
       "trade_s_gbr_m_hs",
-      "trade_s_gbr_m_hs",
       "trade_s_usa_state_m_hs",
       "trade_s_usa_district_m_hs",
       "trade_s_usa_port_m_hs"
