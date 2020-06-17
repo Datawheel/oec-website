@@ -60,7 +60,8 @@ const FEATURE_MATRIX = {
   },
   subnational: {
     products: [
-      {cubeName: "trade_s_bra_mun_m_hs",      fullName: "Brazil Trade"},
+      {cubeName: "trade_s_bra_mun_m_hs", fullName: "Brazil Trade"},
+      {cubeName: "trade_s_bra_ncm_m_hs",      fullName: "Brazil Trade"},
       {cubeName: "trade_s_chn_m_hs",          fullName: "China Trade"},
       {cubeName: "trade_s_can_m_hs",          fullName: "Canada Trade"},
       {cubeName: "trade_s_chl_d_hs",          fullName: "Chile Trade"},
@@ -71,7 +72,9 @@ const FEATURE_MATRIX = {
       {cubeName: "trade_s_esp_m_hs",          fullName: "Spain Trade"},
       {cubeName: "trade_s_swe_m_hs",          fullName: "Sweden Trade"},
       {cubeName: "trade_s_tur_m_hs",          fullName: "Turkey Trade"},
+      {cubeName: "trade_s_usa_state_m_hs", fullName: "United States Trade"},
       {cubeName: "trade_s_usa_district_m_hs", fullName: "United States Trade"},
+      {cubeName: "trade_s_usa_port_m_hs", fullName: "United States Trade"},
       {cubeName: "trade_s_gbr_m_hs",          fullName: "United Kingdom Trade"},
       {cubeName: "trade_s_ury_a_hs",          fullName: "Uruguay Trade"}
     ]

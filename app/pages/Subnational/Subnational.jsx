@@ -32,7 +32,7 @@ class Subnational extends React.Component {
   }
 
   render() {
-    const {subnationalLandingData, matrix} = this.props;
+    const {subnationalLandingData} = this.props;
 
     return <div className="subnational">
       <OECNavbar />

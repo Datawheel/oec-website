@@ -1,5 +1,6 @@
 const toHS = require("helpers/funcs.js").toHS;
 const colors = require("helpers/colors.js");
+const d3plus_format = require("d3plus-format");
 const locale = "en";
 const DEFAULT_PREDICTION_COLOR = "#209292";
 
@@ -31,7 +32,7 @@ module.exports = {
             {title: "🇪🇸 Spain",  url: `/${locale}/subnational/#subnational-country-block-esp`, cubeName: "trade_s_esp_m_hs"},
             // {title: "🇹🇷 Turkey", url: `/${locale}/subnational/#subnational-country-block-tur`},
             // {title: "🇺🇾 Uruguay", url: `/${locale}/subnational/#subnational-country-block-ury`},
-            // {title: "🇺🇸 USA", url: `/${locale}/subnational/#subnational-country-block-usa`},
+            {title: "🇺🇸 USA", url: `/${locale}/subnational/#subnational-country-block-usa`, cubeName: "trade_s_usa_district_m_hs"},
             {title: "🇬🇧 UK", url: `/${locale}/subnational/#subnational-country-block-gbr`, cubeName: "trade_s_gbr_m_hs"}
           ]
         }
