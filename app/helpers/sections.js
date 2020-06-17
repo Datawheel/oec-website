@@ -24,6 +24,17 @@ module.exports = {
     "Unspecified"
   ],
   sitcSections: [
+    "Food and live animals",
+    "Beverages and tobacco",
+    "Crude materials, inedible, except fuels",
+    "Mineral fuels, lubricants and related materials",
+    "Animal and vegetable oils, fats and waxes",
+    "Chemicals and related products, n.e.s.",
+    "Manufactured goods classified chiefly by material",
+    "Machinery and transport equipment",
+    "Miscellaneous manufactured articles",
+    "Commodities and transactions not classified elsewhere in the SITC",
+    "Undefined",
     " Food and live animals",
     " Beverages and tobacco",
     " Crude materials, inedible, except fuels",
@@ -33,7 +44,6 @@ module.exports = {
     " Manufactured goods classified chiefly by material",
     " Machinery and transport equipment",
     " Miscellaneous manufactured articles",
-    " Commodities and transactions not classified elsewhere in the SITC",
-    "Undefined"
+    " Commodities and transactions not classified elsewhere in the SITC"
   ]
 };
