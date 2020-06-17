@@ -167,10 +167,11 @@ class VbChart extends React.Component {
     // if (isFilter || timeSeriesChart)
     drilldowns.push(timeLevel);
 
+
     const params = {
       cube: subnatData.cube,
       drilldowns: drilldowns.join(),
-      measures: "Trade Value",
+      measures: subnatData.measure,
       parents: true
     };
 
@@ -187,7 +188,7 @@ class VbChart extends React.Component {
     if (flowItems[flow]) params["Trade Flow"] = flowItems[flow];
     else params.drilldowns = `Trade Flow,${timeLevel}`;
     if (partnerId) params.Country = partnerId.map(d => d.value).join();
-    if (geoId) params["Subnat Geography"] = geoId;
+    if (geoId && cube.slice(-3) !== geoId) params["Subnat Geography"] = geoId;
     if (isFilter) params.Product = viztype;
     if (params.drilldowns.includes("Country")) params.properties = "ISO 3";
 
@@ -200,7 +201,9 @@ class VbChart extends React.Component {
       delete params.Time;
       const diff = 1;
       params.growth = growth;
-      params.drilldowns += `,${timeLevel}`;
+      if (!params.drilldowns.includes(timeLevel)) {
+        params.drilldowns += `,${timeLevel}`;
+      }
       const year = time * 1;
       params[timeLevel] = `${timeItems[i + diff].value},${year}`;
     }
@@ -354,23 +357,17 @@ class VbChart extends React.Component {
         );
     }
 
-    const countryType = isTechnology
-      ? "Organization Country"
-      : flow === "export"
-        ? reporterCountry
-        : partnerCountry;
+    const countryType = flow === "export"
+      ? reporterCountry
+      : partnerCountry;
 
-    const countryTypeBalance = isTechnology
-      ? "Organization Country"
-      : flow === "export"
-        ? partnerCountry
-        : reporterCountry;
+    const countryTypeBalance = flow === "export"
+      ? partnerCountry
+      : reporterCountry;
 
-    const partnerType = isTechnology
-      ? "Organization Country"
-      : flow === "export"
-        ? partnerCountry
-        : reporterCountry;
+    const partnerType = flow === "export"
+      ? partnerCountry
+      : reporterCountry;
 
     const dd = {
       show: isTechnology
@@ -387,21 +384,26 @@ class VbChart extends React.Component {
 
     if (chart === "line") dd.show = isFilter ? countryType : productLevels[0];
 
+    const isCountry = new RegExp(/^(?!(all|show)).*$/).test(country);
+    const isPartner = new RegExp(/^(?!(all|show)).*$/).test(partner);
+    const isWorld = !isCountry && !isPartner;
+
     const drilldowns = [timeDimension];
-    if (!isTechnology) {
-      if (country === "all" && partner === "all") {
-        drilldowns.push(this.state.depth);
-      }
+    if (country === "all" && partner === "all") {
+      drilldowns.push(this.state.depth);
+    }
+    else {
+      if (isWorld) drilldowns.push(countryType);
       else {
         drilldowns.push(
           !dd[viztype] ? dd.wildcard : dd[viztype] || countryTypeBalance
         );
       }
     }
-    if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
-    if (isTechnology && partner === "all" && !isFilter) {
-      drilldowns.push(this.state.techDepth);
-    }
+    // if (isTechnology && viztype !== "show") drilldowns.push(countryTypeBalance);
+    // if (isTechnology && partner === "all" && !isFilter) {
+    //   drilldowns.push(this.state.techDepth);
+    // }
 
     const params = {
       cube: cubeName,
@@ -424,11 +426,9 @@ class VbChart extends React.Component {
     if (partnerId) params[partnerType] = partnerId.map(d => d.value).join();
     if (isProduct) {
       const productTemp = viztype.split(".")[0];
-      const len = productTemp.length;
-      const digit = len + len % 2 - 2;
-      const productLevelsV2 = {1: "Section", 2: "HS2", 4: "HS4", 6: "HS6"};
+      const productLevelsV2 = cubeSelected.productItems[productTemp] || {type: "HS4"};
 
-      params[productLevelsV2[digit]] = viztype.replace(".", ",");
+      params[productLevelsV2.type] = viztype.replace(".", ",");
     }
     if (isFilter && isTechnology) params[ddTech[viztype.length - 1]] = viztype;
 
@@ -973,12 +973,9 @@ class VbChart extends React.Component {
         </div>;
       }
 
-      const labels = this.props.cubeSelected.productItems.reduce((obj, d) => {
-        if (!obj[d["HS4 ID"]]) obj[d["HS4 ID"]] = d.HS4;
-        return obj;
-      }, {});
+      const labels = this.props.cubeSelected.productItems;
       const labelsRings = data.reduce((obj, d) => {
-        if (!obj[d["HS4 ID"]]) obj[d["HS4 ID"]] = d;
+        if (!obj[d.id]) obj[d.id] = d;
         return obj;
       }, {});
 
@@ -993,7 +990,7 @@ class VbChart extends React.Component {
               config={{
                 data,
                 center: selected,
-                label: d => labels[d.id] || "",
+                label: d => labels[d.id] ? labels[d.id].name : "",
                 legend: false,
                 links: data,
                 total: undefined,
@@ -1002,7 +999,8 @@ class VbChart extends React.Component {
                     const parentId = d.id.slice(0, -4);
                     const color = colors.Section[parentId] || "gray";
                     const image = `/images/icons/hs/hs_${parentId}.svg`;
-                    return tooltipTitle(color, image, labels[d.id] || "");
+                    const name = labels[d.id] ? labels[d.id].name : "";
+                    return tooltipTitle(color, image, name || "");
                   },
                   tbody: d => {
                     const data = labelsRings[d.id];

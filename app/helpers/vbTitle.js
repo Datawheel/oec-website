@@ -11,11 +11,11 @@ export const getList = n => getNames(n).reduce((str, item, i) => {
 const getNames = items => items.map(d => typeof d === "string" ? d : d.name || d.title);
 
 export const getVbTitle = (items, axis, routeParams) => {
-  const {geo, geoPartner, product, isWorld} = items;
+  const {geo, geoPartner, product, isWorld, datasetName, isPort} = items;
   const {x, y} = axis;
 
   const {cube, chart, flow, country, partner, viztype, time} = routeParams;
-  const _countryNames = isWorld ? "the World" : getList(geo);
+  let _countryNames = isWorld ? "the World" : getList(geo);
   const _partnerNames = getList(geoPartner);
   const _productNames = getList(product ? product : []);
 
@@ -28,6 +28,10 @@ export const getVbTitle = (items, axis, routeParams) => {
   const isTradeBalance = flow === "show";
   const isSubnat = cube.includes("subnational");
 
+  const subnatName = isPort ? "ports" : "states/provinces";
+
+  if (isWorld && isSubnat) _countryNames = `${datasetName}'s ${subnatName}`;
+
   const preps = {
     export: "to",
     import: "from",
@@ -36,10 +40,11 @@ export const getVbTitle = (items, axis, routeParams) => {
 
   let params = {
     country: _countryNames,
-    partner: _partnerNames,
     flow,
+    partner: _partnerNames,
     prep: preps[flow],
     product: _productNames,
+    subnatName,
     time: timeTitleFormat(time, isTimeSeriesChart)
   };
 

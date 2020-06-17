@@ -1,11 +1,13 @@
 import React from "react";
 import Button from "@datawheel/canon-cms/src/components/fields/Button.jsx";
+import {Spinner} from "@blueprintjs/core";
 
 import "./OECButtonGroup.css";
 
 export default class OECButtonGroup extends React.Component {
   render() {
-    const {items, selected, title} = this.props;
+    const {items, loading, selected, title} = this.props;
+    if (loading) return <Spinner size={30} />;
     return <div className="oec-button-group cp-button-group">
       {title && <h6 className="oec-button-group-title">{title}</h6>}
       <div className="oec-button-group-items">{items.map((d, i) => <Button
@@ -20,5 +22,6 @@ export default class OECButtonGroup extends React.Component {
 
 OECButtonGroup.defaultProps = {
   items: [],
+  loading: false,
   title: undefined
 };
