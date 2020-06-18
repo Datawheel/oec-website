@@ -207,6 +207,8 @@ module.exports = function (app) {
       const hsThreshold = cubeName1 === "trade_s_chn_m_hs" ? 500000000 : 1500000000;
       const subnatThreshold = cubeName1 === "trade_s_chn_m_hs" ? 100000000 : 300000000;
 
+      const productThreshold = cubeName1 === "trade_s_chn_m_hs" ? 10000000 : 30000000;
+
       const depthComplexityDict = {
         "trade_s_bol_m_sitc3" : "Product",
         "trade_s_fra_q_cpf" : "Product",
@@ -250,6 +252,28 @@ module.exports = function (app) {
       const depthComplexity = depthComplexityDict[cubeName1] || "HS4";
       const depthProduct = depthDict[cubeName1] || "Product";
 
+      const cubeNameVariantDict = {
+        "trade_s_bol_m_sitc3": "trade_s_bol_m_sitc3",
+        "trade_s_fra_q_cpf": "trade_s_fra_q_cpf",
+        "trade_s_deu_m_egw": "trade_s_deu_m_egw",
+        "trade_s_tur_m_hs": "trade_s_tur_m_countries",
+        "trade_s_usa_district_m_hs": "trade_s_usa_district_m_hs",
+        "trade_s_usa_port_m_hs": "trade_s_usa_port_m_hs",
+        "trade_s_usa_state_m_hs": "trade_s_usa_state_m_hs",
+        "trade_s_bra_mun_m_hs": "trade_s_bra_mun_m_hs",
+        "trade_s_bra_ncm_m_hs": "trade_s_bra_ncm_m_hs",
+        "trade_s_can_m_hs": "trade_s_can_m_hs",
+        "trade_s_chn_m_hs": "trade_s_chn_m_hs",
+        "trade_s_ecu_m_hs": "trade_s_ecu_m_hs",
+        "trade_s_jpn_m_hs": "trade_s_jpn_m_hs",
+        "trade_s_rus_m_hs": "trade_s_rus_m_hs",
+        "trade_s_zaf_m_hs": "trade_s_zaf_m_hs",
+        "trade_s_esp_m_hs": "trade_s_esp_m_hs",
+        "trade_s_gbr_m_hs": "trade_s_gbr_m_hs"
+      };
+
+      const cubeNameVariant = cubeNameVariantDict[cubeName1];
+
       return res.json({
         depthComplexity,
         depthProduct,
@@ -257,7 +281,9 @@ module.exports = function (app) {
         yearConcatBaci,
         countryThreshold,
         hsThreshold,
-        subnatThreshold
+        subnatThreshold,
+        productThreshold,
+        cubeNameVariant
       });
     }
     else return res.json({});
