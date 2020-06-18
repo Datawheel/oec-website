@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
 import {isAuthenticated} from "@datawheel/canon-core";
@@ -77,7 +78,8 @@ class Prediction extends React.Component {
   }
 
   componentDidMount() {
-    const {BASE} = this.props.env;
+    // const {BASE} = this.props.env;
+    const BASE = "/olap-proxy/data";
     // window.addEventListener("scroll", this.handleScroll);
     const {dataset} = this.state;
     const dateRangeApiUrl = `${BASE}.jsonrecords?cube=${dataset.cube}&drilldowns=${dataset.dateDrilldown}&measures=Trade+Value`;
@@ -339,7 +341,7 @@ class Prediction extends React.Component {
 
   render() {
     const {activeTabId, currentDrilldown, dataset, datatableOpen, drilldowns,
-      error, loading, predictionData, scrolled, timeAvailable, timeSelection, updateKey} = this.state;
+      error, loading, locale, predictionData, scrolled, timeAvailable, timeSelection, updateKey} = this.state;
     const {auth, router} = this.props;
 
     return <div className="prediction" onScroll={this.handleScroll}>
@@ -348,7 +350,15 @@ class Prediction extends React.Component {
         title={scrolled ? "Forecasts" : ""}
       />
 
-      <OECPaywall auth={auth} paywall={true} redirect={`/${router.location.pathname}${encodeURIComponent(router.location.search)}`} />
+      <OECPaywall
+        auth={auth}
+        callback={d => {
+          if (window && window !== undefined && window.location) {
+            window.location = "/en/prediction";
+          }
+        }}
+        paywall={true}
+        redirect={`/${router.location.pathname}${encodeURIComponent(router.location.search)}`} />
 
       <div className="welcome">
         {/* spinning orb thing */}
@@ -362,7 +372,7 @@ class Prediction extends React.Component {
           <Navbar>
             <Navbar.Group align={Alignment.LEFT}>
               <Navbar.Heading>
-                <h1>Forecasts</h1>
+                <h1><Link to={`/${locale}/prediction`}>Forecasts</Link></h1>
               </Navbar.Heading>
               <Navbar.Divider />
               {PREDICTION_DATASETS.map(dset =>

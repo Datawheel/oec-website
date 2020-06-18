@@ -3,13 +3,9 @@ import {connect} from "react-redux";
 import {isAuthenticated} from "@datawheel/canon-core";
 import {fetchData} from "@datawheel/canon-core";
 import "./App.css";
-import {geoConicConformalSpain} from "d3-composite-projections";
 
 class App extends Component {
-  componentWillMount() {
-    this.props.isAuthenticated();
-    if (typeof window !== "undefined") window.geoConicConformalSpain = geoConicConformalSpain;
-  }
+
   render() {
     return <Fragment>
       {/* <script key="stripe" src="https://js.stripe.com/v3/"></script> */}

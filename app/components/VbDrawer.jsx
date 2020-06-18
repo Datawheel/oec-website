@@ -32,7 +32,7 @@ function VbRelatedVizTitle(props) {
     props.callback(link);
   }}>
     <img className="icon" src="/images/icons/app/app_tree_map.png" alt=""/>
-    {t(titleName, titleConfig)}
+    {t(titleName, Object.assign(titleConfig, {interpolation: {escapeValue: false}}))}
   </Link>;
 }
 
@@ -150,7 +150,10 @@ class VbDrawer extends React.Component {
 
     const timeTitle = timeTitleFormat(time);
     const profileType =  isSubnatProfile
-      ? cube : isGeoGrouping ? "country" : parentKey === "Section" ? "hs92" : cube;
+      ? cube
+      : isGeoGrouping
+        ? "country"
+        : parentKey === "Section" ? "hs92" : isCountrySelected ? "country" : cube;
 
     const drawerIcon = <div
       className="vb-drawer-icon"
@@ -163,6 +166,8 @@ class VbDrawer extends React.Component {
       <div>{titleName}</div>
       {showProfile && <div><a style={{color}} href={`/en/profile/${profileType}/${profileId}`}>{t("View profile")}</a></div>}
     </div>;
+
+    const subnatName = cubeSelected.port ? "ports" : "states/provinces";
 
     return <div>
       <Drawer
@@ -261,7 +266,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
                 router={this.props.router}
-                titleConfig={{country: geoNames, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
+                titleConfig={{country: geoNames, subnatName, product: titleName, flow: d, time: timeTitle, prep: preps[d]}}
                 titleName={isSubnatCube ? "vb_title_which_subnat_flow_product" : "vb_title_which_countries_flow_product"}
                 callback={d => this.props.run(d)}
                 t={t}
@@ -273,7 +278,7 @@ class VbDrawer extends React.Component {
               all.push(<VbRelatedVizTitle
                 permalink={permalink}
                 router={this.props.router}
-                titleConfig={{product: this.props.selectedProducts.map(d => d.name), flow: d, time: timeTitle, prep: preps[d]}}
+                titleConfig={{subnatName, product: this.props.selectedProducts.map(d => d.name), flow: d, time: timeTitle, prep: preps[d]}}
                 titleName={isSubnatCube ? "vb_title_which_subnat_flow_product" : "vb_title_which_countries_flow_product"}
                 callback={d => this.props.run(d)}
                 t={t}

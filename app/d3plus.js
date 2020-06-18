@@ -19,12 +19,16 @@ function findColor(d) {
     detectedColors = Array.from(new Set(this._filteredData.map(findColor)));
   }
   const isSectionHS = sections.hsSections.includes(d.Section);
+  const isSectionSITC = sections.sitcSections.includes(d.Section) && !("Category" in d);
+
   if ("Section" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k))) {
-    const level = isSectionHS ? "Section" : "Category";
-    return colors[level][d[`${level} ID`]] || colors.colorGrey;
+    const level = isSectionHS ? "Section" : isSectionSITC ? "SITC Section" : "Category";
+    const _level = isSectionHS || isSectionSITC ? "Section" : "Category";
+
+    return colors[level][d[`${_level} ID`]] || colors.colorGrey;
   }
   if ("Section" in d && !Array.isArray(d.Section)) {
-    const level = isSectionHS ? "Section" : "Category";
+    const level = isSectionHS ? "Section" : isSectionSITC ? "SITC Section" : "Category";
     return "Patent Share" in d
       ? colors["CPC Section"][d["Section ID"]]
       : colors[level][d[`${level} ID`]];
@@ -63,9 +67,10 @@ export const backgroundImageV2 = (key, d) => {
       return "/images/icons/patent.png";
     case "Section":
       return `/images/icons/hs/hs_${d["Section ID"]}.svg`;
-    case "SITC Section":
     case "Category":
       return `/images/icons/sitc/sitc_${d["Category ID"]}.png`;
+    case "SITC Section":
+      return d["Section ID"] ? `/images/icons/sitc/sitc_${d["Section ID"]}.svg` : `/images/icons/sitc/sitc_X.svg`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Level 1":
@@ -100,11 +105,17 @@ function backgroundImage(d, ascending) {
   if (!ascending) {
     if (
       "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
-      !sections.hsSections.includes(d.Section)
+      !sections.hsSections.includes(d.Section) && sections.sitcSections.includes(d.Section) && !("Category" in d)
     ) {
-      return `/images/icons/sitc/sitc_${d["Category ID"]}.png`;
+      return d["Section ID"] ? `/images/icons/sitc/sitc_${d["Section ID"]}.svg` : `/images/icons/sitc/sitc_X.svg`;
     }
-    if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
+    else if (
+      "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
+      !sections.hsSections.includes(d.Section) && "Category" in d
+    ) {
+      return d["Category ID"] ? `/images/icons/sitc/sitc_${d["Category ID"]}.png` : `/images/icons/sitc/sitc_xx.png`;
+    }
+    else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section)) {
@@ -173,7 +184,7 @@ function backgroundImage(d, ascending) {
       "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
       !sections.hsSections.includes(d.Section)
     ) {
-      return `/images/icons/sitc/sitc_${d["Section ID"]}.svg`;
+      return !("Category" in d) ? `/images/icons/sitc/sitc_${d["Section ID"]}.svg` : `/images/icons/sitc/sitc${d["Category ID"]}.png`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;
@@ -355,6 +366,7 @@ export default {
       let itemBgImg = ["Country", "Organization"].includes(itemId) ? itemId : parentId;
 
       if (itemBgImg === "Section" && !["HS2", "HS4", "HS6"].includes(itemId) && !sections.hsSections.includes(Object.entries(d).find(h => h[0] === "Section")[1])) itemBgImg = "SITC Section";
+
       const imgUrl = backgroundImageV2(itemBgImg, d);
       const bgColor = findColorV2(itemBgImg, d);
 

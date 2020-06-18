@@ -21,7 +21,7 @@ class OECMultiSelect extends React.Component {
   //   console.log("this.props.updateSelection", this.props.updateSelection);
   // }
 
-  renderTag = item => item.title;
+  renderTag = item => item ? item.title || item.name : "asdf";
   renderItem = (item, {modifiers, handleClick}) => {
     if (!modifiers.matchesPredicate) {
       return null;

@@ -1,6 +1,5 @@
 const toHS = require("helpers/funcs.js").toHS;
 const colors = require("helpers/colors.js");
-const d3_composite = require("d3-composite-projections");
 const d3plus_format = require("d3plus-format");
 const locale = "en";
 const DEFAULT_PREDICTION_COLOR = "#209292";
@@ -33,7 +32,7 @@ module.exports = {
             {title: "🇪🇸 Spain",  url: `/${locale}/subnational/#subnational-country-block-esp`, cubeName: "trade_s_esp_m_hs"},
             // {title: "🇹🇷 Turkey", url: `/${locale}/subnational/#subnational-country-block-tur`},
             // {title: "🇺🇾 Uruguay", url: `/${locale}/subnational/#subnational-country-block-ury`},
-            // {title: "🇺🇸 USA", url: `/${locale}/subnational/#subnational-country-block-usa`},
+            {title: "🇺🇸 USA", url: `/${locale}/subnational/#subnational-country-block-usa`, cubeName: "trade_s_usa_district_m_hs"},
             {title: "🇬🇧 UK", url: `/${locale}/subnational/#subnational-country-block-gbr`, cubeName: "trade_s_gbr_m_hs"}
           ]
         }
@@ -235,7 +234,7 @@ module.exports = {
     {
       name: "USA",
       code: "usa",
-      available: false,
+      available: true,
       cube: "trade_s_usa_district_m_hs",
       dimension: "Subnat Geography",
       geoLevels: [
@@ -248,7 +247,7 @@ module.exports = {
             "04000US60", "04000US69", "04000US66"
           ],
           extraMapConfig: {
-            projection: d3_composite.geoAlbersUsaTerritories()
+            projection: "geoAlbersUsaTerritories"
           },
           profileSlug: "subnational_usa_state"
         },
@@ -257,9 +256,20 @@ module.exports = {
           level: "Subnat Geography",
           slug: "districts",
           extraMapConfig: {
-            projection: d3_composite.geoAlbersUsaTerritories()
+            projection: "geoAlbersUsaTerritories"
           },
           profileSlug: "subnational_usa_district"
+        },
+        {
+          overrideCube: "trade_s_usa_port_m_hs",
+          name: "Ports",
+          level: "Subnat Geography",
+          slug: "ports",
+          ignoreIdsMap: [],
+          extraMapConfig: {
+            projection: "geoAlbersUsaTerritories"
+          },
+          profileSlug: "subnational_usa_port"
         }
       ]
     },
@@ -283,14 +293,14 @@ module.exports = {
         {
           name: "Autonomous Communities", level: "Autonomous Communities", slug: "autonomous",
           extraMapConfig: {
-            projection: d3_composite.geoConicConformalSpain()
+            projection: "geoConicConformalSpain"
           },
           ignoreIdsList: ["100"]
         },
         {
           name: "Provinces", level: "Subnat Geography", slug: "provinces",
           extraMapConfig: {
-            projection: d3_composite.geoConicConformalSpain()
+            projection: "geoConicConformalSpain"
           },
           ignoreIdsList: ["0"]
         }

@@ -67,14 +67,12 @@ class OECNavbarForShare extends Component {
   }
 
   render() {
-    const {locale, title, scrolled, shortTitle} = this.props;
-    const {navVisible, searchVisible} = this.state;
-    const {basename, pathname, search} = this.context.router.location;
-    const currentURL = encodeURIComponent(`${basename}${pathname}${search}`.replace("//", "/"));
+    const {title, scrolled, shortTitle} = this.props;
+    const {searchVisible} = this.state;
 
     return (
       <React.Fragment>
-        <div key="navbar" className="navbar">
+        <div key="navbar" className="navbar navbar-share">
           {/* logo */}
           <Link className="navbar-logo-link navbar-logo-link-share" to="/">
             <img
