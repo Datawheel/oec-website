@@ -22,6 +22,8 @@ import VbDownload from 'components/VbDownload';
 import {DATASETS, SUBNATIONAL_DATASETS} from 'helpers/rankings';
 import {subnationalData, yearsNational} from 'helpers/rankings';
 
+import "../Rankings/index.css";
+
 class Custom extends Component {
 	constructor(props) {
 		super(props);
@@ -737,6 +739,7 @@ class Custom extends Component {
 
 		return (
 			<div className="rankings-page">
+				<OECNavbar />
 				<div className="rankings-content">
 					<Helmet title="Custom Rankings" />
 
@@ -803,6 +806,7 @@ class Custom extends Component {
 						</div>
 					}
 				</div>
+				<Footer />
 			</div>
 		);
 	}

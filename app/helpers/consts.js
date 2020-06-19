@@ -90,7 +90,7 @@ module.exports = {
             }
           ]
         },
-        {title: "Custom Rankings", url: `/${locale}/rankings/custom`},
+        {title: "Custom Rankings", url: `/${locale}/custom`},
         {title: "ECI Legacy Rankings", url: `/${locale}/rankings/legacy_eci`},
         {title: "PCI Legacy Rankings", url: `/${locale}/rankings/legacy_pci/hs6/hs92`}
       ]
