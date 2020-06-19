@@ -43,8 +43,16 @@ module.exports = function (app) {
 
       const subnatCubeName = subnatCubeNameDict[id1] || "trade_s_chn_m_hs";
 
+      const url = `${OLAP_PROXY_ENDPOINT}data?time=time.latest&cube=${subnatCubeName}&drilldowns=Time&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
+      const data = await axios.get(url, config).then(resp => resp.data.data).catch((error) => console.error("Custom Attribute Error:", error));
+
+      const latestSubnationalDate = data.length > 0 ? data[0]["Time"] : false;
+      const previousSubnationalDate = latestSubnationalDate ? `${latestSubnationalDate.toString().slice(0, 4) * 1 - 1}${latestSubnationalDate.toString().slice(-2)}` * 1 : false;
+
       return res.json({
-        subnatCubeName
+        subnatCubeName,
+        latestSubnationalDate,
+        previousSubnationalDate
       });
 
     } else if (pid === 2) { //product profile
