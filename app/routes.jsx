@@ -20,7 +20,6 @@ import Account from "./pages/User/Account";
 // import Subscription from "./pages/User/Subscription";
 import Rankings from "./pages/Rankings";
 import Resources from "./pages/Resources";
-import Custom from "./pages/Custom";
 import Loading from "components/Loading";
 import ErrorPage from "./pages/ErrorPage";
 
@@ -109,7 +108,6 @@ export default function RouteCreate() {
       <Route exact path="/:lang/resources/:page" component={Resources} />
       <Route exact path="/:lang/tariffs" component={Tariffs} />
       <Route path="/:lang/rankings/:page(/:depth)(/:rev)" component={Rankings} />
-      <Route path="/:lang/custom" component={Custom} />
       <Route path="*" component={ErrorPage} />
     </Route>
   );

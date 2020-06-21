@@ -7,11 +7,14 @@ import Footer from '../../components/Footer';
 import Error from '../../components/Error';
 
 import Static from './Static';
+import Custom from './Custom';
 import Legacy from './Legacy';
 
 class Rankings extends Component {
 	render() {
 		const {page, depth, rev} = this.props.router.params;
+		const pathParams = this.props.params;
+		const queryParams = this.props.location.query;
 
 		return (
 			<div>
@@ -22,6 +25,8 @@ class Rankings extends Component {
 							return <Static type={page} depth={depth} rev={rev} />;
 						case 'pci':
 							return <Static type={page} depth={depth} rev={rev} />;
+						case 'custom':
+							return <Custom pathParams={pathParams} queryParams={queryParams} />;
 						case 'legacy_eci':
 							return <Legacy type={"eci"} depth={depth} rev={rev} />;
 						case 'legacy_pci':

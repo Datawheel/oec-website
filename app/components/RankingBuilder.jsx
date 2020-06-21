@@ -30,10 +30,6 @@ class RankingsBuilder extends Component {
 			yearInitial,
 			yearFinal,
 			yearRange,
-			// Old Variables
-			yearValue,
-			yearRangeInitial,
-			yearRangeFinal,
 			countryExpThreshold,
 			populationThreshold,
 			productExpThreshold,
@@ -78,6 +74,7 @@ class RankingsBuilder extends Component {
 								<span>Country</span>
 								<Switch
 									onChange={event => handleCategorySwitch('isCountry', !event.currentTarget.checked)}
+									defaultChecked={!isCountry}
 								/>
 								<span>Product</span>
 							</div>
@@ -89,6 +86,7 @@ class RankingsBuilder extends Component {
 									<span>National</span>
 									<Switch
 										onChange={event => handleCountrySwitch('isNational', !event.currentTarget.checked)}
+										defaultChecked={!isNational}
 									/>
 									<span>Subnational</span>
 								</div>
@@ -147,6 +145,7 @@ class RankingsBuilder extends Component {
 								<span>Single-year</span>
 								<Switch
 									onChange={event => handlePeriodYearSwitch('isSingleyear', !event.currentTarget.checked)}
+									defaultChecked={!isSingleyear}
 								/>
 								<span>Multi-year</span>
 							</div>
@@ -156,6 +155,7 @@ class RankingsBuilder extends Component {
 									<Switch
 										onChange={event =>
 											handlePeriodRangeSwitch('isChangeInitialYear', !event.currentTarget.checked)}
+										defaultChecked={!isChangeInitialYear}
 									/>
 									<span>Final Year</span>
 								</div>
@@ -200,7 +200,7 @@ class RankingsBuilder extends Component {
 							<Slider
 								min={0}
 								max={10000000000}
-								stepSize={500000000}
+								stepSize={100000000}
 								labelStepSize={1000000000}
 								onChange={handleThresholdSlider('countryExpThreshold')}
 								labelRenderer={renderMoneyThresholdSlider}
@@ -217,7 +217,7 @@ class RankingsBuilder extends Component {
 							<Slider
 								min={0}
 								max={5000000}
-								stepSize={200000}
+								stepSize={10000}
 								labelStepSize={1000000}
 								onChange={handleThresholdSlider('populationThreshold')}
 								labelRenderer={renderThresholdSlider}
@@ -234,7 +234,7 @@ class RankingsBuilder extends Component {
 							<Slider
 								min={0}
 								max={2000000000}
-								stepSize={250000000}
+								stepSize={10000000}
 								labelStepSize={500000000}
 								onChange={handleThresholdSlider('productExpThreshold')}
 								labelRenderer={renderMoneyThresholdSlider}
@@ -247,7 +247,7 @@ class RankingsBuilder extends Component {
 								<Slider
 									min={0}
 									max={500000000}
-									stepSize={25000000}
+									stepSize={1000000}
 									labelStepSize={100000000}
 									onChange={handleThresholdSlider('subnationalGeoThreshold')}
 									labelRenderer={renderMoneyThresholdSlider}
@@ -261,7 +261,7 @@ class RankingsBuilder extends Component {
 								<Slider
 									min={0}
 									max={30}
-									stepSize={5}
+									stepSize={1}
 									labelStepSize={5}
 									onChange={handleThresholdSlider('subnationalRCAThreshold')}
 									labelRenderer={renderThresholdSlider}

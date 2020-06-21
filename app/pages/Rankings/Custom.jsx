@@ -22,8 +22,6 @@ import VbDownload from 'components/VbDownload';
 import {DATASETS, SUBNATIONAL_DATASETS} from 'helpers/rankings';
 import {subnationalData, yearsNational} from 'helpers/rankings';
 
-import "../Rankings/index.css";
-
 class Custom extends Component {
 	constructor(props) {
 		super(props);
@@ -31,7 +29,7 @@ class Custom extends Component {
 			// New variables
 			NATIONAL_AVAILABLE: null,
 			SUBNATIONAL_AVAILABLE: null,
-			isCountry: true,
+			isCountry: null,
 			isNational: true,
 			isSingleyear: true,
 			isChangeInitialYear: true,
@@ -50,14 +48,10 @@ class Custom extends Component {
 			productExpThreshold: null,
 			subnationalGeoThreshold: null,
 			subnationalRCAThreshold: null,
-			// Old variables
-			// Not Boolean Values
-			yearValue: null,
-			yearRangeInitial: null,
-			yearRangeFinal: null,
 			data: null,
 			dataDownload: null,
 			columns: null,
+			sharePath: null,
 			// Loaders
 			location: null,
 			_ready: false,
@@ -84,43 +78,122 @@ class Custom extends Component {
 		const SUBNATIONAL_AVAILABLE = SUBNATIONAL_COUNTRIES.filter(d => d.available === true).sort((a, b) => (a.name).localeCompare(b.name));
 		const SUBNATIONAL_DEFAULT = SUBNATIONAL_AVAILABLE[0];
 
+		const queryParams = this.props.queryParams;
+		// isCountry
+		const pathCountry = {index: queryParams.index ? queryParams.index : null}
+		const availableIsCountry = ["eci", "pci"];
+		const defaultIsCountry = true;
+		const isCountry = this.checkPathParam(pathCountry.index, availableIsCountry) ? pathCountry.index === "eci" ? true : false : defaultIsCountry;
+		// subnationalData
+		const pathNational = {
+			type: queryParams.subnational ? queryParams.subnational : null,
+			country: queryParams.country ? queryParams.country : null,
+			countryDepth: queryParams.countryDepth ? queryParams.countryDepth : null,
+			subnatProductDepth: queryParams.productDepth ? queryParams.productDepth : null
+		};
+		// isNational
+		const availableIsNational = ["true", "false"];
+		const defaultIsNational = true;
+		const isNational = this.checkPathParam(pathNational.type, availableIsNational) ? pathNational.type === "true" ? false : true : defaultIsNational;
+		// subnationalCountry
+		const subnationalCountryAvailable = [...new Set(SUBNATIONAL_AVAILABLE.map(d => d.name))];
 		const defaultSubnationalCountry = SUBNATIONAL_DEFAULT.code;
-		const defaultSubnationalCountryDepth = SUBNATIONAL_DEFAULT.geoLevels[0].level;
-		const defaultSubnationalProductDepth = SUBNATIONAL_DATASETS[defaultSubnationalCountry].defaultDepth;
-		const defaultDepth = NATIONAL_DEFAULT.defaultDepth;
-		const defaultRevision = NATIONAL_DEFAULT.name;
-		const defaultBasecube = NATIONAL_DEFAULT.basecube;
-		const defaultYearRange = NATIONAL_DEFAULT.yearsRange;
-		const defaultYearFinal = defaultYearRange.slice().reverse()[0];
+		const subnationalCountry = this.checkPathParam(pathNational.country, subnationalCountryAvailable) ? SUBNATIONAL_AVAILABLE.find(d => d.name === pathNational.country).code : defaultSubnationalCountry;
+		// subnationalCountryDepth
+		const subnationalCountryData = SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry);
+		const availableSubnationalCountryDepth = [...new Set(subnationalCountryData.geoLevels.map(d => d.name))];
+		const defaultSubnationalCountryDepth = subnationalCountryData.geoLevels.slice().reverse()[0].level;
+		const subnationalCountryDepth = this.checkPathParam(pathNational.countryDepth, availableSubnationalCountryDepth) ? subnationalCountryData.geoLevels.find(d => d.name === pathNational.countryDepth).level : defaultSubnationalCountryDepth;
+		// sunationalProductDepth
+		const availableSubnationalProductDepth = SUBNATIONAL_DATASETS[subnationalCountry].productDepth;
+		const defaultSubnationalProductDepth = SUBNATIONAL_DATASETS[subnationalCountry].defaultDepth;
+		const subnationalProductDepth = this.checkPathParam(pathNational.subnatProductDepth, availableSubnationalProductDepth) ? pathNational.subnatProductDepth : defaultSubnationalProductDepth;
+		// now we can go for the product depth and revision on national
+		const pathProduct = {
+			depth: queryParams.productDepth ? queryParams.productDepth.toUpperCase() : null,
+			rev: queryParams.productRevision ? queryParams.productRevision.toUpperCase() : null
+		}
+		// productRevision
+		const availableProductRevision = [...new Set(NATIONAL_AVAILABLE.map(d => d.name))];
+		const defaultProductRevision = NATIONAL_DEFAULT.name;
+		const productRevision = this.checkPathParam(pathProduct.rev, availableProductRevision) ? pathProduct.rev : defaultProductRevision;
+		// productDepth
+		const productRevisionData = NATIONAL_AVAILABLE.find(d => d.name === productRevision);
+		const availableProductDepth = productRevisionData.availableDepths;
+		const defaultProductDepth = NATIONAL_DEFAULT.defaultDepth;
+		const productDepth = this.checkPathParam(pathProduct.depth, availableProductDepth) ? pathProduct.depth : defaultProductDepth;
+		// basecube
+		const productBasecube = productRevisionData.basecube;
+		// yearRange
+		const nationalYearRange = productRevisionData.yearsRange;
+		const subnationalYearRange = SUBNATIONAL_DATASETS[subnationalCountry].yearsRange;
+		const yearRange = isNational ? nationalYearRange : subnationalYearRange;
+		// yearFinal and yearInitial
+		const pathYears = {
+			singleyear: queryParams.years ? queryParams.years.split(",").length > 1 ? false : true : true,
+			finalYear: queryParams.years ? queryParams.years.split(",").length > 1 ? queryParams.years.split(",").slice().reverse()[0] * 1 : queryParams.years.split(",")[0] * 1 : null,
+			initialYear: queryParams.years ? queryParams.years.split(",").length > 1 ? queryParams.years.split(",")[0] * 1 : null : null
+		};
+		const defaultYearFinal = yearRange.slice().reverse()[0];
+		const isSingleyear = pathYears.singleyear;
+		const yearFinal = yearRange.includes(pathYears.finalYear) ? pathYears.finalYear : defaultYearFinal;
+		const yearInitial = yearRange.includes(pathYears.initialYear) ? pathYears.initialYear : pathYears.singleyear === true ? yearFinal - 1 : yearRange[0];
+		// thresholds
+		const thresholds = {
+			country: {
+				available: [0, 10000000000],
+				default: 1000000000,
+				path: queryParams.thresholdCountry ? queryParams.thresholdCountry * 1 : null
 
-		const defaultCountryThreshold = 1000000000;
-		const defaultPopulationThreshold = 1000000;
-		const defaultProductThreshold = 500000000;
-		const defaultSubnationalGeoThreshold = 100000000;
-		const defaultSubnationalRCAThreshold = 10;
+			},
+			population: {
+				available: [0, 5000000],
+				default: 1000000,
+				path: queryParams.thresholdPopulation ? queryParams.thresholdPopulation * 1 : null
+			},
+			product: {
+				available: [0, 2000000000],
+				default: 500000000,
+				path: queryParams.thresholdProduct ? queryParams.thresholdProduct * 1 : null
+			},
+			subnational: {
+				available: [0, 500000000],
+				default: 100000000,
+				path: queryParams.thresholdSubnatGeography ? queryParams.thresholdSubnatGeography * 1 : null
+			},
+			rca: {
+				available: [0, 30],
+				default: 10,
+				path: queryParams.thresholdRCA ? queryParams.thresholdRCA * 1 : null
+			}
+		};
+		const countryExpThreshold = this.valueInThreshold(thresholds["country"].path, thresholds["country"].available[0], thresholds["country"].available[1], thresholds["country"].default);
+		const populationThreshold = this.valueInThreshold(thresholds["population"].path, thresholds["population"].available[0], thresholds["population"].available[1], thresholds["population"].default);
+		const productExpThreshold = this.valueInThreshold(thresholds["product"].path, thresholds["product"].available[0], thresholds["product"].available[1], thresholds["product"].default);
+		const subnationalGeoThreshold = this.valueInThreshold(thresholds["subnational"].path, thresholds["subnational"].available[0], thresholds["subnational"].available[1], thresholds["subnational"].default);
+		const subnationalRCAThreshold = this.valueInThreshold(thresholds["rca"].path, thresholds["rca"].available[0], thresholds["rca"].available[1], thresholds["rca"].default);
 
 		this.setState({
 			NATIONAL_AVAILABLE,
 			SUBNATIONAL_AVAILABLE,
-			subnationalCountry: defaultSubnationalCountry,
-			subnationalCountryDepth: defaultSubnationalCountryDepth,
-			subnationalProductDepth: defaultSubnationalProductDepth,
-			productDepth: defaultDepth,
-			productRevision: defaultRevision,
-			productBasecube: defaultBasecube,
-			yearRange: defaultYearRange,
-			yearInitial: defaultYearFinal - 1,
-			yearFinal: defaultYearFinal,
-			countryExpThreshold: defaultCountryThreshold,
-			populationThreshold: defaultPopulationThreshold,
-			productExpThreshold: defaultProductThreshold,
-			subnationalGeoThreshold: defaultSubnationalGeoThreshold,
-			subnationalRCAThreshold: defaultSubnationalRCAThreshold,
-			_ready: true,
-			// Old values
-			yearValue: yearsNational[defaultRevision].final,
-			yearRangeInitial: yearsNational[defaultRevision].final - 1,
-			yearRangeFinal: yearsNational[defaultRevision].final
+			isCountry,
+			isNational,
+			isSingleyear,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			productDepth,
+			productRevision,
+			productBasecube,
+			yearRange,
+			yearInitial,
+			yearFinal,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold,
+			_ready: true
 		});
 		this.setState({location: window.location});
 	}
@@ -128,6 +201,22 @@ class Custom extends Component {
 	// Execute props for checking if it's a pro user
 	componentWillMount() {
 		this.props.isAuthenticated();
+	}
+
+	checkPathParam = (param, valid) => {
+		const checked = valid.includes(param);
+		return checked;
+	}
+
+	valueInThreshold = (value, min, max, def) => {
+		const number = value
+			? value < min
+				? min
+				: value > max
+					? max
+					: value
+			: def;
+		return number;
 	}
 
 	// Returns new year range and validates the year selected in the new range
@@ -154,7 +243,6 @@ class Custom extends Component {
 		const {NATIONAL_AVAILABLE, subnationalCountry, productRevision, yearInitial, yearFinal} = this.state;
 		const DATASET = value ? NATIONAL_AVAILABLE.find(d => d.name === productRevision) : SUBNATIONAL_DATASETS[subnationalCountry];
 		const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
-		console.log(YEARS);
 
 		this.setState({
 			[key]: value,
@@ -326,13 +414,14 @@ class Custom extends Component {
 
 		const data = await this.fetchData(INDEX, pathYearRange);
 		const filteredData = await this.filteredData(INDEX, measure, pathYearRange, data);
-		console.log(filteredData);
 		const columns = await this.createColumns(INDEX, measure, productRevision, pathYearRange);
+		const sharePath = await this.shareCreator();
 
 		this.setState({
 			data: filteredData['data'],
 			dataDownload: filteredData['dataDownload'],
 			columns,
+			sharePath,
 			_loading: false
 		});
 	}
@@ -517,7 +606,6 @@ class Custom extends Component {
 		let columnNAME = {};
 		if (type === "eci") {
 			const eciAccessor = isNational ? 'Country' : `${subnationalCountryDepth}`;
-			console.log(isNational, eciAccessor, subnationalCountry);
 			columnNAME = {
 				id: 'category',
 				accessor: d => d[eciAccessor],
@@ -687,6 +775,68 @@ class Custom extends Component {
 		return columns.filter(f => f !== null);
 	};
 
+	shareCreator = () => {
+		const {
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isCountry,
+			isNational,
+			isSingleyear,
+			productDepth,
+			productRevision,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			yearInitial,
+			yearFinal,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold
+		} = this.state;
+		const {pathParams} = this.props;
+
+		const pathElements = {
+			params: isNational
+				? {
+					index: isCountry ? "eci" : "pci",
+					subnational: isNational ? "false" : "true",
+					productDepth: isNational ? productDepth : subnationalProductDepth,
+					productRevision: isNational ? productRevision : "hs92",
+					years: isSingleyear ? `${yearFinal}` : `${yearInitial},${yearFinal}`,
+					thresholdCountry: `${countryExpThreshold}`,
+					thresholdPopulation: `${populationThreshold}`,
+					thresholdProduct: `${productExpThreshold}`
+				}
+				: {
+					index: isCountry ? "eci" : "pci",
+					subnational: isNational ? "false" : "true",
+					country: `${SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry).name}`,
+					countryDepth: `${subnationalCountryDepth}`,
+					productDepth: isNational ? productDepth : subnationalProductDepth,
+					productRevision: isNational ? productRevision : "hs92",
+					years: isSingleyear ? `${yearFinal}` : `${yearInitial},${yearFinal}`,
+					thresholdCountry: `${countryExpThreshold}`,
+					thresholdPopulation: `${populationThreshold}`,
+					thresholdProduct: `${productExpThreshold}`,
+					thresholdSubnatGeography: `${subnationalGeoThreshold}`,
+					thresholdRCA: `${subnationalRCAThreshold}`
+				}
+		}
+
+		const queryElements = this.sharePathCreator(pathElements.params);
+		const path = `/${pathParams.lang}/rankings/custom?` + queryElements;
+		return path;
+	}
+
+	sharePathCreator = (params) => {
+		const path = [];
+		for (let d in params)
+			path.push(encodeURIComponent(d) + '=' + encodeURIComponent(params[d]));
+		return path.join('&');
+	}
+
 	render() {
 		const {
 			NATIONAL_AVAILABLE,
@@ -709,13 +859,10 @@ class Custom extends Component {
 			productExpThreshold,
 			subnationalGeoThreshold,
 			subnationalRCAThreshold,
-			// Old Variables
-			yearValue,
-			yearRangeInitial,
-			yearRangeFinal,
 			data,
 			dataDownload,
 			columns,
+			sharePath,
 			location,
 			_ready,
 			_loading
@@ -749,7 +896,6 @@ class Custom extends Component {
 						variables={{
 							NATIONAL_AVAILABLE,
 							SUBNATIONAL_AVAILABLE,
-							// New Variables
 							isCountry,
 							isNational,
 							isSingleyear,
@@ -763,10 +909,6 @@ class Custom extends Component {
 							yearInitial,
 							yearFinal,
 							yearRange,
-							// Old Variables
-							yearValue,
-							yearRangeInitial,
-							yearRangeFinal,
 							countryExpThreshold,
 							populationThreshold,
 							productExpThreshold,
@@ -788,18 +930,16 @@ class Custom extends Component {
 						createTable={this.createTable}
 					/>
 
-
-
 					{_loading ? <Loading /> : data &&
 						<div className='custom-table'>
 							<div className="download">
 								<VbDownload
 									data={dataDownload}
 									location={location}
-									title={`custom_rankings_download}`}
-									customAPI={null}
+									title={`custom_rankings_download`}
+									customAPI={sharePath}
 									saveViz={false}
-									buttonTitle={'Download Table'}
+									buttonTitle={'Share & Download Table'}
 								/>
 							</div>
 							<RankingTable data={data} columns={columns} country={isCountry} />
