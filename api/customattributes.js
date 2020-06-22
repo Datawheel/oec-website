@@ -41,7 +41,21 @@ module.exports = function (app) {
         "afzaf": "trade_s_zaf_m_hs"
       };
 
+      const defaultProductLevelDict = {
+        "nacan": "HS4",
+        "aschn": "HS4",
+        "eudeu": "Product",
+        "asjpn": "HS4",
+        "eurus": "HS4",
+        "euesp": "HS4",
+        "sabra": "HS4",
+        "eugbr": "HS4",
+        "nausa": "HS4",
+        "afzaf": "HS4"
+      };
+
       const subnatCubeName = subnatCubeNameDict[id1] || "trade_s_chn_m_hs";
+      const defaultProductLevel = defaultProductLevelDict[id1] || "Product";
 
       const url = `${OLAP_PROXY_ENDPOINT}data?time=time.latest&cube=${subnatCubeName}&drilldowns=Time&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
       const data = await axios.get(url, config).then(resp => resp.data.data).catch((error) => console.error("Custom Attribute Error:", error));
@@ -52,7 +66,8 @@ module.exports = function (app) {
       return res.json({
         subnatCubeName,
         latestSubnationalDate,
-        previousSubnationalDate
+        previousSubnationalDate,
+        defaultProductLevel
       });
 
     } else if (pid === 2) { //product profile
