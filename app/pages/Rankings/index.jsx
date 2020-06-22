@@ -31,6 +31,10 @@ class Rankings extends Component {
 							return <Legacy type={"eci"} depth={depth} rev={rev} />;
 						case 'legacy_pci':
 							return <Legacy type={"pci"} depth={depth} rev={rev} />;
+						case 'country':
+							return <Legacy type={"eci"} depth={depth} rev={rev} />;
+						case 'product':
+							return <Legacy type={"pci"} depth={depth} rev={rev} />;
 						default:
 							return <Error />;
 					}

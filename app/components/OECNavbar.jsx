@@ -67,10 +67,39 @@ class OECNavbar extends Component {
   }
 
   render() {
-    const {auth, locale, title, scrolled, shortTitle} = this.props;
+    const {auth, cubesMetadata, locale, title, scrolled, shortTitle} = this.props;
     const {navVisible, searchVisible} = this.state;
     const {basename, pathname, search} = this.context.router.location;
     const currentURL = encodeURIComponent(`${basename}${pathname}${search}`.replace("//", "/"));
+
+    let enrichedNav = NAV;
+
+    // enrich navigation with latest data updates for subnational cubes
+    // data gets pulled in as a need in the main App component
+    if (cubesMetadata) {
+      enrichedNav = NAV.map(navg => {
+        if (navg.title === "Reports") {
+          navg.items = navg.items.map(navgInnerItem => {
+            if (navgInnerItem.title === "Subnational") {
+              navgInnerItem.items = navgInnerItem.items.map(navgInnerItemInnerItem => {
+                if (navgInnerItemInnerItem.cubeName) {
+                  const thisItemCube = cubesMetadata.subnational.products.find(d => d.cubeName === navgInnerItemInnerItem.cubeName);
+                  const newTitle = thisItemCube
+                    ? navgInnerItemInnerItem.title.includes(thisItemCube.end)
+                      ? navgInnerItemInnerItem.title
+                      : `${navgInnerItemInnerItem.title} (${thisItemCube.end})`
+                    : navgInnerItemInnerItem.title;
+                  return {...navgInnerItemInnerItem, title: newTitle};
+                }
+                return navgInnerItemInnerItem;
+              });
+            }
+            return navgInnerItem;
+          });
+        }
+        return navg;
+      });
+    }
 
     return (
       <React.Fragment>
@@ -96,7 +125,7 @@ class OECNavbar extends Component {
 
           <nav className={`navbar-nav ${navVisible ? "is-visible" : "is-hidden"}`}>
             <ul className="navbar-nav-list">
-              {NAV.map(group =>
+              {enrichedNav.map(group =>
                 <NavGroup {...group} key={group.title} />
               )}
             </ul>
@@ -158,5 +187,6 @@ OECNavbar.contextTypes = {
 
 export default connect(state => ({
   auth: state.auth,
-  locale: state.i18n.locale
+  locale: state.i18n.locale,
+  cubesMetadata: state.data.cubesMetadata
 }))(hot(OECNavbar));

@@ -48,12 +48,16 @@ function subtitle(entity) {
 
 // cherrypick subnat datasets to get latest available dates
 const availableSubnatDatasets = [
+  "trade_s_bra_mun_m_hs",
   "trade_s_chn_m_hs",
   "trade_s_can_m_hs",
   "trade_s_deu_m_egw",
   "trade_s_jpn_m_hs",
   "trade_s_rus_m_hs",
-  "trade_s_esp_m_hs"
+  "trade_s_zaf_m_hs",
+  "trade_s_esp_m_hs",
+  "trade_s_gbr_m_hs",
+  "trade_s_usa_state_m_hs"
 ];
 
 class Home extends Component {
@@ -195,7 +199,7 @@ class Home extends Component {
           <div className="features-tiles header">
             <div className="header-inner">
               <h2>Great tools for great explorers</h2>
-              <p>When you register for <a href={`/${locale}/signup`}>OEC Premium</a> you&apos;ll have access to new tools like predictions, subnational rankings and an advanced viz builder.</p>
+              <p>When you register for <a href={`/${locale}/signup`}>OEC Premium</a> you&apos;ll have access to new tools like forecasts, subnational rankings and an advanced viz builder.</p>
             </div>
           </div>
           <div className="tiles-wrap">
@@ -211,8 +215,8 @@ class Home extends Component {
                   </div>
                 </div>
                 <div className="features-tiles-item-content">
-                  <h3 className="">Predictions</h3>
-                  <p className="">Create your own custom combination out of millions of possible time series predictions.</p>
+                  <h3 className="">Forecasts</h3>
+                  <p className="">Create your own custom combination out of millions of possible time series forecasts.</p>
                   <a href={`/${locale}/prediction`}>Get started &raquo;</a>
                 </div>
               </div>

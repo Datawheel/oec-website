@@ -128,7 +128,7 @@ class VbDownload extends React.Component {
   };
 
   handleSeparator = evt => this.setState({separator: evt.target.value});
-  handleImageFormat = evt => (console.log(evt.target.value), this.setState({imageFormat: evt.target.value}));
+  handleImageFormat = evt => this.setState({imageFormat: evt.target.value});
   handleCopyClipboard = (key, text) => {
     this.setState({[key]: true});
     navigator.clipboard.writeText(text);
@@ -263,6 +263,6 @@ function mapStateToProps(state) {
 VbDownload.defaultProps = {
   saveViz: true,
   buttonTitle: "Download"
-}
+};
 
 export default withNamespaces()(connect(mapStateToProps)(VbDownload));

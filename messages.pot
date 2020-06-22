@@ -1,0 +1,679 @@
+msgid "Trillion"
+msgid_plural "Trillions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Billion"
+msgid_plural "Billions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Million"
+msgid_plural "Millions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Thousand"
+msgid_plural "Thousands"
+msgstr[0] ""
+msgstr[1] ""
+
+msgctxt "0"
+msgid "th"
+msgstr ""
+
+msgctxt "1"
+msgid "st"
+msgstr ""
+
+msgctxt "2"
+msgid "nd"
+msgstr ""
+
+msgctxt "3"
+msgid "rd"
+msgstr ""
+
+msgctxt "4"
+msgid "th"
+msgstr ""
+
+msgctxt "5"
+msgid "th"
+msgstr ""
+
+msgctxt "6"
+msgid "th"
+msgstr ""
+
+msgctxt "7"
+msgid "th"
+msgstr ""
+
+msgctxt "8"
+msgid "th"
+msgstr ""
+
+msgctxt "9"
+msgid "th"
+msgstr ""
+
+msgid "article_the_m_p"
+msgstr ""
+
+msgid "article_the_m"
+msgstr ""
+
+msgid "article_the_f_p"
+msgstr ""
+
+msgid "article_the_f"
+msgstr ""
+
+msgid "article_of"
+msgstr ""
+
+msgid "article_of_m_p"
+msgstr ""
+
+msgid "article_of_m"
+msgstr ""
+
+msgid "article_of_f_p"
+msgstr ""
+
+msgid "article_of_f"
+msgstr ""
+
+msgid "verb_is_p"
+msgstr ""
+
+msgid "verb_is"
+msgstr ""
+
+msgid "The Observatory of Economic Complexity"
+msgstr ""
+
+msgid "We are the world's leading visualization engine for international trade data."
+msgstr ""
+
+msgid "Learn More"
+msgstr ""
+
+msgid "Watch a video"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Application programming interface (API) for querying the raw data used throughout The Observatory of Economic Complexity."
+msgstr ""
+
+msgid "Books"
+msgstr ""
+
+msgid "Photo by"
+msgstr ""
+
+msgid "Countries"
+msgstr ""
+
+msgid "Products"
+msgstr ""
+
+msgid "Visualizations"
+msgstr ""
+
+msgid "Rankings"
+msgstr ""
+
+msgid "Publications"
+msgstr ""
+
+msgid "Resources"
+msgstr ""
+
+msgid "About the Site"
+msgstr ""
+
+msgid "Economic Complexity"
+msgstr ""
+
+msgid "FAQs"
+msgstr ""
+
+msgid "Data Sources"
+msgstr ""
+
+msgid "Permissions"
+msgstr ""
+
+msgid "API"
+msgstr ""
+
+msgid "Exports"
+msgstr ""
+
+msgid "Imports"
+msgstr ""
+
+msgid "and"
+msgstr ""
+
+msgid "Trade Partners"
+msgstr ""
+
+msgid "Product Trade"
+msgstr ""
+
+msgid "Exporters"
+msgstr ""
+
+msgid "Importers"
+msgstr ""
+
+msgid "Explore on Visualizations page"
+msgstr ""
+
+msgid "Product Complexity"
+msgstr ""
+
+msgid "Dataset"
+msgstr ""
+
+msgid "Year"
+msgstr ""
+
+msgid "Depth"
+msgstr ""
+
+msgid "Download Current Year"
+msgstr ""
+
+msgid "Download All Years"
+msgstr ""
+
+msgid "Photos and descriptions of the team members involved in the creation of The Observatory."
+msgstr ""
+
+msgid "About the Observatory"
+msgstr ""
+
+msgid "Current Team"
+msgstr ""
+
+msgid "Past Contributors"
+msgstr ""
+
+msgid "HS, SITC, and Country classification with their corresponding IDs and values."
+msgstr ""
+
+msgid "What is Economic Complexity?"
+msgstr ""
+
+msgid "How is Economic Complexity calculated?"
+msgstr ""
+
+msgid "Who makes what?"
+msgstr ""
+
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgid "A Development blog of updates to the site."
+msgstr ""
+
+msgid "Share"
+msgstr ""
+
+msgid "Short URL"
+msgstr ""
+
+msgid "Embed"
+msgstr ""
+
+msgid "Social Media"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "No Filter"
+msgstr ""
+
+msgid "An emedded visualization."
+msgstr ""
+
+msgid "Data visualization of economic trade"
+msgstr ""
+
+msgid "Controls"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Build Visualization"
+msgstr ""
+
+msgid "Select Trade Scenario"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Population"
+msgstr ""
+
+msgid "GDP"
+msgstr ""
+
+msgid "GDP Per Capita"
+msgstr ""
+
+msgid "Econ Complexity"
+msgstr ""
+
+#, python-format
+msgid "The total world trade in %(year)s was %(export_val)s."
+msgstr ""
+
+#, python-format
+msgid "The 10 most traded products by dollar amount are %(exports_list)s, using the 1992 revision of the HS (Harmonized System) classification."
+msgstr ""
+
+#, python-format
+msgid "The top 10 exporting countries are %(origins_list)s."
+msgstr ""
+
+#, python-format
+msgid "%(country_is)s the %(econ_rank)s largest export economy in the world"
+msgstr ""
+
+#, python-format
+msgid "and the %(eci_rank)s most complex economy according to the Economic Complexity Index (ECI)."
+msgstr ""
+
+#, python-format
+msgid "In %(year)s, %(country)s exported $%(export_val)s and imported $%(import_val)s, resulting in a %(positive_negative)s trade balance of $%(trade_delta)s."
+msgstr ""
+
+#, python-format
+msgid "In %(year)s the GDP %(of_country)s was $%(gdp)s and its GDP per capita was $%(gdp_pc)s."
+msgstr ""
+
+#, python-format
+msgid "The top exports %(of_country)s are %(exports_list)s, using the 1992 revision of the HS (Harmonized System) classification. Its top imports are %(imports_list)s."
+msgstr ""
+
+#, python-format
+msgid "The top export destinations %(of_country)s are %(destinations)s. The top import origins are %(origins)s."
+msgstr ""
+
+#, python-format
+msgid "%(country)s is an island and borders %(maritime_borders)s by sea."
+msgstr ""
+
+#, python-format
+msgid "%(country)s borders %(land_borders)s."
+msgstr ""
+
+#, python-format
+msgid "%(country)s borders %(land_borders)s by land and %(maritime_borders)s by sea."
+msgstr ""
+
+#, python-format
+msgid "During the last five years exports have %(increased_decreased)s at a median annualized rate of %(change_rate)s%%, from $%(past_export_val)s in %(past_year)s to $%(current_export_val)s in %(current_year)s."
+msgstr ""
+
+#, python-format
+msgid "The most recent exports are led by %(top_export)s which represent %(top_export_pct)s%% of the total products exported, followed by %(second_export)s, which account for %(second_export_pct)s%%."
+msgstr ""
+
+#, python-format
+msgid "The top exporters globally are %(origins)s."
+msgstr ""
+
+msgid "Origins"
+msgstr ""
+
+#, python-format
+msgid "In %(year)s %(country)s exported $%(export_val)s, making it the %(export_rank)s largest exporter in the world."
+msgstr ""
+
+#, python-format
+msgid "During the last five years the exports %(of_country)s have %(increased_decreased)s at an annualized rate of %(change_rate)s%%, from $%(past_export_val)s in %(past_year)s to $%(current_export_val)s in %(current_year)s."
+msgstr ""
+
+#, python-format
+msgid "The most recent exports are led by %(top_export)s which represent %(top_export_pct)s%% of the total exports %(of_country)s, followed by %(second_export)s, which account for %(second_export_pct)s%%."
+msgstr ""
+
+#, python-format
+msgid "In %(year)s %(country)s imported $%(import_val)s, making it the %(import_rank)s largest importer in the world."
+msgstr ""
+
+#, python-format
+msgid "During the last five years the imports %(of_country)s have %(increased_decreased)s at an annualized rate of %(change_rate)s%%, from $%(past_import_val)s in %(past_year)s to $%(current_import_val)s in %(current_year)s."
+msgstr ""
+
+#, python-format
+msgid "The most recent imports are led by %(top_import)s which represent %(top_import_pct)s%% of the total imports %(of_country)s, followed by %(second_import)s, which account for %(second_import_pct)s%%."
+msgstr ""
+
+#, python-format
+msgid "The top export destinations %(of_country)s are %(destinations)s."
+msgstr ""
+
+#, python-format
+msgid "The top import origins %(of_country)s are %(origins)s."
+msgstr ""
+
+msgid "positive"
+msgstr ""
+
+msgid "negative"
+msgstr ""
+
+msgid "exports"
+msgstr ""
+
+msgid "imports"
+msgstr ""
+
+#, python-format
+msgid "As of %(year)s %(country)s had a %(positive_negative)s trade balance of $%(net_trade)s in net %(exports_imports)s."
+msgstr ""
+
+msgid "still"
+msgstr ""
+
+#, python-format
+msgid "As compared to their trade balance in %(year)s when they %(still)s had a %(positive_negative)s trade balance of $%(net_trade)s in net %(exports_imports)s."
+msgstr ""
+
+msgid "Trade Balance"
+msgstr ""
+
+msgid "Destinations"
+msgstr ""
+
+#, python-format
+msgid "The economy %(of_country)s has an Economic Complexity Index (ECI) of %(eci)s making it the %(eci_rank)s most complex country."
+msgstr ""
+
+#, python-format
+msgid "%(country)s exports %(num_of_exports)s products with revealed comparative advantage (meaning that its share of global exports is larger than what would be expected from the size of its export economy and from the size of a product’s global market)."
+msgstr ""
+
+msgid "The product space is a network connecting products that are likely to be co-exported and can be used to predict the evolution of a country’s export structure."
+msgstr ""
+
+#, python-format
+msgid "Economic Complexity %(of_country)s"
+msgstr ""
+
+msgid "Product Space"
+msgstr ""
+
+#, python-format
+msgid "The Economic Complexity of each country visualized over the past %(year_range)s years."
+msgstr ""
+
+msgid "Economic Complexity Ranking"
+msgstr ""
+
+msgid "increased"
+msgstr ""
+
+msgid "decreased"
+msgstr ""
+
+#, python-format
+msgid "The Economic Complexity ranking %(of_country)s has %(increased_or_decreased)s by %(rank_delta)s places over the past %(year_range)s years from %(old_eci)s in %(old_year)s to %(current_eci)s in %(current_year)s."
+msgstr ""
+
+#, python-format
+msgid "More on %(country)s from our other sites"
+msgstr ""
+
+msgid "Top Exporter"
+msgstr ""
+
+msgid "Top Importer"
+msgstr ""
+
+#, python-format
+msgid "%(product)s the %(economic_rank)s most traded product"
+msgstr ""
+
+msgid "Product Complexity Index"
+msgstr ""
+
+#, python-format
+msgid "and the %(pci_rank)s most complex product according to the %(pci_ranking_link)s"
+msgstr ""
+
+#, python-format
+msgid "The top exporters of %(product)s are %(exporters)s. The top importers are %(importers)s."
+msgstr ""
+
+#, python-format
+msgid "%(product)s the top export of %(countries)s."
+msgstr ""
+
+#, python-format
+msgid "%(product)s the top import of %(countries)s."
+msgstr ""
+
+#, python-format
+msgid "%(product)s also known as %(keywords)s."
+msgstr ""
+
+#, python-format
+msgid "%(product)s a %(product_id_length)s digit %(classification)s product."
+msgstr ""
+
+#, python-format
+msgid "%(product_name)s Trade."
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the share of countries that export %(product)s."
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the share of countries that import %(product)s."
+msgstr ""
+
+#, python-format
+msgid "This visualization shows products that are likely to be exported by countries that export %(product)s."
+msgstr ""
+
+msgid "This map shows the states in the United States colored by median income."
+msgstr ""
+
+#, python-format
+msgid "Data USA is the most comprehensive visualization of U.S. public data. If you would like more info or to create a similar site get in touch with us at %(oec_email)s."
+msgstr ""
+
+msgid "Explore on Data USA"
+msgstr ""
+
+msgid "This bar chart shows the wage distribution in the United States."
+msgstr ""
+
+msgid "Income by Location"
+msgstr ""
+
+msgid "This treemap shows the municipalities in Brazil that imported products internationally."
+msgstr ""
+
+#, python-format
+msgid "DataViva is a visualization tool that provides official data on trade, industries, and education throughout Brazil. If you would like more info or to create a similar site get in touch with us at %(oec_email)s."
+msgstr ""
+
+msgid "Explore on DataViva"
+msgstr ""
+
+msgid "Imports of Brazil by Municipality"
+msgstr ""
+
+msgid "This map shows the exports of Brazil by state."
+msgstr ""
+
+msgid "This bar chart shows the wage distribution for the working population in Brazil."
+msgstr ""
+
+msgid "State Exports"
+msgstr ""
+
+msgid "Wage Distribution"
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the municipalities in Brazil that imported products from %(country)s."
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the municipalities in Brazil that exported products to %(country)s."
+msgstr ""
+
+#, python-format
+msgid "Brazilian Municipalities that import from %(country)s"
+msgstr ""
+
+#, python-format
+msgid "Brazilian Municipalities that export to %(country)s"
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the municipalities in Brazil that export %(product)s."
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the municipalities in Brazil that import %(product)s."
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the cultural exports %(of_country)s, as proxied by the production of globally famous historical characters"
+msgstr ""
+
+msgid "Explore on Pantheon"
+msgstr ""
+
+#, python-format
+msgid "This treemap shows the cultural exports %(of_country)s by city, as proxied by the production of globally famous historical characters."
+msgstr ""
+
+#, python-format
+msgid "Globally Famous People %(of_country)s"
+msgstr ""
+
+#, python-format
+msgid "Globally Famous People %(of_country)s by City"
+msgstr ""
+
+msgid "Rank"
+msgstr ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Country"
+msgstr ""
+
+msgid "Product"
+msgstr ""
+
+msgid "Percent"
+msgstr ""
+
+msgid "Export Value"
+msgstr ""
+
+msgid "Net Export Value"
+msgstr ""
+
+msgid "Import Value"
+msgstr ""
+
+msgid "Net Import Value"
+msgstr ""
+
+msgid "Market Value"
+msgstr ""
+
+msgid "Export RCA"
+msgstr ""
+
+msgid "Import RCA"
+msgstr ""
+
+msgid "GDPpc (constant '05 US$)"
+msgstr ""
+
+msgid "GDPpc (current US$)"
+msgstr ""
+
+msgid "GDPpc PPP (constant '11)"
+msgstr ""
+
+msgid "GDPpc PPP (current)"
+msgstr ""
+
+msgid "ECI"
+msgstr ""
+
+msgid "ECI Rank"
+msgstr ""
+
+msgid "Annual Growth Rate (1 year)"
+msgstr ""
+
+msgid "Annual Growth Rate (5 year)"
+msgstr ""
+
+msgid "Growth Value (1 year)"
+msgstr ""
+
+msgid "Growth Value (5 year)"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Loading Visualization"
+msgstr ""
+
+msgid "We couldn't find any results."
+msgstr ""
+
+msgid "Partner"
+msgstr ""
+
+msgid "Y Axis"
+msgstr ""
+
+msgid "Trade Flow"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Start Year"
+msgstr ""
+
+msgid "End Year"
+msgstr ""
+
+#, python-format
+msgid "Profile for %(attr)s"
+msgstr ""
+

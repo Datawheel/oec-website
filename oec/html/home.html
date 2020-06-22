@@ -1,0 +1,153 @@
+{% extends "templates/nav.html" %}
+
+{% block title %}: {{ _("The Observatory of Economic Complexity") }}{% endblock %}
+
+{% block body %}
+
+<div id="launch">
+  <div class="modal_close">
+    <img src="/static/img/nav/x.png">
+    <div>[ esc ]</div>
+  </div>
+  <div class="modal_body">
+    <iframe id="vimeo_embed" src="https://player.vimeo.com/video/141271203?autoplay=0&api=1&color=ffffff&title=0&byline=0&portrait=0" width="700" height="394" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  </div>
+</div>
+
+<div class="bg-frame">
+  <div class="ring-pulse"></div>
+  <div class="ring-pulse echo-ring"></div>
+  <div id="ring">
+    <img src="/static/img/home/stars.png" class="star-rotate">
+    <img id="big_logo" src="/static/img/home/logo.png" alt="{{ _('The Observatory of Economic Complexity') }}">
+    <img id="observatory" src="/static/img/home/observatory.png"/>
+    <p id="info">
+      {{ _("We are the world's leading visualization engine for international trade data.") }}
+      <br>
+      <a href="{{ url_for('resources.about', lang=g.locale) }}">{{ _("Learn More") }}</a>
+    </p>
+    <div id="launch_vid" title="Launch video">
+        <img src="/static/img/home/play.png" alt="launch video"/>
+        <span>{{ _("Watch a video") }}</span>
+      </div>
+    <div id="search_home">
+      <img src="/static/img/nav/search.png">
+      {{ _("Search") }}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+<script src="/static/js/libs/froogaloop.min.js"></script>
+<script>
+
+  var timing = 0;
+  function bgresize() {
+
+    var n = d3.select("nav").node().offsetHeight,
+        f = d3.select("footer").node().offsetHeight,
+        p = 50,
+        w = window.innerWidth,
+        h = window.innerHeight - n - f,
+        min = 300,
+        max = 850,
+        s = d3.min([max, d3.max([Math.floor(d3.min([w - p, h - p])), min])]);
+
+    if (timing) {
+      d3.select(".bg-frame").transition().duration(timing)
+        .style("width", s + "px")
+        .style("height", s + "px");
+      d3.select("#info").transition().duration(timing)
+        .style("font-size", s/35 + "px");
+      d3.select("#launch_vid img").transition().duration(timing)
+        .style("width", s/28 + "px").style("height", s/28 + "px");
+      d3.select("#launch_vid span").transition().duration(timing)
+        .style("font-size", s/45 + "px");
+      d3.select("#search_home").transition().duration(timing)
+        .style("font-size", s/32 + "px");
+    }
+    else {
+
+      timing = 600;
+
+      d3.select(".bg-frame")
+        .style("width", s + "px")
+        .style("height", s + "px");
+
+      d3.select("#info").style("font-size", s/35 + "px");
+      d3.select("#launch_vid img").style("width", s/28 + "px").style("height", s/28 + "px");
+      d3.select("#launch_vid span").style("font-size", s/45 + "px");
+      d3.select("#search_home").style("font-size", s/32 + "px");
+
+      d3.select(".bg-frame").transition().duration(timing * 2)
+        .style("opacity", 1);
+
+    }
+
+  }
+
+  bgresize();
+
+  resizeFunctions.push(bgresize);
+
+  d3.select("#launch_vid").on("click", launchVid);
+
+  d3.select("#search_home").on("click", search);
+
+  if (RegExp('tour', 'gi').test(window.location.search)) {
+
+    var intro = introJs();
+    intro.setOptions({
+      steps: [
+        {
+          intro: "<p>Welcome to the new Observatory of Economic Complexity</p><p>This guided tour will take you through most of the pages on the site and highlight some of the new features that have been added in this update.</p>"
+        },
+        {
+          intro: "<p>On any page, while you're using the site, you can click the magnifying class to easily search the site for a specific visualization or the profile of a country or product.</p>",
+          element: document.querySelector('#search_home')
+        },
+      ],
+      doneLabel: 'Next page'
+    });
+
+    intro.start().oncomplete(function() {
+      window.location.href = '/en/profile/country/ita/?tour=true';
+    });
+  }
+
+  d3.select("#vimeo_embed")
+    .attr("width", window.innerWidth * 0.8)
+    .attr("height", window.innerWidth * 0.8 * (9/16));
+
+  var vimeo = $f(d3.select("#vimeo_embed").node());
+  function launchVid() {
+    d3.select("#launch").style("visibility", "visible").classed("visible", true);
+    d3.select("#launch .modal_close").classed("open", true);
+
+    vimeo.api("play");
+
+    d3.select("body").on("keyup.video", function(){
+      if (d3.event.keyCode === 27) {
+        close_launch();
+      }
+    });
+
+  }
+
+  function close_launch() {
+    d3.select("#launch").classed("visible", false);
+    d3.select("#launch .modal_close").classed("open", false);
+    vimeo.api("pause");
+    setTimeout(function(){
+      d3.select("#launch").style("visibility", "hidden");
+    }, 500);
+  }
+
+  d3.select("#launch .modal_close, #launch").on("click", close_launch);
+
+</script>
+
+{% endblock %}

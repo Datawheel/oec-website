@@ -1,0 +1,142 @@
+#share {
+
+  a.share_button {
+    @include transition(opacity 0.1s);
+    color: $blue;
+    display: inline-block;
+    @include margin(10px, 20px, 0, 0);
+    opacity: 0.8;
+    @include text-align(center);
+    width: 20px;
+
+    &:hover {
+      opacity: 1;
+    }
+
+  }
+
+  i {
+    display: inline-block;
+    font-size: 20px;
+  }
+
+}
+
+#short{
+  display: none;
+}
+
+.btn-close {
+  color: #aaaaaa;
+  font-size: 30px;
+  font-weight: 100;
+  text-decoration: none;
+  position: absolute;
+  @include right(10px);
+  top: 2px;
+
+  &:hover {
+    color: #919191;
+  }
+
+}
+
+.modal {
+
+  &#download {
+    .modal-body {
+    @include text-align(center);
+    }
+  }
+
+  .modal-dialog {
+    @include transform(translate(0, -500%));
+    @include shadow();
+    background-color: white;
+    @include left(50%);
+    @include margin-left(-200px);
+    position: fixed;
+    top: -100%;
+    width: 400px;
+    z-index: 31;
+    -webkit-transition: -webkit-transform 0.3s ease-out;
+       -moz-transition: -moz-transform 0.3s ease-out;
+         -o-transition: -o-transform 0.3s ease-out;
+            transition: transform 0.3s ease-out;
+
+    @media all and (max-width: 480px) {
+      @include margin-left(-125px);
+      width: 250px;
+    }
+
+  }
+
+  &.active {
+
+    &:before {
+      display: block;
+    }
+
+    .modal-dialog {
+      @include transform(translate(0, 0));
+      top: 30%;
+    }
+
+  }
+
+}
+
+.modal-header {
+  @include padding(10px, 20px, 0, 20px);
+  h2 {
+    color: $blue;
+  }
+}
+
+.modal-body {
+  @include padding(10px, 20px, 20px, 20px);
+
+  h3 {
+    color: $darkbackground;
+    font-size: 16px;
+    @include margin(10px, 0, 5px, 0);
+
+    &:first-child {
+    @include margin(0, 0, 0, 0);
+    }
+
+  }
+
+  input {
+    border: solid 1px, rgb(236, 236, 236);
+    color: #888;
+    font-size: 12px;
+    letter-spacing: 1px;
+    @include margin(5px, 0, 5px, 0);
+    overflow: hidden;
+    @include padding(3px, 3px, 3px, 3px);
+    width: 100%;
+
+    &:focus {
+      color: #444;
+      outline: 0;
+    }
+
+  }
+
+  .download_button {
+    @include transition(opacity 0.1s);
+    color: black;
+    display: inline-block;
+    font-size: 20px;
+    @include margin(20px, 20px, 10px, 16px);
+    opacity: 0.8;
+    text-decoration: none;
+
+    &:hover {
+      opacity: 1;
+    }
+
+  }
+
+}

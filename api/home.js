@@ -7,17 +7,31 @@ const tiles = [
     large: true
   },
   "/en/profile/hs92/rubber-surgical-gloves",
-  "/profile/country/chl",
+  "/profile/subnational_usa_port/chicago-il-3901",
+  "/profile/country/gbr",
+  {
+    link: "/profile/subnational_usa_state/ca",
+    large: true
+  },
   "/profile/subnational_esp/valencia",
+  "/profile/subnational_bra_state/rio-de-janeiro",
   "/profile/hs92/crude-petroleum",
   {
-    link: "/profile/bilateral-product/therapeutic-respiration-apparatus/reporter/aus",
-    larg: true
+    link: "/profile/hs92/disinfectants-packaged-for-retail-sale",
+    large: true,
+    title: "Hand Sanitizer"
   },
+  "/profile/bilateral-product/therapeutic-respiration-apparatus/reporter/aus",
   "/profile/subnational_rus/omsk-region",
   "/en/profile/bilateral-product/rubber-surgical-gloves/reporter/mys",
   "/profile/country/fra",
+  {
+    link: "/profile/subnational_usa_district/new-york-city-ny",
+    large: true
+  },
   "/profile/subnational_jpn/kanagawa",
+  "/profile/country/ury",
+  "/profile/subnational_bra_municipality/sao-paulo-3450308",
   {
     link: "/profile/subnational_chn/hubei-province",
     large: true
@@ -36,8 +50,18 @@ const tiles = [
     link: "/profile/subnational_deu/baden-wurttemberg",
     large: true
   },
+  "/profile/subnational_usa_district/new-orleans-la",
   "/profile/subnational_jpn/fukushima",
   "/profile/subnational_esp/barcelona-8",
+  {
+    link: "/profile/subnational_usa_port/los-angeles-ca-2704",
+    large: true
+  },
+  // {
+  //   link: "/visualize/tree_map/hs17/export/show/all/6300215/2018/",
+  //   title: "Immunological Testing Kits",
+  //   image: "https://live.staticflickr.com/65535/49712164952_3757aebf01_k.jpg"
+  // },
   "/profile/subnational_rus/volgograd-region",
   "/profile/hs92/semiconductor-devices",
   "/profile/subnational_can/quebec",
@@ -85,11 +109,18 @@ const tiles = [
     link: "/profile/subnational_rus/st-petersburg",
     large: true
   },
+  "/profile/subnational_bra_municipality/sao-jose-dos-campos",
+  "/profile/subnational_usa_port/detroit-mi-3801",
   "/en/profile/bilateral-product/ground-nuts/reporter/gmb",
   "/profile/bilateral-country/bra/partner/arg",
   "/profile/country/lao",
+  {
+    link: "/profile/subnational_usa_district/houston-galveston-tx",
+    large: true
+  },
   "/profile/hs92/cars",
-  "/profile/subnational_jpn/hokkaido"
+  "/profile/subnational_jpn/hokkaido",
+  "/profile/subnational_usa_state/tx"
 
   // {
   //   link: "/profile/firm/disney-enterprises-inc-fa8492d090",

@@ -1,0 +1,733 @@
+# Japanese translations for PROJECT.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+# fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-04-13 18:52-0400\n"
+"PO-Revision-Date: 2016-04-14 11:31-0400\n"
+"Last-Translator: \n"
+"Language: ja\n"
+"Language-Team: ja <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.3\n"
+"X-Generator: Poedit 1.8.7\n"
+
+msgid "Trillion"
+msgid_plural "Trillions"
+msgstr[0] "兆"
+
+msgid "Billion"
+msgid_plural "Billions"
+msgstr[0] "億"
+
+msgid "Million"
+msgid_plural "Millions"
+msgstr[0] "無数"
+
+msgid "Thousand"
+msgid_plural "Thousands"
+msgstr[0] "数千"
+
+msgctxt "0"
+msgid "th"
+msgstr ""
+
+msgctxt "1"
+msgid "st"
+msgstr ""
+
+#, fuzzy
+msgctxt "2"
+msgid "nd"
+msgstr "と"
+
+msgctxt "3"
+msgid "rd"
+msgstr ""
+
+msgctxt "4"
+msgid "th"
+msgstr ""
+
+msgctxt "5"
+msgid "th"
+msgstr ""
+
+msgctxt "6"
+msgid "th"
+msgstr ""
+
+msgctxt "7"
+msgid "th"
+msgstr ""
+
+msgctxt "8"
+msgid "th"
+msgstr ""
+
+msgctxt "9"
+msgid "th"
+msgstr ""
+
+msgid "article_the_m_p"
+msgstr ""
+
+msgid "article_the_m"
+msgstr ""
+
+msgid "article_the_f_p"
+msgstr ""
+
+msgid "article_the_f"
+msgstr ""
+
+msgid "article_of"
+msgstr ""
+
+msgid "article_of_m_p"
+msgstr ""
+
+msgid "article_of_m"
+msgstr ""
+
+msgid "article_of_f_p"
+msgstr ""
+
+msgid "article_of_f"
+msgstr ""
+
+msgid "verb_is_p"
+msgstr ""
+
+msgid "verb_is"
+msgstr ""
+
+msgid "The Observatory of Economic Complexity"
+msgstr "経済複雑性の観測"
+
+msgid "We are the world's<br/>leading visualization engine<br/>for international trade data."
+msgstr "我々は、国際貿易<br/>データの可視化で世界を<br/>主導する機構です。"
+
+msgid "Learn More"
+msgstr "もっと知る"
+
+msgid "Search"
+msgstr "検索"
+
+msgid "Application programming interface (API) for querying the raw data used throughout The Observatory of Economic Complexity."
+msgstr "未補正のデータを検索するアプリケーションプログラムインターフェイスは、経済複雑性の観測をくまなく網羅します。"
+
+msgid "Books"
+msgstr "本"
+
+msgid "Photo by"
+msgstr "撮影"
+
+msgid "Countries"
+msgstr "国"
+
+msgid "Products"
+msgstr "製品"
+
+msgid "Visualizations"
+msgstr "可視化されたもの"
+
+msgid "Rankings"
+msgstr "ランキング"
+
+msgid "Publications"
+msgstr "発表、出版"
+
+msgid "Resources"
+msgstr "資源、情報源"
+
+msgid "About the Site"
+msgstr "こちらのサイトについて"
+
+msgid "Economic Complexity"
+msgstr "経済複雑性"
+
+msgid "FAQs"
+msgstr "よくある質問"
+
+msgid "Data Sources"
+msgstr "出典"
+
+msgid "Permissions"
+msgstr "許可"
+
+msgid "API"
+msgstr "アプリケーションプログラミングインターフェース"
+
+msgid "Take a tour"
+msgstr "こちらをご覧ください"
+
+msgid "Exports"
+msgstr "輸出"
+
+msgid "Imports"
+msgstr "輸入"
+
+msgid "and"
+msgstr "と"
+
+msgid "Trade Partners"
+msgstr "貿易パートナー"
+
+msgid "Product Trade"
+msgstr "製品の貿易"
+
+msgid "Exporters"
+msgstr "輸出"
+
+msgid "Importers"
+msgstr "輸入"
+
+msgid "Prev. Year"
+msgstr "前年"
+
+msgid " Rankings"
+msgstr " ランキング"
+
+msgid "Click here for Product Rankings"
+msgstr "プロダクトランキングはこちらをクリック"
+
+msgid "Product Complexity"
+msgstr "品目名"
+
+msgid "Click here for Country Rankings"
+msgstr "各国のランキングはこちらをクリック"
+
+msgid "Next Year"
+msgstr "来年"
+
+msgid "Previous Year"
+msgstr "前年"
+
+msgid "Dataset"
+msgstr "データ設定"
+
+msgid "Year"
+msgstr "年"
+
+msgid "Depth"
+msgstr "深さ"
+
+msgid "Download Current Year"
+msgstr "今年をダウンロード"
+
+msgid "Download All Years"
+msgstr "すべての年をダウンロード"
+
+msgid "Photos and descriptions of the team members involved in the creation of The Observatory."
+msgstr "この経済複雑性観測所の創設に関わったチームメンバーの写真と説明。"
+
+msgid "About the Observatory"
+msgstr "この観測について"
+
+msgid "Current Team"
+msgstr "現在のチーム"
+
+msgid "Past Contributors"
+msgstr "貢献してくださった方々"
+
+msgid "HS, SITC, and Country classification with their corresponding IDs and values."
+msgstr "HS、SITCそしてIDsと値に付随した国の分類"
+
+msgid "What is Economic Complexity?"
+msgstr "経済複雑性とは何か？"
+
+msgid "How is Economic Complexity calculated?"
+msgstr "経済複雑性はどうやって計測されるのか？"
+
+msgid "Who makes what?"
+msgstr "誰が何を作るのか？"
+
+msgid "Frequently Asked Questions"
+msgstr "よくある質問"
+
+msgid "A Development blog of updates to the site."
+msgstr "サイトの更新の開発ブログ"
+
+msgid "Share"
+msgstr "シェア"
+
+msgid "Short URL"
+msgstr "ショートURL"
+
+msgid "Embed"
+msgstr "埋め込みます"
+
+msgid "Social Media"
+msgstr "ソーシャルメディア"
+
+msgid "Download"
+msgstr "ダウンロード"
+
+msgid "Home"
+msgstr "ホーム"
+
+msgid "No Filter"
+msgstr "フィルター設定なし"
+
+msgid "An emedded visualization."
+msgstr "emedded可視化"
+
+msgid "Data visualization of economic trade"
+msgstr "経済貿易のデータの可視化"
+
+msgid "Controls"
+msgstr "フィルター設定なし"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Build Visualization"
+msgstr "可視化の構築"
+
+msgid "Select Trade Scenario"
+msgstr "トレードシナリオを選ぶ"
+
+msgid "Profile"
+msgstr "プロファイル"
+
+msgid "Population"
+msgstr "人口"
+
+msgid "GDP"
+msgstr "国内総生産"
+
+msgid "GDP Per Capita"
+msgstr "一人あたりのGDP"
+
+msgid "Econ Complexity"
+msgstr "経済複雑性"
+
+#, python-format
+msgid "The total world trade in %(year)s was %(export_val)s."
+msgstr "%(year)s年の世界の総貿易は%(export_val)sでした。"
+
+#, python-format
+msgid "The 10 most traded products by dollar amount are %(exports_list)s, using the 1992 revision of the HS (Harmonized System) classification."
+msgstr "金額で10ほとんどの取引商品は、HS（統一システム）の分類の1992年改訂版を使用して、%(exports_list)sです。"
+
+#, python-format
+msgid "The top 10 exporting countries are %(origins_list)s."
+msgstr "トップ10の輸出国は%(origins_list)sです。"
+
+#, python-format
+msgid "%(country_is)s the %(econ_rank)s largest export economy in the world"
+msgstr "%(country_is)s世界%(econ_rank)s最大の輸出経済"
+
+#, python-format
+msgid " and the %(eci_rank)s most complex economy according to the Economic Complexity Index (ECI). "
+msgstr " %(eci_rank)s経済複雑性指標による最も複雑な経済 "
+
+#, python-format
+msgid "In %(year)s, %(country)s exported $%(export_val)s and imported $%(import_val)s, resulting in a %(positive_negative)s trade balance of $%(trade_delta)s. "
+msgstr "%(year)s年に、%(country)sは$ %(export_val)sエクスポートし、$%(trade_delta)sの%(positive_negative)s貿易収支の結果、$ %(import_val)sインポート。 "
+
+#, python-format
+msgid "In %(year)s the GDP %(of_country)s was $%(gdp)s and its GDP per capita was $%(gdp_pc)s."
+msgstr "%(year)s年に%(of_country)sのGDPは$%(gdp)sで一人当たりのGDPは$%(gdp_pc)s歳。"
+
+#, python-format
+msgid "The top exports %(of_country)s are %(exports_list)s, using the 1992 revision of the HS (Harmonized System) classification. Its top imports are %(imports_list)s."
+msgstr "%(of_country)sトップ輸出はHS（統一システム）の分類の1992年改訂版を使用して、%(exports_list)sです。そのトップの輸入は%(imports_list)sです。"
+
+#, python-format
+msgid "The top export destinations %(of_country)s are %(destinations)s. The top import origins are %(origins)s."
+msgstr "%(of_country)sトップ輸出先は%(destinations)sです。トップ輸入元は%(origins)sです。"
+
+#, python-format
+msgid "%(country)s is an island and borders %(maritime_borders)s by sea."
+msgstr "%(country)s島で、海に%(maritime_borders)sと国境を接します。"
+
+#, python-format
+msgid "%(country)s borders %(land_borders)s."
+msgstr "%(country)s%(land_borders)sと国境を接します。"
+
+#, python-format
+msgid "%(country)s borders %(land_borders)s by land and %(maritime_borders)s by sea."
+msgstr "%(country)s海沿いの土地と%(maritime_borders)s%(land_borders)sと国境を接します。"
+
+#, python-format
+msgid "The total world trade in %(year)s was %(export_val)s. "
+msgstr "%(year)s年の世界の総貿易は%(export_val)sでした。 "
+
+#, python-format
+msgid "During the last five years exports have %(increased_decreased)s at a median annualized rate of %(change_rate)s%%, from $%(past_export_val)s in %(past_year)s to $%(current_export_val)s in %(current_year)s. "
+msgstr "過去5年間で輸出は%(current_year)s年に$%(current_export_val)sに%(past_year)s年に$%(past_export_val)sから、%(change_rate)s%%の中央値は年率で%(increased_decreased)s。 "
+
+#, python-format
+msgid "The most recent exports are led by %(top_export)s which represent %(top_export_pct)s%% of the total products exported, followed by %(second_export)s, which account for %(second_export_pct)s%%. "
+msgstr "%(second_export_pct)s%%を占めて%(second_export)sに続いて、エクスポート、全製品の%(top_export_pct)s%%を表す%(top_export)sが主導している最新の輸出、。 "
+
+#, python-format
+msgid "The top exporters globally are %(origins)s."
+msgstr "トップ輸出は世界的に%(origins)sです。"
+
+msgid "Origins"
+msgstr "輸入元"
+
+#, python-format
+msgid "In %(year)s %(country)s exported $%(export_val)s, making it the %(export_rank)s largest exporter in the world. "
+msgstr "%(year)s年に%(country)s世界で%(export_rank)s番目に大きな輸出国作り、$ %(export_val)s輸出しました。 "
+
+#, python-format
+msgid "During the last five years the exports %(of_country)s have %(increased_decreased)s at an annualized rate of %(change_rate)s%%, from $%(past_export_val)s in %(past_year)s to $%(current_export_val)s in %(current_year)s. "
+msgstr "過去5年の間に%(of_country)s輸出は%(current_year)s年に$%(current_export_val)s に%(past_year)s年に$%(past_export_val)sから、%(change_rate)s%%の年率で%(increased_decreased)s。 "
+
+#, python-format
+msgid "The most recent exports are led by %(top_export)s which represent %(top_export_pct)s%% of the total exports %(of_country)s, followed by %(second_export)s, which account for %(second_export_pct)s%%."
+msgstr "最新の輸出は%(second_export_pct)s%%を占めて%(second_export)sが続く%(of_country)s総輸出額、%(top_export_pct)s%%を占め、%(top_export)sが主導しています。"
+
+#, python-format
+msgid "In %(year)s %(country)s imported $%(import_val)s, making it the %(import_rank)s largest importer in the world. "
+msgstr "%(year)s年に%(country)s世界で%(import_rank)s最大の輸入国作り、$ %(import_val)sインポート。 "
+
+#, python-format
+msgid "During the last five years the imports %(of_country)s have %(increased_decreased)s at an annualized rate of %(change_rate)s%%, from $%(past_import_val)s in %(past_year)s to $%(current_import_val)s in %(current_year)s. "
+msgstr "過去5年の間に%(of_country)s輸入は%(current_year)s年に$%(current_import_val)sに%(past_year)s年に$%(past_import_val)sから、%(change_rate)s%%の年率で%(increased_decreased)s。 "
+
+#, python-format
+msgid "The most recent imports are led by %(top_import)s which represent %(top_import_pct)s%% of the total imports %(of_country)s, followed by %(second_import)s, which account for %(second_import_pct)s%%."
+msgstr "最新の輸入は%(second_import_pct)s%%を占めて%(second_import)sが続く%(of_country)s輸入総額の%(top_import_pct)s%%を表す%(top_import)s、によって導かれています。"
+
+#, python-format
+msgid "The top export destinations %(of_country)s are %(destinations)s."
+msgstr "%(of_country)sトップ輸出先%(destinations)sです。"
+
+#, python-format
+msgid "The top import origins %(of_country)s are %(origins)s."
+msgstr "%(of_country)sトップ輸入起源%(origins)sです。"
+
+msgid "positive"
+msgstr "ポジティブ"
+
+msgid "negative"
+msgstr "ネガティブ"
+
+msgid "exports"
+msgstr "輸出"
+
+msgid "imports"
+msgstr "輸入"
+
+#, python-format
+msgid "As of %(year)s %(country)s had a %(positive_negative)s trade balance of $%(net_trade)s in net %(exports_imports)s."
+msgstr "%(year)s年%(country)s%(exports_imports)sは$%(net_trade)sの%(positive_negative)s貿易収支を持っていました。"
+
+msgid "still"
+msgstr "未だ"
+
+#, python-format
+msgid " As compared to their trade balance in %(year)s when they %(still)s had a %(positive_negative)s trade balance of $%(net_trade)s in net %(exports_imports)s."
+msgstr " %(year)s年に彼らの貿易収支と比較して、%(still)s%(exports_imports)sは$%(net_trade)sの%(positive_negative)s貿易収支を持っていたとき。"
+
+msgid "Trade Balance"
+msgstr "貿易バランス"
+
+msgid "Destinations"
+msgstr "輸出先"
+
+#, python-format
+msgid "The economy %(of_country)s has an Economic Complexity Index (ECI) of %(eci)s making it the %(eci_rank)s most complex country. "
+msgstr "%(of_country)s経済は%(eci)sの経済複雑指数（ECI）はそれを%(eci_rank)s最も複雑な国を作っています。 "
+
+#, python-format
+msgid "%(country)s exports %(num_of_exports)s products with revealed comparative advantage (meaning that its share of global exports is larger than what would be expected from the size of its export economy and from the size of a product’s global market)."
+msgstr "%(country)s（グローバル輸出のシェアは輸出経済の大きさから、製品の世界市場の大きさから予想されるものよりも大きいことを意味する）を明らかに比較優位を持つ%(num_of_exports)s製品を輸出しています。"
+
+msgid "The product space is a network connecting products that are likely to be co-exported and can be used to predict the evolution of a country’s export structure."
+msgstr "プロダクトスペースとは相互輸出やよく予測されるある国の輸出構造の革新のようなネットワークコネクティング製品である"
+
+#, python-format
+msgid "Economic Complexity %(of_country)s"
+msgstr "%(of_country)s経済複雑"
+
+msgid "Product Space"
+msgstr "プロダクトスペース"
+
+#, python-format
+msgid "The Economic Complexities of each country visualized over the past %(year_range)s years."
+msgstr "それぞれの国の経済複雑さは、過去%(year_range)s年間で可視化しました。"
+
+msgid "Economic Complexity Ranking"
+msgstr "経済複雑性ランキング"
+
+msgid "increased"
+msgstr "増加"
+
+msgid "decreased"
+msgstr "減少"
+
+#, python-format
+msgid ""
+"The Economic Complexity ranking %(of_country)s has %(increased_or_decreased)s by %(rank_delta)s places\n"
+"                    over the past %(year_range)s years from %(old_eci)s in %(old_year)s to %(current_eci)s in %(current_year)s."
+msgstr ""
+"%(of_country)s経済複雑さの順位は、%(current_year)s年に%(current_eci)sに%(old_year)s年の%(old_eci)sから、\n"
+"過去%(year_range)s年間で%(rank_delta)sヶ所%(increased_or_decreased)s。"
+
+#, python-format
+msgid "More on %(country)s from our sister sites"
+msgstr "姉妹サイトから%(country)s詳細"
+
+msgid ""
+"\n"
+"                This treemap shows the municipalities in Brazil that imported products internationally.<br /><br />\n"
+"                DataViva is a visualization tool that provides official data on trade, industries, and education throughout Brazil. If you would like more info or to create a similar site get in touch with us at <a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"                </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/all/bra/?size=import_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+msgstr ""
+"\n"
+"このツリーマップは、国際的に製品を輸入し、ブラジルの自治体を示しています。<br /><br />\n"
+"\n"
+"DataVivaは、ブラジル全体での貿易、産業、教育上の公式データを提供して可視化ツールです。あなたはより多くの情報をしたいと思いますか、似たようなサイトは、このメールアドレスで私達と連絡を取って作成する場合。 <a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"                </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/all/bra/?size=import_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+
+msgid "Imports of Brazil by Municipality"
+msgstr "市によるブラジルの輸入"
+
+msgid ""
+"\n"
+"                This map shows the exports of Brazil by state.<br /><br />\n"
+"                DataViva is a visualization tool that provides official data on trade, industries, and education throughout Brazil. If you would like more info or to create a similar site get in touch with us at <a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"                </p><p><a target='_blank' href='http://en.dataviva.info/apps/builder/geo_map/secex/all/all/all/bra/?color=export_val&controls=false&year=2013'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+msgstr ""
+"\n"
+"このマップは、国家によるブラジルの輸出を示しています。\n"
+"\n"
+"                DataVivaは、ブラジル全体での貿易、産業、教育上の公式データを提供して可視化ツールです。あなたはより多くの情報をしたいと思いますか、似たようなサイトは、このメールアドレスで私達と連絡を取って作成する場合。<a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"                </p><p><a target='_blank' href='http://en.dataviva.info/apps/builder/geo_map/secex/all/all/all/bra/?color=export_val&controls=false&year=2013'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+
+msgid ""
+"\n"
+"                This bar chart shows the wage distribution for the working population in Brazil.\n"
+"                </p><p><a target='_blank' href='http://en.dataviva.info/apps/builder/bar/rais/all/all/all/bra/?controls=false&year=2013'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+msgstr ""
+"\n"
+"この棒グラフは、ブラジルの労働人口のための賃金分布を示しています。\n"
+"                </p><p><a target='_blank' href='http://en.dataviva.info/apps/builder/bar/rais/all/all/all/bra/?controls=false&year=2013'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+
+msgid "State Exports"
+msgstr "国家輸出"
+
+msgid "Wage Distribution"
+msgstr "賃金分布"
+
+#, python-format
+msgid ""
+"\n"
+"                This treemap shows the municipalities in Brazil that imported products from %(country)s.<br /><br />\n"
+"                DataViva is a visualization tool that provides official data on trade, industries, and education throughout Brazil. If you would like more info or to create a similar site get in touch with us at <a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"                </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=import_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+msgstr ""
+"\n"
+"このツリーマップは、%(country)sから製品を輸入し、ブラジルの自治体を示しています。<br /><br />\n"
+"DataVivaは、ブラジル全体での貿易、産業、教育上の公式データを提供して可視化ツールです。あなたはより多くの情報をしたいと思いますか、似たようなサイトは、このメールアドレスで私達と連絡を取って作成する場合。<a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"                </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=import_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+
+#, python-format
+msgid ""
+"\n"
+"                This treemap shows the municipalities in Brazil that exported products to %(country)s.\n"
+"                </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=export_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+msgstr ""
+"\n"
+"このツリーマップは、%(country)sに製品を輸出し、ブラジルの自治体を示しています。\n"
+"                </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=export_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"                "
+
+#, python-format
+msgid "Brazilian Municipalities that import from %(country)s"
+msgstr "%(country)sから輸入ブラジルの市町村"
+
+#, python-format
+msgid "Brazilian Municipalities that export to %(country)s"
+msgstr "%(country)sに輸出ブラジルの市町村"
+
+#, python-format
+msgid "Globally Famous People %(of_country)s"
+msgstr "%(of_country)sグローバル有名な人々"
+
+#, python-format
+msgid "This treemap shows the cultural exports %(of_country)s, as proxied by the production of globally famous historical characters.</p><p>%(pantheon_link)s"
+msgstr "世界的に有名な歴史的な文字の生産によってプロキシとしてこのツリーマップは、%(of_country)s文化輸出を示しています。</p><p>%(pantheon_link)s"
+
+#, python-format
+msgid "Globally Famous People %(of_country)s by City"
+msgstr "市による%(of_country)sグローバル有名な人々"
+
+#, python-format
+msgid "This treemap shows the cultural exports %(of_country)s by city, as proxied by the production of globally famous historical characters.</p><p>%(pantheon_link)s"
+msgstr "世界的に有名な歴史的な文字の生産によってプロキシとしてこのツリーマップは、都市別%(of_country)s文化輸出を示しています。</p><p>%(pantheon_link)s"
+
+msgid "Top Exporter"
+msgstr "最大輸出者"
+
+msgid "Top Importer"
+msgstr "最大輸入者"
+
+#, python-format
+msgid "%(product)s the %(economic_rank)s most traded product"
+msgstr "%(economic_rank)sほとんどの取引製品%(product)s"
+
+#, python-format
+msgid " and the %(pci_rank)s most complex product according to the <a href='/en/rankings/hs92/'>Product Complexity Index (PCI)</a>"
+msgstr " そして%(pci_rank)s最も複雑な製品は、に応じて<a href='/en/rankings/hs92/'>Product Complexity Index (PCI)</a>"
+
+#, python-format
+msgid "The top exporters of %(product)s are %(exporters)s. The top importers are %(importers)s."
+msgstr "%(product)sのトップ輸出は%(exporters)sです。トップ輸入%(importers)sです。"
+
+#, python-format
+msgid "%(product)s the top export of %(countries)s."
+msgstr "%(product)s%(countries)sトップ輸出です。"
+
+#, python-format
+msgid "%(product)s the top import of %(countries)s."
+msgstr "%(product)sは%(countries)sトップ輸入です。"
+
+#, python-format
+msgid "%(product)s also known as %(keywords)s."
+msgstr "%(product)sも%(keywords)sとして知られています。"
+
+#, python-format
+msgid "%(product)s a %(product_id_length)s digit %(classification)s product."
+msgstr "%(product)sの%(product_id_length)s桁の%(classification)s。"
+
+msgid "Rank"
+msgstr "ランク"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Country"
+msgstr "国"
+
+msgid "Product"
+msgstr "製品"
+
+msgid "Percent"
+msgstr "パーセント"
+
+msgid "Export Value"
+msgstr "輸出額"
+
+msgid "Net Export Value"
+msgstr "純輸出額"
+
+msgid "Import Value"
+msgstr "輸入額"
+
+msgid "Net Import Value"
+msgstr "純輸入額"
+
+msgid "Market Value"
+msgstr "時価"
+
+msgid "Export"
+msgstr "輸出"
+
+msgid "Import"
+msgstr "輸入"
+
+msgid "GDPpc (constant '05 US$)"
+msgstr "GDPpc（定数'05 US $）"
+
+msgid "GDPpc (current US$)"
+msgstr "GDPpc（現在のUS $）"
+
+msgid "GDPpc PPP (constant '11)"
+msgstr "GDPpc PPP（定数'11）"
+
+msgid "GDPpc PPP (current)"
+msgstr "GDPpc PPP（現在の）"
+
+msgid "ECI"
+msgstr "経済複雑性指標 エコノミック コンプレキシティー インデックス"
+
+msgid "ECI Rank"
+msgstr "経済複雑性指標ランク"
+
+msgid "Annual Growth Rate (1 year)"
+msgstr "年間成長率（1年）"
+
+msgid "Annual Growth Rate (5 year)"
+msgstr "年間成長率（5年）"
+
+msgid "Growth Value (1 year)"
+msgstr "成長値（1年）"
+
+msgid "Growth Value (5 year)"
+msgstr "成長値（5年）"
+
+msgid "Loading..."
+msgstr "読み込んでいます..."
+
+msgid "Loading Visualization"
+msgstr "読み込んで可視化"
+
+msgid "We couldn't find any results."
+msgstr "我々は、任意の結果を見つけることができませんでした。"
+
+msgid "Partner"
+msgstr "パートナー"
+
+msgid "Y Axis"
+msgstr "Y軸"
+
+msgid "Trade Flow"
+msgstr "取引の流れ"
+
+msgid "Start Year"
+msgstr "開始年"
+
+msgid "End Year"
+msgstr "終了年"
+
+#, python-format
+msgid "Profile for %(attr)s"
+msgstr "%(attr)sのプロフィール"
+
+#~ msgid ""
+#~ "\n"
+#~ "            This treemap shows the municipalities in Brazil that imported products from %(country)s.<br /><br />\n"
+#~ "            DataViva is a visualization tool that provides official data on trade, industries, and education throughout Brazil. If you would like more info or to create a similar site get in touch with us at <a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+#~ "            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=import_val&controls=false'>Explore on DataViva &raquo;</a>\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "このツリーマップは、%(country)sから製品を輸入し、ブラジルの自治体を示しています。<br /><br />\n"
+#~ "DataVivaは、ブラジル全体での貿易、産業、教育上の公式データを提供して可視化ツールです。あなたはより多くの情報をしたいと思いますか、似たようなサイトは、このメールアドレスで私達と連絡を取って作成する場合。<a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+#~ "            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=import_val&controls=false'>Explore on DataViva &raquo;</a>\n"
+#~ "            "
+
+#~ msgid ""
+#~ "\n"
+#~ "            This treemap shows the municipalities in Brazil that exported products to %(country)s.\n"
+#~ "            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=export_val&controls=false'>Explore on DataViva &raquo;</a>\n"
+#~ "            "
+#~ msgstr ""
+#~ "\n"
+#~ "このツリーマップは、%(country)sに製品を輸出し、ブラジルの自治体を示しています。\n"
+#~ "            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=export_val&controls=false'>Explore on DataViva &raquo;</a>\n"
+#~ "            "

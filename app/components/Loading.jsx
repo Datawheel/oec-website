@@ -29,7 +29,7 @@ const LOADING_ITEMS = [
   ]},
   {img: "/images/loading/loading_3_Predictions.png", txt: [
     "Looking for a forecasting tool?",
-    "The <b>OEC prediction section</b> allows you to create custom LSTM models and fit them directly over any of the millions of time series we have available."
+    "The <b>OEC forecast section</b> allows you to create custom LSTM models and fit them directly over any of the millions of time series we have available."
   ]},
   {img: "/images/loading/loading_4_Library.png", txt: [
     "Want to keep up with research on Economic Complexity?",
@@ -43,12 +43,12 @@ const LOADING_ITEMS = [
 */
 class Loading extends Component {
   render() {
-    const {t} = this.props;
+    const {isDark, t} = this.props;
     const items = shuffle(LOADING_ITEMS);
     return <div className="app-loading">
       <div className="oec-loader-shell">
         <header>
-          <img className="navbar-logo-img" src="/images/oec-logo.svg" alt="Observatory of Economic Complexity" draggable="false" />
+          <img className="navbar-logo-img" src={`/images/oec-logo${isDark ? "-dark" : ""}.svg`} alt="Observatory of Economic Complexity" draggable="false" />
           <Spinner size={30} />
           <h3 className="heading u-font-xl">{t("Loading.title")}...</h3>
         </header>
@@ -66,6 +66,10 @@ class Loading extends Component {
     </div>;
   }
 }
+
+Loading.defaultProps = {
+  isDark: false
+};
 
 export default withNamespaces()(connect(
   (state, ownProps) => "total" in ownProps ? {

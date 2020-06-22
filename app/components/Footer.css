@@ -32,6 +32,7 @@
       & .footer-group {
         @mixin font-md;
         font-weight: var(--label-font-weight);
+        margin-bottom: 10px;
       }
       & .footer-subgroup {
         @mixin font-sm;

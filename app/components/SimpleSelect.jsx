@@ -26,10 +26,10 @@ export default class SimpleSelect extends React.Component {
 
   };
   render() {
-    const {disabled, items, popoverPosition, selectedItem, title} = this.props;
+    const {disabled, items, isPro, popoverPosition, selectedItem, title} = this.props;
     const {isOpen} = this.state;
     return <div className="selector">
-      <h6 className="title is-6">{title}</h6>
+      <h6 className={classnames("title", "is-6", {"is-pro": isPro})}>{title}</h6>
       <Select
         activeItem={selectedItem}
         className={classnames(
@@ -60,5 +60,6 @@ export default class SimpleSelect extends React.Component {
 
 SimpleSelect.defaultProps = {
   disabled: false,
+  isPro: false,
   popoverPosition: "bottom-left"
 };

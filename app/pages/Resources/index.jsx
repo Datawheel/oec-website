@@ -11,7 +11,7 @@ import About from "./About";
 import Api from "./Api";
 import Data from "./Data";
 import Library from "./Library";
-import Methodology from "./Methodology";
+import Methods from "./Methods";
 import Privacy from "./Privacy";
 import Publications from "./Publications";
 import Terms from "./Terms";
@@ -70,7 +70,7 @@ class Resources extends Component {
               case "data":
                 return <Data />;
               case "methods":
-                return <Methodology />;
+                return <Methods />;
               case "privacy":
                 return <Privacy />;
               case "terms":

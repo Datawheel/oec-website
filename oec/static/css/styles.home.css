@@ -1,0 +1,174 @@
+/**************/
+/* Large Logo */
+/**************/
+div#logo_large {
+  background-image: url("/static/img/nav/logo_large.png");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  display: block;
+  height: 170px;
+  margin: 100px auto 0px;
+  text-indent: -10000px;
+  width: 700px;
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (   min--moz-device-pixel-ratio: 2),
+only screen and (     -o-min-device-pixel-ratio: 2/1),
+only screen and (        min-device-pixel-ratio: 2),
+only screen and (                min-resolution: 192dpi),
+only screen and (                min-resolution: 2dppx) {
+  div#logo_large {
+    background-image: url("/static/img/nav/logo_large_retina.png");
+  }
+}
+
+/****************/
+/* Search Input */
+/****************/
+#search_bar {
+  margin: 25px 0 150px 0;
+  text-align: center;
+}
+
+#search_bar input#search {
+  font-size: 18px;
+  height: 15px;
+  padding: 10px;
+  width: 450px;
+}
+
+/*******************/
+/* Search Dropdown */
+/*******************/
+#search_bar .tt-dropdown-menu {
+  width: 470px;
+  min-width: 470px;
+  margin: 0px 0px 10px;
+  border-width:0px 1px 1px 1px;
+}
+
+#search_bar .tt-suggestion {
+  padding: 5px 10px;
+}
+
+#search_bar .tt-suggestion p {
+  font-size: 14px;
+  margin: 5px !important;
+}
+
+/***************/
+/* Other Sites */
+/***************/
+body.home .related {
+  margin: 150px auto 0px;
+  text-align: center;
+}
+
+body.home .related h3 {
+  margin: 10px;
+  text-align: left;
+}
+
+body.home .related .related_type {
+  display: inline-block;
+  padding: 10px;
+}
+body.home .related .related_type:first-child {
+/*  border-right: solid 2px #0085BF;*/
+  margin: 0 60px 0 0;
+}
+
+div.project {
+  color: #888;
+  display: inline-block;
+  font-size: 14px;
+  margin-right: 20px;
+  min-height: 100px;
+  padding-top: 110px;
+  position: relative;
+  -webkit-transition: color .1s;
+          transition: color .1s;
+  vertical-align: top;
+  width: 140px;
+}
+
+div.project:before {
+  background-position: center;
+  background-size: 100%;
+  content: "";
+  display: block;
+  height: 100px;
+  left: 20px;
+  position: absolute;
+  top: 0px;
+  -webkit-transition: background-image .1s;
+          transition: background-image .1s;
+  width: 100px;
+  vertical-align: top;
+}
+
+div.project:hover {
+  color: #333;
+  cursor: pointer;
+}
+
+span.soon {
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+span.new {
+  background-color: #666;
+  color: white;
+  display: block;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 5px;
+  position: absolute;
+  right: 15px;
+  -webkit-transition: background-color .1s;
+          transition: background-color .1s;
+  top: 10px;
+}
+
+div.project:hover span.new {
+  background-color: #cc0000;
+}
+
+div#pantheon:before {
+  background-image: url("/static/img/home/sites/pantheon_bw.png");
+}
+div#pantheon:hover:before {
+  background-image: url("/static/img/home/sites/pantheon_color.png");
+}
+
+div#placepulse:before {
+  background-image: url("/static/img/home/sites/placepulse_bw.png");
+}
+div#placepulse:hover:before {
+  background-image: url("/static/img/home/sites/placepulse_color.png");
+}
+
+div#immersion:before {
+  background-image: url("/static/img/home/sites/immersion_bw.png");
+}
+div#immersion:hover:before {
+  background-image: url("/static/img/home/sites/immersion_color.png");
+}
+
+div#participie:before {
+  background-image: url("/static/img/home/sites/participie_bw.png");
+}
+div#participie:hover:before {
+  background-image: url("/static/img/home/sites/participie_color.png");
+}
+
+div#dataviva:before {
+  background-image: url("/static/img/home/sites/dataviva_bw.png");
+}
+div#dataviva:hover:before {
+  background-image: url("/static/img/home/sites/dataviva_color.png");
+}

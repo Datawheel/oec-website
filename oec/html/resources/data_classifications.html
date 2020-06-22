@@ -1,0 +1,39 @@
+{% extends "templates/about.html" %}
+
+{% block about_title %}:: Data ({{ data_type|upper }}){% endblock %}
+{% block description %}{{ _('HS, SITC, and Country classification with their corresponding IDs and values.') }}{% endblock %}
+
+{% block about_content %}<div class="col2">
+  <table class="table table-bordered table-condensed table-striped">
+    
+    <thead>
+      <tr>
+    
+        <th>&nbsp;</th>
+        {% for h in headers %}
+        <th>{{ h }}</th>
+        {% endfor %}
+    
+      </tr>
+    </thead>
+    
+    <tbody>
+      
+      {% for item in items %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ item[id_col]|upper }}</td>
+        <td><img class="icon" {% if item.classification %}style="background-color: {{ item.color }}"{% endif %} src="{{ item.get_icon() }}" /> <a href="{{ item.get_profile_url() }}">{{ item.get_name() }}</a></td>
+      </tr>
+      {% endfor %}
+  
+    </tbody>
+
+  </table>
+</div><div class="col1">
+  <h3>Download</h3>
+  <p>
+    <a href="{{ url_for('general.about_data', data_type=data_type) }}?download=true">» Download classification list</a>
+  </p>
+</div>
+{% endblock %}

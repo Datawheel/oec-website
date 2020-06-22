@@ -142,11 +142,6 @@
     align-content: flex-start;
     flex-wrap: wrap;
 
-    &.advanced-params {
-      border: solid 1px var(--dark-1);
-      margin: 0 0 20px 0;
-    }
-
     & .prediction-control {
       flex: 1;
       padding: 5px 10px;
@@ -168,6 +163,14 @@
             border-bottom-left-radius: 0;
           }
         }
+      }
+    }
+
+    &.advanced-params {
+      border: solid 1px var(--dark-1);
+      margin: 0 0 20px 0;
+      & .prediction-control {
+        max-width: none;
       }
     }
   }
@@ -352,7 +355,6 @@ Under viz options (key)
   text-align: center;
   & button {
     margin: 0 10px;
-    /*
     & .bp3-button-text {
       color: var(--dark-1);
     }
@@ -367,7 +369,6 @@ Under viz options (key)
         color: var(--light-3);
       }
     }
-    */
   }
 }
 

@@ -97,6 +97,13 @@ export default class Static extends Component {
             rowDownload[`${d.Year}`] = d[`${type}`.toUpperCase()];
           });
           // Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
+          if (type === "eci") {
+            rowDownload[`${measure} ID`] = unique[index];
+          } else {
+            const HSDigits = depth.slice(-1);
+            rowDownload[`${measure} ID`] = unique[index].toString().slice(-HSDigits);
+          }
+          rowDownload[measure] = rowData[0][measure];
           range(minYear, maxYear).forEach(d => {
             if (!row[d]) {
               if (d !== maxYear) {
@@ -116,17 +123,10 @@ export default class Static extends Component {
               }
             }
           });
-          rowDownload[`${measure} ID`] = unique[index];
-          rowDownload[measure] = rowData[0][measure];
-
-          let rowDownloadInverted = {};
-          Object.keys(rowDownload).map(function (key) {
-            rowDownloadInverted[key] = rowDownload[key];
-          });
 
           // Push the data for the country/product to the one with all the countries/products
           data.push(row);
-          dataDownload.push(rowDownloadInverted);
+          dataDownload.push(rowDownload);
         }
 
         // Sort for the final year
@@ -306,6 +306,44 @@ export default class Static extends Component {
       }
     }
 
+    let columnCODE = null;
+    let HSDigits = null;
+    if (type === 'pci') {
+      HSDigits = depth.slice(-1);
+      columnCODE = {
+        id: 'category',
+        accessor: d => d[`${depth.toUpperCase()} ID`],
+        width: 100,
+        Header: () =>
+          <div className="header">
+            <span className="year">{'Product ID'}</span>
+            <div className="icons">
+              <Icon icon={'caret-up'} iconSize={16} />
+              <Icon icon={'caret-down'} iconSize={16} />
+            </div>
+          </div>,
+        Cell: props =>
+          <div className="category">
+            {rev.toUpperCase() === 'HS92'
+              ? <a
+                href={`/en/profile/${rev}/${props.original[
+                  `${depth.toUpperCase()} ID`
+                ]}`}
+                className="link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="name">{props.original[`${depth.toUpperCase()} ID`].toString().slice(-HSDigits)}</div>
+                <Icon icon={'chevron-right'} iconSize={14} />
+              </a>
+              : <div className="link">
+                <div className="name">{props.original[`${depth.toUpperCase()} ID`]}</div>
+              </div>
+            }
+          </div>
+      };
+    };
+
     // Set the name for the columns for each year
     const measure = type.toUpperCase();
     const YEARS = range(initialYear, finalYear);
@@ -337,7 +375,7 @@ export default class Static extends Component {
       className: 'year'
     }));
 
-    const columns = [columnID, columnNAME, ...columnYEARS];
+    const columns = type === 'eci' ? [columnID, columnNAME, ...columnYEARS] : [columnID, columnNAME, columnCODE, ...columnYEARS];
 
     return columns.filter(f => f !== null);
   };
@@ -364,7 +402,6 @@ export default class Static extends Component {
     const {data, dataDownload, columns, graphData, graphYears, graphYear, filterGraph, filterGDP, path, _loading, _graphs, location} = this.state;
 
     type === "eci" && graphData && this.eciData(_graphs, graphYear);
-    console.log(graphYears);
 
     const title = {
       eci: "Economic Complexity Rankings (ECI)",

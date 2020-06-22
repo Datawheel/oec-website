@@ -1,0 +1,627 @@
+<!-- extend from base layout -->
+{% extends "templates/base.html" %}
+
+{% block content %}
+
+<div id="mobileNav">
+
+  <div class="modal_close">
+    <img src="/static/img/nav/x.png" />
+  </div>
+
+  <ul class="navLinks">
+    <li id="home"{% if g.page_type == "home" %} class="active"{% endif %}>
+      <a href="{{ url_for('general.home', lang=g.locale) }}">{{ _('Home') }}</a>
+    </li>
+    {% include "includes/nav.html" %}
+  </ul>
+
+</div>
+
+<nav>
+
+  <a id="hamburger">
+    <img id="hamburger_button" src="/static/img/nav/menu.png" />
+  </a>
+
+  <a id="logo" href="{{ url_for('general.home', lang=g.locale) }}">
+    <img src="/static/img/home/logo-sm.png" alt="{{ _('The Observatory of Economic Complexity') }}">
+  </a>
+
+  <ul class="navLinks">
+    {% include "includes/nav.html" %}
+  </ul>
+
+  <div id="search_button">
+    <img src="/static/img/nav/search.png" />
+  </div>
+
+</nav>
+
+<div id="container">
+
+  <div id="content">
+    {% block body %}
+    {% endblock %}
+  </div>
+
+  <footer>
+    <a id="mc" href="http://macroconnections.media.mit.edu/" target="_blank">
+      <img src="/static/img/nav/mc.png">
+    </a>
+
+    <div>
+      <ul class="lang">
+        {% for lang_id, lang_name in g.supported_langs %}
+        <li><a href="{{ request.path|langify(lang_id) }}">{{ lang_name }}</a></li>
+        {% endfor %}
+      </ul>
+      The Observatory of Economic Complexity by <a xmlns:cc="http://creativecommons.org/ns#" href="http://alexandersimoes.com/" property="cc:attributionName" rel="cc:attributionURL">Alexander Simoes</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>. Permissions beyond the scope of this license may be available <a xmlns:cc="http://creativecommons.org/ns#" href="/permissions/" rel="cc:morePermissions">here</a>.
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+        <img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/80x15.png" />
+      </a>
+    </div>
+
+  </footer>
+
+</div>
+
+<div id="search">
+  <div id="search_close">
+    <img src="/static/img/nav/x.png">
+    <div>[ esc ]</div>
+  </div>
+  <div id="search_div">
+    <input id="search_input" type="text" placeholder="{{ _('Search') }}" />
+    <div id="search_modes">
+      <select id="search_mode_selector">
+        <option value="all" selected>{{ _('No Filter') }}</option>
+        <option value="country">{{ _('Countries') }}</option>
+        <option value="hs92">{{ _('Products') }}</option>
+        <option value="explore">{{ _('Visualizations') }}</option>
+      </select>
+    </div>
+  </div>
+  <div id="search_results"></div>
+</div>
+
+<script>
+
+  var page = "{{ g.page_type }}", sub_page = "{{ g.page_sub_type }}" || "none";
+
+  d3.selectAll("nav ul li")
+    .on(d3plus.client.pointer.over, function(){
+      d3.select(this).select(".sub_menu").classed("open", true);
+    })
+    .on(d3plus.client.pointer.out, function(){
+      d3.select(this).select(".sub_menu").classed("open", false);
+    });
+
+  // Sets the logo, header, and stats background color.
+  // d3.selectAll("#logo, header, #stats").style("background-color", color);
+
+  // Sets the H2 colors
+  // d3.selectAll("h2").style("color", color);
+
+  // Sets the search box background color.
+  // var rgb = d3.rgb(color);
+  // d3.select("#search_button").style("background-color", "rgba("+rgb.r+", "+rgb.g+", "+rgb.b+", 0.1)");
+
+  // Sets paragraph link styles
+  // d3.selectAll("aside a, p a, h2 a")
+  //   .style("color", color)
+  //   .on(d3plus.client.pointer.over, function(){
+  //     d3.select(this).style("border-bottom", "2px solid " + color);
+  //   })
+  //   .on(d3plus.client.pointer.out, function(){
+  //     d3.select(this).style("border-bottom", "2px solid transparent");
+  //   })
+
+  // Styles the header, if present.
+  var header = d3.select("header"), img;
+  if (!header.empty()) {
+    header.attr("data-height", header.node().offsetHeight);
+    var icon = header.select(".icon");
+    if (!icon.empty()) {
+      icon.attr("data-height", icon.node().offsetWidth);
+    }
+    img = header.select(".header_image > img");
+    if (!img.empty()) {
+      resizeCanvas();
+    }
+  }
+
+  // Hamburger menu logic.
+  d3.select("#hamburger").on("click", function(){
+    d3.select("#hamburger_button").classed("open", true);
+    var open = d3.select("#mobileNav").classed("open");
+    d3.select("#mobileNav").classed("open", !open);
+    d3.select("#mask").classed("visible", !open);
+    d3.select("body").classed("frozen", !open);
+  });
+
+  d3.select("#mobileNav .modal_close").on("click", function(){
+    d3.select("#hamburger_button").classed("open", false);
+    d3.select("#mobileNav").classed("open", false);
+    d3.select("#mask").classed("visible", false);
+    d3.select("body").classed("frozen", false);
+  });
+
+  // Logic for resizing the header, if present.
+  function resizeHeader() {
+
+    if (!header.empty()) {
+
+      var originalHeight = parseFloat(header.attr("data-height")),
+          min = 40,
+          scrollHeight = originalHeight - window.scrollY,
+          newHeight = d3.max([scrollHeight, min]);
+
+      header
+        .style("height", newHeight+"px")
+        .style(d3plus.client.prefix()+"box-shadow", scrollHeight <= min ? "0 2px 4px rgba(0,0,0,0.5)" : "none");
+
+      var icon = header.select(".icon"),
+          normalized = d3.scale.linear()
+            .domain([min, originalHeight])
+            .range([0, 1]);
+      if (!icon.empty()) {
+        var iconSize = parseFloat(icon.attr("data-height")),
+            small = window.innerWidth <= 768,
+            iconScale = d3.scale.linear()
+              .domain([min, originalHeight])
+              .range([min * 0.75, iconSize]);
+        var iconSize = iconScale(newHeight);
+        var iconMargin = d3.scale.linear()
+              .domain([min, originalHeight])
+              .range([-iconSize, 0]);
+        icon
+          .style("width", iconSize+"px")
+          .style("height", iconSize+"px")
+          .style("margin-top", small ? d3.min([0, iconMargin(newHeight)])+"px" : "0px")
+          .style("opacity", small ? normalized(newHeight) : 1)
+      }
+
+      var title = header.select("h1");
+      if (!title.empty()) {
+        var fontSize = window.innerWidth <= 768 ? 35 : 50,
+            fontScale = d3.scale.linear()
+              .domain([min, originalHeight])
+              .range([20, fontSize]);
+        title.style("font-size", fontScale(newHeight)+"px");
+        var sub = header.select("sub");
+        if (!sub.empty()) {
+            var fontScale = d3.scale.linear()
+                  .domain([min, originalHeight])
+                  .range([0, 11]);
+            sub.style("font-size", fontScale(newHeight)+"px");
+        }
+      }
+
+    }
+
+  }
+
+  // Logic for resizing the header canvas image, if present.
+  function resizeCanvas() {
+
+    if (img && !img.empty()) {
+
+      setTimeout(function(){
+
+        var w = header.node().offsetWidth, h = header.node().offsetHeight, r = w/h;
+        var iw = img.node().offsetWidth, ih = img.node().offsetHeight, ir = iw/ih;
+        if (r > ir) {
+          var cw = w, ch = w/ir, l = 0, t = -(ch/2-h/2);
+        }
+        else {
+          var ch = h, cw = h*r, l = -(cw/2-w/2), t = 0;
+        }
+        if (!img.classed("loaded")) {
+          img
+            .style("width", cw+"px")
+            .style("height", ch+"px")
+            .style("left", l+"px")
+            .style("top", t+"px")
+            .classed("loaded", true);
+        }
+        else {
+          img.transition().duration(250)
+            .style("width", cw+"px")
+            .style("height", ch+"px")
+            .style("left", l+"px")
+            .style("top", t+"px");
+        }
+
+      }, 1000);
+
+    }
+
+    // resizeHeader();
+
+  }
+
+  resizeFunctions.push(resizeCanvas);
+  // scrollFunctions.push(resizeHeader);
+
+  function no_results() {
+
+    d3.select("#search_results").append("h1")
+      .classed("search-error", true)
+      .text(oec.translations.no_results);
+
+  }
+
+  function add_results(container, data) {
+
+    function draw(container, data) {
+
+      var g = container.node().id;
+      if (g === "search_results") g = search_mode;
+
+      var results = container.selectAll(".result")
+        .data(data, function(d, i){ return d.id || i; });
+
+      var enter = results.enter().append("a")
+        .attr("class", "result")
+        .attr("href", function(d){
+          var p = "/" + oec.locale + "/";
+          return !d.id ? p + "visualize/" + d.name : p + "profile/" + g + "/" + d.display_id;
+        })
+        .style("background-color", function(d){
+          return analyze_palette(d.palette) || d.color || "transparent";
+        })
+        .style("background-image", function(d){
+          return !d.id ? "url('/static/img/visualizations/" + d.name.split("/")[0] + ".png')" : d.image ? "url('" + d.image + "')" : "none";
+        });
+
+      enter.append("div").attr("class", "button_cover");
+
+      enter.append("img")
+        .attr("class", "icon")
+        .attr("src", function(d) {
+          return d.icon || "/static/img/icons/app/app_" + d.name.split("/")[0] + ".png";
+        });
+
+      enter.append("h1")
+        .text(function(d){
+          return d.value || d.name || d.display_id;
+        })
+
+      results.on("click", function(){
+        d3.select(this).classed("loading", true);
+      })
+
+      results.exit().remove();
+
+    }
+
+    if (data.constructor === String) {
+
+      var viz_loading = container.append("div")
+        .attr("class", "search-loading")
+        .text(oec.translations.loading);
+
+      d3.json(data, function(error, d){
+        viz_loading.remove();
+        if (error || !d.explore) {
+          no_results();
+        }
+        else {
+          draw(container, d.explore);
+        }
+      });
+
+    }
+    else {
+      draw(container, data);
+    }
+
+  }
+
+  var explore_default = [
+    {"name": "tree_map", "value": "Tree Map"},
+    {"name": "stacked", "value": "Stacked"},
+    {"name": "line", "value": "Line"},
+    {"name": "network", "value": "Network"},
+    {"name": "rings", "value": "Rings"},
+    {"name": "scatter", "value": "Scatter"},
+    {"name": "geo_map", "value": "Geo Map"}
+  ];
+
+  function search_results(data) {
+
+    if (!data) {
+      data = {};
+      if (search_mode === "all") {
+        data = {
+          "country": attrs.country.slice(0, default_cutoff),
+          "hs92": attrs.hs92.slice(0, default_cutoff)
+        };
+      }
+      else if (attrs[search_mode]) {
+        data[search_mode] = attrs[search_mode].slice(0, default_cutoff);
+      }
+    }
+
+    var titles = {};
+    d3.select("#search_mode_selector").selectAll("option").each(function(){
+      titles[this.value] = this.innerHTML;
+    })
+
+    var group_data = [];
+    ["country", "hs92", "explore"].forEach(function(g){
+      if (data[g] && data[g].length) {
+        group_data.push(g);
+      }
+    })
+
+    d3.select("#search_results").selectAll("*").remove();
+    if (group_data.length > 1) {
+
+      var groups = d3.select("#search_results").selectAll(".search_group")
+        .data(group_data, String);
+
+      groups.enter().append("div")
+        .attr("class", "search_group")
+        .attr("id", String)
+        .append("h1").text(function(g){ return titles[g]; });
+
+      groups.each(function(g){
+        add_results(d3.select(this), data[g]);
+      });
+
+      groups.exit().remove();
+
+    }
+    else if (group_data.length === 1) {
+
+      add_results(d3.select("#search_results"), data[group_data[0]]);
+
+    }
+    else if (search_query.length) {
+
+      no_results();
+
+    }
+
+  }
+
+  var search_mode,
+      search_default,
+      search_query = "",
+      attrs = {},
+      default_cutoff = 200,
+      search_form;
+
+  setTimeout(function(){
+
+    search_mode = window.innerWidth < 500 ? "country" : "all";
+    search_default = search_mode;
+
+    if (search_mode !== "all") {
+      var option = d3.select("#search_mode_selector");
+      option.select("[value=all]").remove();
+      option.select("[value="+search_mode+"]").attr("selected", true);
+    }
+
+    search_form = d3plus.form()
+      .data("#search_mode_selector")
+      .focus(search_mode, function(d){
+        if (d !== search_mode) {
+          clear_search(d);
+        }
+      })
+      .font({
+        "size": 12
+      })
+      .ui({"padding": 8})
+      .draw();
+
+  }, 10);
+
+  function filterData(a, q) {
+    if (q.length) {
+      return attrs[a].filter(function(d){
+        return d.name.toLowerCase().indexOf(q) >= 0 ||
+               d.id.indexOf(q) === 0 ||
+               (d.display_id && d.display_id.indexOf(q) === 0) ||
+               (d.keywords && d.keywords.indexOf(q) >= 0);
+      });
+    }
+    else {
+      return attrs[a].filter(function(d){
+        return a !== "country" ? d.id.length === 6 : d.id.length === 5;
+      }).slice(0, default_cutoff);
+    }
+  }
+
+  function search_term(q) {
+
+    d3.select("#search_results").selectAll("*").remove();
+
+    d3.select("#search_results").append("h1")
+      .classed("search-loading", true)
+      .text(oec.translations.loading);
+
+    var m = search_mode === "all" ? "" : "&mode=" + search_mode;
+
+    var categories = [];
+    if (search_mode === "all") {
+      categories = ["country", "hs92"];
+    }
+    else if (search_mode !== "explore") {
+      categories = [search_mode];
+    }
+
+    var data = {};
+    function loadAttr() {
+      if (categories.length) {
+        var a = categories.pop();
+        if (!attrs[a]) {
+          load("/attr/" + a + "/" + oec.locale + "/", function(d){
+            attrs[a] = d.data.filter(function(d){
+                return d.weight && d.display_id && d.id.length > 2;
+              }).sort(function(a, b){
+                return b.weight - a.weight;
+              });
+            data[a] = filterData(a, q);
+            loadAttr();
+          })
+        }
+        else {
+          data[a] = filterData(a, q);
+          loadAttr();
+        }
+      }
+      else if (["explore", "all"].indexOf(search_mode) >= 0 && q.length) {
+        data.explore = "/search/?mode=explore&q=" + q;
+        search_results(data);
+      }
+      else {
+        if (["all", "explore"].indexOf(search_mode) >= 0) {
+          data.explore = explore_default;
+        }
+        search_results(data);
+      }
+    }
+    loadAttr();
+
+  }
+
+  var searchInterval = "";
+  // Key events while the search input is active
+  d3.select("#search_input").on("keyup", function(){
+
+    // ESC to close search
+    if (d3.event.keyCode === 27) {
+      close_search();
+    }
+    else {
+
+      var q = this.value.toLowerCase();
+      if (q !== search_query) {
+        clearInterval(searchInterval);
+        search_query = q;
+
+        if (q.length) {
+          searchInterval = setTimeout(function(){
+            search_term(search_query);
+          }, 300);
+        }
+        else {
+          search_results();
+        }
+      }
+
+    }
+  })
+
+  d3.select("body").on("keyup", function(){
+
+    // Site key events when search is closed
+    if (!d3.select("#search").classed("visible") && document.activeElement.tagName.toLowerCase() !== "input") {
+
+      // Press "s" for search
+      if (d3.event.keyCode === 83) {
+        search("all");
+      }
+
+    }
+    else {
+
+      // Down key
+      if (d3.event.keyCode === 40) {
+        if(!d3.select("a.result:focus").empty()){
+          d3.select("a.result:focus").node().nextSibling.focus()
+        }
+        else {
+          d3.select("a.result").node().focus();
+        }
+        d3.event.preventDefault()
+      }
+
+      // Down key
+      if (d3.event.keyCode === 38) {
+        if(!d3.select("a.result:focus").empty()){
+          var prev = d3.select("a.result:focus").node().previousSibling;
+          if(d3.select(prev).classed("result")){
+            prev.focus();
+          }
+          else{
+            d3.select("#search_input").node().focus();
+          }
+        }
+        d3.event.preventDefault()
+      }
+
+      // Right key
+      if (d3.event.keyCode === 39 || d3.event.keyCode === 37) {
+        if(!d3.select("a.result:focus").empty()){
+          var direction = d3.event.keyCode === 39 ? 1 : -1
+          var curr_el = d3.select("a.result:focus").node()
+          var all_groups = Array.prototype.slice.call(document.querySelectorAll(".search_group"))
+          var curr_group = all_groups.indexOf(curr_el.parentNode)
+          var all_in_group = Array.prototype.slice.call(document.querySelectorAll(".search_group#"+curr_el.parentNode.id+" .result"))
+          var next_group = (curr_group+direction) < 0 ? (all_groups.length + (curr_group+direction)) : (curr_group+direction)%all_groups.length
+          var curr_el_index = all_in_group.indexOf(curr_el)
+          all_groups[next_group].childNodes[curr_el_index+1].focus()
+        }
+      }
+
+    }
+  })
+
+  d3.select("body").on("keydown", function(e) {
+    if (d3.select("#search").classed("visible")) {
+      if (d3.event.keyCode === 40 || d3.event.keyCode === 38) {
+         d3.event.preventDefault()
+      }
+    }
+  });
+
+  d3.select("#search").on("click", function(){
+    if (d3.event.toElement === this || d3.event.toElement === d3.select("#search_results").node()) {
+      close_search();
+    }
+  })
+
+  function clear_search(mode) {
+    search_mode = mode;
+    search_term("");
+    d3.select("#search_input").node().value = "";
+    d3.select("#search_input").node().focus();
+  }
+
+  function search(mode) {
+
+    if (mode && mode !== search_mode) {
+      search_form.focus(mode).draw();
+    }
+
+    d3.select("#search").style("visibility", "visible").classed("visible", true);
+    d3.select("body").classed("frozen", true);
+    d3.selectAll("#search_button, #search_close").classed("open", true);
+    d3.select("#search_input").node().focus();
+    search_term(search_query);
+
+  }
+
+  function close_search() {
+    d3.select("#search").classed("visible", false);
+    d3.select("body").classed("frozen", false);
+    d3.selectAll("#search_button, #search_close").classed("open", false);
+    setTimeout(function(){
+      d3.select("#search").style("visibility", "hidden");
+    }, 500);
+  }
+
+  d3.select("#search_button").on("click", function(){
+    search(search_default);
+  });
+
+  d3.select("#search_close").on("click", close_search);
+
+</script>
+
+{% endblock %}

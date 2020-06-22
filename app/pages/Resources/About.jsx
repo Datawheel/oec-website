@@ -41,7 +41,7 @@ export default class About extends Component {
 
         <p>The 4.0 version of the OEC is the largest and most ambitious version of the OEC ever created. It includes subnational level data for dozens of countries, sourced directly from their public customs records. This makes the OEC much more recent, relevant, and higher resolution.</p>
 
-        <p>The 4.0 version of the OEC also includes several new features, such as a tunable prediction tool, the tariff explorer, and the ability to dynamically calculate economic complexity rankings.</p>
+        <p>The 4.0 version of the OEC also includes several new features, such as a tunable forecast tool, the tariff explorer, and the ability to dynamically calculate economic complexity rankings.</p>
 
         <p>OEC 4.0 was built from scratch on a completely new code base created solely by Datawheel.</p>
 

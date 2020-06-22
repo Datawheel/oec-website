@@ -1,0 +1,758 @@
+# Hindi translations for .
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the  project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+# fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-10-14 19:38-0400\n"
+"PO-Revision-Date: 2015-10-15 11:58-0400\n"
+"Last-Translator: sudha Kumari Kumari <kumars04@mit.edu>\n"
+"Language-Team: hi <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.0\n"
+"Language: hi\n"
+"X-Generator: Poedit 1.8.5\n"
+
+msgid "Trillion"
+msgid_plural "Trillions"
+msgstr[0] "खरब"
+msgstr[1] "अरबों"
+
+msgid "Billion"
+msgid_plural "Billions"
+msgstr[0] "एक अरब"
+msgstr[1] "अरबों"
+
+msgid "Million"
+msgid_plural "Millions"
+msgstr[0] "दस लाख"
+msgstr[1] "लाखों"
+
+msgid "Thousand"
+msgid_plural "Thousands"
+msgstr[0] "हज़ार"
+msgstr[1] "हजारों"
+
+msgctxt "0"
+msgid "th"
+msgstr "वीं"
+
+msgctxt "1"
+msgid "st"
+msgstr " "
+
+msgctxt "2"
+msgid "nd"
+msgstr " "
+
+msgctxt "3"
+msgid "rd"
+msgstr " "
+
+msgctxt "4"
+msgid "th"
+msgstr " "
+
+msgctxt "5"
+msgid "th"
+msgstr " "
+
+msgctxt "6"
+msgid "th"
+msgstr " "
+
+msgctxt "7"
+msgid "th"
+msgstr " "
+
+msgctxt "8"
+msgid "th"
+msgstr " "
+
+msgctxt "9"
+msgid "th"
+msgstr " "
+
+msgid "article_the_m_p"
+msgstr " "
+
+msgid "article_the_m"
+msgstr " "
+
+msgid "article_the_f_p"
+msgstr " "
+
+msgid "article_the_f"
+msgstr " "
+
+msgid "article_of"
+msgstr "के"
+
+msgid "article_of_m_p"
+msgstr "के"
+
+msgid "article_of_m"
+msgstr "के"
+
+msgid "article_of_f_p"
+msgstr "के"
+
+msgid "article_of_f"
+msgstr "के"
+
+msgid "verb_is_p"
+msgstr "है"
+
+msgid "verb_is"
+msgstr "है"
+
+msgid "The Observatory of Economic Complexity"
+msgstr "आर्थिक जटिलता की वेधशाला"
+
+msgid "We are the world's<br/>leading visualization engine<br/>for international trade data."
+msgstr "हम दुनिया के प्रमुख<br/>विशुअलिज़शन इंजन है<br/>अंतराष्ट्रीय व्यापार के लिए ।"
+
+msgid "Learn More"
+msgstr "और सीखें"
+
+msgid "Search"
+msgstr "खोज"
+
+msgid "Application programming interface (API) for querying the raw data used throughout The Observatory of Economic Complexity."
+msgstr "आर्थिक जटिलता की वेधशाला भर में इस्तेमाल कच्चे डेटा क्वेरी के लिए एप्लीकेशन प्रोग्रामिंग इंटरफेस (एपीआई)।"
+
+msgid "Books"
+msgstr "किताबें"
+
+msgid "Photo by"
+msgstr "(X) की फ़ोटो"
+
+msgid "Countries"
+msgstr "देश"
+
+msgid "Products"
+msgstr "उत्पाद"
+
+msgid "Visualizations"
+msgstr "विशुअलिज़शन"
+
+msgid "Rankings"
+msgstr "रैंकिंग"
+
+msgid "Publications"
+msgstr "प्रकाशन"
+
+msgid "Resources"
+msgstr "साधन"
+
+msgid "About the Site"
+msgstr "साइट के बारे में"
+
+msgid "Economic Complexity"
+msgstr "आर्थिक जटिलता"
+
+msgid "FAQs"
+msgstr "बार बार पूंछे जाने वाले प्रश्न"
+
+msgid "Data Sources"
+msgstr "डाटा के स्रोत"
+
+msgid "Permissions"
+msgstr "अनुमतियाँ"
+
+msgid "API"
+msgstr "एपीआई"
+
+msgid "Take a tour"
+msgstr "टूर पर चलें"
+
+msgid "Prev. Year"
+msgstr "पिछला वर्ष"
+
+msgid " Rankings"
+msgstr " रैंकिंग"
+
+msgid "Click here for Product Rankings"
+msgstr "उत्पाद रैंकिंग के लिए यहां क्लिक करें"
+
+msgid "Product Complexity"
+msgstr "उत्पाद की जटिलता"
+
+msgid "Click here for Country Rankings"
+msgstr "देश रैंकिंग के लिए यहां क्लिक करें"
+
+msgid "Next Year"
+msgstr "अगला वर्ष"
+
+msgid "Previous Year"
+msgstr "पिछला वर्ष"
+
+msgid "Dataset"
+msgstr "डाटासेट"
+
+msgid "Year"
+msgstr "वर्ष"
+
+msgid "Depth"
+msgstr "गहराई"
+
+msgid "Download Current Year"
+msgstr "वर्तमान वर्ष डाउनलोड करें"
+
+msgid "Download All Years"
+msgstr "कभी साल डाउनलोड करें"
+
+msgid "Photos and descriptions of the team members involved in the creation of The Observatory."
+msgstr "वेधशाला के टीम की तस्वीरें और जीवनियाँ"
+
+msgid "About the Observatory"
+msgstr "वेधशाला के बारे में"
+
+msgid "Current Team"
+msgstr "वर्तमान टीम"
+
+msgid "Past Contributors"
+msgstr "पूर्व टीम"
+
+msgid "HS, SITC, and Country classification with their corresponding IDs and values."
+msgstr "एचएस, एसआईटीसी और देशों के वर्गीकरण, उनके आइडीस और मूल्यों के साथ"
+
+msgid "What is Economic Complexity?"
+msgstr "आर्थिक जटिलता क्या है?"
+
+msgid "How is Economic Complexity calculated?"
+msgstr "आर्थिक जटिलता की गणना कैसे की जाती है?"
+
+msgid "Who makes what?"
+msgstr "कौन क्या करता है?"
+
+msgid "Frequently Asked Questions"
+msgstr "बार बार पूंछे जाने वाले प्रश्न"
+
+msgid "A Development blog of updates to the site."
+msgstr "साईट के विकास के ब्लॉग"
+
+msgid "Share"
+msgstr "शेयर"
+
+msgid "Short URL"
+msgstr "शॉर्ट यूआरएल"
+
+msgid "Embed"
+msgstr "एम्बेड"
+
+msgid "Social Media"
+msgstr "सामाजिक मीडिया"
+
+msgid "Download"
+msgstr "डाउनलोड"
+
+msgid "Home"
+msgstr "घर"
+
+msgid "An emedded visualization."
+msgstr "एक एम्बेडेड विशुअलिज़शन."
+
+msgid "Data visualization of economic trade"
+msgstr "आर्थिक व्यापर की डेटा विशुअलिज़शन"
+
+msgid "Build Visualization"
+msgstr "विशुअलिज़शन बनानें"
+
+msgid "Select Trade Scenario"
+msgstr "व्यापार परिदृश्य का चयन करें"
+
+msgid "Profile"
+msgstr "प्रोफाइल"
+
+msgid "and"
+msgstr "और"
+
+msgid "Econ Complexity"
+msgstr "आर्थिक जटिलता"
+
+msgid "Exports"
+msgstr "निर्यात"
+
+msgid "Imports"
+msgstr "आयात"
+
+msgid "GDP Per Capita"
+msgstr "प्रति व्यक्ति सकल घरेलु उत्पाद"
+
+#, python-format
+msgid "%(country_is)s the %(econ_rank)s largest export economy in the world"
+msgstr "%(country_is)s दुनिया में %(econ_rank)s सबसे बड़ा निर्यात अर्थव्यवस्था"
+
+#, python-format
+msgid " and the %(eci_rank)s most complex economy according to the Economic Complexity Index (ECI). "
+msgstr " और %(eci_rank)s सबसे जटिल अर्थव्यवस्था आर्थिक जटिलता सूचकांक (ईसीआई) के अनुसार। "
+
+#, python-format
+msgid "In %(year)s, %(country)s exported $%(export_val)s and imported $%(import_val)s, resulting in a %(positive_negative)s trade balance of $%(trade_delta)s. "
+msgstr "%(year)s में, %(country)s $ %(export_val)s का निर्यात किया और $ %(trade_delta)s के %(positive_negative)s व्यापार संतुलन में जिसके परिणामस्वरूप, $ %(import_val)s का आयात किया। "
+
+#, python-format
+msgid "In %(year)s the GDP %(of_country)s was $%(gdp)s and its GDP per capita was $%(gdp_pc)s."
+msgstr "%(year)s में %(of_country)s के सकल घरेलू उत्पाद $ %(gdp)s साल का था और प्रति व्यक्ति सकल घरेलू उत्पाद $ %(gdp_pc)s था।"
+
+#, python-format
+msgid "The top exports %(of_country)s are %(exports_list)s, using the 1992 revision of the HS (Harmonized System) classification. Its top imports are %(imports_list)s."
+msgstr "%(of_country)s के शीर्ष निर्यात एच एस (संगत प्रणाली) वर्गीकरण 1992 संशोधन का उपयोग, %(exports_list)s इसके शीर्ष आयात के %(imports_list)s हैं।"
+
+#, python-format
+msgid "The top export destinations %(of_country)s are %(destinations)s. The top import origins are %(origins)s."
+msgstr "शीर्ष निर्यात स्थलों %(of_country)s %(destinations)s हैं। शीर्ष आयात मूल %(origins)s रहे हैं।"
+
+#, python-format
+msgid "%(country)s is an island and borders %(maritime_borders)s by sea."
+msgstr "%(country)s एक द्वीप है और समुद्र से %(maritime_borders)s सीमाओं।"
+
+#, python-format
+msgid "%(country)s borders %(land_borders)s."
+msgstr "%(country)s %(land_borders)s सीमाओं।"
+
+#, python-format
+msgid "%(country)s borders %(land_borders)s by land and %(maritime_borders)s by sea."
+msgstr "%(country)s समुद्र से जमीन और %(maritime_borders)s ने %(land_borders)s की सीमाओं।"
+
+#, python-format
+msgid "In %(year)s %(country)s exported $%(export_val)s, making it the %(export_rank)s largest exporter in the world. "
+msgstr "%(year)s में %(country)s में यह दुनिया में %(export_rank)s सबसे बड़ा निर्यातक बना रही है, $ %(export_val)s का निर्यात किया। "
+
+#, python-format
+msgid "During the last five years the exports %(of_country)s have %(increased_decreased)s at an annualized rate of %(change_rate)s%%, from $%(past_export_val)s in %(past_year)s to $%(current_export_val)s in %(current_year)s. "
+msgstr "पिछले पांच वर्षों के दौरान %(of_country)s के निर्यात %(current_year)s में $ %(current_export_val)s के लिए %(past_year)s में $ %(past_export_val)s से, %(change_rate)s%% की वार्षिक दर से %(increased_decreased)s है। "
+
+#, python-format
+msgid "The most recent exports are led by %(top_export)s which represent %(top_export_pct)s%% of the total exports %(of_country)s, followed by %(second_export)s, which account for %(second_export_pct)s%%."
+msgstr "सबसे हाल ही में निर्यात %(second_export_pct)s%% के लिए खाते में जो %(second_export)s के द्वारा पीछा %(of_country)s कुल निर्यात का %(top_export_pct)s%% का प्रतिनिधित्व करते हैं, जो %(top_export)s से नेतृत्व कर रहे हैं।"
+
+#, python-format
+msgid "In %(year)s %(country)s imported $%(import_val)s, making it the %(import_rank)s largest importer in the world. "
+msgstr "%(year)s में %(country)s में यह दुनिया में %(import_rank)s सबसे बड़ा आयातक बना रही है, $ %(import_val)s का आयात किया। "
+
+#, python-format
+msgid "During the last five years the imports %(of_country)s have %(increased_decreased)s at an annualized rate of %(change_rate)s%%, from $%(past_import_val)s in %(past_year)s to $%(current_import_val)s in %(current_year)s. "
+msgstr "पिछले पांच वर्षों के दौरान %(of_country)s आयात %(current_year)s में $ %(current_import_val)s के लिए %(past_year)s में $ %(past_import_val)s से, %(change_rate)s%% की वार्षिक दर से %(increased_decreased)s है। "
+
+#, python-format
+msgid "The most recent imports are led by %(top_import)s which represent %(top_import_pct)s%% of the total imports %(of_country)s, followed by %(second_import)s, which account for %(second_import_pct)s%%."
+msgstr "%(second_import_pct)s%% के लिए खाते में जो %(second_import)s के द्वारा पीछा %(of_country)s कुल आयात का %(top_import_pct)s%% का प्रतिनिधित्व करते हैं, जो %(top_import)s से नेतृत्व कर रहे हैं सबसे हाल के आयात,।"
+
+#, python-format
+msgid "The top export destinations %(of_country)s are %(destinations)s."
+msgstr "%(of_country)s शीर्ष निर्यात स्थलों %(destinations)s हैं।"
+
+#, python-format
+msgid "The top import origins %(of_country)s are %(origins)s."
+msgstr "%(of_country)s शीर्ष आयात मूल %(origins)s हैं।"
+
+msgid "positive"
+msgstr "सकारात्मक"
+
+msgid "negative"
+msgstr "नकारात्मक"
+
+msgid "exports"
+msgstr "नकारात्मक"
+
+msgid "imports"
+msgstr "आयात"
+
+#, python-format
+msgid "As of %(year)s %(country)s had a %(positive_negative)s trade balance of $%(net_trade)s in net %(exports_imports)s."
+msgstr "%(year)s के रूप में %(country)s का शुद्ध %(exports_imports)s में $ %(net_trade)s की एक %(positive_negative)s व्यापार संतुलन था।"
+
+msgid "still"
+msgstr "अब तक"
+
+#, python-format
+msgid " As compared to their trade balance in %(year)s when they %(still)s had a %(positive_negative)s trade balance of $%(net_trade)s in net %(exports_imports)s."
+msgstr " %(year)s में उनके व्यापार संतुलन की तुलना में वे %(still)s शुद्ध %(exports_imports)s में $ %(net_trade)s की एक %(positive_negative)s व्यापार संतुलन था।"
+
+msgid "Trade Balance"
+msgstr "व्यापार का संतुलन"
+
+msgid "Destinations"
+msgstr "गंतव्य"
+
+msgid "Origins"
+msgstr "स्रोत"
+
+#, python-format
+msgid "The economy %(of_country)s has an Economic Complexity Index (ECI) of %(eci)s making it the %(eci_rank)s most complex country. "
+msgstr "%(of_country)s अर्थव्यवस्था %(eci)s के एक आर्थिक जटिलता सूचकांक (ईसीआई) यह %(eci_rank)s सबसे जटिल देश बना रही है। "
+
+#, python-format
+msgid "%(country)s exports %(num_of_exports)s products with revealed comparative advantage (meaning that its share of global exports is larger than what would be expected from the size of its export economy and from the size of a product’s global market)."
+msgstr "%(country)s (वैश्विक निर्यात का अपना हिस्सा इसके निर्यात अर्थव्यवस्था के आकार से और एक उत्पाद के वैश्विक बाजार के आकार से उम्मीद की जा होगा की तुलना में बड़ा है जिसका अर्थ है कि) से पता चला तुलनात्मक लाभ के साथ %(num_of_exports)s उत्पादों का निर्यात करता है।"
+
+msgid "The product space is a network connecting products that are likely to be co-exported and can be used to predict the evolution of a country’s export structure."
+msgstr "उत्पाद अंतरिक्ष सह-निर्यात किए जाने की संभावना है और एक देश के निर्यात संरचना के विकास की भविष्यवाणी करने के लिए इस्तेमाल किया जा सकता है कि उत्पादों को जोड़ने के लिए एक नेटवर्क है।"
+
+#, python-format
+msgid "Economic Complexity %(of_country)s"
+msgstr "%(of_country)s की अर्थव्यवस्था"
+
+msgid "Product Space"
+msgstr "उत्पाद अंतरिक्ष"
+
+msgid "increased"
+msgstr "बढ़ी हुई"
+
+msgid "decreased"
+msgstr "में कमी आई"
+
+#, python-format
+msgid ""
+"The Economic Complexity ranking %(of_country)s has %(increased_or_decreased)s by %(rank_delta)s places\n"
+"                    over the past %(year_range)s years from %(old_eci)s in %(old_year)s to %(current_eci)s in %(current_year)s."
+msgstr ""
+"%(of_country)s आर्थिक जटिलता रैंकिंग %(current_year)s में %(old_year)s-%(current_eci)s में %(old_eci)s से पिछले\n"
+"                    %(year_range)s वर्षों में %(rank_delta)s स्थानों की %(increased_or_decreased)s धि हुई है।"
+
+msgid "Economic Complexity Ranking"
+msgstr "आर्थिक जटिलता की रैंकिंग"
+
+#, python-format
+msgid "More on %(country)s from our sister sites"
+msgstr "हमारे भगिनी स्थलों से %(country)s पर अधिक"
+
+#, python-format
+msgid ""
+"\n"
+"            This treemap shows the municipalities in Brazil that imported products from %(country)s.<br /><br />\n"
+"            DataViva is a visualization tool that provides official data on trade, industries, and education throughout Brazil. If you would like more info or to create a similar site get in touch with us at <a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=import_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"            "
+msgstr ""
+"\n"
+"            इस पेड़ नक्शा %(country)s से आयातित उत्पादों है कि ब्राजील में नगर पालिकाओं से पता चलता है।<br /><br />\n"
+"            DataViva ब्राजील भर में व्यापार, उद्योग और शिक्षा पर सरकारी आंकड़ों प्रदान करता है कि एक दृश्य उपकरण है। यदि आप अधिक जानकारी चाहते हैं या बनाने के लिए तो एक ऐसी ही साइट हमारे साथ संपर्क में मिलता है <a href='mailto:oec@media.mit.edu'>oec@media.mit.edu</a>.\n"
+"            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=import_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"            "
+
+#, python-format
+msgid ""
+"\n"
+"            This treemap shows the municipalities in Brazil that exported products to %(country)s.\n"
+"            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=export_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"            "
+msgstr ""
+"\n"
+"            इस पेड़ नक्शा %(country)s के लिए उत्पादों का निर्यात किया है कि ब्राजील में नगर पालिकाओं से पता चलता है।\n"
+"            </p><p><a target='_blank' href='http://dataviva.info/apps/builder/tree_map/secex/all/all/%(dv_country_id)s/bra/?size=export_val&controls=false'>Explore on DataViva <i class='fa fa-external-link'></i></a>\n"
+"            "
+
+#, python-format
+msgid "Brazilian Municipalities that import from %(country)s"
+msgstr "%(country)s से है कि आयात ब्राजील नगर पालिकाओं"
+
+#, python-format
+msgid "Brazilian Municipalities that export to %(country)s"
+msgstr "%(country)s के लिए निर्यात कि ब्राजील के नगर पालिकाओं"
+
+#, python-format
+msgid "Globally Famous People %(of_country)s"
+msgstr "%(of_country)s दुनिया भर में मशहूर लोग"
+
+#, python-format
+msgid "This treemap shows the cultural exports %(of_country)s, as proxied by the production of globally famous historical characters.</p><p>%(pantheon_link)s"
+msgstr "विश्व स्तर पर प्रसिद्ध ऐतिहासिक पात्रों के उत्पादन से प्रॉक्सीकृत के रूप में इस पेड़ नक्शा, %(of_country)s सांस्कृतिक निर्यात से पता चलता है।</p><p>%(pantheon_link)s"
+
+#, python-format
+msgid "Globally Famous People %(of_country)s by City"
+msgstr "सिटी द्वारा %(of_country)s दुनिया भर में मशहूर लोग"
+
+#, python-format
+msgid "This treemap shows the cultural exports %(of_country)s by city, as proxied by the production of globally famous historical characters.</p><p>%(pantheon_link)s"
+msgstr "विश्व स्तर पर प्रसिद्ध ऐतिहासिक पात्रों के उत्पादन से प्रॉक्सीकृत के रूप में इस पेड़ नक्शा, शहर से %(of_country)s सांस्कृतिक निर्यात से पता चलता है।</p><p>%(pantheon_link)s"
+
+msgid "Top Exporter"
+msgstr "प्रमुख निर्यातक"
+
+msgid "Top Importer"
+msgstr "प्रमुख आयातक"
+
+#, python-format
+msgid "%(product)s the %(economic_rank)s most traded product"
+msgstr "%(economic_rank)s सबसे अधिक कारोबार उत्पाद %(product)s"
+
+#, python-format
+msgid " and the %(pci_rank)s most complex product according to the <a href='/en/rankings/hs92/'>Product Complexity Index (PCI)</a>"
+msgstr " और %(pci_rank)s सबसे जटिल उत्पाद के अनुसार <a href='/en/rankings/hs92/'>Product Complexity Index (PCI)</a>"
+
+#, python-format
+msgid "The top exporters of %(product)s are %(exporters)s. The top importers are %(importers)s."
+msgstr "%(product)s के शीर्ष निर्यातकों %(exporters)s रहे हैं। शीर्ष आयातकों %(importers)s हैं।"
+
+#, python-format
+msgid "%(product)s the top export of %(countries)s."
+msgstr "%(product)s %(countries)s के शीर्ष निर्यात।"
+
+#, python-format
+msgid "%(product)s the top import of %(countries)s."
+msgstr "%(product)s %(countries)s के शीर्ष आयात करते हैं।"
+
+#, python-format
+msgid "%(product)s also known as %(keywords)s."
+msgstr "%(product)s भी %(keywords)s के रूप में जाना जाता है।"
+
+#, python-format
+msgid "%(product)s a %(product_id_length)s digit %(classification)s product."
+msgstr "%(product)s एक %(product_id_length)s अंकों %(classification)s उत्पाद।"
+
+msgid "Rank"
+msgstr "पद"
+
+msgid "ID"
+msgstr "आईडी"
+
+msgid "Country"
+msgstr "देश"
+
+msgid "Product"
+msgstr "उत्पाद"
+
+msgid "Percent"
+msgstr "प्रतिशत"
+
+msgid "Export Value"
+msgstr "निर्यात का मूल्य"
+
+msgid "Net Export Value"
+msgstr "निर्यात का नेट मूल्य"
+
+msgid "Import Value"
+msgstr "आयात का मूल्य"
+
+msgid "Net Import Value"
+msgstr "आयात का नेट मूल्य"
+
+msgid "Market Value"
+msgstr "बाज़ार का मूल्य"
+
+msgid "Export"
+msgstr "निर्यात"
+
+msgid "Import"
+msgstr "आयात"
+
+msgid "GDP"
+msgstr "सकल घरेलू उत्पाद"
+
+msgid "GDPpc (constant '05 US$)"
+msgstr "प्रति व्यक्ति सकल घरेलु उत्पाद (२००५ अमेरिकी $)"
+
+msgid "GDPpc (current US$)"
+msgstr "प्रति व्यक्ति सकल घरेलु उत्पाद (वर्तमान अमेरिकी $)"
+
+msgid "GDPpc PPP (constant '11)"
+msgstr "प्रति व्यक्ति सकल घरेलु उत्पाद (पीपीपी, २०११ अमेरिकी $)"
+
+msgid "GDPpc PPP (current)"
+msgstr "प्रति व्यक्ति सकल घरेलु उत्पाद (पीपीपी, वर्तमान)"
+
+msgid "ECI"
+msgstr "ईसीआई"
+
+msgid "ECI Rank"
+msgstr "ईसीआई रैंक"
+
+msgid "Annual Growth Rate (1 year)"
+msgstr "वार्षिक विकास दर (१ वर्ष)"
+
+msgid "Annual Growth Rate (5 year)"
+msgstr "वार्षिक विकास दर (५ वर्ष)"
+
+msgid "Growth Value (1 year)"
+msgstr "वृद्धि का मूल्य (१ वर्ष)"
+
+msgid "Growth Value (5 year)"
+msgstr "वृद्धि का मूल्य (५ वर्ष)"
+
+msgid "Partner"
+msgstr "साथी"
+
+msgid "Y Axis"
+msgstr "ऊर्ध्वाधर अक्ष"
+
+msgid "Trade Flow"
+msgstr "व्यापार का प्रवाह"
+
+msgid "Start Year"
+msgstr "पहला साल"
+
+msgid "End Year"
+msgstr "अंतिम साल"
+
+#, python-format
+msgid "Profile for %(attr)s"
+msgstr "%(attr)s के लिए प्रोफ़ाइल"
+
+#~ msgid "Book"
+#~ msgstr "किताब"
+
+#~ msgid "Language"
+#~ msgstr "भाषा"
+
+#~ msgid "Net Export"
+#~ msgstr "शुद्ध निर्यात"
+
+#~ msgid "Net Import"
+#~ msgstr "शुद्ध आयात"
+
+#~ msgid "Interval"
+#~ msgstr "अंतराल"
+
+#~ msgid "Click to view more years"
+#~ msgstr "और ज़्यादा देखने के लिए क्लिक करें"
+
+#~ msgid "View as Visualization"
+#~ msgstr "विज़ुअलाइज़ेशन के रूप में देखें"
+
+#~ msgid "Download this year's data"
+#~ msgstr "इस साल के डेटा डाउनलोड करें"
+
+#~ msgid "Download all years data"
+#~ msgstr "सभी वर्षों के डेटा डाउनलोड करें"
+
+#~ msgid "Flag of %(country)s"
+#~ msgstr "का ध्वज %(country)s"
+
+#~ msgid "Origin Country"
+#~ msgstr "मूल देश"
+
+#~ msgid "Destination Country"
+#~ msgstr "गंतव्य देश"
+
+#~ msgid "The Observatory of Economic Complexity makes international trade data and economic complexity indicators available through millions of interactive visualizations."
+#~ msgstr "आर्थिक जटिलता की ऑब्जर्वेटरी लाखों इंटरैक्टिव विज़ुअलाइज़ेशन के माध्यम से अंतर्राष्ट्रीय व्यापार डेटा और आर्थिक जटिलता के सूचक उपलब्ध कराती है."
+
+#~ msgid "New!"
+#~ msgstr "नया!"
+
+#~ msgid "Application programming interface (API) for emedding an iframe of the visualizations used througout The Observatory of Economic Complexity on your own website."
+#~ msgstr "अपनी खुद की वेबसाइट पर आर्थिक जटिलता की ऑब्जर्वेटरी में इस्तेमाल किये गये विज़ुअलाइज़ेशन के एक iframe की emedding के लिए एप्लीकेशन प्रोग्रामिंग इंटरफेस (एपीआई)."
+
+#~ msgid "A book of complexity economics attempting to explain why some countries grow and others do not. The book uses many of the visualizations seen throughout this site."
+#~ msgstr "आर्थिक जटिलता कैसे आर्थिक विकास की व्याख्या करती है. यह पुस्तक इस साइट भर में देखे गये कईं विज़ुअलाइज़ेशन का उपयोग करती है."
+
+#~ msgid "Loading"
+#~ msgstr "लदाई"
+
+#~ msgid "Value"
+#~ msgstr "मूल्य"
+
+#~ msgid "Continent"
+#~ msgstr "महाद्वीप"
+
+#~ msgid "Category"
+#~ msgstr "श्रेणी"
+
+#~ msgid "Full"
+#~ msgstr "पूर्ण"
+
+#~ msgid "Gross"
+#~ msgstr "सकल"
+
+#~ msgid "Net"
+#~ msgstr "शुद्ध"
+
+#~ msgid "All Years"
+#~ msgstr "सभी साल"
+
+#~ msgid "View as Text"
+#~ msgstr "टेक्स्ट के रूप में देखें"
+
+#~ msgid "Fullscreen"
+#~ msgstr "फुलस्क्रीन"
+
+#~ msgid "value"
+#~ msgstr "मूल्य"
+
+#~ msgid "percentage"
+#~ msgstr "प्रतिशतता"
+
+#~ msgid "Brought to you by"
+#~ msgstr "यूआरएल संक्षेप में"
+
+#~ msgid "Total World Trade"
+#~ msgstr "कुल वर्ल्ड ट्रेड"
+
+#~ msgid "Total Country Trade"
+#~ msgstr "कुल देश के व्यापार"
+
+#~ msgid "View as App"
+#~ msgstr "अनुप्रयोग के रूप में देखें"
+
+#~ msgid "Total"
+#~ msgstr "संपूर्ण"
+
+#~ msgid "%(country)s (%(country_abbrv)s) Profile of Exports, Imports and Trade Partners"
+#~ msgstr "%(country)s (%(country_abbrv)s) निर्यात, आयात और व्यापार में भागीदारों की प्रोफ़ाइल"
+
+#~ msgid "List of major leading exports, imports and complexity economic indicator statistics of %(country)s."
+#~ msgstr "%(country)s के प्रमुख निर्यात, आयात और आर्थिक जटिलता के संकेतक आँकड़ों की सूची"
+
+#~ msgid "Goods and resources of %(country)s."
+#~ msgstr "%(country)s की सम्पदा और संसाधन"
+
+#~ msgid "Previous"
+#~ msgstr "प्रीवियस"
+
+#~ msgid "Learn More About Trade in <strong>%(country)s</strong>"
+#~ msgstr "में व्यापार के बारे में अधिक जानें <strong>%(country)s</strong>"
+
+#~ msgid "Next"
+#~ msgstr "अगली"
+
+#~ msgid "Top 5"
+#~ msgstr "शीर्ष 5"
+
+#~ msgid "%(country)s %(ranked)s %(rank_val)s with an Economic Complexity Index (ECI) of %(eci)s"
+#~ msgstr "%(country)s के एक आर्थिक जटिलता सूचकांक (ईसीआई) %(ranked)s %(rank_val)s के"
+
+#~ msgid "%(country)s is the top exporter of"
+#~ msgstr "शीर्ष निर्यातक %(country)s है"
+
+#~ msgid "Explore"
+#~ msgstr "छान-बीन"
+
+#~ msgid "%(prod)s (%(prod_abbrv)s) Profile of Export Destinations and Import Origins"
+#~ msgstr "%(prod)s (%(prod_abbrv)s) के निर्यात के गंतव्य और आयात के स्रोत की प्रोफ़ाइल"
+
+#~ msgid "List of major leading origin and destination countries with economic indicator statistics of %(prod)s."
+#~ msgstr "आर्थिक संकेतक आँकड़ों %(prod)s.के साथ प्रमुख मूल और गंतव्य देशों की सूची "
+
+#~ msgid "Principle trade partners that export %(prod)s."
+#~ msgstr "प्रमुख व्यापरिक भागीदार जो %(prod)s. निर्यात करते हैं "
+
+#~ msgid "Countries that import %(prod)s."
+#~ msgstr "देश जो %(prod)s. आयात करते हैं"
+
+#~ msgid "Learn More About Trade of <strong>%(prod)s</strong>"
+#~ msgstr "के व्यापार के बारे में अधिक जानें <strong>%(prod)s</strong>"
+
+#~ msgid "%(prod)s (%(classification)s: %(prod_abbrv)s) %(ranked)s %(rank_val)s with a Product Complexity Index (PCI) of %(pci)s"
+#~ msgstr "%(prod)s (%(classification)s: %(prod_abbrv)s) %(ranked)s %(rank_val)s उत्पाद की जटिलता सूचकांक (पीसीआई) %(pci)s के साथ "
+
+#~ msgid "Country Rankings"
+#~ msgstr "देशों की रैंकिंग"
+
+#~ msgid "SITC Product Rankings"
+#~ msgstr "SITC उत्पादों की रैंकिंग"
+
+#~ msgid "Change Year"
+#~ msgstr "बदले साल"
+
+#~ msgid "About"
+#~ msgstr "के बारे में"

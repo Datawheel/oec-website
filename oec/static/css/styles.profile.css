@@ -1,0 +1,140 @@
+/* Title formatting */
+.title {
+  overflow: hidden;
+  position: relative;
+}
+
+.title a.prev,
+.title a.next {
+  bottom: 12px;
+  color: #666;
+  display: inline-block;
+  letter-spacing: 1px;
+  padding: 3px;
+  position: absolute;
+}
+.title h2 {
+  margin: 0px 150px 10px;
+}
+
+.title a.prev {
+  text-align: left;
+  left: 5px;
+}
+
+.title a.next {
+  text-align: right;
+  right: 5px;
+}
+
+body.profile .content {
+  text-align: center;
+}
+
+.content .build {
+  display: inline-block;
+  margin: 10px 10px 30px 10px;
+  min-height: 200px;
+  width: 460px;
+}
+
+.content .build .list {
+  text-align: left;
+}
+
+p.country_name {
+  font-size: 28px;
+  line-height: 30px;
+  margin: 10px;
+  min-height: 40px;
+  padding-left: 60px;
+  padding-top: 10px;
+  position: relative;
+}
+
+span.icon {
+  left: 0px;
+  display: block;
+  height: 50px;
+  margin: 0px;
+  position: absolute;
+  top: 0px;
+  width: 50px;
+  vertical-align: top;
+}
+
+span.icon img {
+  width: 50px;
+}
+
+p.eci_value {
+  line-height: 18px;
+  margin: 10px;
+}
+
+p.keywords {
+  margin: 10px;
+}
+
+div.build a.button {
+  display: block;
+  margin: 0px;
+}
+
+div.build a.button > i {
+  float: right;
+  margin-top: 1px;
+}
+div#geo {
+  border: solid 1px red;
+  width: 280px;
+  height: 280px;
+}
+
+
+
+
+
+table img{
+  width: 15px;
+}
+table a {
+  vertical-align: top;
+}
+div#community_treemap{
+  float: left;
+}
+div#headline_info {
+  float: right;
+  width: 420px;
+}
+div#headline_info p span{
+  font-size: 20px;
+}
+div#headline_info img {
+  width: 20px;
+}
+div#data_text {
+  float: right;
+  height: 400px;
+  overflow-y: scroll;
+  width: 420px;
+}
+
+.desc { color:#6b6b6b;}
+.desc a {color:#0092dd;}
+
+.content .build .list {
+  border: solid #bbb 1px;
+  height: 300px;
+  overflow-y: scroll;
+}
+
+#quick_glance {
+  overflow: hidden;
+  width: 100%;
+}
+
+#viz {
+  margin: 10px 0 0  0;
+}

@@ -38,6 +38,7 @@ class PatchedSelect extends Select {
  * @property {string} color
  * @property {string} icon
  * @property {number | string} id
+ * @property {number | string} label
  * @property {string} name
  * @property {string} searchIndex
  * @property {string} type
@@ -248,7 +249,7 @@ SelectMultiHierarchy.defaultProps = {
         <Text className={Classes.FILL} ellipsize={true}>
           {item.name}
         </Text>
-        <span className={Classes.MENU_ITEM_LABEL}>{item.id}</span>
+        <span className={Classes.MENU_ITEM_LABEL}>{item.label || item.id}</span>
       </a>
     );
   }
@@ -278,10 +279,17 @@ export function extendItems(items, levels, {getColor = () => "", getIcon = () =>
           headerKeys[i] = keyNames[i];
           const colorGetter = getColor[i] || getColor[getColor.length - 1] || getColor;
           const iconGetter = getIcon[i] || getIcon[getIcon.length - 1] || getIcon;
+
+          const label = ["HS2", "HS4"].includes(key)
+            // @ts-ignore
+            ? keyIds[i].toString().slice(-key.slice(-1) * 1)
+            : keyIds[i];
+
           return {
             color: colorGetter(firstItem) || undefined,
             icon: iconGetter(firstItem) || undefined,
             id: keyIds[i],
+            label,
             name: keyNames[i],
             type: key,
             searchIndex: keyNames
@@ -300,6 +308,7 @@ export function extendItems(items, levels, {getColor = () => "", getIcon = () =>
       color: colorGetter(item) || undefined,
       icon: iconGetter(item) || undefined,
       id: item[`${lastKey} ID`],
+      label: ["HS6"].includes(lastKey) ? item[`${lastKey} ID`].toString().slice(-6) : item[`${lastKey} ID`],
       name: item[lastKey],
       type: lastKey,
       searchIndex: keyNames.concat(item[lastKey], item[`${lastKey} ID`]).join("|")
@@ -313,7 +322,7 @@ export function extendItems(items, levels, {getColor = () => "", getIcon = () =>
   });
 
   nestedItems.entries(items);
-  return extendedItems;
+  return Object.values(extendedItems.reduce((acc, cur) => Object.assign(acc, {[cur.id]: cur}), {}));
 }
 
 export default SelectMultiHierarchy;

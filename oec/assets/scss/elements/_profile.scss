@@ -1,0 +1,1075 @@
+body.profile.frozen {
+  h1 {
+    @include margin(0, 0, 0, 0);
+    padding-top: 0;
+  }
+}
+
+body.profile {
+  background-color: $darkbackground;
+
+  h1 {
+    line-height: 1;
+    @include margin(0, 30px, -5px, 30px);
+    padding-top: 40px;
+
+    @media all and (max-width: 768px) {
+      @include margin(0px, 30px, 0px, 30px);
+    }
+  }
+
+  h2 {
+    margin-bottom: 20px;
+    line-height: 1.1;
+  }
+
+  article {
+
+    aside {
+      @include margin(30px, 30px, 30px, 30px, !important);
+
+      a.deep-link {
+        @include transition(color 1s);
+        color: $brightlinkcolor !important;
+        border-bottom: none !important;
+        &:hover {
+          border-bottom: none !important;
+          color: #fff !important;
+        }
+      }
+
+      .fa-external-link {
+        font-size: 13px;
+        vertical-align: middle;
+        @include margin-left(3px);
+
+        @include rtl {
+          @include flip();
+        }
+      }
+
+      p.explore_link {
+        @media all and (max-width: 768px) {
+          margin-bottom: 13px !important;
+        }
+      }
+
+      .share_container {
+        @include flex();
+        @include justify(space-between);
+        @include align-items(center);
+
+        @media all and (max-width: 768px) {
+          @include margin(0, 0, 20px, 0);
+        }
+
+        .share_icons_container {
+          @include flex-size(1);
+          @include flex();
+          @include justify(space-between);
+          @include align-items(center);
+
+          a {
+            @include transition(color 0.5s);
+            color: $lightlinkcolor;
+            cursor: pointer;
+            height: 23px;
+            @include margin(2px, 0, 2px, 0);
+
+            &:hover {
+              color: #fff;
+            }
+          }
+        }
+
+        .share_input_container {
+          @include flex-size(2);
+          margin-top: -4px;
+
+          .share_input {
+            background-color: #3f464f;
+            border: 0;
+            color: white;
+            // display: none;
+            @include margin-left(10px);
+            padding: 5px 7px 5px 7px;
+
+            @media all and (max-width: 768px) {
+              width: 84%;
+              @include margin-left(11%);
+            }
+
+            &.share_embed_url {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    content {
+      @include margin(30px, 30px, 30px, 30px, !important);
+    }
+
+    &.intro-article {
+      background-color: white;
+      color: $black;
+
+      p {
+        color: $black;
+        @include text-align(left);
+
+        a {
+          color: $darklinkcolor;
+          &:hover {
+            border-bottom: 1px solid $darklinkcolor;
+          }
+
+        }
+      }
+    }
+
+    &.titled-section, &.viz-article {
+      background-color: $darkbackground;
+      color: white;
+
+      // content {
+      //   @media all and (max-width: 768px) {
+      //     border-bottom: 1px dotted $darkbordercolor;
+      //   }
+      // }
+
+      p {
+        color: white;
+
+        a {
+          color: $lightlinkcolor;
+          &:hover {
+            border-bottom: 1px solid $lightlinkcolor;
+          }
+        }
+      }
+    }
+
+  }
+
+  article.viz-article, article.viz-article + article.titled-section, article .profile_header {
+    @include font-smoothing(antialiased);
+  }
+
+  article .profile_header {
+
+    p img {
+      @include shadow(none);
+      border: none;
+      @include margin(10px, 0, 0, 0);
+      width: 100%;
+    }
+
+    #title {
+      @include flex;
+      @include align-items(center);
+      @include flex-direction(row);
+      @include margin(20px, 10px, 20px, 10px);
+
+      @media all and (max-width: 768px) {
+        @include justify(center);
+      }
+
+      .icon {
+        @include flex-size(none);
+        height: 80px;
+        @include margin(0, 20px, 0, 0);
+        width: 80px;
+        z-index: 10;
+
+        @media all and (max-width: 768px) {
+          height: 60px;
+          width: 60px;
+        }
+
+      }
+
+      h1 {
+        font-size: 65px;
+        @include margin(0, 0, 0, 0);
+        @include padding(0, 0, 0, 0);
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        i {
+          opacity: 0.5;
+        }
+
+        sub {
+          color: white;
+          display: block;
+          font-size: 11px;
+          text-shadow: $shadow;
+        }
+
+        &:after {
+          content: url('/static/img/nav/search.png');
+          @include transition(opacity 1s);
+          opacity: 0;
+          position: absolute;
+          @include margin-left(15px);
+          margin-top: 2px;
+          cursor: pointer;
+
+          @media all and (max-width: 768px) {
+            display: none;
+          }
+        }
+
+        &:hover:after {
+          opacity: 0.9;
+        }
+      }
+    }
+
+    .author {
+      @include transition(opacity 0.5s);
+      bottom: 3px;
+      color: white;
+      font-size: 9px;
+      font-weight: 400;
+      opacity: 0;
+      position: absolute;
+      @include right(7px);
+      text-shadow: $shadow;
+
+      i {
+        display: inline-block;
+        @include margin(2px, 5px, 0, 5px);
+      }
+
+      a {
+        color: white;
+        &:hover {
+          border-color: transparent;
+        }
+      }
+    }
+
+    .share {
+
+      $icon-width: 25px;
+
+      position: absolute;
+      @include right(3px);
+      top: 0;
+      @include padding(13px, 13px, 13px, 13px);
+      @include margin(-13px, 0, -13px, 0);
+      cursor: pointer;
+      height: $icon-width - 3;
+      width: $icon-width - 3;
+
+      img {
+        @include transition(opacity 0.5s, transform 0.5s);
+        opacity: 0.7;
+        height: $icon-width - 3;
+        width: $icon-width - 3;
+      }
+
+      &:hover img {
+        opacity: 1;
+      }
+
+      .drawer {
+        height: auto;
+        @include margin(18px, 8px, 15px, 0);
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        @include right(30px);
+        width: $icon-width * 2 + 5;
+      }
+
+      .drawer-content {
+        @include transition(right 1s, opacity 1s 0.25s);
+        opacity: 0;
+        position: relative;
+        @include right(-($icon-width) * 2);
+        top: 0;
+
+        i {
+          @include transition(opacity 0.5s);
+          display: inline-block;
+          font-size: 17px;
+          opacity: 0.7;
+          @include text-align(center);
+          width: $icon-width;
+          height: $icon-width;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
+      &.open {
+        img {
+          opacity: 1;
+        }
+
+        .drawer-content {
+          opacity: 1;
+          @include right(0);
+        }
+      }
+
+      @media all and (min-width: 769px) {
+        img {
+          display: none;
+        }
+
+        .drawer {
+          margin-top: 13px;
+          @include right(4px);
+          width: $icon-width;
+        }
+
+        .drawer-content {
+          opacity: 1;
+          @include right(0);
+
+          i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 5px;
+          }
+
+        }
+      }
+
+    }
+
+    #stats {
+      @include flex;
+      @include flex-direction(row);
+      @include align-items(flex-start);
+      @include justify(space-between);
+      @include flex-wrap(wrap);
+      position: relative;
+    }
+
+    #stats {
+      @include margin(20px, 20px, 20px, 20px);
+
+      @media all and (max-width: 600px) {
+        @include margin(0, 10px, 0, 10px, !important);
+      }
+
+    }
+
+    &.country {
+      #title, #stats {
+        @include margin-left(310px);
+
+        @media all and (max-width: 768px) {
+          @include margin-left(10px);
+        }
+
+      }
+    }
+
+    &:hover {
+      .author {
+        opacity: 1;
+      }
+
+      .coords {
+        fill: white;
+        opacity: 0.25;
+        stroke: $darkbackground;
+
+        &.focus {
+          opacity: 1;
+        }
+
+      }
+
+    }
+
+    .stat {
+      @include flex-size(1);
+      @include flex;
+      @include flex-direction(column);
+      color: white;
+      @include margin-right(30px);
+      margin-top: 20px;
+
+      &:last-child {
+        @include margin-right(0);
+      }
+
+      @media all and (max-width: 1024px) {
+        @include margin(10px, 10px, 10px, 10px !important);
+      }
+
+      @media all and (max-width: 600px) {
+        @include flex-size(1 1 40%);
+        @include margin(0, 0, 10px, 0, !important);
+        min-width: 40%;
+      }
+
+      .stat_text {
+        @include flex;
+        @include flex-direction(row);
+        @include align-items(center);
+        @include justify(center);
+
+        @media all and (max-width: 1024px) {
+          @include flex-direction(column);
+          @include justify(center);
+          @include text-align(center);
+          h3 {
+            @include margin(0, 10px, 0, 0, !important);
+
+            .suffix {
+              display: inline !important;
+              vertical-align: middle;
+            }
+
+          }
+        }
+
+        @media all and (max-width: 600px) {
+          h3 {
+            font-size: 20px !important;
+            @include margin(0, 10px, 0, 10px, !important);
+          }
+
+          sub {
+            font-size: 12px !important;
+          }
+        }
+
+        h3 {
+          @include flex-size(none);
+          font-family: $source-sans;
+          font-size: 32px;
+          font-weight: 300;
+          @include text-align(right);
+
+          .suffix {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            max-width: 90px;
+          }
+
+        }
+
+        sub {
+          @include flex-size(none);
+          font-family: $montserrat;
+          font-size: 14px;
+          font-weight: 700;
+          text-transform: uppercase;
+
+          .rank {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      .sparkline {
+        height: 35px;
+        @include margin(10px, 0, 10px, 0);
+        // width: 90%;
+
+        @media all and (max-width: 600px) {
+          display: none;
+        }
+
+        .sparkpath {
+          fill: none;
+          stroke: white;
+          stroke-width: 2px;
+        }
+      }
+
+      .years {
+        @include flex;
+        @include flex-direction(row);
+        @include justify(space-between);
+        // width: 90%;
+
+        @media all and (max-width: 600px) {
+          display: none;
+        }
+
+      }
+
+      .year {
+        font-size: 11px;
+        font-weight: 700;
+        opacity: 0.9;
+      }
+
+      .stat_flag {
+        @include text-align(center);
+        img {
+          height: 60px;
+          width: 60px;
+        }
+
+        @media all and (max-width: 600px) {
+          display: none;
+        }
+
+      }
+
+    }
+  }
+
+  .stat {
+    @include flex-size(1);
+    @include flex;
+    @include flex-direction(column);
+    color: white;
+    @include margin-right(35px);
+    margin-top: 20px;
+
+    .stat_text {
+      @include flex;
+      @include flex-direction(row);
+      @include align-items(center);
+      @include justify(center);
+
+      h3 {
+      @include flex-size(none);
+        font-family: $source-sans;
+        font-size: 32px;
+        font-weight: 300;
+        @include margin(0, 10px, 0, 0, !important);
+      }
+
+      sub {
+        font-family: $montserrat;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+
+        .rank {
+          display: block;
+          font-size: 10px;
+          font-weight: 400;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .sparkline {
+      height: 35px;
+      @include margin(10px, 0, 10px, 0);
+      width: 100%;
+
+      .sparkpath {
+        fill: none;
+        stroke: white;
+        stroke-width: 2px;
+      }
+    }
+
+    .years {
+      @include flex;
+      @include flex-direction(row);
+      @include justify(space-between);
+    }
+
+    .year {
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    &#eci {
+      color: $black;
+      // @include margin(0, 0, 0, 0);
+      width: 100%;
+
+      .stat_text {
+        h3 {
+        @include flex-size(none);
+          font-size: 70px;
+          font-weight: 300;
+        }
+
+        sub {
+          font-size: 15px;
+          line-height: 18px;
+          margin-top: 3px;
+
+          .rank {
+            font-size: 12px;
+          }
+        }
+      }
+
+      .sparkline {
+        height: 50px;
+        @include margin(10px, 0, 10px, 0);
+        width: 100%;
+
+        .sparkpath {
+          fill: none;
+          stroke: $darkbackground;
+          stroke-width: 2px;
+        }
+      }
+
+      .years {
+        width: 100%;
+      }
+
+    }
+
+  }
+
+  .viz #d3plus_drawer {
+    margin-bottom: -15px;
+
+    .d3plus_title {
+      font-family: $montserrat !important;
+      font-size: 12px !important;
+      font-weight: 400 !important;
+      text-transform: uppercase;
+    }
+  }
+
+  article.intro-article {
+
+    content {
+      @include margin(45px, 30px, 30px, 0, !important);
+
+      @media all and (max-width: 768px) {
+        @include margin(0, 30px, 30px, 30px, !important);
+      }
+
+    }
+
+    aside {
+      margin-top: 43px !important;
+
+      @media all and (max-width: 768px) {
+        margin-top: 30px !important;
+      }
+
+    }
+
+    div.columns p {
+      @include text-align(justify);
+
+      @media all and (max-width: 768px) {
+        @include text-align(left);
+      }
+    }
+
+  }
+
+  #topojson {
+    @include flex-size(none);
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid #aaa;
+    height: 250px;
+    @include left(35px);
+    opacity: 1;
+    position: absolute;
+    top: $header + 35px;
+    width: 250px;
+    z-index: 10;
+
+    .coords {
+      fill: white;
+      opacity: 0.25;
+      stroke: $darkbordercolor;
+
+      &.focus {
+        opacity: 1;
+      }
+
+    }
+
+    #topojson-xxwld .coords {
+      stroke: white !important;
+    }
+
+    @media all and (max-width: 768px) {
+      display: none;
+    }
+
+  }
+
+  article.product ~ article.titled-section {
+    h1 {
+      border-top: 0;
+    }
+  }
+
+  article.viz-article {
+
+    p {
+      @include text-align(left);
+    }
+
+    content {
+      @include margin(30px, 30px, 30px, 0, !important);
+
+      @media all and (max-width: 768px) {
+        @include margin(-30px, 0, 45px, 0, !important);
+      }
+    }
+  }
+
+  article.titled-section {
+    h1 {
+      border-top: 1px solid $darkbordercolor;
+      font-family: $montserrat;
+      font-size: 32px;
+      font-weight: 400;
+      text-transform: uppercase;
+
+      @media all and (max-width: 768px) {
+        border-top: 0;
+      }
+    }
+
+    p {
+      @include text-align(left);
+    }
+
+    p img {
+      @include shadow(none);
+      border: none;
+      @include margin(20px, 0, 0, 0);
+      width: 100%;
+
+      @media all and (max-width: 768px) {
+        width: 50%;
+        @include margin(20px, 25%, 20px, 25%);
+      }
+    }
+
+    content {
+      @include margin(30px, 30px, 30px, 0, !important);
+
+      @media all and (max-width: 768px) {
+        @include margin(-30px, 0, 45px, 0, !important);
+      }
+    }
+
+    section.subtitle-section {
+
+      @media all and (max-width: 768px) {
+        aside {
+          @include margin(0, 30px, 0, 30px, !important);
+        }
+      }
+
+      content {
+        @include margin(30px, 0, 30px, 0, !important);
+
+        p {
+          margin-bottom: 0 !important;
+        }
+      }
+    }
+  }
+
+  article .prof-nav {
+    width: 100%;
+
+    a.profile_button {
+      @include flex;
+      @include flex-direction(row);
+      @include align-items(center);
+      @include gradient(rgba(0,0,0,0), $darkbackground);
+      @include background-stretch();
+      height: 150px;
+      margin-top: 6px;
+      overflow: hidden;
+      position: relative;
+      width: 50%;
+
+      @media all and (max-width: 768px) {
+        width: 100%;
+      }
+
+      .button_cover {
+        background-color: rgba(0, 0, 0, 0.5);
+        height: 100%;
+        @include left(0);
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      i {
+        @include flex-size(none);
+        font-size: 35px;
+        @include margin(6px, 10px, 0, 10px);
+        opacity: 0.8;
+        z-index: 1;
+      }
+
+      h1 {
+        font-size: 50px;
+        line-height: 50px;
+        @include margin(0, 0, 0, 0);
+        opacity: 0.8;
+        @include padding(0, 0, 0, 0);
+        @include text-shadow(1px 1px, 6px, $darkbackground);
+        z-index: 1;
+      }
+
+      .icon {
+      @include flex-size(none);
+        @include margin(3px, 15px, 0, 15px);
+        max-height: 50px;
+        z-index: 1;
+      }
+
+      &:hover {
+        i, h1 {
+          opacity: 1;
+        }
+      }
+
+      &.prev {
+        @include justify(flex-start);
+        @include margin-right(3px);
+        @include text-align(left);
+        i {
+          @include padding-left(20px);
+        }
+        @media all and (max-width: 768px) {
+          @include margin-right(0);
+        }
+      }
+
+      &.next {
+        @include justify(flex-end);
+        @include margin-left(3px);
+        @include text-align(right);
+        i {
+          @include padding-right(20px);
+        }
+        @media all and (max-width: 768px) {
+          @include margin-left(0);
+        }
+      }
+
+    }
+  }
+
+  ul.hierarchy.contents {
+    border: 0;
+    @include padding-left(0);
+
+    // &.country {
+    //   margin-top: 20px;
+    //
+    //   @media all and (max-width: 768px) {
+    //     margin-top: -20px;
+    //     margin-bottom: -20px;
+    //   }
+    // }
+
+    li a {
+      color: $brightlinkcolor;
+    }
+  }
+
+  ul.hierarchy {
+    border: 1px solid #BBBDC0;
+    color: $darkbackground;
+    display: block;
+    font-family: $source-sans;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    list-style-type: none;
+    @include padding(0, 20px, 0, 15px);
+
+    li {
+      @include padding(3px, 0, 3px, 0);
+      a {
+        color: $darklinkcolor;
+        font-size: 16px;
+        line-height: 1.3;
+        &:hover {
+          opacity: 0.7;
+        }
+
+        span {
+          font-weight: 700;
+        }
+      }
+    }
+
+    .depth2 {
+      font-size: 22px;
+      line-height: 35px;
+    }
+
+    .depth6 {
+      @include margin-left(10px);
+    }
+
+    .depth8 {
+      @include margin-left(20px);
+    }
+  }
+
+  article {
+
+    &.sisters {
+      background-color: $medbordercolor;
+      background: -moz-linear-gradient(top, $darkbackground 0%, $l4-darkbackground 95%);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $darkbackground), color-stop(100%, $l4-darkbackground));
+      background: -webkit-linear-gradient(top, $darkbackground 0%, $l4-darkbackground 95%);
+      background: -o-linear-gradient(top, $darkbackground 0%, $l4-darkbackground 95%);
+      background: -ms-linear-gradient(top, $darkbackground 0%, $l4-darkbackground 95%);
+      background: linear-gradient(to bottom, $darkbackground 0%, $l4-darkbackground 95%);
+
+      h1 {
+        border-top: 0;
+        padding-bottom: 30px;
+      }
+
+    }
+
+    &.pantheon, &.dataviva, &.datausa {
+
+      h1 {
+        border-top: 0;
+        img {
+          &:hover {
+            opacity: 0.7;
+          }
+        }
+
+        @media all and (max-width: 768px) {
+          text-align: center;
+        }
+      }
+
+    }
+
+    &.datausa {
+      background-color: #e9e9e9;
+
+      h1 a img {
+        width: 200px;
+      }
+
+      p {
+        color: rgba(51, 51, 51, 0.93);
+      }
+
+      section aside h2 {
+        display: none;
+      }
+
+      section aside a {
+        color: #ef6145;
+
+        &:hover {
+          border-bottom: 1px solid #ef6145;
+        }
+      }
+
+    }
+
+    &.dataviva {
+      background-color: $medbordercolor;
+      background-image: url('/static/img/dataviva.png'),
+                        // -moz-linear-gradient(top, $l3-darkbackground 0%, $medbordercolor 5%, rgba(255,255,255,0) 20%),
+                        // -webkit-gradient(linear, left top, left bottom, color-stop(0% $l3-darkbackground), color-stop(5%, $medbordercolor), color-stop(20%, rgba(255,255,255,0))),
+                        // -webkit-linear-gradient(top, $l3-darkbackground 0%, $medbordercolor 5%, rgba(255,255,255,0) 20%),
+                        // -o-linear-gradient(top, $l3-darkbackground 0%, $medbordercolor 5%, rgba(255,255,255,0) 20%),
+                        // -ms-linear-gradient(top, $l3-darkbackground 0%, $medbordercolor 5%, rgba(255,255,255,0) 20%),
+                        linear-gradient(to bottom, $l4-darkbackground 0%, $medbordercolor 5%, rgba(255,255,255,0) 20%),
+                        url('http://en.dataviva.info/static/img/bgs/city_small.jpg');
+      background-attachment: local, local, fixed;
+      background-repeat: repeat-x, no-repeat;
+      background-position: bottom, 50% 50%, left;
+      background-size: auto, auto, cover;
+      color: $black;
+      padding-bottom: 30px;
+
+      p {
+        color: $black;
+      }
+
+      section {
+        aside {
+          background-color: rgba(255, 255, 255, 0.8);
+          @include padding(15px, 15px, 15px, 15px);
+          @include margin(30px, 20px, 30px, 20px, !important);
+
+          a {
+            color: #af1f24;
+            &:hover{
+              border-bottom: 1px solid #af1f24;
+            }
+          }
+
+        }
+
+        content {
+          @media all and (max-width: 768px) {
+            @include margin(0, 0, 20px, 0, !important);
+          }
+        }
+      }
+
+      h1 img {
+        width: $sidebar;
+
+        @media all and (max-width: 768px) {
+          padding-top: 0;
+        }
+      }
+
+    }
+
+    &.pantheon {
+      background-color: #F9F6E3;
+      color: $black;
+
+      p {
+        color: $black;
+      }
+
+      content {
+        overflow: hidden;
+      }
+
+      h1 img {
+        width: ($sidebar + 120);
+        padding-bottom: 20px;
+      }
+
+      section aside a {
+        color: black;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+
+        &:hover {
+          border-bottom: 1px solid black;
+        }
+      }
+
+    }
+
+  }
+}

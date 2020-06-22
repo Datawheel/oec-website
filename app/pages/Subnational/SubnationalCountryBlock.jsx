@@ -1,12 +1,12 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
 
-import {InputGroup, Tab, Tabs} from "@blueprintjs/core";
-
+import {Tab, Tabs} from "@blueprintjs/core";
+import {normalizeString} from "../../helpers/utils";
 import {connect} from "react-redux";
 import {withNamespaces} from "react-i18next";
 
-import {normalizeString} from "../../helpers/utils";
+
 import SubnationalList from "./SubnationalList";
 import SubnationalMap from "./SubnationalMap";
 
@@ -43,6 +43,10 @@ class SubnationalCountryBlock extends React.Component {
     return availabilityText;
   }
 
+  handleNavbarTabChange(navbarTabId) {
+    this.setState({navbarTabId, items: this.props.options, searchText: ""});
+  }
+
   filterList(event) {
     const {options} = this.props;
     const filtered = {};
@@ -51,12 +55,7 @@ class SubnationalCountryBlock extends React.Component {
       filtered[level] = options[level].filter(item => normalizeString(item.name).search(
         searchTerm) !== -1);
     });
-
     this.setState({items: filtered, searchText: event.target.value});
-  }
-
-  handleNavbarTabChange(navbarTabId) {
-    this.setState({navbarTabId, items: this.props.options, searchText: ""});
   }
 
   render() {
@@ -65,13 +64,12 @@ class SubnationalCountryBlock extends React.Component {
     const {items} = this.state;
 
     // Navbar
-    const {navbarTabId, searchText} = this.state;
+    const {navbarTabId} = this.state;
 
     const navbarTabIx = parseInt(navbarTabId.split("-")[1], 0);
 
     const selectedGeoLevel = metadata.geoLevels[navbarTabIx];
 
-    const selectedName = selectedGeoLevel.name;
     const selectedCube = selectedGeoLevel.overrideCube ? selectedGeoLevel.overrideCube : metadata.cube;
     const selectedLevel = `${selectedCube}_${selectedGeoLevel.level}`;
 
@@ -89,23 +87,22 @@ class SubnationalCountryBlock extends React.Component {
             animate={true}
             id={`${metadata.code}-geolevels`}
             key={"horizontal"}
-            className="subnational-tabs-component"
+            className={`subnational-tabs-component subnational-tabs-${metadata.geoLevels.length}-options`}
             renderActiveTabPanelOnly={false}
             vertical={false}
             onChange={this.handleNavbarTabChange}
             selectedTabId={navbarTabId}
           >
             {metadata.geoLevels.map((gl, ix) =>
-              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name} panel={<SubnationalList slug={gl.profileSlug ? gl.profileSlug : `subnational_${metadata.code}`} options={items && items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`] ? items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []} />} />
+              <Tab key={`tab-${ix}`} id={`tab-${ix}`} title={gl.name}
+                panel={<SubnationalList
+                  slug={gl.profileSlug ? gl.profileSlug : `subnational_${metadata.code}`}
+                  options={items && items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`] ? items[`${gl.overrideCube ? gl.overrideCube : metadata.cube}_${gl.level}`].filter(i => gl.ignoreIdsList ? gl.ignoreIdsList.indexOf(i.id) === -1 : true) : []}
+                  name={gl.name}
+                  filterFN={this.filterList}
+                />}
+              />
             )}
-            <InputGroup type="text"
-              id={`${metadata.code}-search`}
-              fill={true}
-              placeholder={`Search ${selectedName}`}
-              onChange={this.filterList}
-              defaultValue={""}
-              value={searchText} />
-            <Tabs.Expander />
           </Tabs>
         </div>
         <div className="subnational-map-container">

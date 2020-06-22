@@ -8,6 +8,13 @@ export default function vizbuilderReducer(state = vbInitialState(), action) {
     case "VB_UPDATE_CUBE_SELECTED": {
       newState = state;
       newState.cubeSelected = action.payload;
+      newState.cubeSelectedTemp = action.payload;
+      return newState;
+    }
+
+    case "VB_UPDATE_CUBE_SELECTED_TEMP": {
+      newState = state;
+      newState.cubeSelectedTemp = action.payload;
       return newState;
     }
 
@@ -23,6 +30,7 @@ export default function vizbuilderReducer(state = vbInitialState(), action) {
       newState.data = action.payload.data;
       newState.loading = action.payload.loading;
       newState.API = action.payload.API;
+      newState.cubeSelected = state.cubeSelectedTemp;
       return newState;
     }
 

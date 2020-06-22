@@ -1,0 +1,155 @@
+#container {
+  margin-top: $header;
+
+  #content {
+    @include margin(0, auto, 0, auto);
+
+    header {
+      min-height: 150px;
+      overflow: hidden;
+      position: relative;
+      -webkit-transform: translateZ(0);
+      width: 100%;
+      z-index: 5;
+
+      @media all and (max-width: 768px) {
+        @include flex-direction(column);
+      }
+
+      h1 {
+        color: #fff;
+        // font-size: 50px;
+        position: relative;
+        width: 100%;
+
+        @media all and (max-width: 768px) {
+          font-size: 35px;
+          width: auto;
+         , // @include text-align(center);
+        }
+
+      }
+
+      .header_image {
+        @include gradient($darkbackground, rgba(33, 40, 49, 0));
+        @include left(0);
+        position: absolute;
+        top: 0;
+        min-height: 150px;
+        width: 100%;
+
+        img {
+          @include transition(opacity 0.25s);
+          display: block;
+          opacity: 0;
+          position: relative;
+          z-index: -1;
+          // -webkit-filter: brightness(0);
+
+          &.loaded {
+            opacity: 1;
+          }
+
+        }
+
+      }
+
+    }
+
+    section {
+      @include flex;
+      @include flex-direction(row);
+
+      @media all and (max-width: 768px) {
+        @include flex-direction(column);
+      }
+
+      aside {
+        @include margin(0, 30px, 0, 30px);
+        width: $sidebar;
+
+        @media all and (max-width: 768px) {
+          width: auto !important;
+        }
+
+      }
+
+      content {
+        @include flex-size(1);
+        @include margin(0, 30px, 20px, 0);
+
+        @media all and (max-width: 768px) {
+          @include margin(0, 30px, 0, 30px);
+        }
+
+        ul {
+          @include margin(20px, 0, 20px, 0);
+
+          li {
+            @include margin-left(30px);
+            @include padding(5px, 0, 5px, 0);
+          }
+
+        }
+
+        .viz {
+          display: block;
+          height: 450px;
+          width: 100%;
+        }
+
+      }
+    }
+
+  }
+
+  footer {
+    color: $lightbackground;
+    font-size: 10px;
+    @include margin($header, auto, 5px, auto);
+    @include text-align(center);
+
+    @media all and (max-width: 768px) {
+      margin-top: 30px !important;
+    }
+
+    a {
+      color: $lightlinkcolor;
+      &:hover {
+        @include text-shadow(0 0, 1px, #fff);
+        @include transition(text-shadow, 1s);
+        color: #fff;
+      }
+    }
+
+    #mc {
+      display: inline-block;
+      margin-bottom: -5px;
+    }
+
+    img, a {
+      @include transition(opacity 1.5s);
+      opacity: 0.8;
+
+      :hover {
+        opacity: 1;
+      }
+    }
+
+    div {
+      max-width: 770px;
+      @include margin(0, auto, 0, auto);
+      @include padding(0, 20px, 0, 20px);
+    }
+
+    ul {
+      margin-top: 10px;
+      li {
+        display: inline-block;
+        @include margin(1px, 5px, 1px, 5px);
+      }
+    }
+
+  }
+
+}
