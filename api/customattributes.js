@@ -55,7 +55,7 @@ module.exports = function (app) {
       };
 
       const subnatCubeName = subnatCubeNameDict[id1] || "trade_s_chn_m_hs";
-      const defaultProductLevel = defaultProductLevelDict[id1] || "Product";
+      const defaultProductLevel = defaultProductLevelDict[id1] || "HS4";
 
       const url = `${OLAP_PROXY_ENDPOINT}data?time=time.latest&cube=${subnatCubeName}&drilldowns=Time&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
       const data = await axios.get(url, config).then(resp => resp.data.data).catch((error) => console.error("Custom Attribute Error:", error));
