@@ -70,7 +70,7 @@ export const backgroundImageV2 = (key, d) => {
     case "Category":
       return `/images/icons/sitc/sitc_${d["Category ID"]}.png`;
     case "SITC Section":
-      return d["Section ID"] ? `/images/icons/sitc/sitc_${d["Section ID"]}.svg` : `/images/icons/sitc/sitc_X.svg`;
+      return !isNaN(d["Section ID"]) ? `/images/icons/sitc/sitc_${d["Section ID"]}.svg` : `/images/icons/sitc/sitc_X.svg`;
     case "EGW1":
       return `/images/icons/egw/egw_${d["EGW1 ID"]}.svg`;
     case "Level 1":
@@ -107,13 +107,13 @@ function backgroundImage(d, ascending) {
       "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
       !sections.hsSections.includes(d.Section) && sections.sitcSections.includes(d.Section) && !("Category" in d)
     ) {
-      return d["Section ID"] ? `/images/icons/sitc/sitc_${d["Section ID"]}.svg` : `/images/icons/sitc/sitc_X.svg`;
+      return !isNaN(d["Section ID"]) ? `/images/icons/sitc/sitc_${d["Section ID"]}.svg` : `/images/icons/sitc/sitc_X.svg`;
     }
     else if (
       "Section ID" in d && !["HS2", "HS4", "HS6"].some(k => Object.keys(d).includes(k)) &&
       !sections.hsSections.includes(d.Section) && "Category" in d
     ) {
-      return d["Category ID"] ? `/images/icons/sitc/sitc_${d["Category ID"]}.png` : `/images/icons/sitc/sitc_xx.png`;
+      return !isNaN(d["Category ID"]) ? `/images/icons/sitc/sitc_${d["Category ID"]}.png` : `/images/icons/sitc/sitc_xx.png`;
     }
     else if ("Section ID" in d && !Array.isArray(d.Section) && "Patent Share" in d) {
       return `/images/icons/cpc/${d["Section ID"]}.png`;

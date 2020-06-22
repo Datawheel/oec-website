@@ -41,10 +41,33 @@ module.exports = function (app) {
         "afzaf": "trade_s_zaf_m_hs"
       };
 
+      const defaultProductLevelDict = {
+        "nacan": "HS4",
+        "aschn": "HS4",
+        "eudeu": "Product",
+        "asjpn": "HS4",
+        "eurus": "HS4",
+        "euesp": "HS4",
+        "sabra": "HS4",
+        "eugbr": "HS4",
+        "nausa": "HS4",
+        "afzaf": "HS4"
+      };
+
       const subnatCubeName = subnatCubeNameDict[id1] || "trade_s_chn_m_hs";
+      const defaultProductLevel = defaultProductLevelDict[id1] || "HS4";
+
+      const url = `${OLAP_PROXY_ENDPOINT}data?time=time.latest&cube=${subnatCubeName}&drilldowns=Time&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
+      const data = await axios.get(url, config).then(resp => resp.data.data).catch((error) => console.error("Custom Attribute Error:", error));
+
+      const latestSubnationalDate = data.length > 0 ? data[0]["Time"] : false;
+      const previousSubnationalDate = latestSubnationalDate ? `${latestSubnationalDate.toString().slice(0, 4) * 1 - 1}${latestSubnationalDate.toString().slice(-2)}` * 1 : false;
 
       return res.json({
-        subnatCubeName
+        subnatCubeName,
+        latestSubnationalDate,
+        previousSubnationalDate,
+        defaultProductLevel
       });
 
     } else if (pid === 2) { //product profile
@@ -207,6 +230,8 @@ module.exports = function (app) {
       const hsThreshold = cubeName1 === "trade_s_chn_m_hs" ? 500000000 : 1500000000;
       const subnatThreshold = cubeName1 === "trade_s_chn_m_hs" ? 100000000 : 300000000;
 
+      const productThreshold = cubeName1 === "trade_s_chn_m_hs" ? 10000000 : 30000000;
+
       const depthComplexityDict = {
         "trade_s_bol_m_sitc3" : "Product",
         "trade_s_fra_q_cpf" : "Product",
@@ -250,6 +275,28 @@ module.exports = function (app) {
       const depthComplexity = depthComplexityDict[cubeName1] || "HS4";
       const depthProduct = depthDict[cubeName1] || "Product";
 
+      const cubeNameVariantDict = {
+        "trade_s_bol_m_sitc3": "trade_s_bol_m_sitc3",
+        "trade_s_fra_q_cpf": "trade_s_fra_q_cpf",
+        "trade_s_deu_m_egw": "trade_s_deu_m_egw",
+        "trade_s_tur_m_hs": "trade_s_tur_m_countries",
+        "trade_s_usa_district_m_hs": "trade_s_usa_district_m_hs",
+        "trade_s_usa_port_m_hs": "trade_s_usa_port_m_hs",
+        "trade_s_usa_state_m_hs": "trade_s_usa_state_m_hs",
+        "trade_s_bra_mun_m_hs": "trade_s_bra_mun_m_hs",
+        "trade_s_bra_ncm_m_hs": "trade_s_bra_ncm_m_hs",
+        "trade_s_can_m_hs": "trade_s_can_m_hs",
+        "trade_s_chn_m_hs": "trade_s_chn_m_hs",
+        "trade_s_ecu_m_hs": "trade_s_ecu_m_hs",
+        "trade_s_jpn_m_hs": "trade_s_jpn_m_hs",
+        "trade_s_rus_m_hs": "trade_s_rus_m_hs",
+        "trade_s_zaf_m_hs": "trade_s_zaf_m_hs",
+        "trade_s_esp_m_hs": "trade_s_esp_m_hs",
+        "trade_s_gbr_m_hs": "trade_s_gbr_m_hs"
+      };
+
+      const cubeNameVariant = cubeNameVariantDict[cubeName1];
+
       return res.json({
         depthComplexity,
         depthProduct,
@@ -257,7 +304,9 @@ module.exports = function (app) {
         yearConcatBaci,
         countryThreshold,
         hsThreshold,
-        subnatThreshold
+        subnatThreshold,
+        productThreshold,
+        cubeNameVariant
       });
     }
     else return res.json({});

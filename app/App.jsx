@@ -5,6 +5,9 @@ import {fetchData} from "@datawheel/canon-core";
 import "./App.css";
 
 class App extends Component {
+  componentWillMount() {
+    this.props.isAuthenticated();
+  }
 
   render() {
     return <Fragment>
