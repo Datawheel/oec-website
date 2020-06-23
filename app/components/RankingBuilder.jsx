@@ -2,26 +2,34 @@
 /* eslint-disable indent */
 /* eslint-disable quotes */
 import React, {Component} from 'react';
-import {Button, ButtonGroup, HTMLSelect, Slider, Switch} from '@blueprintjs/core';
-import {range} from 'helpers/utils';
+import {Button, ButtonGroup, Slider, Switch} from '@blueprintjs/core';
+import classNames from "classnames";
+
 import SimpleSelect from "components/SimpleSelect";
-import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
+
+import {range} from 'helpers/utils';
+import {SUBNATIONAL_DATASETS, REVISION_OPTIONS} from 'helpers/rankings';
 
 import './RankingBuilder.css';
 
 class RankingsBuilder extends Component {
 	render() {
 		const {
-			country,
-			subnational,
-			subnationalValue,
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isCountry,
+			isNational,
+			isSingleyear,
+			isChangeInitialYear,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
 			productDepth,
 			productRevision,
-			singleyear,
-			yearValue,
-			rangeChangeInitial,
-			yearRangeInitial,
-			yearRangeFinal,
+			productBasecube,
+			yearInitial,
+			yearFinal,
+			yearRange,
 			countryExpThreshold,
 			populationThreshold,
 			productExpThreshold,
@@ -41,21 +49,23 @@ class RankingsBuilder extends Component {
 			handleThresholdSlider,
 			renderThresholdSlider,
 			renderMoneyThresholdSlider,
-			apiGetData
+			createTable
 		} = this.props;
-		// const PROD_DEPTH_OPTIONS = [ 'SITC', 'HS4', 'HS6' ];
-		const PROD_DEPTH_OPTIONS = ['HS4', 'HS6'];
-		const REVISION_OPTIONS_SITC = ['Category', 'Section', 'Division', 'Group', 'Subgroup'];
-		const REVISION_OPTIONS_HS = ['HS92 - 1992', 'HS96 - 1996', 'HS02 - 2002', 'HS07 - 2007', 'HS12 - 2012'];
-		const initialYear = subnational
-			? subnationalData[subnationalValue].initial
-			: yearsNational[productRevision].initial;
-		const finalYear = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
-		let revisionItems = productDepth === 'SITC' ? REVISION_OPTIONS_SITC : REVISION_OPTIONS_HS;
-		revisionItems = revisionItems.map(d => ({value: d.split(" ")[0], title: d}));
-		const subnationalItems = subnationalCountries.map(d => ({title: d, value: d}));
+
+		// Set the values for the options of the custom rankings
+		const OPTIONS_SUBNATIONAL = SUBNATIONAL_AVAILABLE.map(d => ({title: d.name, value: d.code}));
+		const SUBNATIONAL_PRODUCT_DEPTH = SUBNATIONAL_DATASETS[subnationalCountry].productDepth.map(d => ({title: d, value: d}));
+		const SUBNATIONAL_DEPTH = SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry).geoLevels.slice().reverse().map(d => ({title: d.name, value: d.level}));
+		const PRODUCT_DEPTH = REVISION_OPTIONS.filter(d => d.available === true).map(d => ({title: d.name, value: d.value, basecube: d.basecube}));
+		const PRODUCT_REV = NATIONAL_AVAILABLE.filter(d => d.basecube === productBasecube).map(d => ({title: d.title, value: d.name}));
+
+		// Set those options in the selectors
+		const OPTIONS_DEPTH = isNational ? PRODUCT_DEPTH : SUBNATIONAL_PRODUCT_DEPTH;
+		const OPTIONS_REV = isNational ? PRODUCT_REV : SUBNATIONAL_DEPTH;
+
 		return (
 			<div className="builder columns">
+
 				<div className="column-1-4">
 					<div className="section is-first">
 						<div className="setting category">
@@ -63,7 +73,8 @@ class RankingsBuilder extends Component {
 							<div className="switch">
 								<span>Country</span>
 								<Switch
-									onChange={event => handleCategorySwitch('country', !event.currentTarget.checked)}
+									onChange={event => handleCategorySwitch('isCountry', !event.currentTarget.checked)}
+									defaultChecked={!isCountry}
 								/>
 								<span>Product</span>
 							</div>
@@ -74,63 +85,58 @@ class RankingsBuilder extends Component {
 								<div className="switch">
 									<span>National</span>
 									<Switch
-										onChange={event =>
-											handleCountrySwitch('subnational', event.currentTarget.checked)}
-										disabled={!_authUser}
+										onChange={event => handleCountrySwitch('isNational', !event.currentTarget.checked)}
+										defaultChecked={!isNational}
 									/>
 									<span>Subnational</span>
 								</div>
 								<SimpleSelect
-									items={subnationalItems}
+									items={OPTIONS_SUBNATIONAL}
 									title={undefined}
-									state={"subnationalValue"}
-									selectedItem={subnationalItems.find(d => d.value === subnationalValue) || {}}
+									state={"subnationalCountry"}
+									selectedItem={OPTIONS_SUBNATIONAL.find(d => d.value === subnationalCountry) || {}}
 									callback={(key, value) => handleCountrySelect(key, value.value)}
-									disabled={!subnational}
+									disabled={isNational}
 								/>
 							</div>
 						}
-						{!subnational &&
-							<div className="setting product-depth last">
-								<h3>Product Depth and Revision</h3>
-								<ButtonGroup fill={true}>
-									{PROD_DEPTH_OPTIONS.map((d, k) =>
-										<Button
-											key={k}
-											onClick={() => handleProductButtons('productDepth', d)}
-											className={productDepth === d && 'active'}
-										>
-											{d}
-										</Button>
-									)}
-								</ButtonGroup>
-								<SimpleSelect
-									items={revisionItems}
-									title={undefined}
-									state={"productRevision"}
-									selectedItem={revisionItems.find(d => d.value === productRevision) || {}}
-									callback={(key, value) => handleProductSelect(key, value.value)}
-								/>
-							</div>
-						}
-						{subnational &&
-							<div className="setting product-depth last">
-								<h3>Product Depth</h3>
-								<ButtonGroup fill={true}>
-									{subnationalData[subnationalValue].productDepth.map((d, k) =>
-										<Button
-											key={k}
-											onClick={() => handleProductButtons('productDepth', d)}
-											className={productDepth === d && 'active'}
-										>
-											{d}
-										</Button>
-									)}
-								</ButtonGroup>
-							</div>
-						}
+						<div className="setting product-depth last">
+							<h3>
+								{isNational
+									? 'Product Depth and Revision'
+									: 'Product Depth and Subnational Depth'
+								}
+							</h3>
+							<ButtonGroup fill={true}>
+								{OPTIONS_DEPTH.map((d, k) =>
+									<Button
+										key={k}
+										onClick={() => (
+											isNational
+												? handleProductButtons('productDepth', d.title, d.basecube)
+												: handleProductButtons('subnationalProductDepth', d.title, null)
+										)}
+										className={
+											isNational
+												? productDepth === d.title && 'active'
+												: subnationalProductDepth === d.title && 'active'
+										}
+									>
+										{d.title}
+									</Button>
+								)}
+							</ButtonGroup>
+							<SimpleSelect
+								items={OPTIONS_REV}
+								title={undefined}
+								state={isNational ? 'productRevision' : 'subnationalCountryDepth'}
+								selectedItem={OPTIONS_REV.find(d => isNational ? d.value === productRevision : d.value === subnationalCountryDepth) || {}}
+								callback={(key, value) => handleProductSelect(key, value.value)}
+							/>
+						</div>
 					</div>
 				</div>
+
 				<div className="column-1-4">
 					<div className="section">
 						<div className="setting last">
@@ -138,17 +144,18 @@ class RankingsBuilder extends Component {
 							<div className="switch">
 								<span>Single-year</span>
 								<Switch
-									onChange={event => handlePeriodYearSwitch('singleyear', !event.currentTarget.checked)}
-								// checked={range(initialYear, finalYear).length === 1 ? false : null}
+									onChange={event => handlePeriodYearSwitch('isSingleyear', !event.currentTarget.checked)}
+									defaultChecked={!isSingleyear}
 								/>
 								<span>Multi-year</span>
 							</div>
-							{!singleyear &&
+							{!isSingleyear &&
 								<div className="switch last">
 									<span>Initial Year</span>
 									<Switch
 										onChange={event =>
-											handlePeriodRangeSwitch('rangeChangeInitial', !event.currentTarget.checked)}
+											handlePeriodRangeSwitch('isChangeInitialYear', !event.currentTarget.checked)}
+										defaultChecked={!isChangeInitialYear}
 									/>
 									<span>Final Year</span>
 								</div>
@@ -156,18 +163,20 @@ class RankingsBuilder extends Component {
 							<div className="year-selector">
 								{
 									<ButtonGroup fill={true}>
-										{range(initialYear, finalYear).map((d, k) =>
+										{yearRange.map((d, k) =>
 											<Button
 												key={k}
-												onClick={() => handlePeriodYearButtons('yearValue', d)}
-												className={
-													singleyear
-														? yearValue === d && 'active'
-														: range(yearRangeInitial, yearRangeFinal).map(
-															j => j === d && 'range'
-														)
-
-												}
+												onClick={() => handlePeriodYearButtons(
+													isSingleyear,
+													isChangeInitialYear,
+													isSingleyear ? 'yearFinal' : isChangeInitialYear ? 'yearInitial' : 'yearFinal',
+													d
+												)}
+												className={classNames(
+													isSingleyear
+														? yearFinal === d ? 'active' : null
+														: range(yearInitial, yearFinal).includes(d) ? 'active' : null
+												)}
 											>
 												{d}
 											</Button>
@@ -178,11 +187,12 @@ class RankingsBuilder extends Component {
 						</div>
 					</div>
 				</div>
+
 				<div className="column-1-2">
 					<div className="section">
 						<div className="setting no-padding">
 							<h3 className="first">
-								{!subnational
+								{isNational
 									? 'Country Export Value Threshold'
 									: 'Country Export Value Threshold (for Basecube)'
 								}
@@ -190,7 +200,7 @@ class RankingsBuilder extends Component {
 							<Slider
 								min={0}
 								max={10000000000}
-								stepSize={500000000}
+								stepSize={100000000}
 								labelStepSize={1000000000}
 								onChange={handleThresholdSlider('countryExpThreshold')}
 								labelRenderer={renderMoneyThresholdSlider}
@@ -199,7 +209,7 @@ class RankingsBuilder extends Component {
 						</div>
 						<div className="setting no-padding">
 							<h3>
-								{!subnational
+								{isNational
 									? 'Country Population Value Threshold'
 									: 'Country Population Value Threshold (for Basecube)'
 								}
@@ -207,7 +217,7 @@ class RankingsBuilder extends Component {
 							<Slider
 								min={0}
 								max={5000000}
-								stepSize={200000}
+								stepSize={10000}
 								labelStepSize={1000000}
 								onChange={handleThresholdSlider('populationThreshold')}
 								labelRenderer={renderThresholdSlider}
@@ -216,7 +226,7 @@ class RankingsBuilder extends Component {
 						</div>
 						<div className="setting no-padding">
 							<h3>
-								{!subnational
+								{isNational
 									? 'Product Export Value Threshold'
 									: 'Product Export Value Threshold (for Basecube)'
 								}
@@ -224,50 +234,49 @@ class RankingsBuilder extends Component {
 							<Slider
 								min={0}
 								max={2000000000}
-								stepSize={250000000}
+								stepSize={10000000}
 								labelStepSize={500000000}
 								onChange={handleThresholdSlider('productExpThreshold')}
 								labelRenderer={renderMoneyThresholdSlider}
 								value={productExpThreshold}
 							/>
 						</div>
-						{subnational && (
+						{!isNational && (
 							<div className="setting no-padding">
-							<h3>Subnational Geography Export Value Threshold</h3>
-							<Slider
-								min={0}
-								max={500000000}
-								stepSize={25000000}
-								labelStepSize={100000000}
-								onChange={handleThresholdSlider('subnationalGeoThreshold')}
-								labelRenderer={renderMoneyThresholdSlider}
-								value={subnationalGeoThreshold}
-							// disabled={subnational}
-							/>
-						</div>
+								<h3>Subnational Geography Export Value Threshold</h3>
+								<Slider
+									min={0}
+									max={500000000}
+									stepSize={1000000}
+									labelStepSize={100000000}
+									onChange={handleThresholdSlider('subnationalGeoThreshold')}
+									labelRenderer={renderMoneyThresholdSlider}
+									value={subnationalGeoThreshold}
+								/>
+							</div>
 						)}
-						{subnational && (
+						{!isNational && (
 							<div className="setting no-padding">
-							<h3>Products with RCA > 1 in in Subnational Geography Threshold</h3>
-							<Slider
-								min={0}
-								max={30}
-								stepSize={5}
-								labelStepSize={5}
-								onChange={handleThresholdSlider('subnationalRCAThreshold')}
-								labelRenderer={renderThresholdSlider}
-								value={subnationalRCAThreshold}
-							// disabled={subnational}
-							/>
-						</div>
+								<h3>Products with RCA > 1 in in Subnational Geography Threshold</h3>
+								<Slider
+									min={0}
+									max={30}
+									stepSize={1}
+									labelStepSize={5}
+									onChange={handleThresholdSlider('subnationalRCAThreshold')}
+									labelRenderer={renderThresholdSlider}
+									value={subnationalRCAThreshold}
+								/>
+							</div>
 						)}
 						<div className="setting last">
 							<div className="build-button">
-								<Button onClick={() => apiGetData()}>Build Table</Button>
+								<Button onClick={() => createTable()}>Build Table</Button>
 							</div>
 						</div>
 					</div>
 				</div>
+
 			</div>
 		);
 	}

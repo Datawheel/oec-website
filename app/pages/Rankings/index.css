@@ -188,6 +188,10 @@
 			justify-content: flex-end;
 			margin-right: var(--gutter-sm);
 		}
+
+		& .custom-table {
+			margin-top: var(--gutter-sm);
+		}
 	}
 }
 

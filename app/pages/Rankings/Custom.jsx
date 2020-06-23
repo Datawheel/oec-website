@@ -17,29 +17,43 @@ import RankingBuilder from 'components/RankingBuilder';
 import RankingTable from 'components/RankingTable';
 
 import {range, normalizeString} from 'helpers/utils';
-import {subnationalCountries, subnationalData, yearsNational} from 'helpers/rankingsyears';
+import {SUBNATIONAL_COUNTRIES} from 'helpers/consts';
+import VbDownload from 'components/VbDownload';
+import {DATASETS, SUBNATIONAL_DATASETS} from 'helpers/rankings';
+import {subnationalData, yearsNational} from 'helpers/rankings';
 
 class Custom extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			country: true,
-			subnational: false,
-			subnationalValue: null,
+			// New variables
+			NATIONAL_AVAILABLE: null,
+			SUBNATIONAL_AVAILABLE: null,
+			isCountry: null,
+			isNational: true,
+			isSingleyear: true,
+			isChangeInitialYear: true,
+			subnationalCountry: null,
+			subnationalCountryDepth: null,
+			subnationalProductDepth: null,
 			productDepth: null,
 			productRevision: null,
-			singleyear: true,
-			yearValue: null,
-			rangeChangeInitial: true,
-			yearRangeInitial: null,
-			yearRangeFinal: null,
+			productBasecube: null,
+			productCube: null,
+			yearInitial: null,
+			yearFinal: null,
+			yearRange: null,
 			countryExpThreshold: null,
 			populationThreshold: null,
 			productExpThreshold: null,
 			subnationalGeoThreshold: null,
 			subnationalRCAThreshold: null,
 			data: null,
+			dataDownload: null,
 			columns: null,
+			sharePath: null,
+			// Loaders
+			location: null,
 			_ready: false,
 			_loading: false
 		};
@@ -54,735 +68,802 @@ class Custom extends Component {
 		this.handleThresholdSlider = this.handleThresholdSlider.bind(this);
 		this.renderThresholdSlider = this.renderThresholdSlider.bind(this);
 		this.renderMoneyThresholdSlider = this.renderMoneyThresholdSlider.bind(this);
-		this.apiGetData = this.apiGetData.bind(this);
+		this.createTable = this.createTable.bind(this);
 	}
 
+	// Set default variables after the first run of code
 	componentDidMount() {
-		const defaultDepth = 'HS4';
-		const defaultRevision = 'HS92';
-		const defaultCountryThreshold = 1000000000;
-		const defaultPopulationThreshold = 1000000;
-		const defaultProductThreshold = 500000000;
-		const defaultSubnationalGeoThreshold = 100000000;
-		const defaultSubnationalRCAThreshold = 10;
+		const NATIONAL_AVAILABLE = DATASETS.filter(d => d.available === true);
+		const NATIONAL_DEFAULT = NATIONAL_AVAILABLE[0];
+		const SUBNATIONAL_AVAILABLE = SUBNATIONAL_COUNTRIES.filter(d => d.available === true).sort((a, b) => (a.name).localeCompare(b.name));
+		const SUBNATIONAL_DEFAULT = SUBNATIONAL_AVAILABLE[0];
+
+		const queryParams = this.props.queryParams;
+		// isCountry
+		const pathCountry = {index: queryParams.index ? queryParams.index : null}
+		const availableIsCountry = ["eci", "pci"];
+		const defaultIsCountry = true;
+		const isCountry = this.checkPathParam(pathCountry.index, availableIsCountry) ? pathCountry.index === "eci" ? true : false : defaultIsCountry;
+		// subnationalData
+		const pathNational = {
+			type: queryParams.subnational ? queryParams.subnational : null,
+			country: queryParams.country ? queryParams.country : null,
+			countryDepth: queryParams.countryDepth ? queryParams.countryDepth : null,
+			subnatProductDepth: queryParams.productDepth ? queryParams.productDepth : null
+		};
+		// isNational
+		const availableIsNational = ["true", "false"];
+		const defaultIsNational = true;
+		const isNational = this.checkPathParam(pathNational.type, availableIsNational) ? pathNational.type === "true" ? false : true : defaultIsNational;
+		// subnationalCountry
+		const subnationalCountryAvailable = [...new Set(SUBNATIONAL_AVAILABLE.map(d => d.name))];
+		const defaultSubnationalCountry = SUBNATIONAL_DEFAULT.code;
+		const subnationalCountry = this.checkPathParam(pathNational.country, subnationalCountryAvailable) ? SUBNATIONAL_AVAILABLE.find(d => d.name === pathNational.country).code : defaultSubnationalCountry;
+		// subnationalCountryDepth
+		const subnationalCountryData = SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry);
+		const availableSubnationalCountryDepth = [...new Set(subnationalCountryData.geoLevels.map(d => d.name))];
+		const defaultSubnationalCountryDepth = subnationalCountryData.geoLevels.slice().reverse()[0].level;
+		const subnationalCountryDepth = this.checkPathParam(pathNational.countryDepth, availableSubnationalCountryDepth) ? subnationalCountryData.geoLevels.find(d => d.name === pathNational.countryDepth).level : defaultSubnationalCountryDepth;
+		// sunationalProductDepth
+		const availableSubnationalProductDepth = SUBNATIONAL_DATASETS[subnationalCountry].productDepth;
+		const defaultSubnationalProductDepth = SUBNATIONAL_DATASETS[subnationalCountry].defaultDepth;
+		const subnationalProductDepth = this.checkPathParam(pathNational.subnatProductDepth, availableSubnationalProductDepth) ? pathNational.subnatProductDepth : defaultSubnationalProductDepth;
+		// now we can go for the product depth and revision on national
+		const pathProduct = {
+			depth: queryParams.productDepth ? queryParams.productDepth.toUpperCase() : null,
+			rev: queryParams.productRevision ? queryParams.productRevision.toUpperCase() : null
+		}
+		// productRevision
+		const availableProductRevision = [...new Set(NATIONAL_AVAILABLE.map(d => d.name))];
+		const defaultProductRevision = NATIONAL_DEFAULT.name;
+		const productRevision = this.checkPathParam(pathProduct.rev, availableProductRevision) ? pathProduct.rev : defaultProductRevision;
+		// productDepth
+		const productRevisionData = NATIONAL_AVAILABLE.find(d => d.name === productRevision);
+		const availableProductDepth = productRevisionData.availableDepths;
+		const defaultProductDepth = NATIONAL_DEFAULT.defaultDepth;
+		const productDepth = this.checkPathParam(pathProduct.depth, availableProductDepth) ? pathProduct.depth : defaultProductDepth;
+		// basecube
+		const productBasecube = productRevisionData.basecube;
+		// yearRange
+		const nationalYearRange = productRevisionData.yearsRange;
+		const subnationalYearRange = SUBNATIONAL_DATASETS[subnationalCountry].yearsRange;
+		const yearRange = isNational ? nationalYearRange : subnationalYearRange;
+		// yearFinal and yearInitial
+		const pathYears = {
+			singleyear: queryParams.years ? queryParams.years.split(",").length > 1 ? false : true : true,
+			finalYear: queryParams.years ? queryParams.years.split(",").length > 1 ? queryParams.years.split(",").slice().reverse()[0] * 1 : queryParams.years.split(",")[0] * 1 : null,
+			initialYear: queryParams.years ? queryParams.years.split(",").length > 1 ? queryParams.years.split(",")[0] * 1 : null : null
+		};
+		const defaultYearFinal = yearRange.slice().reverse()[0];
+		const isSingleyear = pathYears.singleyear;
+		const yearFinal = yearRange.includes(pathYears.finalYear) ? pathYears.finalYear : defaultYearFinal;
+		const yearInitial = yearRange.includes(pathYears.initialYear) ? pathYears.initialYear : pathYears.singleyear === true ? yearFinal - 1 : yearRange[0];
+		// thresholds
+		const thresholds = {
+			country: {
+				available: [0, 10000000000],
+				default: 1000000000,
+				path: queryParams.thresholdCountry ? queryParams.thresholdCountry * 1 : null
+
+			},
+			population: {
+				available: [0, 5000000],
+				default: 1000000,
+				path: queryParams.thresholdPopulation ? queryParams.thresholdPopulation * 1 : null
+			},
+			product: {
+				available: [0, 2000000000],
+				default: 500000000,
+				path: queryParams.thresholdProduct ? queryParams.thresholdProduct * 1 : null
+			},
+			subnational: {
+				available: [0, 500000000],
+				default: 100000000,
+				path: queryParams.thresholdSubnatGeography ? queryParams.thresholdSubnatGeography * 1 : null
+			},
+			rca: {
+				available: [0, 30],
+				default: 10,
+				path: queryParams.thresholdRCA ? queryParams.thresholdRCA * 1 : null
+			}
+		};
+		const countryExpThreshold = this.valueInThreshold(thresholds["country"].path, thresholds["country"].available[0], thresholds["country"].available[1], thresholds["country"].default);
+		const populationThreshold = this.valueInThreshold(thresholds["population"].path, thresholds["population"].available[0], thresholds["population"].available[1], thresholds["population"].default);
+		const productExpThreshold = this.valueInThreshold(thresholds["product"].path, thresholds["product"].available[0], thresholds["product"].available[1], thresholds["product"].default);
+		const subnationalGeoThreshold = this.valueInThreshold(thresholds["subnational"].path, thresholds["subnational"].available[0], thresholds["subnational"].available[1], thresholds["subnational"].default);
+		const subnationalRCAThreshold = this.valueInThreshold(thresholds["rca"].path, thresholds["rca"].available[0], thresholds["rca"].available[1], thresholds["rca"].default);
 
 		this.setState({
-			subnationalValue: subnationalCountries[0],
-			productDepth: defaultDepth,
-			productRevision: defaultRevision,
-			yearValue: yearsNational[defaultRevision].final,
-			yearRangeInitial: yearsNational[defaultRevision].final - 1,
-			yearRangeFinal: yearsNational[defaultRevision].final,
-			countryExpThreshold: defaultCountryThreshold,
-			populationThreshold: defaultPopulationThreshold,
-			productExpThreshold: defaultProductThreshold,
-			subnationalGeoThreshold: defaultSubnationalGeoThreshold,
-			subnationalRCAThreshold: defaultSubnationalRCAThreshold,
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isCountry,
+			isNational,
+			isSingleyear,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			productDepth,
+			productRevision,
+			productBasecube,
+			yearRange,
+			yearInitial,
+			yearFinal,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold,
 			_ready: true
 		});
+		this.setState({location: window.location});
 	}
 
+	// Execute props for checking if it's a pro user
 	componentWillMount() {
 		this.props.isAuthenticated();
 	}
 
+	checkPathParam = (param, valid) => {
+		const checked = valid.includes(param);
+		return checked;
+	}
+
+	valueInThreshold = (value, min, max, def) => {
+		const number = value
+			? value < min
+				? min
+				: value > max
+					? max
+					: value
+			: def;
+		return number;
+	}
+
+	// Returns new year range and validates the year selected in the new range
+	yearValidation = (array, initialyear, finalyear) => {
+		const range = array.yearsRange;
+		const initial = range.includes(initialyear) ? initialyear : initialyear < range[0] ? range[0] : range.slice().reverse()[0];
+		const final = range.includes(finalyear) ? finalyear : finalyear < range[0] ? range[0] : range.slice().reverse()[0];
+		return {
+			yearRange: range,
+			initialYear: initial,
+			finalYear: final
+		};
+	}
+
 	/* BUILDER ORIENTED FUNCTIONS */
 
+	// Handle the Category Switch
 	handleCategorySwitch(key, value) {
 		this.setState({[key]: value});
 	}
 
+	// Handle the Country Switch
 	handleCountrySwitch(key, value) {
-		const {subnational, subnationalValue, productRevision} = this.state;
-		if (subnational) {
-			this.setState({
-				[key]: value,
-				productDepth: 'HS4',
-				productRevision: 'HS92',
-				yearValue: yearsNational[productRevision].final,
-				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
-			});
-		} else {
-			this.setState({
-				[key]: value,
-				productDepth: 'HS4',
-				productRevision: 'HS92',
-				yearValue: subnationalData[subnationalValue].final,
-				yearRangeInitial: subnationalData[subnationalValue].final - 1,
-				yearRangeFinal: subnationalData[subnationalValue].final
-			});
-		}
+		const {NATIONAL_AVAILABLE, subnationalCountry, productRevision, yearInitial, yearFinal} = this.state;
+		const DATASET = value ? NATIONAL_AVAILABLE.find(d => d.name === productRevision) : SUBNATIONAL_DATASETS[subnationalCountry];
+		const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
+
+		this.setState({
+			[key]: value,
+			yearRange: YEARS['yearRange'],
+			yearInitial: YEARS['initialYear'],
+			yearFinal: YEARS['finalYear']
+		});
 	}
 
+	// Handle the Country Select
 	handleCountrySelect(key, value) {
+		const {SUBNATIONAL_AVAILABLE, subnationalCountryDepth, productDepth, yearInitial, yearFinal} = this.state;
+
+		const DATASET = SUBNATIONAL_DATASETS[value];
+		const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
+
+		const SUBNATIONAL_DATASET = SUBNATIONAL_AVAILABLE.find(d => d.code === value);
+		const subnationalCountryDepths = SUBNATIONAL_DATASET.geoLevels.map(d => d.level).reverse();
+		const newSubnationalCountryDepth = subnationalCountryDepths.includes(subnationalCountryDepth) ? subnationalCountryDepth : subnationalCountryDepths[0];
+		const newSubnationalProductDepth = DATASET.productDepth.includes(productDepth) ? productDepth : SUBNATIONAL_DATASETS[value].productDepth[0];
+
 		this.setState({
 			[key]: value,
-			productDepth: 'HS4',
-			yearValue: subnationalData[value].final,
-			yearRangeInitial: subnationalData[value].final - 1,
-			yearRangeFinal: subnationalData[value].final
+			subnationalCountryDepth: newSubnationalCountryDepth,
+			subnationalProductDepth: newSubnationalProductDepth,
+			yearRange: YEARS['yearRange'],
+			yearInitial: YEARS['initialYear'],
+			yearFinal: YEARS['finalYear']
 		});
 	}
 
-	handleProductButtons(key, value) {
-		const {productRevision} = this.state;
-		if (this.state[key] !== 'SITC' && value === 'SITC') {
+	// Handle the Product Button
+	handleProductButtons(key, value, basecube) {
+		const {NATIONAL_AVAILABLE, productRevision, yearInitial, yearFinal} = this.state;
+		if (key === 'productDepth') {
+			const BASECUBE = NATIONAL_AVAILABLE.filter(d => d.basecube === basecube).find(d => d.name === productRevision);
+			const DATASET = BASECUBE ? BASECUBE : NATIONAL_AVAILABLE.filter(d => d.basecube === basecube)[0];
+			const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
+
+			const newProductRevision = DATASET.name;
+
 			this.setState({
 				[key]: value,
-				productRevision: 'Category',
-				yearValue: yearsNational[productRevision].final,
-				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
-			});
-		} else if (this.state[key] === 'SITC' && value !== 'SITC') {
-			this.setState({
-				[key]: value,
-				productRevision: 'HS92',
-				yearValue: yearsNational[productRevision].final,
-				yearRangeInitial: yearsNational[productRevision].final - 1,
-				yearRangeFinal: yearsNational[productRevision].final
+				productRevision: newProductRevision,
+				productBasecube: basecube,
+				yearRange: YEARS['yearRange'],
+				yearInitial: YEARS['initialYear'],
+				yearFinal: YEARS['finalYear']
 			});
 		} else {
-			this.setState({[key]: value});
+			this.setState({
+				[key]: value
+			});
 		}
 	}
 
+	// Handle the Product Select
 	handleProductSelect(key, value) {
-		const {productRevision} = this.state;
-		this.setState({
-			[key]: value,
-			yearValue: yearsNational[productRevision].final,
-			yearRangeInitial: yearsNational[productRevision].final - 1,
-			yearRangeFinal: yearsNational[productRevision].final
-		});
+		const {yearInitial, yearFinal} = this.state;
+		if (key === 'productRevision') {
+			const DATASET = DATASETS.find(d => d.name === value);
+			const YEARS = this.yearValidation(DATASET, yearInitial, yearFinal);
+
+			this.setState({
+				[key]: value,
+				yearRange: YEARS['yearRange'],
+				yearInitial: YEARS['initialYear'],
+				yearFinal: YEARS['finalYear']
+			});
+		} else {
+			this.setState({
+				[key]: value
+			});
+		}
 	}
 
+	// Handle the Period Year Switch
 	handlePeriodYearSwitch(key, value) {
+		const {yearFinal, yearRange} = this.state;
+		if (value) {
+			this.setState({
+				[key]: value,
+				isChangeInitialYear: true
+			});
+		} else {
+			const newYearFinal = yearFinal === yearRange[0] ? yearRange[1] : yearFinal;
+			this.setState({
+				[key]: value,
+				yearInitial: newYearFinal - 1,
+				yearFinal: newYearFinal
+			});
+		}
+	}
+
+	// Handle the Period Switch for change initial and final year
+	handlePeriodRangeSwitch(key, value) {
 		this.setState({[key]: value});
 	}
 
-	handlePeriodYearButtons(key, value) {
-		const {singleyear, productRevision, rangeChangeInitial, yearRangeInitial, yearRangeFinal} = this.state;
+	// Handle the Period Year Buttons
+	handlePeriodYearButtons(singleyear, initialyear, key, value) {
+		const {yearInitial, yearFinal} = this.state;
 		if (singleyear) {
-			this.setState({[key]: value});
+			this.setState({yearInitial: value - 1, [key]: value});
 		} else {
-			if (rangeChangeInitial) {
-				if (value === yearsNational[productRevision].final) {
-					this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
-				} else if (value < yearRangeInitial) {
-					this.setState({yearRangeInitial: value});
-				} else if (yearRangeInitial < value && value < yearRangeFinal) {
-					if (range(value, yearRangeFinal).length >= 2) {
-						this.setState({yearRangeInitial: value});
-					}
-				} else if (yearRangeFinal < value) {
-					this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
+			if (initialyear) {
+				if (value < yearFinal) {
+					this.setState({yearInitial: value});
 				}
 			} else {
-				if (value === yearsNational[productRevision].initial) {
-					this.setState({yearRangeInitial: value, yearRangeFinal: value + 1});
-				} else if (value < yearRangeInitial) {
-					this.setState({yearRangeInitial: value - 1, yearRangeFinal: value});
-				} else if (yearRangeInitial < value && value < yearRangeFinal) {
-					if (range(yearRangeInitial, value).length >= 2) {
-						this.setState({yearRangeFinal: value});
-					}
-				} else if (yearRangeFinal < value) {
-					this.setState({yearRangeFinal: value});
+				if (value > yearInitial) {
+					this.setState({yearFinal: value});
 				}
 			}
 		}
 	}
 
-	handlePeriodRangeSwitch(key, value) {
-		this.setState({[key]: value});
-	}
-
+	// Handle the Thresholds Sliders
 	handleThresholdSlider(key) {
 		return (value) => this.setState({[key]: value});
 	}
 
+	// Render the Threshold values in Slider for normal values
 	renderThresholdSlider(val) {
 		return `${formatAbbreviate(val)}`;
 	}
 
+	// Handle the Threshold values in Slider for money values
 	renderMoneyThresholdSlider(val) {
 		return `$${formatAbbreviate(val)}`;
 	}
 
 	/* TABLE ORIENTED FUNCTIONS*/
+	/* NEW LOGIC*/
 
-	yearAggregation(year, initial) {
-		if (year === initial) {
-			return [year];
-		} else if (year === initial + 1) {
-			return [year - 1, year];
-		} else {
-			return [year - 2, year - 1, year];
-		}
-	}
-
-	pathCreator(years) {
+	// Function that reads the entry parameters and export the data to the page
+	createTable = async () => {
 		const {
-			country,
-			subnational,
-			subnationalValue,
+			isCountry,
+			isNational,
+			isSingleyear,
+			isChangeInitialYear,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
 			productDepth,
 			productRevision,
+			productBasecube,
+			yearInitial,
+			yearFinal,
+			yearRange,
 			countryExpThreshold,
 			populationThreshold,
 			productExpThreshold,
 			subnationalGeoThreshold,
 			subnationalRCAThreshold
 		} = this.state;
-		const index = country ? 'eci' : 'pci';
-		const populationYear = years[2] < 2018 ? years[2] : 2018;
-
-		let pathYears = null;
-		let pathMultiplicatorThreshold = null;
-
-		if (years.length === 1) {
-			pathYears = `${years[0]}`;
-			pathMultiplicatorThreshold = 1;
-		} else if (years.length === 2) {
-			pathYears = `${years[0]},${years[1]}`;
-			pathMultiplicatorThreshold = 2;
-		} else {
-			pathYears = `${years[0]},${years[1]},${years[2]}`;
-			pathMultiplicatorThreshold = 3;
-		}
-
-		if (!subnational) {
-			if (productDepth !== 'SITC') {
-				return `/api/stats/${index}?cube=trade_i_baci_a_${productRevision.substr(
-					2
-				)}&rca=Exporter+Country,${productDepth},Trade+Value&alias=Country,${productDepth}&Year=${pathYears}&ranking=true
-				&threshold=Country:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}:${productExpThreshold * pathMultiplicatorThreshold},Population:${populationThreshold}&YearPopulation=${populationYear}`;
-			} else {
-				return `/api/stats/${index}?cube=trade_i_oec_a_sitc2&rca=Reporter+Country,${productRevision},Trade+Value&alias=Country,${productRevision}&Year=${pathYears}&ranking=true
-				&threshold=Country:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}:${productExpThreshold * pathMultiplicatorThreshold},Population:${populationThreshold}&YearPopulation=${populationYear}`;
-			}
-		} else {
-			const basecube = subnationalData[subnationalValue].basecube;
-			let yearRight = null;
-			let yearPopulationRight = null;
-
-			if (years.length === 1) {
-				yearRight = years[0] > 2018 ? '2018' : `${years[0]}`;
-			} else if (years.length === 2) {
-				yearRight = years[1] > 2018 ? '2017,2018' : `${years[0]},${years[1]}`;
-			} else {
-				yearRight = years[2] > 2018 ? `2016,2017,2018` : `${years[0]},${years[1]},${years[2]}`;
-			}
-
-			if (basecube === 'HS') {
-				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
-					.cube}&rca=${subnationalData[subnationalValue]
-						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_baci_a_92&rcaRight=Exporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
-						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${populationYear}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}`;
-			} else if (basecube === 'SITC') {
-				return `/api/stats/${index}?cube=trade_s_${subnationalData[subnationalValue]
-					.cube}&rca=${subnationalData[subnationalValue]
-						.geo},${productDepth},Trade+Value&Year=${pathYears}&ranking=true&method=subnational&cubeRight=trade_i_comtrade_a_sitc2_new&rcaRight=Reporter+Country,${productDepth},Trade+Value&YearRight=${yearRight}&aliasRight=Country,${productDepth}&Trade+Flow=2
-						&threshold=CountryRight:${countryExpThreshold * pathMultiplicatorThreshold},${productDepth}Right:${productExpThreshold * pathMultiplicatorThreshold},PopulationRight:${populationThreshold},Subnat+Geography:${subnationalGeoThreshold * pathMultiplicatorThreshold}&YearPopulation=${populationYear}${index === "eci" ? `&eciThreshold=Subnat+Geography:${subnationalRCAThreshold}` : ''}
-						`;
-			}
-		}
-	}
-
-	apiGetData() {
-		this.setState({_loading: true});
-		const {
-			singleyear,
-			subnational,
-			subnationalValue,
-			productRevision,
-			yearValue,
-			yearRangeInitial,
-			yearRangeFinal
-		} = this.state;
-
-		if (singleyear) {
-			const aggregatedYears = subnational
-				? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial)
-				: this.yearAggregation(yearValue, yearsNational[productRevision].initial);
-			const path = this.pathCreator(aggregatedYears);
-			this.fetchSingleyearData(path);
-		} else {
-			const dataInitial = subnational
-				? subnationalData[subnationalValue].initial
-				: yearsNational[productRevision].initial;
-			const dataFinal = subnational
-				? subnationalData[subnationalValue].final
-				: yearsNational[productRevision].final;
-			const dataLength = range(dataInitial, dataFinal).length;
-			if (dataLength === 1) {
-				const aggregatedYears = subnational
-					? this.yearAggregation(yearValue, subnationalData[subnationalValue].initial)
-					: this.yearAggregation(yearValue, yearsNational[productRevision].initial);
-				const path = this.pathCreator(aggregatedYears);
-				this.fetchSingleyearData(path);
-			} else {
-				const pathArray = [];
-				range(yearRangeInitial, yearRangeFinal).map((d) => {
-					const aggregatedYears = subnational
-						? this.yearAggregation(d, subnationalData[subnationalValue].initial)
-						: this.yearAggregation(d, yearsNational[productRevision].initial);
-					const path = this.pathCreator(aggregatedYears);
-					pathArray.push({year: d, path});
-				});
-
-				this.fetchMultiyearData(pathArray);
-			}
-		}
-	}
-
-	getSelector = (country) => {
-		const {subnational, subnationalValue, productDepth, productRevision} = this.state;
-
-		let selector = null;
-
-		if (!subnational) {
-			if (country) {
-				selector = 'Country';
-			} else {
-				if (productDepth !== 'SITC') {
-					selector = `${productDepth}`;
-				} else {
-					selector = `${productRevision}`;
-				}
-			}
-		} else {
-			if (country) {
-				selector = subnationalData[subnationalValue].geo;
-			} else {
-				const basecube = subnationalData[subnationalValue].basecube;
-				if (basecube === 'HS') {
-					selector = `${productDepth}`;
-				} else if (basecube === 'SITC') {
-					selector = `${productDepth}`;
-				}
-			}
-		}
-
-		return selector;
-	};
-
-	fetchSingleyearData = (path) => {
-		const {country, singleyear, yearValue} = this.state;
-		axios.all([axios.get(path)]).then(
-			axios.spread((resp) => {
-				const array = resp.data.data;
-				const measure = country ? 'ECI' : 'PCI';
-				const selector = this.getSelector(country);
-
-				let data = {};
-				for (const index in array) {
-					let row = {};
-					row[selector] = array[index][selector];
-					row[selector + ' ID'] = array[index][selector + ' ID'];
-					let values = {};
-					values[yearValue + ' ' + measure] = array[index]['Trade Value ' + measure];
-					values[yearValue + ' Ranking'] = array[index]['Trade Value ' + measure + ' Ranking'];
-					data[row[selector + ' ID']] = row;
-					data[row[selector + ' ID']][yearValue] = values;
-				}
-				const finalData = Object.values(data);
-
-				finalData.sort(
-					(a, b) => a[yearValue][`${yearValue} Ranking`] - b[`${yearValue}`][`${yearValue} Ranking`]
-				);
-
-				const columns = this.createColumns(singleyear, yearValue);
-
-				this.setState({
-					data: finalData,
-					columns,
-					_loading: false
-				});
-			})
-		);
-	};
-
-	fetchMultiyearData = async (paths) => {
-		const {singleyear, yearRangeInitial, yearRangeFinal} = this.state;
-
-		const finalData = await this.groupData(paths);
-
-		const columns = await this.createColumns(singleyear, [yearRangeInitial, yearRangeFinal]);
 
 		this.setState({
-			data: finalData,
+			_loading: true
+		});
+
+		const INDEX = isCountry ? 'eci' : 'pci';
+		// Country, HS4, HS6
+		const measure = isCountry ? isNational ? 'Country' : subnationalCountryDepth : isNational ? productDepth : subnationalProductDepth;
+
+		// Creates the range of years for the data call
+		const pathYearRange = range(isSingleyear ? yearFinal : yearInitial, yearFinal);
+
+		const data = await this.fetchData(INDEX, pathYearRange);
+		const filteredData = await this.filteredData(INDEX, measure, pathYearRange, data);
+		const columns = await this.createColumns(INDEX, measure, productRevision, pathYearRange);
+		const sharePath = await this.shareCreator();
+
+		this.setState({
+			data: filteredData['data'],
+			dataDownload: filteredData['dataDownload'],
 			columns,
+			sharePath,
 			_loading: false
 		});
-	};
+	}
 
-	// Functions for grouping data
-	// Transform data into one array
-	groupData = async (array) => {
-		const {country, yearRangeInitial, yearRangeFinal} = this.state;
+	pathYearValidator = (range, year) => {
+		const {isNational} = this.state;
+		const maxYearRight = 2018;
+		const maxPopulationYear = 2018;
+		const populationYear = year > maxPopulationYear ? maxPopulationYear : year;
+		let pathYear = null;
+		let yearRight = null;
+		let thresholdAggregator = null;
 
-		const measure = country ? 'ECI' : 'PCI';
-
-		const selector = this.getSelector(country);
-
-		let data = {};
-		let dataLength = {};
-
-		for (const path of array) {
-			const pathData = await axios.get(path.path).then((resp) => resp.data.data);
-
-			// Appends the data in "data"
-			for (const index in pathData) {
-				let row = {};
-				row[selector] = pathData[index][selector];
-				row[selector + ' ID'] = pathData[index][selector + ' ID'];
-				let values = {};
-				values[path.year + ' ' + measure] = pathData[index]['Trade Value ' + measure];
-				values[path.year + ' Ranking'] = pathData[index]['Trade Value ' + measure + ' Ranking'];
-
-				if (!data[pathData[index][selector + ' ID']]) {
-					data[row[selector + ' ID']] = row;
-					data[row[selector + ' ID']][path.year] = values;
-				} else {
-					data[row[selector + ' ID']][path.year] = values;
-				}
-			}
-
-			if (path.year === yearRangeFinal) {
-				dataLength = pathData.length;
-			}
+		if (year === range[0]) {
+			pathYear = `${year}`;
+			yearRight = isNational ? null : year > 2018 ? `${maxYearRight}` : pathYear;
+			thresholdAggregator = 1;
+		} else if (year - 1 === range[0]) {
+			pathYear = `${year - 1},${year}`;
+			yearRight = isNational ? null : year > 2018 ? `${maxYearRight - 1},${maxYearRight}` : pathYear;
+			thresholdAggregator = 2;
+		} else {
+			pathYear = `${year - 2},${year - 1},${year}`;
+			yearRight = isNational ? null : year > 2018 ? `${maxYearRight - 2},${maxYearRight - 1},${maxYearRight}` : pathYear;
+			thresholdAggregator = 3;
 		}
 
+		return {
+			pathYear,
+			populationYear: `${populationYear}`,
+			yearRight,
+			thresholdAggregator
+		}
+	}
+
+	// Function that creates the paths for the data requested
+	fetchData = async (INDEX, range) => {
+		const {
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isNational,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			productDepth,
+			productRevision,
+			yearRange,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold
+		} = this.state;
+		const DATASET = isNational ? NATIONAL_AVAILABLE.find(d => d.name === productRevision) : SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry);
+		const dataset = [];
+
+		for (const i in range) {
+			const yearValidator = this.pathYearValidator(yearRange, range[i]);
+			let params = null;
+
+			if (isNational) {
+				params = {
+					cube: DATASET.cube,
+					rca: `Exporter Country,${productDepth},Trade Value`,
+					alias: `Country,${productDepth}`,
+					Year: yearValidator['pathYear'],
+					ranking: true,
+					threshold: `Country:${countryExpThreshold * yearValidator['thresholdAggregator']},${productDepth}:${productExpThreshold * yearValidator['thresholdAggregator']},Population:${populationThreshold}`,
+					YearPopulation: yearValidator['populationYear'],
+					debug: true
+				};
+			} else {
+				params = {
+					cube: DATASET.cube,
+					rca: `${subnationalCountryDepth},${subnationalProductDepth},Trade Value`,
+					Year: yearValidator['pathYear'],
+					ranking: true,
+					method: 'subnational',
+					cubeRight: 'trade_i_baci_a_92',
+					rcaRight: `Exporter Country,${subnationalProductDepth},Trade Value`,
+					YearRight: yearValidator['yearRight'],
+					aliasRight: `Country,${subnationalProductDepth}`,
+					'Trade Flow': 2,
+					threshold: `CountryRight:${countryExpThreshold * yearValidator['thresholdAggregator']},${subnationalProductDepth}Right:${productExpThreshold * yearValidator['thresholdAggregator']},PopulationRight:${populationThreshold},Subnat Geography:${subnationalGeoThreshold * yearValidator['thresholdAggregator']}`,
+					YearPopulation: yearValidator['populationYear'],
+					eciThreshold: `Subnat Geography:${subnationalRCAThreshold}`,
+					debug: true
+				};
+			}
+
+			const data = await axios.get(`/api/stats/${INDEX}`, {params}).then(resp => {
+				resp.data.data.forEach(d => {
+					d[`${INDEX.toUpperCase()}`] = d[`Trade Value ${INDEX.toUpperCase()}`];
+					d[`${INDEX.toUpperCase()} Rank`] = d[`Trade Value ${INDEX.toUpperCase()} Ranking`];
+					d['Year'] = range[i];
+					delete d[`Trade Value ${INDEX.toUpperCase()}`];
+					delete d[`Trade Value ${INDEX.toUpperCase()} Ranking`];
+				});
+				return resp.data.data
+			});
+			dataset.push(data);
+		}
+
+		return dataset.flat();
+	}
+
+	filteredData = (type, measure, range, rawdata) => {
+		// Get list of unique countries/products
+		const unique = [...new Set(rawdata.map(m => m[`${measure} ID`]))];
+		const maxYear = Math.max(...range);
+		const minYear = Math.min(...range);
+
+		// Used for setting the rankings fon countries that don't have in max year
+		const maxYearDataLength = rawdata.filter(f => f.Year === maxYear).length;
 		let flag = 1;
-		const finalData = Object.values(data).map((m) => {
-			range(yearRangeInitial, yearRangeFinal).map((year) => {
-				if (year === yearRangeFinal) {
-					if (!Object.keys(m).includes(year.toString())) {
-						m[year] = {};
-						m[year][`${year} ${measure}`] = -1000;
-						m[year][`${year} Ranking`] = dataLength + flag;
-						flag = flag + 1;
+
+		const data = [];
+		const dataDownload = [];
+
+		for (const index in unique) {
+			const rowData = rawdata.filter(f => f[`${measure} ID`] === unique[index]);
+			// Creates first two values of the array with country/product name and id
+			const row = {};
+			const rowDownload = {};
+			row[measure] = rowData[0][measure];
+			row[`${measure} ID`] = unique[index];
+			// Aggregates the values for the years that we have on the cube
+			rowData.forEach(d => {
+				const values = {};
+				values[`${d.Year} ${`${type.toUpperCase()}`}`] = d[`${type}`.toUpperCase()];
+				values[`${d.Year} Ranking`] = d[`${`${type}`.toUpperCase()} Rank`];
+				row[`${d.Year}`] = values;
+				rowDownload[`${d.Year}`] = d[`${type}`.toUpperCase()];
+			});
+			// Add to the years that the data don't have values -1000 for a flag to don't show them and add's rankings for the ones that don't have on the final year
+			range.forEach(d => {
+				if (!row[d]) {
+					if (d !== maxYear) {
+						const values = {};
+						values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
+						values[`${d} Ranking`] = null;
+						row[`${d}`] = values;
+						rowDownload[`${d}`] = null;
 					}
-				} else {
-					if (!Object.keys(m).includes(year.toString())) {
-						m[year] = {};
-						m[year][`${year} ${measure}`] = -1000;
+					else {
+						const values = {};
+						values[`${d} ${`${type}`.toUpperCase()}`] = -1000;
+						values[`${d} Ranking`] = maxYearDataLength + flag;
+						row[`${d}`] = values;
+						rowDownload[`${d}`] = null;
+						flag += 1;
 					}
 				}
 			});
-			return m;
-		});
+			rowDownload[`${measure} ID`] = unique[index];
+			rowDownload[measure] = rowData[0][measure];
 
-		finalData.sort(
-			(a, b) =>
-				a[yearRangeFinal][`${yearRangeFinal} Ranking`] - b[`${yearRangeFinal}`][`${yearRangeFinal} Ranking`]
-		);
-
-		return finalData;
-	};
-
-	createColumns(type, array) {
-		const {country, subnational, subnationalValue, productDepth, productRevision} = this.state;
-		let years = null;
-		const dataInitial = subnational
-			? subnationalData[subnationalValue].initial
-			: yearsNational[productRevision].initial;
-		const dataFinal = subnational ? subnationalData[subnationalValue].final : yearsNational[productRevision].final;
-		const dataLength = range(dataInitial, dataFinal).length;
-		if (dataLength === 1) {
-			years = [array, array];
-		} else {
-			years = type ? [array, array] : array;
+			// Push the data for the country/product to the one with all the countries/products
+			data.push(row);
+			dataDownload.push(rowDownload);
 		}
 
+		data.sort((a, b) => a[maxYear][`${maxYear} Ranking`] - b[maxYear][`${maxYear} Ranking`]);
+
+		return {data, dataDownload}
+	}
+
+	// Creates the columns for the tables
+	createColumns = (type, depth, rev, range) => {
+		const {isNational, subnationalCountry, subnationalCountryDepth} = this.state;
+		// Column ID (1 to .....n)
 		const columnID = {
 			id: 'ranking',
 			Header: '',
 			className: 'col-id',
-			Cell: (props) => props.index + 1,
+			Cell: props => props.index + 1,
 			width: 40,
 			sortable: false
 		};
 
+		// Set the columns name between Countries and Products
 		let columnNAME = {};
-		if (!subnational) {
-			// National Columns
-			if (country) {
+		if (type === "eci") {
+			const eciAccessor = isNational ? 'Country' : `${subnationalCountryDepth}`;
+			columnNAME = {
+				id: 'category',
+				accessor: d => d[eciAccessor],
+				width: 240,
+				Header: () =>
+					<div className="header">
+						<span className="year">{`${eciAccessor}`}</span>
+						<div className="icons">
+							<Icon icon={'caret-up'} iconSize={16} />
+							<Icon icon={'caret-down'} iconSize={16} />
+						</div>
+					</div>,
+				style: {whiteSpace: 'unset'},
+				Cell: props =>
+					<div className="category">
+						<img
+							src={`/images/icons/country/country_${
+								isNational ? props.original['Country ID'].substr(props.original['Country ID'].length - 3) : subnationalCountry
+								}.png`}
+							alt="icon"
+							className="icon"
+						/>
+						<a
+							href={isNational
+								? `/en/profile/country/${props.original['Country ID'].substr(props.original['Country ID'].length - 3)}`
+								: `/en/profile/subnational_${subnationalCountry}/${normalizeString(props.original[eciAccessor]).replace(/ /g, '-').replace(',', '').replace('.', '')}`
+							}
+							/*
+													href={`/en/profile/subnational_${subnationalData[subnationalValue].profile}/${normalizeString(props.original[subnationalData[subnationalValue].geo]
+																.replace(/ /g, '-')
+																.replace(',', '')
+																.toLowerCase()
+														)}`}
+							*/
+							className="link"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<div className="name">{props.original[eciAccessor]}</div>
+							<Icon icon={'chevron-right'} iconSize={14} />
+						</a>
+					</div>
+
+			};
+		}
+		else {
+			if (depth !== 'SITC') {
 				columnNAME = {
 					id: 'category',
-					accessor: (d) => d.Country,
+					accessor: d => d[`${depth.toUpperCase()}`],
 					width: 400,
-					Header: () => (
+					Header: () =>
 						<div className="header">
-							<span className="year">{'Country'}</span>
+							<span className="year">{'Product'}</span>
 							<div className="icons">
 								<Icon icon={'caret-up'} iconSize={16} />
 								<Icon icon={'caret-down'} iconSize={16} />
 							</div>
-						</div>
-					),
+						</div>,
 					style: {whiteSpace: 'unset'},
-					Cell: (props) => (
+					Cell: props =>
 						<div className="category">
 							<img
-								src={`/images/icons/country/country_${props.original['Country ID'].substr(
-									props.original['Country ID'].length - 3
-								)}.png`}
+								src={`/images/icons/hs/hs_${props.original[`${depth.toUpperCase()} ID`]
+									.toString()
+									.substr(
+										0,
+										props.original[`${depth.toUpperCase()} ID`].toString().length * 1 -
+										depth.substr(2) * 1
+									)}.svg`}
 								alt="icon"
 								className="icon"
 							/>
-							<a
-								href={`/en/profile/country/${props.original['Country ID'].substr(
-									props.original['Country ID'].length - 3
-								)}`}
-								className="link"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<div className="name">{props.original.Country}</div>
-								<Icon icon={'chevron-right'} iconSize={14} />
-							</a>
-						</div>
-					)
-				};
-			} else {
-				if (productDepth !== 'SITC') {
-					columnNAME = {
-						id: 'category',
-						accessor: (d) => d[`${productDepth}`],
-						width: 400,
-						Header: () => (
-							<div className="header">
-								<span className="year">{'Product'}</span>
-								<div className="icons">
-									<Icon icon={'caret-up'} iconSize={16} />
-									<Icon icon={'caret-down'} iconSize={16} />
-								</div>
-							</div>
-						),
-						style: {whiteSpace: 'unset'},
-						Cell: (props) => (
-							<div className="category">
-								<img
-									src={`/images/icons/hs/hs_${props.original[`${productDepth} ID`]
-										.toString()
-										.substr(
-											0,
-											props.original[`${productDepth} ID`].toString().length * 1 -
-											productDepth.substr(2) * 1
-										)}.svg`}
-									alt="icon"
-									className="icon"
-								/>
-								{productRevision === 'HS92' ? (
-									<a
-										href={`/en/profile/${productRevision.toLowerCase()}/${props.original[
-											`${productDepth} ID`
-										]}`}
-										className="link"
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										<div className="name">{props.original[`${productDepth}`]}</div>
-										<Icon icon={'chevron-right'} iconSize={14} />
-									</a>
-								) : (
-										<div className="link">
-											<div className="name">{props.original[`${productDepth}`]}</div>
-										</div>
-									)}
-							</div>
-						)
-					};
-				} else {
-					columnNAME = {
-						id: 'category',
-						accessor: (d) => d[`${productRevision}`],
-						width: 400,
-						Header: () => (
-							<div className="header">
-								<span className="year">{'Product'}</span>
-								<div className="icons">
-									<Icon icon={'caret-up'} iconSize={16} />
-									<Icon icon={'caret-down'} iconSize={16} />
-								</div>
-							</div>
-						),
-						style: {whiteSpace: 'unset'},
-						Cell: (props) => (
-							<div className="category">
-								<img
-									src={`/images/icons/sitc/sitc_${props.original[`${productRevision} ID`]
-										.toString()
-										.charAt(0)}.svg`}
-									alt="icon"
-									className="icon"
-								/>
-								<div className="link">
-									<div className="name">{props.original[`${productRevision}`]}</div>
-								</div>
-							</div>
-						)
-					};
-				}
-			}
-		} else {
-			// Subnational Columns
-			if (country) {
-				columnNAME = {
-					id: 'category',
-					accessor: (d) => d[subnationalData[subnationalValue].geo],
-					width: 400,
-					Header: () => (
-						<div className="header">
-							<span className="year">{subnationalData[subnationalValue].geo}</span>
-							<div className="icons">
-								<Icon icon={'caret-up'} iconSize={16} />
-								<Icon icon={'caret-down'} iconSize={16} />
-							</div>
-						</div>
-					),
-					style: {whiteSpace: 'unset'},
-					Cell: (props) => (
-						<div className="category">
-							<img
-								src={`/images/icons/country/country_${subnationalData[subnationalValue].flag}.png`}
-								alt="icon"
-								className="icon"
-							/>
-							<a
-								href={`/en/profile/subnational_${subnationalData[subnationalValue]
-									.profile}/${normalizeString(
-										props.original[subnationalData[subnationalValue].geo]
-											.replace(/ /g, '-')
-											.replace(',', '')
-											.toLowerCase()
-									)}`}
-								className="link"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<div className="name">{props.original[subnationalData[subnationalValue].geo]}</div>
-								<Icon icon={'chevron-right'} iconSize={14} />
-							</a>
-						</div>
-					)
-				};
-			} else {
-				const basecube = subnationalData[subnationalValue].basecube;
-				if (basecube === 'HS') {
-					columnNAME = {
-						id: 'category',
-						accessor: (d) => d[`${productDepth}`],
-						width: 400,
-						Header: () => (
-							<div className="header">
-								<span className="year">{'Product'}</span>
-								<div className="icons">
-									<Icon icon={'caret-up'} iconSize={16} />
-									<Icon icon={'caret-down'} iconSize={16} />
-								</div>
-							</div>
-						),
-						style: {whiteSpace: 'unset'},
-						Cell: (props) => (
-							<div className="category">
-								<img
-									src={`/images/icons/hs/hs_${productDepth === 'Section'
-										? props.original[`${productDepth} ID`]
-										: props.original[`${productDepth} ID`]
-											.toString()
-											.substr(
-												0,
-												props.original[`${productDepth} ID`].toString().length * 1 -
-												productDepth.substr(2) * 1
-											)}.svg`}
-									alt="icon"
-									className="icon"
-								/>
-								<a
-									href={`/en/profile/hs92/${props.original[`${productDepth} ID`]}`}
+							{rev.toUpperCase() === 'HS92'
+								? <a
+									href={`/en/profile/${rev}/${props.original[
+										`${depth.toUpperCase()} ID`
+									]}`}
 									className="link"
 									target="_blank"
 									rel="noopener noreferrer"
 								>
-									<div className="name">{props.original[`${productDepth}`]}</div>
+									<div className="name">{props.original[`${depth.toUpperCase()}`]}</div>
 									<Icon icon={'chevron-right'} iconSize={14} />
 								</a>
-							</div>
-						)
-					};
-				} else if (basecube === 'SITC') {
-				}
+								: <div className="link">
+									<div className="name">{props.original[`${depth.toUpperCase()}`]}</div>
+								</div>
+							}
+						</div>
+
+				};
 			}
 		}
 
-		const measure = country ? 'ECI' : 'PCI';
-		const YEARS = range(years[0], years[1]);
-		YEARS.reverse()
+		let columnCODE = null;
+		let HSDigits = null;
+		if (type === 'pci') {
+			HSDigits = depth.slice(-1);
+			columnCODE = {
+				id: 'category',
+				accessor: d => d[`${depth.toUpperCase()} ID`],
+				width: 100,
+				Header: () =>
+					<div className="header">
+						<span className="year">{'Product ID'}</span>
+						<div className="icons">
+							<Icon icon={'caret-up'} iconSize={16} />
+							<Icon icon={'caret-down'} iconSize={16} />
+						</div>
+					</div>,
+				Cell: props =>
+					<div className="category">
+						{rev.toUpperCase() === 'HS92'
+							? <a
+								href={`/en/profile/${rev}/${props.original[
+									`${depth.toUpperCase()} ID`
+								]}`}
+								className="link"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<div className="name">{props.original[`${depth.toUpperCase()} ID`].toString().slice(-HSDigits)}</div>
+								<Icon icon={'chevron-right'} iconSize={14} />
+							</a>
+							: <div className="link">
+								<div className="name">{props.original[`${depth.toUpperCase()} ID`]}</div>
+							</div>
+						}
+					</div>
+			};
+		};
+
+		// Set the name for the columns for each year
+		const measure = type.toUpperCase();
+		const YEARS = range;
+		YEARS.reverse();
 		const columnYEARS = YEARS.map((year, index, {length}) => ({
 			id: index === 0 ? 'lastyear' : `${year}`,
-			Header: () => (
+			Header: () =>
 				<div className="header">
 					<span className="year">{year}</span>
 					<div className="icons">
 						<Icon icon={'caret-up'} iconSize={16} />
 						<Icon icon={'caret-down'} iconSize={16} />
 					</div>
-				</div>
-			),
-			accessor: (d) => d[`${year}`][`${year} ${measure}`],
-			Cell: (props) => {
-				if (type) {
+				</div>,
+			accessor: d => d[`${year}`][`${year} ${measure}`],
+			Cell: props => {
+				if (props.original[`${year}`][`${year} ${measure}`] !== -1000) {
 					return (
 						<div className="value">
-							<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format('0.00')}`}</span>
+							<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format(
+								'0.00'
+							)} `}</span>
+							<span>({numeral(props.original[`${year}`][`${year} Ranking`]).format('0o')})</span>
 						</div>
 					);
-				} else {
-					if (props.original[`${year}`][`${year} ${measure}`] !== -1000) {
-						return (
-							<div className="value">
-								<span>{`${numeral(props.original[`${year}`][`${year} ${measure}`]).format(
-									'0.00'
-								)} `}</span>
-								<span>({numeral(props.original[`${year}`][`${year} Ranking`]).format('0o')})</span>
-							</div>
-						);
-					}
-					return <span />;
 				}
+				return <span />;
 			},
 			className: 'year'
 		}));
 
-		const columns = [columnID, columnNAME, ...columnYEARS];
+		const columns = type === 'eci' ? [columnID, columnNAME, ...columnYEARS] : [columnID, columnNAME, columnCODE, ...columnYEARS];
 
-		return columns.filter((f) => f !== null);
+		return columns.filter(f => f !== null);
+	};
+
+	shareCreator = () => {
+		const {
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isCountry,
+			isNational,
+			isSingleyear,
+			productDepth,
+			productRevision,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			yearInitial,
+			yearFinal,
+			countryExpThreshold,
+			populationThreshold,
+			productExpThreshold,
+			subnationalGeoThreshold,
+			subnationalRCAThreshold
+		} = this.state;
+		const {pathParams} = this.props;
+
+		const pathElements = {
+			params: isNational
+				? {
+					index: isCountry ? "eci" : "pci",
+					subnational: isNational ? "false" : "true",
+					productDepth: isNational ? productDepth : subnationalProductDepth,
+					productRevision: isNational ? productRevision : "hs92",
+					years: isSingleyear ? `${yearFinal}` : `${yearInitial},${yearFinal}`,
+					thresholdCountry: `${countryExpThreshold}`,
+					thresholdPopulation: `${populationThreshold}`,
+					thresholdProduct: `${productExpThreshold}`
+				}
+				: {
+					index: isCountry ? "eci" : "pci",
+					subnational: isNational ? "false" : "true",
+					country: `${SUBNATIONAL_AVAILABLE.find(d => d.code === subnationalCountry).name}`,
+					countryDepth: `${subnationalCountryDepth}`,
+					productDepth: isNational ? productDepth : subnationalProductDepth,
+					productRevision: isNational ? productRevision : "hs92",
+					years: isSingleyear ? `${yearFinal}` : `${yearInitial},${yearFinal}`,
+					thresholdCountry: `${countryExpThreshold}`,
+					thresholdPopulation: `${populationThreshold}`,
+					thresholdProduct: `${productExpThreshold}`,
+					thresholdSubnatGeography: `${subnationalGeoThreshold}`,
+					thresholdRCA: `${subnationalRCAThreshold}`
+				}
+		}
+
+		const queryElements = this.sharePathCreator(pathElements.params);
+		const path = `/${pathParams.lang}/rankings/custom?` + queryElements;
+		return path;
+	}
+
+	sharePathCreator = (params) => {
+		const path = [];
+		for (let d in params)
+			path.push(encodeURIComponent(d) + '=' + encodeURIComponent(params[d]));
+		return path.join('&');
 	}
 
 	render() {
 		const {
-			country,
-			subnational,
-			subnationalValue,
+			NATIONAL_AVAILABLE,
+			SUBNATIONAL_AVAILABLE,
+			isCountry,
+			isNational,
+			isSingleyear,
+			isChangeInitialYear,
 			productDepth,
 			productRevision,
-			singleyear,
-			yearValue,
-			rangeChangeInitial,
-			yearRangeInitial,
-			yearRangeFinal,
+			productBasecube,
+			subnationalCountry,
+			subnationalCountryDepth,
+			subnationalProductDepth,
+			yearInitial,
+			yearFinal,
+			yearRange,
 			countryExpThreshold,
 			populationThreshold,
 			productExpThreshold,
 			subnationalGeoThreshold,
 			subnationalRCAThreshold,
 			data,
+			dataDownload,
 			columns,
+			sharePath,
+			location,
 			_ready,
 			_loading
 		} = this.state;
@@ -805,6 +886,7 @@ class Custom extends Component {
 
 		return (
 			<div className="rankings-page">
+				<OECNavbar />
 				<div className="rankings-content">
 					<Helmet title="Custom Rankings" />
 
@@ -812,16 +894,21 @@ class Custom extends Component {
 
 					<RankingBuilder
 						variables={{
-							country,
-							subnational,
-							subnationalValue,
+							NATIONAL_AVAILABLE,
+							SUBNATIONAL_AVAILABLE,
+							isCountry,
+							isNational,
+							isSingleyear,
+							isChangeInitialYear,
+							subnationalCountry,
+							subnationalCountryDepth,
+							subnationalProductDepth,
 							productDepth,
 							productRevision,
-							singleyear,
-							yearValue,
-							rangeChangeInitial,
-							yearRangeInitial,
-							yearRangeFinal,
+							productBasecube,
+							yearInitial,
+							yearFinal,
+							yearRange,
 							countryExpThreshold,
 							populationThreshold,
 							productExpThreshold,
@@ -840,11 +927,26 @@ class Custom extends Component {
 						handleThresholdSlider={this.handleThresholdSlider}
 						renderThresholdSlider={this.renderThresholdSlider}
 						renderMoneyThresholdSlider={this.renderMoneyThresholdSlider}
-						apiGetData={this.apiGetData}
+						createTable={this.createTable}
 					/>
 
-					{_loading ? <Loading /> : data && <RankingTable data={data} columns={columns} country={country} />}
+					{_loading ? <Loading /> : data &&
+						<div className='custom-table'>
+							<div className="download">
+								<VbDownload
+									data={dataDownload}
+									location={location}
+									title={`custom_rankings_download`}
+									customAPI={sharePath}
+									saveViz={false}
+									buttonTitle={'Share & Download Table'}
+								/>
+							</div>
+							<RankingTable data={data} columns={columns} country={isCountry} />
+						</div>
+					}
 				</div>
+				<Footer />
 			</div>
 		);
 	}
