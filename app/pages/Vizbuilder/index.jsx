@@ -193,7 +193,7 @@ class Vizbuilder extends React.Component {
     this.handleCube = this.handleCube.bind(this);
   }
 
-  fetchSubnationalData = async(cubeName, ...args) => {
+  fetchSubnationalData = async (cubeName, ...args) => {
     const subnatItem = subnat.cubeSelector.find(d => d.cube === cubeName);
     const {geoLevels, productLevels, timeLevels} = subnatItem;
     const {routeParams} = this.props;
@@ -269,7 +269,7 @@ class Vizbuilder extends React.Component {
     this.setState(nextState);
   }
 
-  fetchProductNames = async(cubeName, levelName = "HS6", levels = ["Section", "HS2", "HS4", "HS6"]) => {
+  fetchProductNames = async (cubeName, levelName = "HS6", levels = ["Section", "HS2", "HS4", "HS6"]) => {
     const params = {
       cube: cubeName,
       drilldowns: levelName,
@@ -466,7 +466,7 @@ class Vizbuilder extends React.Component {
         : parseIdsToURL(selectedSubnatTimeTemp, "value");
 
       if (notEmpty(selectedSubnatProductTemp)) {
-        filterIds =  parseIdsToURL(selectedSubnatProductTemp, "id");
+        filterIds = parseIdsToURL(selectedSubnatProductTemp, "id");
       }
     }
 
@@ -713,7 +713,7 @@ class Vizbuilder extends React.Component {
     const _startYear = isTimeSeriesChart && timeItemsSelected[0]
       ? timeItemsSelected[0] : isSubnat ? timeItemsV2[0] || {} : this.state._startYear;
     const _endYear = isTimeSeriesChart && timeItemsSelected[1]
-      ? timeItemsSelected[1] :  isSubnat ? timeItemsV2[3] || {} : this.state._endYear;
+      ? timeItemsSelected[1] : isSubnat ? timeItemsV2[3] || {} : this.state._endYear;
 
     if (["export", "import"].includes(flow)) prevState._flow = flowItems.find(d => d.value === flow);
 
@@ -1041,10 +1041,10 @@ class Vizbuilder extends React.Component {
                     <h4 className="title is-pro">{t("State/Province")}</h4>
                     <SelectMultiHierarchy
                       getIcon={this.state.subnatItem.geoIcon}
-                      isPro={true}
-                      isProProps={{
-                        auth, redirect
-                      }}
+                      // isPro={false}
+                      // isProProps={{
+                      //   auth, redirect
+                      // }}
                       items={this.state.subnatGeography}
                       levels={this.state.subnatGeoLevels || []}
                       onItemSelect={item => {
@@ -1132,7 +1132,7 @@ class Vizbuilder extends React.Component {
                       ? [subnatDataset].concat(datasets)
                       : datasets}
                     title={t("Dataset")}
-                    isPro={subnatSelector && isAuth}
+                    // isPro={subnatSelector && isAuth}
                     state="_dataset"
                     selectedItem={this.state._dataset}
                     callback={(key, value) => {
@@ -1336,8 +1336,8 @@ class Vizbuilder extends React.Component {
             </div>
             {vbChartComponent}
           </div> : <div className={classnames("vb-column", {"loading-embed": this.props.isEmbed})}>
-            <Loading isDark={this.props.isEmbed} />
-          </div>}
+              <Loading isDark={this.props.isEmbed} />
+            </div>}
         </div>
       </div>
       <Footer />
@@ -1364,7 +1364,8 @@ function mapStateToProps(state) {
     cubeSelected,
     cubeSelectedTemp,
     data,
-    isAuth: state.auth.user,
+    // isAuth: state.auth.user,
+    isAuth: true,
     loading,
     wdiIndicators,
     xConfig,
