@@ -46,9 +46,9 @@ class SubnationalList extends React.Component {
         onChange={this.filterList}
         defaultValue={""}
         value={searchText} />
-      <div className="subnational-list-container">
+      <div className="subnational-list-container oec-scrollbar">
         {options &&
-          <ul>
+          <ul className="">
             {options.length === 0 &&
               <li>No results.<br/> Try another search.</li>
             }
