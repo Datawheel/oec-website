@@ -1038,7 +1038,7 @@ class Vizbuilder extends React.Component {
               {subnatSelector && <div className="columns">
                 <div className="column-1">
                   <div className="selector select-multi-section-wrapper">
-                    <h4 className="title is-pro">{t("State/Province")}</h4>
+                    <h4 className="title">{t("State/Province")}</h4>
                     <SelectMultiHierarchy
                       getIcon={this.state.subnatItem.geoIcon}
                       // isPro={false}
