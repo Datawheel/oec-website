@@ -669,20 +669,20 @@ export default class Methods extends Component {
 
             <p className="formula">
               <MathJax.Context input="tex">
-                <MathJax.Node inline>{"ECI=\\frac{K_c - K_c}{\\sigma(K_c)},"}</MathJax.Node>
+                <MathJax.Node inline>{"ECI=\\frac{K_c - \\tilde{K_c}}{\\sigma(K_c)},"}</MathJax.Node>
               </MathJax.Context>
             </p>
 
             <p className="formula">
               <MathJax.Context input="tex">
-                <MathJax.Node inline>{"PCI=\\frac{K_p - K_p}{\\sigma(K_p)},"}</MathJax.Node>
+                <MathJax.Node inline>{"PCI=\\frac{K_p - \\tilde{K_p}}{\\sigma(K_p)},"}</MathJax.Node>
               </MathJax.Context>
             </p>
 
             <p>
 							Where {""}
               <MathJax.Context input="tex">
-                <MathJax.Node inline>{"K_{c}"}</MathJax.Node>
+                <MathJax.Node inline>{"\\tilde{K_{c}}"}</MathJax.Node>
               </MathJax.Context>{" "}
 							is the average of {""}
               <MathJax.Context input="tex">
