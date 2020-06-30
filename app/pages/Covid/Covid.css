@@ -1,0 +1,46 @@
+@import "../../helpers/mixins.css";
+
+.covid-profile {
+  background-color: var(--dark-4);
+  color: var(--white);
+  margin-top: var(--nav-height);
+
+  & .covid-content {
+    align-items: flex-start;
+    padding: 0.75rem 3rem;
+    width: 100%;
+  }
+
+  & .covid-title {
+    margin-top: var(--gutter-lg);
+    text-align: center;
+  }
+
+  & .covid-columns {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    & .covid-column {
+      flex: 1;
+      padding: var(--gutter-sm);
+      & .aside {
+        max-width: 300px;
+        min-width: 300px;
+        transition: margin 0.7s ease 0s;
+        & .controls {
+          width: 100%;
+          height: auto;
+          & label {
+            font-size: var(--font-lg);
+          }
+        }
+        & .oec-button-group-items {
+          margin-bottom: 0 !important;
+          & .cp-button {
+            flex: 1;
+          }
+        }
+      }
+    }
+  }
+}
