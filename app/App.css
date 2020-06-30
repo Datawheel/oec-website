@@ -5,6 +5,24 @@ html, body {
   background-color: var(--dark-4);
 }
 
+/* Scrollbar styles */
+body,
+.oec-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  scrollbar-width: 4px;
+  scrollbar-color: red green;
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: white ;
+    border-radius: 0px;
+    border: none;
+  }
+}
+
 p > a,
 .link,
 .cp-hero-credits-link {

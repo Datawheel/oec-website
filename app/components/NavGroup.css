@@ -95,7 +95,7 @@
 .nav-group-list {
   @mixin list-reset;
   max-height: calc(100vh - calc(var(--nav-height) * 3));
-  overflow-y: scroll;
+  overflow-y: auto;
 
   /* absolutely position & size dropdowns */
   &:not(.nav-group-nested-list) {
