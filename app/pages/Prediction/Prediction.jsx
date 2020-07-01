@@ -9,7 +9,7 @@ import {withNamespaces} from "react-i18next";
 import queryString from "query-string";
 
 import OECNavbar from "components/OECNavbar";
-import OECPaywall from "components/OECPaywall";
+// import OECPaywall from "components/OECPaywall";
 import Footer from "components/Footer";
 import SearchMultiSelect from "components/SearchMultiSelect";
 import ToggleSelect from "components/ToggleSelect";
@@ -350,7 +350,7 @@ class Prediction extends React.Component {
         title={scrolled ? "Forecasts" : ""}
       />
 
-      <OECPaywall
+      {/* <OECPaywall
         auth={auth}
         callback={d => {
           if (window && window !== undefined && window.location) {
@@ -358,7 +358,7 @@ class Prediction extends React.Component {
           }
         }}
         paywall={true}
-        redirect={`/${router.location.pathname}${encodeURIComponent(router.location.search)}`} />
+        redirect={`/${router.location.pathname}${encodeURIComponent(router.location.search)}`} /> */}
 
       <div className="welcome">
         {/* spinning orb thing */}
