@@ -23,7 +23,7 @@
     & .covid-column {
       flex: 1;
       padding: var(--gutter-sm);
-      & .aside {
+      .aside {
         max-width: 300px;
         min-width: 300px;
         transition: margin 0.7s ease 0s;
