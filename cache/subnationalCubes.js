@@ -4,6 +4,11 @@ const {OLAP_PROXY_ENDPOINT, OLAP_PROXY_SECRET} = process.env;
 
 module.exports = async function() {
 
+  const catcher = e => {
+    console.error("[cache] Error in Subnational Cubes: ", e);
+    return false;
+  };
+
   const apiToken = jwt.sign(
     {
       auth_level: 10,
@@ -22,7 +27,7 @@ module.exports = async function() {
 
   const fullURL = `${OLAP_PROXY_ENDPOINT}cubes`;
 
-  const y = await axios.get(fullURL, config).then(resp => resp.data);
+  const y = await axios.get(fullURL, config).then(resp => resp.data).catch(catcher);
   const data = y.cubes.filter(d => d.name.includes("trade_s_"));
   const output = {};
   for (const d of data) {
@@ -34,10 +39,10 @@ module.exports = async function() {
     const fullDataURL = `${OLAP_PROXY_ENDPOINT}data?cube=${d.name}&drilldowns=${isTime ? "Time" : "Year"}&measures=Trade+Value`;
     let x = [];
     try {
-      x = await axios.get(fullDataURL, config);
+      x = await axios.get(fullDataURL, config).catch(catcher);
     }
     catch {
-      x = await axios.get(fullDataURL);
+      x = await axios.get(fullDataURL).catch(catcher);
     }
 
     const time = x.data.data.map(d => d.Time);
