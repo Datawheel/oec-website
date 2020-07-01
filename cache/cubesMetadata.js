@@ -70,7 +70,7 @@ const FEATURE_MATRIX = {
       {cubeName: "trade_s_rus_m_hs",          fullName: "Russia Trade"},
       {cubeName: "trade_s_zaf_m_hs",          fullName: "South Africa Trade"},
       {cubeName: "trade_s_esp_m_hs",          fullName: "Spain Trade"},
-      {cubeName: "trade_s_swe_m_hs",          fullName: "Sweden Trade"},
+      // {cubeName: "trade_s_swe_m_hs",          fullName: "Sweden Trade"},
       {cubeName: "trade_s_tur_m_hs",          fullName: "Turkey Trade"},
       {cubeName: "trade_s_usa_state_m_hs", fullName: "United States Trade"},
       {cubeName: "trade_s_usa_district_m_hs", fullName: "United States Trade"},
