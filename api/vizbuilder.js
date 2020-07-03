@@ -35,7 +35,7 @@ module.exports = function(app) {
         ...itm
       }));
 
-    axios.all([
+    const data = await axios.all([
       axios.get(`${origin}/olap-proxy/data`, {params: {
         Year: queryParams.Year || 2017,
         cube: "trade_i_baci_a_92",
@@ -56,8 +56,11 @@ module.exports = function(app) {
         data = mergeById(data, filteredData);
       });
 
-      res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
-    }));
+      return data;
+
+    })).catch(error => `Error on /api/gdp/eci: ${  error}`);
+
+    return res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
   });
 
   app.get("/api/connections/hs4", async(req, res) => {
@@ -75,7 +78,7 @@ module.exports = function(app) {
     };
 
     const origin = `${req.protocol}://${req.headers.host}`;
-    axios.get(`${origin}/api/stats/relatedness`, {params}).then(response => {
+    const output = await axios.get(`${origin}/api/stats/relatedness`, {params}).then(response => {
       const rcaData = response.data.data;
       const rcaObj = rcaData.reduce((all, d) => {
         all[d["HS4 ID"] * 1] = d;
@@ -85,8 +88,10 @@ module.exports = function(app) {
       data.forEach(d => {
         Object.assign(d, rcaObj[d.source * 1] || {});
       });
-      res.json(data);
+      return data;
     }).catch(error => error);
+
+    return res.json(output);
 
   });
 
