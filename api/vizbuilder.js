@@ -4,6 +4,7 @@ const TESSERACT_API = "/api/stats/relatedness";
 
 module.exports = function(app) {
   app.get("/api/gdp/eci", async(req, res) => {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     const queryParams = req.query;
     const origin = `${req.protocol}://${req.headers.host}`;
 
@@ -62,16 +63,15 @@ module.exports = function(app) {
       console.log(`Error on /api/gdp/eci: ${error}`);
       return res.json([]);
     });
-    
-    console.log("\n\n\n\ndata:", data);
-    console.log("\n\n\n\n");
-    if(data && data.length) {
+
+    if (data && data.length) {
       return res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
     }
-    return res.json([])
+    return res.json([]);
   });
 
   app.get("/api/connections/hs4", async(req, res) => {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
     const data = dataHS4.edges;
     const queryParams = req.query;
 
@@ -97,9 +97,15 @@ module.exports = function(app) {
         Object.assign(d, rcaObj[d.source * 1] || {});
       });
       return data;
-    }).catch(error => error);
+    }).catch(error => {
+      console.log("error in /api/connections/hs4: ", error);
+      return res.json({error: true});
+    });
 
-    return res.json(output);
+    if (output && output.length) {
+      return res.json(output);
+    }
+    return res.json([]);
 
   });
 
