@@ -60,7 +60,7 @@ module.exports = function(app) {
 
     })).catch(error => `Error on /api/gdp/eci: ${  error}`);
 
-    res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
+    return res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
   });
 
   app.get("/api/connections/hs4", async(req, res) => {
@@ -91,7 +91,7 @@ module.exports = function(app) {
       return data;
     }).catch(error => error);
 
-    res.json(output);
+    return res.json(output);
 
   });
 
