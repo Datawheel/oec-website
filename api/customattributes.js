@@ -40,7 +40,9 @@ module.exports = function(app) {
         nausa: "trade_s_usa_state_m_hs",
         afzaf: "trade_s_zaf_m_hs",
         askor: "trade_n_kor_m_hs",
-
+        asmys: "trade_n_mys_m_hs",
+        euswe: "trade_n_swe_m_hs",
+        asphl: "trade_n_phl_m_hs",
       };
 
       const defaultProductLevelDict = {
@@ -55,6 +57,9 @@ module.exports = function(app) {
         nausa: "HS4",
         afzaf: "HS4",
         askor: "HS2",
+        asmys: "HS4",
+        euswe: "HS4",
+        asphl: "HS4",
       };
 
       const subnatCubeName = subnatCubeNameDict[id1] || "trade_s_chn_m_hs";
@@ -97,7 +102,11 @@ module.exports = function(app) {
         sabra: "trade_s_bra_ncm_m_hs",
         eugbr: "trade_s_gbr_m_hs",
         nausa: "trade_s_usa_state_m_hs",
-        afzaf: "trade_s_zaf_m_hs"
+        afzaf: "trade_s_zaf_m_hs",
+        askor: "trade_n_kor_m_hs",
+        asmys: "trade_n_mys_m_hs",
+        euswe: "trade_n_swe_m_hs",
+        asphl: "trade_n_phl_m_hs",
       };
 
       const customSectionDict = {
@@ -110,7 +119,11 @@ module.exports = function(app) {
         sabra: "Section",
         eugbr: "Section",
         nausa: "Section",
-        afzaf: "Section"
+        afzaf: "Section",
+        askor: "Section",
+        asmys: "Section",
+        euswe: "Section",
+        asphl: "Section",
       };
 
       const customHS2Dict = {
@@ -123,7 +136,11 @@ module.exports = function(app) {
         sabra: "HS2",
         eugbr: "HS2",
         nausa: "HS2",
-        afzaf: "HS2"
+        afzaf: "HS2",
+        askor: "HS2",
+        asmys: "HS2",
+        euswe: "HS2",
+        asphl: "HS2",
       };
 
       const customHS4Dict = {
@@ -136,7 +153,11 @@ module.exports = function(app) {
         sabra: "HS4",
         eugbr: "HS4",
         nausa: "HS4",
-        afzaf: "HS4"
+        afzaf: "HS4",
+        askor: false,
+        asmys: "HS4",
+        euswe: "HS4",
+        asphl: "HS4",
       };
 
       const customHS6Dict = {
@@ -149,7 +170,11 @@ module.exports = function(app) {
         sabra: "Product",
         eugbr: "Product",
         nausa: "Product",
-        afzaf: "Product"
+        afzaf: "Product",
+        askor: false,
+        asmys: "Product",
+        euswe: "Product",
+        asphl: "Product",
       };
 
       const customSection = customSectionDict[id2] || "Section";
