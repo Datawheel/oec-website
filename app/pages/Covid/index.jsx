@@ -219,7 +219,7 @@ class Covid extends Component {
                       state="flowId"
                       selectedItem={_selectedFlow}
                       title={"Flow"}
-                      callback={value => {
+                      callback={(key, value) => {
                         this.fetchData(_selectedItemsCountry, value.value, _startDate.value);
                         this.setState({
                           _selectedFlow: value,
