@@ -38,7 +38,9 @@ module.exports = function(app) {
         sabra: "trade_s_bra_ncm_m_hs",
         eugbr: "trade_s_gbr_m_hs",
         nausa: "trade_s_usa_state_m_hs",
-        afzaf: "trade_s_zaf_m_hs"
+        afzaf: "trade_s_zaf_m_hs",
+        askor: "trade_n_kor_m_hs",
+
       };
 
       const defaultProductLevelDict = {
@@ -51,7 +53,8 @@ module.exports = function(app) {
         sabra: "HS4",
         eugbr: "HS4",
         nausa: "HS4",
-        afzaf: "HS4"
+        afzaf: "HS4",
+        askor: "HS2",
       };
 
       const subnatCubeName = subnatCubeNameDict[id1] || "trade_s_chn_m_hs";
