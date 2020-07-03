@@ -59,8 +59,13 @@ module.exports = function(app) {
       return data;
 
     })).catch(error => `Error on /api/gdp/eci: ${  error}`);
-
-    return res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
+    
+    console.log("\n\n\n\ndata:", data);
+    console.log("\n\n\n\n");
+    if(data && data.length) {
+      return res.json(data.filter(d => d[queryParams.x] && d[queryParams.y]));
+    }
+    return res.json([])
   });
 
   app.get("/api/connections/hs4", async(req, res) => {
