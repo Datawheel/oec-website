@@ -58,7 +58,10 @@ module.exports = function(app) {
 
       return data;
 
-    })).catch(error => `Error on /api/gdp/eci: ${  error}`);
+    })).catch(error => {
+      console.log(`Error on /api/gdp/eci: ${error}`);
+      return res.json([]);
+    });
     
     console.log("\n\n\n\ndata:", data);
     console.log("\n\n\n\n");
