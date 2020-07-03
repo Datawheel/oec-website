@@ -1,18 +1,19 @@
 @import "../../helpers/mixins.css";
 
 .covid-profile {
-  background-color: var(--dark-4);
+  background-color: var(--dark-3);
   color: var(--white);
   margin-top: var(--nav-height);
 
   & .covid-content {
+    background-color: var(--dark-3);
     align-items: flex-start;
-    padding: 0.75rem 3rem;
+    padding: 0.75rem 1.5rem;
     width: 100%;
   }
 
   & .covid-title {
-    margin-top: var(--gutter-lg);
+    margin-top: var(--gutter-sm);
     text-align: center;
   }
 
@@ -23,9 +24,9 @@
     & .covid-column {
       flex: 1;
       padding: var(--gutter-sm);
-      .aside {
-        max-width: 300px;
-        min-width: 300px;
+      &.aside {
+        max-width: 250px;
+        min-width: 250px;
         transition: margin 0.7s ease 0s;
         & .controls {
           width: 100%;
@@ -40,7 +41,83 @@
             flex: 1;
           }
         }
+
+        & .covid-selector {
+          flex-direction: column;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: var(--gutter-sm);
+
+          & .covid-selector-config {
+            width: 100%;
+            align-items: center;
+            justify-content: left;
+            display: flex;
+            flex-wrap: wrap;
+
+            & .covid-selector-title {
+              font-family: "Montserrat", sans-serif;
+              font-size: 0.7rem;
+              margin-bottom: 5px;
+              margin-top: 10px;
+              text-transform: uppercase;
+            }
+
+            & .oec-button-group.cp-button-group {
+              width: 100%
+            }
+          }
+        }
+      }
+
+      & .covid-chart {
+        height: calc(100vh - var(--nav-height) - 8rem);
+        & .covid-chart-no-data {
+          align-items: center;
+          display: flex;
+          height: inherit;
+          justify-content: center;
+        }
+      }
+
+      & .covid-selector-title {
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.7rem;
+        margin-bottom: 5px;
+        margin-top: 10px;
+        text-transform: uppercase;
+      }
+    }
+
+    & .covid-subtitle {
+      margin-top: var(--gutter-sm);
+      text-align: left;
+      text-transform: uppercase;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .covid-profile {
+    & .covid-columns {
+      flex-direction: column;
+      & .covid-column.aside {
+        max-width: 100%;
+      }
+    }
+
+    & .covid-chart {
+      height: calc(100vh - var(--nav-height));
+    }
+
+    & .covid-chart-options {
+      flex-direction: row;
+      flex-wrap: wrap;
+      & .oec-button-group-title {
+        margin: 0;
       }
     }
   }
 }
+
