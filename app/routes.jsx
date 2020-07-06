@@ -23,6 +23,7 @@ import Rankings from "./pages/Rankings";
 import Resources from "./pages/Resources";
 import Loading from "components/Loading";
 import ErrorPage from "./pages/ErrorPage";
+import Covid from "./pages/Covid";
 
 import {HS_TO_OEC_HS} from "helpers/consts";
 
@@ -120,6 +121,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/signup" component={SignUp} />
       <Route exact path="/:lang/reset" component={Reset} />
       <Route exact path="/:lang/account" component={Account} />
+      <Route exact path="/:lang/covid" component={Covid} />
       {/* <Route exact path="/:lang/subscription" component={Subscription} /> */}
       <Route exact path="/:lang/subnational" component={Subnational} />
       <Route exact path="/:lang/prediction" component={PredictionLanding} />
