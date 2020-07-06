@@ -5,7 +5,7 @@ import axios from "axios";
 import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
-
+import CountriesLegend from "pages/Covid/CountriesLegend";
 import Loading from "components/Loading";
 import OECNavbar from "components/OECNavbar";
 import OECMultiSelect from "components/OECMultiSelect";
@@ -29,6 +29,7 @@ class Covid extends Component {
       data: [],
       flow: "Exports",
       flowId: 2,
+      highlightCountries: ["nausa", "aschn"],
       loading: true,
       _selectedItemsCountry: subnatCubeMembers,
       _selectedFlow: {
@@ -36,17 +37,20 @@ class Covid extends Component {
         title: "Exports"
       },
       _startDate: {
-        value: 201905,
-        title: "May 2019"
+        value: 202001,
+        title: "January 2020"
       },
+      _ticks: [],
       productCuts: [],
       productOptions: []
     };
+
+    this.highlightCountry = this.highlightCountry.bind(this);
   }
 
   componentDidMount() {
-    const {countryMembers, flowId, _startDate, productCuts} = this.state;
-    this.fetchData(countryMembers, flowId, _startDate.value, productCuts);
+    const {countryMembers, flowId, highlightCountries, _startDate, productCuts} = this.state;
+    this.fetchData(countryMembers, flowId, _startDate.value, productCuts, highlightCountries);
   }
 
   createDates = date => {
@@ -62,7 +66,7 @@ class Covid extends Component {
     return formattedDate;
   }
 
-  fetchData = (urls, flowId, dateId, productCuts) => {
+  fetchData = (urls, flowId, dateId, productCuts, countries) => {
     let {availableDates, productOptions} = this.state;
     let _productCut = [];
 
@@ -72,9 +76,14 @@ class Covid extends Component {
     }
 
     const promisesList = urls
-      .map((url, i) => _productCut.length > 0
-        ? `${BASE}?cube=${url.cube}&drilldowns=Time&measures=Trade+Value&Trade+Flow=${flowId}&parents=true&sparse=false${_productCut[i]}`
-        : `${BASE}?cube=${url.cube}&drilldowns=Time&measures=Trade+Value&Trade+Flow=${flowId}&parents=true&sparse=false`);
+      .map((url, i) => {
+
+        const timeDrilldown = url.cube === "trade_s_chl_d_hs" ? "Month" : "Time";
+
+        return _productCut.length > 0
+          ? `${BASE}?cube=${url.cube}&drilldowns=${timeDrilldown}&measures=Trade+Value&Trade+Flow=${flowId}&parents=true&sparse=false${_productCut[i]}&q=`
+          : `${BASE}?cube=${url.cube}&drilldowns=${timeDrilldown}&measures=Trade+Value&Trade+Flow=${flowId}&parents=true&sparse=false`;
+      });
 
     if (this.state.loading) {
       promisesList.push("/api/productsList");
@@ -91,6 +100,12 @@ class Covid extends Component {
         }
         else {
 
+          if (urls[i].cube === "trade_s_chl_d_hs") {
+            _data.forEach(d => {
+              d.Time = `${d.Year}${`0${d["Month ID"]}`.slice(-2)}` * 1;
+            });
+          }
+
           _data = _data.filter(d => d.Time >= 201801);
 
           if (this.state.loading) {
@@ -98,12 +113,13 @@ class Covid extends Component {
           }
 
           _data.forEach(d => {
-            d["Previous Year"] = d.Year - 1;
+            d.color = countries.includes(urls[i].value) ? urls[i].color : "#737373";
             d["Continent ID"] = urls[i].parent_id;
             d.Continent = urls[i].parent;
             d["Country ID"] = urls[i].value;
             d.Country = urls[i].title;
             d.Date = `${d.Time.toString().slice(-2)}/01/${d.Time.toString().slice(0, 4)}`;
+            d["Previous Year"] = d.Year - 1;
             d["Trade Value Previous"] = _data.find(h => h.Time === dateId) ? _data.find(h => h.Time === dateId)["Trade Value"] : 0;
           });
 
@@ -120,12 +136,17 @@ class Covid extends Component {
         availableDates = availableDates.slice(0, -1);
       }
 
+      const _tickDates = this.tickBuilder(allPromises.flat());
+
       this.setState({
         availableDates,
         data: allPromises.flat(),
         loading: false,
-        productOptions
+        productOptions,
+        _tickDates
       });
+    }).catch(error => {
+      console.error("COVID API's calls failed", error);
     });
   }
 
@@ -135,15 +156,24 @@ class Covid extends Component {
   }
 
   handleItemMultiSelect = (key, d) => {
-    const {_selectedItemsCountry, _startDate, countryMembers, flowId, productCuts} = this.state;
+    const {_selectedItemsCountry, _startDate, countryMembers, flowId, highlightCountries, productCuts} = this.state;
 
-    this.setState({[key]: Array.isArray(d) ? d : new Array(d)});
+    const addedCountry = _selectedItemsCountry.length > 0 ? d.filter(h => !_selectedItemsCountry.includes(h)) : d;
+
+    if (addedCountry.length > 0) {
+      highlightCountries.push(addedCountry[0].value);
+    }
+
+    this.setState({
+      [key]: Array.isArray(d) ? d : new Array(d),
+      highlightCountries
+    });
 
     if (key === "_selectedItemsCountry") {
-      this.fetchData(d.map(item => item), flowId, _startDate.value, productCuts);
+      this.fetchData(d.map(item => item), flowId, _startDate.value, productCuts, highlightCountries);
     }
     else {
-      this.fetchData(_selectedItemsCountry.length > 0 ? _selectedItemsCountry : countryMembers, flowId, _startDate.value, new Array(d));
+      this.fetchData(_selectedItemsCountry.length > 0 ? _selectedItemsCountry : countryMembers, flowId, _startDate.value, new Array(d), highlightCountries);
 
       if (_selectedItemsCountry.length === 0) {
         this.setState({
@@ -153,14 +183,36 @@ class Covid extends Component {
     }
   };
 
+  highlightCountry = item => {
+    const {_selectedItemsCountry, flowId, _startDate, productCuts} = this.state;
+    let {highlightCountries} = this.state;
+
+    if (highlightCountries.includes(item)) {
+      highlightCountries = highlightCountries.filter(d => d !== item);
+    }
+    else highlightCountries.push(item);
+
+    this.fetchData(_selectedItemsCountry, flowId, _startDate.value, productCuts, highlightCountries);
+
+    this.setState({
+      highlightCountries
+    });
+  }
+
+  legendCreator = items => {
+    const legend = items.map(d => `/images/icons/country/country_${d.label}.png`);
+
+    return legend;
+  }
+
   removeItemMultiSelect = (key, value) => {
-    const {_selectedItemsCountry, countryMembers, _startDate, flowId, productCuts} = this.state;
+    const {_selectedItemsCountry, countryMembers, _startDate, flowId, productCuts, highlightCountries} = this.state;
 
     if (key === "_selectedItemsCountry") {
-      this.fetchData(countryMembers, flowId, _startDate.value, productCuts);
+      this.fetchData(countryMembers, flowId, _startDate.value, productCuts, highlightCountries);
     }
     else {
-      this.fetchData(_selectedItemsCountry, flowId, _startDate.value, []);
+      this.fetchData(_selectedItemsCountry, flowId, _startDate.value, [], highlightCountries);
     }
 
     this.setState({
@@ -169,22 +221,30 @@ class Covid extends Component {
   }
 
   removeSelectedItem = () => {
-    const {_selectedItemsCountry, _startDate, flowId} = this.state;
+    const {_selectedItemsCountry, _startDate, flowId, highlightCountries} = this.state;
     let {productCuts} = this.state;
 
     productCuts = [];
 
-    this.fetchData(_selectedItemsCountry, flowId, _startDate.value, productCuts);
+    this.fetchData(_selectedItemsCountry, flowId, _startDate.value, productCuts, highlightCountries);
 
     this.setState({
       productCuts
     });
   }
 
-  updateFilter = (key, value) => {
-    const {_selectedItemsCountry, flowId, productCuts} = this.state;
+  tickBuilder = data => {
+    const ticks = [];
 
-    this.fetchData(_selectedItemsCountry, flowId, value.value, productCuts);
+    data.map(d => !ticks.includes(d.Date) ? ticks.push(d.Date) : false);
+
+    return ticks;
+  }
+
+  updateFilter = (key, value) => {
+    const {_selectedItemsCountry, flowId, highlightCountries, productCuts} = this.state;
+
+    this.fetchData(_selectedItemsCountry, flowId, value.value, productCuts, highlightCountries);
 
     this.setState({
       [key]: value
@@ -192,7 +252,7 @@ class Covid extends Component {
   };
 
   render() {
-    const {_selectedFlow, _selectedItemsCountry, _startDate, availableDates, countryMembers, data, flow, loading, productCuts, productOptions} = this.state;
+    const {_selectedFlow, _selectedItemsCountry, _startDate, _tickDates, availableDates, countryMembers, data, flow, highlightCountries, loading, productCuts, productOptions} = this.state;
 
     return (
       <div className="covid-profile">
@@ -278,37 +338,72 @@ class Covid extends Component {
                 <Loading />
               </div>}
               {!loading &&
-              <div className="covid-chart">
-                <LinePlot
-                  config={{
-                    data,
-                    discrete: "x",
-                    groupBy: ["Continent ID", "Country"],
-                    heigth: 400,
-                    legendTooltip: {
-                      tbody: []
-                    },
-                    lineLabels: true,
-                    time: "Date",
-                    timeline: false,
-                    tooltipConfig: {
-                      tbody: [
-                        ["Period", d => `${d.Month} ${d.Year}`],
-                        ["Reference Period", () => _startDate.title],
-                        [`Relative ${flow} Growth`, d => `${currencySign[d["Country ID"]]} ${formatAbbreviate(d["Trade Value Growth Value"])}`],
-                        [`Relative ${flow} Growth (%)`, d => `${formatAbbreviate(d["Trade Value Growth"])}%`]
-                      ]
-                    },
-                    total: false,
-                    x: "Date",
-                    y: "Trade Value Growth",
-                    yConfig: {
-                      scale: "linear",
-                      tickFormat: d => `${d}%`
-                    }
-                  }}
-                />
-              </div>
+              <React.Fragment>
+                <div className="covid-chart">
+                  <LinePlot
+                    config={{
+                      data,
+                      discrete: "x",
+                      groupBy: ["Continent ID", "Country"],
+                      heigth: 200,
+                      layoutPadding: 1,
+                      legend: false,
+                      legendTooltip: {
+                        tbody: []
+                      },
+                      lineLabels: true,
+                      shapeConfig: {
+                        labelConfig: {
+                          margin: 0,
+                          padding: 0
+                        },
+                        Line: {
+                          labelConfig: {
+                            padding: 3
+                          },
+                          stroke: d => highlightCountries.includes(d["Country ID"]) ? d.color : "#737373",
+                          strokeWidth: d => highlightCountries.includes(d["Country ID"]) ? 3 : 0.5
+                        },
+                        sort: (a, b) => {
+                          if (!highlightCountries.includes(b["Country ID"])) return 1; else return -1;
+                        }
+                      },
+                      time: "Date",
+                      timeline: false,
+                      tooltipConfig: {
+                        tbody: [
+                          ["Period", d => `${d.Month} ${d.Year}`],
+                          ["Reference Period", () => _startDate.title],
+                          [`Relative ${flow} Growth`, d => `${currencySign[d["Country ID"]]} ${formatAbbreviate(d["Trade Value Growth Value"])}`],
+                          [`Relative ${flow} Growth (%)`, d => `${formatAbbreviate(d["Trade Value Growth"])}%`]
+                        ]
+                      },
+                      total: false,
+                      x: "Date",
+                      xConfig: {
+                        labels: _tickDates
+                      },
+                      y: "Trade Value Growth",
+                      yConfig: {
+                        scale: "linear",
+                        tickFormat: d => `${d}%`
+                      }
+                    }}
+                  />
+                </div>
+                <div className="covid-legend">
+                  {_selectedItemsCountry.length > 0 ? <h4>Click to Highlight:</h4> : ""}
+                  {_selectedItemsCountry.map((d, i) =>
+                    <CountriesLegend
+                      key={i}
+                      country={d.value}
+                      countryName={d.title}
+                      activeList={highlightCountries}
+                      icon={`/images/icons/country/country_${d.label}.png`}
+                      onItemSelect={d => this.highlightCountry(d)}
+                    />)}
+                </div>
+              </React.Fragment>
               }
             </div>
           </div>

@@ -1,0 +1,27 @@
+.country-selector {
+  cursor: pointer;
+  pointer-events: all;
+
+  & .flag-icon {
+    width: 1.5rem;
+    margin: 5px;
+    padding: 0px;
+  }
+
+  & .covid-tooltip {
+    display: flex;
+
+    & .flag-icon {
+      width: 1.5rem;
+      margin: 5px;
+      padding: 0px;
+    }
+  }
+
+  & .bp3-overlay {
+    &.bp3-overlay-open {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}
