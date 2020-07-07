@@ -354,7 +354,6 @@ class Covid extends Component {
                       },
                       lineLabels: true,
                       shapeConfig: {
-                        label: d => d["ISO 3"],
                         Line: {
                           labelConfig: {
                             fontSize: d => highlightCountries.includes(d["Country ID"]) ? 12 : 6,
