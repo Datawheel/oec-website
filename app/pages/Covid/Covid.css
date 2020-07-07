@@ -166,7 +166,7 @@
   }
 }
 
-@media (max-width: 2560px) {
+@media (min-width: 2560px) {
   .covid-profile {
 
     & .covid-content {
