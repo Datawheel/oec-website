@@ -44,6 +44,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "BR",
     label: "bra",
     level: "Country",
     parent_id: "sa",
@@ -59,6 +60,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "CA",
     label: "can",
     level: "Country",
     parent_id: "na",
@@ -74,6 +76,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "CN",
     label: "chn",
     level: "Country",
     parent_id: "as",
@@ -87,6 +90,7 @@ export const subnatCubeMembers = [
     color: "#BA12CC",
     cube: "trade_s_deu_m_egw",
     depthDict: {},
+    iso2: "DE",
     label: "deu",
     level: "Country",
     parent_id: "eu",
@@ -102,6 +106,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "JP",
     label: "jpn",
     level: "Country",
     parent_id: "as",
@@ -117,6 +122,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "RU",
     label: "rus",
     level: "Country",
     parent_id: "eu",
@@ -132,6 +138,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "ZA",
     label: "zaf",
     level: "Country",
     parent_id: "af",
@@ -147,6 +154,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "ES",
     label: "esp",
     level: "Country",
     parent_id: "eu",
@@ -162,6 +170,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "GB",
     label: "gbr",
     level: "Country",
     parent_id: "eu",
@@ -177,6 +186,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "US",
     label: "usa",
     level: "Country",
     parent_id: "na",
@@ -190,6 +200,7 @@ export const subnatCubeMembers = [
     color: "#C8140A",
     cube: "trade_n_kor_m_hs",
     depthDict: {},
+    iso2: "KR",
     label: "kor",
     level: "Country",
     parent_id: "as",
@@ -205,6 +216,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "MY",
     label: "mys",
     level: "Country",
     parent_id: "as",
@@ -220,6 +232,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "PH",
     label: "phl",
     level: "Country",
     parent_id: "as",
@@ -235,6 +248,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "SE",
     label: "swe",
     level: "Country",
     parent_id: "eu",
@@ -248,6 +262,7 @@ export const subnatCubeMembers = [
     color: "#C8140A",
     cube: "trade_s_ind_m_pc",
     depthDict: {},
+    iso2: "IN",
     label: "ind",
     level: "Country",
     parent_id: "as",
@@ -263,6 +278,7 @@ export const subnatCubeMembers = [
     depthDict: {
       HS6: "Product"
     },
+    iso2: "CL",
     label: "chl",
     level: "Country",
     parent_id: "sa",

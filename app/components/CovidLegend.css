@@ -17,11 +17,4 @@
       padding: 0px;
     }
   }
-
-  & .bp3-overlay {
-    &.bp3-overlay-open {
-      display: flex;
-      flex-direction: row;
-    }
-  }
 }

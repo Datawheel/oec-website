@@ -14,6 +14,7 @@
 
   & .covid-title {
     margin-top: var(--gutter-sm);
+    margin-bottom: var(--gutter-sm);
     text-align: center;
   }
 
@@ -102,7 +103,32 @@
       text-align: left;
       text-transform: uppercase;
     }
+
+    & .covid-reference {
+      font-size: var(--font-sm);
+      text-align: center;
+    }
   }
+
+  &.is-light {
+    background-color: var(--light-2);
+    color: var(--dark-3);
+
+    & .covid-content {
+      background-color: var(--light-2);
+      color: var(--dark-3);
+
+      & .button-virtual-selector {
+        color: var(--dark-3);
+      }
+
+      & .bp3-multi-select {
+        background: var(--dark-3);
+        opacity: 1;
+      }
+    }
+  }
+
 }
 
 @media (max-width: 700px) {
@@ -126,7 +152,7 @@
     }
 
     & .covid-chart {
-      height: calc(60vh - var(--nav-height));
+      height: calc(60vh - var(--nav-height))!important;
       padding: 0;
     }
 

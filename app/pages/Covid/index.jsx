@@ -26,6 +26,7 @@ class Covid extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      availableYears: [2020],
       availableDates: [],
       countryMembers: subnatCubeMembers,
       data: [],
@@ -44,7 +45,8 @@ class Covid extends Component {
       },
       _ticks: [],
       productCuts: [],
-      productOptions: []
+      productOptions: [],
+      _style: ""
     };
 
     this.highlightCountry = this.highlightCountry.bind(this);
@@ -53,6 +55,16 @@ class Covid extends Component {
   componentDidMount() {
     const {countryMembers, flowId, highlightCountries, _startDate, productCuts} = this.state;
     this.fetchData(countryMembers, flowId, _startDate.value, productCuts, highlightCountries);
+  }
+
+  changeStyle = () => {
+    let {_style} = this.state;
+
+    _style = _style === "is-light" ? "" : "is-light";
+
+    this.setState({
+      _style
+    });
   }
 
   createDates = date => {
@@ -69,7 +81,7 @@ class Covid extends Component {
   }
 
   fetchData = (urls, flowId, dateId, productCuts, countries) => {
-    let {availableDates, productOptions} = this.state;
+    let {availableDates, availableYears, productOptions} = this.state;
     let _productCut = [];
 
     if (productCuts && productCuts.length > 0) {
@@ -118,6 +130,7 @@ class Covid extends Component {
             d.color = countries.includes(urls[i].value) ? urls[i].color : "#737373";
             d["Continent ID"] = urls[i].parent_id;
             d.Continent = urls[i].parent;
+            d["ISO 2"] = urls[i].iso2;
             d["ISO 3"] = urls[i].label.toUpperCase();
             d["Country ID"] = urls[i].value;
             d.Country = urls[i].title;
@@ -139,10 +152,13 @@ class Covid extends Component {
         availableDates = availableDates.slice(0, -1);
       }
 
+      availableYears = [...new Set(allPromises.flat().map(d => d.Year))];
+
       const _tickDates = this.tickBuilder(allPromises.flat());
 
       this.setState({
         availableDates,
+        availableYears,
         data: allPromises.flat(),
         loading: false,
         productOptions,
@@ -212,6 +228,15 @@ class Covid extends Component {
     return legend;
   }
 
+  listFormatter = items => items.reduce((str, item, i) => {
+
+    if (!i) str += item;
+    else if (i === items.length - 1 && i === 1) str += ` and ${item}`;
+    else if (i === items.length - 1) str += `, and ${item}`;
+    else str += `, ${item}`;
+    return str;
+  }, "")
+
   removeItemMultiSelect = (key, value) => {
     const {_selectedItemsCountry, countryMembers, _startDate, flowId, productCuts, highlightCountries} = this.state;
 
@@ -259,7 +284,7 @@ class Covid extends Component {
   };
 
   render() {
-    const {_selectedFlow, _selectedItemsCountry, _startDate, _tickDates, availableDates, countryMembers, data, flow, highlightCountries, loading, productCuts, productOptions} = this.state;
+    const {_selectedFlow, _selectedItemsCountry, _startDate, _tickDates, availableDates, availableYears, countryMembers, data, flow, highlightCountries, loading, productCuts, productOptions} = this.state;
 
     return (
       <div className="covid-profile">
@@ -287,7 +312,7 @@ class Covid extends Component {
                       selectedItem={_selectedFlow}
                       title={"Flow"}
                       callback={(key, value) => {
-                        this.fetchData(_selectedItemsCountry, value.value, _startDate.value);
+                        this.fetchData(_selectedItemsCountry, value.value, _startDate.value, productCuts, highlightCountries);
                         this.setState({
                           _selectedFlow: value,
                           flow: value.title,
@@ -339,7 +364,8 @@ class Covid extends Component {
               </div>
             </div>
             <div className="covid-column">
-              <h1 className="covid-title">How has COVID affected international trade patterns?</h1>
+              <h1 className="covid-title">How has COVID-19 affected international trade patterns?</h1>
+              <h2 className="covid-reference">Monthly {flow.toLowerCase()} in {this.listFormatter(availableYears)} compared with {_startDate.title} </h2>
               {loading &&
               <div className="covid-chart">
                 <Loading />
@@ -351,8 +377,8 @@ class Covid extends Component {
                     config={{
                       data,
                       discrete: "x",
-                      groupBy: ["Continent ID", "Country"],
-                      highlightCountries, // forces redraw when this array changes
+                      groupBy: ["Continent ID", "ISO 3"],
+                      highlightCountries,
                       legend: false,
                       legendTooltip: {
                         tbody: []
@@ -361,7 +387,7 @@ class Covid extends Component {
                       shapeConfig: {
                         Line: {
                           labelConfig: {
-                            fontSize: d => highlightCountries.includes(d["Country ID"]) ? 12 : 6,
+                            fontSize: d => highlightCountries.includes(d["Country ID"]) ? 10 : 5,
                             fontStroke: style["dark-2"],
                             fontStrokeWidth: d => highlightCountries.includes(d["Country ID"]) ? 0.85 : 0.5,
                             fontWeight: 800,
@@ -377,6 +403,13 @@ class Covid extends Component {
                       time: "Date",
                       timeline: false,
                       tooltipConfig: {
+                        title: d => {
+                          let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
+                          tooltip += `<div class="icon"><img src="/images/icons/country/country_${d["ISO 3"]}.png" /></div>`;
+                          tooltip += `<div class="title"><span>${d.Country}</span></div>`;
+                          tooltip += "</div>";
+                          return tooltip;
+                        },
                         tbody: [
                           ["Period", d => `${d.Month} ${d.Year}`],
                           ["Reference Period", () => _startDate.title],
@@ -398,7 +431,6 @@ class Covid extends Component {
                   />
                 </div>
                 <div className="covid-legend">
-                  {_selectedItemsCountry.length > 0 ? <h4>Click to Highlight:</h4> : ""}
                   {_selectedItemsCountry.map((d, i) =>
                     <CovidLegend
                       key={i}
