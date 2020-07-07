@@ -166,3 +166,28 @@
   }
 }
 
+@media (max-width: 2560px) {
+  .covid-profile {
+
+    & .covid-content {
+      background-color: var(--dark-3);
+      width: 100%;
+    }
+
+    & .covid-title {
+      font-size: var(--font-xl);
+    }
+
+    & .covid-columns {
+      & .covid-reference {
+        font-size: var(--font-lg);
+      }
+    }
+
+    & .covid-chart {
+      height: calc(100vh - var(--nav-height));
+      padding: 0;
+    }
+  }
+}
+

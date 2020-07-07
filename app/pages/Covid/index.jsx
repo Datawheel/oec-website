@@ -392,7 +392,7 @@ class Covid extends Component {
                       shapeConfig: {
                         Line: {
                           labelConfig: {
-                            fontSize: d => highlightCountries.includes(d["Country ID"]) ? 10 : 5,
+                            fontSize: d => highlightCountries.includes(d["Country ID"]) ? width < 1920 ? 10 : width < 2560 ? 15 : width < 3840 ? 20 : 25 : width < 1920 ? 5 : width < 2560 ? 10 : width < 3840 ? 15 : 20,
                             fontStroke: style["dark-2"],
                             fontStrokeWidth: d => highlightCountries.includes(d["Country ID"]) ? 0.4 : 0.5,
                             fontWeight: 800,

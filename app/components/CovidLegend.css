@@ -18,3 +18,11 @@
     }
   }
 }
+
+@media (max-width: 2560px) {
+  .country-selector {
+    & .flag-icon {
+      width: 2.3rem;
+    }
+  }
+}
