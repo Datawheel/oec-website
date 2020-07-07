@@ -81,6 +81,13 @@
         }
       }
 
+      & .covid-legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+      }
+
       & .covid-selector-title {
         font-family: "Montserrat", sans-serif;
         font-size: 0.7rem;
@@ -100,15 +107,27 @@
 
 @media (max-width: 700px) {
   .covid-profile {
+
+    & .covid-content {
+      background-color: var(--dark-3);
+      padding: 0;
+      width: 100%;
+    }
+
+    & .covid-title {
+      font-size: var(--font-lg);
+    }
+
     & .covid-columns {
-      flex-direction: column;
+      flex-direction: column-reverse;
       & .covid-column.aside {
         max-width: 100%;
       }
     }
 
     & .covid-chart {
-      height: calc(100vh - var(--nav-height));
+      height: calc(60vh - var(--nav-height));
+      padding: 0;
     }
 
     & .covid-chart-options {

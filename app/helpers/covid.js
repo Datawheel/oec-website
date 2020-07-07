@@ -17,7 +17,8 @@ export const currencySign = {
   asmys: "$",
   asphl: "$",
   euswe: "SEK",
-  asind: "$"
+  asind: "$",
+  sachl: "$"
 };
 
 export const monthNames = [
@@ -254,6 +255,21 @@ export const subnatCubeMembers = [
     product_category: "pc",
     title: "India",
     value: "asind"
+  },
+  {
+    avialablesDepth: ["Section", "HS2", "HS4", "HS6"],
+    color: "#1AB558",
+    cube: "trade_s_chl_d_hs",
+    depthDict: {
+      HS6: "Product"
+    },
+    label: "chl",
+    level: "Country",
+    parent_id: "sa",
+    parent: "South America",
+    product_category: "hs",
+    title: "Chile",
+    value: "sachl"
   }
 
   /* COUNTRIES WITH NON UPDATED DATA
