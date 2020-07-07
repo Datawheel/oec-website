@@ -410,7 +410,7 @@ class Covid extends Component {
                       tooltipConfig: {
                         title: d => {
                           let tooltip = "<div class='d3plus-tooltip-title-wrapper'>";
-                          tooltip += `<div class="icon"><img src="/images/icons/country/country_${d["ISO 3"]}.png" /></div>`;
+                          tooltip += `<div class="icon"><img src="/images/icons/country/country_${d["ISO 3"].toLowerCase()}.png" /></div>`;
                           tooltip += `<div class="title"><span>${d.Country}</span></div>`;
                           tooltip += "</div>";
                           return tooltip;
