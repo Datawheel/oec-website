@@ -5,7 +5,7 @@ import axios from "axios";
 import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
-import CountriesLegend from "pages/Covid/CountriesLegend";
+import CovidLegend from "components/CovidLegend";
 import Loading from "components/Loading";
 import OECNavbar from "components/OECNavbar";
 import OECMultiSelect from "components/OECMultiSelect";
@@ -116,6 +116,7 @@ class Covid extends Component {
             d.color = countries.includes(urls[i].value) ? urls[i].color : "#737373";
             d["Continent ID"] = urls[i].parent_id;
             d.Continent = urls[i].parent;
+            d["ISO 3"] = urls[i].label.toUpperCase();
             d["Country ID"] = urls[i].value;
             d.Country = urls[i].title;
             d.Date = `${d.Time.toString().slice(-2)}/01/${d.Time.toString().slice(0, 4)}`;
@@ -353,12 +354,10 @@ class Covid extends Component {
                       },
                       lineLabels: true,
                       shapeConfig: {
-                        labelConfig: {
-                          margin: 0,
-                          padding: 0
-                        },
+                        label: d => d["ISO 3"],
                         Line: {
                           labelConfig: {
+                            fontSize: d => highlightCountries.includes(d["Country ID"]) ? 12 : 6,
                             padding: 3
                           },
                           stroke: d => highlightCountries.includes(d["Country ID"]) ? d.color : "#737373",
@@ -394,7 +393,7 @@ class Covid extends Component {
                 <div className="covid-legend">
                   {_selectedItemsCountry.length > 0 ? <h4>Click to Highlight:</h4> : ""}
                   {_selectedItemsCountry.map((d, i) =>
-                    <CountriesLegend
+                    <CovidLegend
                       key={i}
                       country={d.value}
                       countryName={d.title}

@@ -1,9 +1,9 @@
-import React, {Component} from "React";
+import React, {Component} from "react";
 import {Position, Tooltip} from "@blueprintjs/core";
 
-import "./CountriesLegend.css";
+import "./CovidLegend.css";
 
-class CountriesLegend extends Component {
+class CovidLegend extends Component {
   render() {
     const {
       activeList,
@@ -25,4 +25,4 @@ class CountriesLegend extends Component {
   }
 }
 
-export default CountriesLegend;
+export default CovidLegend;
