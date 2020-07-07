@@ -46,7 +46,8 @@ class Covid extends Component {
       _ticks: [],
       productCuts: [],
       productOptions: [],
-      _style: ""
+      _style: "",
+      width: 0
     };
 
     this.highlightCountry = this.highlightCountry.bind(this);
@@ -55,6 +56,10 @@ class Covid extends Component {
   componentDidMount() {
     const {countryMembers, flowId, highlightCountries, _startDate, productCuts} = this.state;
     this.fetchData(countryMembers, flowId, _startDate.value, productCuts, highlightCountries);
+
+    this.setState({
+      width: window.innerWidth
+    });
   }
 
   changeStyle = () => {
@@ -284,7 +289,7 @@ class Covid extends Component {
   };
 
   render() {
-    const {_selectedFlow, _selectedItemsCountry, _startDate, _tickDates, availableDates, availableYears, countryMembers, data, flow, highlightCountries, loading, productCuts, productOptions} = this.state;
+    const {_selectedFlow, _selectedItemsCountry, _startDate, _tickDates, availableDates, availableYears, countryMembers, data, flow, highlightCountries, loading, productCuts, productOptions, width} = this.state;
 
     return (
       <div className="covid-profile">
@@ -377,7 +382,7 @@ class Covid extends Component {
                     config={{
                       data,
                       discrete: "x",
-                      groupBy: ["Continent ID", "ISO 3"],
+                      groupBy: width < 768 ? ["Continent ID", "ISO 3"] : ["Continent ID", "Country"],
                       highlightCountries,
                       legend: false,
                       legendTooltip: {
@@ -389,7 +394,7 @@ class Covid extends Component {
                           labelConfig: {
                             fontSize: d => highlightCountries.includes(d["Country ID"]) ? 10 : 5,
                             fontStroke: style["dark-2"],
-                            fontStrokeWidth: d => highlightCountries.includes(d["Country ID"]) ? 0.85 : 0.5,
+                            fontStrokeWidth: d => highlightCountries.includes(d["Country ID"]) ? 0.4 : 0.5,
                             fontWeight: 800,
                             padding: 3
                           },
