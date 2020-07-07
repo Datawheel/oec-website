@@ -5,6 +5,8 @@ import axios from "axios";
 import {LinePlot} from "d3plus-react";
 import {formatAbbreviate} from "d3plus-format";
 
+import style from "style.yml";
+
 import CovidLegend from "components/CovidLegend";
 import Loading from "components/Loading";
 import OECNavbar from "components/OECNavbar";
@@ -350,8 +352,7 @@ class Covid extends Component {
                       data,
                       discrete: "x",
                       groupBy: ["Continent ID", "Country"],
-                      heigth: 200,
-                      layoutPadding: 1,
+                      highlightCountries, // forces redraw when this array changes
                       legend: false,
                       legendTooltip: {
                         tbody: []
@@ -361,6 +362,9 @@ class Covid extends Component {
                         Line: {
                           labelConfig: {
                             fontSize: d => highlightCountries.includes(d["Country ID"]) ? 12 : 6,
+                            fontStroke: style["dark-2"],
+                            fontStrokeWidth: d => highlightCountries.includes(d["Country ID"]) ? 0.85 : 0.5,
+                            fontWeight: 800,
                             padding: 3
                           },
                           stroke: d => highlightCountries.includes(d["Country ID"]) ? d.color : "#737373",
