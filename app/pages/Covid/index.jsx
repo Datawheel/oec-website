@@ -159,19 +159,23 @@ class Covid extends Component {
   handleItemMultiSelect = (key, d) => {
     const {_selectedItemsCountry, _startDate, countryMembers, flowId, highlightCountries, productCuts} = this.state;
 
-    const addedCountry = _selectedItemsCountry.length > 0 ? d.filter(h => !_selectedItemsCountry.includes(h)) : d;
-
-    if (addedCountry.length > 0) {
-      highlightCountries.push(addedCountry[0].value);
-    }
-
     this.setState({
-      [key]: Array.isArray(d) ? d : new Array(d),
-      highlightCountries
+      [key]: Array.isArray(d) ? d : new Array(d)
     });
 
     if (key === "_selectedItemsCountry") {
+
+      const addedCountry = _selectedItemsCountry.length > 0 ? d.filter(h => !_selectedItemsCountry.includes(h)) : d;
+
+      if (addedCountry.length > 0) {
+        highlightCountries.push(addedCountry[0].value);
+      }
+
       this.fetchData(d.map(item => item), flowId, _startDate.value, productCuts, highlightCountries);
+
+      this.setState({
+        highlightCountries
+      });
     }
     else {
       this.fetchData(_selectedItemsCountry.length > 0 ? _selectedItemsCountry : countryMembers, flowId, _startDate.value, new Array(d), highlightCountries);
