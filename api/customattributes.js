@@ -259,8 +259,8 @@ module.exports = function(app) {
       const urlId = `${OLAP_PROXY_ENDPOINT}data?Subnat+Geography=${id1}&cube=${cubeName1}&drilldowns=Subnat+Geography,Year,Trade+Flow&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
       const dataId = await axios.get(urlId, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
 
-      const dataIMPO = dataId.filter(d => d["Trade Flow"] = 1);
-      const dataEXPO = dataId.filter(d => d["Trade Flow"] = 2);
+      const dataIMPO = dataId.filter(d => d["Trade Flow"] == 1);
+      const dataEXPO = dataId.filter(d => d["Trade Flow"] == 2);
       dataIMPO.sort((a, b) => b["Year"] - a["Year"]);
       dataEXPO.sort((a, b) => b["Year"] - a["Year"]);
       const yearLastIMPO = dataIMPO.length > 0 ? dataIMPO[0]["Year"] === 2020 ? dataIMPO[0]["Year"] -1 : dataIMPO[0]["Year"] : 2019;
