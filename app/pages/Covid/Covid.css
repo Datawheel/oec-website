@@ -29,6 +29,16 @@
         max-width: 250px;
         min-width: 250px;
         transition: margin 0.7s ease 0s;
+
+        & .column-1 {
+          & .vb-chart-button-option {
+            display: flex;
+            width: 100%;
+            margin: 0;
+            margin-top: 20px;
+          }
+        }
+
         & .controls {
           width: 100%;
           height: auto;
@@ -80,6 +90,12 @@
           height: inherit;
           justify-content: center;
         }
+      }
+
+      & .covid-vdownloader {
+        display: flex;
+        justify-content: flex-end;
+        margin-right: 4rem;
       }
 
       & .covid-legend {
@@ -156,6 +172,12 @@
       padding: 0;
     }
 
+    & .covid-vdownloader {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 2rem!important;
+    }
+
     & .covid-chart-options {
       flex-direction: row;
       flex-wrap: wrap;
@@ -187,6 +209,12 @@
     & .covid-chart {
       height: calc(100vh - var(--nav-height));
       padding: 0;
+    }
+
+    & .covid-vdownloader {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 8rem!important;
     }
   }
 }

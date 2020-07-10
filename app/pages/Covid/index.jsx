@@ -14,13 +14,25 @@ import OECMultiSelect from "components/OECMultiSelect";
 import SelectMultiHierarchy from "components/SelectMultiHierarchy";
 import SimpleSelect from "components/SimpleSelect";
 import Footer from "components/Footer";
+import VbDownload from "components/VbDownload";
 
 import "./Covid.css";
 
 // Helpers
+import colors from "helpers/colors";
 import {currencySign, monthNames, productColor, productIcon, productLevels, spinner, subnatCubeMembers} from "helpers/covid";
 
 const BASE = "/olap-proxy/data";
+const availableFlows = [
+  {
+    value: 2,
+    title: "Exports"
+  },
+  {
+    value: 1,
+    title: "Imports"
+  }
+];
 
 class Covid extends Component {
   constructor(props) {
@@ -34,11 +46,10 @@ class Covid extends Component {
       flowId: 2,
       highlightCountries: ["nausa", "aschn"],
       loading: true,
-      _selectedItemsCountry: subnatCubeMembers,
-      _selectedFlow: {
-        value: 2,
-        title: "Exports"
-      },
+      location: null,
+      _selectedItemsCountry: Object.keys(this.props.location.query.length > 0) ? this.props.location.query["Selected Country"] ? this.props.location.query["Selected Country"] === "all" ? subnatCubeMembers : subnatCubeMembers.filter(item => this.props.location.query["Selected Country"].split(",").includes(item.value)) : subnatCubeMembers : subnatCubeMembers,
+      _availableFlows: availableFlows,
+      _selectedFlow: Object.keys(this.props.location.query.length > 0) ? this.props.location.query["Trade Flow"] ? availableFlows.find(d => d.value * 1 === this.props.location.query["Trade Flow"] * 1) : {value: 2, title: "Exports"} : {value: 2, title: "Exports"},
       _startDate: {
         value: 202001,
         title: "January 2020"
@@ -46,6 +57,7 @@ class Covid extends Component {
       _ticks: [],
       productCuts: [],
       productOptions: [],
+      queryProduct: "",
       _style: "",
       width: 0
     };
@@ -54,12 +66,71 @@ class Covid extends Component {
   }
 
   componentDidMount() {
-    const {countryMembers, flowId, highlightCountries, _startDate, productCuts} = this.state;
-    this.fetchData(countryMembers, flowId, _startDate.value, productCuts, highlightCountries);
+    const {query} = this.props.location;
+    const {_availableFlows} = this.state;
+    let {_selectedItemsCountry, flow, flowId, highlightCountries, _selectedFlow, _startDate} = this.state;
+
+    let queryProduct = [];
+
+    if (Object.keys(query).length !== 0) {
+      const queryCountries = query["Selected Country"] ? query["Selected Country"].split(",") : false;
+      const queryHighlight = query["Highlight Country"] ? query["Highlight Country"].split(",") : false;
+      const queryFlow = query["Trade Flow"] ? query["Trade Flow"] : false;
+      const queryDate = query.Time ? query.Time < 201801 ? 201801 : query.Time * 1 : false;
+      queryProduct = Object.keys(query).map(d => d).find(key => productLevels.includes(key)) || [];
+
+      if (queryProduct) {
+        queryProduct = [
+          {
+            type: queryProduct,
+            id: query[queryProduct]
+          }
+        ];
+      }
+
+      _selectedItemsCountry = queryCountries ? queryCountries[0] === "all" ? subnatCubeMembers : subnatCubeMembers.filter(item => queryCountries.includes(item.value)) : subnatCubeMembers;
+      highlightCountries =  queryHighlight ? queryHighlight[0] === "all" ? subnatCubeMembers.map(d => d.value) : queryHighlight : highlightCountries;
+      flowId = queryFlow ? [1, 2].includes(queryFlow * 1) ? queryFlow * 1 : 2 : flowId;
+      _selectedFlow = queryFlow ? _availableFlows.find(flow => flow.value * 1 === queryFlow * 1) : _selectedFlow;
+      flow = queryFlow ? _availableFlows.find(item => item.value * 1 === queryFlow * 1).title : flow;
+      _startDate = queryDate ? this.createDates(queryDate) : _startDate;
+    }
+
+    console.log(flowId, _selectedFlow, flow);
 
     this.setState({
+      _selectedFlow,
+      _selectedItemsCountry,
+      _startDate,
+      highlightCountries,
+      flow,
+      flowId,
       width: window.innerWidth
     });
+    this.setState({location: window.location});
+
+    this.fetchData(_selectedItemsCountry, flowId, _startDate.value, queryProduct, highlightCountries);
+  }
+
+  buildLink = () => {
+    const {flowId, _startDate, _selectedItemsCountry, highlightCountries, productCuts} = this.state;
+
+    const path = this.props.location.pathname;
+
+    const queryDict = {
+      "Trade Flow": flowId,
+      "Time": _startDate.value,
+      "Selected Country": _selectedItemsCountry ? _selectedItemsCountry.length === subnatCubeMembers.length ? "all" : _selectedItemsCountry.map(d => d.value) : "all",
+      "Highlight Country": _selectedItemsCountry ? _selectedItemsCountry.length === highlightCountries.length ? "all" : highlightCountries : "all"
+    };
+
+    if (productCuts && productCuts.length > 0) {
+      Object.assign(queryDict, {[productCuts[0].type]: productCuts[0].id});
+    }
+
+    const queryString = Object.keys(queryDict).map(key => `${key}=${queryDict[key]}`).join("&");
+
+    return `/${path}?${queryString}`;
   }
 
   changeStyle = () => {
@@ -73,12 +144,19 @@ class Covid extends Component {
   }
 
   createDates = date => {
-    const monthId = date.toString().slice(-2) * 1 - 1;
+    let monthId = date.toString().slice(-2) * 1 - 1;
+
+    monthId = monthId >= 11 ? 11 : monthId;
+
+    const _monthId = `0${monthId + 1}`.slice(-2);
+
     const month = monthNames[monthId];
     const year = date.toString().slice(0, 4) * 1;
 
+    const _date = `${year}${_monthId  }` * 1;
+
     const formattedDate = {
-      value: date,
+      value: _date,
       title: `${month} ${year}`
     };
 
@@ -111,8 +189,13 @@ class Covid extends Component {
     const allPromises = [];
 
     Promise.all(promisesList.map(url => axios.get(url))).then(responses => {
-      responses.map((res, i) => {
+      responses.map((res, j) => {
         let _data = res.data.data;
+        let i = j;
+
+        if (j !== responses.length - 1) {
+          i = urls.map(d => d.cube).findIndex(d => d === res.data.source[0].name);
+        }
 
         if (i === responses.length - 1 && this.state.loading) {
           productOptions = _data;
@@ -125,10 +208,10 @@ class Covid extends Component {
             });
           }
 
-          _data = _data.filter(d => d.Time >= 201801);
+          _data = _data.filter(d => d.Time * 1 >= 201801);
 
           if (this.state.loading) {
-            _data.map(d => availableDates ? !availableDates.find(h => h.value === d.Time) ? availableDates.push(this.createDates(d.Time)) : false : false);
+            _data.map(d => availableDates ? !availableDates.find(h => h.value * 1 === d.Time * 1) ? availableDates.push(this.createDates(d.Time)) : false : false);
           }
 
           _data.forEach(d => {
@@ -141,7 +224,7 @@ class Covid extends Component {
             d.Country = urls[i].title;
             d.Date = `${d.Time.toString().slice(-2)}/01/${d.Time.toString().slice(0, 4)}`;
             d["Previous Year"] = d.Year - 1;
-            d["Trade Value Previous"] = _data.find(h => h.Time === dateId) ? _data.find(h => h.Time === dateId)["Trade Value"] : 0;
+            d["Trade Value Previous"] = _data.find(h => h.Time === dateId * 1) ? _data.find(h => h.Time === dateId * 1)["Trade Value"] : 0;
           });
 
           _data.forEach(d => {
@@ -149,7 +232,7 @@ class Covid extends Component {
             d["Trade Value Growth Value"] = d["Trade Value"] - d["Trade Value Previous"];
           });
 
-          allPromises.push(_data.filter(d => d.Time >= dateId && isFinite(d["Trade Value Growth"])));
+          allPromises.push(_data.filter(d => d.Time >= dateId * 1 && isFinite(d["Trade Value Growth"])));
         }
       });
 
@@ -161,16 +244,33 @@ class Covid extends Component {
 
       const _tickDates = this.tickBuilder(allPromises.flat());
 
+      if (productCuts && productCuts.length > 0 && this.state.loading) {
+        const _productCuts = productOptions.find(d => d[`${productCuts[0].type} ID`] * 1 === productCuts[0].id * 1);
+        if (_productCuts) {
+          productCuts = [{
+            color: colors.Section[_productCuts["Section ID"]],
+            icon: `/images/icons/hs/hs_${_productCuts["Section ID"]}.svg`,
+            id: productCuts[0].id,
+            label: productCuts[0].id,
+            name: _productCuts[productCuts[0].type],
+            searchIndex: `${_productCuts[productCuts[0].type]}|${productCuts[0].id}`,
+            type: productCuts[0].type
+          }];
+        }
+      }
+
       this.setState({
         availableDates,
         availableYears,
         data: allPromises.flat(),
         loading: false,
+        productCuts,
         productOptions,
         _tickDates
       });
     }).catch(error => {
       console.error("COVID API's calls failed", error);
+      return [];
     });
   }
 
@@ -289,7 +389,7 @@ class Covid extends Component {
   };
 
   render() {
-    const {_selectedFlow, _selectedItemsCountry, _startDate, _tickDates, availableDates, availableYears, countryMembers, data, flow, highlightCountries, loading, productCuts, productOptions, width} = this.state;
+    const {_selectedFlow, _selectedItemsCountry, _startDate, _tickDates, availableDates, availableYears, countryMembers, data, flow, highlightCountries, loading, location, productCuts, productOptions, width} = this.state;
 
     return (
       <div className="covid-profile">
@@ -301,18 +401,9 @@ class Covid extends Component {
               <div className="content">
                 <div className="columns">
                   <h3 className="covid-subtitle">Lastest Trends Explorer</h3>
-                  <div className="column-1 ">
+                  <div className="column-1">
                     <SimpleSelect
-                      items={[
-                        {
-                          value: 2,
-                          title: "Exports"
-                        },
-                        {
-                          value: 1,
-                          title: "Imports"
-                        }
-                      ]}
+                      items={availableFlows}
                       state="flowId"
                       selectedItem={_selectedFlow}
                       title={"Flow"}
@@ -343,7 +434,9 @@ class Covid extends Component {
                       onClear={() => {
                         this.removeItemMultiSelect("_selectedItemsCountry", []);
                       }}
-                      callback={d => this.handleItemMultiSelect("_selectedItemsCountry", d)}
+                      callback={d => {
+                        this.handleItemMultiSelect("_selectedItemsCountry", d);
+                      }}
                     />
                   </div>
                   <div className="column-1">
@@ -365,12 +458,22 @@ class Covid extends Component {
                       }}
                     />
                   </div>
+                  <div className="column-1">
+                    {!loading && <VbDownload
+                      className="covid-vdownloader"
+                      customAPI={this.buildLink()}
+                      data={data}
+                      dropCols={["Quarter ID", "Quarter", "Time", "color", "ISO 2", "ISO 3", "Date", "Previous Year"]}
+                      location={location}
+                      title="download"
+                    />}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="covid-column">
               <h1 className="covid-title">How has COVID-19 affected international trade patterns?</h1>
-              <h2 className="covid-reference">Monthly {flow.toLowerCase()} in {this.listFormatter(availableYears)} compared with {_startDate.title} </h2>
+              <h2 className="covid-reference">Monthly {flow.toLowerCase()} in {this.listFormatter(availableYears)} compared to {_startDate.title}</h2>
               {loading &&
               <div className="covid-chart">
                 <Loading />
