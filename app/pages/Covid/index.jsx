@@ -79,7 +79,7 @@ class Covid extends Component {
       const queryDate = query.Time ? query.Time < 201801 ? 201801 : query.Time * 1 : false;
       queryProduct = Object.keys(query).map(d => d).find(key => productLevels.includes(key)) || [];
 
-      if (queryProduct) {
+      if (queryProduct.length > 0) {
         queryProduct = [
           {
             type: queryProduct,
