@@ -96,8 +96,6 @@ class Covid extends Component {
       _startDate = queryDate ? this.createDates(queryDate) : _startDate;
     }
 
-    console.log(flowId, _selectedFlow, flow);
-
     this.setState({
       _selectedFlow,
       _selectedItemsCountry,
