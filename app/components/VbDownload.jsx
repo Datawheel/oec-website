@@ -62,10 +62,15 @@ class VbDownload extends React.Component {
     const {title} = this.props;
     const results = this.props.data;
 
+    const dropCols = this.props.dropCols;
+
     const rowDelim = "\r\n";
     const colDelim = this.state.separator;
 
-    const columns = results && results[0] ? Object.keys(results[0]) : [];
+    let columns = results && results[0] ? Object.keys(results[0]) : [];
+
+    columns = dropCols ? columns.filter(column => !dropCols.includes(column)) : columns;
+
     let csv = columns.map(val => `\"${val}\"`).join(colDelim);
 
     for (let i = 0; i < results.length; i++) {
@@ -136,7 +141,7 @@ class VbDownload extends React.Component {
 
   render() {
     const {separator} = this.state;
-    const {data, location, t, saveViz, buttonTitle} = this.props;
+    const {data, location, t, saveViz, buttonTitle, dropCols} = this.props;
     const REDUX_API = this.props.API;
     const CUSTOM_API = this.props.customAPI;
     const API = CUSTOM_API || REDUX_API;
@@ -182,7 +187,7 @@ class VbDownload extends React.Component {
           <div className="vb-share-option">
             <h5 className="title">{t("Preview data")}</h5>
             <ReactTable
-              columns={columns}
+              columns={dropCols ? columns.filter(d => !dropCols.includes(d.accessor)) : columns}
               data={filteredData.slice(0, 5)}
               defaultPageSize={5}
               showPagination={false}
