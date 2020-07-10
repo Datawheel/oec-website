@@ -18,7 +18,8 @@ export const currencySign = {
   asphl: "$",
   euswe: "SEK",
   asind: "$",
-  sachl: "$"
+  sachl: "$",
+  eunld: "$"
 };
 
 export const monthNames = [
@@ -286,6 +287,20 @@ export const subnatCubeMembers = [
     product_category: "hs",
     title: "Chile",
     value: "sachl"
+  },
+  {
+    avialablesDepth: ["Section", "Division", "Group"],
+    color: "#BA12CC",
+    cube: "trade_n_nld_m_sitc3",
+    depthDict: {},
+    iso2: "NL",
+    label: "nld",
+    level: "Country",
+    parent_id: "eu",
+    parent: "Europe",
+    product_category: "sitc",
+    title: "Netherlands",
+    value: "eunld"
   }
 
   /* COUNTRIES WITH NON UPDATED DATA
