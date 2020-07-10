@@ -42,7 +42,7 @@ module.exports = function(app) {
         askor: "trade_n_kor_m_hs",
         asmys: "trade_n_mys_m_hs",
         euswe: "trade_n_swe_m_hs",
-        asphl: "trade_n_phl_m_hs",
+        asphl: "trade_n_phl_m_hs"
       };
 
       const defaultProductLevelDict = {
@@ -59,14 +59,19 @@ module.exports = function(app) {
         askor: "HS2",
         asmys: "HS4",
         euswe: "HS4",
-        asphl: "HS4",
+        asphl: "HS4"
       };
 
       const subnatCubeName = subnatCubeNameDict[id1] || "trade_s_chn_m_hs";
       const defaultProductLevel = defaultProductLevelDict[id1] || "HS4";
 
       const url = `${OLAP_PROXY_ENDPOINT}data?time=time.latest&cube=${subnatCubeName}&drilldowns=Time&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
-      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
+      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
+
+      if (!data) return res.json({});
 
       const latestSubnationalDate = data.length > 0 ? data[0].Time : false;
       const previousSubnationalDate = latestSubnationalDate ? `${latestSubnationalDate.toString().slice(0, 4) * 1 - 1}${latestSubnationalDate.toString().slice(-2)}` * 1 : false;
@@ -77,11 +82,15 @@ module.exports = function(app) {
         previousSubnationalDate,
         defaultProductLevel
       });
-
     }
     else if (pid === 2) { // product profile
       const url = `${OLAP_PROXY_ENDPOINT}data?${hierarchy1}=${id1}&cube=${cubeName1}&drilldowns=Year&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
-      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
+      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
+
+      if (!data) return res.json({});
 
       data.sort((a, b) => b.Year - a.Year);
 
@@ -106,7 +115,7 @@ module.exports = function(app) {
         askor: "trade_n_kor_m_hs",
         asmys: "trade_n_mys_m_hs",
         euswe: "trade_n_swe_m_hs",
-        asphl: "trade_n_phl_m_hs",
+        asphl: "trade_n_phl_m_hs"
       };
 
       const customSectionDict = {
@@ -123,7 +132,7 @@ module.exports = function(app) {
         askor: "Section",
         asmys: "Section",
         euswe: "Section",
-        asphl: "Section",
+        asphl: "Section"
       };
 
       const customHS2Dict = {
@@ -140,7 +149,7 @@ module.exports = function(app) {
         askor: "HS2",
         asmys: "HS2",
         euswe: "HS2",
-        asphl: "HS2",
+        asphl: "HS2"
       };
 
       const customHS4Dict = {
@@ -157,7 +166,7 @@ module.exports = function(app) {
         askor: false,
         asmys: "HS4",
         euswe: "HS4",
-        asphl: "HS4",
+        asphl: "HS4"
       };
 
       const customHS6Dict = {
@@ -174,7 +183,7 @@ module.exports = function(app) {
         askor: false,
         asmys: "Product",
         euswe: "Product",
-        asphl: "Product",
+        asphl: "Product"
       };
 
       const customSection = customSectionDict[id2] || "Section";
@@ -196,14 +205,28 @@ module.exports = function(app) {
       const urlExporter = `${OLAP_PROXY_ENDPOINT}data?${hierarchy1}=${id1}&Exporter+Country=${id2}&cube=${cubeName1}&drilldowns=Year&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
       const urlImporter = `${OLAP_PROXY_ENDPOINT}data?${hierarchy1}=${id1}&Importer+Country=${id2}&cube=${cubeName1}&drilldowns=Year&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
 
-      const dataExpo = await axios.get(urlExporter, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
-      const dataImpo = await axios.get(urlImporter, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
+      const dataExpo = await axios.get(urlExporter, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
+
+      const dataImpo = await axios.get(urlImporter, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
+
+      if (!dataExpo || !dataImpo) return res.json({});
 
       const exporterYear = dataExpo.length > 0 ? dataExpo.sort((a, b) => b.Year - a.Year)[0].Year : 2018;
       const importerYear = dataImpo.length > 0 ? dataImpo.sort((a, b) => b.Year - a.Year)[0].Year : 2018;
 
       const url = `${OLAP_PROXY_ENDPOINT}data?time=time.latest&cube=${subnatCubeName}&drilldowns=Time&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
-      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
+      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
+
+      if (!data) return res.json({});
 
       const latestSubnationalDate = data.length > 0 ? data[0].Time : false;
       const previousSubnationalDate = latestSubnationalDate ? `${latestSubnationalDate.toString().slice(0, 4) * 1 - 1}${latestSubnationalDate.toString().slice(-2)}` * 1 : false;
@@ -245,28 +268,46 @@ module.exports = function(app) {
       const url = `${OLAP_PROXY_ENDPOINT}data?cube=${cubeName1}&drilldowns=${timeDim}&measures=Trade+Value&Trade+Flow=2&parents=true&sparse=false&locale=${locale}`;
       const urlBaci = `${OLAP_PROXY_ENDPOINT}data?cube=trade_i_baci_a_92&drilldowns=Year&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
 
-      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
-      const dataBaci = await axios.get(urlBaci, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
+      const data = await axios.get(url, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
+
+      if (!data) return res.json({});
+
+      const dataBaci = await axios.get(urlBaci, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
+
+      if (!dataBaci) return res.json({});
 
       data.sort((a, b) => {
         if (b.Year > a.Year) return 1;
         if (b.Year < a.Year) return -1;
         if (b[`${timeDim} ID`] > a[`${timeDim} ID`]) return 1;
         if (b[`${timeDim} ID`] < a[`${timeDim} ID`]) return -1;
+        return 1;
       });
+
       dataBaci.sort((a, b) => b.Year - a.Year);
 
       const urlId = `${OLAP_PROXY_ENDPOINT}data?Subnat+Geography=${id1}&cube=${cubeName1}&drilldowns=Subnat+Geography,Year,Trade+Flow&measures=Trade+Value&parents=false&sparse=false&locale=${locale}`;
-      const dataId = await axios.get(urlId, config).then(resp => resp.data.data).catch(error => console.error("Custom Attribute Error:", error));
+      const dataId = await axios.get(urlId, config).then(resp => resp.data.data).catch(error => {
+        console.error("Custom Attribute Error:", error);
+        return false;
+      });
 
-      const dataIMPO = dataId.filter(d => d["Trade Flow ID"] === 1);
-      const dataEXPO = dataId.filter(d => d["Trade Flow ID"] === 2);
+      if (!dataId) return res.json({});
 
-      dataIMPO.sort((a, b) => b["Year"] - a["Year"]);
-      dataEXPO.sort((a, b) => b["Year"] - a["Year"]);
+      const dataImpo = dataId.filter(d => d["Trade Flow ID"] === 1);
+      const dataExpo = dataId.filter(d => d["Trade Flow ID"] === 2);
 
-      const yearLastIMPO = dataIMPO.length > 0 ? dataIMPO[0]["Year"] === 2020 ? dataIMPO[0]["Year"] -1 : dataIMPO[0]["Year"] : 2019;
-      const yearLastEXPO = dataEXPO.length > 0 ? dataEXPO[0]["Year"] === 2020 ? dataEXPO[0]["Year"] -1 : dataEXPO[0]["Year"] : 2019;
+      dataImpo.sort((a, b) => b.Year - a.Year);
+      dataExpo.sort((a, b) => b.Year - a.Year);
+
+      const yearLastImpo = dataImpo.length > 0 ? dataImpo[0].Year === 2020 ? dataImpo[0].Year - 1 : dataImpo[0].Year : 2019;
+      const yearLastExpo = dataExpo.length > 0 ? dataExpo[0].Year === 2020 ? dataExpo[0].Year - 1 : dataExpo[0].Year : 2019;
 
       const notMonthCountries = ["trade_s_fra_q_cpf"];
 
@@ -359,8 +400,8 @@ module.exports = function(app) {
         subnatThreshold,
         productThreshold,
         cubeNameVariant,
-        yearLastIMPO,
-        yearLastEXPO,
+        yearLastImpo,
+        yearLastExpo
       });
     }
     else return res.json({});
