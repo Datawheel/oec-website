@@ -366,9 +366,18 @@ module.exports = {
       geoLevels: [
         {name: "Ports", level: "Subnat Geography", slug: "ports"}
       ]
-    }
-    // TODO: CHL
-    // TBD: SWE -> no units, ignore it.
+    },
+    /*{
+      name: "Saudi Arabia",
+      code: "sau",
+      available: true,
+      cube: "trade_s_tur_m_countries",
+      dimension: "Subnat Geography",
+      geoLevels: [
+        {name: "Provinces", level: "Subnat Geography", slug: "ports"}
+      ]
+    }*/
+
   ],
 
   PREDICTION_DATASETS: [
