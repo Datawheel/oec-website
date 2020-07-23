@@ -367,16 +367,16 @@ module.exports = {
         {name: "Ports", level: "Subnat Geography", slug: "ports"}
       ]
     },
-    /*{
+    {
       name: "Saudi Arabia",
       code: "sau",
-      available: true,
-      cube: "trade_s_tur_m_countries",
+      available: false,
+      cube: "trade_s_sau_m_ports_of_entry",
       dimension: "Subnat Geography",
       geoLevels: [
-        {name: "Provinces", level: "Subnat Geography", slug: "ports"}
+        {name: "Ports", level: "Subnat Geography", slug: "ports"}
       ]
-    }*/
+    }
 
   ],
 
