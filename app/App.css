@@ -64,6 +64,16 @@ p > a,
   }
 }
 
+.cp-viz-container {
+  & > .cp-viz-header + .cp-viz-figure {
+    bottom: 3rem;
+    height: auto !important;
+    flex: 1;
+    top: 3rem;
+    width: 100%;
+  }
+}
+
 /* --------------------------
 // blueprint
 -------------------------- */
