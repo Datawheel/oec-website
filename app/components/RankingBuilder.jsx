@@ -34,8 +34,7 @@ class RankingsBuilder extends Component {
 			populationThreshold,
 			productExpThreshold,
 			subnationalGeoThreshold,
-			subnationalRCAThreshold,
-			_authUser
+			subnationalRCAThreshold
 		} = this.props.variables;
 		const {
 			handleCategorySwitch,
@@ -79,27 +78,25 @@ class RankingsBuilder extends Component {
 								<span>Product</span>
 							</div>
 						</div>
-						{_authUser &&
-							<div className="setting country-depth">
-								<h3 className="is-pro">Country Depth</h3>
-								<div className="switch">
-									<span>National</span>
-									<Switch
-										onChange={event => handleCountrySwitch('isNational', !event.currentTarget.checked)}
-										defaultChecked={!isNational}
-									/>
-									<span>Subnational</span>
-								</div>
-								<SimpleSelect
-									items={OPTIONS_SUBNATIONAL}
-									title={undefined}
-									state={"subnationalCountry"}
-									selectedItem={OPTIONS_SUBNATIONAL.find(d => d.value === subnationalCountry) || {}}
-									callback={(key, value) => handleCountrySelect(key, value.value)}
-									disabled={isNational}
+						<div className="setting country-depth">
+							<h3>Country Depth</h3>
+							<div className="switch">
+								<span>National</span>
+								<Switch
+									onChange={event => handleCountrySwitch('isNational', !event.currentTarget.checked)}
+									defaultChecked={!isNational}
 								/>
+								<span>Subnational</span>
 							</div>
-						}
+							<SimpleSelect
+								items={OPTIONS_SUBNATIONAL}
+								title={undefined}
+								state={"subnationalCountry"}
+								selectedItem={OPTIONS_SUBNATIONAL.find(d => d.value === subnationalCountry) || {}}
+								callback={(key, value) => handleCountrySelect(key, value.value)}
+								disabled={isNational}
+							/>
+						</div>
 						<div className="setting product-depth last">
 							<h3>
 								{isNational
@@ -111,11 +108,11 @@ class RankingsBuilder extends Component {
 								{OPTIONS_DEPTH.map((d, k) =>
 									<Button
 										key={k}
-										onClick={() => (
+										onClick={() =>
 											isNational
 												? handleProductButtons('productDepth', d.title, d.basecube)
 												: handleProductButtons('subnationalProductDepth', d.title, null)
-										)}
+										}
 										className={
 											isNational
 												? productDepth === d.title && 'active'
@@ -241,7 +238,7 @@ class RankingsBuilder extends Component {
 								value={productExpThreshold}
 							/>
 						</div>
-						{!isNational && (
+						{!isNational &&
 							<div className="setting no-padding">
 								<h3>Subnational Geography Export Value Threshold</h3>
 								<Slider
@@ -254,8 +251,8 @@ class RankingsBuilder extends Component {
 									value={subnationalGeoThreshold}
 								/>
 							</div>
-						)}
-						{!isNational && (
+						}
+						{!isNational &&
 							<div className="setting no-padding">
 								<h3>Products with RCA > 1 in in Subnational Geography Threshold</h3>
 								<Slider
@@ -268,7 +265,7 @@ class RankingsBuilder extends Component {
 									value={subnationalRCAThreshold}
 								/>
 							</div>
-						)}
+						}
 						<div className="setting last">
 							<div className="build-button">
 								<Button onClick={() => createTable()}>Build Table</Button>
