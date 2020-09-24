@@ -966,6 +966,7 @@ class Vizbuilder extends React.Component {
                     <SelectMultiHierarchy
                       getColor={subnatItem.productColor}
                       getIcon={subnatItem.productIcon}
+                      getLabel={subnat.productLabel}
                       items={this.state.subnatProductItems}
                       levels={productLevels}
                       onItemSelect={item => this.safeChangeHandler("selectedSubnatProductTemp", item)}
@@ -995,6 +996,7 @@ class Vizbuilder extends React.Component {
                       getIcon={cube === "sitc"
                         ? d => `/images/icons/sitc/sitc_${d["Category ID"]}.png`
                         : d => `/images/icons/hs/hs_${d["Section ID"]}.svg`}
+                      getLabel={subnat.productLabel}
                       items={this.state.product}
                       levels={chart === "rings" ? ["HS4"] : this.state._dataset.productLevels}
                       onItemSelect={item => this.safeChangeHandler("_selectedItemsProduct", item)}
@@ -1041,6 +1043,7 @@ class Vizbuilder extends React.Component {
                     <h4 className="title">{t("State/Province")}</h4>
                     <SelectMultiHierarchy
                       getIcon={this.state.subnatItem.geoIcon}
+                      getLabel={subnat.productLabel}
                       // isPro={false}
                       // isProProps={{
                       //   auth, redirect

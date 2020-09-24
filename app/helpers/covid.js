@@ -344,6 +344,9 @@ export const subnatCubeMembers = [
 
 export const productColor = d => colors.Section[d["Section ID"]];
 export const productIcon = d => `/images/icons/hs/hs_${d["Section ID"]}.svg`;
+export const productLabel = (d, lvl) => ["HS2", "HS4", "HS6"].includes(lvl)
+    ? `${d[`${lvl} ID`]}`.slice(-lvl.slice(-1) * 1)
+    : `${d[`${lvl} ID`]}`;
 export const productLevels = ["Section", "HS2", "HS4", "HS6"];
 
 export const spinner = <Spinner size={Spinner.SIZE_SMALL} />;

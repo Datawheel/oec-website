@@ -14,9 +14,12 @@ export const countryIcon = [
 export const productLevels = ["Section", "HS2", "HS4", "HS6"];
 export const productColor = d => colors.Section[d["Section ID"]];
 export const productIcon = d => `/images/icons/hs/hs_${d["Section ID"]}.svg`;
+export const productLabel = (d, lvl) => ["HS2", "HS4", "HS6"].includes(lvl)
+  ? `${d[`${lvl} ID`]}`.slice(-lvl.slice(-1) * 1)
+  : `${d[`${lvl} ID`]}`;
 
 export const countryConsts = {levels: countryLevels, getColor: countryColor, getIcon: countryIcon};
-export const productConsts = {levels: productLevels, getColor: productColor, getIcon: productIcon};
+export const productConsts = {levels: productLevels, getColor: productColor, getIcon: productIcon, getLabel: productLabel};
 
 /** @type {Record<string, HSLevel>} */
 export const productDetail = {Section: "Section", HS2: "HS2", HS4: "HS4", HS6: "HS6"};

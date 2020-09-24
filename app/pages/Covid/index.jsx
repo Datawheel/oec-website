@@ -20,7 +20,7 @@ import "./Covid.css";
 
 // Helpers
 import colors from "helpers/colors";
-import {currencySign, monthNames, productColor, productIcon, productLevels, spinner, subnatCubeMembers} from "helpers/covid";
+import {currencySign, monthNames, productColor, productIcon, productLabel, productLevels, spinner, subnatCubeMembers} from "helpers/covid";
 
 const BASE = "/olap-proxy/data";
 const availableFlows = [
@@ -251,7 +251,7 @@ class Covid extends Component {
             id: productCuts[0].id,
             label: productCuts[0].id,
             name: _productCuts[productCuts[0].type],
-            searchIndex: `${_productCuts[productCuts[0].type]}|${productCuts[0].id}`,
+            searchIndex: `${_productCuts[productCuts[0].type]}`,
             type: productCuts[0].type
           }];
         }
@@ -442,6 +442,7 @@ class Covid extends Component {
                     <SelectMultiHierarchy
                       getColor={productColor}
                       getIcon={productIcon}
+                      getLabel={productLabel}
                       inputRightIcon={loading && spinner}
                       items={productOptions}
                       levels={productLevels}

@@ -160,5 +160,8 @@ const datasets = [
 module.exports = {
   ...cubes,
   cubeSelector,
-  datasets
+  datasets,
+  productLabel: (d, lvl) => ["HS2", "HS4", "HS6"].includes(lvl)
+    ? `${d[`${lvl} ID`]}`.slice(-lvl.slice(-1) * 1)
+    : `${d[`${lvl} ID`]}`
 };

@@ -11,10 +11,6 @@ import "./SelectMultiHierarchy.css";
 import SMHFullList from "./SelectMultiHierarchyList";
 import SMHNaviList from "./SelectMultiHierarchyNavi";
 
-const initialState = {
-  paywall: false
-};
-
 /**
  * @template T
  * @extends Select<T>
@@ -52,17 +48,22 @@ class PatchedSelect extends Select {
  * The list of base data items that will be hierarchified.
  * @property {SelectedItem[]} selectedItems
  * Here we handle the selected items, can be empty at start.
- * @property {((d: any) => string) | Array<(d: any) => string>} [getColor]
- * This function must provide a color for each item of the array provided on `items`.
- * @property {((d: any) => string) | Array<(d: any) => string>} [getIcon]
- * This function must provide an url to an icon for each item of the array provided on `items`.
+ * @property {((d: any, lvl: string) => string) | Array<(d: any, lvl: string) => string>} [getColor]
+ * This function can provide a color for the background of the icon on each item of the array provided on `items`.
+ * If not set, gray will be used.
+ * @property {((d: any, lvl: string) => string) | Array<(d: any, lvl: string) => string>} [getIcon]
+ * This function can provide an url to an icon for each item of the array provided on `items`.
+ * If not set, an icon won't be shown.
+ * @property {((d: any, lvl: string) => string) | Array<(d: any, lvl: string) => string>} [getLabel]
+ * This function can provide an url to an icon for each item of the array provided on `items`.
+ * If not set, the item ID will be used.
  * @property {import("@blueprintjs/core").IconName | import("@blueprintjs/core").MaybeElement} [inputRightIcon]
  * The name of a icon to show on the right side of the input.
  * @property {string} [placeholder]
  * Renders some faded text in the input field if the selection is empty.
  * @property {(event: React.MouseEvent<HTMLButtonElement>) => void} [onClear]
  * This function will be called when the used presses the cross button next to the selected item tags in the target.
- * @property {(item: SelectedItem, event?: React.SyntheticEvent<HTMLElement>) => void} [onItemSelect]
+ * @property {(item: SelectedItem, event?: React.SyntheticEvent<HTMLElement>) => void} onItemSelect
  * This function will be called when the user selects an option in the list. The first parameter is the selected item.
  * @property {(e: React.MouseEvent<HTMLButtonElement>, item: SelectedItem) => void} [onItemRemove]
  * This function will be called when the user presses the cross in the tag of the selected item wanted to remove.
@@ -110,6 +111,7 @@ class PatchedSelect extends Select {
 const SelectMultiHierarchy = ({
   getColor,
   getIcon,
+  getLabel,
   inputRightIcon,
   isPro,
   isProProps,
@@ -123,10 +125,12 @@ const SelectMultiHierarchy = ({
   placeholder,
   selectedItems
 }) => {
+  const [paywall, setPaywall] = useState(false);
+
   const memoLevels = useMemo(() => levels, levels);
 
   const extendedItems = useMemo(
-    () => extendItems(items, levels, {getColor, getIcon}),
+    () => extendItems(items, levels, {getColor, getIcon, getLabel}),
     [memoLevels, items]
   );
 
@@ -148,8 +152,6 @@ const SelectMultiHierarchy = ({
     [memoLevels]
   );
 
-  const [state, setState] = useState(initialState);
-
   return (
     <PatchedSelect
       // filterable={true}
@@ -169,9 +171,14 @@ const SelectMultiHierarchy = ({
       }}
     >
       <div
-        className={classNames(Classes.INPUT, Classes.TAG_INPUT, Classes.FILL, SelectClasses.MULTISELECT)}
+        className={classNames(
+          Classes.INPUT,
+          Classes.TAG_INPUT,
+          Classes.FILL,
+          SelectClasses.MULTISELECT
+        )}
       >
-        <div className={Classes.TAG_INPUT_VALUES} onClick={() => setState({paywall: true})}>
+        <div className={Classes.TAG_INPUT_VALUES} onClick={() => setPaywall(true)}>
           {selectedItems.length === 0 && placeholder &&
             <span className="sh-hie--placeholder">{placeholder}</span>
           }
@@ -196,30 +203,36 @@ const SelectMultiHierarchy = ({
         {onClear && selectedItems.length > 0 &&
           <Button icon="cross" minimal={true} onClick={onClear} />
         }
-        {isPro && state.paywall && <OECPaywall
+        {isPro && paywall && <OECPaywall
           {...isProProps}
-          paywall={state.paywall}
-          callback={paywall => setState({paywall})}
+          paywall={paywall}
+          callback={(paywall) => setPaywall(paywall)}
         />}
       </div>
     </PatchedSelect>
   );
 };
 
-const reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
-const reHasRegExpChar = RegExp(reRegExpChar.source);
-const escapeRegExp = value => {
-  value = `${value}`.trim();
-  return value && reHasRegExpChar.test(value)
-    ? value.replace(reRegExpChar, "\\$&")
-    : value;
+/** @type {(query: string) => RegExp} */
+const forgeQuery = query => {
+  if (!query) return /./i;
+  const querySource = query
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "[^|]+");
+  return RegExp(querySource, "i");
 };
 
 SelectMultiHierarchy.defaultProps = {
   itemListPredicate(query, items) {
-    query = escapeRegExp(query).replace(/\s+/g, "[^|]+");
-    const queryTester = RegExp(query || ".", "i");
-    return items.filter(item => queryTester.test(item.searchIndex));
+    const queryTester = forgeQuery(query);
+    const matchIndex = items.reduce((matches, item) =>
+      matches +
+      (queryTester.test(`${item.id} ${item.name}`)
+        ? `^${item.searchIndex}`
+        : ""),
+    "");
+    return items.filter(item => matchIndex.includes(`^${item.searchIndex}`));
   },
 
   itemRenderer(item, {handleClick, modifiers}) {
@@ -255,21 +268,39 @@ SelectMultiHierarchy.defaultProps = {
   }
 };
 
+const noStr = () => "";
+
 /**
+ * This function converts a list of elements of the same level of hierarchy,
+ * with parent information, into a list of `SelectedItem`, ready to be used by
+ * the SelectMultiHierarchy component.
+ * The code is written under the assumption the IDs are available under the
+ * `Key ID` format, and the list of `items` is already sorted by these IDs.
+ * This sorting is what determines the resulting list of items, so be careful
+ * if any modification makes changes to it.
+ *
  * @param {any[]} items
  * @param {string[]} levels
- * @param {Pick<OwnProps, "getColor" | "getIcon">} param2
+ * @param {Pick<OwnProps, "getColor" | "getIcon" | "getLabel">} param2
  * @returns {SelectedItem[]}
  */
-export function extendItems(items, levels, {getColor = () => "", getIcon = () => ""}) {
+export function extendItems(
+  items,
+  levels,
+  {getColor = noStr, getIcon = noStr, getLabel = noStr}
+) {
   const keys = levels.slice();
   const lastKey = `${keys.pop()}`;
 
+  const extendedItemKeys = new Set();
   const extendedItems = [];
 
   const headerKeys = [];
   const nestedItems = nest().rollup(values => {
     const firstItem = values[0];
+
+    /** @type {(item: false | SelectedItem) => item is SelectedItem} */
+    const uniqueItemGuard = item => item && !extendedItemKeys.has(item.id);
 
     const keyIds = keys.map(key => firstItem[`${key} ID`]);
     const keyNames = keys.map(key => firstItem[key]);
@@ -279,39 +310,35 @@ export function extendItems(items, levels, {getColor = () => "", getIcon = () =>
           headerKeys[i] = keyNames[i];
           const colorGetter = getColor[i] || getColor[getColor.length - 1] || getColor;
           const iconGetter = getIcon[i] || getIcon[getIcon.length - 1] || getIcon;
-
-          const label = ["HS2", "HS4"].includes(key)
-            // @ts-ignore
-            ? keyIds[i].toString().slice(-key.slice(-1) * 1)
-            : keyIds[i];
+          const labelGetter = getLabel[i] || getLabel[getLabel.length - 1] || getLabel;
 
           return {
-            color: colorGetter(firstItem) || undefined,
-            icon: iconGetter(firstItem) || undefined,
+            color: colorGetter(firstItem, key) || undefined,
+            icon: iconGetter(firstItem, key) || undefined,
             id: keyIds[i],
-            label,
+            label: labelGetter(firstItem, key) || keyIds[i],
             name: keyNames[i],
             type: key,
-            searchIndex: keyNames
-              .slice(0, i + 1)
-              .concat(keyIds[i])
-              .join("|")
+            searchIndex: keyNames.slice(0, i + 1).join("|")
           };
         }
         return false;
       })
-      .filter(Boolean);
+      .filter(uniqueItemGuard);
+
+    keyItems.forEach(item => extendedItemKeys.add(item.id));
 
     const colorGetter = getColor[getColor.length - 1] || getColor;
     const iconGetter = getIcon[getIcon.length - 1] || getIcon;
+    const labelGetter = getLabel[getLabel.length - 1] || getLabel;
     const valueItems = values.map(item => ({
-      color: colorGetter(item) || undefined,
-      icon: iconGetter(item) || undefined,
+      color: colorGetter(item, lastKey) || undefined,
+      icon: iconGetter(item, lastKey) || undefined,
       id: item[`${lastKey} ID`],
-      label: ["HS6"].includes(lastKey) ? item[`${lastKey} ID`].toString().slice(-6) : item[`${lastKey} ID`],
+      label: labelGetter(item, lastKey) || item[`${lastKey} ID`],
       name: item[lastKey],
       type: lastKey,
-      searchIndex: keyNames.concat(item[lastKey], item[`${lastKey} ID`]).join("|")
+      searchIndex: keyNames.concat(item[lastKey]).join("|")
     }));
 
     extendedItems.push(...keyItems.concat(valueItems));
@@ -322,7 +349,7 @@ export function extendItems(items, levels, {getColor = () => "", getIcon = () =>
   });
 
   nestedItems.entries(items);
-  return Object.values(extendedItems.reduce((acc, cur) => Object.assign(acc, {[cur.id]: cur}), {}));
+  return extendedItems;
 }
 
 export default SelectMultiHierarchy;
