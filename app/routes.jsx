@@ -11,6 +11,7 @@ import Tariffs from "./pages/Tariffs/Tariffs";
 
 import App from "./App";
 import Home from "./pages/Home";
+import Keytest from "./pages/Keytest";
 import Welcome from "./pages/Welcome";
 import Explorer from "./pages/Explorer";
 import Vizbuilder from "./pages/Vizbuilder";
@@ -129,6 +130,7 @@ export default function RouteCreate() {
       <Route exact path="/:lang/resources/:page" component={Resources} />
       <Route exact path="/:lang/tariffs" component={Tariffs} />
       <Route path="/:lang/rankings/:page(/:depth)(/:rev)" component={Rankings} />
+      <Route path="/:lang/keytest" component={Keytest} />
       <Route path="*" component={ErrorPage} />
     </Route>
   );

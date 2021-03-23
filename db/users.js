@@ -50,7 +50,8 @@ module.exports = function(sequelize, db) {
         allowNull: false,
         defaultValue: 0,
         type: db.INTEGER
-      }
+      },
+      apikey: {type: db.STRING}
     }
   );
 
