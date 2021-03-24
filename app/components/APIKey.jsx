@@ -16,26 +16,32 @@ class APIKey extends Component {
     };
   }
 
-  componentDidMount() {
-    if (this.props.auth.user) {
+  fetchOrGenerateKey() {
+    const {user} = this.props.auth;
+    if (user.role >= 2 && !user.apikey) {
+      this.generateKey(true);
+    }
+    else {
       this.setState({apikey: this.props.auth.user.apikey});
     }
+  }
+
+  componentDidMount() {
+    if (this.props.auth.user) this.fetchOrGenerateKey();
   }
 
   componentDidUpdate(prevProps) {
-    if (!prevProps.auth.user && this.props.auth.user) {
-      this.setState({apikey: this.props.auth.user.apikey});
-    }
+    if (!prevProps.auth.user && this.props.auth.user) this.fetchOrGenerateKey();
   }
 
-  generateKey() {
+  generateKey(silent) {
     axios.get("/auth/keygen/generate").then(resp => {
       if (!resp.data.error) {
-        this.notify("Key Successfully Regenerated!", Intent.SUCCESS);
+        if (!silent) this.notify("Key Successfully Regenerated!", Intent.SUCCESS);
         this.setState({apikey: resp.data.apikey});
       }
       else {
-        this.notify("Regeneration Failed. Please contact support.", Intent.DANGER);
+        this.notify("API Key Generation Failed. Please contact support.", Intent.DANGER);
       }
     });
   }
@@ -62,7 +68,7 @@ class APIKey extends Component {
           readOnly
         />
 
-        <button type="button" className="bp3-fill bp3-button" onClick={this.generateKey.bind(this)}>
+        <button type="button" className="bp3-fill bp3-button" onClick={() => this.generateKey.bind(this)()}>
           Regenerate Key
         </button>
 
