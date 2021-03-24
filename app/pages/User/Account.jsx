@@ -14,6 +14,7 @@ import {Dialog, Intent, NonIdealState, Spinner, Tag} from "@blueprintjs/core";
 import OECNavbar from "components/OECNavbar";
 import Footer from "components/Footer";
 import ChangePassword from "components/ChangePassword";
+import APIKey from "components/APIKey";
 import FeatureMatrix from "components/FeatureMatrix";
 
 const roleLookup = {
@@ -123,6 +124,7 @@ class Account extends Component {
                   </Button>
                 </div>
                 <ChangePassword />
+                <APIKey />
               </div>
               <div className="account-panel">
                 { user.role < 1 ? <div className="account-paywall">

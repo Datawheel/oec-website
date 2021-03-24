@@ -5,6 +5,7 @@ const {
 } = process.env;
 
 const bcrypt = require("bcrypt-nodejs"),
+      crypto = require("crypto"),
       stripe = require("stripe")(CANON_STRIPE_SECRET);
 
 const isRole = role => (req, res, next) => {
@@ -17,6 +18,16 @@ const isRole = role => (req, res, next) => {
   }
   res.status(401).send("not logged in").end();
   return;
+};
+
+const keygen = async db => {
+  const users = await db.users.findAll();
+  const usedKeys = users.map(d => d.toJSON()).reduce((acc, d) => d.apikey ? {...acc, [d.apikey]: true} : acc, {});
+  let apikey;
+  do {
+    apikey = crypto.randomBytes(16).toString("hex");
+  } while (usedKeys[apikey]);
+  return apikey;
 };
 
 module.exports = function(app) {
@@ -59,6 +70,14 @@ module.exports = function(app) {
       return res.json({error: "The current password you entered is not correct."});
     }
 
+  });
+
+  app.get("/auth/keygen/generate", isRole(2), async(req, res) => {
+    const {id} = req.user;
+    const apikey = await keygen(db);
+    const update = await db.users.update({apikey}, {where: {id}}).catch(() => false);
+    if (!update) return res.json({error: "Error generating key"});
+    return res.json({apikey});
   });
 
   const stripeUser = async(req, res, next) => {
