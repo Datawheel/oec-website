@@ -19,14 +19,44 @@ const isRole = role => (req, res, next) => {
   return;
 };
 
+// https://stackoverflow.com/questions/1634748/how-can-i-delete-a-query-string-parameter-in-javascript
+const removeURLParameter = (url, parameter) => {
+  // prefer to use l.search if you have a location/link object
+  const urlparts = url.split("?");
+  if (urlparts.length >= 2) {
+    const prefix = `${encodeURIComponent(parameter)  }=`;
+    const pars = urlparts[1].split(/[&;]/g);
+    // reverse iteration as may be destructive
+    for (let i = pars.length; i-- > 0;) {
+      // idiom for string.startsWith
+      if (pars[i].lastIndexOf(prefix, 0) !== -1) {
+        pars.splice(i, 1);
+      }
+    }
+
+    return urlparts[0] + (pars.length > 0 ? `?${  pars.join("&")}` : "");
+  }
+  return url;
+};
+
 module.exports = function(app) {
 
   app.get("/olap-proxy/*", async(req, res) => {
 
+    const {db} = app.settings;
+
     const params = req.params[0];
     const baseURL = url.resolve(OLAP_PROXY_ENDPOINT, params);
     const queryString = url.parse(req.url).query;
-    const fullURL = queryString ? `${baseURL}?${queryString}` : baseURL;
+    let fullURL = queryString ? `${baseURL}?${queryString}` : baseURL;
+    if (req.query.token) {
+      const valid = await db.users.findOne({where: {apikey: req.query.token}});
+      if (!valid) return res.status(403).send("403 Unauthorized - API Key Incorrect");
+      fullURL = removeURLParameter(fullURL, "token");
+    }
+    else {
+      return res.status(403).send("403 Unauthorized - API Key Required");
+    }
     const {user} = req;
 
     let apiToken = req.headers["x-tesseract-jwt-token"];
@@ -57,7 +87,7 @@ module.exports = function(app) {
         return errorObject;
       });
 
-    res.send(data).end();
+    return res.send(data).end();
 
   });
 
